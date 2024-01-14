@@ -95,7 +95,27 @@ var ThisCouldBeBetter;
                 var returnValue = serializer.serialize(this, false); // pretty-print
                 return returnValue;
             }
-            // Saves.
+            // Saving.
+            toImageSnapshot(universe) {
+                var displaySize = universe.display.sizeInPixels;
+                var displayFull = GameFramework.Display2D.fromSizeAndIsInvisible(displaySize, true);
+                displayFull.initialize(universe);
+                var place = this.placeCurrent;
+                place.draw(universe, this, displayFull);
+                var imageSnapshotFull = displayFull.toImage(GameFramework.Profile.name);
+                return imageSnapshotFull;
+            }
+            toImageThumbnail(universe) {
+                var imageSnapshotFull = this.toImageSnapshot(universe);
+                var imageSizeThumbnail = GameFramework.Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
+                var displayThumbnail = GameFramework.Display2D.fromSizeAndIsInvisible(imageSizeThumbnail, true);
+                displayThumbnail.initialize(universe);
+                displayThumbnail.drawImageScaled(imageSnapshotFull, GameFramework.Coords.Instances().Zeroes, imageSizeThumbnail);
+                var imageThumbnailFromDisplay = displayThumbnail.toImage(GameFramework.SaveStateBase.name);
+                var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
+                var imageThumbnail = new GameFramework.Image2("Snapshot", imageThumbnailAsDataUrl).unload();
+                return imageThumbnail;
+            }
             toSaveState(universe) {
                 var world = this;
                 var now = GameFramework.DateTime.now();
@@ -104,18 +124,7 @@ var ThisCouldBeBetter;
                 var place = world.placeCurrent;
                 var placeName = place.name;
                 var timePlayingAsString = world.timePlayingAsStringShort(universe);
-                var displaySize = universe.display.sizeInPixels;
-                var displayFull = GameFramework.Display2D.fromSizeAndIsInvisible(displaySize, true);
-                displayFull.initialize(universe);
-                place.draw(universe, world, displayFull);
-                var imageSnapshotFull = displayFull.toImage(GameFramework.Profile.name);
-                var imageSizeThumbnail = GameFramework.Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
-                var displayThumbnail = GameFramework.Display2D.fromSizeAndIsInvisible(imageSizeThumbnail, true);
-                displayThumbnail.initialize(universe);
-                displayThumbnail.drawImageScaled(imageSnapshotFull, GameFramework.Coords.Instances().Zeroes, imageSizeThumbnail);
-                var imageThumbnailFromDisplay = displayThumbnail.toImage(GameFramework.SaveStateBase.name);
-                var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
-                var imageThumbnail = new GameFramework.Image2("Snapshot", imageThumbnailAsDataUrl).unload();
+                var imageThumbnail = this.toImageThumbnail(universe);
                 var saveStateName = "Save-" + nowAsString;
                 var saveState = new GameFramework.SaveStateWorld(saveStateName, placeName, timePlayingAsString, now, imageThumbnail).fromWorld(this);
                 return saveState;

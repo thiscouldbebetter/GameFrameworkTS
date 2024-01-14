@@ -179,25 +179,22 @@ export class World //
 		return returnValue;
 	}
 
-	// Saves.
+	// Saving.
 
-	toSaveState(universe: Universe): SaveStateBase
+	toImageSnapshot(universe: Universe): Image2
 	{
-		var world = this;
-
-		var now = DateTime.now();
-		world.dateSaved = now;
-
-		var nowAsString = now.toStringYYYYMMDD_HHMM_SS();
-		var place = world.placeCurrent;
-		var placeName = place.name;
-		var timePlayingAsString = world.timePlayingAsStringShort(universe);
-
 		var displaySize = universe.display.sizeInPixels;
 		var displayFull = Display2D.fromSizeAndIsInvisible(displaySize, true);
 		displayFull.initialize(universe);
-		place.draw(universe, world, displayFull);
+		var place = this.placeCurrent;
+		place.draw(universe, this, displayFull);
 		var imageSnapshotFull = displayFull.toImage(Profile.name);
+		return imageSnapshotFull;
+	}
+
+	toImageThumbnail(universe: Universe): Image2
+	{
+		var imageSnapshotFull = this.toImageSnapshot(universe);
 
 		var imageSizeThumbnail = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
 		var displayThumbnail = Display2D.fromSizeAndIsInvisible
@@ -213,6 +210,23 @@ export class World //
 			displayThumbnail.toImage(SaveStateBase.name);
 		var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
 		var imageThumbnail = new Image2("Snapshot", imageThumbnailAsDataUrl).unload();
+
+		return imageThumbnail;
+	}
+
+	toSaveState(universe: Universe): SaveStateBase
+	{
+		var world = this;
+
+		var now = DateTime.now();
+		world.dateSaved = now;
+
+		var nowAsString = now.toStringYYYYMMDD_HHMM_SS();
+		var place = world.placeCurrent;
+		var placeName = place.name;
+		var timePlayingAsString = world.timePlayingAsStringShort(universe);
+
+		var imageThumbnail = this.toImageThumbnail(universe);
 
 		var saveStateName = "Save-" + nowAsString;
 
