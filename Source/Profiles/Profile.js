@@ -246,29 +246,11 @@ var ThisCouldBeBetter;
             static toControlSaveStateLoadOrSave_SaveToLocalStorage(universe) {
                 var profile = universe.profile;
                 var world = universe.world;
-                var now = GameFramework.DateTime.now();
-                world.dateSaved = now;
-                var nowAsString = now.toStringYYYYMMDD_HHMM_SS();
-                var place = world.placeCurrent;
-                var placeName = place.name;
-                var timePlayingAsString = world.timePlayingAsStringShort(universe);
-                var displaySize = universe.display.sizeInPixels;
-                var displayFull = GameFramework.Display2D.fromSizeAndIsInvisible(displaySize, true);
-                displayFull.initialize(universe);
-                place.draw(universe, world, displayFull);
-                var imageSnapshotFull = displayFull.toImage(Profile.name);
-                var imageSizeThumbnail = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
-                var displayThumbnail = GameFramework.Display2D.fromSizeAndIsInvisible(imageSizeThumbnail, true);
-                displayThumbnail.initialize(universe);
-                displayThumbnail.drawImageScaled(imageSnapshotFull, GameFramework.Coords.Instances().Zeroes, imageSizeThumbnail);
-                var imageThumbnailFromDisplay = displayThumbnail.toImage(GameFramework.SaveStateBase.name);
-                var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
-                var imageThumbnail = new GameFramework.Image2("Snapshot", imageThumbnailAsDataUrl).unload();
-                var saveStateName = "Save-" + nowAsString;
-                var saveState = new GameFramework.SaveStateWorld(saveStateName, placeName, timePlayingAsString, now, imageThumbnail).fromWorld(world);
+                var saveState = world.toSaveState(universe);
                 var storageHelper = universe.storageHelper;
                 var errorMessageFromSave;
                 try {
+                    var saveStateName = saveState.name;
                     storageHelper.save(saveStateName, saveState);
                     if (profile.saveStates.some(x => x.name == saveStateName) == false) {
                         saveState.unload();

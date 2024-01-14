@@ -340,7 +340,7 @@ class PlaceBuilderDemo_Items
 				"buttonDone",
 				Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight),
 				Coords.fromXY(size.x / 2, fontHeight * 2),
-				"Done",
+				DataBinding.fromContext("Done"),
 				fontNameAndHeight,
 				true, // hasBorder
 				DataBinding.fromTrue(), // isEnabled

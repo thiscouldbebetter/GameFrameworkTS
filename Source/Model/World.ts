@@ -178,6 +178,59 @@ export class World //
 		var returnValue = serializer.serialize(this, false); // pretty-print
 		return returnValue;
 	}
+
+	// Saves.
+
+	toSaveState(universe: Universe): SaveStateBase
+	{
+		var world = this;
+
+		var now = DateTime.now();
+		world.dateSaved = now;
+
+		var nowAsString = now.toStringYYYYMMDD_HHMM_SS();
+		var place = world.placeCurrent;
+		var placeName = place.name;
+		var timePlayingAsString = world.timePlayingAsStringShort(universe);
+
+		var displaySize = universe.display.sizeInPixels;
+		var displayFull = Display2D.fromSizeAndIsInvisible(displaySize, true);
+		displayFull.initialize(universe);
+		place.draw(universe, world, displayFull);
+		var imageSnapshotFull = displayFull.toImage(Profile.name);
+
+		var imageSizeThumbnail = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
+		var displayThumbnail = Display2D.fromSizeAndIsInvisible
+		(
+			imageSizeThumbnail, true
+		);
+		displayThumbnail.initialize(universe);
+		displayThumbnail.drawImageScaled
+		(
+			imageSnapshotFull, Coords.Instances().Zeroes, imageSizeThumbnail
+		);
+		var imageThumbnailFromDisplay =
+			displayThumbnail.toImage(SaveStateBase.name);
+		var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
+		var imageThumbnail = new Image2("Snapshot", imageThumbnailAsDataUrl).unload();
+
+		var saveStateName = "Save-" + nowAsString;
+
+		var saveState = new SaveStateWorld
+		(
+			saveStateName,
+			placeName,
+			timePlayingAsString,
+			now,
+			imageThumbnail,
+		).fromWorld
+		(
+			this
+		);
+
+		return saveState;
+	}
+
 }
 
 }
