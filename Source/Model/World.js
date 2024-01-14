@@ -51,6 +51,9 @@ var ThisCouldBeBetter;
             placeGetByName(placeName) {
                 return this._placeGetByName.call(this, placeName);
             }
+            saveFileNameStem() {
+                return this.name;
+            }
             timePlayingAsStringShort(universe) {
                 return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);
             }

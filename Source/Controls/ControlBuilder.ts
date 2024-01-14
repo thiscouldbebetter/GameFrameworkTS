@@ -573,7 +573,7 @@ export class ControlBuilder
 
 		var font = this.fontBase;
 
-		var buttonWidth = 40;
+		var buttonWidth = 50;
 		var buttonHeight = this.buttonHeightBase;
 		var padding = 5;
 		var rowCount = (includeResumeButton ? 3 : 2);

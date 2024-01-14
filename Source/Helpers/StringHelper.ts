@@ -29,6 +29,11 @@ export class StringHelper
 		return stringToPad;
 	}
 
+	static spacesToUnderscores(stringToAlter: string): string
+	{
+		return StringHelper.replaceAll(stringToAlter, " ", "_");
+	}
+
 	static replaceAll(stringToReplaceWithin: string, stringToBeReplaced: string, stringToReplaceWith: string)
 	{
 		return stringToReplaceWithin.split(stringToBeReplaced).join(stringToReplaceWith);

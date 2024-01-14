@@ -105,6 +105,11 @@ export class World //
 		return this._placeGetByName.call(this, placeName);
 	}
 
+	saveFileNameStem(): string
+	{
+		return this.name;
+	}
+
 	timePlayingAsStringShort(universe: Universe): string
 	{
 		return universe.timerHelper.ticksToStringH_M_S(this.timerTicksSoFar);

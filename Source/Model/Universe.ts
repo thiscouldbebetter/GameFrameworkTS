@@ -182,6 +182,15 @@ export class Universe
 		this.soundHelper.reset();
 	}
 
+	saveFileNameStem(): string
+	{
+		var now = DateTime.now();
+		var nowAsString = now.toStringMonDD_HHMM();
+		var returnValue =
+			this.name + "-" + "Saved_" +  nowAsString + "-" + this.world.saveFileNameStem();
+		return returnValue;
+	}
+
 	start(): void
 	{
 		this.timerHelper.initialize(this.updateForTimerTick.bind(this));

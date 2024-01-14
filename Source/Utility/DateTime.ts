@@ -75,6 +75,33 @@ export class DateTime
 		return returnValue;
 	}
 
+	toStringMonDD_HHMM()
+	{
+		var monthAbbreviations =
+		[
+			"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+		];
+		var monthAbbreviation = monthAbbreviations[this.month - 1];
+
+		var dayOfYearAsString =
+			monthAbbreviation
+			+ "_"
+			+ StringHelper.padStart("" + this.day, 2, "0")
+
+		var timeOfDayAsString = 
+			StringHelper.padStart("" + this.hours, 2, "0")
+			+ StringHelper.padStart("" + this.minutes, 2, "0");
+
+		var returnValue =
+			""
+			+ dayOfYearAsString
+			+ "-"
+			+ timeOfDayAsString
+
+		return returnValue;
+
+	}
+
 	toStringHH_MM_SS()
 	{
 		var returnValue =

@@ -66,6 +66,12 @@ var ThisCouldBeBetter;
                 // hack
                 this.soundHelper.reset();
             }
+            saveFileNameStem() {
+                var now = GameFramework.DateTime.now();
+                var nowAsString = now.toStringMonDD_HHMM();
+                var returnValue = this.name + "-" + "Saved_" + nowAsString + "-" + this.world.saveFileNameStem();
+                return returnValue;
+            }
             start() {
                 this.timerHelper.initialize(this.updateForTimerTick.bind(this));
             }

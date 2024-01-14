@@ -20,6 +20,9 @@ var ThisCouldBeBetter;
                 }
                 return stringToPad;
             }
+            static spacesToUnderscores(stringToAlter) {
+                return StringHelper.replaceAll(stringToAlter, " ", "_");
+            }
             static replaceAll(stringToReplaceWithin, stringToBeReplaced, stringToReplaceWith) {
                 return stringToReplaceWithin.split(stringToBeReplaced).join(stringToReplaceWith);
             }

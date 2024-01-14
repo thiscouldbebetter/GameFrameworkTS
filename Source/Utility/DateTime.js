@@ -41,6 +41,22 @@ var ThisCouldBeBetter;
                     + GameFramework.StringHelper.padStart("" + this.seconds, 2, "0");
                 return returnValue;
             }
+            toStringMonDD_HHMM() {
+                var monthAbbreviations = [
+                    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                ];
+                var monthAbbreviation = monthAbbreviations[this.month - 1];
+                var dayOfYearAsString = monthAbbreviation
+                    + "_"
+                    + GameFramework.StringHelper.padStart("" + this.day, 2, "0");
+                var timeOfDayAsString = GameFramework.StringHelper.padStart("" + this.hours, 2, "0")
+                    + GameFramework.StringHelper.padStart("" + this.minutes, 2, "0");
+                var returnValue = ""
+                    + dayOfYearAsString
+                    + "-"
+                    + timeOfDayAsString;
+                return returnValue;
+            }
             toStringHH_MM_SS() {
                 var returnValue = +GameFramework.StringHelper.padStart("" + this.hours, 2, "0")
                     + ":"

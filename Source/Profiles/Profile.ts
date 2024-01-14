@@ -64,12 +64,15 @@ export class Profile
 			size = universe.display.sizeDefault();
 		}
 
+		var margin = 8;
 		var controlBuilder = universe.controlBuilder;
 		var sizeBase = controlBuilder.sizeBase;
 		var scaleMultiplier = size.clone().divide(sizeBase);
 		var fontHeight = controlBuilder.fontHeightInPixelsBase;
 		var fontNameAndHeight = new FontNameAndHeight(null, fontHeight);
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
+		var buttonSize = Coords.fromXY(1.5, 1).multiplyScalar(buttonHeightBase);
+		var colors = Color.Instances();
 
 		var visualThumbnailSize = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
 
@@ -86,285 +89,311 @@ export class Profile
 			);
 		};
 
+		var labelProfileName = ControlLabel.from4CenteredHorizontally
+		(
+			Coords.fromXY(margin, margin), // pos
+			Coords.fromXY(sizeBase.x, fontHeight), // size
+			DataBinding.fromContext
+			(
+				"Profile: " + universe.profile.name
+			),
+			fontNameAndHeight
+		);
+
+		var labelChooseAState = ControlLabel.from4CenteredHorizontally
+		(
+			Coords.fromXY(margin, margin * 2), // pos
+			Coords.fromXY(sizeBase.x, 25), // size
+			DataBinding.fromContext
+			(
+				"Choose a State to "
+				+ (isLoadNotSave ? "Restore" : "Overwrite") + ":"
+			),
+			fontNameAndHeight
+		);
+
+		var listPosY = margin * 4;
+
+		var listSize = Coords.fromXY
+		(
+			sizeBase.x - margin * 3 - visualThumbnailSize.x,
+			sizeBase.y - margin * 6 - buttonSize.y
+		);
+
+		var listSaveStates = ControlList.from10
+		(
+			"listSaveStates",
+			Coords.fromXY(margin, listPosY), // pos
+			listSize,
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) => c.saveStates
+			), // items
+			DataBinding.fromGet
+			(
+				(c: SaveStateBase) =>
+				{
+					var timeSaved = c.timeSaved;
+					return (timeSaved == null ? "-" : timeSaved.toStringYYYY_MM_DD_HH_MM_SS() )
+				}
+			), // bindingForOptionText
+			fontNameAndHeight,
+			new DataBinding
+			(
+				universe.profile,
+				(c: Profile) => c.saveStateSelected(),
+				(c: Profile, v: SaveStateBase) => c.saveStateNameSelected = v.name
+			), // bindingForOptionSelected
+			DataBinding.fromGet( (v: SaveStateBase) => v.name ), // value
+			null,
+			(
+				isLoadNotSave
+				? Profile.toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage
+				: saveToLocalStorageOverwritingSlotSelected
+			) // confirm
+		);
+
+		var buttonPosY = sizeBase.y - margin - buttonSize.y;
+
+		var buttonNew = ControlButton.from8
+		(
+			"buttonNew",
+			Coords.fromXY(margin, buttonPosY), // pos
+			buttonSize.clone(),
+			"New",
+			fontNameAndHeight,
+			true, // hasBorder
+			DataBinding.fromTrue(), // isEnabled
+			(
+				isLoadNotSave
+				? () => Profile.toControlSaveStateLoadOrSave_LoadNewWorld(universe, size)
+				: () =>
+					Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot
+					(
+						universe, size
+					)
+			) // click
+		);
+
+		var buttonSelect = ControlButton.from11
+		(
+			"buttonSelect",
+			Coords.fromXY
+			(
+				margin * 2 + buttonSize.x,
+				buttonPosY
+			), // pos
+			buttonSize.clone(),
+			(isLoadNotSave ? "Load" : "Save"),
+			fontNameAndHeight,
+			true, // hasBorder
+			// isEnabled
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) => (c.saveStateNameSelected != null)
+			),
+			(
+				isLoadNotSave
+				? () => Profile.toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage(universe)
+				: saveToLocalStorageOverwritingSlotSelected
+			), // click
+			false // canBeHeldDown
+		);
+
+		var buttonFile = ControlButton.from8
+		(
+			"buttonFile",
+			Coords.fromXY
+			(
+				margin * 3 + buttonSize.x * 2,
+				buttonPosY
+			), // pos
+			buttonSize.clone(),
+			"File",
+			fontNameAndHeight,
+			true, // hasBorder
+			// isEnabled
+			/*
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) => (c.saveStateNameSelected != null),
+			),
+			*/
+			DataBinding.fromTrue(),
+			(
+				isLoadNotSave
+				? () => Profile.toControlSaveStateLoadOrSave_LoadFromFile(universe, size)
+				: () => Profile.toControlSaveStateLoadOrSave_SaveToFilesystem(universe, size)
+			) // click
+		);
+
+		var buttonDelete = ControlButton.from8
+		(
+			"buttonDelete",
+			Coords.fromXY(margin * 4 + buttonSize.x * 3, buttonPosY), // pos
+			buttonSize.clone(),
+			"Delete",
+			fontNameAndHeight,
+			true, // hasBorder
+			// isEnabled
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) => (c.saveStateNameSelected != null)
+			),
+			() => Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected(universe, size) // click
+		);
+
+		var imagePosX = margin * 2 + listSize.x;
+
+		var visualSnapshot = ControlVisual.from5
+		(
+			"visualSnapshot",
+			Coords.fromXY(imagePosX, listPosY),
+			visualThumbnailSize,
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) =>
+				{
+					var saveState = c.saveStateSelected();
+					var saveStateImageSnapshot =
+					(
+						saveState == null
+						? null
+						: saveState.imageSnapshot.load(null)
+					);
+					var returnValue =
+					(
+						saveStateImageSnapshot == null || saveStateImageSnapshot.isLoaded == false
+						? new VisualNone()
+						: new VisualImageScaled
+						(
+							visualThumbnailSize.clone(),
+							new VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
+						)
+					);
+					return returnValue;
+				}
+			),
+			colors.White
+		);
+
+		var labelSize = Coords.fromXY(120, buttonHeightBase);
+
+		var labelPlaceName = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY
+			(
+				imagePosX,
+				listPosY + visualThumbnailSize.y + margin
+			), // pos
+			labelSize.clone(),
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) =>
+				{
+					var saveState = c.saveStateSelected();
+					return (saveState == null ? "" : saveState.placeName);
+				}
+			),
+			fontNameAndHeight
+		);
+
+		var labelTimePlaying = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY
+			(
+				imagePosX,
+				90
+			), // pos
+			labelSize.clone(), // size
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) =>
+				{
+					var saveState = c.saveStateSelected();
+					return (saveState == null ? "" : saveState.timePlayingAsString);
+				}
+			),
+			fontNameAndHeight
+		);
+
+		var labelTimeSavedYMD = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(imagePosX, 100), // pos
+			labelSize.clone(),
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) =>
+				{
+					var saveState = c.saveStateSelected();
+					var returnValue =
+					(
+						saveState == null
+						? ""
+						:
+						(
+							saveState.timeSaved == null
+							? ""
+							: saveState.timeSaved.toStringYYYY_MM_DD()
+						)
+					);
+					return returnValue;
+				}
+			),
+			fontNameAndHeight
+		);
+
+		var labelTimeSavedHMS = ControlLabel.from4Uncentered
+		(
+			Coords.fromXY(imagePosX, 110), // pos
+			labelSize.clone(),
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) =>
+				{
+					var saveState = c.saveStateSelected();
+					return (saveState == null ? "" : saveState.timeSaved.toStringHH_MM_SS());
+				}
+			),
+			fontNameAndHeight
+		);
+
+		var buttonBack = ControlButton.from5
+		(
+			Coords.fromXY
+			(
+				sizeBase.x - margin - buttonSize.x, buttonPosY
+			), // pos
+			buttonSize.clone(),
+			"Back",
+			fontNameAndHeight,
+			back // click
+		);
+
 		var childControls = 
 		[
-			new ControlLabel
-			(
-				"labelProfileName",
-				Coords.fromXY(10, 10), // pos
-				Coords.fromXY(sizeBase.x, fontHeight), // size
-				true, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
-				DataBinding.fromContext
-				(
-					"Profile: " + universe.profile.name
-				),
-				fontNameAndHeight
-			),
-
-			new ControlLabel
-			(
-				"labelChooseASave",
-				Coords.fromXY(10, 20), // pos
-				Coords.fromXY(sizeBase.x, 25), // size
-				true, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
-				DataBinding.fromContext
-				(
-					"Choose a State to "
-					+ (isLoadNotSave ? "Restore" : "Overwrite") + ":"
-				),
-				fontNameAndHeight
-			),
-
-			ControlList.from10
-			(
-				"listSaveStates",
-				Coords.fromXY(10, 35), // pos
-				Coords.fromXY(110, 75), // size
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) => c.saveStates
-				), // items
-				DataBinding.fromGet
-				(
-					(c: SaveStateBase) =>
-					{
-						var timeSaved = c.timeSaved;
-						return (timeSaved == null ? "-" : timeSaved.toStringYYYY_MM_DD_HH_MM_SS() )
-					}
-				), // bindingForOptionText
-				fontNameAndHeight,
-				new DataBinding
-				(
-					universe.profile,
-					(c: Profile) => c.saveStateSelected(),
-					(c: Profile, v: SaveStateBase) => c.saveStateNameSelected = v.name
-				), // bindingForOptionSelected
-				DataBinding.fromGet( (v: SaveStateBase) => v.name ), // value
-				null,
-				(
-					isLoadNotSave
-					? Profile.toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage
-					: saveToLocalStorageOverwritingSlotSelected
-				) // confirm
-			),
-
-			ControlButton.from8
-			(
-				"buttonNew",
-				Coords.fromXY(10, 120), // pos
-				Coords.fromXY(25, buttonHeightBase), // size
-				"New",
-				fontNameAndHeight,
-				true, // hasBorder
-				DataBinding.fromTrue(), // isEnabled
-				(
-					isLoadNotSave
-					? () => Profile.toControlSaveStateLoadOrSave_LoadNewWorld(universe, size)
-					: () =>
-						Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot
-						(
-							universe, size
-						)
-				) // click
-			),
-
-			ControlButton.from11
-			(
-				"buttonSelect",
-				Coords.fromXY(40, 120), // pos
-				Coords.fromXY(25, buttonHeightBase), // size
-				(isLoadNotSave ? "Load" : "Save"),
-				fontNameAndHeight,
-				true, // hasBorder
-				// isEnabled
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) => (c.saveStateNameSelected != null)
-				),
-				(
-					isLoadNotSave
-					? () => Profile.toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage(universe)
-					: saveToLocalStorageOverwritingSlotSelected
-				), // click
-				false // canBeHeldDown
-			),
-
-			ControlButton.from8
-			(
-				"buttonFile",
-				Coords.fromXY(70, 120), // pos
-				Coords.fromXY(25, buttonHeightBase), // size
-				"File",
-				fontNameAndHeight,
-				true, // hasBorder
-				// isEnabled
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) => (c.saveStateNameSelected != null),
-				),
-				(
-					isLoadNotSave
-					? () => Profile.toControlSaveStateLoadOrSave_LoadFromFile(universe, size)
-					: () => Profile.toControlSaveStateLoadOrSave_SaveToFilesystem(universe, size)
-				) // click
-			),
-
-			ControlButton.from8
-			(
-				"buttonDelete",
-				Coords.fromXY(100, 120), // pos
-				Coords.fromXY(20, buttonHeightBase), // size
-				"X",
-				fontNameAndHeight,
-				true, // hasBorder
-				// isEnabled
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) => (c.saveStateNameSelected != null)
-				),
-				() => Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected(universe, size) // click
-			),
-
-			ControlVisual.from5
-			(
-				"visualSnapshot",
-				Coords.fromXY(130, 35),
-				visualThumbnailSize,
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) =>
-					{
-						var saveState = c.saveStateSelected();
-						var saveStateImageSnapshot =
-						(
-							saveState == null
-							? null
-							: saveState.imageSnapshot.load(null)
-						);
-						var returnValue =
-						(
-							saveStateImageSnapshot == null || saveStateImageSnapshot.isLoaded == false
-							? new VisualNone()
-							: new VisualImageScaled
-							(
-								visualThumbnailSize.clone(),
-								new VisualImageImmediate(saveStateImageSnapshot, true) // isScaled
-							)
-						);
-						return returnValue;
-					}
-				),
-				Color.byName("White")
-			),
-
-			new ControlLabel
-			(
-				"labelPlaceName",
-				Coords.fromXY(130, 80), // pos
-				Coords.fromXY(120, buttonHeightBase), // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) =>
-					{
-						var saveState = c.saveStateSelected();
-						return (saveState == null ? "" : saveState.placeName);
-					}
-				),
-				fontNameAndHeight
-			),
-
-			new ControlLabel
-			(
-				"labelTimePlaying",
-				Coords.fromXY(130, 90), // pos
-				Coords.fromXY(120, buttonHeightBase), // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) =>
-					{
-						var saveState = c.saveStateSelected();
-						return (saveState == null ? "" : saveState.timePlayingAsString);
-					}
-				),
-				fontNameAndHeight
-			),
-
-			new ControlLabel
-			(
-				"labelDateSaved",
-				Coords.fromXY(130, 100), // pos
-				Coords.fromXY(120, buttonHeightBase), // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) =>
-					{
-						var saveState = c.saveStateSelected();
-						var returnValue =
-						(
-							saveState == null
-							? ""
-							:
-							(
-								saveState.timeSaved == null
-								? ""
-								: saveState.timeSaved.toStringYYYY_MM_DD()
-							)
-						);
-						return returnValue;
-					}
-				),
-				fontNameAndHeight
-			),
-
-			new ControlLabel
-			(
-				"labelTimeSaved",
-				Coords.fromXY(130, 110), // pos
-				Coords.fromXY(120, buttonHeightBase), // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
-				DataBinding.fromContextAndGet
-				(
-					universe.profile,
-					(c: Profile) =>
-					{
-						var saveState = c.saveStateSelected();
-						return (saveState == null ? "" : saveState.timeSaved.toStringHH_MM_SS());
-					}
-				),
-				fontNameAndHeight
-			),
-
-			ControlButton.from8
-			(
-				"buttonBack",
-				Coords.fromXY
-				(
-					sizeBase.x - 10 - 25, sizeBase.y - 10 - 15
-				), // pos
-				Coords.fromXY(25, 15), // size
-				"Back",
-				fontNameAndHeight,
-				true, // hasBorder
-				DataBinding.fromTrue(), // isEnabled
-				back // click
-			),
+			labelProfileName,
+			labelChooseAState,
+			listSaveStates,
+			buttonNew,
+			buttonSelect,
+			buttonFile,
+			buttonDelete,
+			visualSnapshot,
+			labelPlaceName,
+			labelTimePlaying,
+			labelTimeSavedYMD,
+			labelTimeSavedHMS,
+			buttonBack
 		];
 
 		var returnValue = new ControlContainer
@@ -671,9 +700,12 @@ export class Profile
 				: "Save failed due to errors."
 			);
 
+			var fileNameStem = universe.saveFileNameStem();
+			var fileName = fileNameStem + ".json.lzw";
+
 			new FileHelper().saveBytesToFileWithName
 			(
-				worldCompressedAsBytes, universe.world.name + ".json.lzw"
+				worldCompressedAsBytes, fileName
 			);
 
 			var controlMessage = universe.controlBuilder.message4
