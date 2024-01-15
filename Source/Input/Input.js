@@ -27,6 +27,7 @@ var ThisCouldBeBetter;
                 this.Control = "Control";
                 this.Enter = "Enter";
                 this.Escape = "Escape";
+                this.F5 = "F5";
                 this.GamepadButton0 = "GamepadButton0_";
                 this.GamepadButton1 = "GamepadButton1_";
                 this.GamepadMoveDown = "GamepadMoveDown_";
@@ -50,6 +51,7 @@ var ThisCouldBeBetter;
                         this.Control,
                         this.Enter,
                         this.Escape,
+                        this.F5,
                         this.GamepadButton0,
                         this.GamepadButton1,
                         this.GamepadMoveDown,

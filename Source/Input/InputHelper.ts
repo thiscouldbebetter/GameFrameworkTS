@@ -37,6 +37,7 @@ export class InputHelper implements Platformable
 			inputNames.ArrowLeft,
 			inputNames.ArrowRight,
 			inputNames.ArrowUp,
+			inputNames.F5,
 			inputNames.Tab
 		];
 

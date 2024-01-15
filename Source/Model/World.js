@@ -95,7 +95,7 @@ var ThisCouldBeBetter;
             }
             toStringJson(universe) {
                 var serializer = universe.serializer;
-                var returnValue = serializer.serialize(this, false); // pretty-print
+                var returnValue = serializer.serializeWithoutFormatting(this);
                 return returnValue;
             }
             // Saving.

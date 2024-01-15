@@ -85,7 +85,7 @@ export class Profile
 			Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm(universe);
 			Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot
 			(
-				universe, size
+				universe, size, venueToReturnTo
 			);
 		};
 
@@ -156,22 +156,19 @@ export class Profile
 
 		var buttonPosY = sizeBase.y - margin - buttonSize.y;
 
-		var buttonNew = ControlButton.from8
+		var buttonNew = ControlButton.from5
 		(
-			"buttonNew",
 			Coords.fromXY(margin, buttonPosY), // pos
 			buttonSize.clone(),
 			"New",
 			fontNameAndHeight,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
 			(
 				isLoadNotSave
 				? () => Profile.toControlSaveStateLoadOrSave_LoadNewWorld(universe, size)
 				: () =>
 					Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot
 					(
-						universe, size
+						universe, size, venueToReturnTo
 					)
 			) // click
 		);
@@ -202,9 +199,8 @@ export class Profile
 			false // canBeHeldDown
 		);
 
-		var buttonFile = ControlButton.from8
+		var buttonFile = ControlButton.from5
 		(
-			"buttonFile",
 			Coords.fromXY
 			(
 				margin * 3 + buttonSize.x * 2,
@@ -213,12 +209,9 @@ export class Profile
 			buttonSize.clone(),
 			"File",
 			fontNameAndHeight,
-			true, // hasBorder
-			// isEnabled
-			DataBinding.fromTrue(),
 			(
 				isLoadNotSave
-				? () => Profile.toControlSaveStateLoadOrSave_LoadFromFile(universe, size)
+				? () => Profile.toControlSaveStateLoadOrSave_LoadFromFile(universe, size, venuePrev)
 				: () => Profile.toControlSaveStateLoadOrSave_SaveToFilesystem(universe, size)
 			) // click
 		);
@@ -446,7 +439,7 @@ export class Profile
 
 	static toControlSaveStateLoadOrSave_LoadFromFile
 	(
-		universe: Universe, size: Coords
+		universe: Universe, size: Coords, venueToReturnTo: Venue
 	): void
 	{
 		var venueFileUpload = new VenueFileUpload(null, null);
@@ -457,34 +450,11 @@ export class Profile
 			universe,
 			size,
 			DataBinding.fromContext("Ready to load from file..."),
-			() => // acknowledge
-			{
-				var callback = (fileContentsAsString: string) =>
-				{
-					var worldAsStringCompressed = fileContentsAsString;
-					var compressor = universe.storageHelper.compressor;
-					var worldSerialized = compressor.decompressString(worldAsStringCompressed);
-					var worldCreator = universe.worldCreator;
-					var worldBlank = worldCreator.worldCreate(universe, worldCreator);
-					var worldDeserialized = worldBlank.fromStringJson(worldSerialized, universe);
-					universe.world = worldDeserialized;
-
-					var venueNext = universe.controlBuilder.game
-					(
-						universe, size, universe.venueCurrent()
-					).toVenue();
-					universe.venueTransitionTo(venueNext);
-				}
-
-				var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
-				var fileToLoad = inputFile.files[0];
-				new FileHelper().loadFileAsBinaryString
+			() =>
+				Profile.toControlSaveStateLoadOrSave_LoadFromFile_Acknowledge
 				(
-					fileToLoad,
-					callback,
-					null // contextForCallback
-				);
-			}
+					universe, size, venueFileUpload, venueToReturnTo
+				)
 		);
 
 		var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
@@ -496,8 +466,8 @@ export class Profile
 			DataBinding.fromContext("No file specified."),
 			() => // acknowlege
 			{
-				var venueNext=
-					controlBuilder.game(universe, size, universe.venueCurrent()).toVenue();
+				var control = controlBuilder.game(universe, size, venueToReturnTo);
+				var venueNext = control.toVenue();
 				universe.venueTransitionTo(venueNext);
 			}
 		);
@@ -509,6 +479,42 @@ export class Profile
 
 		universe.venueTransitionTo(venueFileUpload);
 	};
+
+	static toControlSaveStateLoadOrSave_LoadFromFile_Acknowledge
+	(
+		universe: Universe,
+		size: Coords,
+		venueFileUpload: VenueFileUpload,
+		venueToReturnTo: Venue
+	): void
+	{
+		var callback = (fileContentsAsString: string) =>
+		{
+			var saveStateAsStringCompressed = fileContentsAsString;
+			var compressor = universe.storageHelper.compressor;
+			var saveStateSerialized =
+				compressor.decompressString(saveStateAsStringCompressed);
+			var serializer = universe.serializer;
+			var saveState = serializer.deserialize(saveStateSerialized);
+			universe.world = saveState.toWorld(universe);
+
+			var venueNext = universe.controlBuilder.game
+			(
+				universe, size, venueToReturnTo
+			).toVenue();
+			universe.venueTransitionTo(venueNext);
+		}
+
+		var domElement = venueFileUpload.toDomElement();
+		var inputFile = domElement.getElementsByTagName("input")[0];
+		var fileToLoad = inputFile.files[0];
+		new FileHelper().loadFileAsBinaryString
+		(
+			fileToLoad,
+			callback,
+			null // contextForCallback
+		);
+	}
 
 	static toControlSaveStateLoadOrSave_LoadNewWorld
 	(
@@ -585,14 +591,17 @@ export class Profile
 
 			storageHelper.save(saveStateName, saveState);
 
-			if (profile.saveStates.some(x => x.name == saveStateName) == false)
+			var profileHasSaveStateWithName =
+				profile.saveStates.some(x => x.name == saveStateName);
+			if (profileHasSaveStateWithName == false)
 			{
 				saveState.unload();
 				profile.saveStates.push(saveState);
 				storageHelper.save(profile.name, profile);
 			}
 
-			var profileNames = storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
+			var profileNames =
+				storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
 
 			if (profileNames == null)
 			{
@@ -634,7 +643,8 @@ export class Profile
 	(
 		universe: Universe,
 		size: Coords,
-		errorMessageFromSave: string
+		errorMessageFromSave: string,
+		venueToReturnTo: Venue
 	): void
 	{
 		var message =
@@ -653,7 +663,7 @@ export class Profile
 			{
 				var venueNext: Venue = universe.controlBuilder.game
 				(
-					universe, null, universe.venueCurrent()
+					universe, null, venueToReturnTo
 				).toVenue();
 				universe.venueTransitionTo(venueNext);
 			}
@@ -670,28 +680,56 @@ export class Profile
 	{
 		var venueMessage = VenueMessage.fromText("Saving game...");
 
-		var savePerform = () => Profile.savePerform(universe);
+		var saveDo =
+			() =>
+				Profile.toControlSaveStateLoadOrSave_SaveToFilesystem_Do(universe);
 
 		var venueToReturnTo = universe.venuePrev();
 
 		var saveDone =
 			(worldCompressedAsBytes: number[]) =>
-				Profile.saveDone(worldCompressedAsBytes, universe, size, venueToReturnTo);
+				Profile.toControlSaveStateLoadOrSave_SaveToFilesystem_Done
+				(
+					worldCompressedAsBytes, universe, size, venueToReturnTo
+				);
 
-		var venueTask = new VenueTask(venueMessage, savePerform, saveDone);
+		var venueTask = new VenueTask
+		(
+			venueMessage, saveDo, saveDone
+		);
 
 		universe.venueTransitionTo(venueTask);
 	}
 
-	static saveDone
+	static toControlSaveStateLoadOrSave_SaveToFilesystem_Do
 	(
-		worldCompressedAsBytes: number[],
+		universe: Universe
+	): number[]
+	{
+		var world = universe.world;
+
+		var worldAsSaveState = world.toSaveState(universe);
+
+		var serializer = universe.serializer;
+		var saveStateSerialized =
+			serializer.serializeWithoutFormatting(worldAsSaveState);
+
+		var compressor = universe.storageHelper.compressor;
+		var worldCompressedAsBytes =
+			compressor.compressStringToBytes(saveStateSerialized);
+
+		return worldCompressedAsBytes;
+	}
+
+	static toControlSaveStateLoadOrSave_SaveToFilesystem_Done
+	(
+		saveStateCompressedAsBytes: number[],
 		universe: Universe,
 		size: Coords,
 		venueToReturnTo: Venue
 	): void
 	{
-		var wasSaveSuccessful = (worldCompressedAsBytes != null);
+		var wasSaveSuccessful = (saveStateCompressedAsBytes != null);
 		var message =
 		(
 			wasSaveSuccessful
@@ -704,7 +742,7 @@ export class Profile
 
 		new FileHelper().saveBytesToFileWithName
 		(
-			worldCompressedAsBytes, fileName
+			saveStateCompressedAsBytes, fileName
 		);
 
 		var controlMessage = universe.controlBuilder.message4
@@ -726,22 +764,9 @@ export class Profile
 		universe.venueTransitionTo(venueMessage);
 	}
 
-	static savePerform(universe: Universe): number[]
-	{
-		var world = universe.world;
-
-		world.dateSaved = DateTime.now();
-		var worldSerialized = world.toStringJson(universe);
-
-		var compressor = universe.storageHelper.compressor;
-		var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
-
-		return worldCompressedAsBytes;
-	}
-
 	static toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot
 	(
-		universe: Universe, size: Coords
+		universe: Universe, size: Coords, venueToReturnTo: Venue
 	): void
 	{
 		var messageAsDataBinding = DataBinding.fromContextAndGet
@@ -766,7 +791,7 @@ export class Profile
 			{
 				Profile.toControlSaveStateLoadOrSave_SaveToLocalStorage_Done
 				(
-					universe, size, errorMessageFromSave
+					universe, size, errorMessageFromSave, venueToReturnTo
 				);
 			}
 		);

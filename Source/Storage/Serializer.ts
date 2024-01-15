@@ -33,6 +33,17 @@ export class Serializer
 
 		return nodeRootSerialized;
 	}
+
+	serializeWithFormatting<T>(objectToSerialize: T)
+	{
+		return this.serialize(objectToSerialize, true);
+	}
+
+	serializeWithoutFormatting<T>(objectToSerialize: T)
+	{
+		return this.serialize(objectToSerialize, false);
+	}
+
 }
 
 export class SerializerNode

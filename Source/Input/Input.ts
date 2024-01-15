@@ -39,6 +39,7 @@ class Input_Names
 	Control: string;
 	Enter: string;
 	Escape: string;
+	F5: string;
 	GamepadButton0: string;
 	GamepadButton1: string;
 	GamepadMoveDown: string;
@@ -66,6 +67,7 @@ class Input_Names
 		this.Control = "Control";
 		this.Enter = "Enter";
 		this.Escape = "Escape";
+		this.F5 = "F5";
 		this.GamepadButton0 = "GamepadButton0_";
 		this.GamepadButton1 = "GamepadButton1_";
 		this.GamepadMoveDown = "GamepadMoveDown_";
@@ -90,6 +92,7 @@ class Input_Names
 			this.Control,
 			this.Enter,
 			this.Escape,
+			this.F5,
 			this.GamepadButton0,
 			this.GamepadButton1,
 			this.GamepadMoveDown,

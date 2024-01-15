@@ -22,6 +22,12 @@ var ThisCouldBeBetter;
                 );
                 return nodeRootSerialized;
             }
+            serializeWithFormatting(objectToSerialize) {
+                return this.serialize(objectToSerialize, true);
+            }
+            serializeWithoutFormatting(objectToSerialize) {
+                return this.serialize(objectToSerialize, false);
+            }
         }
         GameFramework.Serializer = Serializer;
         class SerializerNode {

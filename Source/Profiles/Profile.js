@@ -46,7 +46,7 @@ var ThisCouldBeBetter;
                 var back = () => universe.venueTransitionTo(venueToReturnTo);
                 var saveToLocalStorageOverwritingSlotSelected = () => {
                     Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected_Confirm(universe);
-                    Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot(universe, size);
+                    Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot(universe, size, venueToReturnTo);
                 };
                 var labelProfileName = GameFramework.ControlLabel.from4CenteredHorizontally(GameFramework.Coords.fromXY(margin, margin), // pos
                 GameFramework.Coords.fromXY(sizeBase.x, fontHeight), // size
@@ -70,12 +70,10 @@ var ThisCouldBeBetter;
                     : saveToLocalStorageOverwritingSlotSelected) // confirm
                 );
                 var buttonPosY = sizeBase.y - margin - buttonSize.y;
-                var buttonNew = GameFramework.ControlButton.from8("buttonNew", GameFramework.Coords.fromXY(margin, buttonPosY), // pos
-                buttonSize.clone(), "New", fontNameAndHeight, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled
-                (isLoadNotSave
+                var buttonNew = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(margin, buttonPosY), // pos
+                buttonSize.clone(), "New", fontNameAndHeight, (isLoadNotSave
                     ? () => Profile.toControlSaveStateLoadOrSave_LoadNewWorld(universe, size)
-                    : () => Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot(universe, size)) // click
+                    : () => Profile.toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot(universe, size, venueToReturnTo)) // click
                 );
                 var buttonSelect = GameFramework.ControlButton.from11("buttonSelect", GameFramework.Coords.fromXY(margin * 2 + buttonSize.x, buttonPosY), // pos
                 buttonSize.clone(), (isLoadNotSave ? "Load" : "Save"), fontNameAndHeight, true, // hasBorder
@@ -85,11 +83,9 @@ var ThisCouldBeBetter;
                     : saveToLocalStorageOverwritingSlotSelected), // click
                 false // canBeHeldDown
                 );
-                var buttonFile = GameFramework.ControlButton.from8("buttonFile", GameFramework.Coords.fromXY(margin * 3 + buttonSize.x * 2, buttonPosY), // pos
-                buttonSize.clone(), "File", fontNameAndHeight, true, // hasBorder
-                // isEnabled
-                GameFramework.DataBinding.fromTrue(), (isLoadNotSave
-                    ? () => Profile.toControlSaveStateLoadOrSave_LoadFromFile(universe, size)
+                var buttonFile = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(margin * 3 + buttonSize.x * 2, buttonPosY), // pos
+                buttonSize.clone(), "File", fontNameAndHeight, (isLoadNotSave
+                    ? () => Profile.toControlSaveStateLoadOrSave_LoadFromFile(universe, size, venuePrev)
                     : () => Profile.toControlSaveStateLoadOrSave_SaveToFilesystem(universe, size)) // click
                 );
                 var buttonDelete = GameFramework.ControlButton.from8("buttonDelete", GameFramework.Coords.fromXY(margin * 4 + buttonSize.x * 3, buttonPosY), // pos
@@ -181,31 +177,15 @@ var ThisCouldBeBetter;
                 storageHelper.save(profile.name, profile);
             }
             ;
-            static toControlSaveStateLoadOrSave_LoadFromFile(universe, size) {
+            static toControlSaveStateLoadOrSave_LoadFromFile(universe, size, venueToReturnTo) {
                 var venueFileUpload = new GameFramework.VenueFileUpload(null, null);
                 var controlBuilder = universe.controlBuilder;
-                var controlMessageReadyToLoad = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => // acknowledge
-                 {
-                    var callback = (fileContentsAsString) => {
-                        var worldAsStringCompressed = fileContentsAsString;
-                        var compressor = universe.storageHelper.compressor;
-                        var worldSerialized = compressor.decompressString(worldAsStringCompressed);
-                        var worldCreator = universe.worldCreator;
-                        var worldBlank = worldCreator.worldCreate(universe, worldCreator);
-                        var worldDeserialized = worldBlank.fromStringJson(worldSerialized, universe);
-                        universe.world = worldDeserialized;
-                        var venueNext = universe.controlBuilder.game(universe, size, universe.venueCurrent()).toVenue();
-                        universe.venueTransitionTo(venueNext);
-                    };
-                    var inputFile = venueFileUpload.toDomElement().getElementsByTagName("input")[0];
-                    var fileToLoad = inputFile.files[0];
-                    new GameFramework.FileHelper().loadFileAsBinaryString(fileToLoad, callback, null // contextForCallback
-                    );
-                });
+                var controlMessageReadyToLoad = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => Profile.toControlSaveStateLoadOrSave_LoadFromFile_Acknowledge(universe, size, venueFileUpload, venueToReturnTo));
                 var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
                 var controlMessageCancelled = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
                  {
-                    var venueNext = controlBuilder.game(universe, size, universe.venueCurrent()).toVenue();
+                    var control = controlBuilder.game(universe, size, venueToReturnTo);
+                    var venueNext = control.toVenue();
                     universe.venueTransitionTo(venueNext);
                 });
                 var venueMessageCancelled = controlMessageCancelled.toVenue();
@@ -214,6 +194,23 @@ var ThisCouldBeBetter;
                 universe.venueTransitionTo(venueFileUpload);
             }
             ;
+            static toControlSaveStateLoadOrSave_LoadFromFile_Acknowledge(universe, size, venueFileUpload, venueToReturnTo) {
+                var callback = (fileContentsAsString) => {
+                    var saveStateAsStringCompressed = fileContentsAsString;
+                    var compressor = universe.storageHelper.compressor;
+                    var saveStateSerialized = compressor.decompressString(saveStateAsStringCompressed);
+                    var serializer = universe.serializer;
+                    var saveState = serializer.deserialize(saveStateSerialized);
+                    universe.world = saveState.toWorld(universe);
+                    var venueNext = universe.controlBuilder.game(universe, size, venueToReturnTo).toVenue();
+                    universe.venueTransitionTo(venueNext);
+                };
+                var domElement = venueFileUpload.toDomElement();
+                var inputFile = domElement.getElementsByTagName("input")[0];
+                var fileToLoad = inputFile.files[0];
+                new GameFramework.FileHelper().loadFileAsBinaryString(fileToLoad, callback, null // contextForCallback
+                );
+            }
             static toControlSaveStateLoadOrSave_LoadNewWorld(universe, size) {
                 var world = universe.worldCreate();
                 universe.world = world;
@@ -250,7 +247,8 @@ var ThisCouldBeBetter;
                 try {
                     var saveStateName = saveState.name;
                     storageHelper.save(saveStateName, saveState);
-                    if (profile.saveStates.some(x => x.name == saveStateName) == false) {
+                    var profileHasSaveStateWithName = profile.saveStates.some(x => x.name == saveStateName);
+                    if (profileHasSaveStateWithName == false) {
                         saveState.unload();
                         profile.saveStates.push(saveState);
                         storageHelper.save(profile.name, profile);
@@ -279,13 +277,13 @@ var ThisCouldBeBetter;
                 }
                 return errorMessageFromSave;
             }
-            static toControlSaveStateLoadOrSave_SaveToLocalStorage_Done(universe, size, errorMessageFromSave) {
+            static toControlSaveStateLoadOrSave_SaveToLocalStorage_Done(universe, size, errorMessageFromSave, venueToReturnTo) {
                 var message = (errorMessageFromSave == null
                     ? "Game saved successfully."
                     : "Save failed due to errors:\n" + errorMessageFromSave);
                 var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                  {
-                    var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent()).toVenue();
+                    var venueNext = universe.controlBuilder.game(universe, null, venueToReturnTo).toVenue();
                     universe.venueTransitionTo(venueNext);
                 });
                 var venueNext = controlMessage.toVenue();
@@ -293,20 +291,29 @@ var ThisCouldBeBetter;
             }
             static toControlSaveStateLoadOrSave_SaveToFilesystem(universe, size) {
                 var venueMessage = GameFramework.VenueMessage.fromText("Saving game...");
-                var savePerform = () => Profile.savePerform(universe);
+                var saveDo = () => Profile.toControlSaveStateLoadOrSave_SaveToFilesystem_Do(universe);
                 var venueToReturnTo = universe.venuePrev();
-                var saveDone = (worldCompressedAsBytes) => Profile.saveDone(worldCompressedAsBytes, universe, size, venueToReturnTo);
-                var venueTask = new GameFramework.VenueTask(venueMessage, savePerform, saveDone);
+                var saveDone = (worldCompressedAsBytes) => Profile.toControlSaveStateLoadOrSave_SaveToFilesystem_Done(worldCompressedAsBytes, universe, size, venueToReturnTo);
+                var venueTask = new GameFramework.VenueTask(venueMessage, saveDo, saveDone);
                 universe.venueTransitionTo(venueTask);
             }
-            static saveDone(worldCompressedAsBytes, universe, size, venueToReturnTo) {
-                var wasSaveSuccessful = (worldCompressedAsBytes != null);
+            static toControlSaveStateLoadOrSave_SaveToFilesystem_Do(universe) {
+                var world = universe.world;
+                var worldAsSaveState = world.toSaveState(universe);
+                var serializer = universe.serializer;
+                var saveStateSerialized = serializer.serializeWithoutFormatting(worldAsSaveState);
+                var compressor = universe.storageHelper.compressor;
+                var worldCompressedAsBytes = compressor.compressStringToBytes(saveStateSerialized);
+                return worldCompressedAsBytes;
+            }
+            static toControlSaveStateLoadOrSave_SaveToFilesystem_Done(saveStateCompressedAsBytes, universe, size, venueToReturnTo) {
+                var wasSaveSuccessful = (saveStateCompressedAsBytes != null);
                 var message = (wasSaveSuccessful
                     ? "Save ready: choose location on dialog."
                     : "Save failed due to errors.");
                 var fileNameStem = universe.saveFileNameStem();
                 var fileName = fileNameStem + ".json.lzw";
-                new GameFramework.FileHelper().saveBytesToFileWithName(worldCompressedAsBytes, fileName);
+                new GameFramework.FileHelper().saveBytesToFileWithName(saveStateCompressedAsBytes, fileName);
                 var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                  {
                     var venueNext = universe.controlBuilder.game(universe, null, venueToReturnTo).toVenue();
@@ -315,22 +322,14 @@ var ThisCouldBeBetter;
                 var venueMessage = controlMessage.toVenue();
                 universe.venueTransitionTo(venueMessage);
             }
-            static savePerform(universe) {
-                var world = universe.world;
-                world.dateSaved = GameFramework.DateTime.now();
-                var worldSerialized = world.toStringJson(universe);
-                var compressor = universe.storageHelper.compressor;
-                var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
-                return worldCompressedAsBytes;
-            }
-            static toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot(universe, size) {
+            static toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot(universe, size, venueToReturnTo) {
                 var messageAsDataBinding = GameFramework.DataBinding.fromContextAndGet(null, // context - Set below.
                 (c) => "Saving game...");
                 var venueMessage = GameFramework.VenueMessage.fromMessage(messageAsDataBinding);
                 var perform = () => Profile.toControlSaveStateLoadOrSave_SaveToLocalStorage(universe);
                 var venueTask = new GameFramework.VenueTask(venueMessage, perform, (errorMessageFromSave) => // done
                  {
-                    Profile.toControlSaveStateLoadOrSave_SaveToLocalStorage_Done(universe, size, errorMessageFromSave);
+                    Profile.toControlSaveStateLoadOrSave_SaveToLocalStorage_Done(universe, size, errorMessageFromSave, venueToReturnTo);
                 });
                 messageAsDataBinding.contextSet(venueTask);
                 universe.venueTransitionTo(venueTask);

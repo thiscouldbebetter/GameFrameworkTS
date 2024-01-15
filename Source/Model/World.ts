@@ -180,7 +180,7 @@ export class World //
 	toStringJson(universe: Universe): string
 	{
 		var serializer = universe.serializer;
-		var returnValue = serializer.serialize(this, false); // pretty-print
+		var returnValue = serializer.serializeWithoutFormatting(this);
 		return returnValue;
 	}
 
