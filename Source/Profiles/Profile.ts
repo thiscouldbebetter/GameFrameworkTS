@@ -215,13 +215,6 @@ export class Profile
 			fontNameAndHeight,
 			true, // hasBorder
 			// isEnabled
-			/*
-			DataBinding.fromContextAndGet
-			(
-				universe.profile,
-				(c: Profile) => (c.saveStateNameSelected != null),
-			),
-			*/
 			DataBinding.fromTrue(),
 			(
 				isLoadNotSave
@@ -677,59 +670,73 @@ export class Profile
 	{
 		var venueMessage = VenueMessage.fromText("Saving game...");
 
-		var savePerform = () =>
-		{
-			var world = universe.world;
+		var savePerform = () => Profile.savePerform(universe);
 
-			world.dateSaved = DateTime.now();
-			var worldSerialized = world.toStringJson(universe);
+		var venueToReturnTo = universe.venuePrev();
 
-			var compressor = universe.storageHelper.compressor;
-			var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
-
-			return worldCompressedAsBytes;
-		};
-
-		var saveDone = (worldCompressedAsBytes: number[]) => // done
-		{
-			var wasSaveSuccessful = (worldCompressedAsBytes != null);
-			var message =
-			(
-				wasSaveSuccessful
-				? "Save ready: choose location on dialog."
-				: "Save failed due to errors."
-			);
-
-			var fileNameStem = universe.saveFileNameStem();
-			var fileName = fileNameStem + ".json.lzw";
-
-			new FileHelper().saveBytesToFileWithName
-			(
-				worldCompressedAsBytes, fileName
-			);
-
-			var controlMessage = universe.controlBuilder.message4
-			(
-				universe,
-				size,
-				DataBinding.fromContext(message),
-				() => // acknowledge
-				{
-					var venueNext = universe.controlBuilder.game
-					(
-						universe, null, universe.venueCurrent()
-					).toVenue();
-					universe.venueTransitionTo(venueNext);
-				}
-			);
-
-			var venueMessage = controlMessage.toVenue();
-			universe.venueTransitionTo(venueMessage);
-		}
+		var saveDone =
+			(worldCompressedAsBytes: number[]) =>
+				Profile.saveDone(worldCompressedAsBytes, universe, size, venueToReturnTo);
 
 		var venueTask = new VenueTask(venueMessage, savePerform, saveDone);
 
 		universe.venueTransitionTo(venueTask);
+	}
+
+	static saveDone
+	(
+		worldCompressedAsBytes: number[],
+		universe: Universe,
+		size: Coords,
+		venueToReturnTo: Venue
+	): void
+	{
+		var wasSaveSuccessful = (worldCompressedAsBytes != null);
+		var message =
+		(
+			wasSaveSuccessful
+			? "Save ready: choose location on dialog."
+			: "Save failed due to errors."
+		);
+
+		var fileNameStem = universe.saveFileNameStem();
+		var fileName = fileNameStem + ".json.lzw";
+
+		new FileHelper().saveBytesToFileWithName
+		(
+			worldCompressedAsBytes, fileName
+		);
+
+		var controlMessage = universe.controlBuilder.message4
+		(
+			universe,
+			size,
+			DataBinding.fromContext(message),
+			() => // acknowledge
+			{
+				var venueNext = universe.controlBuilder.game
+				(
+					universe, null, venueToReturnTo
+				).toVenue();
+				universe.venueTransitionTo(venueNext);
+			}
+		);
+
+		var venueMessage = controlMessage.toVenue();
+		universe.venueTransitionTo(venueMessage);
+	}
+
+	static savePerform(universe: Universe): number[]
+	{
+		var world = universe.world;
+
+		world.dateSaved = DateTime.now();
+		var worldSerialized = world.toStringJson(universe);
+
+		var compressor = universe.storageHelper.compressor;
+		var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
+
+		return worldCompressedAsBytes;
 	}
 
 	static toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot

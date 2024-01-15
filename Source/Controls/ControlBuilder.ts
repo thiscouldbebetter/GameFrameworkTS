@@ -370,8 +370,6 @@ export class ControlBuilder
 
 	game(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
-		var controlBuilder = this;
-
 		if (size == null)
 		{
 			size = universe.display.sizeDefault().clone();
@@ -431,6 +429,8 @@ export class ControlBuilder
 
 			var venueCurrent = universe.venueCurrent();
 
+			var venueToReturnTo = universe.venueCurrent();
+
 			var venueNext = new VenueMessage
 			(
 				DataBinding.fromContext(aboutText),
@@ -438,42 +438,16 @@ export class ControlBuilder
 				{
 					universe.venueTransitionTo(venueCurrent);
 				},
-				universe.venueCurrent(), // venuePrev
+				venueToReturnTo,
 				size,
 				false
 			);
 			universe.venueTransitionTo(venueNext);
 		};
 
-		var quit = () =>
-		{
-			var controlConfirm = universe.controlBuilder.confirm
-			(
-				universe,
-				size,
-				"Are you sure you want to quit?",
-				() => // confirm
-				{
-					universe.reset();
-					var venueNext =
-						controlBuilder.title(universe, null).toVenue();
-					universe.venueTransitionTo(venueNext);
-				},
-				() => // cancel
-				{
-					var venueNext = venuePrev;
-					universe.venueTransitionTo(venueNext);
-				}
-			);
+		var quit = () => ControlBuilder.game_Quit(universe, size, venuePrev);
 
-			var venueNext: Venue = controlConfirm.toVenue();
-			universe.venueTransitionTo(venueNext);
-		};
-
-		var back = () =>
-		{
-			universe.venueTransitionTo(venuePrev);
-		};
+		var back = () => ControlBuilder.game_Back(universe, venuePrev);
 
 		var buttonSave = ControlButton.from5
 		(
@@ -543,6 +517,36 @@ export class ControlBuilder
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
+	}
+
+	static game_Back(universe: Universe, venueToReturnTo: Venue): void
+	{
+		universe.venueTransitionTo(venueToReturnTo);
+	}
+
+	static game_Quit(universe: Universe, size: Coords, venueToReturnTo: Venue): void
+	{
+		var controlConfirm = universe.controlBuilder.confirm
+		(
+			universe,
+			size,
+			"Are you sure you want to quit?",
+			() => // confirm
+			{
+				universe.reset();
+				var venueNext =
+					universe.controlBuilder.title(universe, null).toVenue();
+				universe.venueTransitionTo(venueNext);
+			},
+			() => // cancel
+			{
+				var venueNext = venueToReturnTo;
+				universe.venueTransitionTo(venueNext);
+			}
+		);
+
+		var venueNext: Venue = controlConfirm.toVenue();
+		universe.venueTransitionTo(venueNext);
 	}
 
 	gameAndSettings1(universe: Universe): ControlBase

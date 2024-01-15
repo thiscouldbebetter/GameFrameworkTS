@@ -155,7 +155,6 @@ var ThisCouldBeBetter;
                 );
             }
             game(universe, size, venuePrev) {
-                var controlBuilder = this;
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
@@ -191,30 +190,15 @@ var ThisCouldBeBetter;
                     ];
                     var aboutText = aboutTextAsLines.join("\n");
                     var venueCurrent = universe.venueCurrent();
+                    var venueToReturnTo = universe.venueCurrent();
                     var venueNext = new GameFramework.VenueMessage(GameFramework.DataBinding.fromContext(aboutText), () => // acknowledge
                      {
                         universe.venueTransitionTo(venueCurrent);
-                    }, universe.venueCurrent(), // venuePrev
-                    size, false);
+                    }, venueToReturnTo, size, false);
                     universe.venueTransitionTo(venueNext);
                 };
-                var quit = () => {
-                    var controlConfirm = universe.controlBuilder.confirm(universe, size, "Are you sure you want to quit?", () => // confirm
-                     {
-                        universe.reset();
-                        var venueNext = controlBuilder.title(universe, null).toVenue();
-                        universe.venueTransitionTo(venueNext);
-                    }, () => // cancel
-                     {
-                        var venueNext = venuePrev;
-                        universe.venueTransitionTo(venueNext);
-                    });
-                    var venueNext = controlConfirm.toVenue();
-                    universe.venueTransitionTo(venueNext);
-                };
-                var back = () => {
-                    universe.venueTransitionTo(venuePrev);
-                };
+                var quit = () => ControlBuilder.game_Quit(universe, size, venuePrev);
+                var back = () => ControlBuilder.game_Back(universe, venuePrev);
                 var buttonSave = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(posX, row0PosY), // pos
                 buttonSize.clone(), "Save", font, save);
                 var buttonLoad = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(posX, row1PosY), // pos
@@ -238,6 +222,23 @@ var ThisCouldBeBetter;
                 ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", ["Escape"], true)]);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
+            }
+            static game_Back(universe, venueToReturnTo) {
+                universe.venueTransitionTo(venueToReturnTo);
+            }
+            static game_Quit(universe, size, venueToReturnTo) {
+                var controlConfirm = universe.controlBuilder.confirm(universe, size, "Are you sure you want to quit?", () => // confirm
+                 {
+                    universe.reset();
+                    var venueNext = universe.controlBuilder.title(universe, null).toVenue();
+                    universe.venueTransitionTo(venueNext);
+                }, () => // cancel
+                 {
+                    var venueNext = venueToReturnTo;
+                    universe.venueTransitionTo(venueNext);
+                });
+                var venueNext = controlConfirm.toVenue();
+                universe.venueTransitionTo(venueNext);
             }
             gameAndSettings1(universe) {
                 return this.gameAndSettings(universe, null, // size

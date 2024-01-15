@@ -88,13 +88,6 @@ var ThisCouldBeBetter;
                 var buttonFile = GameFramework.ControlButton.from8("buttonFile", GameFramework.Coords.fromXY(margin * 3 + buttonSize.x * 2, buttonPosY), // pos
                 buttonSize.clone(), "File", fontNameAndHeight, true, // hasBorder
                 // isEnabled
-                /*
-                DataBinding.fromContextAndGet
-                (
-                    universe.profile,
-                    (c: Profile) => (c.saveStateNameSelected != null),
-                ),
-                */
                 GameFramework.DataBinding.fromTrue(), (isLoadNotSave
                     ? () => Profile.toControlSaveStateLoadOrSave_LoadFromFile(universe, size)
                     : () => Profile.toControlSaveStateLoadOrSave_SaveToFilesystem(universe, size)) // click
@@ -300,33 +293,35 @@ var ThisCouldBeBetter;
             }
             static toControlSaveStateLoadOrSave_SaveToFilesystem(universe, size) {
                 var venueMessage = GameFramework.VenueMessage.fromText("Saving game...");
-                var savePerform = () => {
-                    var world = universe.world;
-                    world.dateSaved = GameFramework.DateTime.now();
-                    var worldSerialized = world.toStringJson(universe);
-                    var compressor = universe.storageHelper.compressor;
-                    var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
-                    return worldCompressedAsBytes;
-                };
-                var saveDone = (worldCompressedAsBytes) => // done
-                 {
-                    var wasSaveSuccessful = (worldCompressedAsBytes != null);
-                    var message = (wasSaveSuccessful
-                        ? "Save ready: choose location on dialog."
-                        : "Save failed due to errors.");
-                    var fileNameStem = universe.saveFileNameStem();
-                    var fileName = fileNameStem + ".json.lzw";
-                    new GameFramework.FileHelper().saveBytesToFileWithName(worldCompressedAsBytes, fileName);
-                    var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
-                     {
-                        var venueNext = universe.controlBuilder.game(universe, null, universe.venueCurrent()).toVenue();
-                        universe.venueTransitionTo(venueNext);
-                    });
-                    var venueMessage = controlMessage.toVenue();
-                    universe.venueTransitionTo(venueMessage);
-                };
+                var savePerform = () => Profile.savePerform(universe);
+                var venueToReturnTo = universe.venuePrev();
+                var saveDone = (worldCompressedAsBytes) => Profile.saveDone(worldCompressedAsBytes, universe, size, venueToReturnTo);
                 var venueTask = new GameFramework.VenueTask(venueMessage, savePerform, saveDone);
                 universe.venueTransitionTo(venueTask);
+            }
+            static saveDone(worldCompressedAsBytes, universe, size, venueToReturnTo) {
+                var wasSaveSuccessful = (worldCompressedAsBytes != null);
+                var message = (wasSaveSuccessful
+                    ? "Save ready: choose location on dialog."
+                    : "Save failed due to errors.");
+                var fileNameStem = universe.saveFileNameStem();
+                var fileName = fileNameStem + ".json.lzw";
+                new GameFramework.FileHelper().saveBytesToFileWithName(worldCompressedAsBytes, fileName);
+                var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
+                 {
+                    var venueNext = universe.controlBuilder.game(universe, null, venueToReturnTo).toVenue();
+                    universe.venueTransitionTo(venueNext);
+                });
+                var venueMessage = controlMessage.toVenue();
+                universe.venueTransitionTo(venueMessage);
+            }
+            static savePerform(universe) {
+                var world = universe.world;
+                world.dateSaved = GameFramework.DateTime.now();
+                var worldSerialized = world.toStringJson(universe);
+                var compressor = universe.storageHelper.compressor;
+                var worldCompressedAsBytes = compressor.compressStringToBytes(worldSerialized);
+                return worldCompressedAsBytes;
             }
             static toControlSaveStateLoadOrSave_SaveToLocalStorageAsNewSlot(universe, size) {
                 var messageAsDataBinding = GameFramework.DataBinding.fromContextAndGet(null, // context - Set below.
