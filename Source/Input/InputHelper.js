@@ -18,8 +18,8 @@ var ThisCouldBeBetter;
                         inputNames.ArrowLeft,
                         inputNames.ArrowRight,
                         inputNames.ArrowUp,
-                        inputNames.Tab,
                         inputNames.F5,
+                        inputNames.Tab
                     ];
                 this.inputsPressed = [];
                 this.inputsPressedByName = new Map();
