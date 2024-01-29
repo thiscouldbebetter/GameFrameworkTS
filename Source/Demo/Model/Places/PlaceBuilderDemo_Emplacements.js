@@ -180,7 +180,7 @@ class PlaceBuilderDemo_Emplacements {
             collidable,
             Drawable.fromVisual(visual),
             Locatable.create(),
-            new Portal(null, null, Coords.create()),
+            new Portal(null, null, Coords.create()), // Destination must be set ouside this method.
             new Usable((uwpe) => {
                 var eUsed = uwpe.entity2;
                 eUsed.portal().use(uwpe);
@@ -265,7 +265,7 @@ class PlaceBuilderDemo_Emplacements {
         var entityDefnName = "Mine";
         var obstacleMappedMap = new MapOfCells(entityDefnName, obstacleMappedSizeInCells, obstacleMappedCellSize, obstacleMappedCellSource);
         var obstacleMappedVisualLookup = new Map([
-            ["Blocking", new VisualRectangle(obstacleMappedCellSize, obstacleColor, null, false)],
+            ["Blocking", new VisualRectangle(obstacleMappedCellSize, obstacleColor, null, false)], // isCentered
             ["Open", new VisualNone()]
         ]);
         var obstacleMappedVisual = new VisualGroup([

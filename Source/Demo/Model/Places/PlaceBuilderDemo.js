@@ -917,7 +917,7 @@ class PlaceBuilderDemo // Main.
                 var portalEntity = new Entity("PortalToNeighbor" + i, [
                     collidable,
                     locatable,
-                    Movable.default(),
+                    Movable.default(), // hack - For CollisionTracker.
                     portal
                 ]);
                 entities.push(portalEntity);

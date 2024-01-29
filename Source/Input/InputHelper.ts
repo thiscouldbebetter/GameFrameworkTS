@@ -198,7 +198,7 @@ export class InputHelper implements Platformable
 			var axisDisplacements = gamepad.axisDisplacements;
 			for (var a = 0; a < axisDisplacements.length; a++)
 			{
-				var axisDisplacement = axisDisplacements[a];
+				var axisDisplacement = axisDisplacements[a] as number;
 				if (axisDisplacement == 0)
 				{
 					if (a == 0)

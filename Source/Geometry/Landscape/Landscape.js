@@ -18,9 +18,9 @@ var ThisCouldBeBetter;
             }
             generateRandom() {
                 var cornerCellPositions = [
-                    GameFramework.Coords.create(),
-                    GameFramework.Coords.fromXY(this.sizeInCellsMinusOnes.x, 0),
-                    GameFramework.Coords.fromXY(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y),
+                    GameFramework.Coords.create(), // nw
+                    GameFramework.Coords.fromXY(this.sizeInCellsMinusOnes.x, 0), // ne
+                    GameFramework.Coords.fromXY(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y), // se
                     GameFramework.Coords.fromXY(0, this.sizeInCellsMinusOnes.y), // sw
                 ];
                 for (var i = 0; i < cornerCellPositions.length; i++) {
