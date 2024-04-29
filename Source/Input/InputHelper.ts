@@ -433,7 +433,7 @@ export class InputGamepad
 	index: number
 	systemGamepad: Gamepad;
 	buttonsPressed: unknown[];
-	axisDisplacements: unknown[];
+	axisDisplacements: number[];
 
 	constructor(index: number, systemGamepad: Gamepad)
 	{
