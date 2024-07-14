@@ -40,6 +40,10 @@ var ThisCouldBeBetter;
             static from3(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
                 return new Collidable(false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
             }
+            canCollideAgainWithoutSeparatingSet(value) {
+                this.canCollideAgainWithoutSeparating = value;
+                return this;
+            }
             collideEntities(entityColliding, entityCollidedWith) {
                 var uwpe = this._uwpe.clear().entitySet(entityColliding).entity2Set(entityCollidedWith);
                 var collision = this._collision.clear().entityCollidableAdd(entityColliding).entityCollidableAdd(entityCollidedWith);
@@ -99,24 +103,11 @@ var ThisCouldBeBetter;
                 }
             }
             collisionsFindForEntity(uwpe, collisionsSoFar) {
+                var universe = uwpe.universe;
                 var place = uwpe.place;
                 var entity = uwpe.entity;
                 var collisionTracker = place.collisionTracker();
-                var entityBoundable = entity.boundable();
-                if (collisionTracker == null
-                    || entityBoundable == null
-                    || entityBoundable.bounds.constructor.name != GameFramework.Box.name) {
-                    collisionsSoFar = this.collisionsFindForEntity_WithoutTracker(uwpe, collisionsSoFar);
-                }
-                else {
-                    collisionsSoFar = this.collisionsFindForEntity_WithTracker(uwpe, collisionsSoFar, collisionTracker);
-                }
-                return collisionsSoFar;
-            }
-            collisionsFindForEntity_WithTracker(uwpe, collisionsSoFar, collisionTracker) {
-                var universe = uwpe.universe;
-                var entity = uwpe.entity;
-                this.collisionTrackerCollidableData(collisionTracker).resetForEntity(entity);
+                collisionTracker.entityReset(entity);
                 collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(entity, universe.collisionHelper, collisionsSoFar);
                 collisionsSoFar = collisionsSoFar.filter(collision => this.entityPropertyNamesToCollideWith.some(propertyName => collision.entitiesColliding[1].propertyByName(propertyName) != null));
                 return collisionsSoFar;
@@ -218,6 +209,7 @@ var ThisCouldBeBetter;
                 // which leads to false collisions or false misses.
                 this.colliderLocateForEntity(uwpe.entity);
             }
+            propertyName() { return Collidable.name; }
             updateForTimerTick(uwpe) {
                 var entity = uwpe.entity;
                 var isStationary = this.isEntityStationary(entity);

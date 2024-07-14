@@ -113,6 +113,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return SkillLearner.name; }
             updateForTimerTick(uwpe) {
                 // Do nothing.
             }

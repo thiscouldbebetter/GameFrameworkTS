@@ -14,6 +14,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Recurrent.name; }
             updateForTimerTick(uwpe) {
                 if (this.timesRecurredSoFar < this.timesToRecur) {
                     this.ticksUntilRecurrence--;

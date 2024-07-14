@@ -33,6 +33,8 @@ export class Triggerable implements EntityProperty<Triggerable>
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Triggerable.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		for (var i = 0; i < this.triggers.length; i++)

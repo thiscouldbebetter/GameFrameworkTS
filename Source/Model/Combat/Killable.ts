@@ -133,6 +133,8 @@ export class Killable implements EntityProperty<Killable>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Killable.name; }
+
 	updateForTimerTick
 	(
 		uwpe: UniverseWorldPlaceEntities

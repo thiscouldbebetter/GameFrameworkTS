@@ -75,6 +75,9 @@ export class Item implements EntityProperty<Item>
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	propertyName(): string { return Item.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Equatable

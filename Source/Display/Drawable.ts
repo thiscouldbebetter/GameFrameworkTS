@@ -71,6 +71,8 @@ export class Drawable implements EntityProperty<Drawable>
 
 	// EntityProperty.
 
+	propertyName(): string { return Drawable.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.draw(uwpe);

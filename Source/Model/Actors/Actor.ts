@@ -34,6 +34,8 @@ export class Actor implements EntityProperty<Actor>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Actor.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.activity.perform(uwpe);

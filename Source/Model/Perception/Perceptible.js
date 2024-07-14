@@ -51,6 +51,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Perceptible.name; }
             updateForTimerTick(uwpe) {
                 if (this.isHiding != this._isHidingPrev) {
                     this._isHidingPrev = this.isHiding;

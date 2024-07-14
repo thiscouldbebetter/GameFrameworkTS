@@ -903,6 +903,7 @@ class PlaceBuilderDemo_Movers
 			[
 				actor,
 				Animatable2.create(),
+				new Boundable(friendlyCollider.toBox(null) ),
 				constrainable,
 				collidable,
 				Drawable.fromVisual(friendlyVisual),
@@ -1625,6 +1626,7 @@ class PlaceBuilderDemo_Movers
 			[
 				new Actor(playerActivity),
 				Animatable2.create(),
+				new Boundable(playerCollider.toBox(null) ),
 				new Collidable
 				(
 					false, // canCollideAgainWithoutSeparating

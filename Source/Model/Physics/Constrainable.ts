@@ -72,6 +72,8 @@ export class Constrainable implements EntityProperty<Constrainable>
 		this.updateForTimerTick(uwpe);
 	}
 
+	propertyName(): string { return Constrainable.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.constrain(uwpe);

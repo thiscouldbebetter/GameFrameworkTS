@@ -58,6 +58,9 @@ var ThisCouldBeBetter;
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
             toBox(boxOut) {
+                if (boxOut == null) {
+                    boxOut = GameFramework.Box.create();
+                }
                 var diameter = this.radius * 2;
                 boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);
                 return boxOut;

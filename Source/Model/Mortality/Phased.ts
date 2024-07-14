@@ -72,6 +72,8 @@ export class Phased implements EntityProperty<Phased>
 		}
 	}
 
+	propertyName(): string { return Phased.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities)
 	{
 		this.ticksOnPhaseCurrent++;

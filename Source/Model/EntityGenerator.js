@@ -22,6 +22,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return EntityGenerator.name; }
             updateForTimerTick(uwpe) {
                 var place = uwpe.place;
                 this.entitiesGenerated = this.entitiesGenerated.filter(e => place.entityByName(e.name) != null);

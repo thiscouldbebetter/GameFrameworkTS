@@ -13,6 +13,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return JournalKeeper.name; }
             updateForTimerTick(uwpe) { }
             // Equatable
             equals(other) { return false; } // todo

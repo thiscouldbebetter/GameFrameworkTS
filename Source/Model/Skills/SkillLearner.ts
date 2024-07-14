@@ -210,6 +210,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return SkillLearner.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		// Do nothing.

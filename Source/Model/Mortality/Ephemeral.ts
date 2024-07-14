@@ -34,6 +34,8 @@ export class Ephemeral implements EntityProperty<Ephemeral>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Ephemeral.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.ticksToLive--;

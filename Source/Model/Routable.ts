@@ -21,6 +21,8 @@ export class Routable implements EntityProperty<Routable>
 			Box.fromMinAndMax(Coords.create(), uwpe.place.size().clone());
 	}
 
+	propertyName(): string { return Routable.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Clonable.

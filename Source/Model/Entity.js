@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 this.propertiesByName = new Map();
                 for (var i = 0; i < this.properties.length; i++) {
                     var property = this.properties[i];
-                    var propertyName = property.constructor.name;
+                    var propertyName = property.propertyName();
                     this.propertiesByName.set(propertyName, property);
                 }
             }

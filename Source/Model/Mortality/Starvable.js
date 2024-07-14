@@ -31,6 +31,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Starvable.name; }
             updateForTimerTick(uwpe) {
                 if (this.isStarving()) {
                     this.starve(uwpe);

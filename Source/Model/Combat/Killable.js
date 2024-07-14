@@ -68,6 +68,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Killable.name; }
             updateForTimerTick(uwpe) {
                 if (this.isAlive() == false) {
                     var place = uwpe.place;

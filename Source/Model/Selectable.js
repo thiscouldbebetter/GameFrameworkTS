@@ -30,6 +30,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Selectable.name; }
             updateForTimerTick(uwpe) { }
             // Equatable
             equals(other) { return false; } // todo

@@ -34,10 +34,29 @@ var ThisCouldBeBetter;
             }
             cellAtPos(pos) {
                 this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
-                return this.cellAtPosInCells(this._posInCells);
+                var returnCell = this.cellAtPosInCells(this._posInCells);
+                if (returnCell == null) {
+                    throw new Error("Cell at logical pos " + pos.toString() + " could not be retrieved.");
+                }
+                return returnCell;
             }
             cellAtPosInCells(cellPosInCells) {
-                return this.cellSource.cellAtPosInCells(this, cellPosInCells, this._cell);
+                var returnCell = this.cellSource.cellAtPosInCells(this, cellPosInCells, this._cell);
+                if (returnCell == null) {
+                    throw new Error("Cell at cell pos " + cellPosInCells.toString() + " could not be retrieved.");
+                }
+                return returnCell;
+            }
+            cellAtPosInCellsExists(cellPosInCells) {
+                var cellFound = this.cellSource.cellAtPosInCells(this, cellPosInCells, this._cell);
+                return (cellFound != null);
+            }
+            cellAtPosInCellsNoOverwrite(cellPosInCells) {
+                var returnCell = this.cellSource.cellAtPosInCellsNoOverwrite(this, cellPosInCells);
+                if (returnCell == null) {
+                    throw new Error("Cell at cell pos " + cellPosInCells.toString() + " could not be retrieved.");
+                }
+                return returnCell;
             }
             cellCreate() {
                 return this.cellSource.cellCreate();
@@ -54,7 +73,7 @@ var ThisCouldBeBetter;
                     cellPosInCells.y = y;
                     for (var x = minPosInCells.x; x <= maxPosInCells.x; x++) {
                         cellPosInCells.x = x;
-                        var cellAtPos = this.cellAtPosInCells(cellPosInCells);
+                        var cellAtPos = this.cellAtPosInCellsNoOverwrite(cellPosInCells);
                         cellsInBox.push(cellAtPos);
                     }
                 }
@@ -103,10 +122,18 @@ var ThisCouldBeBetter;
                 this._cellCreate = cellCreate;
             }
             cellAtPosInCells(map, posInCells, cellToOverwrite) {
-                var cellIndex = posInCells.y * map.sizeInCells.x + posInCells.x;
-                var cellFound = this.cells[cellIndex];
+                var cellFound = this.cellAtPosInCellsNoOverwrite(map, posInCells);
                 cellToOverwrite.overwriteWith(cellFound);
                 return cellToOverwrite;
+            }
+            cellAtPosInCellsNoOverwrite(map, posInCells) {
+                var cellIndex = posInCells.y * map.sizeInCells.x + posInCells.x;
+                var cellFound = this.cells[cellIndex];
+                if (cellFound == null) {
+                    cellFound = this.cellCreate();
+                    this.cells[cellIndex] = cellFound;
+                }
+                return cellFound;
             }
             cellCreate() {
                 return this._cellCreate();
@@ -133,6 +160,9 @@ var ThisCouldBeBetter;
                 var color = this.colorAtPos(posInCells, this._color);
                 this._cellOverwriteFromColor(cellToOverwrite, color);
                 return cellToOverwrite;
+            }
+            cellAtPosInCellsNoOverwrite(map, posInCells) {
+                return this.cellAtPosInCells(map, posInCells, this.cellCreate());
             }
             cellCreate() {
                 return this._cellCreate();
@@ -163,6 +193,9 @@ var ThisCouldBeBetter;
                 var pixelColor = this.cellsAsDisplay.colorAtPos(posInCells, this._pixelColor);
                 this.cellSetFromColor(cellToOverwrite, pixelColor);
                 return cellToOverwrite;
+            }
+            cellAtPosInCellsNoOverwrite(map, posInCells) {
+                return this.cellAtPosInCells(map, posInCells, this.cellCreate());
             }
             cellCreate() {
                 return this._cellCreate();

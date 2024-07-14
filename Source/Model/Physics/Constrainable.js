@@ -44,6 +44,7 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 this.updateForTimerTick(uwpe);
             }
+            propertyName() { return Constrainable.name; }
             updateForTimerTick(uwpe) {
                 this.constrain(uwpe);
             }

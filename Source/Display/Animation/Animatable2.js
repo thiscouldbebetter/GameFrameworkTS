@@ -48,6 +48,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Animatable2.name; }
             updateForTimerTick(uwpe) {
                 var world = uwpe.world;
                 var animationDefnsRunning = this.animationDefnsRunning();

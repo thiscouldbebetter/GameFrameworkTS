@@ -12,6 +12,7 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 this.updateForTimerTick(uwpe);
             }
+            propertyName() { return Boundable.name; }
             updateForTimerTick(uwpe) {
                 var e = uwpe.entity;
                 this.bounds.locate(e.locatable().loc);

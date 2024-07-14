@@ -45,6 +45,8 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return EntityGenerator.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var place = uwpe.place;

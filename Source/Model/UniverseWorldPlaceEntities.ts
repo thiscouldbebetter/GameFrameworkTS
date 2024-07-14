@@ -49,6 +49,11 @@ export class UniverseWorldPlaceEntities
 		return new UniverseWorldPlaceEntities(universe, world, place, null, null);
 	}
 
+	static fromEntity(entity: Entity): UniverseWorldPlaceEntities
+	{
+		return new UniverseWorldPlaceEntities(null, null, null, entity, null);
+	}
+
 	clear(): UniverseWorldPlaceEntities
 	{
 		this.universe = null;

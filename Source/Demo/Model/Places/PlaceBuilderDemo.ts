@@ -923,17 +923,20 @@ class PlaceBuilderDemo // Main.
 			{
 				var neighborOffset = neighborOffsets[n];
 				neighborPos.overwriteWith(cellPosInCells).add(neighborOffset);
-				var cellNeighbor = map.cellAtPosInCells(neighborPos);
-				var cellNeighborTerrain;
-				if (cellNeighbor == null)
+				if (map.cellAtPosInCellsExists(neighborPos) )
 				{
-					cellNeighborTerrain = cellTerrain;
+					var cellNeighbor = map.cellAtPosInCells(neighborPos);
+					var cellNeighborTerrain;
+					if (cellNeighbor == null)
+					{
+						cellNeighborTerrain = cellTerrain;
+					}
+					else
+					{
+						cellNeighborTerrain = terrainsByName.get(cellNeighbor.visualName);
+					}
+					neighborTerrains.push(cellNeighborTerrain);
 				}
-				else
-				{
-					cellNeighborTerrain = terrainsByName.get(cellNeighbor.visualName);
-				}
-				neighborTerrains.push(cellNeighborTerrain);
 			}
 
 			var borderTypeCount = 4; // straight0, inside corner, outside corner, straight1
@@ -1207,26 +1210,8 @@ class PlaceBuilderDemo // Main.
 			cameraLoc,
 			(entities: Entity[]) => Camera.entitiesSortByRenderingOrderThenZThenY(entities)
 		);
-		var cameraBoundable = new Boundable(camera.viewCollider);
-		var cameraCollidable = Collidable.fromCollider(camera.viewCollider);
-		var cameraConstrainable = new Constrainable
-		([
-			new Constraint_AttachToEntityWithName("Player"),
-			new Constraint_ContainInBox(cameraPosBox)
-		]);
-
-		var cameraEntity = new Entity
-		(
-			Camera.name,
-			[
-				camera,
-				cameraBoundable,
-				cameraCollidable,
-				cameraConstrainable,
-				new Locatable(cameraLoc),
-				Movable.default()
-			]
-		);
+		var cameraEntity = camera.toEntity();
+		cameraEntity.constrainable().constraintAdd(new Constraint_ContainInBox(cameraPosBox) );
 		return cameraEntity;
 	}
 
@@ -3350,6 +3335,15 @@ class MapOfCellsCellSourceTerrain
 			cellToOverwrite = null;
 		}
 		return cellToOverwrite;
+	}
+
+	cellAtPosInCellsNoOverwrite
+	(
+		map: MapOfCells<MapCellObstacle>,
+		posInCells: Coords
+	): MapCellObstacle
+	{
+		return this.cellAtPosInCells(map, posInCells, this.cellCreate() );
 	}
 
 	// Clonable.

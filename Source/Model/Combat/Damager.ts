@@ -64,6 +64,7 @@ export class Damager implements EntityProperty<Damager>
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	propertyName(): string { return Damager.name; }
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.ticksUntilCanAttempt--;

@@ -24,6 +24,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return EntityPropertyFromValue.name; }
             updateForTimerTick(uwpe) { }
             // Equatable
             equals(other) {

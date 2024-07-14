@@ -54,6 +54,8 @@ export class LoadableProperty
 		}
 	}
 
+	propertyName(): string { return LoadableProperty.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		// Do nothing.

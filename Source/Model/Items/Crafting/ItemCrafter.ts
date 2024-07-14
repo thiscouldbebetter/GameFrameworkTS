@@ -102,6 +102,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return ItemCrafter.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.recipesQueued.length > 0)

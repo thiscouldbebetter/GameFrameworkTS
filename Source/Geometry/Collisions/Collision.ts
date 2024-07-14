@@ -68,6 +68,11 @@ export class Collision //
 		return this;
 	}
 
+	entityIsInvolved(entityToCheck: Entity): boolean
+	{
+		return (this.entitiesColliding.indexOf(entityToCheck) >= 0);
+	}
+
 	toString(): string
 	{
 		return this.entitiesColliding.map(x => x.name).join("+");

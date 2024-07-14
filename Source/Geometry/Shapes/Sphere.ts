@@ -116,6 +116,10 @@ export class Sphere implements ShapeBase
 
 	toBox(boxOut: Box): Box
 	{
+		if (boxOut == null)
+		{
+			boxOut = Box.create();
+		}
 		var diameter = this.radius * 2;
 		boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);
 		return boxOut;

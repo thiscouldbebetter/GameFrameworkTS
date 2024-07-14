@@ -31,6 +31,7 @@ var ThisCouldBeBetter;
                     this.isLoaded = false;
                 }
             }
+            propertyName() { return LoadableProperty.name; }
             updateForTimerTick(uwpe) {
                 // Do nothing.
             }

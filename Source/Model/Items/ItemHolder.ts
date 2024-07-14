@@ -457,6 +457,9 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	propertyName(): string { return ItemHolder.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Equatable

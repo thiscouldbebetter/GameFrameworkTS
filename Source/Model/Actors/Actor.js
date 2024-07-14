@@ -19,6 +19,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Actor.name; }
             updateForTimerTick(uwpe) {
                 this.activity.perform(uwpe);
             }

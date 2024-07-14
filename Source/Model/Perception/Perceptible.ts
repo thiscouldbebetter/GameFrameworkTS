@@ -79,6 +79,8 @@ export class Perceptible implements EntityProperty<Perceptible>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Perceptible.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isHiding != this._isHidingPrev)

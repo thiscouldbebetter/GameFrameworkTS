@@ -36,6 +36,8 @@ export class Effectable implements EntityProperty<Effectable>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Effectable.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		for (var i = 0; i < this.effects.length; i++)

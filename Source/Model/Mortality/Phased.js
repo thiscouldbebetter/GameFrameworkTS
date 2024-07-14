@@ -40,6 +40,7 @@ var ThisCouldBeBetter;
                     phase.enter(uwpe);
                 }
             }
+            propertyName() { return Phased.name; }
             updateForTimerTick(uwpe) {
                 this.ticksOnPhaseCurrent++;
                 var phaseCurrent = this.phaseCurrent();

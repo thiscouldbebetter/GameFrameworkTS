@@ -13,6 +13,7 @@ var ThisCouldBeBetter;
                 this.route.bounds =
                     GameFramework.Box.fromMinAndMax(GameFramework.Coords.create(), uwpe.place.size().clone());
             }
+            propertyName() { return Routable.name; }
             updateForTimerTick(uwpe) { }
             // Clonable.
             clone() {

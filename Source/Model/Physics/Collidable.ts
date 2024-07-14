@@ -107,6 +107,12 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 	}
 
+	canCollideAgainWithoutSeparatingSet(value: boolean): Collidable
+	{
+		this.canCollideAgainWithoutSeparating = value;
+		return this;
+	}
+
 	collideEntities(entityColliding: Entity, entityCollidedWith: Entity): Collision
 	{
 		var uwpe = this._uwpe.clear().entitySet
@@ -237,49 +243,17 @@ export class Collidable implements EntityProperty<Collidable>
 
 	collisionsFindForEntity
 	(
-		uwpe: UniverseWorldPlaceEntities, collisionsSoFar: Collision[]
+		uwpe: UniverseWorldPlaceEntities,
+		collisionsSoFar: Collision[],
 	): Collision[]
 	{
+		var universe = uwpe.universe;
 		var place = uwpe.place;
 		var entity = uwpe.entity;
 
 		var collisionTracker = (place as PlaceBase).collisionTracker();
-		var entityBoundable = entity.boundable();
 
-		if
-		(
-			collisionTracker == null
-			|| entityBoundable == null
-			|| entityBoundable.bounds.constructor.name != Box.name
-		)
-		{
-			collisionsSoFar = this.collisionsFindForEntity_WithoutTracker
-			(
-				uwpe, collisionsSoFar
-			);
-		}
-		else
-		{
-			collisionsSoFar = this.collisionsFindForEntity_WithTracker
-			(
-				uwpe, collisionsSoFar, collisionTracker
-			);
-		}
-
-		return collisionsSoFar;
-	}
-
-	collisionsFindForEntity_WithTracker
-	(
-		uwpe: UniverseWorldPlaceEntities,
-		collisionsSoFar: Collision[],
-		collisionTracker: CollisionTracker
-	): Collision[]
-	{
-		var universe = uwpe.universe;
-		var entity = uwpe.entity;
-
-		this.collisionTrackerCollidableData(collisionTracker).resetForEntity(entity);
+		collisionTracker.entityReset(entity);
 
 		collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions
 		(
@@ -467,6 +441,8 @@ export class Collidable implements EntityProperty<Collidable>
 		// which leads to false collisions or false misses.
 		this.colliderLocateForEntity(uwpe.entity);
 	}
+
+	propertyName(): string { return Collidable.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{

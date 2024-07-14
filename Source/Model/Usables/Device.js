@@ -14,6 +14,7 @@ var ThisCouldBeBetter;
             }
             // EntityProperty.
             finalize(uwpe) { }
+            propertyName() { return Device.name; }
             updateForTimerTick(uwpe) { }
             initialize(uwpe) {
                 if (this._initialize != null) {

@@ -14,6 +14,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Perceptor.name; }
             updateForTimerTick(uwpe) { }
             // Equatable
             equals(other) { return false; } // todo

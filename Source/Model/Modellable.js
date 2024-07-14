@@ -13,6 +13,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Modellable.name; }
             updateForTimerTick(uwpe) {
                 // Do nothing.
             }

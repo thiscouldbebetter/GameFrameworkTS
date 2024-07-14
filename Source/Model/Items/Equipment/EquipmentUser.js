@@ -183,6 +183,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return EquipmentUser.name; }
             updateForTimerTick(uwpe) { }
             // control
             toControl(universe, size, entityEquipmentUser, venuePrev, includeTitleAndDoneButton) {

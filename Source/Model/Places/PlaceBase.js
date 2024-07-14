@@ -123,7 +123,7 @@ var ThisCouldBeBetter;
                     var entityProperties = entity.properties;
                     for (var i = 0; i < entityProperties.length; i++) {
                         var property = entityProperties[i];
-                        var propertyName = property.constructor.name;
+                        var propertyName = property.propertyName();
                         var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
                         entitiesWithProperty.push(entity);
                     }
@@ -180,7 +180,7 @@ var ThisCouldBeBetter;
                         if (entitiesWithProperty != null) {
                             for (var i = 0; i < entitiesWithProperty.length; i++) {
                                 var entity = entitiesWithProperty[i];
-                                var entityProperty = entity.propertiesByName.get(propertyName);
+                                var entityProperty = entity.propertyByName(propertyName);
                                 uwpe.entity = entity;
                                 entityProperty.updateForTimerTick(uwpe);
                             }
@@ -221,15 +221,17 @@ var ThisCouldBeBetter;
             camera() {
                 return this.entitiesByPropertyName(GameFramework.Camera.name)[0];
             }
+            collidables() {
+                return this.entitiesByPropertyName(GameFramework.Collidable.name);
+            }
             collisionTracker() {
-                var returnValue = null;
-                if (typeof (GameFramework.CollisionTrackerBase) != "undefined") {
-                    var collisionTrackerEntity = this.entitiesByPropertyName(GameFramework.CollisionTrackerBase.name)[0];
-                    var returnValueAsProperty = (collisionTrackerEntity == null
-                        ? null
-                        : collisionTrackerEntity.propertyByName(GameFramework.CollisionTrackerBase.name));
-                    returnValue = returnValueAsProperty;
+                var collisionTrackerAsEntity = this.entityByName(GameFramework.CollisionTrackerBase.name);
+                if (collisionTrackerAsEntity == null) {
+                    var collisionTracker = new GameFramework.CollisionTrackerBruteForce();
+                    var collisionTrackerAsEntity = collisionTracker.toEntity();
+                    this.entitySpawn(GameFramework.UniverseWorldPlaceEntities.fromEntity(collisionTrackerAsEntity));
                 }
+                var returnValue = collisionTrackerAsEntity.properties[0];
                 return returnValue;
             }
             drawables() {

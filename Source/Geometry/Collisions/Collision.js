@@ -37,6 +37,9 @@ var ThisCouldBeBetter;
                 this.entitiesColliding.push(entity);
                 return this;
             }
+            entityIsInvolved(entityToCheck) {
+                return (this.entitiesColliding.indexOf(entityToCheck) >= 0);
+            }
             toString() {
                 return this.entitiesColliding.map(x => x.name).join("+");
             }

@@ -31,6 +31,8 @@ export class Recurrent implements EntityProperty<Recurrent>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Recurrent.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.timesRecurredSoFar < this.timesToRecur)

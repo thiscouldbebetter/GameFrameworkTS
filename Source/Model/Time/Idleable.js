@@ -30,6 +30,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Idleable.name; }
             updateForTimerTick(uwpe) {
                 var world = uwpe.world;
                 var entity = uwpe.entity;

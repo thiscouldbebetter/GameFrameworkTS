@@ -462,6 +462,9 @@ class MapOfCellsCellSourceObstacle {
         cellToOverwrite.isBlocking = cellIsBlocking;
         return cellToOverwrite;
     }
+    cellAtPosInCellsNoOverwrite(map, posInCells) {
+        return this.cellAtPosInCells(map, posInCells, this.cellCreate());
+    }
     cellCreate() {
         return MapCellObstacle.default();
     }

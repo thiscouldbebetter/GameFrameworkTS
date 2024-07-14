@@ -443,6 +443,7 @@ class PlaceBuilderDemo_Movers {
         var friendlyEntityDefn = new Entity("Friendly", [
             actor,
             Animatable2.create(),
+            new Boundable(friendlyCollider.toBox(null)),
             constrainable,
             collidable,
             Drawable.fromVisual(friendlyVisual),
@@ -844,6 +845,7 @@ class PlaceBuilderDemo_Movers {
         var playerEntityDefn = new Entity(entityDefnNamePlayer, [
             new Actor(playerActivity),
             Animatable2.create(),
+            new Boundable(playerCollider.toBox(null)),
             new Collidable(false, // canCollideAgainWithoutSeparating
             0, // ticksToWaitBetweenCollisions
             playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith

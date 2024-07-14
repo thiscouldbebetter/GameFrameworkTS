@@ -240,35 +240,14 @@ export class Camera implements EntityProperty<Camera>
 
 	drawEntitiesInView_1_FindEntitiesInView
 	(
-		place: Place, cameraEntity: Entity,
-		collisionHelper: CollisionHelper, entitiesInView: Entity[]
+		place: Place,
+		cameraEntity: Entity,
+		collisionHelper: CollisionHelper,
+		entitiesInView: Entity[]
 	): Entity[]
 	{
 		var collisionTracker = (place as PlaceBase).collisionTracker();
-		if (collisionTracker == null)
-		{
-			entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
-			(
-				place, collisionHelper, entitiesInView
-			);
-		}
-		else
-		{
-			entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithTracker
-			(
-				place, cameraEntity, collisionHelper, entitiesInView, collisionTracker
-			);
-		}
 
-		return entitiesInView;
-	}
-
-	drawEntitiesInView_1_FindEntitiesInView_WithTracker
-	(
-		place: Place, cameraEntity: Entity, collisionHelper: CollisionHelper,
-		entitiesInView: Entity[], collisionTracker: CollisionTracker
-	): Entity[]
-	{
 		var cameraCollidable = cameraEntity.collidable();
 		//cameraCollidable.isDisabled = false;
 		cameraCollidable.entitiesAlreadyCollidedWith.length = 0;
@@ -287,6 +266,7 @@ export class Camera implements EntityProperty<Camera>
 		return entitiesInView;
 	}
 
+	/*
 	drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
 	(
 		place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
@@ -333,6 +313,7 @@ export class Camera implements EntityProperty<Camera>
 
 		return entitiesInView;
 	}
+	*/
 
 	drawEntitiesInView_2_Draw
 	(
@@ -417,6 +398,12 @@ export class Camera implements EntityProperty<Camera>
 
 	toEntity(): Entity
 	{
+		/*
+
+		// todo -
+		// This isn't used to find entities in camera view,
+		// but if it was it would need to include a Collidable property.
+
 		return new Entity
 		(
 			Camera.name,
@@ -426,6 +413,33 @@ export class Camera implements EntityProperty<Camera>
 				new Locatable(this.loc),
 			]
 		);
+		*/
+		var cameraBoundable = new Boundable(this.viewCollider);
+		var cameraCollidable =
+			Collidable
+				.fromCollider(this.viewCollider)
+				.canCollideAgainWithoutSeparatingSet(true);
+
+		var cameraConstrainable = new Constrainable
+		([
+			new Constraint_AttachToEntityWithName("Player"),
+			//new Constraint_ContainInBox(cameraPosBox)
+		]);
+
+		var cameraEntity = new Entity
+		(
+			Camera.name,
+			[
+				this,
+				cameraBoundable,
+				cameraCollidable,
+				cameraConstrainable,
+				new Locatable(this.loc),
+				Movable.default()
+			]
+		);
+
+		return cameraEntity;
 	}
 
 	// Clonable.
@@ -436,6 +450,8 @@ export class Camera implements EntityProperty<Camera>
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	propertyName(): string { return Camera.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{

@@ -26,6 +26,8 @@ export class Boundable<TBounds extends ShapeBase>
 		this.updateForTimerTick(uwpe);
 	}
 
+	propertyName(): string { return Boundable.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var e = uwpe.entity;

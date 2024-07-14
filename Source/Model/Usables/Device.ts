@@ -33,6 +33,7 @@ export class Device implements EntityProperty<Device>
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+	propertyName(): string { return Device.name; }
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void

@@ -43,6 +43,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Tirable.name; }
             updateForTimerTick(uwpe) {
                 if (this.isExhausted()) {
                     this.fallAsleep(uwpe);

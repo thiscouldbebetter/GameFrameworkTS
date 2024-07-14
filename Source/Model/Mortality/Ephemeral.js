@@ -18,6 +18,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Ephemeral.name; }
             updateForTimerTick(uwpe) {
                 this.ticksToLive--;
                 if (this.ticksToLive <= 0) {

@@ -81,12 +81,44 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 	cellAtPos(pos: Coords): TCell
 	{
 		this._posInCells.overwriteWith(pos).divide(this.cellSize).floor();
-		return this.cellAtPosInCells(this._posInCells);
+		var returnCell = this.cellAtPosInCells(this._posInCells);
+		if (returnCell == null)
+		{
+			throw new Error("Cell at logical pos " + pos.toString() + " could not be retrieved.");
+		}
+		return returnCell;
 	}
 
 	cellAtPosInCells(cellPosInCells: Coords): TCell
 	{
-		return this.cellSource.cellAtPosInCells(this, cellPosInCells, this._cell);
+		var returnCell =
+			this.cellSource.cellAtPosInCells(this, cellPosInCells, this._cell);
+
+		if (returnCell == null)
+		{
+			throw new Error("Cell at cell pos " + cellPosInCells.toString() + " could not be retrieved.");
+		}
+		return returnCell;
+	}
+
+	cellAtPosInCellsExists(cellPosInCells: Coords): boolean
+	{
+		var cellFound =
+			this.cellSource.cellAtPosInCells(this, cellPosInCells, this._cell);
+		return (cellFound != null);
+	}
+
+	cellAtPosInCellsNoOverwrite(cellPosInCells: Coords): TCell
+	{
+		var returnCell =
+			this.cellSource.cellAtPosInCellsNoOverwrite(this, cellPosInCells);
+
+		if (returnCell == null)
+		{
+			throw new Error("Cell at cell pos " + cellPosInCells.toString() + " could not be retrieved.");
+		}
+
+		return returnCell;
 	}
 
 	cellCreate(): TCell
@@ -134,7 +166,7 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 			{
 				cellPosInCells.x = x;
 
-				var cellAtPos = this.cellAtPosInCells(cellPosInCells);
+				var cellAtPos = this.cellAtPosInCellsNoOverwrite(cellPosInCells);
 				cellsInBox.push(cellAtPos);
 			}
 		}
@@ -221,6 +253,11 @@ export interface MapOfCellsCellSource<TCell extends Clonable<TCell> >
 		map: MapOfCells<TCell>, posInCells: Coords, cellToOverwrite: TCell
 	): TCell;
 
+	cellAtPosInCellsNoOverwrite
+	(
+		map: MapOfCells<TCell>, posInCells: Coords
+	): TCell;
+
 	cellCreate(): TCell;
 }
 
@@ -241,10 +278,24 @@ export class MapOfCellsCellSourceArray<TCell extends Clonable<TCell>>
 		map: MapOfCells<TCell>, posInCells: Coords, cellToOverwrite: TCell
 	): TCell
 	{
-		var cellIndex = posInCells.y * map.sizeInCells.x + posInCells.x;
-		var cellFound = this.cells[cellIndex];
+		var cellFound = this.cellAtPosInCellsNoOverwrite(map, posInCells);
 		cellToOverwrite.overwriteWith(cellFound);
 		return cellToOverwrite;
+	}
+
+	cellAtPosInCellsNoOverwrite
+	(
+		map: MapOfCells<TCell>, posInCells: Coords
+	): TCell
+	{
+		var cellIndex = posInCells.y * map.sizeInCells.x + posInCells.x;
+		var cellFound = this.cells[cellIndex];
+		if (cellFound == null)
+		{
+			cellFound = this.cellCreate();
+			this.cells[cellIndex] = cellFound;
+		}
+		return cellFound;
 	}
 
 	cellCreate(): TCell
@@ -303,6 +354,15 @@ export class MapOfCellsCellSourceDisplay<TCell extends Clonable<TCell>>
 		var color = this.colorAtPos(posInCells, this._color);
 		this._cellOverwriteFromColor(cellToOverwrite, color);
 		return cellToOverwrite;
+	}
+
+	cellAtPosInCellsNoOverwrite
+	(
+		map: MapOfCells<TCell>,
+		posInCells: Coords
+	): TCell
+	{
+		return this.cellAtPosInCells(map, posInCells, this.cellCreate() );
 	}
 
 	cellCreate(): TCell
@@ -372,6 +432,15 @@ export class MapOfCellsCellSourceImage<TCell extends Clonable<TCell>>
 			this.cellsAsDisplay.colorAtPos(posInCells, this._pixelColor);
 		this.cellSetFromColor(cellToOverwrite, pixelColor);
 		return cellToOverwrite;
+	}
+
+	cellAtPosInCellsNoOverwrite
+	(
+		map: MapOfCells<TCell>,
+		posInCells: Coords
+	): TCell
+	{
+		return this.cellAtPosInCells(map, posInCells, this.cellCreate() );
 	}
 
 	cellCreate(): TCell

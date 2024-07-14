@@ -207,7 +207,7 @@ export class PlaceBase implements Place, Loadable
 			for (var i = 0; i < entityProperties.length; i++)
 			{
 				var property = entityProperties[i];
-				var propertyName = property.constructor.name;
+				var propertyName = property.propertyName();
 				var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
 				entitiesWithProperty.push(entity);
 			}
@@ -295,7 +295,7 @@ export class PlaceBase implements Place, Loadable
 					for (var i = 0; i < entitiesWithProperty.length; i++)
 					{
 						var entity = entitiesWithProperty[i];
-						var entityProperty = entity.propertiesByName.get(propertyName);
+						var entityProperty = entity.propertyByName(propertyName);
 						uwpe.entity = entity;
 						entityProperty.updateForTimerTick(uwpe);
 					}
@@ -363,22 +363,27 @@ export class PlaceBase implements Place, Loadable
 		return this.entitiesByPropertyName(Camera.name)[0];
 	}
 
+	collidables(): Entity[]
+	{
+		return this.entitiesByPropertyName(Collidable.name);
+	}
+
 	collisionTracker(): CollisionTracker
 	{
-		var returnValue: CollisionTracker = null;
- 
-		if (typeof(CollisionTrackerBase) != "undefined")
+		var collisionTrackerAsEntity =
+			this.entityByName(CollisionTrackerBase.name);
+
+		if (collisionTrackerAsEntity == null)
 		{
-			var collisionTrackerEntity =
-				this.entitiesByPropertyName(CollisionTrackerBase.name)[0];
-			var returnValueAsProperty =
-			(
-				collisionTrackerEntity == null
-				? null
-				: collisionTrackerEntity.propertyByName(CollisionTrackerBase.name)
-			);
-			returnValue = returnValueAsProperty as CollisionTrackerBase;
+			var collisionTracker =
+				new CollisionTrackerBruteForce() as CollisionTrackerBase;
+			var collisionTrackerAsEntity = collisionTracker.toEntity();
+			this.entitySpawn(UniverseWorldPlaceEntities.fromEntity(collisionTrackerAsEntity));
 		}
+
+		var returnValue =
+			collisionTrackerAsEntity.properties[0] as CollisionTrackerBase;
+
 		return returnValue;
 	}
 

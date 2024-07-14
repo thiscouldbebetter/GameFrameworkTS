@@ -34,6 +34,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Damager.name; }
             updateForTimerTick(uwpe) {
                 this.ticksUntilCanAttempt--;
             }

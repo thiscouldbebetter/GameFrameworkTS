@@ -61,6 +61,8 @@ export class Starvable implements EntityProperty<Starvable>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Starvable.name; }
+
 	updateForTimerTick
 	(
 		uwpe: UniverseWorldPlaceEntities

@@ -63,6 +63,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return ItemCrafter.name; }
             updateForTimerTick(uwpe) {
                 if (this.recipesQueued.length > 0) {
                     var recipeInProgress = this.recipesQueued[0];

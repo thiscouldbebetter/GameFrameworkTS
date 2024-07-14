@@ -37,6 +37,7 @@ var ThisCouldBeBetter;
                 this.isVisible = true;
             }
             // EntityProperty.
+            propertyName() { return Drawable.name; }
             updateForTimerTick(uwpe) {
                 this.draw(uwpe);
             }

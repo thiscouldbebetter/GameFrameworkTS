@@ -941,6 +941,15 @@ class MapOfCellsCellSourceObstacle
 		return cellToOverwrite;
 	}
 
+	cellAtPosInCellsNoOverwrite
+	(
+		map: MapOfCells<MapCellObstacle>,
+		posInCells: Coords
+	): MapCellObstacle
+	{
+		return this.cellAtPosInCells(map, posInCells, this.cellCreate() );
+	}
+
 	cellCreate(): MapCellObstacle
 	{
 		return MapCellObstacle.default();

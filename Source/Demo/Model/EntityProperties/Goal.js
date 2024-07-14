@@ -9,6 +9,7 @@ class Goal {
     // EntityProperty.
     finalize(uwpe) { }
     initialize(uwpe) { }
+    propertyName() { return Goal.name; }
     updateForTimerTick(uwpe) { }
     // Equatable
     equals(other) { return false; } // todo

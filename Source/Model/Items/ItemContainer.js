@@ -32,6 +32,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return ItemContainer.name; }
             updateForTimerTick(uwpe) { }
             // Equatable
             equals(other) { return false; } // todo

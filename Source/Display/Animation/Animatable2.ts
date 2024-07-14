@@ -92,6 +92,8 @@ export class Animatable2 implements EntityProperty<Animatable2>
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
+	propertyName(): string { return Animatable2.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var world = uwpe.world;

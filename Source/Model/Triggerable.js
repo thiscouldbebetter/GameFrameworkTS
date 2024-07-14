@@ -19,6 +19,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Triggerable.name; }
             updateForTimerTick(uwpe) {
                 for (var i = 0; i < this.triggers.length; i++) {
                     var trigger = this.triggers[i];

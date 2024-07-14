@@ -25,9 +25,10 @@ export class Audible implements EntityProperty<Audible>
 	}
 
 	// EntityProperty.
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+	propertyName(): string { return Audible.name; }
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
 	// Equatable
 

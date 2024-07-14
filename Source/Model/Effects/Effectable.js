@@ -22,6 +22,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Effectable.name; }
             updateForTimerTick(uwpe) {
                 for (var i = 0; i < this.effects.length; i++) {
                     var effect = this.effects[i];

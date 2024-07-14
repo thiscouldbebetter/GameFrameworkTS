@@ -315,6 +315,8 @@ export class Selector implements EntityProperty<Selector>
 		place.entityToSpawnAdd(this.entityForCursor);
 	}
 
+	propertyName(): string { return Selector.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var cursorPos = this.entityForCursor.locatable().loc.pos;

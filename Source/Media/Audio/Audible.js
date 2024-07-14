@@ -16,9 +16,10 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            updateForTimerTick(uwpe) { }
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Audible.name; }
+            updateForTimerTick(uwpe) { }
             // Equatable
             equals(other) { return false; } // todo
         }

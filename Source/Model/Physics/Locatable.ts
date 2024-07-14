@@ -104,6 +104,8 @@ export class Locatable implements EntityProperty<Locatable>
 
 	// EntityProperty.
 
+	propertyName(): string { return Locatable.name; }
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var loc = this.loc;

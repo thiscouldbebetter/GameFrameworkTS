@@ -157,15 +157,6 @@ var ThisCouldBeBetter;
             }
             drawEntitiesInView_1_FindEntitiesInView(place, cameraEntity, collisionHelper, entitiesInView) {
                 var collisionTracker = place.collisionTracker();
-                if (collisionTracker == null) {
-                    entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithoutTracker(place, collisionHelper, entitiesInView);
-                }
-                else {
-                    entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView_WithTracker(place, cameraEntity, collisionHelper, entitiesInView, collisionTracker);
-                }
-                return entitiesInView;
-            }
-            drawEntitiesInView_1_FindEntitiesInView_WithTracker(place, cameraEntity, collisionHelper, entitiesInView, collisionTracker) {
                 var cameraCollidable = cameraEntity.collidable();
                 //cameraCollidable.isDisabled = false;
                 cameraCollidable.entitiesAlreadyCollidedWith.length = 0;
@@ -178,34 +169,54 @@ var ThisCouldBeBetter;
                 entitiesInView.push(...drawablesUnboundable);
                 return entitiesInView;
             }
-            drawEntitiesInView_1_FindEntitiesInView_WithoutTracker(place, collisionHelper, entitiesInView) {
+            /*
+            drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
+            (
+                place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
+            ): Entity[]
+            {
                 entitiesInView.length = 0;
+        
                 var placeEntitiesDrawable = place.drawables();
-                for (var i = 0; i < placeEntitiesDrawable.length; i++) {
+        
+                for (var i = 0; i < placeEntitiesDrawable.length; i++)
+                {
                     var entity = placeEntitiesDrawable[i];
                     var drawable = entity.drawable();
-                    if (drawable.isVisible) {
+                    if (drawable.isVisible)
+                    {
                         var entityPos = entity.locatable().loc.pos;
                         this._posSaved.overwriteWith(entityPos);
+        
                         this.coordsTransformWorldToView(entityPos);
+        
                         var isEntityInView = false;
                         var boundable = entity.boundable();
                         if (boundable == null) // todo
-                         {
+                        {
                             isEntityInView = true;
                         }
-                        else {
+                        else
+                        {
                             var entityCollider = boundable.bounds;
-                            isEntityInView = collisionHelper.doCollidersCollide(entityCollider, this.viewCollider);
+                            isEntityInView = collisionHelper.doCollidersCollide
+                            (
+                                entityCollider, this.viewCollider
+                            );
                         }
-                        if (isEntityInView) {
+        
+                        if (isEntityInView)
+                        {
                             entitiesInView.push(entity);
                         }
+        
                         entityPos.overwriteWith(this._posSaved);
                     }
                 }
+        
                 return entitiesInView;
             }
+            */
             drawEntitiesInView_2_Draw(uwpe, display, entitiesInView) {
                 this.entitiesInViewSort(entitiesInView);
                 for (var i = 0; i < entitiesInView.length; i++) {
@@ -252,11 +263,39 @@ var ThisCouldBeBetter;
                 return entitiesToSort;
             }
             toEntity() {
-                return new GameFramework.Entity(Camera.name, [
-                    this,
-                    new GameFramework.Constrainable([]),
-                    new GameFramework.Locatable(this.loc),
+                /*
+        
+                // todo -
+                // This isn't used to find entities in camera view,
+                // but if it was it would need to include a Collidable property.
+        
+                return new Entity
+                (
+                    Camera.name,
+                    [
+                        this,
+                        new Constrainable([]),
+                        new Locatable(this.loc),
+                    ]
+                );
+                */
+                var cameraBoundable = new GameFramework.Boundable(this.viewCollider);
+                var cameraCollidable = GameFramework.Collidable
+                    .fromCollider(this.viewCollider)
+                    .canCollideAgainWithoutSeparatingSet(true);
+                var cameraConstrainable = new GameFramework.Constrainable([
+                    new GameFramework.Constraint_AttachToEntityWithName("Player"),
+                    //new Constraint_ContainInBox(cameraPosBox)
                 ]);
+                var cameraEntity = new GameFramework.Entity(Camera.name, [
+                    this,
+                    cameraBoundable,
+                    cameraCollidable,
+                    cameraConstrainable,
+                    new GameFramework.Locatable(this.loc),
+                    GameFramework.Movable.default()
+                ]);
+                return cameraEntity;
             }
             // Clonable.
             clone() { return this; }
@@ -264,6 +303,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
+            propertyName() { return Camera.name; }
             updateForTimerTick(uwpe) {
                 // Do nothing.  Rendering is done in Place.draw().
             }

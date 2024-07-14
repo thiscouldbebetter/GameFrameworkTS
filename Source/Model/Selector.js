@@ -142,6 +142,7 @@ var ThisCouldBeBetter;
                 var place = uwpe.place;
                 place.entityToSpawnAdd(this.entityForCursor);
             }
+            propertyName() { return Selector.name; }
             updateForTimerTick(uwpe) {
                 var cursorPos = this.entityForCursor.locatable().loc.pos;
                 var mousePosAbsolute = this.mouseMovePosAbsoluteGet(uwpe);

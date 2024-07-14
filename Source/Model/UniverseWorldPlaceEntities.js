@@ -23,6 +23,9 @@ var ThisCouldBeBetter;
             static fromUniverseWorldAndPlace(universe, world, place) {
                 return new UniverseWorldPlaceEntities(universe, world, place, null, null);
             }
+            static fromEntity(entity) {
+                return new UniverseWorldPlaceEntities(null, null, null, entity, null);
+            }
             clear() {
                 this.universe = null;
                 this.world = null;

@@ -58,6 +58,7 @@ var ThisCouldBeBetter;
                 return new GameFramework.Entity(Locatable.name, [this]);
             }
             // EntityProperty.
+            propertyName() { return Locatable.name; }
             updateForTimerTick(uwpe) {
                 var loc = this.loc;
                 loc.vel.add(loc.accel);
