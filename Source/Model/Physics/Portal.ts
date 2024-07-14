@@ -70,7 +70,7 @@ export class Portal implements EntityProperty<Portal>
 		var entityToTransportLoc = entityToTransport.locatable().loc;
 		var entityToTransportPos = entityToTransportLoc.pos;
 
-		world.placeNext = destinationPlace;
+		world.placeNextSet(destinationPlace);
 		entityToTransportPos.overwriteWith(destinationPos);
 		entityToTransport.collidable().entitiesAlreadyCollidedWith.push(destinationEntity);
 

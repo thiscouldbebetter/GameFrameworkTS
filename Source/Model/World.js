@@ -51,6 +51,10 @@ var ThisCouldBeBetter;
             placeGetByName(placeName) {
                 return this._placeGetByName.call(this, placeName);
             }
+            placeNextSet(value) {
+                this.placeNext = value;
+                return this;
+            }
             saveFileNameStem() {
                 return this.name;
             }

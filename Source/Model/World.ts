@@ -105,6 +105,12 @@ export class World //
 		return this._placeGetByName.call(this, placeName);
 	}
 
+	placeNextSet(value: Place): World
+	{
+		this.placeNext = value;
+		return this;
+	}
+
 	saveFileNameStem(): string
 	{
 		return this.name;

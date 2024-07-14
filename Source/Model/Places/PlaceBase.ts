@@ -56,7 +56,7 @@ export class PlaceBase implements Place, Loadable
 	{
 		return world.defn.placeDefnByName(this.defnName);
 	}
-	
+
 	placeParent(world: World): Place
 	{
 		return (this.parentName == null ? null : world.placeGetByName(this.parentName));
@@ -69,7 +69,7 @@ export class PlaceBase implements Place, Loadable
 		placesInAncestry.push(this);
 		return placesInAncestry;
 	}
-	
+
 	size(): Coords
 	{
 		return this._size;

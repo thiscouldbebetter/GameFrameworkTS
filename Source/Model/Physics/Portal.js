@@ -41,7 +41,7 @@ var ThisCouldBeBetter;
                 var destinationPos = destinationEntity.locatable().loc.pos;
                 var entityToTransportLoc = entityToTransport.locatable().loc;
                 var entityToTransportPos = entityToTransportLoc.pos;
-                world.placeNext = destinationPlace;
+                world.placeNextSet(destinationPlace);
                 entityToTransportPos.overwriteWith(destinationPos);
                 entityToTransport.collidable().entitiesAlreadyCollidedWith.push(destinationEntity);
                 if (this.velocityToApply != null) {
