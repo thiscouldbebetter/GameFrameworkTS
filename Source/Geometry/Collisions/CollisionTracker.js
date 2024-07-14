@@ -3,14 +3,37 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class CollisionTracker {
+        class CollisionTrackerBase {
+            collidableDataCreate() {
+                throw new Error("Must be overridden in subclass.");
+            }
+            entityCollidableAddAndFindCollisions(entity, collisionHelper, collisionsSoFar) {
+                throw new Error("Must be overridden in subclass.");
+            }
+            // Clonable.
+            clone() { throw new Error("todo"); }
+            overwriteWith(other) { throw new Error("todo"); }
+            // EntityProperty.
+            finalize(uwpe) { }
+            initialize(uwpe) { }
+            updateForTimerTick(uwpe) { }
+            // Equatable
+            equals(other) { return false; } // todo
+        }
+        GameFramework.CollisionTrackerBase = CollisionTrackerBase;
+        class CollisionTrackerMapped extends CollisionTrackerBase {
             constructor(size, collisionMapSizeInCells) {
+                super();
                 this.collisionMap =
-                    new CollisionTrackerMap(size, collisionMapSizeInCells);
+                    new CollisionTrackerMappedMap(size, collisionMapSizeInCells);
                 this._cells = [];
             }
             static fromSize(size) {
-                return new CollisionTracker(size, GameFramework.Coords.fromXY(4, 4));
+                return new CollisionTrackerMapped(size, GameFramework.Coords.fromXY(4, 4));
+            }
+            // CollisionTracker implementation.
+            collidableDataCreate() {
+                return new CollisionTrackerMappedCollidableData();
             }
             entityCollidableAddAndFindCollisions(entity, collisionHelper, collisionsSoFar) {
                 collisionsSoFar.length = 0;
@@ -18,7 +41,8 @@ var ThisCouldBeBetter;
                 var entityCollidable = entity.collidable();
                 var entityBounds = entityBoundable.bounds;
                 var cellsToAddEntityTo = this.collisionMap.cellsInBox(entityBounds, GameFramework.ArrayHelper.clear(this._cells));
-                entityCollidable._collisionTrackerMapCellsOccupied.push(...cellsToAddEntityTo);
+                var data = entityCollidable.collisionTrackerCollidableData(this);
+                data.cellsOccupiedAdd(cellsToAddEntityTo);
                 for (var c = 0; c < cellsToAddEntityTo.length; c++) {
                     var cell = cellsToAddEntityTo[c];
                     var cellEntitiesPresent = cell.entitiesPresent;
@@ -43,7 +67,7 @@ var ThisCouldBeBetter;
                 return collisionsSoFar;
             }
             toEntity() {
-                return new GameFramework.Entity(CollisionTracker.name, [this]);
+                return new GameFramework.Entity(CollisionTrackerBase.name, [this]);
             }
             // Clonable.
             clone() { return this; }
@@ -60,19 +84,33 @@ var ThisCouldBeBetter;
             // Equatable
             equals(other) { return false; } // todo
         }
-        GameFramework.CollisionTracker = CollisionTracker;
-        class CollisionTrackerMap extends GameFramework.MapOfCells {
+        GameFramework.CollisionTrackerMapped = CollisionTrackerMapped;
+        class CollisionTrackerMappedCollidableData {
+            constructor() {
+                this.cellsOccupied = [];
+            }
+            cellsOccupiedAdd(cellsToAdd) {
+                this.cellsOccupied.push(...cellsToAdd);
+            }
+            // CollisionTrackerCollidableData implementation.
+            resetForEntity(entity) {
+                this.cellsOccupied.forEach(x => GameFramework.ArrayHelper.remove(x.entitiesPresent, entity));
+                this.cellsOccupied.length = 0;
+            }
+        }
+        GameFramework.CollisionTrackerMappedCollidableData = CollisionTrackerMappedCollidableData;
+        class CollisionTrackerMappedMap extends GameFramework.MapOfCells {
             constructor(size, sizeInCells) {
                 sizeInCells =
                     sizeInCells || GameFramework.Coords.fromXY(1, 1).multiplyScalar(4);
                 var cellSize = size.clone().divide(sizeInCells);
-                super(CollisionTrackerMap.name, sizeInCells, cellSize, new GameFramework.MapOfCellsCellSourceArray([], // cells
-                () => new CollisionTrackerMapCell()) // cellSource
+                super(CollisionTrackerMappedMap.name, sizeInCells, cellSize, new GameFramework.MapOfCellsCellSourceArray([], // cells
+                () => new CollisionTrackerMappedMapCell()) // cellSource
                 );
             }
         }
-        GameFramework.CollisionTrackerMap = CollisionTrackerMap;
-        class CollisionTrackerMapCell {
+        GameFramework.CollisionTrackerMappedMap = CollisionTrackerMappedMap;
+        class CollisionTrackerMappedMapCell {
             constructor() {
                 this.entitiesPresent = new Array();
             }
@@ -82,6 +120,6 @@ var ThisCouldBeBetter;
                 return this; // todo
             }
         }
-        GameFramework.CollisionTrackerMapCell = CollisionTrackerMapCell;
+        GameFramework.CollisionTrackerMappedMapCell = CollisionTrackerMappedMapCell;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

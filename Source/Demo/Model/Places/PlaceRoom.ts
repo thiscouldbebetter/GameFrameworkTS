@@ -20,7 +20,7 @@ class PlaceRoom extends PlaceBase
 			size,
 			ArrayHelper.addMany
 			(
-				[ CollisionTracker.fromSize(size).toEntity() ], // hack - Must come before collidables.
+				[ CollisionTrackerMapped.fromSize(size).toEntity() ], // hack - Must come before collidables.
 				entities
 			)
 		);

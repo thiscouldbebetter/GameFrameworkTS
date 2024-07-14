@@ -223,11 +223,11 @@ var ThisCouldBeBetter;
             }
             collisionTracker() {
                 var returnValue = null;
-                if (typeof (GameFramework.CollisionTracker) != "undefined") {
-                    var collisionTrackerEntity = this.entitiesByPropertyName(GameFramework.CollisionTracker.name)[0];
+                if (typeof (GameFramework.CollisionTrackerBase) != "undefined") {
+                    var collisionTrackerEntity = this.entitiesByPropertyName(GameFramework.CollisionTrackerBase.name)[0];
                     var returnValueAsProperty = (collisionTrackerEntity == null
                         ? null
-                        : collisionTrackerEntity.propertyByName(GameFramework.CollisionTracker.name));
+                        : collisionTrackerEntity.propertyByName(GameFramework.CollisionTrackerBase.name));
                     returnValue = returnValueAsProperty;
                 }
                 return returnValue;

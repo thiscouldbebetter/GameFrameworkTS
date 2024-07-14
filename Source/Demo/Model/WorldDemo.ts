@@ -39,7 +39,7 @@ class WorldDemo extends World
 			Locatable.name,
 			ForceField.name,
 
-			CollisionTracker.name,
+			CollisionTrackerBase.name,
 			Boundable.name,
 			Constrainable.name,
 			Collidable.name,

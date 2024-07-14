@@ -104,8 +104,10 @@ import Rotation = gf.Rotation;
 import Collision = gf.Collision;
 import CollisionHelper = gf.CollisionHelper;
 import CollisionTracker = gf.CollisionTracker;
-import CollisionTrackerMap = gf.CollisionTrackerMap;
-import CollisionTrackerMapCell = gf.CollisionTrackerMapCell;
+import CollisionTrackerBase = gf.CollisionTrackerBase;
+import CollisionTrackerMapped = gf.CollisionTrackerMapped;
+import CollisionTrackerMappedMap = gf.CollisionTrackerMappedMap;
+import CollisionTrackerMappedMapCell = gf.CollisionTrackerMappedMapCell;
 
 // Geometry - Constraints.
 import Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;

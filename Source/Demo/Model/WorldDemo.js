@@ -21,7 +21,7 @@ class WorldDemo extends World {
             LoadableProperty.name,
             Locatable.name,
             ForceField.name,
-            CollisionTracker.name,
+            CollisionTrackerBase.name,
             Boundable.name,
             Constrainable.name,
             Collidable.name,

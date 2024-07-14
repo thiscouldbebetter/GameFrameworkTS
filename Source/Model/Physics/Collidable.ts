@@ -17,7 +17,7 @@ export class Collidable implements EntityProperty<Collidable>
 	entitiesAlreadyCollidedWith: Entity[];
 	isDisabled: boolean;
 
-	_collisionTrackerMapCellsOccupied: CollisionTrackerMapCell[];
+	_collisionTrackerCollidableData: CollisionTrackerCollidableData;
 	private _collision: Collision;
 	private _collisions: Collision[];
 	private _uwpe: UniverseWorldPlaceEntities;
@@ -50,8 +50,6 @@ export class Collidable implements EntityProperty<Collidable>
 
 		// Helper variables.
 
-		this._collisionTrackerMapCellsOccupied =
-			new Array<CollisionTrackerMapCell>();
 		this._collision = Collision.create();
 		this._collisions = new Array<Collision>();
 		this._uwpe = UniverseWorldPlaceEntities.create();
@@ -274,17 +272,14 @@ export class Collidable implements EntityProperty<Collidable>
 	collisionsFindForEntity_WithTracker
 	(
 		uwpe: UniverseWorldPlaceEntities,
-		collisionsSoFar: Collision[], collisionTracker: CollisionTracker
+		collisionsSoFar: Collision[],
+		collisionTracker: CollisionTracker
 	): Collision[]
 	{
 		var universe = uwpe.universe;
 		var entity = uwpe.entity;
 
-		this._collisionTrackerMapCellsOccupied.forEach
-		(
-			x => ArrayHelper.remove(x.entitiesPresent, entity)
-		);
-		this._collisionTrackerMapCellsOccupied.length = 0;
+		this.collisionTrackerCollidableData(collisionTracker).resetForEntity(entity);
 
 		collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions
 		(
@@ -344,6 +339,16 @@ export class Collidable implements EntityProperty<Collidable>
 		}
 
 		return collisionsSoFar;
+	}
+
+	collisionTrackerCollidableData(collisionTracker: CollisionTracker): CollisionTrackerCollidableData
+	{
+		if (this._collisionTrackerCollidableData == null)
+		{
+			this._collisionTrackerCollidableData =
+				collisionTracker.collidableDataCreate();
+		}
+		return this._collisionTrackerCollidableData;
 	}
 
 	doEntitiesCollide

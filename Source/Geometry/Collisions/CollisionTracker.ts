@@ -2,23 +2,82 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class CollisionTracker implements EntityProperty<CollisionTracker>
+export interface CollisionTracker
 {
-	collisionMap: MapOfCells<CollisionTrackerMapCell>;
+	collidableDataCreate(): CollisionTrackerCollidableData;
 
-	_cells: CollisionTrackerMapCell[];
+	entityCollidableAddAndFindCollisions
+	(
+		entity: Entity,
+		collisionHelper: CollisionHelper,
+		collisionsSoFar: Collision[]
+	): Collision[];
+}
+
+export class CollisionTrackerBase implements CollisionTracker, EntityProperty<CollisionTrackerBase>
+{
+	collidableDataCreate(): CollisionTrackerCollidableData
+	{
+		throw new Error("Must be overridden in subclass.");
+	}
+
+	entityCollidableAddAndFindCollisions
+	(
+		entity: Entity, collisionHelper: CollisionHelper, collisionsSoFar: Collision[]
+	): Collision[]
+	{
+		throw new Error("Must be overridden in subclass.");
+	}
+
+	// Clonable.
+	clone(): CollisionTrackerBase { throw new Error("todo"); }
+	overwriteWith(other: CollisionTrackerMapped): CollisionTrackerBase { throw new Error("todo"); }
+
+	// EntityProperty.
+
+	finalize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
+
+	// Equatable
+
+	equals(other: CollisionTrackerBase): boolean { return false; } // todo
+
+}
+
+export interface CollisionTrackerCollidableData
+{
+	resetForEntity(entity: Entity): void;
+}
+
+export class CollisionTrackerMapped extends CollisionTrackerBase implements EntityProperty<CollisionTrackerMapped>
+{
+	collisionMap: MapOfCells<CollisionTrackerMappedMapCell>;
+
+	_cells: CollisionTrackerMappedMapCell[];
 
 	constructor(size: Coords, collisionMapSizeInCells: Coords)
 	{
+		super();
+
 		this.collisionMap =
-			new CollisionTrackerMap(size, collisionMapSizeInCells);
+			new CollisionTrackerMappedMap(size, collisionMapSizeInCells);
 
 		this._cells = [];
 	}
 
-	static fromSize(size: Coords): CollisionTracker
+	static fromSize(size: Coords): CollisionTrackerMapped
 	{
-		return new CollisionTracker(size, Coords.fromXY(4, 4));
+		return new CollisionTrackerMapped(size, Coords.fromXY(4, 4));
+	}
+
+	// CollisionTracker implementation.
+
+	collidableDataCreate(): CollisionTrackerCollidableData
+	{
+		return new CollisionTrackerMappedCollidableData();
 	}
 
 	entityCollidableAddAndFindCollisions
@@ -37,7 +96,8 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 			entityBounds, ArrayHelper.clear(this._cells)
 		);
 
-		entityCollidable._collisionTrackerMapCellsOccupied.push(...cellsToAddEntityTo);
+		var data = entityCollidable.collisionTrackerCollidableData(this) as CollisionTrackerMappedCollidableData;
+		data.cellsOccupiedAdd(cellsToAddEntityTo);
 
 		for (var c = 0; c < cellsToAddEntityTo.length; c++)
 		{
@@ -83,13 +143,13 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 	{
 		return new Entity
 		(
-			CollisionTracker.name, [ this ]
+			CollisionTrackerBase.name, [ this ]
 		);
 	}
 
 	// Clonable.
-	clone(): CollisionTracker { return this; }
-	overwriteWith(other: CollisionTracker): CollisionTracker { return this; }
+	clone(): CollisionTrackerMapped { return this; }
+	overwriteWith(other: CollisionTrackerMapped): CollisionTrackerMapped { return this; }
 
 	// EntityProperty.
 
@@ -111,10 +171,36 @@ export class CollisionTracker implements EntityProperty<CollisionTracker>
 
 	// Equatable
 
-	equals(other: CollisionTracker): boolean { return false; } // todo
+	equals(other: CollisionTrackerMapped): boolean { return false; } // todo
 }
 
-export class CollisionTrackerMap extends MapOfCells<CollisionTrackerMapCell>
+export class CollisionTrackerMappedCollidableData implements CollisionTrackerCollidableData
+{
+	cellsOccupied: CollisionTrackerMappedMapCell[];
+
+	constructor()
+	{
+		this.cellsOccupied = [];
+	}
+
+	cellsOccupiedAdd(cellsToAdd: CollisionTrackerMappedMapCell[]): void
+	{
+		this.cellsOccupied.push(...cellsToAdd);
+	}
+
+	// CollisionTrackerCollidableData implementation.
+
+	resetForEntity(entity: Entity): void
+	{
+		this.cellsOccupied.forEach
+		(
+			x => ArrayHelper.remove(x.entitiesPresent, entity)
+		);
+		this.cellsOccupied.length = 0;
+	}
+}
+
+export class CollisionTrackerMappedMap extends MapOfCells<CollisionTrackerMappedMapCell>
 {
 	constructor(size: Coords, sizeInCells: Coords)
 	{
@@ -125,20 +211,20 @@ export class CollisionTrackerMap extends MapOfCells<CollisionTrackerMapCell>
 
 		super
 		(
-			CollisionTrackerMap.name,
+			CollisionTrackerMappedMap.name,
 			sizeInCells,
 			cellSize,
-			new MapOfCellsCellSourceArray<CollisionTrackerMapCell>
+			new MapOfCellsCellSourceArray<CollisionTrackerMappedMapCell>
 			(
 				[], // cells
-				() => new CollisionTrackerMapCell()
+				() => new CollisionTrackerMappedMapCell()
 			) // cellSource
 		);
 	}
 }
 
-export class CollisionTrackerMapCell
-	implements MapCell, Clonable<CollisionTrackerMapCell>
+export class CollisionTrackerMappedMapCell
+	implements MapCell, Clonable<CollisionTrackerMappedMapCell>
 {
 	entitiesPresent: Entity[];
 
@@ -149,9 +235,9 @@ export class CollisionTrackerMapCell
 
 	// Clonable.
 
-	clone(): CollisionTrackerMapCell { return this; } // todo
+	clone(): CollisionTrackerMappedMapCell { return this; } // todo
 
-	overwriteWith(other: CollisionTrackerMapCell): CollisionTrackerMapCell
+	overwriteWith(other: CollisionTrackerMappedMapCell): CollisionTrackerMappedMapCell
 	{
 		return this; // todo
 	}

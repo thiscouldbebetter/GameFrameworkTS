@@ -367,16 +367,17 @@ export class PlaceBase implements Place, Loadable
 	{
 		var returnValue: CollisionTracker = null;
  
-		if (typeof(CollisionTracker) != "undefined")
+		if (typeof(CollisionTrackerBase) != "undefined")
 		{
-			var collisionTrackerEntity = this.entitiesByPropertyName(CollisionTracker.name)[0];
+			var collisionTrackerEntity =
+				this.entitiesByPropertyName(CollisionTrackerBase.name)[0];
 			var returnValueAsProperty =
 			(
 				collisionTrackerEntity == null
 				? null
-				: collisionTrackerEntity.propertyByName(CollisionTracker.name)
+				: collisionTrackerEntity.propertyByName(CollisionTrackerBase.name)
 			);
-			returnValue = returnValueAsProperty as CollisionTracker;
+			returnValue = returnValueAsProperty as CollisionTrackerBase;
 		}
 		return returnValue;
 	}

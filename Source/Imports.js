@@ -86,9 +86,10 @@ var Rotation = gf.Rotation;
 // Geometry - Collisions.
 var Collision = gf.Collision;
 var CollisionHelper = gf.CollisionHelper;
-var CollisionTracker = gf.CollisionTracker;
-var CollisionTrackerMap = gf.CollisionTrackerMap;
-var CollisionTrackerMapCell = gf.CollisionTrackerMapCell;
+var CollisionTrackerBase = gf.CollisionTrackerBase;
+var CollisionTrackerMapped = gf.CollisionTrackerMapped;
+var CollisionTrackerMappedMap = gf.CollisionTrackerMappedMap;
+var CollisionTrackerMappedMapCell = gf.CollisionTrackerMappedMapCell;
 // Geometry - Constraints.
 var Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
 var Constraint_Conditional = gf.Constraint_Conditional;

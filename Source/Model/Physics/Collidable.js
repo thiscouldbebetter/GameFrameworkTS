@@ -20,8 +20,6 @@ var ThisCouldBeBetter;
                 this.entitiesAlreadyCollidedWith = new Array();
                 this.isDisabled = false;
                 // Helper variables.
-                this._collisionTrackerMapCellsOccupied =
-                    new Array();
                 this._collision = GameFramework.Collision.create();
                 this._collisions = new Array();
                 this._uwpe = GameFramework.UniverseWorldPlaceEntities.create();
@@ -118,8 +116,7 @@ var ThisCouldBeBetter;
             collisionsFindForEntity_WithTracker(uwpe, collisionsSoFar, collisionTracker) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;
-                this._collisionTrackerMapCellsOccupied.forEach(x => GameFramework.ArrayHelper.remove(x.entitiesPresent, entity));
-                this._collisionTrackerMapCellsOccupied.length = 0;
+                this.collisionTrackerCollidableData(collisionTracker).resetForEntity(entity);
                 collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(entity, universe.collisionHelper, collisionsSoFar);
                 collisionsSoFar = collisionsSoFar.filter(collision => this.entityPropertyNamesToCollideWith.some(propertyName => collision.entitiesColliding[1].propertyByName(propertyName) != null));
                 return collisionsSoFar;
@@ -146,6 +143,13 @@ var ThisCouldBeBetter;
                     }
                 }
                 return collisionsSoFar;
+            }
+            collisionTrackerCollidableData(collisionTracker) {
+                if (this._collisionTrackerCollidableData == null) {
+                    this._collisionTrackerCollidableData =
+                        collisionTracker.collidableDataCreate();
+                }
+                return this._collisionTrackerCollidableData;
             }
             doEntitiesCollide(entity0, entity1, collisionHelper) {
                 var collidable0 = entity0.collidable();
