@@ -208,6 +208,11 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // This causes problems sometimes.
                 // this.collisionsFindAndHandle(uwpe);
+                // Maybe this won't? 
+                // If this isn't done at initialization, then the colliders
+                // may be in the wrong positions on the first tick,
+                // which leads to false collisions or false misses.
+                this.colliderLocateForEntity(uwpe.entity);
             }
             updateForTimerTick(uwpe) {
                 var entity = uwpe.entity;
