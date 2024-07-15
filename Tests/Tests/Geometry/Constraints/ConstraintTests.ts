@@ -430,7 +430,7 @@ class ConstraintTests extends TestFixture
 
 	trimToPlaceSize(): void
 	{
-		var placeSize = this._place.size;
+		var placeSize = this._place.size();
 
 		var constraint = new Constraint_TrimToPlaceSize();
 		this._constrainable.clear().constraintAdd(constraint);
@@ -452,7 +452,7 @@ class ConstraintTests extends TestFixture
 
 	wrapToPlaceSize(): void
 	{
-		var placeSize = this._place.size;
+		var placeSize = this._place.size();
 
 		var constraint = new Constraint_WrapToPlaceSize();
 		this._constrainable.clear().constraintAdd(constraint);
@@ -475,7 +475,7 @@ class ConstraintTests extends TestFixture
 
 	wrapToPlaceSizeX(): void
 	{
-		var placeSize = this._place.size;
+		var placeSize = this._place.size();
 
 		var constraint = new Constraint_WrapToPlaceSizeX();
 		this._constrainable.clear().constraintAdd(constraint);
@@ -510,7 +510,7 @@ class ConstraintTests extends TestFixture
 
 	wrapToPlaceSizeXTrimY(): void
 	{
-		var placeSize = this._place.size;
+		var placeSize = this._place.size();
 
 		var constraint = new Constraint_WrapToPlaceSizeXTrimY();
 		this._constrainable.clear().constraintAdd(constraint);

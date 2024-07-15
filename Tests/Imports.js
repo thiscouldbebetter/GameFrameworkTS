@@ -85,7 +85,8 @@ var Rotation = gf.Rotation;
 // Geometry - Collision.
 var Collision = gf.Collision;
 var CollisionHelper = gf.CollisionHelper;
-var CollisionTracker = gf.CollisionTracker;
+var CollisionTrackerBase = gf.CollisionTrackerBase;
+var CollisionTrackerMapped = gf.CollisionTrackerMapped;
 // Geometry - Constraints.
 var Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
 var Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
@@ -224,8 +225,7 @@ var Obstacle = gf.Obstacle;
 var Portal = gf.Portal;
 var Traversable = gf.Traversable;
 var Vehicle = gf.Vehicle;
-// Model - Places.
-var Place = gf.Place;
+var PlaceBase = gf.PlaceBase;
 var PlaceDefn = gf.PlaceDefn;
 var PlaceZoned = gf.PlaceZoned;
 var Zone = gf.Zone;
@@ -271,6 +271,7 @@ var DateTime = gf.DateTime;
 var DiceRoll = gf.DiceRoll;
 var IDHelper = gf.IDHelper;
 var PlatformHelper = gf.PlatformHelper;
+var Randomizer = gf.Randomizer;
 var RandomizerSystem = gf.RandomizerSystem;
 var Reference = gf.Reference;
 var TimerHelper = gf.TimerHelper;

@@ -102,6 +102,8 @@ import Rotation = gf.Rotation;
 import Collision = gf.Collision;
 import CollisionHelper = gf.CollisionHelper;
 import CollisionTracker = gf.CollisionTracker;
+import CollisionTrackerBase = gf.CollisionTrackerBase;
+import CollisionTrackerMapped = gf.CollisionTrackerMapped;
 
 // Geometry - Constraints.
 import Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
@@ -278,6 +280,7 @@ import Vehicle = gf.Vehicle;
 
 // Model - Places.
 import Place = gf.Place;
+import PlaceBase = gf.PlaceBase;
 import PlaceDefn = gf.PlaceDefn;
 import PlaceZoned = gf.PlaceZoned;
 import Zone = gf.Zone;

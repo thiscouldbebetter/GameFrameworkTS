@@ -216,7 +216,7 @@ class ConstraintTests extends TestFixture {
         Assert.areEqual(posAfterConstraintExpected, posAfterConstraint);
     }
     trimToPlaceSize() {
-        var placeSize = this._place.size;
+        var placeSize = this._place.size();
         var constraint = new Constraint_TrimToPlaceSize();
         this._constrainable.clear().constraintAdd(constraint);
         var entityPos = this._entityToConstrainLoc.pos;
@@ -230,7 +230,7 @@ class ConstraintTests extends TestFixture {
         Assert.areEqual(placeSize, entityPosAfterConstraint);
     }
     wrapToPlaceSize() {
-        var placeSize = this._place.size;
+        var placeSize = this._place.size();
         var constraint = new Constraint_WrapToPlaceSize();
         this._constrainable.clear().constraintAdd(constraint);
         var entityPos = this._entityToConstrainLoc.pos;
@@ -245,7 +245,7 @@ class ConstraintTests extends TestFixture {
         Assert.areEqual(zeroes, entityPosAfterConstraint);
     }
     wrapToPlaceSizeX() {
-        var placeSize = this._place.size;
+        var placeSize = this._place.size();
         var constraint = new Constraint_WrapToPlaceSizeX();
         this._constrainable.clear().constraintAdd(constraint);
         var entityPos = this._entityToConstrainLoc.pos;
@@ -261,7 +261,7 @@ class ConstraintTests extends TestFixture {
         Assert.areNumbersEqual(entityPosBeforeConstraint.z, entityPosAfterConstraint.z);
     }
     wrapToPlaceSizeXTrimY() {
-        var placeSize = this._place.size;
+        var placeSize = this._place.size();
         var constraint = new Constraint_WrapToPlaceSizeXTrimY();
         this._constrainable.clear().constraintAdd(constraint);
         var entityPos = this._entityToConstrainLoc.pos;

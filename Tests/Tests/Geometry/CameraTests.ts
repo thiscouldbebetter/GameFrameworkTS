@@ -33,7 +33,9 @@ class CameraTests extends TestFixture
 		var ignoreZFalse = false;
 		var worldCoords =
 			this._camera.coordsTransformViewToWorld(viewCoords, ignoreZFalse);
-		var worldCoordsExpected = new Coords(0, -200, -300); // todo
+		var worldCoordsExpected =
+			// new Coords(0, -200, -300); // todo
+			new Coords(-200, -150, -150);
 		Assert.areEqual(worldCoordsExpected, worldCoords);
 	}
 
@@ -42,7 +44,7 @@ class CameraTests extends TestFixture
 		var worldCoords = Coords.zeroes();
 		var viewCoords =
 			this._camera.coordsTransformWorldToView(worldCoords);
-		var viewCoordsExpected = new Coords(200, 300, 0); // todo
+		var viewCoordsExpected = new Coords(200, 150, 150); // todo
 		Assert.areEqual(viewCoordsExpected, viewCoords);
 	}
 

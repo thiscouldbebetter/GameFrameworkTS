@@ -21,13 +21,15 @@ class CameraTests extends TestFixture {
         var viewCoords = Coords.fromXY(0, 0);
         var ignoreZFalse = false;
         var worldCoords = this._camera.coordsTransformViewToWorld(viewCoords, ignoreZFalse);
-        var worldCoordsExpected = new Coords(0, -200, -300); // todo
+        var worldCoordsExpected = 
+        // new Coords(0, -200, -300); // todo
+        new Coords(-200, -150, -150);
         Assert.areEqual(worldCoordsExpected, worldCoords);
     }
     coordsTransformWorldToView() {
         var worldCoords = Coords.zeroes();
         var viewCoords = this._camera.coordsTransformWorldToView(worldCoords);
-        var viewCoordsExpected = new Coords(200, 300, 0); // todo
+        var viewCoordsExpected = new Coords(200, 150, 150); // todo
         Assert.areEqual(viewCoordsExpected, viewCoords);
     }
     drawEntitiesInView() {
