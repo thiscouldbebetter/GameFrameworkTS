@@ -157,13 +157,17 @@ var ThisCouldBeBetter;
             }
             drawEntitiesInView_1_FindEntitiesInView(place, cameraEntity, collisionHelper, entitiesInView) {
                 var collisionTracker = place.collisionTracker();
+                collisionTracker.entityReset(cameraEntity);
                 var cameraCollidable = cameraEntity.collidable();
                 //cameraCollidable.isDisabled = false;
                 cameraCollidable.entitiesAlreadyCollidedWith.length = 0;
                 var collisions = collisionTracker.entityCollidableAddAndFindCollisions(cameraEntity, collisionHelper, new Array());
                 var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
                 var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
+                entitiesInView =
+                    entitiesInView.filter((x, i) => entitiesInView.indexOf(x) == i); // Distinct.
                 //cameraCollidable.isDisabled = true;
+                // Now draw the unboundables.
                 var drawablesAll = place.drawables();
                 var drawablesUnboundable = drawablesAll.filter(x => x.boundable() == null);
                 entitiesInView.push(...drawablesUnboundable);

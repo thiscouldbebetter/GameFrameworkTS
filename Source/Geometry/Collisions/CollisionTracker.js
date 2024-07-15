@@ -95,6 +95,37 @@ var ThisCouldBeBetter;
             static fromSize(size) {
                 return new CollisionTrackerMapped(size, GameFramework.Coords.fromXY(4, 4));
             }
+            doesAnyCellContainTheSameEntityMoreThanOnce() {
+                var doAnyCellsContainDuplicatesSoFar = false;
+                var cellsAll = this.collisionMap.cellsAll();
+                for (var c = 0; c < cellsAll.length; c++) {
+                    var cell = cellsAll[c];
+                    var entitiesInCell = cell.entitiesPresent();
+                    for (var i = 0; i < entitiesInCell.length; i++) {
+                        var entityI = entitiesInCell[i];
+                        for (var j = i + 1; j < entitiesInCell.length; j++) {
+                            var entityJ = entitiesInCell[j];
+                            if (entityJ == entityI) {
+                                doAnyCellsContainDuplicatesSoFar = true;
+                                i = entitiesInCell.length;
+                                c = cellsAll.length;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return doAnyCellsContainDuplicatesSoFar;
+            }
+            entitiesPresentInAnyCell() {
+                var cellsAll = this.collisionMap.cellsAll();
+                var entitiesAll = new Array();
+                cellsAll.forEach(x => x.entitiesPresent().forEach(y => {
+                    if (entitiesAll.indexOf(y) == -1) {
+                        entitiesAll.push(y);
+                    }
+                }));
+                return entitiesAll;
+            }
             // CollisionTracker implementation.
             collidableDataCreate() {
                 return new CollisionTrackerMappedCollidableData();
@@ -120,8 +151,7 @@ var ThisCouldBeBetter;
                         for (var e = 0; e < cellEntitiesPresent.length; e++) {
                             var entityOther = cellEntitiesPresent[e];
                             if (entityOther == entity) {
-                                // This shouldn't happen!
-                                GameFramework.Debug.doNothing();
+                                // This perhaps shouldn't happen, but it does.
                             }
                             else {
                                 var doEntitiesCollide = entityCollidable.doEntitiesCollide(entity, entityOther, collisionHelper);
@@ -154,10 +184,13 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) { }
             updateForTimerTick(uwpe) {
+                /*
                 var cellsAll = this._cells;
-                cellsAll.forEach(x => {
-                    x.entitiesPresentRemoveMovers();
+                cellsAll.forEach(x =>
+                {
+                    x.entitiesPresentRemoveMovers()
                 });
+                */
             }
             // Equatable
             equals(other) { return false; } // todo
@@ -199,10 +232,19 @@ var ThisCouldBeBetter;
                 return this._entitiesPresent;
             }
             entitiesPresentRemoveMovers() {
-                this._entitiesPresent = this._entitiesPresent.filter(y => y.collidable().isEntityStationary(y));
+                var entitiesMovers = this._entitiesPresent.filter(x => x.collidable().isEntityStationary(x) == false);
+                entitiesMovers.forEach(x => this.entityPresentRemove(x));
             }
             entityPresentAdd(entity) {
-                this._entitiesPresent.push(entity);
+                if (this._entitiesPresent.indexOf(entity) == -1) {
+                    this._entitiesPresent.push(entity);
+                }
+                else {
+                    // hack - This shouldn't happen. 
+                    // If it does, it may be because the CollisionTracker.entityReset()
+                    // wasn't called before adding it again.
+                    console.log("An entity was added to a cell that already contains it.");
+                }
             }
             entityPresentRemove(entity) {
                 var entityIndex = this._entitiesPresent.indexOf(entity);

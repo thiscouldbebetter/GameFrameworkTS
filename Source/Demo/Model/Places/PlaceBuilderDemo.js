@@ -905,6 +905,7 @@ class PlaceBuilderDemo // Main.
                 portalBox, [Playable.name], portalCollide);
                 var locatable = new Locatable(new Disposition(portalPos, null, null));
                 var portalEntity = new Entity("PortalToNeighbor" + i, [
+                    Boundable.fromCollidable(collidable),
                     collidable,
                     locatable,
                     Movable.default(), // hack - For CollisionTracker.
@@ -916,6 +917,7 @@ class PlaceBuilderDemo // Main.
                 0, // ticks
                 portalBox, [Playable.name], forceFieldCollide);
                 var forceFieldEntity = new Entity("PortalToNeighbor" + i + "_ForceField", [
+                    Boundable.fromCollidable(forceFieldCollidable),
                     forceFieldCollidable,
                     forceField,
                     locatable,

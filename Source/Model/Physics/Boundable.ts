@@ -17,6 +17,14 @@ export class Boundable<TBounds extends ShapeBase>
 		this.bounds = bounds;
 	}
 
+	static fromCollidable(collidable: Collidable): Boundable<Box>
+	{
+		var collider = collidable.collider;
+		var colliderAsBox = collider.toBox(Box.create() );
+		var boundable = new Boundable(colliderAsBox);
+		return boundable;
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

@@ -1674,6 +1674,7 @@ class PlaceBuilderDemo // Main.
 				(
 					"PortalToNeighbor" + i,
 					[
+						Boundable.fromCollidable(collidable),
 						collidable,
 						locatable,
 						Movable.default(), // hack - For CollisionTracker.
@@ -1700,6 +1701,7 @@ class PlaceBuilderDemo // Main.
 				(
 					"PortalToNeighbor" + i + "_ForceField",
 					[
+						Boundable.fromCollidable(forceFieldCollidable),
 						forceFieldCollidable,
 						forceField,
 						locatable,

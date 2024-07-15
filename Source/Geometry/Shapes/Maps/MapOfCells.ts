@@ -174,6 +174,31 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 		return cellsInBox;
 	}
 
+	cellsAll(): TCell[]
+	{
+		var returnCells = new Array<TCell>();
+
+		var cellPosInCells = Coords.create();
+		var cellPosStart = Coords.zeroes();
+		var cellPosEnd = this.sizeInCells;
+
+		for (var y = cellPosStart.y; y < cellPosEnd.y; y++)
+		{
+			cellPosInCells.y = y;
+
+			for (var x = cellPosStart.x; x < cellPosEnd.x; x++)
+			{
+				cellPosInCells.x = x;
+
+				var cell = this.cellAtPosInCellsNoOverwrite(cellPosInCells);
+
+				returnCells.push(cell);
+			}
+		}
+
+		return returnCells;
+	}
+
 	cellsAsEntities
 	(
 		mapAndCellPosToEntity: (m: MapOfCells<TCell>, p: Coords) => Entity
@@ -182,7 +207,7 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 		var returnValues = new Array<Entity>();
 
 		var cellPosInCells = Coords.create();
-		var cellPosStart = Coords.create();
+		var cellPosStart = Coords.zeroes();
 		var cellPosEnd = this.sizeInCells;
 
 		for (var y = cellPosStart.y; y < cellPosEnd.y; y++)

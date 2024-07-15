@@ -247,6 +247,7 @@ export class Camera implements EntityProperty<Camera>
 	): Entity[]
 	{
 		var collisionTracker = (place as PlaceBase).collisionTracker();
+		collisionTracker.entityReset(cameraEntity);
 
 		var cameraCollidable = cameraEntity.collidable();
 		//cameraCollidable.isDisabled = false;
@@ -257,7 +258,11 @@ export class Camera implements EntityProperty<Camera>
 		);
 		var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
 		var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
+		entitiesInView =
+			entitiesInView.filter( (x, i) => entitiesInView.indexOf(x) == i); // Distinct.
 		//cameraCollidable.isDisabled = true;
+
+		// Now draw the unboundables.
 
 		var drawablesAll = place.drawables();
 		var drawablesUnboundable = drawablesAll.filter(x => x.boundable() == null);

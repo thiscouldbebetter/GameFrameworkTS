@@ -7,6 +7,12 @@ var ThisCouldBeBetter;
             constructor(bounds) {
                 this.bounds = bounds;
             }
+            static fromCollidable(collidable) {
+                var collider = collidable.collider;
+                var colliderAsBox = collider.toBox(GameFramework.Box.create());
+                var boundable = new Boundable(colliderAsBox);
+                return boundable;
+            }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {

@@ -198,6 +198,59 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 		return new CollisionTrackerMapped(size, Coords.fromXY(4, 4));
 	}
 
+	doesAnyCellContainTheSameEntityMoreThanOnce(): boolean
+	{
+		var doAnyCellsContainDuplicatesSoFar = false;
+
+		var cellsAll = this.collisionMap.cellsAll();
+
+		for (var c = 0; c < cellsAll.length; c++)
+		{
+			var cell = cellsAll[c];
+
+			var entitiesInCell = cell.entitiesPresent();
+
+			for (var i = 0; i < entitiesInCell.length; i++)
+			{
+				var entityI = entitiesInCell[i];
+
+				for (var j = i + 1; j < entitiesInCell.length; j++)
+				{
+					var entityJ = entitiesInCell[j];
+					if (entityJ == entityI)
+					{
+						doAnyCellsContainDuplicatesSoFar = true;
+						i = entitiesInCell.length;
+						c = cellsAll.length;
+						break;
+					}
+				}
+			}
+		}
+
+		return doAnyCellsContainDuplicatesSoFar;
+	}
+
+	entitiesPresentInAnyCell(): Entity[]
+	{
+		var cellsAll = this.collisionMap.cellsAll();
+		var entitiesAll = new Array<Entity>();
+		cellsAll.forEach
+		(
+			x => x.entitiesPresent().forEach
+			(
+				y =>
+				{
+					if (entitiesAll.indexOf(y) == -1)
+					{
+						entitiesAll.push(y);
+					}
+				}
+			)
+		);
+		return entitiesAll;
+	}
+
 	// CollisionTracker implementation.
 
 	collidableDataCreate(): CollisionTrackerCollidableData
@@ -207,7 +260,9 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 
 	entityCollidableAddAndFindCollisions
 	(
-		entity: Entity, collisionHelper: CollisionHelper, collisionsSoFar: Collision[]
+		entity: Entity,
+		collisionHelper: CollisionHelper,
+		collisionsSoFar: Collision[]
 	): Collision[]
 	{
 		collisionsSoFar.length = 0;
@@ -230,7 +285,8 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 			entityBounds, ArrayHelper.clear(this._cells)
 		);
 
-		var data = entityCollidable.collisionTrackerCollidableData(this) as CollisionTrackerMappedCollidableData;
+		var data =
+			entityCollidable.collisionTrackerCollidableData(this) as CollisionTrackerMappedCollidableData;
 		data.cellsOccupiedAdd(cellsToAddEntityTo);
 
 		for (var c = 0; c < cellsToAddEntityTo.length; c++)
@@ -248,8 +304,7 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 
 					if (entityOther == entity)
 					{
-						// This shouldn't happen!
-						Debug.doNothing();
+						// This perhaps shouldn't happen, but it does.
 					}
 					else
 					{
@@ -271,6 +326,7 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 			}
 
 			cell.entityPresentAdd(entity);
+
 		} // end for each cell
 
 		return collisionsSoFar;
@@ -308,11 +364,13 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		/*
 		var cellsAll = this._cells;
 		cellsAll.forEach(x =>
 		{
 			x.entitiesPresentRemoveMovers()
 		});
+		*/
 	}
 
 	// Equatable
@@ -391,15 +449,29 @@ export class CollisionTrackerMappedMapCell
 
 	entitiesPresentRemoveMovers(): void
 	{
-		this._entitiesPresent = this._entitiesPresent.filter
+		var entitiesMovers = this._entitiesPresent.filter
 		(
-			y => y.collidable().isEntityStationary(y)
+			x => x.collidable().isEntityStationary(x) == false
+		);
+		entitiesMovers.forEach
+		(
+			x => this.entityPresentRemove(x)
 		);
 	}
 
 	entityPresentAdd(entity: Entity): void
 	{
-		this._entitiesPresent.push(entity);
+		if (this._entitiesPresent.indexOf(entity) == -1)
+		{
+			this._entitiesPresent.push(entity);
+		}
+		else
+		{
+			// hack - This shouldn't happen. 
+			// If it does, it may be because the CollisionTracker.entityReset()
+			// wasn't called before adding it again.
+			console.log("An entity was added to a cell that already contains it.");
+		}
 	}
 
 	entityPresentRemove(entity: Entity): void

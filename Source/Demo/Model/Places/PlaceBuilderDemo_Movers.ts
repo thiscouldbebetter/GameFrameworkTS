@@ -192,13 +192,17 @@ class PlaceBuilderDemo_Movers
 			);
 		};
 
+		var carnivoreCollidable =
+			Collidable.fromCollider(carnivoreCollider);
+
 		var carnivoreEntityDefn = new Entity
 		(
 			"Carnivore",
 			[
 				new Actor(carnivoreActivity),
 				Animatable2.create(),
-				Collidable.fromCollider(carnivoreCollider),
+				Boundable.fromCollidable(carnivoreCollidable),
+				carnivoreCollidable,
 				new Constrainable([constraintSpeedMax1]),
 				Drawable.fromVisual(carnivoreVisual),
 				new Killable(10, null, carnivoreDie),
@@ -1156,14 +1160,17 @@ class PlaceBuilderDemo_Movers
 			]
 		);
 
+		var grazerCollidable = Collidable.fromCollider(grazerCollider);
+
 		var grazerEntityDefn = new Entity
 		(
 			"Grazer",
 			[
 				new Actor(grazerActivity),
 				Animatable2.create(),
+				Boundable.fromCollidable(grazerCollidable),
 				grazerPhased,
-				Collidable.fromCollider(grazerCollider),
+				grazerCollidable,
 				new Constrainable([constraintSpeedMax1]),
 				Drawable.fromVisual(grazerVisual),
 				new Killable(10, null, grazerDie),
