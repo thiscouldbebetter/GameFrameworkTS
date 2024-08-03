@@ -67,10 +67,22 @@ export class MediaLibrary
 
 	static default()
 	{
-		return MediaLibrary.fromFilePaths("../Content/", []);
+		return MediaLibrary.fromMediaFilePaths([]);
 	}
 
-	static fromFilePaths(contentDirectoryPath: string, mediaFilePaths: string[]): MediaLibrary
+	static fromMediaFilePaths(mediaFilePaths: string[]): MediaLibrary
+	{
+		return MediaLibrary.fromContentDirectoryPathAndMediaFilePaths
+		(
+			"../Content/", mediaFilePaths
+		);
+	}
+
+	static fromContentDirectoryPathAndMediaFilePaths
+	(
+		contentDirectoryPath: string,
+		mediaFilePaths: string[]
+	): MediaLibrary
 	{
 		var images = new Array<Image2>();
 		var sounds = new Array<Sound>();
@@ -315,27 +327,52 @@ export class MediaLibrary
 
 	fontGetByName(name: string): Font
 	{
-		return this.fontsByName.get(name);
+		var returnFont = this.fontsByName.get(name);
+		if (returnFont == null)
+		{
+			throw new Error("No font found with name: " + name);
+		}
+		return returnFont;
 	}
 
 	imageGetByName(name: string): Image2
 	{
-		return this.imagesByName.get(name);
+		var returnImage = this.imagesByName.get(name);
+		if (returnImage == null)
+		{
+			throw new Error("No image found with name: " + name);
+		}
+		return returnImage;
 	}
 
 	soundGetByName(name: string): Sound
 	{
-		return this.soundsByName.get(name);
+		var returnSound = this.soundsByName.get(name);
+		if (returnSound == null)
+		{
+			throw new Error("No sound found with name: " + name);
+		}
+		return returnSound;
 	}
 
 	textStringGetByName(name: string): TextString
 	{
-		return this.textStringsByName.get(name);
+		var returnTextString = this.textStringsByName.get(name);
+		if (returnTextString == null)
+		{
+			throw new Error("No text string found with name: " + name);
+		}
+		return returnTextString;
 	}
 
 	videoGetByName(name: string): Video
 	{
-		return this.videosByName.get(name);
+		var returnVideo = this.videosByName.get(name);
+		if (returnVideo == null)
+		{
+			throw new Error("No video found with name: " + name);
+		}
+		return returnVideo;
 	}
 }
 

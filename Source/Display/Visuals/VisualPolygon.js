@@ -53,6 +53,10 @@ var ThisCouldBeBetter;
                 GameFramework.Transforms.applyTransformToCoordsMany(this.transformLocate, this.verticesAsPathTransformed.points);
                 display.drawPolygon(this.verticesAsPathTransformed.points, this.colorFill, this.colorBorder);
             }
+            shouldUseEntityOrientationSet(value) {
+                this.shouldUseEntityOrientation = value;
+                return this;
+            }
             // Clonable.
             clone() {
                 return new VisualPolygon(this.verticesAsPath.clone(), GameFramework.ClonableHelper.clone(this.colorFill), GameFramework.ClonableHelper.clone(this.colorBorder), this.shouldUseEntityOrientation);

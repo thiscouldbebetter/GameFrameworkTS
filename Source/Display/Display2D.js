@@ -5,20 +5,38 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Display2D {
             constructor(sizesAvailable, fontNameAndHeight, colorFore, colorBack, isInvisible) {
-                this.sizesAvailable = sizesAvailable;
+                this.sizesAvailable =
+                    sizesAvailable
+                        ||
+                            [
+                                new GameFramework.Coords(400, 300, 1),
+                                new GameFramework.Coords(640, 480, 1),
+                                new GameFramework.Coords(800, 600, 1),
+                                new GameFramework.Coords(1200, 900, 1),
+                                // Wrap.
+                                new GameFramework.Coords(200, 150, 1),
+                            ];
                 this._sizeDefault = this.sizesAvailable[0];
                 this.sizeInPixels = this._sizeDefault;
                 this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
                 this.fontNameAndHeight =
                     fontNameAndHeight || GameFramework.FontNameAndHeight.default();
-                this.colorFore = colorFore;
-                this.colorBack = colorBack;
+                this.colorFore = colorFore || GameFramework.Color.Instances().Gray;
+                this.colorBack = colorBack || GameFramework.Color.Instances().White;
                 this.isInvisible = isInvisible || false;
                 // Helper variables.
                 this._curveControlPos = GameFramework.Coords.create();
                 this._drawPos = GameFramework.Coords.create();
                 this._sizeHalf = GameFramework.Coords.create();
                 this._zeroes = GameFramework.Coords.Instances().Zeroes;
+            }
+            static default() {
+                return new Display2D(null, // sizesAvailable
+                null, // fontNameAndHeight
+                null, // colorFore
+                null, // colorBack
+                false // isInvisible
+                );
             }
             static fromImage(image) {
                 var returnDisplay = Display2D.fromSizeAndIsInvisible(image.sizeInPixels, true // isInvisible

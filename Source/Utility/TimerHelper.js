@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 var millisecondsPerSecond = 1000;
                 this.millisecondsPerTick = Math.floor(millisecondsPerSecond / this.ticksPerSecond);
             }
+            static default() {
+                return new TimerHelper(25);
+            }
             initialize(handleEventTimerTick) {
                 this.handleEventTimerTick = handleEventTimerTick;
                 this.ticksSoFar = 0;

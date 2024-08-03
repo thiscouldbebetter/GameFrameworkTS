@@ -32,9 +32,12 @@ var ThisCouldBeBetter;
                 this.collectionsByName.set("TextStrings", this.textStringsByName);
             }
             static default() {
-                return MediaLibrary.fromFilePaths("../Content/", []);
+                return MediaLibrary.fromMediaFilePaths([]);
             }
-            static fromFilePaths(contentDirectoryPath, mediaFilePaths) {
+            static fromMediaFilePaths(mediaFilePaths) {
+                return MediaLibrary.fromContentDirectoryPathAndMediaFilePaths("../Content/", mediaFilePaths);
+            }
+            static fromContentDirectoryPathAndMediaFilePaths(contentDirectoryPath, mediaFilePaths) {
                 var images = new Array();
                 var sounds = new Array();
                 var videos = new Array();
@@ -183,19 +186,39 @@ var ThisCouldBeBetter;
                 }
             }
             fontGetByName(name) {
-                return this.fontsByName.get(name);
+                var returnFont = this.fontsByName.get(name);
+                if (returnFont == null) {
+                    throw new Error("No font found with name: " + name);
+                }
+                return returnFont;
             }
             imageGetByName(name) {
-                return this.imagesByName.get(name);
+                var returnImage = this.imagesByName.get(name);
+                if (returnImage == null) {
+                    throw new Error("No image found with name: " + name);
+                }
+                return returnImage;
             }
             soundGetByName(name) {
-                return this.soundsByName.get(name);
+                var returnSound = this.soundsByName.get(name);
+                if (returnSound == null) {
+                    throw new Error("No sound found with name: " + name);
+                }
+                return returnSound;
             }
             textStringGetByName(name) {
-                return this.textStringsByName.get(name);
+                var returnTextString = this.textStringsByName.get(name);
+                if (returnTextString == null) {
+                    throw new Error("No text string found with name: " + name);
+                }
+                return returnTextString;
             }
             videoGetByName(name) {
-                return this.videosByName.get(name);
+                var returnVideo = this.videosByName.get(name);
+                if (returnVideo == null) {
+                    throw new Error("No video found with name: " + name);
+                }
+                return returnVideo;
             }
         }
         GameFramework.MediaLibrary = MediaLibrary;

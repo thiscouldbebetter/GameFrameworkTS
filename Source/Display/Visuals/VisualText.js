@@ -16,6 +16,12 @@ var ThisCouldBeBetter;
                 return new VisualText(textBinding, font, colorFill, null // colorBorder
                 );
             }
+            static fromTextImmediate(text) {
+                return VisualText.fromTextImmediateAndColors(text, GameFramework.Color.Instances().White, GameFramework.Color.Instances().Black);
+            }
+            static fromTextImmediateAndColors(text, colorFill, colorBorder) {
+                return VisualText.fromTextImmediateFontAndColorsFillAndBorder(text, GameFramework.FontNameAndHeight.default(), colorFill, colorBorder);
+            }
             static fromTextBindingFontAndColorsFillAndBorder(textBinding, font, colorFill, colorBorder) {
                 return new VisualText(textBinding, font, colorFill, colorBorder);
             }

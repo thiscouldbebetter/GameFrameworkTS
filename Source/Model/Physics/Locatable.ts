@@ -21,12 +21,28 @@ export class Locatable implements EntityProperty<Locatable>
 		return new Locatable(Disposition.fromPos(pos));
 	}
 
+	approachOtherWithAccelerationAndSpeedMax
+	(
+		locatableToApproach: Locatable,
+		accelerationPerTick: number,
+		speedMax: number
+	): void
+	{
+		this.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance
+		(
+			locatableToApproach,
+			accelerationPerTick,
+			speedMax
+		);
+	}
+
 	approachOtherWithAccelerationAndSpeedMaxAndReturnDistance
 	(
 		locatableToApproach: Locatable,
 		accelerationPerTick: number,
-		speedMax: number// ,distanceMin: number
+		speedMax: number
 	): number
+
 	{
 		accelerationPerTick = accelerationPerTick || .1;
 		speedMax = speedMax || 1;

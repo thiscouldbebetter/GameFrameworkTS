@@ -44,6 +44,33 @@ export class VisualText implements Visual<VisualText>
 		);
 	}
 
+	static fromTextImmediate
+	(
+		text: string,
+	): VisualText
+	{
+		return VisualText.fromTextImmediateAndColors
+		(
+			text, Color.Instances().White, Color.Instances().Black,
+		);
+	}
+
+	static fromTextImmediateAndColors
+	(
+		text: string,
+		colorFill: Color,
+		colorBorder: Color
+	): VisualText
+	{
+		return VisualText.fromTextImmediateFontAndColorsFillAndBorder
+		(
+			text,
+			FontNameAndHeight.default(),
+			colorFill,
+			colorBorder
+		);
+	}
+
 	static fromTextBindingFontAndColorsFillAndBorder
 	(
 		textBinding: DataBinding<any, string>,

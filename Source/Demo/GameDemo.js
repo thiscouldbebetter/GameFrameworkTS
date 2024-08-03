@@ -8,7 +8,7 @@ class GameDemo {
         // deserialization of existing saved items after the schema changes.
         // localStorage.clear();
         var mediaFilePaths = this.mediaFilePathsBuild();
-        var mediaLibrary = MediaLibrary.fromFilePaths("../Content/", mediaFilePaths);
+        var mediaLibrary = MediaLibrary.fromMediaFilePaths(mediaFilePaths);
         var displaySizesAvailable = [
             new Coords(400, 300, 1),
             new Coords(640, 480, 1),
@@ -25,7 +25,8 @@ class GameDemo {
             ControlStyle.Instances().Dark
         ]);
         var version = _BuildRecord.version();
-        var universe = Universe.create("Game Framework Demo Game", version, timerHelper, display, mediaLibrary, controlBuilder, WorldCreator.fromWorldCreate(WorldDemo.create));
+        var universe = Universe.create("Game Framework Demo Game", version, timerHelper, display, null, // soundHelper
+        mediaLibrary, controlBuilder, WorldCreator.fromWorldCreate(WorldDemo.create));
         universe.initialize(() => universe.start());
     }
     mediaFilePathsBuild() {

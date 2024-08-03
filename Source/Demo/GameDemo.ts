@@ -16,7 +16,7 @@ class GameDemo
 
 		var mediaFilePaths = this.mediaFilePathsBuild();
 
-		var mediaLibrary = MediaLibrary.fromFilePaths("../Content/", mediaFilePaths);
+		var mediaLibrary = MediaLibrary.fromMediaFilePaths(mediaFilePaths);
 
 		var displaySizesAvailable =
 		[
@@ -53,6 +53,7 @@ class GameDemo
 			version,
 			timerHelper,
 			display,
+			null, // soundHelper
 			mediaLibrary,
 			controlBuilder,
 			WorldCreator.fromWorldCreate(WorldDemo.create)

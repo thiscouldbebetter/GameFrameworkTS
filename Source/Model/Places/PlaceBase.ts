@@ -111,7 +111,7 @@ export class PlaceBase implements Place, Loadable
 	{
 		return this._entities;
 	}
-	
+
 	entitiesByPropertyName(propertyName: string): Entity[]
 	{
 		var returnValues = this._entitiesByPropertyName.get(propertyName);

@@ -13,8 +13,10 @@ var ThisCouldBeBetter;
             static fromPos(pos) {
                 return new Locatable(GameFramework.Disposition.fromPos(pos));
             }
-            approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(locatableToApproach, accelerationPerTick, speedMax // ,distanceMin: number
-            ) {
+            approachOtherWithAccelerationAndSpeedMax(locatableToApproach, accelerationPerTick, speedMax) {
+                this.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(locatableToApproach, accelerationPerTick, speedMax);
+            }
+            approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(locatableToApproach, accelerationPerTick, speedMax) {
                 accelerationPerTick = accelerationPerTick || .1;
                 speedMax = speedMax || 1;
                 //distanceMin = distanceMin || 1;

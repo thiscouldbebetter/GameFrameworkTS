@@ -43,14 +43,20 @@ export class Universe
 		worldCreator: WorldCreator
 	)
 	{
-		this.name = name;
-		this.version = version || _BuildRecord.version();
-		this.timerHelper = timerHelper;
-		this.display = display;
-		this.soundHelper = soundHelper;
-		this.mediaLibrary = mediaLibrary;
-		this.controlBuilder = controlBuilder;
-		this.worldCreator = worldCreator;
+		this.name = name || "Untitled";
+		this.version = version || "no_version_specified";
+		this.timerHelper = timerHelper || TimerHelper.default();
+		this.display = display || Display2D.default();
+		this.soundHelper = soundHelper || new SoundHelperLive();
+		this.mediaLibrary = mediaLibrary || MediaLibrary.default();
+		this.controlBuilder = controlBuilder || ControlBuilder.default();
+		this.worldCreator =
+			worldCreator
+			||
+			WorldCreator.fromWorldCreate
+			(
+				() => World.default(),
+			);
 
 		this.collisionHelper = new CollisionHelper();
 		this.displayRecorder = new DisplayRecorder
@@ -81,13 +87,12 @@ export class Universe
 		version: string,
 		timerHelper: TimerHelper,
 		display: Display,
+		soundHelper: SoundHelper,
 		mediaLibrary: MediaLibrary,
 		controlBuilder: ControlBuilder,
 		worldCreator: WorldCreator
 	): Universe
 	{
-		var soundHelper = new SoundHelperLive();
-
 		var returnValue = new Universe
 		(
 			name,
@@ -107,20 +112,35 @@ export class Universe
 	{
 		var universe = Universe.create
 		(
-			"Default",
+			null, // name
 			null, // version
-			new TimerHelper(20),
-			Display2D.fromSize
-			(
-				Coords.fromXY(200, 150)
-			),
-			MediaLibrary.default(),
-			ControlBuilder.default(),
-			WorldCreator.fromWorldCreate
-			(
-				() => World.default(),
-				
-			)
+			null, // timerHelper
+			null, // display
+			null, // soundHelper,
+			null, // mediaLibrary
+			null, // controlBuilder
+			null, // worldCreator
+		);
+
+		return universe;
+	}
+
+	static fromMediaLibraryAndWorldCreator
+	(
+		mediaLibrary: MediaLibrary,
+		worldCreator: WorldCreator
+	): Universe
+	{
+		var universe = Universe.create
+		(
+			null, // name
+			null, // version
+			null, // timerHelper
+			null, // display
+			null, // soundHelper,
+			mediaLibrary,
+			null, // controlBuilder
+			worldCreator
 		);
 
 		return universe;

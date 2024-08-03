@@ -22,6 +22,11 @@ export class TimerHelper
 		);
 	}
 
+	static default(): TimerHelper
+	{
+		return new TimerHelper(25);
+	}
+
 	initialize(handleEventTimerTick: () => void): void
 	{
 		this.handleEventTimerTick = handleEventTimerTick;

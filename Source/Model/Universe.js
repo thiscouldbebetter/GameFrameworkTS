@@ -5,14 +5,17 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Universe {
             constructor(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator) {
-                this.name = name;
-                this.version = version || _BuildRecord.version();
-                this.timerHelper = timerHelper;
-                this.display = display;
-                this.soundHelper = soundHelper;
-                this.mediaLibrary = mediaLibrary;
-                this.controlBuilder = controlBuilder;
-                this.worldCreator = worldCreator;
+                this.name = name || "Untitled";
+                this.version = version || "no_version_specified";
+                this.timerHelper = timerHelper || GameFramework.TimerHelper.default();
+                this.display = display || GameFramework.Display2D.default();
+                this.soundHelper = soundHelper || new GameFramework.SoundHelperLive();
+                this.mediaLibrary = mediaLibrary || GameFramework.MediaLibrary.default();
+                this.controlBuilder = controlBuilder || GameFramework.ControlBuilder.default();
+                this.worldCreator =
+                    worldCreator
+                        ||
+                            GameFramework.WorldCreator.fromWorldCreate(() => GameFramework.World.default());
                 this.collisionHelper = new GameFramework.CollisionHelper();
                 this.displayRecorder = new GameFramework.DisplayRecorder(1, // ticksPerFrame
                 100, // bufferSizeInFrames - 5 seconds at 20 fps.
@@ -29,14 +32,29 @@ var ThisCouldBeBetter;
                 this.debuggingModeName = debuggingModeName;
             }
             // static methods
-            static create(name, version, timerHelper, display, mediaLibrary, controlBuilder, worldCreator) {
-                var soundHelper = new GameFramework.SoundHelperLive();
+            static create(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator) {
                 var returnValue = new Universe(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator);
                 return returnValue;
             }
             static default() {
-                var universe = Universe.create("Default", null, // version
-                new GameFramework.TimerHelper(20), GameFramework.Display2D.fromSize(GameFramework.Coords.fromXY(200, 150)), GameFramework.MediaLibrary.default(), GameFramework.ControlBuilder.default(), GameFramework.WorldCreator.fromWorldCreate(() => GameFramework.World.default()));
+                var universe = Universe.create(null, // name
+                null, // version
+                null, // timerHelper
+                null, // display
+                null, // soundHelper,
+                null, // mediaLibrary
+                null, // controlBuilder
+                null);
+                return universe;
+            }
+            static fromMediaLibraryAndWorldCreator(mediaLibrary, worldCreator) {
+                var universe = Universe.create(null, // name
+                null, // version
+                null, // timerHelper
+                null, // display
+                null, // soundHelper,
+                mediaLibrary, null, // controlBuilder
+                worldCreator);
                 return universe;
             }
             // instance methods

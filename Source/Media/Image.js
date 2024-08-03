@@ -63,6 +63,9 @@ var ThisCouldBeBetter;
                 if (this.sourcePath != null) {
                     var image = this;
                     var imgElement = document.createElement("img");
+                    imgElement.onerror = (event) => {
+                        throw new Error("Error loading image: " + image.name);
+                    };
                     imgElement.onload = (event) => {
                         var imgLoaded = event.target;
                         image.isLoaded = true;

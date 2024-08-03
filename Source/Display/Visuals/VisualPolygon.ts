@@ -135,6 +135,12 @@ export class VisualPolygon implements Visual<VisualPolygon>
 		);
 	}
 
+	shouldUseEntityOrientationSet(value: boolean): VisualPolygon
+	{
+		this.shouldUseEntityOrientation = value;
+		return this;
+	}
+
 	// Clonable.
 
 	clone(): VisualPolygon

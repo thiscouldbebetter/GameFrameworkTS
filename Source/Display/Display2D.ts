@@ -31,14 +31,24 @@ export class Display2D implements Display
 		isInvisible: boolean
 	)
 	{
-		this.sizesAvailable = sizesAvailable;
+		this.sizesAvailable =
+			sizesAvailable
+			||
+			[
+				new Coords(400, 300, 1),
+				new Coords(640, 480, 1),
+				new Coords(800, 600, 1),
+				new Coords(1200, 900, 1),
+				// Wrap.
+				new Coords(200, 150, 1),
+			];
 		this._sizeDefault = this.sizesAvailable[0];
 		this.sizeInPixels = this._sizeDefault;
 		this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
 		this.fontNameAndHeight =
 			fontNameAndHeight || FontNameAndHeight.default();
-		this.colorFore = colorFore;
-		this.colorBack = colorBack;
+		this.colorFore = colorFore || Color.Instances().Gray;
+		this.colorBack = colorBack || Color.Instances().White;
 		this.isInvisible = isInvisible || false;
 
 		// Helper variables.
@@ -47,6 +57,18 @@ export class Display2D implements Display
 		this._drawPos = Coords.create();
 		this._sizeHalf = Coords.create();
 		this._zeroes = Coords.Instances().Zeroes;
+	}
+
+	static default(): Display2D
+	{
+		return new Display2D
+		(
+			null, // sizesAvailable
+			null, // fontNameAndHeight
+			null, // colorFore
+			null, // colorBack
+			false // isInvisible
+		);
 	}
 
 	static fromImage(image: Image2): Display2D
