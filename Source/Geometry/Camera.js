@@ -86,13 +86,14 @@ var ThisCouldBeBetter;
             }
             drawEntitiesInView(uwpe, cameraEntity, display) {
                 var universe = uwpe.universe;
-                var place = uwpe.place;
                 this.loc.pos.round(); // hack - To prevent lines between map tiles.
-                this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView(place, cameraEntity, universe.collisionHelper, this.entitiesInView);
+                this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView(uwpe, cameraEntity, universe.collisionHelper, this.entitiesInView);
                 this.drawEntitiesInView_2_Draw(uwpe, display, this.entitiesInView);
             }
-            drawEntitiesInView_1_FindEntitiesInView(place, cameraEntity, collisionHelper, entitiesInView) {
-                var collisionTracker = place.collisionTracker();
+            drawEntitiesInView_1_FindEntitiesInView(uwpe, cameraEntity, collisionHelper, entitiesInView) {
+                var world = uwpe.world;
+                var place = uwpe.place;
+                var collisionTracker = place.collisionTracker(world);
                 collisionTracker.entityReset(cameraEntity);
                 var cameraCollidable = cameraEntity.collidable();
                 //cameraCollidable.isDisabled = false;

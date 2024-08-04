@@ -419,7 +419,12 @@ export class InputHelper implements Platformable
 			? this.handleEventMouseMove.bind(this)
 			: null
 		);
-		divMain.onwheel = this.handleEventMouseWheel.bind(this);
+		divMain.addEventListener
+		(
+			"wheel",
+			this.handleEventMouseWheel.bind(this),
+			{ passive: true }
+		);
 
 		divMain.ontouchstart = this.handleEventTouchStart.bind(this);
 		divMain.ontouchend = this.handleEventTouchEnd.bind(this);

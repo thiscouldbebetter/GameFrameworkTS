@@ -104,12 +104,32 @@ var ThisCouldBeBetter;
             }
             collisionsFindForEntity(uwpe, collisionsSoFar) {
                 var universe = uwpe.universe;
+                var world = uwpe.world;
                 var place = uwpe.place;
                 var entity = uwpe.entity;
-                var collisionTracker = place.collisionTracker();
+                var collisionTracker = place.collisionTracker(world);
                 collisionTracker.entityReset(entity);
                 collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(entity, universe.collisionHelper, collisionsSoFar);
-                collisionsSoFar = collisionsSoFar.filter(collision => this.entityPropertyNamesToCollideWith.some(propertyName => collision.entitiesColliding[1].propertyByName(propertyName) != null));
+                var collisionsToIgnore = collisionsSoFar.filter(collision => {
+                    var entityThis = collision.entitiesColliding[0];
+                    var entityOther = collision.entitiesColliding[1];
+                    var collisionBetweenEntityThisAndOtherShouldBeHandled = this.entityPropertyNamesToCollideWith.some(propertyName => {
+                        var collisionsBetweenEntityTypesAreTracked = (entityOther.propertyByName(propertyName) != null);
+                        return collisionsBetweenEntityTypesAreTracked;
+                    });
+                    var collisionBetweenEntityOtherAndThisShouldBeHandled = entityOther.collidable().entityPropertyNamesToCollideWith.some(propertyName => {
+                        var collisionsBetweenEntityTypesAreTracked = (entityThis.propertyByName(propertyName) != null);
+                        return collisionsBetweenEntityTypesAreTracked;
+                    });
+                    var collisionBetweenEntityTypesShouldBeHandled = collisionBetweenEntityThisAndOtherShouldBeHandled
+                        || collisionBetweenEntityOtherAndThisShouldBeHandled;
+                    var collisionShouldBeIgnored = (collisionBetweenEntityTypesShouldBeHandled == false);
+                    return collisionShouldBeIgnored;
+                });
+                collisionsToIgnore.forEach(x => {
+                    var i = collisionsSoFar.indexOf(x);
+                    collisionsSoFar.splice(i, 1);
+                });
                 return collisionsSoFar;
             }
             collisionsFindForEntity_WithoutTracker(uwpe, collisionsSoFar) {

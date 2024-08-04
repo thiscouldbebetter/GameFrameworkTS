@@ -368,7 +368,7 @@ export class PlaceBase implements Place, Loadable
 		return this.entitiesByPropertyName(Collidable.name);
 	}
 
-	collisionTracker(): CollisionTracker
+	collisionTracker(world: World): CollisionTracker
 	{
 		var collisionTrackerAsEntity =
 			this.entityByName(CollisionTrackerBase.name);
@@ -377,6 +377,18 @@ export class PlaceBase implements Place, Loadable
 		{
 			var collisionTracker =
 				new CollisionTrackerBruteForce() as CollisionTrackerBase;
+
+			// hack
+			// Must add the CollisionTracker to the propertyNamesToProcess,
+			// or otherwise collisions won't be tracked.
+			var placeDefn = this.defn(world);
+			var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
+			var collisionTrackerPropertyName = collisionTracker.propertyName();
+			if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1)
+			{
+				placeDefnPropertyNames.push(collisionTrackerPropertyName);
+			}
+
 			var collisionTrackerAsEntity = collisionTracker.toEntity();
 			this.entitySpawn(UniverseWorldPlaceEntities.fromEntity(collisionTrackerAsEntity));
 		}

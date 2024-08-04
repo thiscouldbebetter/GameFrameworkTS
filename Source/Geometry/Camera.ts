@@ -221,13 +221,12 @@ export class Camera implements EntityProperty<Camera>
 	): void
 	{
 		var universe = uwpe.universe;
-		var place = uwpe.place;
 
 		this.loc.pos.round(); // hack - To prevent lines between map tiles.
 
 		this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView
 		(
-			place, cameraEntity, universe.collisionHelper, this.entitiesInView
+			uwpe, cameraEntity, universe.collisionHelper, this.entitiesInView
 		);
 
 		this.drawEntitiesInView_2_Draw
@@ -238,13 +237,16 @@ export class Camera implements EntityProperty<Camera>
 
 	drawEntitiesInView_1_FindEntitiesInView
 	(
-		place: Place,
+		uwpe: UniverseWorldPlaceEntities,
 		cameraEntity: Entity,
 		collisionHelper: CollisionHelper,
 		entitiesInView: Entity[]
 	): Entity[]
 	{
-		var collisionTracker = (place as PlaceBase).collisionTracker();
+		var world = uwpe.world;
+		var place = uwpe.place;
+
+		var collisionTracker = (place as PlaceBase).collisionTracker(world);
 		collisionTracker.entityReset(cameraEntity);
 
 		var cameraCollidable = cameraEntity.collidable();
