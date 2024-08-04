@@ -68,7 +68,6 @@ export class Camera implements EntityProperty<Camera>
 		);
 	}
 
-	/*
 	clipPlanes(): Plane[]
 	{
 		if (this._clipPlanes == null)
@@ -166,7 +165,6 @@ export class Camera implements EntityProperty<Camera>
 
 		return this._clipPlanes;
 	}
-	*/
 
 	coordsTransformViewToWorld(viewCoords: Coords, ignoreZ: boolean): Coords
 	{
