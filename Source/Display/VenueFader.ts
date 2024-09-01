@@ -8,7 +8,7 @@ export class VenueFader implements Venue
 	backgroundColor: Color;
 	millisecondsPerFade: number;
 
-	timeFadeStarted: Date;
+	tickFadeStarted: number;
 	venueIndexCurrent: number;
 
 	constructor
@@ -66,19 +66,25 @@ export class VenueFader implements Venue
 	{
 		this.draw(universe);
 
-		var now = new Date();
+		var timerHelper = universe.timerHelper;
+		var tickCurrent = timerHelper.ticksSoFar;
 
-		if (this.timeFadeStarted == null)
+		if (this.tickFadeStarted == null)
 		{
-			this.timeFadeStarted = now;
+			this.tickFadeStarted = tickCurrent;
 		}
 
-		var millisecondsSinceFadeStarted =
-			now.getTime() - this.timeFadeStarted.getTime();
+		var ticksSinceFadeStarted =
+			tickCurrent - this.tickFadeStarted;
+
+		var ticksPerFade =
+			this.millisecondsPerFade
+			* timerHelper.ticksPerSecond
+			/ 1000;
 
 		var fractionOfFadeCompleted =
-			millisecondsSinceFadeStarted
-			/ this.millisecondsPerFade;
+			ticksSinceFadeStarted
+			/ ticksPerFade;
 
 		var alphaOfFadeColor;
 
@@ -88,7 +94,7 @@ export class VenueFader implements Venue
 			{
 				fractionOfFadeCompleted = 1;
 				this.venueIndexCurrent++;
-				this.timeFadeStarted = null;
+				this.tickFadeStarted = null;
 
 				var venueToFadeTo = this.venuesToFadeFromAndTo[1];
 				if (venueToFadeTo.draw == null)
@@ -104,7 +110,8 @@ export class VenueFader implements Venue
 			if (fractionOfFadeCompleted > 1)
 			{
 				fractionOfFadeCompleted = 1;
-				universe.venueNextSet(this.venueCurrent() );
+				var venueNext = this.venueCurrent();
+				universe.venueNextSet(venueNext);
 				universe.venueCurrentRemove();
 			}
 

@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                 ]);
             }
             static fromNameDateCreatedDefnAndPlaces(name, dateCreated, defn, places) {
-                var placesByName = GameFramework.ArrayHelper.addLookupsByName(places);
+                var placesByName = new Map(places.map(x => [x.name, x]));
                 var placeGetByName = (placeName) => placesByName.get(placeName);
                 var placeInitialName = places[0].name;
                 var returnValue = new World(name, dateCreated, defn, placeGetByName, placeInitialName);

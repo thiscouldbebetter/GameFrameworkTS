@@ -62,8 +62,8 @@ var ThisCouldBeBetter;
                     var buttonRun = d.createElement("button");
                     buttonRun.onclick = () => {
                         try {
+                            labelStatus.innerHTML = "Running.";
                             x.call(testFixture);
-                            labelStatus.innerHTML = "Passed.";
                         }
                         catch (err) {
                             var errAsString = err.message + "<br />" + err.stack;

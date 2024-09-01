@@ -65,8 +65,10 @@ export class TimerHelper
 
 	ticksToString
 	(
-		ticksToConvert: number, unitStringHours: string,
-		unitStringMinutes: string, unitStringSeconds: string
+		ticksToConvert: number,
+		unitStringHours: string,
+		unitStringMinutes: string,
+		unitStringSeconds: string
 	): string
 	{
 		var secondsTotal = Math.floor

@@ -105,8 +105,8 @@ export class TestFixture
 				{
 					try
 					{
+						labelStatus.innerHTML = "Running.";
 						x.call(testFixture);
-						labelStatus.innerHTML = "Passed.";
 					}
 					catch (err)
 					{

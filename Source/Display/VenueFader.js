@@ -36,19 +36,23 @@ var ThisCouldBeBetter;
             }
             updateForTimerTick(universe) {
                 this.draw(universe);
-                var now = new Date();
-                if (this.timeFadeStarted == null) {
-                    this.timeFadeStarted = now;
+                var timerHelper = universe.timerHelper;
+                var tickCurrent = timerHelper.ticksSoFar;
+                if (this.tickFadeStarted == null) {
+                    this.tickFadeStarted = tickCurrent;
                 }
-                var millisecondsSinceFadeStarted = now.getTime() - this.timeFadeStarted.getTime();
-                var fractionOfFadeCompleted = millisecondsSinceFadeStarted
-                    / this.millisecondsPerFade;
+                var ticksSinceFadeStarted = tickCurrent - this.tickFadeStarted;
+                var ticksPerFade = this.millisecondsPerFade
+                    * timerHelper.ticksPerSecond
+                    / 1000;
+                var fractionOfFadeCompleted = ticksSinceFadeStarted
+                    / ticksPerFade;
                 var alphaOfFadeColor;
                 if (this.venueIndexCurrent == 0) {
                     if (fractionOfFadeCompleted > 1) {
                         fractionOfFadeCompleted = 1;
                         this.venueIndexCurrent++;
-                        this.timeFadeStarted = null;
+                        this.tickFadeStarted = null;
                         var venueToFadeTo = this.venuesToFadeFromAndTo[1];
                         if (venueToFadeTo.draw == null) {
                             universe.venueNextSet(venueToFadeTo);
@@ -61,7 +65,8 @@ var ThisCouldBeBetter;
                  {
                     if (fractionOfFadeCompleted > 1) {
                         fractionOfFadeCompleted = 1;
-                        universe.venueNextSet(this.venueCurrent());
+                        var venueNext = this.venueCurrent();
+                        universe.venueNextSet(venueNext);
                         universe.venueCurrentRemove();
                     }
                     alphaOfFadeColor = 1 - fractionOfFadeCompleted;

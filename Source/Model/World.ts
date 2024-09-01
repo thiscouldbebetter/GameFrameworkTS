@@ -55,7 +55,7 @@ export class World //
 		places: Place[]
 	): World
 	{
-		var placesByName = ArrayHelper.addLookupsByName(places);
+		var placesByName = new Map(places.map(x => [x.name, x]) );
 		var placeGetByName = (placeName: string) => placesByName.get(placeName);
 		var placeInitialName = places[0].name;
 		var returnValue = new World
