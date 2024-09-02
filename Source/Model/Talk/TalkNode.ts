@@ -259,6 +259,11 @@ export class TalkNode //
 
 	isEnabled(u: Universe, cr: ConversationRun): boolean
 	{
+		return this.isEnabledForUniverseAndConversationRun(u, cr);
+	}
+
+	isEnabledForUniverseAndConversationRun(u: Universe, cr: ConversationRun): boolean
+	{
 		var returnValue =
 		(
 			this._isDisabled == null
@@ -303,6 +308,13 @@ export class TalkNode //
 		this.next = other.next;
 		this._isDisabled = other._isDisabled;
 		return this;
+	}
+
+	// String.
+
+	toString(): string
+	{
+		return this.content;
 	}
 }
 

@@ -57,10 +57,20 @@ export class ConversationRun
 
 	disable(talkNodeToDisableName: string): void
 	{
+		this.disableTalkNodeWithName(talkNodeToDisableName);
+	}
+
+	disableTalkNodeWithName(talkNodeToDisableName: string): void
+	{
 		this.enableOrDisable(talkNodeToDisableName, true);
 	}
 
 	enable(talkNodeToActivateName: string): void
+	{
+		this.enableTalkNodeWithName(talkNodeToActivateName);
+	}
+
+	enableTalkNodeWithName(talkNodeToActivateName: string): void
 	{
 		this.enableOrDisable(talkNodeToActivateName, false);
 	}
@@ -79,6 +89,11 @@ export class ConversationRun
 
 	goto(talkNodeNameNext: string, universe: Universe): void
 	{
+		this.gotoTalkNodeWithNameForUniverse(talkNodeNameNext, universe);
+	}
+
+	gotoTalkNodeWithNameForUniverse(talkNodeNameNext: string, universe: Universe): void
+	{
 		// This convenience method is tersely named for use in scripts.
 		var scope = this.scopeCurrent;
 		var nodeNext = this.defn.talkNodeByName(talkNodeNameNext);
@@ -92,6 +107,11 @@ export class ConversationRun
 	}
 
 	next(universe: Universe): void
+	{
+		this.nextForUniverse(universe);
+	}
+
+	nextForUniverse(universe: Universe): void
 	{
 		var scope = this.scopeCurrent;
 
@@ -131,6 +151,11 @@ export class ConversationRun
 	}
 
 	nextUntilPrompt(universe: Universe): void
+	{
+		this.nextUntilPromptForUniverse(universe);
+	}
+
+	nextUntilPromptForUniverse(universe: Universe): void
 	{
 		var prompt = TalkNodeDefn.Instances().Prompt.name;
 		var quit = TalkNodeDefn.Instances().Quit.name;
@@ -368,6 +393,11 @@ export class ConversationRun
 
 	toControl(size: Coords, universe: Universe): ControlBase
 	{
+		return this.toControlForSizeAndUniverse(size, universe);
+	}
+
+	toControlForSizeAndUniverse(size: Coords, universe: Universe): ControlBase
+	{
 		return this.toControl_Layout_Default(size, universe);
 	}
 
@@ -589,17 +619,14 @@ export class ConversationRun
 				fontNameAndHeight
 			),
 
-			new ControlLabel
+			ControlLabel.from4Uncentered
 			(
-				"labelResponse",
 				Coords.fromXY
 				(
 					marginSize.x,
 					marginSize.y * 2 + portraitSize.y - fontHeight / 2
 				),
 				size, // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext("Response:"),
 				fontNameAndHeight
 			),
@@ -680,9 +707,8 @@ export class ConversationRun
 				next // click
 			);
 
-			var buttonTranscript =ControlButton.from8
+			var buttonTranscript = ControlButton.from5
 			(
-				"buttonTranscript",
 				Coords.fromXY
 				(
 					containerButtonsMarginSize.x,
@@ -691,8 +717,6 @@ export class ConversationRun
 				buttonSize.clone(),
 				"Log",
 				fontNameAndHeight,
-				true, // hasBorder
-				DataBinding.fromTrue(), // isEnabled
 				viewLog // click
 			);
 
@@ -720,9 +744,8 @@ export class ConversationRun
 					new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true )
 				);
 
-				var buttonLeave = ControlButton.from8
+				var buttonLeave = ControlButton.from5
 				(
-					"buttonLeave",
 					Coords.fromXY
 					(
 						containerButtonsMarginSize.x,
@@ -731,8 +754,6 @@ export class ConversationRun
 					buttonSize.clone(),
 					"Leave",
 					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					back // click
 				);
 
@@ -863,6 +884,15 @@ export class ConversationRun
 				),
 			]
 		);
+
+		return returnValue;
+	}
+
+	// String.
+
+	toStringForUniverse(u: Universe): string
+	{
+		var returnValue = this.scopeCurrent.toStringForUniverseAndConversationRun(u, this);
 
 		return returnValue;
 	}

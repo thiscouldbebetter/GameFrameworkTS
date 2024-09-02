@@ -24,9 +24,15 @@ var ThisCouldBeBetter;
             }
             // Instance methods.
             disable(talkNodeToDisableName) {
+                this.disableTalkNodeWithName(talkNodeToDisableName);
+            }
+            disableTalkNodeWithName(talkNodeToDisableName) {
                 this.enableOrDisable(talkNodeToDisableName, true);
             }
             enable(talkNodeToActivateName) {
+                this.enableTalkNodeWithName(talkNodeToActivateName);
+            }
+            enableTalkNodeWithName(talkNodeToActivateName) {
                 this.enableOrDisable(talkNodeToActivateName, false);
             }
             enableOrDisable(talkNodeToEnableOrDisableName, isDisabledValueToSet) {
@@ -35,6 +41,9 @@ var ThisCouldBeBetter;
                 talkNodeToSet._isDisabled = () => isDisabledValueToSet;
             }
             goto(talkNodeNameNext, universe) {
+                this.gotoTalkNodeWithNameForUniverse(talkNodeNameNext, universe);
+            }
+            gotoTalkNodeWithNameForUniverse(talkNodeNameNext, universe) {
                 // This convenience method is tersely named for use in scripts.
                 var scope = this.scopeCurrent;
                 var nodeNext = this.defn.talkNodeByName(talkNodeNameNext);
@@ -45,6 +54,9 @@ var ThisCouldBeBetter;
                 this.next(universe);
             }
             next(universe) {
+                this.nextForUniverse(universe);
+            }
+            nextForUniverse(universe) {
                 var scope = this.scopeCurrent;
                 if (this.talkNodeCurrent() == null) {
                     // Do nothing.
@@ -71,6 +83,9 @@ var ThisCouldBeBetter;
                 }
             }
             nextUntilPrompt(universe) {
+                this.nextUntilPromptForUniverse(universe);
+            }
+            nextUntilPromptForUniverse(universe) {
                 var prompt = GameFramework.TalkNodeDefn.Instances().Prompt.name;
                 var quit = GameFramework.TalkNodeDefn.Instances().Quit.name;
                 var nodeDefnName = this.talkNodeCurrent().defnName;
@@ -210,6 +225,9 @@ var ThisCouldBeBetter;
             }
             // controls
             toControl(size, universe) {
+                return this.toControlForSizeAndUniverse(size, universe);
+            }
+            toControlForSizeAndUniverse(size, universe) {
                 return this.toControl_Layout_Default(size, universe);
             }
             toControl_Layout_Default(size, universe) {
@@ -278,9 +296,7 @@ var ThisCouldBeBetter;
                     null // colorBorder
                     ),
                     new GameFramework.ControlLabel("labelSpeaker", labelSpeakerPos, labelSpeakerSize, labelSpeakerIsCenteredHorizontally, labelSpeakerIsCenteredVertically, GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent()), fontNameAndHeight),
-                    new GameFramework.ControlLabel("labelResponse", GameFramework.Coords.fromXY(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2), size, // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
+                    GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2), size, // size
                     GameFramework.DataBinding.fromContext("Response:"), fontNameAndHeight),
                     GameFramework.ControlList.from10("listResponses", listPos, listSize, 
                     // items
@@ -305,9 +321,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     next // click
                     );
-                    var buttonTranscript = GameFramework.ControlButton.from8("buttonTranscript", GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 2 + buttonSize.y), buttonSize.clone(), "Log", fontNameAndHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    viewLog // click
+                    var buttonTranscript = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 2 + buttonSize.y), buttonSize.clone(), "Log", fontNameAndHeight, viewLog // click
                     );
                     var buttons = [
                         buttonNext,
@@ -322,9 +336,7 @@ var ThisCouldBeBetter;
                     if (this._quit != null) {
                         actions.push(new GameFramework.Action("Back", back));
                         actionToInputsMappings.push(new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true));
-                        var buttonLeave = GameFramework.ControlButton.from8("buttonLeave", GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 3 + buttonSize.y * 2), buttonSize.clone(), "Leave", fontNameAndHeight, true, // hasBorder
-                        GameFramework.DataBinding.fromTrue(), // isEnabled
-                        back // click
+                        var buttonLeave = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 3 + buttonSize.y * 2), buttonSize.clone(), "Leave", fontNameAndHeight, back // click
                         );
                         buttons.push(buttonLeave);
                     }
@@ -375,6 +387,11 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.talkNodesForTranscript), GameFramework.DataBinding.fromGet((c) => c.textForTranscript(conversationRun)), // bindingForItemText
                     fontNameAndHeightShort),
                 ]);
+                return returnValue;
+            }
+            // String.
+            toStringForUniverse(u) {
+                var returnValue = this.scopeCurrent.toStringForUniverseAndConversationRun(u, this);
                 return returnValue;
             }
         }

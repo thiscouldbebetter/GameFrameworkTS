@@ -198,6 +198,22 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 		return new CollisionTrackerMapped(size, Coords.fromXY(4, 4));
 	}
 
+	cellsWithEntityByName(entityToFindName: string): CollisionTrackerMappedMapCell[]
+	{
+		// For debugging.
+		return this._cells.filter(c => c.entitiesPresent().some(e => e.name == entityToFindName) );
+	}
+
+	cellsWithMultipleEntitiesPresent(): CollisionTrackerMappedMapCell[]
+	{
+		// For debugging.
+
+		var cellsWithMoreThanOneEntityPresent =
+			this._cells.filter(x => x.entitiesPresent().length > 1);
+
+		return cellsWithMoreThanOneEntityPresent;
+	}
+
 	doesAnyCellContainTheSameEntityMoreThanOnce(): boolean
 	{
 		var doAnyCellsContainDuplicatesSoFar = false;

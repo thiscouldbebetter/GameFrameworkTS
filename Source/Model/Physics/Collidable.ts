@@ -357,7 +357,10 @@ export class Collidable implements EntityProperty<Collidable>
 		return collisionsSoFar;
 	}
 
-	collisionTrackerCollidableData(collisionTracker: CollisionTracker): CollisionTrackerCollidableData
+	collisionTrackerCollidableData
+	(
+		collisionTracker: CollisionTracker
+	): CollisionTrackerCollidableData
 	{
 		if (this._collisionTrackerCollidableData == null)
 		{
@@ -474,14 +477,17 @@ export class Collidable implements EntityProperty<Collidable>
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		// This causes problems sometimes.
-		// this.collisionsFindAndHandle(uwpe);
-
-		// Maybe this won't? 
 		// If this isn't done at initialization, then the colliders
 		// may be in the wrong positions on the first tick,
 		// which leads to false collisions or false misses.
 		this.colliderLocateForEntity(uwpe.entity);
+
+		var entity = uwpe.entity;
+		var entityIsStationary = this.isEntityStationary(entity);
+		if (entityIsStationary)
+		{
+			this.collisionsFindAndHandle(uwpe);
+		}
 	}
 
 	propertyName(): string { return Collidable.name; }
@@ -489,8 +495,8 @@ export class Collidable implements EntityProperty<Collidable>
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;
-		var isStationary = this.isEntityStationary(entity);
-		if (isStationary)
+		var entityIsStationary = this.isEntityStationary(entity);
+		if (entityIsStationary)
 		{
 			this.entitiesAlreadyCollidedWith.length = 0;
 		}

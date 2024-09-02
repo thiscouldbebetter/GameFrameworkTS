@@ -127,6 +127,9 @@ var ThisCouldBeBetter;
                 defn.execute(universe, conversationRun);
             }
             isEnabled(u, cr) {
+                return this.isEnabledForUniverseAndConversationRun(u, cr);
+            }
+            isEnabledForUniverseAndConversationRun(u, cr) {
                 var returnValue = (this._isDisabled == null
                     ? true
                     : this._isDisabled(u, cr) == false);
@@ -150,6 +153,10 @@ var ThisCouldBeBetter;
                 this.next = other.next;
                 this._isDisabled = other._isDisabled;
                 return this;
+            }
+            // String.
+            toString() {
+                return this.content;
             }
         }
         // static methods

@@ -221,19 +221,21 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {
-                // This causes problems sometimes.
-                // this.collisionsFindAndHandle(uwpe);
-                // Maybe this won't? 
                 // If this isn't done at initialization, then the colliders
                 // may be in the wrong positions on the first tick,
                 // which leads to false collisions or false misses.
                 this.colliderLocateForEntity(uwpe.entity);
+                var entity = uwpe.entity;
+                var entityIsStationary = this.isEntityStationary(entity);
+                if (entityIsStationary) {
+                    this.collisionsFindAndHandle(uwpe);
+                }
             }
             propertyName() { return Collidable.name; }
             updateForTimerTick(uwpe) {
                 var entity = uwpe.entity;
-                var isStationary = this.isEntityStationary(entity);
-                if (isStationary) {
+                var entityIsStationary = this.isEntityStationary(entity);
+                if (entityIsStationary) {
                     this.entitiesAlreadyCollidedWith.length = 0;
                 }
                 else {

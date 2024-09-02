@@ -132,6 +132,20 @@ var ThisCouldBeBetter;
                 }
                 return returnValues;
             }
+            // String.
+            toString(universe, conversationRun) {
+                return this.toStringForUniverseAndConversationRun(universe, conversationRun);
+            }
+            toStringForUniverseAndConversationRun(universe, conversationRun) {
+                var nodeCurrent = this.talkNodeCurrent();
+                var nodeCurrentAsString = nodeCurrent.toString();
+                var nodesForOptions = this.talkNodesForOptionsActive(universe, conversationRun);
+                var nodesForOptionsAsString = nodesForOptions.map(x => x.toString()).join("\n");
+                var returnValue = nodeCurrentAsString
+                    + "\n\n"
+                    + nodesForOptionsAsString;
+                return returnValue;
+            }
         }
         GameFramework.ConversationScope = ConversationScope;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

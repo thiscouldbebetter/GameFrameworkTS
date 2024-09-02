@@ -231,6 +231,29 @@ export class ConversationScope
 
 		return returnValues;
 	}
+
+	// String.
+
+	toString(universe: Universe, conversationRun: ConversationRun): string
+	{
+		return this.toStringForUniverseAndConversationRun(universe, conversationRun);
+	}
+
+	toStringForUniverseAndConversationRun(universe: Universe, conversationRun: ConversationRun): string
+	{
+		var nodeCurrent = this.talkNodeCurrent();
+		var nodeCurrentAsString = nodeCurrent.toString();
+
+		var nodesForOptions = this.talkNodesForOptionsActive(universe, conversationRun);
+		var nodesForOptionsAsString = nodesForOptions.map(x => x.toString() ).join("\n");
+
+		var returnValue =
+			nodeCurrentAsString
+			+ "\n\n"
+			+ nodesForOptionsAsString
+
+		return returnValue;
+	}
 }
 
 }
