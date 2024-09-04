@@ -18,7 +18,9 @@ var ThisCouldBeBetter;
                 var testsPassedCount = 0;
                 tests.forEach(test => {
                     try {
-                        test.call(this);
+                        test.call(this, () => {
+                            // Do nothing.
+                        });
                         testsPassedCount++;
                     }
                     catch (ex) {
@@ -50,8 +52,9 @@ var ThisCouldBeBetter;
                 testFixtureAsDomElement.appendChild(headingTestsInFixture);
                 var divTests = d.createElement("div");
                 var testFixture = this;
-                this.tests().forEach(x => {
-                    var testName = x.name;
+                var tests = this.tests();
+                tests.forEach(test => {
+                    var testName = test.name;
                     var divTest = d.createElement("div");
                     var labelName = d.createElement("label");
                     labelName.innerHTML = testName;
@@ -63,7 +66,12 @@ var ThisCouldBeBetter;
                     buttonRun.onclick = () => {
                         try {
                             labelStatus.innerHTML = "Running.";
-                            x.call(testFixture);
+                            test.call(testFixture, () => {
+                                var labelStatusId = "labelStatus" + test.name;
+                                ;
+                                var labelStatus = document.getElementById(labelStatusId);
+                                labelStatus.innerHTML = "Completed.";
+                            });
                         }
                         catch (err) {
                             var errAsString = err.message + "<br />" + err.stack;

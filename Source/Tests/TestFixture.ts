@@ -11,7 +11,7 @@ export class TestFixture
 		this.name = name;
 	}
 
-	tests(): ( ()=>void )[]
+	tests(): ( (callback: () => void) => void)[]
 	{
 		return null;
 	}
@@ -32,7 +32,14 @@ export class TestFixture
 		{
 			try
 			{
-				test.call(this);
+				test.call
+				(
+					this,
+					() => 
+					{
+						// Do nothing.
+					}
+				);
 				testsPassedCount++;
 			}
 			catch (ex)
@@ -84,11 +91,12 @@ export class TestFixture
 
 		var testFixture = this;
 
-		this.tests().forEach
+		var tests = this.tests();
+		tests.forEach
 		(
-			x =>
+			test =>
 			{
-				var testName = x.name;
+				var testName = test.name;
 
 				var divTest = d.createElement("div");
 
@@ -106,7 +114,16 @@ export class TestFixture
 					try
 					{
 						labelStatus.innerHTML = "Running.";
-						x.call(testFixture);
+						test.call
+						(
+							testFixture,
+							() =>
+							{
+								var labelStatusId = "labelStatus" + test.name;;
+								var labelStatus = document.getElementById(labelStatusId);
+								labelStatus.innerHTML = "Completed.";
+							}
+						);
 					}
 					catch (err)
 					{

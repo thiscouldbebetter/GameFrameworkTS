@@ -33,7 +33,8 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 uwpe.world = this;
                 if (this.placeNextName != null) {
-                    this.placeNext = this.placeGetByName(this.placeNextName);
+                    var placeNext = this.placeGetByName(this.placeNextName);
+                    this.placeNextSet(placeNext);
                     this.placeNextName = null;
                 }
                 if (this.placeNext != null) {
@@ -41,7 +42,7 @@ var ThisCouldBeBetter;
                         this.placeCurrent.finalize(uwpe);
                     }
                     this.placeCurrent = this.placeNext;
-                    this.placeNext = null;
+                    this.placeNextSet(null);
                 }
                 if (this.placeCurrent != null) {
                     uwpe.place = this.placeCurrent;
@@ -74,7 +75,7 @@ var ThisCouldBeBetter;
                         this.placeCurrent.finalize(uwpe);
                     }
                     this.placeCurrent = this.placeNext;
-                    this.placeNext = null;
+                    this.placeNextSet(null);
                     uwpe.place = this.placeCurrent;
                     this.placeCurrent.initialize(uwpe);
                 }

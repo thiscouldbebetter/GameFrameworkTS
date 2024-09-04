@@ -10,6 +10,7 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._centerAsArray = [this.center];
                 this._displacement = GameFramework.Coords.create();
+                this._pointRandom = GameFramework.Coords.create();
             }
             static default() {
                 return new Sphere(GameFramework.Coords.create(), 1);

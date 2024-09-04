@@ -79,7 +79,8 @@ export class World //
 
 		if (this.placeNextName != null)
 		{
-			this.placeNext = this.placeGetByName(this.placeNextName);
+			var placeNext = this.placeGetByName(this.placeNextName);
+			this.placeNextSet(placeNext);
 			this.placeNextName = null;
 		}
 
@@ -90,7 +91,7 @@ export class World //
 				this.placeCurrent.finalize(uwpe);
 			}
 			this.placeCurrent = this.placeNext;
-			this.placeNext = null;
+			this.placeNextSet(null);
 		}
 
 		if (this.placeCurrent != null)
@@ -141,7 +142,7 @@ export class World //
 				this.placeCurrent.finalize(uwpe);
 			}
 			this.placeCurrent = this.placeNext;
-			this.placeNext = null;
+			this.placeNextSet(null);
 			uwpe.place = this.placeCurrent;
 			this.placeCurrent.initialize(uwpe);
 		}

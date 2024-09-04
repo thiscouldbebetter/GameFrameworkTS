@@ -19,6 +19,7 @@ export class Sphere implements ShapeBase
 		// Helper variables.
 		this._centerAsArray = [ this.center ];
 		this._displacement = Coords.create();
+		this._pointRandom = Coords.create();
 	}
 
 	static default(): Sphere
