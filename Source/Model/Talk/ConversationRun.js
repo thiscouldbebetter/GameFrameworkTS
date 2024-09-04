@@ -58,7 +58,8 @@ var ThisCouldBeBetter;
             }
             nextForUniverse(universe) {
                 var scope = this.scopeCurrent;
-                if (this.talkNodeCurrent() == null) {
+                var talkNodeCurrent = this.talkNodeCurrent();
+                if (talkNodeCurrent == null) {
                     // Do nothing.
                 }
                 else if (scope.isPromptingForResponse) {
@@ -86,8 +87,9 @@ var ThisCouldBeBetter;
                 this.nextUntilPromptForUniverse(universe);
             }
             nextUntilPromptForUniverse(universe) {
-                var prompt = GameFramework.TalkNodeDefn.Instances().Prompt.name;
-                var quit = GameFramework.TalkNodeDefn.Instances().Quit.name;
+                var talkNodeDefns = GameFramework.TalkNodeDefn.Instances();
+                var prompt = talkNodeDefns.Prompt.name;
+                var quit = talkNodeDefns.Quit.name;
                 var nodeDefnName = this.talkNodeCurrent().defnName;
                 if (nodeDefnName == prompt || this.scopeCurrent.isPromptingForResponse) {
                     this.next(universe);

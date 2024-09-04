@@ -216,34 +216,34 @@ var ThisCouldBeBetter;
                     // wall
                     // b = bottom, t = top, l = left, r = right.
                     // top
-                    new GameFramework.Coords(-doorwayWidthHalf, -doorwayHeight, 0), // bl - 0
-                    new GameFramework.Coords(doorwayWidthHalf, -doorwayHeight, 0), // br - 1
-                    new GameFramework.Coords(doorwayWidthHalf, -1, 0), // tr - 2
-                    new GameFramework.Coords(-doorwayWidthHalf, -1, 0), // tl - 3
+                    new GameFramework.Coords(-doorwayWidthHalf, -doorwayHeight, 0),
+                    new GameFramework.Coords(doorwayWidthHalf, -doorwayHeight, 0),
+                    new GameFramework.Coords(doorwayWidthHalf, -1, 0),
+                    new GameFramework.Coords(-doorwayWidthHalf, -1, 0),
                     // left
-                    new GameFramework.Coords(-1, 1, 0), // bl - 4
-                    new GameFramework.Coords(-doorwayWidthHalf, 1, 0), // br - 5
-                    new GameFramework.Coords(-doorwayWidthHalf, -1, 0), // tr - 6
-                    new GameFramework.Coords(-1, -1, 0), // tl - 7
+                    new GameFramework.Coords(-1, 1, 0),
+                    new GameFramework.Coords(-doorwayWidthHalf, 1, 0),
+                    new GameFramework.Coords(-doorwayWidthHalf, -1, 0),
+                    new GameFramework.Coords(-1, -1, 0),
                     // right
-                    new GameFramework.Coords(doorwayWidthHalf, 1, 0), // bl - 8
-                    new GameFramework.Coords(1, 1, 0), // br - 9
-                    new GameFramework.Coords(1, -1, 0), // tr - 10
-                    new GameFramework.Coords(doorwayWidthHalf, -1, 0), // tl - 11
+                    new GameFramework.Coords(doorwayWidthHalf, 1, 0),
+                    new GameFramework.Coords(1, 1, 0),
+                    new GameFramework.Coords(1, -1, 0),
+                    new GameFramework.Coords(doorwayWidthHalf, -1, 0),
                     // doorframe
-                    new GameFramework.Coords(-doorwayWidthHalf, 1, wt), // bl - 12
-                    new GameFramework.Coords(doorwayWidthHalf, 1, wt), // br - 13
-                    new GameFramework.Coords(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
+                    new GameFramework.Coords(-doorwayWidthHalf, 1, wt),
+                    new GameFramework.Coords(doorwayWidthHalf, 1, wt),
+                    new GameFramework.Coords(doorwayWidthHalf, -doorwayHeight, wt),
                     new GameFramework.Coords(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
                 ], 
                 // vertexIndicesForFaces
                 [
                     // wall
-                    new GameFramework.Mesh_FaceBuilder([0, 1, 2, 3]), // top
-                    new GameFramework.Mesh_FaceBuilder([4, 5, 6, 7]), // left
-                    new GameFramework.Mesh_FaceBuilder([8, 9, 10, 11]), // right
+                    new GameFramework.Mesh_FaceBuilder([0, 1, 2, 3]),
+                    new GameFramework.Mesh_FaceBuilder([4, 5, 6, 7]),
+                    new GameFramework.Mesh_FaceBuilder([8, 9, 10, 11]),
                     // doorframe
-                    new GameFramework.Mesh_FaceBuilder([5, 12, 15, 0]), // left
+                    new GameFramework.Mesh_FaceBuilder([5, 12, 15, 0]),
                     new GameFramework.Mesh_FaceBuilder([1, 14, 13, 8]), // right
                     // todo - top - Hard to see currently.
                 ]);
@@ -320,11 +320,11 @@ var ThisCouldBeBetter;
                 ], 
                 // vertexIndicesForFaces
                 [
-                    new GameFramework.Mesh_FaceBuilder([7, 3, 0, 4]), // west
-                    new GameFramework.Mesh_FaceBuilder([5, 1, 2, 6]), // east
-                    new GameFramework.Mesh_FaceBuilder([4, 0, 1, 5]), // north
-                    new GameFramework.Mesh_FaceBuilder([6, 2, 3, 7]), // south
-                    new GameFramework.Mesh_FaceBuilder([0, 3, 2, 1]), // top
+                    new GameFramework.Mesh_FaceBuilder([7, 3, 0, 4]),
+                    new GameFramework.Mesh_FaceBuilder([5, 1, 2, 6]),
+                    new GameFramework.Mesh_FaceBuilder([4, 0, 1, 5]),
+                    new GameFramework.Mesh_FaceBuilder([6, 2, 3, 7]),
+                    new GameFramework.Mesh_FaceBuilder([0, 3, 2, 1]),
                     new GameFramework.Mesh_FaceBuilder([5, 6, 7, 4]), // bottom
                 ]);
                 return returnMesh;
@@ -434,7 +434,7 @@ var ThisCouldBeBetter;
             splitFaceByPlaneFrontAndBack(faceToDivide, planeToDivideOn) {
                 var returnValues = new Array();
                 var verticesInFacesDivided = [
-                    new Array(), // front
+                    new Array(),
                     new Array() // back
                 ];
                 var distanceOfVertexAbovePlane = 0;
