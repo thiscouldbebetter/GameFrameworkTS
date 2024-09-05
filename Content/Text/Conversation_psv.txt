@@ -113,7 +113,7 @@ Game.GoWithMe|Display|No, I'm pretty comfortable here.
 |Display|...so I can provide valuable insights.
 |Script|(u) => { u.world.placeCurrent.player().itemHolder().itemEntityAdd( new Entity(null, [ new Item("Walkie-Talkie", 1) ] ) ); }
 |Display|[You have received a walkie-talkie.]
-|Disable|Game.GoWithMe.Option
+|Disable||Game.GoWithMe.Option
 |Goto||Game.Prompt
 Game.Tips|Display|Don't touch anything red.
 |Display|Just in the game, I mean...
@@ -122,7 +122,7 @@ Game.Tips|Display|Don't touch anything red.
 Game.NeverMind|Display|You were fun.  I'll miss you.
 |Pop||Subject
 Trade|Display|I guess so.  Got anything good?
-|Script|u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue()
+|Script|u.venueNextSet(new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue() )
 |Display|Well, that was mutually enriching.
 |Goto||Subject
 Quit|Display|Same to you, buddy.

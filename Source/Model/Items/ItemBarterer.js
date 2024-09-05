@@ -200,7 +200,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     itemOfferCustomer),
-                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(0, size.y - margin * 2 - buttonSize.y), // pos
                     GameFramework.Coords.fromXY(size.x, fontHeight), // size
                     true, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically

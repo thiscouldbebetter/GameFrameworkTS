@@ -538,7 +538,7 @@
 		},
 		{
 			"defnName": "Script",
-			"content": "u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue()"
+			"content": "u.venueNextSet(new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue() )"
 		},
 		{
 			"defnName": "Display",

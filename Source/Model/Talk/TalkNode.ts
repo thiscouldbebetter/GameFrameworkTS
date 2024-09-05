@@ -19,10 +19,10 @@ export class TalkNode //
 		isDisabled: (u: Universe, cr: ConversationRun) => boolean
 	)
 	{
-		this.name = (name == null ? TalkNode.idNext() : name);
+		this.name = ( (name == null || name == "") ? TalkNode.idNext() : name);
 		this.defnName = defnName;
-		this.content = content;
-		this.next = next;
+		this.content = content == "" ? null : content;
+		this.next = next == "" ? null : next;
 		this._isDisabled = isDisabled;
 	}
 

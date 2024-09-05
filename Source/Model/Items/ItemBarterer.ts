@@ -507,7 +507,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 				new ControlLabel
 				(
 					"infoStatus",
-					Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+					Coords.fromXY(0, size.y - margin * 2 - buttonSize.y), // pos
 					Coords.fromXY(size.x, fontHeight), // size
 					true, // isTextCenteredHorizontally
 					false, // isTextCenteredVertically
