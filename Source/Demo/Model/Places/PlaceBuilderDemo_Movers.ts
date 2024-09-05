@@ -915,7 +915,11 @@ class PlaceBuilderDemo_Movers
 				Locatable.create(),
 				Movable.default(),
 				routable,
-				Talker.fromConversationDefnName("Conversation"),
+				Talker.fromConversationDefnName
+				(
+					"Conversation"
+					//"Conversation_psv"
+				),
 			]
 		);
 

@@ -34,9 +34,9 @@ export class Talker implements EntityProperty<Talker>
 		var entityTalkee = uwpe.entity2;
 
 		var mediaLibrary = universe.mediaLibrary;
-		var conversationDefnAsJSON =
+		var conversationDefnAsText =
 			mediaLibrary.textStringGetByName(this.conversationDefnName).value;
-		var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
+		var conversationDefn = ConversationDefn.deserialize(conversationDefnAsText);
 
 		var contentTextStringName = conversationDefn.contentTextStringName;
 		var contentTextString =

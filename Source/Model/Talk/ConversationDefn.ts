@@ -204,9 +204,95 @@ export class ConversationDefn
 
 	// Serialization.
 
-	static deserialize(conversationDefnAsJSON: string): ConversationDefn
+	static deserialize(conversationDefnAsText: string): ConversationDefn
 	{
-		var conversationDefn = JSON.parse(conversationDefnAsJSON);
+		var returnValue: ConversationDefn;
+
+		try
+		{
+			returnValue = ConversationDefn.fromJson(conversationDefnAsText);
+		}
+		catch (err)
+		{
+			returnValue = ConversationDefn.fromPipeSeparatedValues(conversationDefnAsText);
+		}
+
+		return returnValue;
+	}
+
+	static fromPipeSeparatedValues(conversationDefnAsPsv: string): ConversationDefn
+	{
+		var newline = "\n";
+
+		conversationDefnAsPsv = conversationDefnAsPsv.split("\r\n").join(newline);
+
+		var blankLine = newline + newline;
+		var indexOfFirstBlankLine = conversationDefnAsPsv.indexOf(blankLine);
+		var header = conversationDefnAsPsv.substr(0, indexOfFirstBlankLine);
+		var body = conversationDefnAsPsv.substr(indexOfFirstBlankLine);
+
+		var conversationDefnName: string;
+		var contentTextStringName: string;
+		var imagePortraitName: string;
+		var soundMusicName: string;
+		var headerLines = header.split(newline);
+		for (var i = 0; i < headerLines.length; i++)
+		{
+			var headerLine = headerLines[i];
+			var fieldNameAndValue = headerLine.split("=");
+			var fieldName = fieldNameAndValue[0];
+			var fieldValue = fieldNameAndValue[1];
+
+			if (fieldName == "name")
+			{
+				conversationDefnName = fieldValue;
+			}
+			else if (fieldName == "contentTextStringName")
+			{
+				contentTextStringName = fieldValue;
+			}
+			else if (fieldName == "imagePortraitName")
+			{
+				imagePortraitName = fieldValue;
+			}
+			else if (fieldName == "soundMusicName")
+			{
+				soundMusicName = fieldValue;
+			}
+			else
+			{
+				// Ignore it.
+			}
+		}
+
+		var visualPortrait = new VisualImageFromLibrary(imagePortraitName);
+
+		var bodyLines = body.split(newline);
+		var bodyLinesMinusComments =
+			bodyLines.map(x => x.split("//")[0]);
+		var bodyLinesNonBlank =
+			bodyLinesMinusComments.filter(x => x.trim().length > 0);
+		var bodyLinesAsTalkNodes =
+			bodyLinesNonBlank.map(x => TalkNode.fromLinePipeSeparatedValues(x) );
+
+		var talkNodeDefns = TalkNodeDefn.Instances()._All;
+
+		var returnValue = new ConversationDefn
+		(
+			conversationDefnName,
+			contentTextStringName,
+			visualPortrait, // todo
+			soundMusicName,
+			talkNodeDefns,
+			bodyLinesAsTalkNodes
+		);
+
+		return returnValue;
+	}
+
+	static fromJson(conversationDefnAsJson: string): ConversationDefn
+	{
+		var conversationDefn = JSON.parse(conversationDefnAsJson);
 
 		// Additional processing to support minification.
 		conversationDefn.name = conversationDefn["name"];

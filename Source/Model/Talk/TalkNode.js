@@ -12,11 +12,30 @@ var ThisCouldBeBetter;
                 this.next = next;
                 this._isDisabled = isDisabled;
             }
+            static fromLinePipeSeparatedValues(talkNodeAsLinePsv) {
+                var fields = talkNodeAsLinePsv.split("|");
+                var isDisabledAsText = fields[4];
+                var isDisabled;
+                if (isDisabledAsText == null) {
+                    isDisabled = null;
+                }
+                else {
+                    var scriptToRunAsString = "( (u, cr) => " + isDisabledAsText + " )";
+                    isDisabled = eval(scriptToRunAsString);
+                }
+                var returnValue = new TalkNode(fields[0], // name
+                fields[1], // defnName
+                fields[2], // content
+                fields[3], // next
+                isDisabled);
+                return returnValue;
+            }
             static idNext() {
                 var returnValue = "_" + TalkNode._idNext;
                 TalkNode._idNext++;
                 return returnValue;
             }
+            // Types.
             static display(name, content) {
                 return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().Display.name, content, null, // next
                 null // isDisabled

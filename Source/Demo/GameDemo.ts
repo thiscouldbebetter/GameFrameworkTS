@@ -104,6 +104,8 @@ class GameDemo
 
 			textStringDirectoryPath + "Conversation.json",
 			// textStringDirectoryPath + "Conversation.json.txtpng", // Turns out text read from images is subject to CORS too.
+			textStringDirectoryPath + "Conversation_psv.txt",
+
 			textStringDirectoryPath + "Instructions.txt",
 		];
 

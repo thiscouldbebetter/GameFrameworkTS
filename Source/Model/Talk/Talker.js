@@ -17,8 +17,8 @@ var ThisCouldBeBetter;
                 var entityTalker = uwpe.entity;
                 var entityTalkee = uwpe.entity2;
                 var mediaLibrary = universe.mediaLibrary;
-                var conversationDefnAsJSON = mediaLibrary.textStringGetByName(this.conversationDefnName).value;
-                var conversationDefn = GameFramework.ConversationDefn.deserialize(conversationDefnAsJSON);
+                var conversationDefnAsText = mediaLibrary.textStringGetByName(this.conversationDefnName).value;
+                var conversationDefn = GameFramework.ConversationDefn.deserialize(conversationDefnAsText);
                 var contentTextStringName = conversationDefn.contentTextStringName;
                 var contentTextString = contentTextStringName == null
                     ? null
