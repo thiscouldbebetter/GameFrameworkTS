@@ -39,7 +39,10 @@ export class Talker implements EntityProperty<Talker>
 		var conversationDefn = ConversationDefn.deserialize(conversationDefnAsJSON);
 
 		var contentTextStringName = conversationDefn.contentTextStringName;
-		var contentTextString = mediaLibrary.textStringGetByName(contentTextStringName);
+		var contentTextString =
+			contentTextStringName == null
+			? null
+			: mediaLibrary.textStringGetByName(contentTextStringName);
 		if (contentTextString != null)
 		{
 			// hack - For a specific content tag format in a downstream project.

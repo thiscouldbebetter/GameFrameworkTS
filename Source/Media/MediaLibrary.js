@@ -213,6 +213,9 @@ var ThisCouldBeBetter;
                 }
                 return returnTextString;
             }
+            textStringWithNameExists(name) {
+                return this.textStringsByName.has(name);
+            }
             videoGetByName(name) {
                 var returnVideo = this.videosByName.get(name);
                 if (returnVideo == null) {

@@ -365,6 +365,11 @@ export class MediaLibrary
 		return returnTextString;
 	}
 
+	textStringWithNameExists(name: string): boolean
+	{
+		return this.textStringsByName.has(name);
+	}
+
 	videoGetByName(name: string): Video
 	{
 		var returnVideo = this.videosByName.get(name);

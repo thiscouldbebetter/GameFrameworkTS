@@ -20,7 +20,9 @@ var ThisCouldBeBetter;
                 var conversationDefnAsJSON = mediaLibrary.textStringGetByName(this.conversationDefnName).value;
                 var conversationDefn = GameFramework.ConversationDefn.deserialize(conversationDefnAsJSON);
                 var contentTextStringName = conversationDefn.contentTextStringName;
-                var contentTextString = mediaLibrary.textStringGetByName(contentTextStringName);
+                var contentTextString = contentTextStringName == null
+                    ? null
+                    : mediaLibrary.textStringGetByName(contentTextStringName);
                 if (contentTextString != null) {
                     // hack - For a specific content tag format in a downstream project.
                     var contentText = contentTextString.value.split("\n#").join("\n\n#");
