@@ -26,34 +26,6 @@ export class TalkNode //
 		this._isDisabled = isDisabled;
 	}
 
-	static fromLinePipeSeparatedValues(talkNodeAsLinePsv: string): TalkNode
-	{
-		var fields = talkNodeAsLinePsv.split("|");
-
-		var isDisabledAsText = fields[4];
-
-		var isDisabled: any;
-		if (isDisabledAsText == null)
-		{
-			isDisabled = null;
-		}
-		else
-		{
-			var scriptToRunAsString = "( (u, cr) => " + isDisabledAsText + " )";
-			isDisabled = eval(scriptToRunAsString);
-		}
-
-		var returnValue = new TalkNode
-		(
-			fields[0], // name
-			fields[1], // defnName
-			fields[2], // content
-			fields[3], // next
-			isDisabled
-		);
-		return returnValue;
-	}
-
 	// static methods
 
 	static _idNext = 0;
@@ -339,6 +311,57 @@ export class TalkNode //
 		this.next = other.next;
 		this._isDisabled = other._isDisabled;
 		return this;
+	}
+
+	// Serialization.
+
+	static fromLinePipeSeparatedValues(talkNodeAsLinePsv: string): TalkNode
+	{
+		var fields = talkNodeAsLinePsv.split("|");
+
+		var isDisabledAsText = fields[4];
+
+		var isDisabled: any;
+		if (isDisabledAsText == null)
+		{
+			isDisabled = null;
+		}
+		else
+		{
+			var scriptToRunAsString = "( (u, cr) => " + isDisabledAsText + " )";
+			isDisabled = eval(scriptToRunAsString);
+		}
+
+		var returnValue = new TalkNode
+		(
+			fields[0], // name
+			fields[1], // defnName
+			fields[2], // content
+			fields[3], // next
+			isDisabled
+		);
+		return returnValue;
+	}
+
+	toPipeSeparatedValues(): string
+	{
+		var returnValue =
+		[
+			this.name,
+			this.defnName,
+			this.content,
+			this.next,
+			this._isDisabled == null ? null : this._isDisabled.toString()
+		].join("|");
+
+
+		while (returnValue.endsWith("|") )
+		{
+			returnValue = returnValue.substr(0, returnValue.length - 1);
+		}
+
+		return returnValue;
+
 	}
 
 	// String.

@@ -69,20 +69,28 @@ var ThisCouldBeBetter;
             validateAndReturnErrors() {
                 var errorsSoFar = [];
                 var nodes = this.talkNodes;
-                var nodesWithUnrecognizedTypes = nodes.filter(x => this.talkNodeDefnsByName.has(x.defnName) == false);
-                if (nodesWithUnrecognizedTypes.length > 0) {
-                    var defnNamesUnrecognized = nodesWithUnrecognizedTypes.map(x => x.defnName);
-                    var error = "one or more nodes have unrecognized types: " + defnNamesUnrecognized.join(", ");
+                var nodesWithNoTypeSpecified = nodes.filter(x => x.defnName == null);
+                if (nodesWithNoTypeSpecified.length > 0) {
+                    var error = "one or more nodes have no type specified: "
+                        + nodesWithNoTypeSpecified.map(x => x.name).join(", ");
                     errorsSoFar.push(error);
                 }
-                var nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes = nodes.filter(x => x.defnName.startsWith("Variable") == false // Some of these use the next field to store a script.
-                    && x.next != null
-                    && nodes.some(y => y.name == x.next) == false);
-                if (nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.length > 0) {
-                    var nextFieldsThatDoNotMatch = nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.map(x => x.next);
-                    var error = "one or more nodes have next fields that do not correspond to the name of some other node: "
-                        + nextFieldsThatDoNotMatch.join(", ");
-                    errorsSoFar.push(error);
+                else {
+                    var nodesWithUnrecognizedTypes = nodes.filter(x => this.talkNodeDefnsByName.has(x.defnName) == false);
+                    if (nodesWithUnrecognizedTypes.length > 0) {
+                        var defnNamesUnrecognized = nodesWithUnrecognizedTypes.map(x => x.defnName);
+                        var error = "one or more nodes have unrecognized types: " + defnNamesUnrecognized.join(", ");
+                        errorsSoFar.push(error);
+                    }
+                    var nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes = nodes.filter(x => x.defnName.startsWith("Variable") == false // Some node types use the next field to store a script.
+                        && x.next != null
+                        && nodes.some(y => y.name == x.next) == false);
+                    if (nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.length > 0) {
+                        var nextFieldsThatDoNotMatch = nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.map(x => x.next);
+                        var error = "one or more nodes have next fields that do not correspond to the name of some other node: "
+                            + nextFieldsThatDoNotMatch.join(", ");
+                        errorsSoFar.push(error);
+                    }
                 }
                 return errorsSoFar;
             }
@@ -145,10 +153,24 @@ var ThisCouldBeBetter;
             // Serialization.
             static deserialize(conversationDefnAsText) {
                 var returnValue;
+                var newline = "\n";
+                conversationDefnAsText =
+                    conversationDefnAsText
+                        .split(newline)
+                        .filter(x => x.startsWith("//") == false)
+                        .join(newline);
+                var wasTextParsableAsJson;
                 try {
-                    returnValue = ConversationDefn.fromJson(conversationDefnAsText);
+                    JSON.parse(conversationDefnAsText);
+                    wasTextParsableAsJson = true;
                 }
                 catch (err) {
+                    wasTextParsableAsJson = false;
+                }
+                if (wasTextParsableAsJson) {
+                    returnValue = ConversationDefn.fromJson(conversationDefnAsText);
+                }
+                else {
                     returnValue = ConversationDefn.fromPipeSeparatedValues(conversationDefnAsText);
                 }
                 return returnValue;
@@ -255,6 +277,28 @@ var ThisCouldBeBetter;
                 delete this.talkNodeDefns;
                 var returnValue = JSON.stringify(this, null, 4);
                 this.talkNodeDefns = talkNodeDefnsToRestore;
+                return returnValue;
+            }
+            toPipeSeparatedValues() {
+                var lines = [];
+                if (this.name != null) {
+                    lines.push("name=" + this.name);
+                }
+                if (this.contentTextStringName != null) {
+                    lines.push("contentTextStringName=" + this.contentTextStringName);
+                }
+                if (this.visualPortrait != null) {
+                    // hack
+                    lines.push("imagePortraitName=" + this.visualPortrait.imageName);
+                }
+                if (this.soundMusicName != null) {
+                    lines.push("soundMusicName=" + this.soundMusicName);
+                }
+                lines.push("");
+                var talkNodesAsLines = this.talkNodes.map(x => x.toPipeSeparatedValues());
+                lines.push(...talkNodesAsLines);
+                var newline = "\n";
+                var returnValue = lines.join(newline);
                 return returnValue;
             }
         }

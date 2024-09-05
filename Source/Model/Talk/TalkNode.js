@@ -12,24 +12,6 @@ var ThisCouldBeBetter;
                 this.next = next == "" ? null : next;
                 this._isDisabled = isDisabled;
             }
-            static fromLinePipeSeparatedValues(talkNodeAsLinePsv) {
-                var fields = talkNodeAsLinePsv.split("|");
-                var isDisabledAsText = fields[4];
-                var isDisabled;
-                if (isDisabledAsText == null) {
-                    isDisabled = null;
-                }
-                else {
-                    var scriptToRunAsString = "( (u, cr) => " + isDisabledAsText + " )";
-                    isDisabled = eval(scriptToRunAsString);
-                }
-                var returnValue = new TalkNode(fields[0], // name
-                fields[1], // defnName
-                fields[2], // content
-                fields[3], // next
-                isDisabled);
-                return returnValue;
-            }
             static idNext() {
                 var returnValue = "_" + TalkNode._idNext;
                 TalkNode._idNext++;
@@ -172,6 +154,38 @@ var ThisCouldBeBetter;
                 this.next = other.next;
                 this._isDisabled = other._isDisabled;
                 return this;
+            }
+            // Serialization.
+            static fromLinePipeSeparatedValues(talkNodeAsLinePsv) {
+                var fields = talkNodeAsLinePsv.split("|");
+                var isDisabledAsText = fields[4];
+                var isDisabled;
+                if (isDisabledAsText == null) {
+                    isDisabled = null;
+                }
+                else {
+                    var scriptToRunAsString = "( (u, cr) => " + isDisabledAsText + " )";
+                    isDisabled = eval(scriptToRunAsString);
+                }
+                var returnValue = new TalkNode(fields[0], // name
+                fields[1], // defnName
+                fields[2], // content
+                fields[3], // next
+                isDisabled);
+                return returnValue;
+            }
+            toPipeSeparatedValues() {
+                var returnValue = [
+                    this.name,
+                    this.defnName,
+                    this.content,
+                    this.next,
+                    this._isDisabled == null ? null : this._isDisabled.toString()
+                ].join("|");
+                while (returnValue.endsWith("|")) {
+                    returnValue = returnValue.substr(0, returnValue.length - 1);
+                }
+                return returnValue;
             }
             // String.
             toString() {
