@@ -15,8 +15,12 @@ rem leading zeroes are disallowed in TypeScript,
 rem because they're interpreted as octals, which are deprecated!
 rem Also, parsing may fail if the date formatting has been changed from the default.
 
-echo static buildTime(): Date { return new Date(%date:~10,4%, (parseInt("%date:~4,2%") - 1), parseInt("%date:~7,2%"), parseInt("%time:~0,2%"), parseInt("%time:~3,2%"), parseInt("%time:~6,2%")); } >> _BuildRecord.ts
-rem echo static buildTime(): Date { return new Date(%date:~0,4%, (parseInt("%date:~5,2%") - 1), parseInt("%date:~8,2%"), parseInt("%time:~0,2%"), parseInt("%time:~3,2%"), parseInt("%time:~6,2%")); } >> _BuildRecord.ts
+rem I don't remember why this next line had to change, then change back.
+rem Perhaps different versions of Windows
+rem format the string returned by the "date" and "time" command differently?
+
+rem echo static buildTime(): Date { return new Date(%date:~10,4%, (parseInt("%date:~4,2%") - 1), parseInt("%date:~7,2%"), parseInt("%time:~0,2%"), parseInt("%time:~3,2%"), parseInt("%time:~6,2%")); } >> _BuildRecord.ts
+echo static buildTime(): Date { return new Date(%date:~0,4%, (parseInt("%date:~5,2%") - 1), parseInt("%date:~8,2%"), parseInt("%time:~0,2%"), parseInt("%time:~3,2%"), parseInt("%time:~6,2%")); } >> _BuildRecord.ts
 
 rem Reads the current version from git tags, or, if none available, uses "unknown".
 set version=

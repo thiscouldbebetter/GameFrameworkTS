@@ -239,11 +239,14 @@ class PlaceBuilderDemo_Emplacements
 			campfireCollide
 		);
 
+		var boundable = Boundable.fromCollidable(campfireCollidable);
+
 		var campfireEntityDefn = new Entity
 		(
 			campfireName,
 			[
 				Animatable2.create(),
+				boundable,
 				campfireCollidable,
 				Drawable.fromVisual(campfireVisual),
 				Locatable.create()
@@ -279,14 +282,19 @@ class PlaceBuilderDemo_Emplacements
 			"Container", containerColor, visual
 		);
 
+		var collidable = Collidable.fromCollider
+		(
+			new Box(Coords.create(), entitySize)
+		);
+
+		var boundable = Boundable.fromCollidable(collidable);
+	
 		var containerEntityDefn = new Entity
 		(
 			"Container",
 			[
-				Collidable.fromCollider
-				(
-					new Box(Coords.create(), entitySize)
-				),
+				boundable,
+				collidable,
 				Drawable.fromVisual(visual),
 				new ItemContainer(),
 				new ItemHolder([], null, null),
@@ -358,10 +366,13 @@ class PlaceBuilderDemo_Emplacements
 			new Box(Coords.create(), entitySize)
 		);
 
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var exitEntityDefn = new Entity
 		(
 			"Exit",
 			[
+				boundable,
 				collidable,
 				Drawable.fromVisual(visual),
 				Locatable.create(),
@@ -623,14 +634,17 @@ class PlaceBuilderDemo_Emplacements
 			(uwpe: UniverseWorldPlaceEntities) => obstacleRingObstacle.collide(uwpe)
 		);
 
+		var boundable = Boundable.fromCollidable(obstacleCollidable);
+
 		var obstacleRingEntityDefn = new Entity
 		(
 			"Ring",
 			[
-				new Locatable(obstacleLoc),
+				boundable,
 				obstacleCollidable,
 				//Damager.fromDamagePerHit(Damage.fromAmount(10)),
 				Drawable.fromVisual(obstacleRingVisual),
+				new Locatable(obstacleLoc),
 			]
 		);
 

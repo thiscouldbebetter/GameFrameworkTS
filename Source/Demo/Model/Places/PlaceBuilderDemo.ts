@@ -1588,6 +1588,9 @@ class PlaceBuilderDemo // Main.
 				],
 				(uwpe: UniverseWorldPlaceEntities) => wallObstacle.collide(uwpe)
 			);
+
+			var wallBoundable = Boundable.fromCollidable(wallCollidable);
+
 			var wallVisual = VisualRectangle.fromSizeAndColorFill(wallSize, wallColor);
 
 			var numberOfWallPartsOnSide = (isNeighborConnected ? 2 : 1);
@@ -1622,9 +1625,10 @@ class PlaceBuilderDemo // Main.
 				(
 					"ObstacleWall" + i + "_" + d,
 					[
-						new Locatable(wallPartLoc),
+						wallBoundable,
 						wallCollidable,
 						Drawable.fromVisual(wallVisual),
+						new Locatable(wallPartLoc),
 						wallObstacle
 					]
 				);
@@ -2084,16 +2088,25 @@ class PlaceBuilderDemo // Main.
 			}
 		);
 
+		var collidable = Collidable.fromCollider(itemBombCollider);
+		var drawable = Drawable.fromVisual(itemBombVisual);
+		var item = new Item(itemDefnBombName, 1);
+		var locatable = Locatable.create();
+		var equippable = Equippable.default();
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemBombEntityDefn = new Entity
 		(
 			itemDefnBombName,
 			[
-				new Item(itemDefnBombName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemBombCollider),
+				boundable,
+				collidable,
+				drawable,
+				equippable,
+				item,
 				itemBombDevice,
-				Drawable.fromVisual(itemBombVisual),
-				Equippable.default()
+				locatable
 			]
 		);
 
@@ -2108,14 +2121,22 @@ class PlaceBuilderDemo // Main.
 		var itemBookVisual = this.itemDefnsByName.get(itemDefnBookName).visual;
 		var itemBookCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
+		var collidable = Collidable.fromCollider(itemBookCollider);
+		var drawable = Drawable.fromVisual(itemBookVisual);
+		var item = new Item(itemDefnBookName, 1);
+		var locatable = Locatable.create();
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemBookEntityDefn = new Entity
 		(
 			itemDefnBookName,
 			[
-				new Item(itemDefnBookName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemBookCollider),
-				Drawable.fromVisual(itemBookVisual),
+				boundable,
+				collidable,
+				drawable,
+				item,
+				locatable
 			]
 		);
 
@@ -2262,16 +2283,25 @@ class PlaceBuilderDemo // Main.
 			itemBowUse
 		);
 
+		var collidable = Collidable.fromCollider(itemBowCollider);
+		var drawable = Drawable.fromVisual(itemBowVisual);
+		var equippable = Equippable.default();
+		var item = new Item(itemDefnName, 1);
+		var locatable = Locatable.create();
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemBowEntityDefn = new Entity
 		(
 			itemDefnName,
 			[
-				new Item(itemDefnName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemBowCollider),
-				Drawable.fromVisual(itemBowVisual),
-				Equippable.default(),
-				itemBowDevice
+				boundable,
+				collidable,
+				drawable,
+				equippable,
+				item,
+				itemBowDevice,
+				locatable
 			]
 		);
 
@@ -2286,14 +2316,18 @@ class PlaceBuilderDemo // Main.
 		var itemBreadVisual = this.itemDefnsByName.get(itemDefnBreadName).visual;
 		var itemBreadCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
+		var collidable = Collidable.fromCollider(itemBreadCollider);
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemBreadEntityDefn = new Entity
 		(
 			itemDefnBreadName,
 			[
+				boundable,
+				collidable,
+				Drawable.fromVisual(itemBreadVisual),
 				new Item(itemDefnBreadName, 1),
 				Locatable.create(),
-				Collidable.fromCollider(itemBreadCollider),
-				Drawable.fromVisual(itemBreadVisual),
 			]
 		);
 
@@ -2421,14 +2455,20 @@ class PlaceBuilderDemo // Main.
 			.01 // steeringAngleInTurns
 		);
 
+		var drawable = Drawable.fromVisual(carVisual);
+		var locatable = new Locatable(carLoc);
+
+		var boundable = Boundable.fromCollidable(carCollidable);
+
 		var carEntityDefn = new Entity
 		(
 			defnName,
 			[
-				new Locatable(carLoc),
+				boundable,
 				carCollidable,
 				carConstrainable,
-				Drawable.fromVisual(carVisual),
+				drawable,
+				locatable,
 				carUsable,
 				vehicle
 			]
@@ -2446,14 +2486,22 @@ class PlaceBuilderDemo // Main.
 		var itemCoinCollider =
 			new Sphere(Coords.create(), entityDimensionHalf);
 
+		var collidable = Collidable.fromCollider(itemCoinCollider);
+		var drawable = Drawable.fromVisual(itemCoinVisual);
+		var item = new Item(itemDefnCoinName, 1);
+		var locatable = Locatable.create();
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemCoinEntityDefn = new Entity
 		(
 			itemDefnCoinName,
 			[
-				new Item(itemDefnCoinName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemCoinCollider),
-				Drawable.fromVisual(itemCoinVisual),
+				boundable,
+				collidable,
+				drawable,
+				item,
+				locatable,
 			]
 		);
 
@@ -2490,14 +2538,19 @@ class PlaceBuilderDemo // Main.
 		var itemDoughnutVisual = this.itemDefnsByName.get(itemDefnDoughnutName).visual;
 		var itemDoughnutCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
+		var collidable = Collidable.fromCollider(itemDoughnutCollider);
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemDoughnutEntityDefn = new Entity
 		(
 			itemDefnDoughnutName,
 			[
-				new Item(itemDefnDoughnutName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemDoughnutCollider),
+				boundable,
+				collidable,
 				Drawable.fromVisual(itemDoughnutVisual),
+				new Item(itemDefnDoughnutName, 1),
+				Locatable.create()
 			]
 		);
 
@@ -2601,14 +2654,19 @@ class PlaceBuilderDemo // Main.
 		var itemHeartVisual = this.itemDefnsByName.get(itemDefnHeartName).visual;
 		var itemHeartCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
+		var collidable = Collidable.fromCollider(itemHeartCollider);
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemHeartEntityDefn = new Entity
 		(
 			itemDefnHeartName,
 			[
+				boundable,
+				collidable,
+				Drawable.fromVisual(itemHeartVisual),
 				new Item(itemDefnHeartName, 1),
 				Locatable.create(),
-				Collidable.fromCollider(itemHeartCollider),
-				Drawable.fromVisual(itemHeartVisual)
 			]
 		);
 
@@ -2691,14 +2749,19 @@ class PlaceBuilderDemo // Main.
 		var itemMeatVisual = itemMeatDefn.visual;
 		var itemMeatCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
+		var collidable = Collidable.fromCollider(itemMeatCollider);
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemMeatEntityDefn = new Entity
 		(
 			itemDefnMeatName,
 			[
+				boundable,
+				collidable,
+				Drawable.fromVisual(itemMeatVisual),
 				new Item(itemDefnMeatName, 1),
 				Locatable.create(),
-				Collidable.fromCollider(itemMeatCollider),
-				Drawable.fromVisual(itemMeatVisual),
 				new Usable((uwpe: UniverseWorldPlaceEntities) => itemMeatDefn.use(uwpe))
 			]
 		);
@@ -3110,16 +3173,21 @@ class PlaceBuilderDemo // Main.
 			)
 		);
 
+		var collidable = Collidable.fromCollider(itemSwordCollider);
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemSwordEntityDefn = new Entity
 		(
 			itemDefnName,
 			[
-				new Item(itemDefnName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemSwordCollider),
+				boundable,
+				collidable,
 				Drawable.fromVisual(itemSwordVisual),
+				Equippable.default(),
+				new Item(itemDefnName, 1),
 				itemSwordDevice,
-				Equippable.default()
+				Locatable.create(),
 			]
 		);
 
@@ -3134,14 +3202,19 @@ class PlaceBuilderDemo // Main.
 
 		var itemToolsetCollider = new Sphere(Coords.create(), this.entityDimension / 2);
 
+		var collidable = Collidable.fromCollider(itemToolsetCollider);
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemToolsetEntityDefn = new Entity
 		(
 			itemDefnName,
 			[
+				boundable,
+				collidable,
+				Drawable.fromVisual(itemToolsetVisual),
 				new Item(itemDefnName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemToolsetCollider),
-				Drawable.fromVisual(itemToolsetVisual)
+				Locatable.create()
 			]
 		);
 
@@ -3156,15 +3229,20 @@ class PlaceBuilderDemo // Main.
 
 		var itemTorchCollider = new Sphere(Coords.create(), this.entityDimension / 2);
 
+		var collidable = Collidable.fromCollider(itemTorchCollider);
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemTorchEntityDefn = new Entity
 		(
 			itemDefnName,
 			[
 				Animatable2.create(),
+				boundable,
+				collidable,
+				Drawable.fromVisual(itemTorchVisual),
 				new Item(itemDefnName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemTorchCollider),
-				Drawable.fromVisual(itemTorchVisual)
+				Locatable.create()
 			]
 		);
 
@@ -3180,14 +3258,19 @@ class PlaceBuilderDemo // Main.
 		var itemWeightCollider =
 			new Sphere(Coords.create(), this.entityDimension / 2);
 
+		var collidable = Collidable.fromCollider(itemWeightCollider);
+
+		var boundable = Boundable.fromCollidable(collidable);
+
 		var itemWeightEntityDefn = new Entity
 		(
 			itemDefnName,
 			[
+				boundable,
+				collidable,
+				Drawable.fromVisual(itemWeightVisual),
 				new Item(itemDefnName, 1),
-				Locatable.create(),
-				Collidable.fromCollider(itemWeightCollider),
-				Drawable.fromVisual(itemWeightVisual)
+				Locatable.create()
 			]
 		);
 

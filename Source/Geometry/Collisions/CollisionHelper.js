@@ -5,7 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class CollisionHelper {
             constructor() {
-                this.throwErrorIfCollidersCannotBeCollided = true;
+                this.throwErrorIfCollidersCannotBeCollided = false; // true;
                 this.colliderTypeNamesToDoCollideLookup = this.doCollideLookupBuild();
                 this.colliderTypeNamesToDoesContainLookup = this.doesContainLookupBuild();
                 this.colliderTypeNamesToCollisionFindLookup = this.collisionFindLookupBuild();
@@ -186,16 +186,23 @@ var ThisCouldBeBetter;
                 var collider0TypeName = collider0.constructor.name;
                 var collider1TypeName = collider1.constructor.name;
                 var collideLookup = this.colliderTypeNamesToCollisionFindLookup.get(collider0TypeName);
+                var errorMessage = "Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
                 if (collideLookup == null) {
                     if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw ("Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName);
+                        throw (errorMessage);
+                    }
+                    else {
+                        console.log(errorMessage);
                     }
                 }
                 else {
                     var collisionMethod = collideLookup.get(collider1TypeName);
                     if (collisionMethod == null) {
                         if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw ("Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName);
+                            throw (errorMessage);
+                        }
+                        else {
+                            console.log(errorMessage);
                         }
                     }
                     else {
@@ -242,16 +249,23 @@ var ThisCouldBeBetter;
                 var collider0TypeName = collider0.constructor.name;
                 var collider1TypeName = collider1.constructor.name;
                 var doCollideLookup = this.colliderTypeNamesToDoCollideLookup.get(collider0TypeName);
+                var errorMessage = "Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName;
                 if (doCollideLookup == null) {
                     if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw ("Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName);
+                        throw (errorMessage);
+                    }
+                    else {
+                        console.log(errorMessage);
                     }
                 }
                 else {
                     var collisionMethod = doCollideLookup.get(collider1TypeName);
                     if (collisionMethod == null) {
                         if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw ("Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName);
+                            throw (errorMessage);
+                        }
+                        else {
+                            console.log(errorMessage);
                         }
                     }
                     else {
@@ -271,16 +285,23 @@ var ThisCouldBeBetter;
                 var collider0TypeName = collider0.constructor.name;
                 var collider1TypeName = collider1.constructor.name;
                 var doesContainLookup = this.colliderTypeNamesToDoesContainLookup.get(collider0TypeName);
+                var errorMessage = "Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName;
                 if (doesContainLookup == null) {
                     if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw ("Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName);
+                        throw (errorMessage);
+                    }
+                    else {
+                        console.log(errorMessage);
                     }
                 }
                 else {
                     var doesColliderContainOther = doesContainLookup.get(collider1TypeName);
                     if (doesColliderContainOther == null) {
                         if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw ("Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName);
+                            throw (errorMessage);
+                        }
+                        else {
+                            console.log(errorMessage);
                         }
                     }
                     else {
