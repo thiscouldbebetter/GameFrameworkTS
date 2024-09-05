@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 var backOffset = GameFramework.Coords.fromXY(-1, 0).multiplyScalar(length);
                 var rightOffset = GameFramework.Coords.fromXY(0, 1).multiplyScalar(width / 2);
                 return new Path([
-                    GameFramework.Coords.fromXY(0, 0), // tip
+                    GameFramework.Coords.fromXY(0, 0),
                     backOffset.clone().add(rightOffset),
                     backOffset.clone().subtract(rightOffset)
                 ]);

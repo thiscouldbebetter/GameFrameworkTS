@@ -115,7 +115,8 @@ export class ConversationRun
 	{
 		var scope = this.scopeCurrent;
 
-		if (this.talkNodeCurrent() == null)
+		var talkNodeCurrent = this.talkNodeCurrent();
+		if (talkNodeCurrent == null)
 		{
 			// Do nothing.
 		}
@@ -157,8 +158,9 @@ export class ConversationRun
 
 	nextUntilPromptForUniverse(universe: Universe): void
 	{
-		var prompt = TalkNodeDefn.Instances().Prompt.name;
-		var quit = TalkNodeDefn.Instances().Quit.name;
+		var talkNodeDefns = TalkNodeDefn.Instances();
+		var prompt = talkNodeDefns.Prompt.name;
+		var quit = talkNodeDefns.Quit.name;
 
 		var nodeDefnName = this.talkNodeCurrent().defnName;
 		if (nodeDefnName == prompt || this.scopeCurrent.isPromptingForResponse)

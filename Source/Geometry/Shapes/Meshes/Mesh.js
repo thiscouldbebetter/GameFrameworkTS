@@ -40,11 +40,11 @@ var ThisCouldBeBetter;
                     new GameFramework.Coords(min.x, max.y, max.z),
                 ];
                 var faceBuilders = [
-                    new Mesh_FaceBuilder([0, 1, 5, 4]), // north
-                    new Mesh_FaceBuilder([1, 2, 6, 5]), // east
-                    new Mesh_FaceBuilder([2, 3, 7, 6]), // south
-                    new Mesh_FaceBuilder([3, 0, 4, 7]), // west
-                    new Mesh_FaceBuilder([0, 3, 2, 1]), // top
+                    new Mesh_FaceBuilder([0, 1, 5, 4]),
+                    new Mesh_FaceBuilder([1, 2, 6, 5]),
+                    new Mesh_FaceBuilder([2, 3, 7, 6]),
+                    new Mesh_FaceBuilder([3, 0, 4, 7]),
+                    new Mesh_FaceBuilder([0, 3, 2, 1]),
                     new Mesh_FaceBuilder([4, 5, 6, 7]), // bottom
                 ];
                 var returnValue = new Mesh(box.center, vertexOffsets, faceBuilders);
