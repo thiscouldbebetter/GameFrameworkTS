@@ -917,8 +917,8 @@ class PlaceBuilderDemo_Movers
 				routable,
 				Talker.fromConversationDefnName
 				(
-					"Conversation"
-					//"Conversation_psv"
+					//"Conversation"
+					"Conversation_psv"
 				),
 			]
 		);

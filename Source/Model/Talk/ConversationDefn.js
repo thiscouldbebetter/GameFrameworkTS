@@ -13,6 +13,11 @@ var ThisCouldBeBetter;
                 this.talkNodeDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodeDefns);
                 this.talkNodes = talkNodes;
                 this.talkNodesByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodes);
+                var validationErrors = this.validateAndReturnErrors();
+                if (validationErrors.length > 0) {
+                    var errorMessage = "ConversationDefn '" + this.name + "'is not valid: " + validationErrors.join("; ") + ".";
+                    throw new Error(errorMessage);
+                }
             }
             contentSubstitute(contentByNodeName) {
                 this.talkNodes.forEach(talkNode => {
@@ -61,6 +66,27 @@ var ThisCouldBeBetter;
                 }
                 return returnNodes;
             }
+            validateAndReturnErrors() {
+                var errorsSoFar = [];
+                var nodes = this.talkNodes;
+                var nodesWithUnrecognizedTypes = nodes.filter(x => this.talkNodeDefnsByName.has(x.defnName) == false);
+                if (nodesWithUnrecognizedTypes.length > 0) {
+                    var defnNamesUnrecognized = nodesWithUnrecognizedTypes.map(x => x.defnName);
+                    var error = "one or more nodes have unrecognized types: " + defnNamesUnrecognized.join(", ");
+                    errorsSoFar.push(error);
+                }
+                var nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes = nodes.filter(x => x.defnName.startsWith("Variable") == false // Some of these use the next field to store a script.
+                    && x.next != null
+                    && nodes.some(y => y.name == x.next) == false);
+                if (nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.length > 0) {
+                    var nextFieldsThatDoNotMatch = nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.map(x => x.next);
+                    var error = "one or more nodes have next fields that do not correspond to the name of some other node: "
+                        + nextFieldsThatDoNotMatch.join(", ");
+                    errorsSoFar.push(error);
+                }
+                return errorsSoFar;
+            }
+            // Content expansion.
             expandFromContentTextString(contentTextString) {
                 var contentText = contentTextString.value;
                 var contentTextAsLines = contentText.split("\n");

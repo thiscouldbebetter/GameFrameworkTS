@@ -8,16 +8,16 @@ Subject|Display|What do you want to talk about?
 |Option|Let's talk about science.|Science
 Subject.History|Option|Let's talk about history.|History
 Subject.Random|Option|Say something random.|CoinFlip
-Subject.Carol|Option|TalkOver|We NEED to talk about Carol.|true
+Subject.Carol|Option|We NEED to talk about Carol.|TalkOver|true
 |Option|; drop database conversation_topics;|SQLInjection
 |Option|Say, how do I play this game?|Game
 |Option|Do you want to trade items?|Trade
-|Option|"Never mind. I hate you.|Quit
+|Option|Never mind. I hate you.|Quit
 SubjectPrompt|Prompt
 Math|Display|Math is too complicated...
 |Display|...what with all those numbers.
 |Goto||SubjectPrompt
-Science|Display"|Science is way too broad a subject.
+Science|Display|Science is way too broad a subject.
 |Display|I mean, what ISN'T science, really?
 |Goto||SubjectPrompt
 History|Push
@@ -49,9 +49,9 @@ CoinFlip|Push
 |Display|Now YOU say something random, smart guy.
 |VariableLoad|SaySomethingRandomIndex|u.randomizer.integerLessThan(3)
 |Option|Uhh... skibluhvwee.|CoinFlip.Done|cr.varGet('SaySomethingRandomIndex') != 0
-|Option|Uhh... jib--jibbluhkuhjax."|CoinFlip.Done|cr.varGet('SaySomethingRandomIndex') != 1
+|Option|Uhh... jib--jibbluhkuhjax.|CoinFlip.Done|cr.varGet('SaySomethingRandomIndex') != 1
 |Option|My baloney... has no middle name.|CoinFlip.Done|cr.varGet('SaySomethingRandomIndex') != 2
-|Option|I... can't|CoinFlip.Done.
+|Option|I... can't.|CoinFlip.Done
 |Prompt
 CoinFlip.Done|Display|Yeah, that's what I figured.
 |Pop
@@ -65,8 +65,8 @@ GameDescription|Display|Well, it's kind of a moving target.
 |Display|But basically, use the arrow keys to move.
 |Display|If you move over the exit there...
 |Display|...and press E, you'll go outside.
-Display|After that, uh, have adventures, I guess
-|Option|How do I win?|Game.Win,
+|Display|After that, uh, have adventures, I guess.
+|Option|How do I win?|Game.Win
 |Option|What buttons do I press?|Game.Controls
 |Option|Any exciting gameplay mechanics?|Game.Mechanics
 Game.GoWithMe.Option|Option|Will you go with me, to help?|Game.GoWithMe
@@ -111,7 +111,7 @@ Game.Mechanics|Display|Not really.
 Game.GoWithMe|Display|No, I'm pretty comfortable here.
 |Display|But I'll give you a walkie-talkie...
 |Display|...so I can provide valuable insights.
-|Script"|(u) => { u.world.placeCurrent.player().itemHolder().itemEntityAdd( new Entity(null, [ new Item("Walkie-Talkie", 1) ] ) ); }
+|Script|(u) => { u.world.placeCurrent.player().itemHolder().itemEntityAdd( new Entity(null, [ new Item("Walkie-Talkie", 1) ] ) ); }
 |Display|[You have received a walkie-talkie.]
 |Disable|Game.GoWithMe.Option
 |Goto||Game.Prompt
@@ -119,11 +119,11 @@ Game.Tips|Display|Don't touch anything red.
 |Display|Just in the game, I mean...
 |Display|...not in, like, life.
 |Goto||Game.Prompt
-|Game.NeverMind|Display|You were fun.  I'll miss you.
+Game.NeverMind|Display|You were fun.  I'll miss you.
 |Pop||Subject
-"Trade|Display|I guess so.  Got anything good?
+Trade|Display|I guess so.  Got anything good?
 |Script|u.venueNext = new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue()
-Display|Well, that was mutually enriching.
+|Display|Well, that was mutually enriching.
 |Goto||Subject
 Quit|Display|Same to you, buddy.
 TalkOver|Display|[This conversation is over.]
