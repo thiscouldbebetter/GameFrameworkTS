@@ -194,6 +194,11 @@ export class ConversationRun
 		return nodesStartingWithPrefix;
 	}
 
+	optionSelectByName(nameToMatch: string): TalkNode
+	{
+		return this.scopeCurrent.optionSelectByName(nameToMatch);
+	}
+
 	optionSelectByNext(nextToMatch: string): TalkNode
 	{
 		return this.scopeCurrent.optionSelectByNext(nextToMatch);

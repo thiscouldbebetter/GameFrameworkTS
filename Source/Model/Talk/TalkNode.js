@@ -127,6 +127,9 @@ var ThisCouldBeBetter;
                 var defn = this.defn(conversationRun.defn);
                 defn.execute(universe, conversationRun);
             }
+            isDisabled(u, cr) {
+                return (this.isEnabled(u, cr) == false);
+            }
             isEnabled(u, cr) {
                 return this.isEnabledForUniverseAndConversationRun(u, cr);
             }

@@ -260,6 +260,11 @@ export class TalkNode //
 		defn.execute(universe, conversationRun);
 	}
 
+	isDisabled(u: Universe, cr: ConversationRun): boolean
+	{
+		return (this.isEnabled(u, cr) == false);
+	}
+
 	isEnabled(u: Universe, cr: ConversationRun): boolean
 	{
 		return this.isEnabledForUniverseAndConversationRun(u, cr);
