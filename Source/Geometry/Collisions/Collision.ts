@@ -64,6 +64,11 @@ export class Collision //
 
 	entityCollidableAdd(entity: Entity): Collision
 	{
+		return this.entityCollidingAdd(entity);
+	}
+
+	entityCollidingAdd(entity: Entity): Collision
+	{
 		this.entitiesColliding.push(entity);
 		return this;
 	}
@@ -108,8 +113,8 @@ export class Collision //
 		(
 			this.pos.clone(),
 			this.distanceToCollision,
-			this.colliders,
-			this.entitiesColliding
+			this.colliders.map(x => x),
+			this.entitiesColliding.map(x => x)
 		);
 
 		// hack

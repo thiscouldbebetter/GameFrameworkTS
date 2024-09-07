@@ -300,8 +300,15 @@ export class Universe
 
 	worldCreate(): World
 	{
-		this.world = this.worldCreator.worldCreate(this, this.worldCreator);
+		var world = this.worldCreator.worldCreate(this, this.worldCreator);
+		this.worldSet(world);
 		return this.world;
+	}
+
+	worldSet(value: World): Universe
+	{
+		this.world = value;
+		return this;
 	}
 }
 

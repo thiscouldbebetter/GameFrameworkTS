@@ -34,6 +34,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             entityCollidableAdd(entity) {
+                return this.entityCollidingAdd(entity);
+            }
+            entityCollidingAdd(entity) {
                 this.entitiesColliding.push(entity);
                 return this;
             }
@@ -56,7 +59,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                var returnValue = new Collision(this.pos.clone(), this.distanceToCollision, this.colliders, this.entitiesColliding);
+                var returnValue = new Collision(this.pos.clone(), this.distanceToCollision, this.colliders.map(x => x), this.entitiesColliding.map(x => x));
                 // hack
                 returnValue.collidersByName = this.collidersByName;
                 returnValue.normals = GameFramework.ArrayHelper.clone(this.normals);

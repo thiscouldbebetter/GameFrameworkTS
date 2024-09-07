@@ -33,7 +33,7 @@ export class VenueWorld implements Venue
 
 	initialize(universe: Universe): void
 	{
-		universe.world = this.world;
+		universe.worldSet(this.world);
 		var uwpe = UniverseWorldPlaceEntities.fromUniverseAndWorld
 		(
 			universe, this.world

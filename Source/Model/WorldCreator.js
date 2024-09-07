@@ -60,7 +60,7 @@ var ThisCouldBeBetter;
                 };
                 var venueTask = new GameFramework.VenueTask(venueMessage, worldGeneratePerform, (world) => // done
                  {
-                    universe.world = world;
+                    universe.worldSet(world);
                     var venueNext = universe.world.toVenue();
                     universe.venueTransitionTo(venueNext);
                 });

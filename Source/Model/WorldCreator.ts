@@ -146,7 +146,7 @@ export class WorldCreator
 			worldGeneratePerform,
 			(world: World) => // done
 			{
-				universe.world = world;
+				universe.worldSet(world);
 
 				var venueNext = universe.world.toVenue();
 				universe.venueTransitionTo(venueNext);

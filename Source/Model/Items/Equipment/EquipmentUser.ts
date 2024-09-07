@@ -47,7 +47,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 					(
 						uwpe
 					);
-					uwpe.entity2 = itemToEquipAsEntity;
+					uwpe.entity2Set(itemToEquipAsEntity);
 					this.equipItemEntityInSocketWithName
 					(
 						uwpe, socket.defnName, true // ?
@@ -292,7 +292,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		if (entityItemEquipped != null)
 		{
 			var itemEquipped = entityItemEquipped.item();
-			uwpe.entity2 = entityItemEquipped;
+			uwpe.entity2Set(entityItemEquipped);
 			itemEquipped.use(uwpe);
 		}
 		this.unequipItemsNoLongerHeld(uwpe);
@@ -374,7 +374,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		var equipItemSelectedToSocketDefault = () =>
 		{
 			var itemEntityToEquip = equipmentUser.itemEntitySelected;
-			uwpe.entity2 = itemEntityToEquip;
+			uwpe.entity2Set(itemEntityToEquip);
 			equipmentUser.equipEntityWithItem(uwpe);
 		};
 
@@ -407,7 +407,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		var equipItemSelectedToSocketSelected = () =>
 		{
 			var itemEntityToEquip = equipmentUser.itemEntitySelected;
-			uwpe.entity2 = itemEntityToEquip;
+			uwpe.entity2Set(itemEntityToEquip);
 
 			var socketSelected = equipmentUser.socketSelected;
 			if (socketSelected == null)
@@ -426,7 +426,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 
 		var equipItemSelectedInQuickSlot = (quickSlotNumber: number) =>
 		{
-			uwpe.entity2 = equipmentUser.itemEntitySelected;
+			uwpe.entity2Set(equipmentUser.itemEntitySelected);
 			equipmentUser.equipItemEntityInSocketWithName
 			(
 				uwpe,

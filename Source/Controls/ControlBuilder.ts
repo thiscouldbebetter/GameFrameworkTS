@@ -1676,7 +1676,7 @@ export class ControlBuilder
 						ArrayHelper.remove(saveStates, saveState);
 						storageHelper.save(profile.name, profile);
 
-						universe.world = null;
+						universe.worldSet(null);
 						storageHelper.delete(saveStateName);
 					},
 					null // cancel
@@ -1749,7 +1749,8 @@ export class ControlBuilder
 				},
 				(saveStateReloaded: SaveStateBase) => // done
 				{
-					universe.world = saveStateReloaded.toWorld(universe);
+					var world = saveStateReloaded.toWorld(universe);
+					universe.worldSet(world);
 					var venueNext = universe.controlBuilder.worldLoad
 					(
 						universe, null
@@ -1786,7 +1787,7 @@ export class ControlBuilder
 					var worldCreator = universe.worldCreator;
 					var worldBlank = worldCreator.worldCreate(universe, worldCreator);
 					var worldDeserialized = worldBlank.fromStringJson(worldSerialized, universe);
-					universe.world = worldDeserialized;
+					universe.worldSet(worldDeserialized);
 
 					var venueNext = controlBuilder.game
 					(

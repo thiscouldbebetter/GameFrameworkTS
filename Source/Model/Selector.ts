@@ -171,7 +171,7 @@ export class Selector implements EntityProperty<Selector>
 		this.entitiesDeselectAll(uwpe);
 		if (entityToSelect != null)
 		{
-			uwpe.entity2 = entityToSelect;
+			uwpe.entity2Set(entityToSelect);
 			this.entitySelect(uwpe);
 		}
 

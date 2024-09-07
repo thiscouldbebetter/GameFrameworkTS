@@ -1460,7 +1460,7 @@ class PlaceBuilderDemo_Movers
 					entityKillable.locatable().loc.pos,
 					Color.byName(messageColorName)
 				);
-				uwpe.entity = messageEntity;
+				uwpe.entitySet(messageEntity);
 				place.entitySpawn(uwpe);
 
 				return damageAmount;
@@ -1717,7 +1717,7 @@ class PlaceBuilderDemo_Movers
 		{
 			var entityPickingUp = entityPlayer;
 			var itemEntityGettingPickedUp = itemEntityToPickUp;
-			uwpe.entity2 = itemEntityGettingPickedUp;
+			uwpe.entity2Set(itemEntityGettingPickedUp);
 
 			var entityPickingUpLocatable = entityPickingUp.locatable();
 

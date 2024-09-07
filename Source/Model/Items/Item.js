@@ -31,7 +31,7 @@ var ThisCouldBeBetter;
                 return this.quantity * this.defn(world).tradeValue;
             }
             use(uwpe) {
-                uwpe.entity2 = this.toEntity(uwpe);
+                uwpe.entity2Set(this.toEntity(uwpe));
                 var defn = this.defn(uwpe.world);
                 defn.use(uwpe);
             }

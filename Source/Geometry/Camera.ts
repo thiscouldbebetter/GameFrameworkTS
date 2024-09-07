@@ -331,7 +331,7 @@ export class Camera implements EntityProperty<Camera>
 		for (var i = 0; i < entitiesInView.length; i++)
 		{
 			var entity = entitiesInView[i];
-			uwpe.entity = entity;
+			uwpe.entitySet(entity);
 
 			var visual = entity.drawable().visual;
 

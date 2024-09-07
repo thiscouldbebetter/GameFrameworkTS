@@ -768,7 +768,7 @@ var ThisCouldBeBetter;
                         var saveStates = profile.saveStates;
                         GameFramework.ArrayHelper.remove(saveStates, saveState);
                         storageHelper.save(profile.name, profile);
-                        universe.world = null;
+                        universe.worldSet(null);
                         storageHelper.delete(saveStateName);
                     }, null // cancel
                     );
@@ -809,7 +809,8 @@ var ThisCouldBeBetter;
                         return storageHelper.load(saveStateSelected.name);
                     }, (saveStateReloaded) => // done
                      {
-                        universe.world = saveStateReloaded.toWorld(universe);
+                        var world = saveStateReloaded.toWorld(universe);
+                        universe.worldSet(world);
                         var venueNext = universe.controlBuilder.worldLoad(universe, null).toVenue();
                         universe.venueTransitionTo(venueNext);
                     });
@@ -830,7 +831,7 @@ var ThisCouldBeBetter;
                             var worldCreator = universe.worldCreator;
                             var worldBlank = worldCreator.worldCreate(universe, worldCreator);
                             var worldDeserialized = worldBlank.fromStringJson(worldSerialized, universe);
-                            universe.world = worldDeserialized;
+                            universe.worldSet(worldDeserialized);
                             var venueNext = controlBuilder.game(universe, size, universe.venueCurrent()).toVenue();
                             universe.venueTransitionTo(venueNext);
                         };

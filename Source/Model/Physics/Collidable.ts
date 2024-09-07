@@ -124,10 +124,10 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 
 		var collision =
-			this._collision.clear().entityCollidableAdd
+			this._collision.clear().entityCollidingAdd
 			(
 				entityColliding
-			).entityCollidableAdd
+			).entityCollidingAdd
 			(
 				entityCollidedWith
 			);
@@ -258,7 +258,9 @@ export class Collidable implements EntityProperty<Collidable>
 
 		collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions
 		(
-			entity, universe.collisionHelper, collisionsSoFar
+			entity,
+			universe.collisionHelper,
+			collisionsSoFar
 		);
 
 		var collisionsToIgnore = collisionsSoFar.filter

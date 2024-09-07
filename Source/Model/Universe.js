@@ -143,8 +143,13 @@ var ThisCouldBeBetter;
                 this.venueNextSet(venueNext);
             }
             worldCreate() {
-                this.world = this.worldCreator.worldCreate(this, this.worldCreator);
+                var world = this.worldCreator.worldCreate(this, this.worldCreator);
+                this.worldSet(world);
                 return this.world;
+            }
+            worldSet(value) {
+                this.world = value;
+                return this;
             }
         }
         GameFramework.Universe = Universe;

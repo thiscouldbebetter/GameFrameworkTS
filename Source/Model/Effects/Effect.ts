@@ -108,7 +108,7 @@ class Effect_Instances
 			{
 				var damage = Damage.fromAmountAndTypeName(1, "Heat");
 				var e = uwpe.entity;
-				uwpe.entity2 = e;
+				uwpe.entity2Set(e);
 				e.killable().damageApply(uwpe, damage );
 			}
 		);
@@ -123,7 +123,7 @@ class Effect_Instances
 			{
 				var damage = Damage.fromAmountAndTypeName(1, "Cold");
 				var e = uwpe.entity;
-				uwpe.entity2 = e;
+				uwpe.entity2Set(e);
 				e.killable().damageApply(uwpe, damage );
 			}
 		);
@@ -159,7 +159,7 @@ class Effect_Instances
 			{
 				var damage = Damage.fromAmountAndTypeName(-1, "Healing");
 				var e = uwpe.entity;
-				uwpe.entity2 = e;
+				uwpe.entity2Set(e);
 				e.killable().damageApply(uwpe, damage);
 			}
 		);

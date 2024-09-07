@@ -22,7 +22,7 @@ var ThisCouldBeBetter;
                         if (itemsEquippable.length > 0) {
                             var itemToEquip = itemsEquippable[0];
                             var itemToEquipAsEntity = itemToEquip.toEntity(uwpe);
-                            uwpe.entity2 = itemToEquipAsEntity;
+                            uwpe.entity2Set(itemToEquipAsEntity);
                             this.equipItemEntityInSocketWithName(uwpe, socket.defnName, true // ?
                             );
                         }
@@ -175,7 +175,7 @@ var ThisCouldBeBetter;
                 var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
                 if (entityItemEquipped != null) {
                     var itemEquipped = entityItemEquipped.item();
-                    uwpe.entity2 = entityItemEquipped;
+                    uwpe.entity2Set(entityItemEquipped);
                     itemEquipped.use(uwpe);
                 }
                 this.unequipItemsNoLongerHeld(uwpe);
@@ -223,7 +223,7 @@ var ThisCouldBeBetter;
                 var listHeight = 100;
                 var equipItemSelectedToSocketDefault = () => {
                     var itemEntityToEquip = equipmentUser.itemEntitySelected;
-                    uwpe.entity2 = itemEntityToEquip;
+                    uwpe.entity2Set(itemEntityToEquip);
                     equipmentUser.equipEntityWithItem(uwpe);
                 };
                 var listEquippables = new GameFramework.ControlList("listEquippables", GameFramework.Coords.fromXY(10, 15), // pos
@@ -236,7 +236,7 @@ var ThisCouldBeBetter;
                 equipItemSelectedToSocketDefault, null);
                 var equipItemSelectedToSocketSelected = () => {
                     var itemEntityToEquip = equipmentUser.itemEntitySelected;
-                    uwpe.entity2 = itemEntityToEquip;
+                    uwpe.entity2Set(itemEntityToEquip);
                     var socketSelected = equipmentUser.socketSelected;
                     if (socketSelected == null) {
                         equipmentUser.equipEntityWithItem(uwpe);
@@ -247,7 +247,7 @@ var ThisCouldBeBetter;
                     }
                 };
                 var equipItemSelectedInQuickSlot = (quickSlotNumber) => {
-                    uwpe.entity2 = equipmentUser.itemEntitySelected;
+                    uwpe.entity2Set(equipmentUser.itemEntitySelected);
                     equipmentUser.equipItemEntityInSocketWithName(uwpe, "Item" + quickSlotNumber, // socketName
                     true // includeSocketNameInMessage
                     );

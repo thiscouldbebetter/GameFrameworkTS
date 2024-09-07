@@ -75,7 +75,7 @@ export class World //
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		uwpe.world = this;
+		uwpe.worldSet(this);
 
 		if (this.placeNextName != null)
 		{
@@ -96,7 +96,7 @@ export class World //
 
 		if (this.placeCurrent != null)
 		{
-			uwpe.place = this.placeCurrent;
+			uwpe.placeSet(this.placeCurrent);
 			this.placeCurrent.initialize(uwpe);
 		}
 	}
@@ -134,7 +134,7 @@ export class World //
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		uwpe.world = this;
+		uwpe.worldSet(this);
 		if (this.placeNext != null)
 		{
 			if (this.placeCurrent != null)
@@ -143,7 +143,7 @@ export class World //
 			}
 			this.placeCurrent = this.placeNext;
 			this.placeNextSet(null);
-			uwpe.place = this.placeCurrent;
+			uwpe.placeSet(this.placeCurrent);
 			this.placeCurrent.initialize(uwpe);
 		}
 		this.placeCurrent.updateForTimerTick(uwpe);

@@ -31,7 +31,7 @@ export class Entity implements Clonable<Entity>
 
 	finalize(uwpe: UniverseWorldPlaceEntities): Entity
 	{
-		uwpe.entity = this;
+		uwpe.entitySet(this);
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
 		{
@@ -46,7 +46,7 @@ export class Entity implements Clonable<Entity>
 
 	initialize(uwpe: UniverseWorldPlaceEntities): Entity
 	{
-		uwpe.entity = this;
+		uwpe.entitySet(this);
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)
 		{
@@ -116,7 +116,7 @@ export class Entity implements Clonable<Entity>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): Entity
 	{
-		uwpe.entity = this;
+		uwpe.entitySet(this);
 
 		var entityProperties = this.properties;
 		for (var p = 0; p < entityProperties.length; p++)

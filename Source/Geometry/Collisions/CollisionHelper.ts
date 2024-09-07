@@ -263,7 +263,9 @@ export class CollisionHelper
 
 	collisionOfEntities
 	(
-		entityColliding: Entity, entityCollidedWith: Entity, collisionOut: Collision
+		entityColliding: Entity,
+		entityCollidedWith: Entity,
+		collisionOut: Collision
 	): Collision
 	{
 		var collider0 = entityColliding.collidable().collider;
@@ -271,9 +273,8 @@ export class CollisionHelper
 
 		collisionOut = this.collisionOfColliders(collider0, collider1, collisionOut);
 
-		var entitiesColliding = collisionOut.entitiesColliding;
-		entitiesColliding.push(entityColliding);
-		entitiesColliding.push(entityCollidedWith);
+		collisionOut.entityCollidingAdd(entityColliding);
+		collisionOut.entityCollidingAdd(entityCollidedWith);
 
 		return collisionOut;
 	}
@@ -362,8 +363,8 @@ export class CollisionHelper
 				if (doCollide)
 				{
 					var collision = Collision.create();
-					collision.entitiesColliding.push(entity0);
-					collision.entitiesColliding.push(entity1);
+					collision.entityCollidingAdd(entity0);
+					collision.entityCollidingAdd(entity1);
 					returnValues.push(collision);
 				}
 			}

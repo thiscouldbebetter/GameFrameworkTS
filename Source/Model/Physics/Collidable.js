@@ -46,7 +46,7 @@ var ThisCouldBeBetter;
             }
             collideEntities(entityColliding, entityCollidedWith) {
                 var uwpe = this._uwpe.clear().entitySet(entityColliding).entity2Set(entityCollidedWith);
-                var collision = this._collision.clear().entityCollidableAdd(entityColliding).entityCollidableAdd(entityCollidedWith);
+                var collision = this._collision.clear().entityCollidingAdd(entityColliding).entityCollidingAdd(entityCollidedWith);
                 return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
             }
             collideEntitiesForUniverseWorldPlaceEntities(uwpe) {

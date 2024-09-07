@@ -82,10 +82,10 @@ var ThisCouldBeBetter;
                 this.entitiesToSpawn.push(...entitiesToSpawn);
             }
             entitiesSpawn(uwpe) {
-                uwpe.place = this;
+                uwpe.placeSet(this);
                 for (var i = 0; i < this.entitiesToSpawn.length; i++) {
                     var entity = this.entitiesToSpawn[i];
-                    uwpe.entity = entity;
+                    uwpe.entitySet(entity);
                     this.entitySpawn(uwpe);
                 }
                 this.entitiesToSpawn.length = 0;
@@ -111,7 +111,7 @@ var ThisCouldBeBetter;
                 this.entitiesById.delete(entity.id);
             }
             entitySpawn(uwpe) {
-                uwpe.place = this;
+                uwpe.placeSet(this);
                 var entity = uwpe.entity;
                 if (this._entities.indexOf(entity) == -1) // hack
                  {
@@ -141,7 +141,7 @@ var ThisCouldBeBetter;
             }
             // EntityProperties.
             finalize(uwpe) {
-                uwpe.place = this;
+                uwpe.placeSet(this);
                 var universe = uwpe.universe;
                 this.entitiesRemove();
                 universe.inputHelper.inputsRemoveAll();
@@ -152,7 +152,7 @@ var ThisCouldBeBetter;
                 }
             }
             initialize(uwpe) {
-                uwpe.place = this;
+                uwpe.placeSet(this);
                 var world = uwpe.world;
                 var defn = this.defn(world);
                 defn.placeInitialize(uwpe);
@@ -181,7 +181,7 @@ var ThisCouldBeBetter;
                             for (var i = 0; i < entitiesWithProperty.length; i++) {
                                 var entity = entitiesWithProperty[i];
                                 var entityProperty = entity.propertyByName(propertyName);
-                                uwpe.entity = entity;
+                                uwpe.entitySet(entity);
                                 entityProperty.updateForTimerTick(uwpe);
                             }
                         }
@@ -192,7 +192,7 @@ var ThisCouldBeBetter;
             load(uwpe, callback) {
                 if (this.isLoaded == false) {
                     var loadables = this.loadables();
-                    uwpe.place = this;
+                    uwpe.placeSet(this);
                     loadables.forEach(x => x.loadable().load(uwpe.entitySet(x)));
                     this.isLoaded = true;
                 }
@@ -200,7 +200,7 @@ var ThisCouldBeBetter;
             unload(uwpe) {
                 if (this.isLoaded) {
                     var loadables = this.loadables();
-                    uwpe.place = this;
+                    uwpe.placeSet(this);
                     loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x)));
                     this.isLoaded = false;
                 }

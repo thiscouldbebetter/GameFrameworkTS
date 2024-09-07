@@ -16,11 +16,11 @@ export class UniverseWorldPlaceEntities
 		entity2: Entity
 	)
 	{
-		this.universe = universe;
-		this.world = world;
-		this.place = place;
-		this.entity = entity;
-		this.entity2 = entity2;
+		this.universeSet(universe);
+		this.worldSet(world);
+		this.placeSet(place);
+		this.entitySet(entity);
+		this.entity2Set(entity2);
 	}
 
 	static create(): UniverseWorldPlaceEntities
@@ -56,26 +56,26 @@ export class UniverseWorldPlaceEntities
 
 	clear(): UniverseWorldPlaceEntities
 	{
-		this.universe = null;
-		this.world = null;
-		this.place = null;
-		this.entity = null;
-		this.entity2 = null;
+		this.universeSet(null);
+		this.worldSet(null);
+		this.placeSet(null);
+		this.entitySet(null);
+		this.entity2Set(null);
 		return this;
 	}
 
 	entitiesSet(entity: Entity, entity2: Entity): UniverseWorldPlaceEntities
 	{
-		this.entity = entity;
-		this.entity2 = entity2;
+		this.entitySet(entity);
+		this.entity2Set(entity2);
 		return this;
 	}
 
 	entitiesSwap(): UniverseWorldPlaceEntities
 	{
 		var temp = this.entity;
-		this.entity = this.entity2;
-		this.entity2 = temp;
+		this.entitySet(this.entity2);
+		this.entity2Set(temp);
 		return this;
 	}
 
@@ -97,17 +97,23 @@ export class UniverseWorldPlaceEntities
 		entity: Entity, entity2: Entity
 	): UniverseWorldPlaceEntities
 	{
-		this.universe = universe;
-		this.world = world;
-		this.place = place;
-		this.entity = entity;
-		this.entity2 = entity2;
+		this.universeSet(universe);
+		this.worldSet(world);
+		this.placeSet(place);
+		this.entitySet(entity);
+		this.entity2Set(entity2);
 		return this;
 	}
 
 	placeSet(value: Place): UniverseWorldPlaceEntities
 	{
 		this.place = value;
+		return this;
+	}
+
+	universeSet(value: Universe): UniverseWorldPlaceEntities
+	{
+		this.universe = value;
 		return this;
 	}
 
@@ -129,11 +135,11 @@ export class UniverseWorldPlaceEntities
 
 	overwriteWith(other: UniverseWorldPlaceEntities): UniverseWorldPlaceEntities
 	{
-		this.universe = other.universe;
-		this.world = other.world;
-		this.place = other.place;
-		this.entity = other.entity;
-		this.entity2 = other.entity2;
+		this.universeSet(other.universe);
+		this.worldSet(other.world);
+		this.placeSet(other.place);
+		this.entitySet(other.entity);
+		this.entity2Set(other.entity2);
 		return this;
 	}
 

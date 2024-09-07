@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                 */
             }
             initialize(universe) {
-                universe.world = this.world;
+                universe.worldSet(this.world);
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseAndWorld(universe, this.world);
                 this.world.initialize(uwpe);
                 /*

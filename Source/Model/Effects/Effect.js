@@ -51,7 +51,7 @@ var ThisCouldBeBetter;
                 GameFramework.VisualBuilder.Instance().flame(visualDimension), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(1, "Heat");
                     var e = uwpe.entity;
-                    uwpe.entity2 = e;
+                    uwpe.entity2Set(e);
                     e.killable().damageApply(uwpe, damage);
                 });
                 this.Frozen = new Effect("Frozen", 20, // ticksPerCycle
@@ -59,7 +59,7 @@ var ThisCouldBeBetter;
                 GameFramework.VisualCircle.fromRadiusAndColorFill(visualDimension, GameFramework.Color.byName("Cyan")), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(1, "Cold");
                     var e = uwpe.entity;
-                    uwpe.entity2 = e;
+                    uwpe.entity2Set(e);
                     e.killable().damageApply(uwpe, damage);
                 });
                 this.Healing = new Effect("Healing", 40, // ticksPerCycle
@@ -80,7 +80,7 @@ var ThisCouldBeBetter;
                 ]).transform(GameFramework.Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.byName("Red")), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(-1, "Healing");
                     var e = uwpe.entity;
-                    uwpe.entity2 = e;
+                    uwpe.entity2Set(e);
                     e.killable().damageApply(uwpe, damage);
                 });
                 this._All =

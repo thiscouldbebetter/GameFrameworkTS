@@ -146,11 +146,11 @@ export class PlaceBase implements Place, Loadable
 
 	entitiesSpawn(uwpe: UniverseWorldPlaceEntities): void
 	{
-		uwpe.place = this;
+		uwpe.placeSet(this);
 		for (var i = 0; i < this.entitiesToSpawn.length; i++)
 		{
 			var entity = this.entitiesToSpawn[i];
-			uwpe.entity = entity;
+			uwpe.entitySet(entity);
 			this.entitySpawn(uwpe);
 		}
 
@@ -189,7 +189,7 @@ export class PlaceBase implements Place, Loadable
 
 	entitySpawn(uwpe: UniverseWorldPlaceEntities): void
 	{
-		uwpe.place = this;
+		uwpe.placeSet(this);
 
 		var entity = uwpe.entity;
 
@@ -238,7 +238,7 @@ export class PlaceBase implements Place, Loadable
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		uwpe.place = this;
+		uwpe.placeSet(this);
 		var universe = uwpe.universe;
 		this.entitiesRemove();
 		universe.inputHelper.inputsRemoveAll();
@@ -252,7 +252,7 @@ export class PlaceBase implements Place, Loadable
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		uwpe.place = this;
+		uwpe.placeSet(this);
 		var world = uwpe.world;
 		var defn = this.defn(world);
 		defn.placeInitialize(uwpe);
@@ -296,7 +296,7 @@ export class PlaceBase implements Place, Loadable
 					{
 						var entity = entitiesWithProperty[i];
 						var entityProperty = entity.propertyByName(propertyName);
-						uwpe.entity = entity;
+						uwpe.entitySet(entity);
 						entityProperty.updateForTimerTick(uwpe);
 					}
 				}
@@ -315,7 +315,7 @@ export class PlaceBase implements Place, Loadable
 		if (this.isLoaded == false)
 		{
 			var loadables = this.loadables();
-			uwpe.place = this;
+			uwpe.placeSet(this);
 			loadables.forEach(x => x.loadable().load(uwpe.entitySet(x) ) );
 			this.isLoaded = true;
 		}
@@ -326,7 +326,7 @@ export class PlaceBase implements Place, Loadable
 		if (this.isLoaded)
 		{
 			var loadables = this.loadables();
-			uwpe.place = this;
+			uwpe.placeSet(this);
 			loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x) ) );
 			this.isLoaded = false;
 		}

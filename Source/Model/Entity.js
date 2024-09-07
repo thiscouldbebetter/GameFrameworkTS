@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                 return new Entity(null, [property]);
             }
             finalize(uwpe) {
-                uwpe.entity = this;
+                uwpe.entitySet(this);
                 var entityProperties = this.properties;
                 for (var p = 0; p < entityProperties.length; p++) {
                     var property = entityProperties[p];
@@ -30,7 +30,7 @@ var ThisCouldBeBetter;
                 return this;
             }
             initialize(uwpe) {
-                uwpe.entity = this;
+                uwpe.entitySet(this);
                 var entityProperties = this.properties;
                 for (var p = 0; p < entityProperties.length; p++) {
                     var property = entityProperties[p];
@@ -74,7 +74,7 @@ var ThisCouldBeBetter;
                 return this;
             }
             updateForTimerTick(uwpe) {
-                uwpe.entity = this;
+                uwpe.entitySet(this);
                 var entityProperties = this.properties;
                 for (var p = 0; p < entityProperties.length; p++) {
                     var property = entityProperties[p];

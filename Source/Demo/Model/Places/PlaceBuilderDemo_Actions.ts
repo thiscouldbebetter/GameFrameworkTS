@@ -42,7 +42,7 @@ class PlaceBuilderDemo_Actions
 					if (actorHasWieldableEquipped)
 					{
 						var deviceWieldable = entityWieldableEquipped.device();
-						uwpe.entity2 = entityWieldableEquipped;
+						uwpe.entity2Set(entityWieldableEquipped);
 						deviceWieldable.use(uwpe);
 					}
 				}
@@ -216,7 +216,7 @@ class PlaceBuilderDemo_Actions
 					if (entityUsablesWithinReach.length > 0)
 					{
 						var entityToUse = entityUsablesWithinReach[0];
-						uwpe.entity2 = entityToUse;
+						uwpe.entity2Set(entityToUse);
 						entityToUse.usable().use(uwpe);
 					}
 				}

@@ -31,7 +31,7 @@ var ThisCouldBeBetter;
                 }
             }
             initialize(uwpe) {
-                uwpe.world = this;
+                uwpe.worldSet(this);
                 if (this.placeNextName != null) {
                     var placeNext = this.placeGetByName(this.placeNextName);
                     this.placeNextSet(placeNext);
@@ -45,7 +45,7 @@ var ThisCouldBeBetter;
                     this.placeNextSet(null);
                 }
                 if (this.placeCurrent != null) {
-                    uwpe.place = this.placeCurrent;
+                    uwpe.placeSet(this.placeCurrent);
                     this.placeCurrent.initialize(uwpe);
                 }
             }
@@ -69,14 +69,14 @@ var ThisCouldBeBetter;
                 return new GameFramework.VenueWorld(this);
             }
             updateForTimerTick(uwpe) {
-                uwpe.world = this;
+                uwpe.worldSet(this);
                 if (this.placeNext != null) {
                     if (this.placeCurrent != null) {
                         this.placeCurrent.finalize(uwpe);
                     }
                     this.placeCurrent = this.placeNext;
                     this.placeNextSet(null);
-                    uwpe.place = this.placeCurrent;
+                    uwpe.placeSet(this.placeCurrent);
                     this.placeCurrent.initialize(uwpe);
                 }
                 this.placeCurrent.updateForTimerTick(uwpe);

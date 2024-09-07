@@ -169,9 +169,8 @@ var ThisCouldBeBetter;
                 var collider0 = entityColliding.collidable().collider;
                 var collider1 = entityCollidedWith.collidable().collider;
                 collisionOut = this.collisionOfColliders(collider0, collider1, collisionOut);
-                var entitiesColliding = collisionOut.entitiesColliding;
-                entitiesColliding.push(entityColliding);
-                entitiesColliding.push(entityCollidedWith);
+                collisionOut.entityCollidingAdd(entityColliding);
+                collisionOut.entityCollidingAdd(entityCollidedWith);
                 return collisionOut;
             }
             collisionOfColliders(collider0, collider1, collisionOut) {
@@ -221,8 +220,8 @@ var ThisCouldBeBetter;
                         var doCollide = this.doEntitiesCollide(entity0, entity1);
                         if (doCollide) {
                             var collision = GameFramework.Collision.create();
-                            collision.entitiesColliding.push(entity0);
-                            collision.entitiesColliding.push(entity1);
+                            collision.entityCollidingAdd(entity0);
+                            collision.entityCollidingAdd(entity1);
                             returnValues.push(collision);
                         }
                     }
