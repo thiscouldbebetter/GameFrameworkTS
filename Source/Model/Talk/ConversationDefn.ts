@@ -167,6 +167,19 @@ export class ConversationDefn
 					+ nextFieldsThatDoNotMatch.join(", ");
 				errorsSoFar.push(error);
 			}
+
+			var optionNodesWithNoNextField =
+				nodes.filter(x => x.defnName == "Option" && x.next == null);
+
+			if (optionNodesWithNoNextField.length > 0)
+			{
+				var optionNodeContents =
+					optionNodesWithNoNextField.map(x => "'" + x.content + "'");
+				var error =
+					"one or more Option nodes have no next fields specified: "
+					+ optionNodeContents.join(", ");
+				errorsSoFar.push(error);
+			}
 		}
 
 		return errorsSoFar;
