@@ -215,7 +215,8 @@ class TalkNodeDefn_Instances
 				var variableName = talkNode.content;
 				var talkNodeNameToJumpTo = talkNode.next;
 				var variableValue = conversationRun.variableByName(variableName);
-				if ((variableValue as boolean) == true)
+				var variableValueAsString = variableValue == null ? null : variableValue.toString();
+				if (variableValueAsString == "true")
 				{
 					conversationRun.talkNodeAdvance(universe);
 				}
@@ -244,7 +245,8 @@ class TalkNodeDefn_Instances
 				var variableName = talkNode.content;
 				var talkNodeNameToJumpTo = talkNode.next;
 				var variableValue = conversationRun.variableByName(variableName);
-				if ((variableValue as boolean) == true)
+				var variableValueAsString = variableValue == null ? null : variableValue.toString();
+				if (variableValueAsString == "true")
 				{
 					var nodeNext = conversationRun.defn.talkNodeByName
 					(

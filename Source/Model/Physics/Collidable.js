@@ -47,10 +47,11 @@ var ThisCouldBeBetter;
             collideEntities(entityColliding, entityCollidedWith) {
                 var uwpe = this._uwpe.clear().entitySet(entityColliding).entity2Set(entityCollidedWith);
                 var collision = this._collision.clear().entityCollidingAdd(entityColliding).entityCollidingAdd(entityCollidedWith);
-                return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
+                var returnValue = this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
+                return returnValue;
             }
             collideEntitiesForUniverseWorldPlaceEntities(uwpe) {
-                this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, null);
+                return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, null);
             }
             collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision) {
                 if (this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision != null) {

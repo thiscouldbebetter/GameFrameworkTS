@@ -334,11 +334,15 @@ export class ConversationRun
 	): void
 	{
 		var variablesByNameToExport = this.variablesByName;
-		for (var variableName in variablesByNameToExport)
+		for (var [variableName, variableValue] of variablesByNameToExport)
 		{
-			var variableValue = this.variableByName(variableName).toString();
+			var variableValueAsString = variableValue.toString();
 			var scriptExpressionWithValue =
-				variableLookupExpression.split("$key").join(variableName).split("$value").join(variableValue);
+				variableLookupExpression
+					.split("$key")
+					.join("\"" + variableName + "\"")
+					.split("$value")
+					.join("\"" + variableValueAsString + "\"");
 			var scriptToRunAsString =
 				"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
 			var scriptToRun = eval(scriptToRunAsString);
@@ -355,9 +359,8 @@ export class ConversationRun
 		var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
 		var scriptToRun = eval(scriptText);
 		var variablesByNameToImportFrom = scriptToRun(universe, this);
-		for (var variableName in variablesByNameToImportFrom)
+		for (var [variableName, variableValue] of variablesByNameToImportFrom)
 		{
-			var variableValue = variablesByNameToImportFrom.get(variableName);
 			this.variableSet(variableName, variableValue);
 		}
 	}

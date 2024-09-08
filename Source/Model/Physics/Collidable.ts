@@ -132,15 +132,18 @@ export class Collidable implements EntityProperty<Collidable>
 				entityCollidedWith
 			);
 
-		return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
-		(
-			uwpe, collision
-		)
+		var returnValue =
+			this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
+			(
+				uwpe, collision
+			);
+
+		return returnValue;
 	}
 
-	collideEntitiesForUniverseWorldPlaceEntities(uwpe: UniverseWorldPlaceEntities)
+	collideEntitiesForUniverseWorldPlaceEntities(uwpe: UniverseWorldPlaceEntities): Collision
 	{
-		this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, null);
+		return this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, null);
 	}
 
 	collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
@@ -170,7 +173,7 @@ export class Collidable implements EntityProperty<Collidable>
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		collision: Collision
-	)
+	): void
 	{
 		var collisionAsString = collision.toString();
 		var message = "Collision detected: " + collisionAsString;

@@ -81,7 +81,8 @@ var ThisCouldBeBetter;
                     var variableName = talkNode.content;
                     var talkNodeNameToJumpTo = talkNode.next;
                     var variableValue = conversationRun.variableByName(variableName);
-                    if (variableValue == true) {
+                    var variableValueAsString = variableValue == null ? null : variableValue.toString();
+                    if (variableValueAsString == "true") {
                         conversationRun.talkNodeAdvance(universe);
                     }
                     else {
@@ -96,7 +97,8 @@ var ThisCouldBeBetter;
                     var variableName = talkNode.content;
                     var talkNodeNameToJumpTo = talkNode.next;
                     var variableValue = conversationRun.variableByName(variableName);
-                    if (variableValue == true) {
+                    var variableValueAsString = variableValue == null ? null : variableValue.toString();
+                    if (variableValueAsString == "true") {
                         var nodeNext = conversationRun.defn.talkNodeByName(talkNodeNameToJumpTo);
                         conversationRun.talkNodeCurrentSet(nodeNext);
                     }

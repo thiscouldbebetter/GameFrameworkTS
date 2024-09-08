@@ -195,9 +195,13 @@ var ThisCouldBeBetter;
             }
             variablesExport(universe, variableLookupExpression) {
                 var variablesByNameToExport = this.variablesByName;
-                for (var variableName in variablesByNameToExport) {
-                    var variableValue = this.variableByName(variableName).toString();
-                    var scriptExpressionWithValue = variableLookupExpression.split("$key").join(variableName).split("$value").join(variableValue);
+                for (var [variableName, variableValue] of variablesByNameToExport) {
+                    var variableValueAsString = variableValue.toString();
+                    var scriptExpressionWithValue = variableLookupExpression
+                        .split("$key")
+                        .join("\"" + variableName + "\"")
+                        .split("$value")
+                        .join("\"" + variableValueAsString + "\"");
                     var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
                     var scriptToRun = eval(scriptToRunAsString);
                     scriptToRun(universe, this);
@@ -207,8 +211,7 @@ var ThisCouldBeBetter;
                 var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
                 var scriptToRun = eval(scriptText);
                 var variablesByNameToImportFrom = scriptToRun(universe, this);
-                for (var variableName in variablesByNameToImportFrom) {
-                    var variableValue = variablesByNameToImportFrom.get(variableName);
+                for (var [variableName, variableValue] of variablesByNameToImportFrom) {
                     this.variableSet(variableName, variableValue);
                 }
             }
