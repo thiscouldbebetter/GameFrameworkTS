@@ -69,449 +69,28 @@ class TalkNodeDefn_Instances
 
 	constructor()
 	{
-		this.Disable = new TalkNodeDefn
-		(
-			"Disable",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var talkNodesToDisablePrefixesJoined =
-					talkNode.next;
+		var tnd = (n: string, e: (u: Universe, r: ConversationRun) => void) => new TalkNodeDefn(n, e);
 
-				var talkNodesToDisablePrefixes =
-					talkNodesToDisablePrefixesJoined.split(",");
-
-				var talkNodesToDisableAsArrays = talkNodesToDisablePrefixes.map
-				(
-					prefix => conversationRun.nodesByPrefix(prefix)
-				);
-
-				var talkNodesToDisable =
-					ArrayHelper.flattenArrayOfArrays(talkNodesToDisableAsArrays);
-
-				talkNodesToDisable.forEach
-				(
-					talkNodeToDisable => 
-						conversationRun.disable(talkNodeToDisable.name)
-				);
-
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.Display = new TalkNodeDefn
-		(
-			"Display",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var scope = conversationRun.scopeCurrent;
-				var talkNode = conversationRun.talkNodeCurrent();
-
-				talkNode.contentVariablesSubstitute(conversationRun);
-
-				if (scope.displayLinesCurrent == null)
-				{
-					scope.displayLinesCurrent = talkNode.content.split("\n");
-				}
-
-				scope.displayTextCurrentAdvance();
-
-				var displayTextCurrent = scope.displayTextCurrent();
-				if (displayTextCurrent == null)
-				{
-					scope.displayLinesCurrent = null;
-					conversationRun.talkNodeGoToNext(universe);
-					conversationRun.talkNodeCurrentExecute(universe);
-				}
-				else
-				{
-					var nodeForTranscript = TalkNode.display
-					(
-						null, displayTextCurrent
-					)
-					conversationRun.talkNodesForTranscript.push(nodeForTranscript);
-				}
-			}
-		);
-
-		this.DoNothing = new TalkNodeDefn
-		(
-			"DoNothing",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.Enable = new TalkNodeDefn
-		(
-			"Enable",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-
-				var talkNodesToEnablePrefixesJoined =
-					talkNode.next;
-
-				var talkNodesToEnablePrefixes =
-					talkNodesToEnablePrefixesJoined.split(",");
-
-				var talkNodesToEnableAsArrays = talkNodesToEnablePrefixes.map
-				(
-					prefix => conversationRun.nodesByPrefix(prefix)
-				);
-
-				var talkNodesToEnable =
-					ArrayHelper.flattenArrayOfArrays(talkNodesToEnableAsArrays);
-
-				talkNodesToEnable.forEach
-				(
-					talkNodeToEnable => 
-						conversationRun.enable(talkNodeToEnable.name)
-				);
-
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.Goto = new TalkNodeDefn
-		(
-			"Goto",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var talkNodeNameNext = talkNode.next;
-				conversationRun.goto(talkNodeNameNext, universe);
-			}
-		);
-
-		this.JumpIfFalse = new TalkNodeDefn
-		(
-			"JumpIfFalse",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var variableName = talkNode.content;
-				var talkNodeNameToJumpTo = talkNode.next;
-				var variableValue = conversationRun.variableByName(variableName);
-				var variableValueAsString = variableValue == null ? null : variableValue.toString();
-				if (variableValueAsString == "true")
-				{
-					conversationRun.talkNodeAdvance(universe);
-				}
-				else
-				{
-					var nodeNext = conversationRun.defn.talkNodeByName
-					(
-						talkNodeNameToJumpTo
-					);
-					conversationRun.talkNodeCurrentSet(nodeNext);
-				}
-
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.JumpIfTrue = new TalkNodeDefn
-		(
-			"JumpIfTrue",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var variableName = talkNode.content;
-				var talkNodeNameToJumpTo = talkNode.next;
-				var variableValue = conversationRun.variableByName(variableName);
-				var variableValueAsString = variableValue == null ? null : variableValue.toString();
-				if (variableValueAsString == "true")
-				{
-					var nodeNext = conversationRun.defn.talkNodeByName
-					(
-						talkNodeNameToJumpTo
-					);
-					conversationRun.talkNodeCurrentSet(nodeNext);
-				}
-				else
-				{
-					conversationRun.talkNodeAdvance(universe);
-				}
-
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.Option = new TalkNodeDefn
-		(
-			"Option",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var scope = conversationRun.scopeCurrent;
-				var talkNode = conversationRun.talkNodeCurrent();
-
-				var talkNodesForOptions = scope.talkNodesForOptions;
-				if (talkNodesForOptions.indexOf(talkNode) == -1)
-				{
-					talkNodesForOptions.push(talkNode);
-					scope.talkNodesForOptionsByName.set(talkNode.name, talkNode);
-				}
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.OptionsClear = new TalkNodeDefn
-		(
-			"OptionsClear",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var scope = conversationRun.scopeCurrent;
-
-				var talkNodesForOptions = scope.talkNodesForOptions;
-				talkNodesForOptions.length = 0;
-
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.Pop = new TalkNodeDefn
-		(
-			"Pop",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var scope = conversationRun.scopeCurrent;
-				var talkNode = conversationRun.talkNodeCurrent();
-
-				scope = scope.parent;
-				conversationRun.scopeCurrent = scope;
-				if (talkNode.next != null)
-				{
-					var nodeNext = conversationRun.defn.talkNodeByName
-					(
-						talkNode.next
-					);
-					conversationRun.talkNodeCurrentSet(nodeNext);
-				}
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.Prompt = new TalkNodeDefn
-		(
-			"Prompt",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var scope = conversationRun.scopeCurrent;
-				scope.isPromptingForResponse = true;
-			}
-		);
-
-		this.Push = new TalkNodeDefn
-		(
-			"Push",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNodeToPushTo = conversationRun.talkNodeNext();
-
-				var talkNodeToReturnTo = conversationRun.talkNodePrev();
-				conversationRun.talkNodeCurrentSet(talkNodeToReturnTo);
-
-				conversationRun.scopeCurrent = new ConversationScope
-				(
-					conversationRun.scopeCurrent, // parent
-					talkNodeToPushTo,
-					[] // options
-				);
-				conversationRun.talkNodeCurrentExecute(universe);
-			}
-		);
-
-		this.Quit = new TalkNodeDefn
-		(
-			"Quit",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				conversationRun.quit(universe);
-			}
-		);
-
-		this.Script = new TalkNodeDefn
-		(
-			"Script",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var scriptToRunAsString = "( (u, cr) => " + talkNode.content + ")";
-				var scriptToRun = eval(scriptToRunAsString);
-				scriptToRun(universe, conversationRun);
-				conversationRun.talkNodeGoToNext(universe);
-				conversationRun.talkNodeCurrentExecute(universe); // hack
-			}
-		);
-
-		this.Switch = new TalkNodeDefn
-		(
-			"Switch",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var variableName = talkNode.content;
-				var variableValueActual =
-					conversationRun.variableByName(variableName);
-				var variableValueAndNodeNextNamePairs =
-					talkNode.next.split(";").map(x => x.split(":"));
-
-				var talkNodeNextName = variableValueAndNodeNextNamePairs.find
-				(
-					x => x[0] == variableValueActual
-				)[1];
-
-				conversationRun.goto(talkNodeNextName, universe);
-			}
-		);
-
-		this.VariableLoad = new TalkNodeDefn
-		(
-			"VariableLoad",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var variableName = talkNode.content;
-				var scriptExpression = talkNode.next;
-
-				conversationRun.variableLoad(universe, variableName, scriptExpression);
-
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe); // hack
-			}
-		);
-
-		this.VariableSet = new TalkNodeDefn
-		(
-			"VariableSet",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var variableName = talkNode.content;
-				var variableValue = talkNode.next;
-
-				conversationRun.variableSet(variableName, variableValue);
-
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe); // hack
-			}
-		);
-
-		this.VariableStore = new TalkNodeDefn
-		(
-			"VariableStore",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var variableName = talkNode.content;
-				var scriptExpression = talkNode.next;
-
-				conversationRun.variableStore(universe, variableName, scriptExpression);
-
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe); // hack
-			}
-		);
-
-		this.VariablesExport = new TalkNodeDefn
-		(
-			"VariablesExport",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var variableLookupToExportToName = talkNode.content;
-
-				conversationRun.variablesExport(universe, variableLookupToExportToName);
-
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe); // hack
-			}
-		);
-
-		this.VariablesImport = new TalkNodeDefn
-		(
-			"VariablesImport",
-			(
-				universe: Universe,
-				conversationRun: ConversationRun
-			) => // execute
-			{
-				var talkNode = conversationRun.talkNodeCurrent();
-				var variableLookupToImportFromExpression = talkNode.content;
-
-				conversationRun.variablesImport
-				(
-					universe, variableLookupToImportFromExpression
-				);
-
-				conversationRun.talkNodeAdvance(universe);
-				conversationRun.talkNodeCurrentExecute(universe); // hack
-			}
-		);
+		this.Disable 			= tnd("Disable", this.disable);
+		this.Display 			= tnd("Display", this.display);
+		this.DoNothing 			= tnd("DoNothing", this.doNothing);
+		this.Enable 			= tnd("Enable", this.enable);
+		this.Goto 				= tnd("Goto", this.goto);
+		this.JumpIfFalse 		= tnd("JumpIfFalse", this.jumpIfFalse);
+		this.JumpIfTrue 		= tnd("JumpIfTrue", this.jumpIfTrue);
+		this.Option 			= tnd("Option", this.option);
+		this.OptionsClear 		= tnd("OptionsClear", this.optionsClear);
+		this.Pop 				= tnd("Pop", this.pop);
+		this.Prompt 			= tnd("Prompt", this.prompt);
+		this.Push 				= tnd("Push", this.push);
+		this.Quit 				= tnd("Quit", this.quit);
+		this.Script 			= tnd("Script", this.script);
+		this.Switch 			= tnd("Switch", this._switch);
+		this.VariableLoad 		= tnd("VariableLoad", this.variableLoad);
+		this.VariableSet 		= tnd("VariableSet", this.variableSet);
+		this.VariableStore 		= tnd("VariableStore", this.variableStore);
+		this.VariablesExport 	= tnd("VariablesExport", this.variablesExport);
+		this.VariablesImport 	= tnd("VariablesImport", this.variablesImport);
 
 		this._All =
 		[
@@ -539,6 +118,312 @@ class TalkNodeDefn_Instances
 
 		this._AllByName = ArrayHelper.addLookupsByName(this._All);
 	}
+
+	disable(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var talkNodesToDisablePrefixesJoined =
+			talkNode.next;
+
+		var talkNodesToDisablePrefixes =
+			talkNodesToDisablePrefixesJoined.split(",");
+
+		var talkNodesToDisableAsArrays = talkNodesToDisablePrefixes.map
+		(
+			prefix => conversationRun.nodesByPrefix(prefix)
+		);
+
+		var talkNodesToDisable =
+			ArrayHelper.flattenArrayOfArrays(talkNodesToDisableAsArrays);
+
+		talkNodesToDisable.forEach
+		(
+			talkNodeToDisable => 
+				conversationRun.disable(talkNodeToDisable.name)
+		);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	display(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var scope = conversationRun.scopeCurrent;
+		var talkNode = conversationRun.talkNodeCurrent();
+
+		talkNode.contentVariablesSubstitute(conversationRun);
+
+		if (scope.displayLinesCurrent == null)
+		{
+			scope.displayLinesCurrent = talkNode.content.split("\n");
+		}
+
+		scope.displayTextCurrentAdvance();
+
+		var displayTextCurrent = scope.displayTextCurrent();
+		if (displayTextCurrent == null)
+		{
+			scope.displayLinesCurrent = null;
+			conversationRun.talkNodeGoToNext(universe);
+			conversationRun.talkNodeCurrentExecute(universe);
+		}
+		else
+		{
+			var nodeForTranscript = TalkNode.display
+			(
+				null, displayTextCurrent
+			)
+			conversationRun.talkNodesForTranscript.push(nodeForTranscript);
+		}
+	}
+
+	doNothing(universe: Universe, conversationRun: ConversationRun): void
+	{
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	enable(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+
+		var talkNodesToEnablePrefixesJoined =
+			talkNode.next;
+
+		var talkNodesToEnablePrefixes =
+			talkNodesToEnablePrefixesJoined.split(",");
+
+		var talkNodesToEnableAsArrays = talkNodesToEnablePrefixes.map
+		(
+			prefix => conversationRun.nodesByPrefix(prefix)
+		);
+
+		var talkNodesToEnable =
+			ArrayHelper.flattenArrayOfArrays(talkNodesToEnableAsArrays);
+
+		talkNodesToEnable.forEach
+		(
+			talkNodeToEnable => 
+				conversationRun.enable(talkNodeToEnable.name)
+		);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	goto(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var talkNodeNameNext = talkNode.next;
+		conversationRun.goto(talkNodeNameNext, universe);
+	}
+
+	jumpIfFalse(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var variableName = talkNode.content;
+		var talkNodeNameToJumpTo = talkNode.next;
+		var variableValue = conversationRun.variableByName(variableName);
+		var variableValueAsString = variableValue == null ? null : variableValue.toString();
+		if (variableValueAsString == "true")
+		{
+			conversationRun.talkNodeAdvance(universe);
+		}
+		else
+		{
+			var nodeNext = conversationRun.defn.talkNodeByName
+			(
+				talkNodeNameToJumpTo
+			);
+			conversationRun.talkNodeCurrentSet(nodeNext);
+		}
+
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	jumpIfTrue(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var variableName = talkNode.content;
+		var talkNodeNameToJumpTo = talkNode.next;
+		var variableValue = conversationRun.variableByName(variableName);
+		var variableValueAsString = variableValue == null ? null : variableValue.toString();
+		if (variableValueAsString == "true")
+		{
+			var nodeNext = conversationRun.defn.talkNodeByName
+			(
+				talkNodeNameToJumpTo
+			);
+			conversationRun.talkNodeCurrentSet(nodeNext);
+		}
+		else
+		{
+			conversationRun.talkNodeAdvance(universe);
+		}
+
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	option(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var scope = conversationRun.scopeCurrent;
+		var talkNode = conversationRun.talkNodeCurrent();
+
+		var talkNodesForOptions = scope.talkNodesForOptions;
+		if (talkNodesForOptions.indexOf(talkNode) == -1)
+		{
+			talkNodesForOptions.push(talkNode);
+			scope.talkNodesForOptionsByName.set(talkNode.name, talkNode);
+		}
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	optionsClear(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var scope = conversationRun.scopeCurrent;
+
+		var talkNodesForOptions = scope.talkNodesForOptions;
+		talkNodesForOptions.length = 0;
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	pop(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var scope = conversationRun.scopeCurrent;
+		var talkNode = conversationRun.talkNodeCurrent();
+
+		scope = scope.parent;
+		conversationRun.scopeCurrent = scope;
+		if (talkNode.next != null)
+		{
+			var nodeNext = conversationRun.defn.talkNodeByName
+			(
+				talkNode.next
+			);
+			conversationRun.talkNodeCurrentSet(nodeNext);
+		}
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	prompt(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var scope = conversationRun.scopeCurrent;
+		scope.isPromptingForResponse = true;
+	}
+
+
+	push(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNodeToPushTo = conversationRun.talkNodeNext();
+
+		var talkNodeToReturnTo = conversationRun.talkNodePrev();
+		conversationRun.talkNodeCurrentSet(talkNodeToReturnTo);
+
+		conversationRun.scopeCurrent = new ConversationScope
+		(
+			conversationRun.scopeCurrent, // parent
+			talkNodeToPushTo,
+			[] // options
+		);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	quit(universe: Universe, conversationRun: ConversationRun): void
+	{
+		conversationRun.quit(universe);
+	}
+
+	script(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var scriptToRunAsString = "( (u, cr) => " + talkNode.content + ")";
+		var scriptToRun = eval(scriptToRunAsString);
+		scriptToRun(universe, conversationRun);
+		conversationRun.talkNodeGoToNext(universe);
+		conversationRun.talkNodeCurrentExecute(universe); // hack
+	}
+
+	_switch(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var variableName = talkNode.content;
+		var variableValueActual =
+			conversationRun.variableByName(variableName);
+		var variableValueAndNodeNextNamePairs =
+			talkNode.next.split(";").map(x => x.split(":"));
+
+		var talkNodeNextName = variableValueAndNodeNextNamePairs.find
+		(
+			x => x[0] == variableValueActual
+		)[1];
+
+		conversationRun.goto(talkNodeNextName, universe);
+	}
+
+	variableLoad(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var variableName = talkNode.content;
+		var scriptExpression = talkNode.next;
+
+		conversationRun.variableLoad(universe, variableName, scriptExpression);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe); // hack
+	}
+
+	variableSet(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var variableName = talkNode.content;
+		var variableValue = talkNode.next;
+
+		conversationRun.variableSet(variableName, variableValue);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe); // hack
+	}
+
+	variableStore(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var variableName = talkNode.content;
+		var scriptExpression = talkNode.next;
+
+		conversationRun.variableStore(universe, variableName, scriptExpression);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe); // hack
+	}
+
+	variablesExport(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var variableLookupToExportToName = talkNode.content;
+
+		conversationRun.variablesExport(universe, variableLookupToExportToName);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe); // hack
+	}
+
+	variablesImport(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var variableLookupToImportFromExpression = talkNode.content;
+
+		conversationRun.variablesImport
+		(
+			universe, variableLookupToImportFromExpression
+		);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe); // hack
+	}
+
 }
 
 }
