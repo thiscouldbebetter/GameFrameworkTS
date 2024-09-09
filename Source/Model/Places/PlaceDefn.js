@@ -5,7 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class PlaceDefn {
             constructor(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess, placeInitialize, placeFinalize) {
-                this.name = name;
+                this.name = name || PlaceDefn.name + "Default";
                 this.soundForMusicName = soundForMusicName;
                 this.actions = actions || [];
                 this.actionToInputsMappingsDefault = actionToInputsMappings || [];
@@ -18,7 +18,7 @@ var ThisCouldBeBetter;
                 this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
             }
             static default() {
-                return new PlaceDefn("Default", // name,
+                return new PlaceDefn(null, // name,
                 null, // soundForMusicName
                 [], // actions,
                 [], // actionToInputsMappings,
@@ -29,11 +29,14 @@ var ThisCouldBeBetter;
             }
             static fromNameAndPropertyNamesToProcess(name, propertyNamesToProcess) {
                 return new PlaceDefn(name, null, // soundForMusicName
-                [], // actions,
-                [], // actionToInputsMappings,
+                [], // actions
+                [], // actionToInputsMapping,
                 propertyNamesToProcess, null, // placeInitialize
                 null // placeFinalize
                 );
+            }
+            static fromPropertyNamesToProcess(propertyNamesToProcess) {
+                return PlaceDefn.fromNameAndPropertyNamesToProcess(PlaceDefn.name, propertyNamesToProcess);
             }
             static from5(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess) {
                 return new PlaceDefn(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess, null, null // placeInitialize, placeFinalize

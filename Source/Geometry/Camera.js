@@ -97,8 +97,8 @@ var ThisCouldBeBetter;
                 collisionTracker.entityReset(cameraEntity);
                 var cameraCollidable = cameraEntity.collidable();
                 //cameraCollidable.isDisabled = false;
-                cameraCollidable.entitiesAlreadyCollidedWith.length = 0;
-                var collisions = collisionTracker.entityCollidableAddAndFindCollisions(cameraEntity, collisionHelper, new Array());
+                cameraCollidable.entitiesAlreadyCollidedWithClear();
+                var collisions = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, cameraEntity, collisionHelper, new Array());
                 var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
                 var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
                 entitiesInView =

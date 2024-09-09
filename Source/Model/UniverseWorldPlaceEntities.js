@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new UniverseWorldPlaceEntities(null, null, null, null, null);
             }
+            static fromEntity(entity) {
+                return new UniverseWorldPlaceEntities(null, null, null, entity, null);
+            }
             static fromUniverse(universe) {
                 return new UniverseWorldPlaceEntities(universe, null, null, null, null);
             }
@@ -23,8 +26,8 @@ var ThisCouldBeBetter;
             static fromUniverseWorldAndPlace(universe, world, place) {
                 return new UniverseWorldPlaceEntities(universe, world, place, null, null);
             }
-            static fromEntity(entity) {
-                return new UniverseWorldPlaceEntities(null, null, null, entity, null);
+            static fromWorldAndPlace(world, place) {
+                return new UniverseWorldPlaceEntities(null, world, place, null, null);
             }
             clear() {
                 this.universeSet(null);

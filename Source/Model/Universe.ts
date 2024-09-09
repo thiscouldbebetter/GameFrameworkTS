@@ -146,7 +146,14 @@ export class Universe
 		return universe;
 	}
 
-	// instance methods
+	static fromWorld(world: World)
+	{
+		var universe = Universe.default();
+		universe.world = world;
+		return universe;
+	}
+
+	// Instance methods.
 
 	initialize(callback: (u: Universe) => void): void
 	{
@@ -233,10 +240,12 @@ export class Universe
 			this.venueStack.push(venueNext);
 			this.venueNextClear();
 
-			this.venueCurrent().initialize(this);
+			venueCurrent = this.venueCurrent();
+			venueCurrent.initialize(this);
 		}
 
-		this.venueCurrent().updateForTimerTick(this);
+		var venueCurrent = this.venueCurrent();
+		venueCurrent.updateForTimerTick(this);
 
 		this.displayRecorder.updateForTimerTick(this);
 	}

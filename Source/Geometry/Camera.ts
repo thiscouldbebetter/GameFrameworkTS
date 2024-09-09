@@ -251,10 +251,10 @@ export class Camera implements EntityProperty<Camera>
 
 		var cameraCollidable = cameraEntity.collidable();
 		//cameraCollidable.isDisabled = false;
-		cameraCollidable.entitiesAlreadyCollidedWith.length = 0;
+		cameraCollidable.entitiesAlreadyCollidedWithClear();
 		var collisions = collisionTracker.entityCollidableAddAndFindCollisions
 		(
-			cameraEntity, collisionHelper, new Array<Collision>()
+			uwpe, cameraEntity, collisionHelper, new Array<Collision>()
 		);
 		var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
 		var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);

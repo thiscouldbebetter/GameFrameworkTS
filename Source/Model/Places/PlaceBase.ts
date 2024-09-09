@@ -45,7 +45,19 @@ export class PlaceBase implements Place, Loadable
 		return new PlaceBase
 		(
 			"Default",
-			"Default", // defnName,
+			PlaceDefn + "Default", // defnName,
+			null, // parentName
+			Coords.fromXY(1, 1).multiplyScalar(1000), // size
+			null // entities
+		);
+	}
+
+	static fromPlaceDefn(placeDefn: PlaceDefn): PlaceBase
+	{
+		return new PlaceBase
+		(
+			PlaceBase.name + "FromPlaceDefn" + placeDefn.name,
+			placeDefn.name,
 			null, // parentName
 			Coords.fromXY(1, 1).multiplyScalar(1000), // size
 			null // entities
@@ -54,7 +66,7 @@ export class PlaceBase implements Place, Loadable
 
 	defn(world: World): PlaceDefn
 	{
-		return world.defn.placeDefnByName(this.defnName);
+		return world.placeDefnByName(this.defnName);
 	}
 
 	placeParent(world: World): Place

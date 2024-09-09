@@ -23,12 +23,12 @@ export class World //
 		placeInitialName: string
 	)
 	{
-		this.name = name;
-		this.dateCreated = dateCreated;
+		this.name = name || World.name;
+		this.dateCreated = dateCreated || DateTime.now();
 
 		this.timerTicksSoFar = 0;
 
-		this.defn = defn;
+		this.defn = defn || WorldDefn.default();
 
 		this._placeGetByName = placeGetByName;
 		this.placeNextName = placeInitialName;
@@ -36,14 +36,16 @@ export class World //
 
 	static default(): World
 	{
+		var placeDefn = PlaceDefn.default();
+
+		var place = PlaceBase.fromPlaceDefn(placeDefn);
+
 		return World.fromNameDateCreatedDefnAndPlaces
 		(
-			"name",
-			DateTime.now(),
-			WorldDefn.default(),
-			[
-				PlaceBase.default()
-			]
+			null, // name
+			null, // dateCreated
+			WorldDefn.fromPlaceDefns([ placeDefn ]), // defn
+			[ place ]
 		);
 	}
 
@@ -63,6 +65,21 @@ export class World //
 			name, dateCreated, defn, placeGetByName, placeInitialName
 		);
 		return returnValue;
+	}
+
+	static fromPlaceWithDefn(place: Place, placeDefn: PlaceDefn): World
+	{
+		var worldDefn = WorldDefn.fromPlaceDefns( [ placeDefn ] );
+
+		var world = World.fromNameDateCreatedDefnAndPlaces
+		(
+			place.name,
+			null, // dateCreated
+			worldDefn,
+			[ place ]
+		);
+
+		return world;
 	}
 
 	draw(universe: Universe): void
@@ -99,6 +116,11 @@ export class World //
 			uwpe.placeSet(this.placeCurrent);
 			this.placeCurrent.initialize(uwpe);
 		}
+	}
+
+	placeDefnByName(name: string): PlaceDefn
+	{
+		return this.defn.placeDefnByName(name);
 	}
 
 	placeGetByName(placeName: string): Place

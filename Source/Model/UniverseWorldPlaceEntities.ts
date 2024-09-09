@@ -28,6 +28,11 @@ export class UniverseWorldPlaceEntities
 		return new UniverseWorldPlaceEntities(null, null, null, null, null);
 	}
 
+	static fromEntity(entity: Entity): UniverseWorldPlaceEntities
+	{
+		return new UniverseWorldPlaceEntities(null, null, null, entity, null);
+	}
+
 	static fromUniverse(universe: Universe): UniverseWorldPlaceEntities
 	{
 		return new UniverseWorldPlaceEntities(universe, null, null, null, null);
@@ -49,9 +54,12 @@ export class UniverseWorldPlaceEntities
 		return new UniverseWorldPlaceEntities(universe, world, place, null, null);
 	}
 
-	static fromEntity(entity: Entity): UniverseWorldPlaceEntities
+	static fromWorldAndPlace
+	(
+		world: World, place: Place
+	): UniverseWorldPlaceEntities
 	{
-		return new UniverseWorldPlaceEntities(null, null, null, entity, null);
+		return new UniverseWorldPlaceEntities(null, world, place, null, null);
 	}
 
 	clear(): UniverseWorldPlaceEntities

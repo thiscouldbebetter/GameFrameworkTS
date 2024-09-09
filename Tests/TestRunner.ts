@@ -15,6 +15,7 @@ class TestRunner
 				new CameraTests(),
 
 				// Geometry - Collisions.
+				new CollidableTests(),
 				new CollisionHelperTests(),
 
 				// Geometry - Constraints.

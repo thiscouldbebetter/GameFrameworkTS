@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             collidableDataCreate() {
                 throw new Error("Must be overridden in subclass.");
             }
-            entityCollidableAddAndFindCollisions(entity, collisionHelper, collisionsSoFar) {
+            entityCollidableAddAndFindCollisions(uwpe, entity, collisionHelper, collisionsSoFar) {
                 throw new Error("Must be overridden in subclass.");
             }
             entityReset(entity) {
@@ -35,15 +35,25 @@ var ThisCouldBeBetter;
         class CollisionTrackerBruteForce extends CollisionTrackerBase {
             constructor() {
                 super();
-                this.collisionsThisTick = [];
             }
             // CollisionTracker implementation.
             collidableDataCreate() {
                 return null;
             }
-            entityCollidableAddAndFindCollisions(entity, collisionHelper, collisionsSoFar) {
-                var collisionsThisTickInvolvingEntity = this.collisionsThisTick.filter(x => x.entityIsInvolved(entity));
-                return collisionsThisTickInvolvingEntity;
+            entityCollidableAddAndFindCollisions(uwpe, entity, collisionHelper, collisionsSoFar) {
+                var place = uwpe.place;
+                var entitiesCollidable = place.collidables();
+                for (var i = 0; i < entitiesCollidable.length; i++) {
+                    var entityOther = entitiesCollidable[i];
+                    if (entityOther != entity) {
+                        var doEntitiesCollide = GameFramework.Collidable.doEntitiesCollide(entity, entityOther, collisionHelper);
+                        if (doEntitiesCollide) {
+                            var collision = collisionHelper.collisionOfEntities(entity, entityOther, GameFramework.Collision.create());
+                            collisionsSoFar.push(collision);
+                        }
+                    }
+                }
+                return collisionsSoFar;
             }
             entityReset(entity) {
                 // Do nothing.
@@ -62,23 +72,7 @@ var ThisCouldBeBetter;
             initialize(uwpe) { }
             propertyName() { return CollisionTrackerBase.name; }
             updateForTimerTick(uwpe) {
-                this.collisionsThisTick.length = 0;
-                var universe = uwpe.universe;
-                var place = uwpe.place;
-                var collisionHelper = universe.collisionHelper;
-                var entitiesCollidable = place.collidables();
-                for (var i = 0; i < entitiesCollidable.length; i++) {
-                    var entity = entitiesCollidable[i];
-                    var entityCollidable = entity.collidable();
-                    for (var j = i + 1; j < entitiesCollidable.length; j++) {
-                        var entityOther = entitiesCollidable[j];
-                        var doEntitiesCollide = entityCollidable.doEntitiesCollide(entity, entityOther, collisionHelper);
-                        if (doEntitiesCollide) {
-                            var collision = collisionHelper.collisionOfEntities(entity, entityOther, GameFramework.Collision.create());
-                            this.collisionsThisTick.push(collision);
-                        }
-                    }
-                }
+                // Do nothing.
             }
             // Equatable.
             equals(other) { return false; } // todo
@@ -139,7 +133,7 @@ var ThisCouldBeBetter;
             collidableDataCreate() {
                 return new CollisionTrackerMappedCollidableData();
             }
-            entityCollidableAddAndFindCollisions(entity, collisionHelper, collisionsSoFar) {
+            entityCollidableAddAndFindCollisions(uwpe, entity, collisionHelper, collisionsSoFar) {
                 collisionsSoFar.length = 0;
                 var entityBoundable = entity.boundable();
                 if (entityBoundable == null) {
@@ -163,7 +157,7 @@ var ThisCouldBeBetter;
                                 // This perhaps shouldn't happen, but it does.
                             }
                             else {
-                                var doEntitiesCollide = entityCollidable.doEntitiesCollide(entity, entityOther, collisionHelper);
+                                var doEntitiesCollide = GameFramework.Collidable.doEntitiesCollide(entity, entityOther, collisionHelper);
                                 if (doEntitiesCollide) {
                                     var collision = collisionHelper.collisionOfEntities(entity, entityOther, GameFramework.Collision.create());
                                     collisionsSoFar.push(collision);

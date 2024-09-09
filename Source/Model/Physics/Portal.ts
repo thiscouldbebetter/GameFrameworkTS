@@ -72,7 +72,8 @@ export class Portal implements EntityProperty<Portal>
 
 		world.placeNextSet(destinationPlace);
 		entityToTransportPos.overwriteWith(destinationPos);
-		entityToTransport.collidable().entitiesAlreadyCollidedWith.push(destinationEntity);
+		var collidable = entityToTransport.collidable();
+		collidable.entityAlreadyCollidedWithAddIfNotPresent(destinationEntity);
 
 		if (this.velocityToApply != null)
 		{

@@ -14,7 +14,7 @@ export class Collidable implements EntityProperty<Collidable>
 	collider: ShapeBase;
 	locPrev: Disposition;
 	ticksUntilCanCollide: number;
-	entitiesAlreadyCollidedWith: Entity[];
+	_entitiesAlreadyCollidedWith: Entity[];
 	isDisabled: boolean;
 
 	_collisionTrackerCollidableData: CollisionTrackerCollidableData;
@@ -45,7 +45,7 @@ export class Collidable implements EntityProperty<Collidable>
 		this.collider = this.colliderAtRest.clone();
 		this.locPrev = Disposition.create();
 		this.ticksUntilCanCollide = 0;
-		this.entitiesAlreadyCollidedWith = new Array<Entity>();
+		this._entitiesAlreadyCollidedWith = new Array<Entity>();
 		this.isDisabled = false;
 
 		// Helper variables.
@@ -85,12 +85,16 @@ export class Collidable implements EntityProperty<Collidable>
 	static fromColliderAndCollideEntities
 	(
 		colliderAtRest: ShapeBase,
-		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	): Collidable
 	{
 		return new Collidable
 		(
-			false, null, colliderAtRest, null, collideEntities
+			false, // canCollideAgainWithoutSeparating
+			null, // ticksToWaitBetweenCollisions
+			colliderAtRest,
+			null, // entityPropertyNamesToCollideWith
+			collideEntities
 		);
 	}
 
@@ -107,10 +111,36 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 	}
 
+	static wereEntitiesAlreadyColliding(entity0: Entity, entity1: Entity): boolean
+	{
+		var collidable0 = entity0.collidable();
+		var collidable1 = entity1.collidable();
+
+		var wereEntitiesAlreadyColliding =
+			collidable0.wasAlreadyCollidingWithEntity(entity1)
+			|| collidable1.wasAlreadyCollidingWithEntity(entity0);
+
+		return wereEntitiesAlreadyColliding;
+	}
+
 	canCollideAgainWithoutSeparatingSet(value: boolean): Collidable
 	{
 		this.canCollideAgainWithoutSeparating = value;
 		return this;
+	}
+
+	canCollideWithTypeOfEntity(entityOther: Entity): boolean
+	{
+		var returnValue = this.entityPropertyNamesToCollideWith.some
+		(
+			propertyName =>
+			{
+				var collisionsBetweenEntityTypesAreTracked =
+					(entityOther.propertyByName(propertyName) != null);
+				return collisionsBetweenEntityTypesAreTracked;
+			}
+		);
+		return returnValue;
 	}
 
 	collideEntities(entityColliding: Entity, entityCollidedWith: Entity): Collision
@@ -159,6 +189,15 @@ export class Collidable implements EntityProperty<Collidable>
 		return collision;
 	}
 
+	collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionSet
+	(
+		value: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
+	): Collidable
+	{
+		this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision = value;
+		return this;
+	}
+
 	collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionWithLogging
 	(
 		uwpe: UniverseWorldPlaceEntities,
@@ -194,28 +233,95 @@ export class Collidable implements EntityProperty<Collidable>
 
 	collisionHandle(uwpe: UniverseWorldPlaceEntities, collision: Collision): void
 	{
-		var entitiesColliding = collision.entitiesColliding;
-		var entity = entitiesColliding[0];
-		var entityOther = entitiesColliding[1];
+		var collisionShouldBeIgnored = this.collisionShouldBeIgnored(collision);
 
-		uwpe.entitySet(entity).entity2Set(entityOther);
+		if (collisionShouldBeIgnored == false)
+		{
+			var entitiesColliding = collision.entitiesColliding;
+			var entity = entitiesColliding[0];
+			var entityOther = entitiesColliding[1];
 
-		this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
-		(
-			uwpe, collision
-		);
+			uwpe.entitySet(entity).entity2Set(entityOther);
+			this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
+			(
+				uwpe, collision
+			);
 
-		var entityOtherCollidable = entityOther.collidable();
-		uwpe.entitiesSwap();
-		entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
-		(
-			uwpe, collision
-		);
-		uwpe.entitiesSwap();
+			var entityOtherCollidable = entityOther.collidable();
+			uwpe.entitiesSwap();
+			entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
+			(
+				uwpe, collision
+			);
+			uwpe.entitiesSwap();
+
+			entity.collidable().entityAlreadyCollidedWithAddIfNotPresent(entityOther);
+			entityOther.collidable().entityAlreadyCollidedWithAddIfNotPresent(entity);
+		}
 	}
 
-	collisionsFindAndHandle(uwpe: UniverseWorldPlaceEntities): void
+	collisionShouldBeIgnored(collision: Collision): boolean
 	{
+		var collisionShouldBeIgnored: boolean;
+
+		var entityThis = collision.entitiesColliding[0];
+		var entityOther = collision.entitiesColliding[1];
+
+		var collidableThis = entityThis.collidable();
+		var collidableOther = entityOther.collidable();
+
+		var eitherCollidableIsDisabled =
+			collidableThis.isDisabled
+			|| collidableOther.isDisabled;
+
+		if (eitherCollidableIsDisabled)
+		{
+			collisionShouldBeIgnored = true;
+		}
+		else
+		{
+			var entityThisAndOtherCanEverCollide =
+				collidableThis.canCollideWithTypeOfEntity(entityOther);
+
+			var entityOtherAndThisCanEverCollide =
+				collidableOther.canCollideWithTypeOfEntity(entityThis);
+
+			var collisionBetweenEntityTypesCanEverOccur =
+				entityThisAndOtherCanEverCollide
+				|| entityOtherAndThisCanEverCollide;
+
+			if (collisionBetweenEntityTypesCanEverOccur == false)
+			{
+				collisionShouldBeIgnored = true;
+			}
+			else
+			{
+				var eitherCollidableMustCoolDownBeforeCollidingAgain =
+					collidableThis.mustCoolDownBeforeCollidingAgain()
+					|| collidableOther.mustCoolDownBeforeCollidingAgain();
+
+				if (eitherCollidableMustCoolDownBeforeCollidingAgain)
+				{
+					collisionShouldBeIgnored = true;
+				}
+				else
+				{
+					var additionalResponseRequired =
+						this.ongoingCollisionOfCollidablesRequiresAdditionalResponse(entityThis, entityOther);
+
+					collisionShouldBeIgnored =
+						(additionalResponseRequired == false);
+				}
+			}
+		}
+
+		return collisionShouldBeIgnored;
+	}
+
+	collisionsFind(uwpe: UniverseWorldPlaceEntities): Collision[]
+	{
+		var collisions = ArrayHelper.clear(this._collisions);
+
 		if (this.isDisabled == false)
 		{
 			var entity = uwpe.entity;
@@ -230,24 +336,35 @@ export class Collidable implements EntityProperty<Collidable>
 			}
 			else
 			{
-				var collisions = ArrayHelper.clear(this._collisions);
 				collisions = this.collisionsFindForEntity
 				(
 					uwpe, collisions
 				);
-
-				collisions.forEach
-				(
-					collision => this.collisionHandle(uwpe, collision)
-				);
 			}
 		}
+
+		return collisions;
+	}
+
+	collisionsFindAndHandle(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var collisions = this.collisionsFind(uwpe);
+		this.collisionsHandle(uwpe, collisions);
 	}
 
 	collisionsFindForEntity
 	(
 		uwpe: UniverseWorldPlaceEntities,
-		collisionsSoFar: Collision[],
+		collisionsSoFar: Collision[]
+	): Collision[]
+	{
+		return this.collisionsFindForEntityWithTracker(uwpe, collisionsSoFar);
+	}
+
+	collisionsFindForEntityWithTracker
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		collisionsSoFar: Collision[]
 	): Collision[]
 	{
 		var universe = uwpe.universe;
@@ -261,58 +378,10 @@ export class Collidable implements EntityProperty<Collidable>
 
 		collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions
 		(
+			uwpe,
 			entity,
 			universe.collisionHelper,
-			collisionsSoFar
-		);
-
-		var collisionsToIgnore = collisionsSoFar.filter
-		(
-			collision =>
-			{
-				var entityThis = collision.entitiesColliding[0];
-				var entityOther = collision.entitiesColliding[1];
-
-				var collisionBetweenEntityThisAndOtherShouldBeHandled =
-					this.entityPropertyNamesToCollideWith.some
-					(
-						propertyName =>
-						{
-							var collisionsBetweenEntityTypesAreTracked =
-								(entityOther.propertyByName(propertyName) != null);
-							return collisionsBetweenEntityTypesAreTracked;
-						}
-					);
-
-				var collisionBetweenEntityOtherAndThisShouldBeHandled =
-					entityOther.collidable().entityPropertyNamesToCollideWith.some
-					(
-						propertyName =>
-						{
-							var collisionsBetweenEntityTypesAreTracked =
-								(entityThis.propertyByName(propertyName) != null);
-							return collisionsBetweenEntityTypesAreTracked;
-						}
-					);
-
-				var collisionBetweenEntityTypesShouldBeHandled =
-					collisionBetweenEntityThisAndOtherShouldBeHandled
-					|| collisionBetweenEntityOtherAndThisShouldBeHandled
-
-				var collisionShouldBeIgnored = 
-					(collisionBetweenEntityTypesShouldBeHandled == false);
-
-				return collisionShouldBeIgnored;
-			}
-		);
-
-		collisionsToIgnore.forEach
-		(
-			x =>
-			{
-				var i = collisionsSoFar.indexOf(x);
-				collisionsSoFar.splice(i, 1);
-			}
+			collisionsSoFar // Sometimes ignored.
 		);
 
 		return collisionsSoFar;
@@ -341,7 +410,7 @@ export class Collidable implements EntityProperty<Collidable>
 					var entityOther = entitiesWithProperty[e];
 					if (entityOther != entity)
 					{
-						var doEntitiesCollide = this.doEntitiesCollide
+						var doEntitiesCollide = Collidable.doEntitiesCollide
 						(
 							entity, entityOther, collisionHelper
 						);
@@ -362,6 +431,14 @@ export class Collidable implements EntityProperty<Collidable>
 		return collisionsSoFar;
 	}
 
+	collisionsHandle(uwpe: UniverseWorldPlaceEntities, collisions: Collision[]): void
+	{
+		collisions.forEach
+		(
+			collision => this.collisionHandle(uwpe, collision)
+		);
+	}
+
 	collisionTrackerCollidableData
 	(
 		collisionTracker: CollisionTracker
@@ -375,94 +452,95 @@ export class Collidable implements EntityProperty<Collidable>
 		return this._collisionTrackerCollidableData;
 	}
 
-	doEntitiesCollide
+	static doEntitiesCollide
 	(
 		entity0: Entity, entity1: Entity, collisionHelper: CollisionHelper
 	): boolean
 	{
-		var collidable0 = entity0.collidable();
-		var collidable1 = entity1.collidable();
-
-		var collidable0EntitiesAlreadyCollidedWith =
-			collidable0.entitiesAlreadyCollidedWith;
-		var collidable1EntitiesAlreadyCollidedWith =
-			collidable1.entitiesAlreadyCollidedWith;
-
 		var doEntitiesCollide = false;
 
-		var canCollidablesCollideYet =
-			(
-				collidable0.ticksUntilCanCollide <= 0
-				&& collidable1.ticksUntilCanCollide <= 0
-			);
+		var collidable0Boundable = entity0.boundable();
+		var collidable1Boundable = entity1.boundable();
 
-		if (canCollidablesCollideYet)
-		{
-			var collidable0Boundable = entity0.boundable();
-			var collidable1Boundable = entity1.boundable();
-			
-			var isEitherUnboundable =
-			(
-				collidable0Boundable == null
-				|| collidable1Boundable == null
-			);
-
-			var isEitherUnboundableOrDoBoundsCollide: boolean;
-
-			if (isEitherUnboundable)
-			{
-				isEitherUnboundableOrDoBoundsCollide = true;
-			}
-			else
-			{
-				var doBoundsCollide = collisionHelper.doCollidersCollide
-				(
-					collidable0Boundable.bounds,
-					collidable1Boundable.bounds
-				);
-				isEitherUnboundableOrDoBoundsCollide = doBoundsCollide;
-			}
-
-			if (isEitherUnboundableOrDoBoundsCollide)
-			{
-				var collider0 = collidable0.collider;
-				var collider1 = collidable1.collider;
-
-				doEntitiesCollide =
-					collisionHelper.doCollidersCollide(collider0, collider1);
-			}
-		}
-
-		var wereEntitiesAlreadyColliding =
+		var isEitherUnboundable =
 		(
-			collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
-			|| collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0
+			collidable0Boundable == null
+			|| collidable1Boundable == null
 		);
 
-		if (doEntitiesCollide)
+		var isEitherUnboundableOrDoBoundsCollide: boolean;
+
+		if (isEitherUnboundable)
 		{
-			if (wereEntitiesAlreadyColliding)
-			{
-				doEntitiesCollide =
-				(
-					collidable0.canCollideAgainWithoutSeparating
-					|| collidable1.canCollideAgainWithoutSeparating
-				);
-			}
-			else
-			{
-				this.ticksUntilCanCollide = this.ticksToWaitBetweenCollisions;
-				collidable0EntitiesAlreadyCollidedWith.push(entity1);
-				collidable1EntitiesAlreadyCollidedWith.push(entity0);
-			}
+			isEitherUnboundableOrDoBoundsCollide = true;
 		}
-		else if (wereEntitiesAlreadyColliding)
+		else
 		{
-			ArrayHelper.remove(collidable0EntitiesAlreadyCollidedWith, entity1);
-			ArrayHelper.remove(collidable1EntitiesAlreadyCollidedWith, entity0);
+			var doBoundsCollide = collisionHelper.doCollidersCollide
+			(
+				collidable0Boundable.bounds,
+				collidable1Boundable.bounds
+			);
+			isEitherUnboundableOrDoBoundsCollide = doBoundsCollide;
+		}
+
+		if (isEitherUnboundableOrDoBoundsCollide)
+		{
+			var collidable0 = entity0.collidable();
+			var collidable1 = entity1.collidable();
+
+			var collider0 = collidable0.collider;
+			var collider1 = collidable1.collider;
+
+			doEntitiesCollide =
+				collisionHelper.doCollidersCollide(collider0, collider1);
 		}
 
 		return doEntitiesCollide;
+	}
+
+	entitiesAlreadyCollidedWithClear(): void
+	{
+		this._entitiesAlreadyCollidedWith.length = 0;
+	}
+
+	entitiesAlreadyCollidedWithRemoveIfNotInvolvedInAnyCollisions(collisionsToCheck: Collision[]): void
+	{
+		var entitiesPreviouslyCollidedWith = this._entitiesAlreadyCollidedWith;
+		var entitiesNoLongerCollidedWith = new Array<Entity>();
+
+		for (var i = 0; i < entitiesPreviouslyCollidedWith.length; i++)
+		{
+			var entityPreviouslyCollidedWith = entitiesPreviouslyCollidedWith[i];
+			var entityPreviouslyCollidedWithIsStillBeingCollidedWith =
+				collisionsToCheck.some(x => x.entityIsInvolved(entityPreviouslyCollidedWith) );
+			if (entityPreviouslyCollidedWithIsStillBeingCollidedWith == false)
+			{
+				entitiesNoLongerCollidedWith.push(entityPreviouslyCollidedWith);
+			}
+		}
+
+		entitiesNoLongerCollidedWith.forEach
+		(
+			x => entitiesPreviouslyCollidedWith.splice(entitiesPreviouslyCollidedWith.indexOf(x), 1)
+		);
+	}
+
+	entityAlreadyCollidedWithAddIfNotPresent(entityCollidedWith: Entity): void
+	{
+		if (this._entitiesAlreadyCollidedWith.indexOf(entityCollidedWith) == -1)
+		{
+			this._entitiesAlreadyCollidedWith.push(entityCollidedWith);
+		}
+	}
+
+	entityAlreadyCollidedWithRemove(entityCollidedWith: Entity): void
+	{
+		var index = this._entitiesAlreadyCollidedWith.indexOf(entityCollidedWith);
+		if (index >= 0)
+		{
+			this._entitiesAlreadyCollidedWith.splice(index, 1);
+		}
 	}
 
 	isEntityStationary(entity: Entity): boolean
@@ -474,6 +552,52 @@ export class Collidable implements EntityProperty<Collidable>
 		//return (entity.locatable().loc.equals(this.locPrev));
 
 		return (entity.movable() == null);
+	}
+
+	mustCoolDownBeforeCollidingAgain(): boolean
+	{
+		return (this.ticksUntilCanCollide > 0);
+	}
+
+	ongoingCollisionOfCollidablesRequiresAdditionalResponse
+	(
+		entityThis: Entity, entityOther: Entity
+	): boolean
+	{
+		var additionalResponseRequired: boolean;
+
+		var collidableThis = entityThis.collidable();
+		var collidableOther = entityOther.collidable();
+
+		var eitherCollidableCanCollideAgainWithoutSeparating =
+			collidableThis.canCollideAgainWithoutSeparating
+			|| collidableOther.canCollideAgainWithoutSeparating;
+
+		if (eitherCollidableCanCollideAgainWithoutSeparating)
+		{
+			additionalResponseRequired = true;
+		}
+		else
+		{
+			var ongoingCollisionOfCollidablesHasAlreadyBeenRespondedToOnce =
+				Collidable.wereEntitiesAlreadyColliding(entityThis, entityOther);
+
+			if (ongoingCollisionOfCollidablesHasAlreadyBeenRespondedToOnce)
+			{
+				additionalResponseRequired = false;
+			}
+			else
+			{
+				additionalResponseRequired = true;
+			}
+		}
+
+		return additionalResponseRequired;
+	}
+
+	wasAlreadyCollidingWithEntity(entityOther: Entity): boolean
+	{
+		return (this._entitiesAlreadyCollidedWith.indexOf(entityOther) >= 0);
 	}
 
 	// EntityProperty.
@@ -503,12 +627,15 @@ export class Collidable implements EntityProperty<Collidable>
 		var entityIsStationary = this.isEntityStationary(entity);
 		if (entityIsStationary)
 		{
-			this.entitiesAlreadyCollidedWith.length = 0;
+			this._entitiesAlreadyCollidedWith.length = 0;
 		}
 		else
 		{
 			this.colliderLocateForEntity(entity);
-			this.collisionsFindAndHandle(uwpe);
+			var collisions = this.collisionsFind(uwpe);
+			this.collisionsHandle(uwpe, collisions);
+
+			this.entitiesAlreadyCollidedWithRemoveIfNotInvolvedInAnyCollisions(collisions);
 		}
 	}
 

@@ -738,7 +738,7 @@ class PlaceBuilderDemo_Movers {
             var damageAmountAsString = "" + (damageAmount > 0 ? "" : "+") + (0 - damageAmount);
             var messageColorName = (damageAmount > 0 ? "Red" : "Green");
             var messageEntity = universe.entityBuilder.messageFloater(damageAmountAsString, this.font, entityKillable.locatable().loc.pos, Color.byName(messageColorName));
-            uwpe.entity = messageEntity;
+            uwpe.entitySet(messageEntity);
             place.entitySpawn(uwpe);
             return damageAmount;
         }, (uwpe) => // die
@@ -908,7 +908,7 @@ class PlaceBuilderDemo_Movers {
         if (itemEntityToPickUp != null) {
             var entityPickingUp = entityPlayer;
             var itemEntityGettingPickedUp = itemEntityToPickUp;
-            uwpe.entity2 = itemEntityGettingPickedUp;
+            uwpe.entity2Set(itemEntityGettingPickedUp);
             var entityPickingUpLocatable = entityPickingUp.locatable();
             var itemLocatable = itemEntityGettingPickedUp.locatable();
             var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(entityPickingUpLocatable, .5, 4 //, 1

@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class VenueMessage {
             constructor(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly) {
                 this.messageToShow = messageToShow;
-                this.acknowledge = acknowledge;
+                this._acknowledge = acknowledge;
                 this.venuePrev = venuePrev;
                 this._sizeInPixels = sizeInPixels;
                 this.showMessageOnly = showMessageOnly || false;
@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
                 return new VenueMessage(messageToShow, acknowledge, null, // venuePrev
                 sizeInPixels, null // showMessageOnly
                 );
+            }
+            static fromMessageAcknowledgeAndVenuePrev(messageToShow, acknowledge, venuePrev) {
+                return new VenueMessage(messageToShow, acknowledge, venuePrev, null, null);
             }
             static fromMessageAndAcknowledge(messageToShow, acknowledge) {
                 return new VenueMessage(messageToShow, acknowledge, null, null, null);
@@ -31,14 +34,23 @@ var ThisCouldBeBetter;
             static fromTextAndAcknowledge(text, acknowledge) {
                 return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge);
             }
+            static fromTextAcknowledgeAndVenuePrev(text, acknowledge, venuePrev) {
+                return VenueMessage.fromMessageAcknowledgeAndVenuePrev(GameFramework.DataBinding.fromGet((c) => text), acknowledge, venuePrev);
+            }
             // instance methods
+            acknowledge(uwpe) {
+                this._acknowledge(uwpe);
+                var universe = uwpe.universe;
+                universe.venuePrevJumpTo();
+            }
             draw(universe) {
                 this.venueInner(universe).draw(universe);
             }
             finalize(universe) { }
             initialize(universe) { }
             updateForTimerTick(universe) {
-                this.venueInner(universe).updateForTimerTick(universe);
+                var venueInner = this.venueInner(universe);
+                venueInner.updateForTimerTick(universe);
             }
             sizeInPixels(universe) {
                 if (this._sizeInPixels == null) {
@@ -50,7 +62,7 @@ var ThisCouldBeBetter;
                 if (this._venueInner == null) {
                     var sizeInPixels = this.sizeInPixels(universe);
                     var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
-                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge, this.showMessageOnly, fontNameAndHeight);
+                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge.bind(this), this.showMessageOnly, fontNameAndHeight);
                     var venuesToLayer = [];
                     if (this.venuePrev != null) {
                         venuesToLayer.push(this.venuePrev);

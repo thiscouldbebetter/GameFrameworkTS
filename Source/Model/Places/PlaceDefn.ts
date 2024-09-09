@@ -29,7 +29,7 @@ export class PlaceDefn
 		placeFinalize: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
-		this.name = name;
+		this.name = name || PlaceDefn.name + "Default";
 		this.soundForMusicName = soundForMusicName;
 		this.actions = actions || [];
 		this.actionToInputsMappingsDefault = actionToInputsMappings || [];
@@ -52,7 +52,7 @@ export class PlaceDefn
 	{
 		return new PlaceDefn
 		(
-			"Default", // name,
+			null, // name,
 			null, // soundForMusicName
 			[], // actions,
 			[], // actionToInputsMappings,
@@ -72,12 +72,20 @@ export class PlaceDefn
 		(
 			name,
 			null, // soundForMusicName
-			[], // actions,
-			[], // actionToInputsMappings,
+			[], // actions
+			[], // actionToInputsMapping,
 			propertyNamesToProcess,
 			null, // placeInitialize
 			null // placeFinalize
 		);
+	}
+
+	static fromPropertyNamesToProcess
+	(
+		propertyNamesToProcess: string[]
+	)
+	{
+		return PlaceDefn.fromNameAndPropertyNamesToProcess(PlaceDefn.name, propertyNamesToProcess);
 	}
 
 	static from5

@@ -18,14 +18,20 @@ var ThisCouldBeBetter;
                 this.isLoaded = false;
             }
             static default() {
-                return new PlaceBase("Default", "Default", // defnName,
+                return new PlaceBase("Default", GameFramework.PlaceDefn + "Default", // defnName,
                 null, // parentName
                 GameFramework.Coords.fromXY(1, 1).multiplyScalar(1000), // size
                 null // entities
                 );
             }
+            static fromPlaceDefn(placeDefn) {
+                return new PlaceBase(PlaceBase.name + "FromPlaceDefn" + placeDefn.name, placeDefn.name, null, // parentName
+                GameFramework.Coords.fromXY(1, 1).multiplyScalar(1000), // size
+                null // entities
+                );
+            }
             defn(world) {
-                return world.defn.placeDefnByName(this.defnName);
+                return world.placeDefnByName(this.defnName);
             }
             placeParent(world) {
                 return (this.parentName == null ? null : world.placeGetByName(this.parentName));

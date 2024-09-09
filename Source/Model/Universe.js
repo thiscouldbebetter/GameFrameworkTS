@@ -57,7 +57,12 @@ var ThisCouldBeBetter;
                 worldCreator);
                 return universe;
             }
-            // instance methods
+            static fromWorld(world) {
+                var universe = Universe.default();
+                universe.world = world;
+                return universe;
+            }
+            // Instance methods.
             initialize(callback) {
                 this.platformHelper.initialize(this);
                 this.storageHelper = new GameFramework.StorageHelper(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
@@ -103,9 +108,11 @@ var ThisCouldBeBetter;
                     }
                     this.venueStack.push(venueNext);
                     this.venueNextClear();
-                    this.venueCurrent().initialize(this);
+                    venueCurrent = this.venueCurrent();
+                    venueCurrent.initialize(this);
                 }
-                this.venueCurrent().updateForTimerTick(this);
+                var venueCurrent = this.venueCurrent();
+                venueCurrent.updateForTimerTick(this);
                 this.displayRecorder.updateForTimerTick(this);
             }
             venueCurrent() {

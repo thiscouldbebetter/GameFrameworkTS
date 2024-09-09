@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
                 this.collider = this.colliderAtRest.clone();
                 this.locPrev = GameFramework.Disposition.create();
                 this.ticksUntilCanCollide = 0;
-                this.entitiesAlreadyCollidedWith = new Array();
+                this._entitiesAlreadyCollidedWith = new Array();
                 this.isDisabled = false;
                 // Helper variables.
                 this._collision = GameFramework.Collision.create();
@@ -35,14 +35,31 @@ var ThisCouldBeBetter;
                 return Collidable.fromColliderAndCollideEntities(colliderAtRest, null);
             }
             static fromColliderAndCollideEntities(colliderAtRest, collideEntities) {
-                return new Collidable(false, null, colliderAtRest, null, collideEntities);
+                return new Collidable(false, // canCollideAgainWithoutSeparating
+                null, // ticksToWaitBetweenCollisions
+                colliderAtRest, null, // entityPropertyNamesToCollideWith
+                collideEntities);
             }
             static from3(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
                 return new Collidable(false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
             }
+            static wereEntitiesAlreadyColliding(entity0, entity1) {
+                var collidable0 = entity0.collidable();
+                var collidable1 = entity1.collidable();
+                var wereEntitiesAlreadyColliding = collidable0.wasAlreadyCollidingWithEntity(entity1)
+                    || collidable1.wasAlreadyCollidingWithEntity(entity0);
+                return wereEntitiesAlreadyColliding;
+            }
             canCollideAgainWithoutSeparatingSet(value) {
                 this.canCollideAgainWithoutSeparating = value;
                 return this;
+            }
+            canCollideWithTypeOfEntity(entityOther) {
+                var returnValue = this.entityPropertyNamesToCollideWith.some(propertyName => {
+                    var collisionsBetweenEntityTypesAreTracked = (entityOther.propertyByName(propertyName) != null);
+                    return collisionsBetweenEntityTypesAreTracked;
+                });
+                return returnValue;
             }
             collideEntities(entityColliding, entityCollidedWith) {
                 var uwpe = this._uwpe.clear().entitySet(entityColliding).entity2Set(entityCollidedWith);
@@ -58,6 +75,10 @@ var ThisCouldBeBetter;
                     this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
                 }
                 return collision;
+            }
+            collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionSet(value) {
+                this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision = value;
+                return this;
             }
             collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionWithLogging(uwpe, collision) {
                 Collidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog(uwpe, collision);
@@ -77,17 +98,57 @@ var ThisCouldBeBetter;
                 this.collider.overwriteWith(this.colliderAtRest);
             }
             collisionHandle(uwpe, collision) {
-                var entitiesColliding = collision.entitiesColliding;
-                var entity = entitiesColliding[0];
-                var entityOther = entitiesColliding[1];
-                uwpe.entitySet(entity).entity2Set(entityOther);
-                this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
-                var entityOtherCollidable = entityOther.collidable();
-                uwpe.entitiesSwap();
-                entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
-                uwpe.entitiesSwap();
+                var collisionShouldBeIgnored = this.collisionShouldBeIgnored(collision);
+                if (collisionShouldBeIgnored == false) {
+                    var entitiesColliding = collision.entitiesColliding;
+                    var entity = entitiesColliding[0];
+                    var entityOther = entitiesColliding[1];
+                    uwpe.entitySet(entity).entity2Set(entityOther);
+                    this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
+                    var entityOtherCollidable = entityOther.collidable();
+                    uwpe.entitiesSwap();
+                    entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
+                    uwpe.entitiesSwap();
+                    entity.collidable().entityAlreadyCollidedWithAddIfNotPresent(entityOther);
+                    entityOther.collidable().entityAlreadyCollidedWithAddIfNotPresent(entity);
+                }
             }
-            collisionsFindAndHandle(uwpe) {
+            collisionShouldBeIgnored(collision) {
+                var collisionShouldBeIgnored;
+                var entityThis = collision.entitiesColliding[0];
+                var entityOther = collision.entitiesColliding[1];
+                var collidableThis = entityThis.collidable();
+                var collidableOther = entityOther.collidable();
+                var eitherCollidableIsDisabled = collidableThis.isDisabled
+                    || collidableOther.isDisabled;
+                if (eitherCollidableIsDisabled) {
+                    collisionShouldBeIgnored = true;
+                }
+                else {
+                    var entityThisAndOtherCanEverCollide = collidableThis.canCollideWithTypeOfEntity(entityOther);
+                    var entityOtherAndThisCanEverCollide = collidableOther.canCollideWithTypeOfEntity(entityThis);
+                    var collisionBetweenEntityTypesCanEverOccur = entityThisAndOtherCanEverCollide
+                        || entityOtherAndThisCanEverCollide;
+                    if (collisionBetweenEntityTypesCanEverOccur == false) {
+                        collisionShouldBeIgnored = true;
+                    }
+                    else {
+                        var eitherCollidableMustCoolDownBeforeCollidingAgain = collidableThis.mustCoolDownBeforeCollidingAgain()
+                            || collidableOther.mustCoolDownBeforeCollidingAgain();
+                        if (eitherCollidableMustCoolDownBeforeCollidingAgain) {
+                            collisionShouldBeIgnored = true;
+                        }
+                        else {
+                            var additionalResponseRequired = this.ongoingCollisionOfCollidablesRequiresAdditionalResponse(entityThis, entityOther);
+                            collisionShouldBeIgnored =
+                                (additionalResponseRequired == false);
+                        }
+                    }
+                }
+                return collisionShouldBeIgnored;
+            }
+            collisionsFind(uwpe) {
+                var collisions = GameFramework.ArrayHelper.clear(this._collisions);
                 if (this.isDisabled == false) {
                     var entity = uwpe.entity;
                     var entityLoc = entity.locatable().loc;
@@ -97,40 +158,27 @@ var ThisCouldBeBetter;
                         this.ticksUntilCanCollide--;
                     }
                     else {
-                        var collisions = GameFramework.ArrayHelper.clear(this._collisions);
                         collisions = this.collisionsFindForEntity(uwpe, collisions);
-                        collisions.forEach(collision => this.collisionHandle(uwpe, collision));
                     }
                 }
+                return collisions;
+            }
+            collisionsFindAndHandle(uwpe) {
+                var collisions = this.collisionsFind(uwpe);
+                this.collisionsHandle(uwpe, collisions);
             }
             collisionsFindForEntity(uwpe, collisionsSoFar) {
+                return this.collisionsFindForEntityWithTracker(uwpe, collisionsSoFar);
+            }
+            collisionsFindForEntityWithTracker(uwpe, collisionsSoFar) {
                 var universe = uwpe.universe;
                 var world = uwpe.world;
                 var place = uwpe.place;
                 var entity = uwpe.entity;
                 var collisionTracker = place.collisionTracker(world);
                 collisionTracker.entityReset(entity);
-                collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(entity, universe.collisionHelper, collisionsSoFar);
-                var collisionsToIgnore = collisionsSoFar.filter(collision => {
-                    var entityThis = collision.entitiesColliding[0];
-                    var entityOther = collision.entitiesColliding[1];
-                    var collisionBetweenEntityThisAndOtherShouldBeHandled = this.entityPropertyNamesToCollideWith.some(propertyName => {
-                        var collisionsBetweenEntityTypesAreTracked = (entityOther.propertyByName(propertyName) != null);
-                        return collisionsBetweenEntityTypesAreTracked;
-                    });
-                    var collisionBetweenEntityOtherAndThisShouldBeHandled = entityOther.collidable().entityPropertyNamesToCollideWith.some(propertyName => {
-                        var collisionsBetweenEntityTypesAreTracked = (entityThis.propertyByName(propertyName) != null);
-                        return collisionsBetweenEntityTypesAreTracked;
-                    });
-                    var collisionBetweenEntityTypesShouldBeHandled = collisionBetweenEntityThisAndOtherShouldBeHandled
-                        || collisionBetweenEntityOtherAndThisShouldBeHandled;
-                    var collisionShouldBeIgnored = (collisionBetweenEntityTypesShouldBeHandled == false);
-                    return collisionShouldBeIgnored;
-                });
-                collisionsToIgnore.forEach(x => {
-                    var i = collisionsSoFar.indexOf(x);
-                    collisionsSoFar.splice(i, 1);
-                });
+                collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, entity, universe.collisionHelper, collisionsSoFar // Sometimes ignored.
+                );
                 return collisionsSoFar;
             }
             collisionsFindForEntity_WithoutTracker(uwpe, collisionsSoFar) {
@@ -145,7 +193,7 @@ var ThisCouldBeBetter;
                         for (var e = 0; e < entitiesWithProperty.length; e++) {
                             var entityOther = entitiesWithProperty[e];
                             if (entityOther != entity) {
-                                var doEntitiesCollide = this.doEntitiesCollide(entity, entityOther, collisionHelper);
+                                var doEntitiesCollide = Collidable.doEntitiesCollide(entity, entityOther, collisionHelper);
                                 if (doEntitiesCollide) {
                                     var collision = collisionHelper.collisionOfEntities(entity, entityOther, GameFramework.Collision.create());
                                     collisionsSoFar.push(collision);
@@ -156,6 +204,9 @@ var ThisCouldBeBetter;
                 }
                 return collisionsSoFar;
             }
+            collisionsHandle(uwpe, collisions) {
+                collisions.forEach(collision => this.collisionHandle(uwpe, collision));
+            }
             collisionTrackerCollidableData(collisionTracker) {
                 if (this._collisionTrackerCollidableData == null) {
                     this._collisionTrackerCollidableData =
@@ -163,53 +214,55 @@ var ThisCouldBeBetter;
                 }
                 return this._collisionTrackerCollidableData;
             }
-            doEntitiesCollide(entity0, entity1, collisionHelper) {
-                var collidable0 = entity0.collidable();
-                var collidable1 = entity1.collidable();
-                var collidable0EntitiesAlreadyCollidedWith = collidable0.entitiesAlreadyCollidedWith;
-                var collidable1EntitiesAlreadyCollidedWith = collidable1.entitiesAlreadyCollidedWith;
+            static doEntitiesCollide(entity0, entity1, collisionHelper) {
                 var doEntitiesCollide = false;
-                var canCollidablesCollideYet = (collidable0.ticksUntilCanCollide <= 0
-                    && collidable1.ticksUntilCanCollide <= 0);
-                if (canCollidablesCollideYet) {
-                    var collidable0Boundable = entity0.boundable();
-                    var collidable1Boundable = entity1.boundable();
-                    var isEitherUnboundable = (collidable0Boundable == null
-                        || collidable1Boundable == null);
-                    var isEitherUnboundableOrDoBoundsCollide;
-                    if (isEitherUnboundable) {
-                        isEitherUnboundableOrDoBoundsCollide = true;
-                    }
-                    else {
-                        var doBoundsCollide = collisionHelper.doCollidersCollide(collidable0Boundable.bounds, collidable1Boundable.bounds);
-                        isEitherUnboundableOrDoBoundsCollide = doBoundsCollide;
-                    }
-                    if (isEitherUnboundableOrDoBoundsCollide) {
-                        var collider0 = collidable0.collider;
-                        var collider1 = collidable1.collider;
-                        doEntitiesCollide =
-                            collisionHelper.doCollidersCollide(collider0, collider1);
-                    }
+                var collidable0Boundable = entity0.boundable();
+                var collidable1Boundable = entity1.boundable();
+                var isEitherUnboundable = (collidable0Boundable == null
+                    || collidable1Boundable == null);
+                var isEitherUnboundableOrDoBoundsCollide;
+                if (isEitherUnboundable) {
+                    isEitherUnboundableOrDoBoundsCollide = true;
                 }
-                var wereEntitiesAlreadyColliding = (collidable0EntitiesAlreadyCollidedWith.indexOf(entity1) >= 0
-                    || collidable1EntitiesAlreadyCollidedWith.indexOf(entity0) >= 0);
-                if (doEntitiesCollide) {
-                    if (wereEntitiesAlreadyColliding) {
-                        doEntitiesCollide =
-                            (collidable0.canCollideAgainWithoutSeparating
-                                || collidable1.canCollideAgainWithoutSeparating);
-                    }
-                    else {
-                        this.ticksUntilCanCollide = this.ticksToWaitBetweenCollisions;
-                        collidable0EntitiesAlreadyCollidedWith.push(entity1);
-                        collidable1EntitiesAlreadyCollidedWith.push(entity0);
-                    }
+                else {
+                    var doBoundsCollide = collisionHelper.doCollidersCollide(collidable0Boundable.bounds, collidable1Boundable.bounds);
+                    isEitherUnboundableOrDoBoundsCollide = doBoundsCollide;
                 }
-                else if (wereEntitiesAlreadyColliding) {
-                    GameFramework.ArrayHelper.remove(collidable0EntitiesAlreadyCollidedWith, entity1);
-                    GameFramework.ArrayHelper.remove(collidable1EntitiesAlreadyCollidedWith, entity0);
+                if (isEitherUnboundableOrDoBoundsCollide) {
+                    var collidable0 = entity0.collidable();
+                    var collidable1 = entity1.collidable();
+                    var collider0 = collidable0.collider;
+                    var collider1 = collidable1.collider;
+                    doEntitiesCollide =
+                        collisionHelper.doCollidersCollide(collider0, collider1);
                 }
                 return doEntitiesCollide;
+            }
+            entitiesAlreadyCollidedWithClear() {
+                this._entitiesAlreadyCollidedWith.length = 0;
+            }
+            entitiesAlreadyCollidedWithRemoveIfNotInvolvedInAnyCollisions(collisionsToCheck) {
+                var entitiesPreviouslyCollidedWith = this._entitiesAlreadyCollidedWith;
+                var entitiesNoLongerCollidedWith = new Array();
+                for (var i = 0; i < entitiesPreviouslyCollidedWith.length; i++) {
+                    var entityPreviouslyCollidedWith = entitiesPreviouslyCollidedWith[i];
+                    var entityPreviouslyCollidedWithIsStillBeingCollidedWith = collisionsToCheck.some(x => x.entityIsInvolved(entityPreviouslyCollidedWith));
+                    if (entityPreviouslyCollidedWithIsStillBeingCollidedWith == false) {
+                        entitiesNoLongerCollidedWith.push(entityPreviouslyCollidedWith);
+                    }
+                }
+                entitiesNoLongerCollidedWith.forEach(x => entitiesPreviouslyCollidedWith.splice(entitiesPreviouslyCollidedWith.indexOf(x), 1));
+            }
+            entityAlreadyCollidedWithAddIfNotPresent(entityCollidedWith) {
+                if (this._entitiesAlreadyCollidedWith.indexOf(entityCollidedWith) == -1) {
+                    this._entitiesAlreadyCollidedWith.push(entityCollidedWith);
+                }
+            }
+            entityAlreadyCollidedWithRemove(entityCollidedWith) {
+                var index = this._entitiesAlreadyCollidedWith.indexOf(entityCollidedWith);
+                if (index >= 0) {
+                    this._entitiesAlreadyCollidedWith.splice(index, 1);
+                }
             }
             isEntityStationary(entity) {
                 // This way would be better, but it causes strange glitches.
@@ -218,6 +271,32 @@ var ThisCouldBeBetter;
                 // the walls shift inward suddenly!
                 //return (entity.locatable().loc.equals(this.locPrev));
                 return (entity.movable() == null);
+            }
+            mustCoolDownBeforeCollidingAgain() {
+                return (this.ticksUntilCanCollide > 0);
+            }
+            ongoingCollisionOfCollidablesRequiresAdditionalResponse(entityThis, entityOther) {
+                var additionalResponseRequired;
+                var collidableThis = entityThis.collidable();
+                var collidableOther = entityOther.collidable();
+                var eitherCollidableCanCollideAgainWithoutSeparating = collidableThis.canCollideAgainWithoutSeparating
+                    || collidableOther.canCollideAgainWithoutSeparating;
+                if (eitherCollidableCanCollideAgainWithoutSeparating) {
+                    additionalResponseRequired = true;
+                }
+                else {
+                    var ongoingCollisionOfCollidablesHasAlreadyBeenRespondedToOnce = Collidable.wereEntitiesAlreadyColliding(entityThis, entityOther);
+                    if (ongoingCollisionOfCollidablesHasAlreadyBeenRespondedToOnce) {
+                        additionalResponseRequired = false;
+                    }
+                    else {
+                        additionalResponseRequired = true;
+                    }
+                }
+                return additionalResponseRequired;
+            }
+            wasAlreadyCollidingWithEntity(entityOther) {
+                return (this._entitiesAlreadyCollidedWith.indexOf(entityOther) >= 0);
             }
             // EntityProperty.
             finalize(uwpe) { }
@@ -237,11 +316,13 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var entityIsStationary = this.isEntityStationary(entity);
                 if (entityIsStationary) {
-                    this.entitiesAlreadyCollidedWith.length = 0;
+                    this._entitiesAlreadyCollidedWith.length = 0;
                 }
                 else {
                     this.colliderLocateForEntity(entity);
-                    this.collisionsFindAndHandle(uwpe);
+                    var collisions = this.collisionsFind(uwpe);
+                    this.collisionsHandle(uwpe, collisions);
+                    this.entitiesAlreadyCollidedWithRemoveIfNotInvolvedInAnyCollisions(collisions);
                 }
             }
             // cloneable

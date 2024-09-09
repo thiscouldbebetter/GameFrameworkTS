@@ -8,6 +8,7 @@ export interface CollisionTracker
 
 	entityCollidableAddAndFindCollisions
 	(
+		uwpe: UniverseWorldPlaceEntities,
 		entity: Entity,
 		collisionHelper: CollisionHelper,
 		collisionsSoFar: Collision[]
@@ -29,6 +30,7 @@ export class CollisionTrackerBase implements CollisionTracker, EntityProperty<Co
 
 	entityCollidableAddAndFindCollisions
 	(
+		uwpe: UniverseWorldPlaceEntities,
 		entity: Entity, collisionHelper: CollisionHelper, collisionsSoFar: Collision[]
 	): Collision[]
 	{
@@ -75,13 +77,9 @@ export interface CollisionTrackerCollidableData
 
 export class CollisionTrackerBruteForce extends CollisionTrackerBase implements EntityProperty<CollisionTrackerBruteForce>
 {
-	collisionsThisTick: Collision[];
-
 	constructor()
 	{
 		super();
-
-		this.collisionsThisTick = [];
 	}
 
 	// CollisionTracker implementation.
@@ -93,15 +91,38 @@ export class CollisionTrackerBruteForce extends CollisionTrackerBase implements 
 
 	entityCollidableAddAndFindCollisions
 	(
+		uwpe: UniverseWorldPlaceEntities,
 		entity: Entity,
 		collisionHelper: CollisionHelper,
 		collisionsSoFar: Collision[]
 	): Collision[]
 	{
-		var collisionsThisTickInvolvingEntity =
-			this.collisionsThisTick.filter(x => x.entityIsInvolved(entity) );
+		var place = uwpe.place;
+		var entitiesCollidable = (place as PlaceBase).collidables();
 
-		return collisionsThisTickInvolvingEntity;
+		for (var i = 0; i < entitiesCollidable.length; i++)
+		{
+			var entityOther = entitiesCollidable[i];
+
+			if (entityOther != entity)
+			{
+				var doEntitiesCollide = Collidable.doEntitiesCollide
+				(
+					entity, entityOther, collisionHelper
+				);
+
+				if (doEntitiesCollide)
+				{
+					var collision = collisionHelper.collisionOfEntities
+					(
+						entity, entityOther, Collision.create()
+					);
+					collisionsSoFar.push(collision);
+				}
+			}
+		}
+
+		return collisionsSoFar;
 	}
 
 	entityReset(entity: Entity): void
@@ -136,38 +157,7 @@ export class CollisionTrackerBruteForce extends CollisionTrackerBase implements 
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.collisionsThisTick.length = 0;
-
-		var universe = uwpe.universe;
-		var place = uwpe.place as PlaceBase;
-
-		var collisionHelper = universe.collisionHelper
-
-		var entitiesCollidable = place.collidables();
-		for (var i = 0; i < entitiesCollidable.length; i++)
-		{
-			var entity = entitiesCollidable[i];
-			var entityCollidable = entity.collidable();
-
-			for (var j = i + 1; j < entitiesCollidable.length; j++)
-			{
-				var entityOther = entitiesCollidable[j];
-
-				var doEntitiesCollide = entityCollidable.doEntitiesCollide
-				(
-					entity, entityOther, collisionHelper
-				);
-
-				if (doEntitiesCollide)
-				{
-					var collision = collisionHelper.collisionOfEntities
-					(
-						entity, entityOther, Collision.create()
-					);
-					this.collisionsThisTick.push(collision);
-				}
-			}
-		}
+		// Do nothing.
 	}
 
 	// Equatable.
@@ -276,6 +266,7 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 
 	entityCollidableAddAndFindCollisions
 	(
+		uwpe: UniverseWorldPlaceEntities,
 		entity: Entity,
 		collisionHelper: CollisionHelper,
 		collisionsSoFar: Collision[]
@@ -324,7 +315,7 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 					}
 					else
 					{
-						var doEntitiesCollide = entityCollidable.doEntitiesCollide
+						var doEntitiesCollide = Collidable.doEntitiesCollide
 						(
 							entity, entityOther, collisionHelper
 						);

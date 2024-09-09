@@ -5,7 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class VenueMessage<TContext> implements Venue
 {
 	messageToShow: DataBinding<TContext, string>;
-	acknowledge: () => void;
+	_acknowledge: (uwpe: UniverseWorldPlaceEntities) => void;
 	venuePrev: Venue;
 	_sizeInPixels: Coords;
 	showMessageOnly: boolean;
@@ -15,14 +15,14 @@ export class VenueMessage<TContext> implements Venue
 	constructor
 	(
 		messageToShow: DataBinding<TContext, string>,
-		acknowledge: () => void,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
 		venuePrev: Venue,
 		sizeInPixels: Coords,
 		showMessageOnly: boolean
 	)
 	{
 		this.messageToShow = messageToShow;
-		this.acknowledge = acknowledge;
+		this._acknowledge = acknowledge;
 		this.venuePrev = venuePrev;
 		this._sizeInPixels = sizeInPixels;
 		this.showMessageOnly = showMessageOnly || false;
@@ -39,7 +39,7 @@ export class VenueMessage<TContext> implements Venue
 	static fromMessageAcknowledgeAndSize<TContext>
 	(
 		messageToShow: DataBinding<TContext, string>,
-		acknowledge: () => void,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
 		sizeInPixels: Coords
 	): VenueMessage<TContext>
 	{
@@ -53,10 +53,20 @@ export class VenueMessage<TContext> implements Venue
 		);
 	}
 
+	static fromMessageAcknowledgeAndVenuePrev<TContext>
+	(
+		messageToShow: DataBinding<TContext, string>,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
+		venuePrev: Venue
+	): VenueMessage<TContext>
+	{
+		return new VenueMessage<TContext>(messageToShow, acknowledge, venuePrev, null, null);
+	}
+
 	static fromMessageAndAcknowledge<TContext>
 	(
 		messageToShow: DataBinding<TContext, string>,
-		acknowledge: () => void
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void
 	): VenueMessage<TContext>
 	{
 		return new VenueMessage<TContext>(messageToShow, acknowledge, null, null, null);
@@ -72,7 +82,9 @@ export class VenueMessage<TContext> implements Venue
 
 	static fromTextAcknowledgeAndSize<TContext>
 	(
-		text: string, acknowledge: () => void, sizeInPixels: Coords
+		text: string,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
+		sizeInPixels: Coords
 	): VenueMessage<TContext>
 	{
 		return VenueMessage.fromMessageAcknowledgeAndSize
@@ -85,7 +97,8 @@ export class VenueMessage<TContext> implements Venue
 
 	static fromTextAndAcknowledge<TContext>
 	(
-		text: string, acknowledge: () => void
+		text: string,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void
 	): VenueMessage<TContext>
 	{
 		return VenueMessage.fromMessageAndAcknowledge
@@ -95,7 +108,29 @@ export class VenueMessage<TContext> implements Venue
 		);
 	}
 
+	static fromTextAcknowledgeAndVenuePrev<TContext>
+	(
+		text: string,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
+		venuePrev: Venue
+	): VenueMessage<TContext>
+	{
+		return VenueMessage.fromMessageAcknowledgeAndVenuePrev
+		(
+			DataBinding.fromGet( (c: TContext) => text ),
+			acknowledge,
+			venuePrev
+		);
+	}
+
 	// instance methods
+
+	acknowledge(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this._acknowledge(uwpe);
+		var universe = uwpe.universe;
+		universe.venuePrevJumpTo();
+	}
 
 	draw(universe: Universe): void
 	{
@@ -108,7 +143,8 @@ export class VenueMessage<TContext> implements Venue
 
 	updateForTimerTick(universe: Universe): void
 	{
-		this.venueInner(universe).updateForTimerTick(universe);
+		var venueInner = this.venueInner(universe);
+		venueInner.updateForTimerTick(universe);
 	}
 
 	sizeInPixels(universe: Universe): Coords
@@ -134,7 +170,7 @@ export class VenueMessage<TContext> implements Venue
 				universe,
 				sizeInPixels,
 				this.messageToShow,
-				this.acknowledge,
+				this.acknowledge.bind(this),
 				this.showMessageOnly,
 				fontNameAndHeight
 			);

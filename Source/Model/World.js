@@ -6,17 +6,20 @@ var ThisCouldBeBetter;
         class World //
          {
             constructor(name, dateCreated, defn, placeGetByName, placeInitialName) {
-                this.name = name;
-                this.dateCreated = dateCreated;
+                this.name = name || World.name;
+                this.dateCreated = dateCreated || GameFramework.DateTime.now();
                 this.timerTicksSoFar = 0;
-                this.defn = defn;
+                this.defn = defn || GameFramework.WorldDefn.default();
                 this._placeGetByName = placeGetByName;
                 this.placeNextName = placeInitialName;
             }
             static default() {
-                return World.fromNameDateCreatedDefnAndPlaces("name", GameFramework.DateTime.now(), GameFramework.WorldDefn.default(), [
-                    GameFramework.PlaceBase.default()
-                ]);
+                var placeDefn = GameFramework.PlaceDefn.default();
+                var place = GameFramework.PlaceBase.fromPlaceDefn(placeDefn);
+                return World.fromNameDateCreatedDefnAndPlaces(null, // name
+                null, // dateCreated
+                GameFramework.WorldDefn.fromPlaceDefns([placeDefn]), // defn
+                [place]);
             }
             static fromNameDateCreatedDefnAndPlaces(name, dateCreated, defn, places) {
                 var placesByName = new Map(places.map(x => [x.name, x]));
@@ -24,6 +27,12 @@ var ThisCouldBeBetter;
                 var placeInitialName = places[0].name;
                 var returnValue = new World(name, dateCreated, defn, placeGetByName, placeInitialName);
                 return returnValue;
+            }
+            static fromPlaceWithDefn(place, placeDefn) {
+                var worldDefn = GameFramework.WorldDefn.fromPlaceDefns([placeDefn]);
+                var world = World.fromNameDateCreatedDefnAndPlaces(place.name, null, // dateCreated
+                worldDefn, [place]);
+                return world;
             }
             draw(universe) {
                 if (this.placeCurrent != null) {
@@ -48,6 +57,9 @@ var ThisCouldBeBetter;
                     uwpe.placeSet(this.placeCurrent);
                     this.placeCurrent.initialize(uwpe);
                 }
+            }
+            placeDefnByName(name) {
+                return this.defn.placeDefnByName(name);
             }
             placeGetByName(placeName) {
                 return this._placeGetByName.call(this, placeName);
