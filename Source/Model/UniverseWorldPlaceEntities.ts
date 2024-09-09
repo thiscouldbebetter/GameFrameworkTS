@@ -17,8 +17,8 @@ export class UniverseWorldPlaceEntities
 	)
 	{
 		this.universeSet(universe);
-		this.worldSet(world);
-		this.placeSet(place);
+		this.worldSet(world || (universe == null ? null : universe.world) );
+		this.placeSet(place || (universe == null ? null : (universe.world == null ? null : universe.world.placeCurrent) ) );
 		this.entitySet(entity);
 		this.entity2Set(entity2);
 	}

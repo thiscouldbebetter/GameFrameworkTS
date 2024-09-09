@@ -58,6 +58,9 @@ var ThisCouldBeBetter;
                     this.placeCurrent.initialize(uwpe);
                 }
             }
+            place() {
+                return this.placeCurrent;
+            }
             placeDefnByName(name) {
                 return this.defn.placeDefnByName(name);
             }

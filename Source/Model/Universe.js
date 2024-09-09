@@ -98,6 +98,12 @@ var ThisCouldBeBetter;
             start() {
                 this.timerHelper.initialize(this.updateForTimerTick.bind(this));
             }
+            toUniverseWorldPlaceEntities() {
+                return GameFramework.UniverseWorldPlaceEntities.fromUniverse(this);
+            }
+            toUwpe() {
+                return this.toUniverseWorldPlaceEntities();
+            }
             updateForTimerTick() {
                 this.inputHelper.updateForTimerTick(this);
                 var venueNext = this.venueNext();

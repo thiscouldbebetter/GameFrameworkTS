@@ -118,6 +118,11 @@ export class World //
 		}
 	}
 
+	place(): Place
+	{
+		return this.placeCurrent;
+	}
+
 	placeDefnByName(name: string): PlaceDefn
 	{
 		return this.defn.placeDefnByName(name);

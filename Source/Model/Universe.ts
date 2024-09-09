@@ -223,6 +223,16 @@ export class Universe
 		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
 	}
 
+	toUniverseWorldPlaceEntities(): UniverseWorldPlaceEntities
+	{
+		return UniverseWorldPlaceEntities.fromUniverse(this);
+	}
+
+	toUwpe(): UniverseWorldPlaceEntities
+	{
+		return this.toUniverseWorldPlaceEntities();
+	}
+
 	updateForTimerTick(): void
 	{
 		this.inputHelper.updateForTimerTick(this);
