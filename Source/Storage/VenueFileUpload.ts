@@ -40,7 +40,7 @@ export class VenueFileUpload implements Venue
 		var platformHelper = universe.platformHelper;
 		platformHelper.platformableRemove(this);
 		var display = universe.display;
-		var colorBlack = Color.byName("Black");
+		var colorBlack = Color.Instances().Black;
 		display.drawBackground(colorBlack, null);
 		platformHelper.platformableShow(display);
 	}

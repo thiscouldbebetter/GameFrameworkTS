@@ -56,7 +56,7 @@ var ThisCouldBeBetter;
                 });
                 this.Frozen = new Effect("Frozen", 20, // ticksPerCycle
                 5, // cyclesToLive
-                GameFramework.VisualCircle.fromRadiusAndColorFill(visualDimension, GameFramework.Color.byName("Cyan")), (uwpe, effect) => {
+                GameFramework.VisualCircle.fromRadiusAndColorFill(visualDimension, GameFramework.Color.Instances().Cyan), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(1, "Cold");
                     var e = uwpe.entity;
                     uwpe.entity2Set(e);
@@ -77,7 +77,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(-0.2, 0.5),
                     GameFramework.Coords.fromXY(-0.2, 0.2),
                     GameFramework.Coords.fromXY(-0.5, 0.2)
-                ]).transform(GameFramework.Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.byName("Red")), (uwpe, effect) => {
+                ]).transform(GameFramework.Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.Instances().Red), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(-1, "Healing");
                     var e = uwpe.entity;
                     uwpe.entity2Set(e);

@@ -647,10 +647,11 @@ export class VisualBuilder
 	{
 		var visualPupilRadius = visualEyeRadius / 2;
 
+		var colors = Color.Instances();
 		var visualEye = new VisualGroup
 		([
-			VisualCircle.fromRadiusAndColorFill(visualEyeRadius, Color.byName("White")),
-			VisualCircle.fromRadiusAndColorFill(visualPupilRadius, Color.byName("Black"))
+			VisualCircle.fromRadiusAndColorFill(visualEyeRadius, colors.White),
+			VisualCircle.fromRadiusAndColorFill(visualPupilRadius, colors.Black)
 		]);
 
 		var visualEyes = new VisualGroup
@@ -679,6 +680,7 @@ export class VisualBuilder
 	flame(dimension: number): VisualBase
 	{
 		var dimensionHalf = dimension / 2;
+		var colors = Color.Instances();
 		var flameVisualStatic = new VisualGroup
 		([
 			VisualPolygon.fromPathAndColorFill
@@ -689,7 +691,7 @@ export class VisualBuilder
 					Coords.fromXY(dimension, 0),
 					Coords.fromXY(-dimension, 0),
 				]),
-				Color.byName("Orange")
+				colors.Orange
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -699,7 +701,7 @@ export class VisualBuilder
 					Coords.fromXY(dimensionHalf, 0),
 					Coords.fromXY(-dimensionHalf, 0),
 				]),
-				Color.byName("Yellow")
+				colors.Yellow
 			)
 		]);
 
@@ -733,7 +735,7 @@ export class VisualBuilder
 	ice(dimension: number): VisualBase
 	{
 		var dimensionHalf = dimension / 2;
-		var color = Color.byName("Cyan");
+		var color = Color.Instances().Cyan;
 		var visual = new VisualGroup
 		([
 			VisualPolygon.fromPathAndColors

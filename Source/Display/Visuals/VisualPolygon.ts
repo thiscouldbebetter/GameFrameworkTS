@@ -50,7 +50,7 @@ export class VisualPolygon implements Visual<VisualPolygon>
 	{
 		return VisualPolygon.fromDimensionAndColorBorder
 		(
-			10, Color.byName("Cyan")
+			10, Color.Instances().Cyan
 		)
 	}
 

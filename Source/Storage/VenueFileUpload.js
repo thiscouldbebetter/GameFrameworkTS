@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                 var platformHelper = universe.platformHelper;
                 platformHelper.platformableRemove(this);
                 var display = universe.display;
-                var colorBlack = GameFramework.Color.byName("Black");
+                var colorBlack = GameFramework.Color.Instances().Black;
                 display.drawBackground(colorBlack, null);
                 platformHelper.platformableShow(display);
             }

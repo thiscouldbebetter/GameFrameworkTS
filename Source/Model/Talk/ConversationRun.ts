@@ -609,7 +609,7 @@ export class ConversationRun
 				portraitPos,
 				portraitSize,
 				DataBinding.fromContext(visualPortrait),
-				Color.byName("Black"), // colorBackground
+				Color.Instances().Black, // colorBackground
 				null // colorBorder
 			),
 

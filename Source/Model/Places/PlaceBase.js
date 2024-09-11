@@ -48,7 +48,7 @@ var ThisCouldBeBetter;
             // Drawing.
             draw(universe, world, display) {
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseWorldAndPlace(universe, world, this);
-                var colorBlack = GameFramework.Color.byName("Black");
+                var colorBlack = GameFramework.Color.Instances().Black;
                 display.drawBackground(colorBlack, colorBlack);
                 var cameraEntity = this.camera();
                 if (cameraEntity == null) {

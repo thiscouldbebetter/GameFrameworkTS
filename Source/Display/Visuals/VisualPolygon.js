@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             static default() {
-                return VisualPolygon.fromDimensionAndColorBorder(10, GameFramework.Color.byName("Cyan"));
+                return VisualPolygon.fromDimensionAndColorBorder(10, GameFramework.Color.Instances().Cyan);
             }
             static fromColorBorder(colorBorder) {
                 return VisualPolygon.fromDimensionAndColorBorder(10, colorBorder);

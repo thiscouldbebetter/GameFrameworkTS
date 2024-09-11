@@ -64,24 +64,26 @@ export class ControlColorScheme_Instances
 
 	constructor()
 	{
+		var colors = Color.Instances();
+
 		this.Default = new ControlColorScheme
 		(
 			"Default", // name
 			Color.fromRGB(240/255, 240/255, 240/255), // colorBackground
-			Color.byName("White"), // colorFill
-			Color.byName("Gray"), // colorBorder
-			Color.byName("GrayLight") // colorDisabled
+			colors.White, // colorFill
+			colors.Gray, // colorBorder
+			colors.GrayLight // colorDisabled
 		);
 
 		this.Dark = new ControlColorScheme
 		(
 			"Dark", // name
-			Color.byName("GrayDark"), // colorBackground
-			Color.byName("Black"), // colorFill
-			Color.byName("White"), // colorBorder
-			Color.byName("GrayLight") // colorDisabled
+			colors.GrayDark, // colorBackground
+			colors.Black, // colorFill
+			colors.White, // colorBorder
+			colors.GrayLight // colorDisabled
 		);
-				
+
 		this._All =
 		[
 			this.Default, this.Dark

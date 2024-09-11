@@ -427,7 +427,7 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var i = c.itemSelected;
                         return (i == null ? visualNone : i.defn(world).visual);
-                    }), GameFramework.Color.byName("Black") // colorBackground
+                    }), GameFramework.Color.Instances().Black // colorBackground
                     ),
                     new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(150, 115), // pos
                     GameFramework.Coords.fromXY(200, 15), // size

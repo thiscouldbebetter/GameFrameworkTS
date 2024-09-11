@@ -103,7 +103,7 @@ class PlaceBuilderDemo // Main.
         var tunnelsVisual = new VisualGroup([]);
         var wallThickness = 4; // todo
         var tunnelWidth = wallThickness * 8;
-        var color = Color.byName("Red");
+        var color = Color.Instances().Red;
         var nodes = network.nodes;
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
@@ -652,7 +652,7 @@ class PlaceBuilderDemo // Main.
     }
     build_SizeWallsAndMargins(namePrefix, placePos, areNeighborsConnectedESWN) {
         this.size = this.size.clearZ();
-        var wallThickness = this.entityBuildObstacleWalls(Color.byName("Gray"), areNeighborsConnectedESWN, namePrefix, placePos, 0 // damagePerHit
+        var wallThickness = this.entityBuildObstacleWalls(Color.Instances().Gray, areNeighborsConnectedESWN, namePrefix, placePos, 0 // damagePerHit
         );
         var marginThickness = wallThickness * 8;
         var marginSize = new Coords(1, 1, 0).multiplyScalar(marginThickness);
@@ -732,10 +732,10 @@ class PlaceBuilderDemo // Main.
         return entity;
     }
     entityBuildGoal(entities, entitySize, numberOfKeysToUnlockGoal) {
-        var itemKeyColor = Color.byName("Yellow");
+        var itemKeyColor = Color.Instances().Yellow;
         var goalPos = Coords.create().randomize(this.randomizer).multiplyScalar(.5).addDimensions(.25, .25, 0).multiply(this.size);
         var goalLoc = Disposition.fromPos(goalPos);
-        var goalColor = Color.byName("GreenDark");
+        var goalColor = Color.Instances().GreenDark;
         var goalVisual = new VisualGroup([
             VisualRectangle.fromSizeAndColorFill(entitySize, goalColor),
             VisualText.fromTextImmediateFontAndColor("" + numberOfKeysToUnlockGoal, this.font, itemKeyColor)
@@ -961,11 +961,11 @@ class PlaceBuilderDemo // Main.
         ]);
     }
     entityDefnBuildStore() {
-        var storeColor = Color.byName("Brown");
+        var storeColor = Color.Instances().Brown;
         var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
         var visual = new VisualGroup([
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 1.5).multiplyScalar(this.entityDimension), storeColor),
-            new VisualOffset(Coords.fromXY(0, -.75).multiplyScalar(this.entityDimension), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1.1, .2).multiplyScalar(this.entityDimension), Color.byName("Gray"))),
+            new VisualOffset(Coords.fromXY(0, -.75).multiplyScalar(this.entityDimension), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1.1, .2).multiplyScalar(this.entityDimension), Color.Instances().Gray)),
         ]);
         if (this.visualsHaveText) {
             visual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor("Store", this.font, storeColor)));
@@ -1092,7 +1092,7 @@ class PlaceBuilderDemo // Main.
             var projectileCollide = null;
             var projectileDie = (uwpe) => {
                 var explosionRadius = 32;
-                var explosionVisual = VisualCircle.fromRadiusAndColorFill(explosionRadius, Color.byName("Yellow"));
+                var explosionVisual = VisualCircle.fromRadiusAndColorFill(explosionRadius, Color.Instances().Yellow);
                 var explosionCollider = new Sphere(Coords.create(), explosionRadius);
                 var explosionCollide = (uwpe) => {
                     var entityProjectile = uwpe.entity;
@@ -1213,7 +1213,7 @@ class PlaceBuilderDemo // Main.
                     entityProjectile.killable().integrity = 0;
                 }
             };
-            var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.byName("Red"));
+            var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
             var killable = new Killable(1, // integrityMax
             null, // damageApply
             (uwpe) => // die
@@ -1306,7 +1306,7 @@ class PlaceBuilderDemo // Main.
             carVisualBody
         ]);
         if (this.visualsHaveText) {
-            carVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - entityDimension * 2.5), VisualText.fromTextImmediateFontAndColor(defnName, this.font, Color.byName("Blue"))));
+            carVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - entityDimension * 2.5), VisualText.fromTextImmediateFontAndColor(defnName, this.font, Color.Instances().Blue)));
         }
         var carCollider = new Sphere(Coords.create(), entityDimension / 2);
         var carCollide = (uwpe) => {
@@ -1588,7 +1588,8 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildPotion() {
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnPotionName = "Potion";
-        var itemPotionColor = Color.byName("Blue");
+        var colors = Color.Instances();
+        var itemPotionColor = colors.Blue;
         var itemPotionVisual = new VisualGroup([
             VisualPolygon.fromPathAndColors(new Path([
                 Coords.fromXY(1, 1),
@@ -1597,7 +1598,7 @@ class PlaceBuilderDemo // Main.
                 Coords.fromXY(-.2, -.5),
                 Coords.fromXY(.2, -.5),
                 Coords.fromXY(.2, 0)
-            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPotionColor, Color.byName("White"))
+            ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemPotionColor, colors.White)
         ]);
         if (this.visualsHaveText) {
             itemPotionVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemDefnPotionName, this.font, itemPotionColor)));
@@ -1680,7 +1681,7 @@ class PlaceBuilderDemo // Main.
             var staminaToFire = 10;
             if (userTirable.stamina < staminaToFire) {
                 var message = "Too tired!";
-                place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.font, userPos.clone(), Color.byName("Red")));
+                place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.font, userPos.clone(), Color.Instances().Red));
                 return;
             }
             userTirable.staminaSubtract(staminaToFire);
@@ -1705,7 +1706,7 @@ class PlaceBuilderDemo // Main.
                     entityProjectile.killable().integrity = 0;
                 }
             };
-            var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.byName("Red"));
+            var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
             var killable = new Killable(1, // integrityMax
             null, // damageApply
             (uwpe) => // die

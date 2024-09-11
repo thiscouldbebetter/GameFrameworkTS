@@ -118,7 +118,7 @@ class Effect_Instances
 			"Frozen",
 			20, // ticksPerCycle
 			5, // cyclesToLive
-			VisualCircle.fromRadiusAndColorFill(visualDimension, Color.byName("Cyan")),
+			VisualCircle.fromRadiusAndColorFill(visualDimension, Color.Instances().Cyan),
 			(uwpe: UniverseWorldPlaceEntities, effect: Effect) =>
 			{
 				var damage = Damage.fromAmountAndTypeName(1, "Cold");
@@ -153,7 +153,7 @@ class Effect_Instances
 				(
 					Transform_Scale.fromScalar(visualDimension * 1.5)
 				),
-				Color.byName("Red")
+				Color.Instances().Red
 			),
 			(uwpe: UniverseWorldPlaceEntities, effect: Effect) =>
 			{

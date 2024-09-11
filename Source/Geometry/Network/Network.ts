@@ -207,7 +207,7 @@ export class VisualNetwork implements Visual<VisualNetwork>
 
 		var networkTransformed = this.networkTransformed;
 
-		var colorCyan = Color.byName("Cyan");
+		var colorCyan = Color.Instances().Cyan;
 
 		var links = networkTransformed.links;
 		for (var i = 0; i < links.length; i++)

@@ -17,7 +17,8 @@ class GameDemo {
             // Wrap.
             new Coords(200, 150, 1),
         ];
-        var display = new Display2D(displaySizesAvailable, new FontNameAndHeight("Font", 10), Color.byName("Gray"), Color.byName("White"), // colorFore, colorBack
+        var colors = Color.Instances();
+        var display = new Display2D(displaySizesAvailable, new FontNameAndHeight("Font", 10), colors.Gray, colors.White, // colorFore, colorBack
         null);
         var timerHelper = new TimerHelper(20);
         var controlBuilder = ControlBuilder.fromStyles([

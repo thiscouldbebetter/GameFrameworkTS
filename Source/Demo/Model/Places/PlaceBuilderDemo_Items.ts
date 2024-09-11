@@ -70,7 +70,7 @@ class PlaceBuilderDemo_Items
 	armor(): ItemDefn
 	{
 		var itemArmorName = "Armor";
-		var itemArmorColor = Color.byName("GreenDark");
+		var itemArmorColor = Color.Instances().GreenDark;
 		var path = new Path
 		([
 			Coords.fromXY(0, 0.5),
@@ -105,7 +105,7 @@ class PlaceBuilderDemo_Items
 	armorEnhanced(): ItemDefn
 	{
 		var itemArmorName = "Enhanced Armor";
-		var itemArmorColor = Color.byName("GreenDark");
+		var itemArmorColor = Color.Instances().GreenDark;
 		var path = new Path
 		([
 			Coords.fromXY(0, 0.5),
@@ -154,7 +154,7 @@ class PlaceBuilderDemo_Items
 
 		var itemArrowVisualShaft = new VisualLine
 		(
-			Coords.fromXY(-5, 0), Coords.fromXY(5, 0), Color.byName("Brown"), 1 // lineThickness
+			Coords.fromXY(-5, 0), Coords.fromXY(5, 0), Color.Instances().Brown, 1 // lineThickness
 		);
 
 		var pathHead = new Path
@@ -185,7 +185,7 @@ class PlaceBuilderDemo_Items
 		);
 		var itemArrowVisualTail = VisualPolygon.fromPathAndColorFill
 		(
-			pathTail, Color.byName("White")
+			pathTail, Color.Instances().White
 		);
 
 		var itemArrowVisual = new VisualGroup
@@ -221,7 +221,8 @@ class PlaceBuilderDemo_Items
 	bomb(): ItemDefn
 	{
 		var itemBombName = "Bomb";
-		var itemBombColor = Color.byName("BlueDark");
+		var colors = Color.Instances();
+		var itemBombColor = colors.BlueDark;
 		var itemBombVisual = new VisualGroup
 		([
 			// fuse
@@ -231,7 +232,7 @@ class PlaceBuilderDemo_Items
 				VisualRectangle.fromSizeAndColorFill
 				(
 					new Coords(.2, 1, 1).multiplyScalar(this.entityDimensionHalf),
-					Color.byName("Tan")
+					colors.Tan
 				)
 			),
 			// body
@@ -245,7 +246,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3),
 				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimensionHalf * .3, Color.byName("Blue")
+					this.entityDimensionHalf * .3, colors.Blue
 				)
 			)
 		]);
@@ -278,7 +279,8 @@ class PlaceBuilderDemo_Items
 	book(): ItemDefn
 	{
 		var itemBookName = "Book";
-		var itemBookColor = Color.byName("Blue");
+		var colors = Color.Instances();
+		var itemBookColor = colors.Blue;
 		var itemBookVisual = new VisualGroup
 		([
 			VisualRectangle.fromSizeAndColorFill
@@ -292,7 +294,7 @@ class PlaceBuilderDemo_Items
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(.1, 1.1).multiplyScalar(this.entityDimension),
-					Color.byName("White")
+					colors.White
 				)
 			)
 		]);
@@ -381,7 +383,7 @@ class PlaceBuilderDemo_Items
 	bow(): ItemDefn
 	{
 		var itemBowName = "Bow";
-		var itemBowColor = Color.byName("Brown");
+		var itemBowColor = Color.Instances().Brown;
 
 		var itemBowVisualString = VisualPolygon.fromPathAndColorFill
 		(
@@ -392,7 +394,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(1, this.entityDimension),
 				Coords.fromXY(0, this.entityDimension),
 			]),
-			Color.byName("White")
+			Color.Instances().White
 		);
 
 		var itemBowVisualBody = new VisualArc
@@ -439,14 +441,15 @@ class PlaceBuilderDemo_Items
 	bread(): ItemDefn
 	{
 		var itemBreadName = "Bread";
-		var itemBreadColor = Color.byName("Orange");
+		var colors = Color.Instances();
+		var itemBreadColor = colors.Orange;
 
 		var itemBreadVisualCut = new VisualEllipse
 		(
 			this.entityDimension * .15, // semimajorAxis
 			this.entityDimensionHalf * .15,
 			.25, // rotationInTurns
-			Color.byName("Tan"),
+			colors.Tan,
 			null, // colorBorder
 			false // shouldUseEntityOrientation
 		);
@@ -517,7 +520,8 @@ class PlaceBuilderDemo_Items
 	coin(): ItemDefn
 	{
 		var itemCoinName = "Coin";
-		var itemCoinColor = Color.byName("Yellow");
+		var colors = Color.Instances();
+		var itemCoinColor = colors.Yellow;
 		var itemCoinVisual = new VisualGroup
 		([
 			VisualCircle.fromRadiusAndColorFill
@@ -526,7 +530,7 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualCircle
 			(
-				this.entityDimensionHalf * .75, null, Color.byName("Gray"), null
+				this.entityDimensionHalf * .75, null, colors.Gray, null
 			)
 		]);
 
@@ -556,7 +560,8 @@ class PlaceBuilderDemo_Items
 	crystal(): ItemDefn
 	{
 		var itemCrystalName = "Crystal";
-		var itemCrystalColor = Color.byName("Cyan");
+		var colors = Color.Instances();
+		var itemCrystalColor = colors.Cyan;
 		var itemCrystalVisual = new VisualGroup
 		([
 			VisualPolygon.fromPathAndColors
@@ -575,7 +580,7 @@ class PlaceBuilderDemo_Items
 					)
 				),
 				itemCrystalColor,
-				Color.byName("White")
+				colors.White
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -592,7 +597,7 @@ class PlaceBuilderDemo_Items
 						Coords.ones().multiplyScalar(this.entityDimension / 4)
 					)
 				),
-				Color.byName("White")
+				colors.White
 			)
 		]);
 
@@ -622,7 +627,7 @@ class PlaceBuilderDemo_Items
 	doughnut(): ItemDefn
 	{
 		var itemDoughnutName = "Doughnut";
-		var itemDoughnutColor = Color.byName("Orange");
+		var itemDoughnutColor = Color.Instances().Orange;
 
 		var itemDoughnutVisualBody = new VisualGroup
 		([
@@ -689,7 +694,8 @@ class PlaceBuilderDemo_Items
 	flower(): ItemDefn
 	{
 		var itemFlowerName = "Flower";
-		var colorFlower = Color.byName("Pink");
+		var colors = Color.Instances();
+		var colorFlower = colors.Pink;
 		var itemFlowerVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -701,7 +707,7 @@ class PlaceBuilderDemo_Items
 					this.entityDimensionHalf * 2 - 2, // radiusInner
 					Coords.fromXY(-1, 1).normalize(), // directionMin
 					.25, // angleSpannedInTurns
-					Color.byName("GreenDark"),
+					colors.GreenDark,
 					null
 				)
 			),
@@ -725,7 +731,7 @@ class PlaceBuilderDemo_Items
 					)
 				),
 				colorFlower,
-				Color.byName("Red")
+				colors.Red
 			)
 		]);
 
@@ -755,7 +761,8 @@ class PlaceBuilderDemo_Items
 	fruit(): ItemDefn
 	{
 		var itemFruitName = "Fruit";
-		var itemFruitColor = Color.byName("Orange");
+		var colors = Color.Instances();
+		var itemFruitColor = colors.Orange;
 		var itemFruitVisual = new VisualGroup
 		([
 			VisualCircle.fromRadiusAndColorFill
@@ -767,7 +774,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2),
 				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimensionHalf * .25, Color.byName("White")
+					this.entityDimensionHalf * .25, colors.White
 				)
 			)
 		]);
@@ -840,7 +847,7 @@ class PlaceBuilderDemo_Items
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3),
 					VisualText.fromTextImmediateFontAndColor
 					(
-						itemGrassName, this.font, Color.byName("GreenDark")
+						itemGrassName, this.font, Color.Instances().GreenDark
 					)
 				)
 			);
@@ -858,7 +865,7 @@ class PlaceBuilderDemo_Items
 	{
 		var entityDimensionQuarter = this.entityDimensionHalf / 2;
 		var itemHeartName = "Heart";
-		var itemHeartColor = Color.byName("Red");
+		var itemHeartColor = Color.Instances().Red;
 		var itemHeartVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -936,7 +943,7 @@ class PlaceBuilderDemo_Items
 	iron(): ItemDefn
 	{
 		var itemIronName = "Iron";
-		var itemIronColor = Color.byName("Gray");
+		var itemIronColor = Color.Instances().Gray;
 		var itemIronVisual = new VisualGroup
 		([
 			VisualPolygon.fromPathAndColorFill
@@ -983,7 +990,7 @@ class PlaceBuilderDemo_Items
 	ironOre(): ItemDefn
 	{
 		var itemIronOreName = "Iron Ore";
-		var itemIronOreColor = Color.byName("Gray");
+		var itemIronOreColor = Color.Instances().Gray;
 		var itemIronOreVisual = new VisualGroup
 		([
 			new VisualArc
@@ -1025,7 +1032,7 @@ class PlaceBuilderDemo_Items
 	key(): ItemDefn
 	{
 		var itemKeyName = "Key";
-		var itemKeyColor = Color.byName("Yellow");
+		var itemKeyColor = Color.Instances().Yellow;
 		var itemKeyVisual = new VisualGroup
 		([
 			new VisualArc
@@ -1078,7 +1085,7 @@ class PlaceBuilderDemo_Items
 	log(): ItemDefn
 	{
 		var itemLogName = "Log";
-		var itemLogColor = Color.byName("Brown");
+		var itemLogColor = Color.Instances().Brown;
 		var itemLogVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -1099,7 +1106,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(-this.entityDimension, 0),
 				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimensionHalf, Color.byName("Tan")
+					this.entityDimensionHalf, Color.Instances().Tan
 				)
 			)
 		]);
@@ -1130,7 +1137,8 @@ class PlaceBuilderDemo_Items
 	meat(): ItemDefn
 	{
 		var itemMeatName = "Meat";
-		var itemMeatColor = Color.byName("Red");
+		var colors = Color.Instances();
+		var itemMeatColor = colors.Red;
 		var itemMeatVisual = new VisualGroup
 		([
 			VisualCircle.fromRadiusAndColorFill
@@ -1139,7 +1147,7 @@ class PlaceBuilderDemo_Items
 			),
 			new VisualCircle
 			(
-				this.entityDimensionHalf * .9, null, Color.byName("White"), null
+				this.entityDimensionHalf * .9, null, colors.White, null
 			),
 			new VisualOffset
 			(
@@ -1147,8 +1155,8 @@ class PlaceBuilderDemo_Items
 				new VisualCircle
 				(
 					this.entityDimensionHalf * .2,
-					Color.byName("Pink"),
-					Color.byName("White"), null // ?
+					colors.Pink,
+					colors.White, null // ?
 				)
 			)
 		]);
@@ -1192,13 +1200,14 @@ class PlaceBuilderDemo_Items
 	medicine(): ItemDefn
 	{
 		var itemMedicineName = "Medicine";
-		var itemMedicineColor = Color.byName("Red");
+		var colors = Color.Instances();
+		var itemMedicineColor = colors.Red;
 		var itemMedicineVisual = new VisualGroup
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
 				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension),
-				Color.byName("White")
+				colors.White
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -1254,8 +1263,9 @@ class PlaceBuilderDemo_Items
 	mushroom(): ItemDefn
 	{
 		var itemMushroomName = "Mushroom";
-		var colorStem = Color.byName("Gray");
-		var colorCap = Color.byName("Violet");
+		var colors = Color.Instances();
+		var colorStem = colors.Gray;
+		var colorCap = colors.Violet;
 		var itemMushroomVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -1298,7 +1308,8 @@ class PlaceBuilderDemo_Items
 	pick(): ItemDefn
 	{
 		var itemPickName = "Pick";
-		var itemPickColor = Color.byName("Gray");
+		var colors = Color.Instances();
+		var itemPickColor = colors.Gray;
 		var itemPickVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -1307,7 +1318,7 @@ class PlaceBuilderDemo_Items
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
-					Color.byName("Brown")
+					colors.Brown
 				)
 			),
 			VisualPolygon.fromPathAndColorFill
@@ -1356,13 +1367,14 @@ class PlaceBuilderDemo_Items
 		// todo - Same as medicine right now.
 
 		var itemPotionName = "Potion";
-		var itemPotionColor = Color.byName("Red");
+		var colors = Color.Instances();
+		var itemPotionColor = colors.Red;
 		var itemPotionVisual = new VisualGroup
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
 				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension),
-				Color.byName("White")
+				colors.White
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -1428,7 +1440,8 @@ class PlaceBuilderDemo_Items
 	shovel(): ItemDefn
 	{
 		var itemShovelName = "Shovel";
-		var itemShovelColor = Color.byName("Gray");
+		var colors = Color.Instances();
+		var itemShovelColor = colors.Gray;
 		var itemShovelVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -1437,7 +1450,7 @@ class PlaceBuilderDemo_Items
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
-					Color.byName("Brown")
+					colors.Brown
 				)
 			),
 			VisualPolygon.fromPathAndColorFill
@@ -1475,7 +1488,7 @@ class PlaceBuilderDemo_Items
 	speedBoots(): ItemDefn
 	{
 		var itemSpeedBootsName = "Speed Boots";
-		var itemAccessoryColor = Color.byName("Orange");
+		var itemAccessoryColor = Color.Instances().Orange;
 		var itemSpeedBootsVisual = new VisualGroup
 		([
 			VisualPolygon.fromPathAndColorFill
@@ -1538,7 +1551,7 @@ class PlaceBuilderDemo_Items
 
 	sword(): ItemDefn
 	{
-		var itemSwordVisual = this.sword_Visual(Color.byName("GrayLight"));
+		var itemSwordVisual = this.sword_Visual(Color.Instances().GrayLight);
 		var itemSword = new ItemDefn
 		(
 			"Sword", null, null, 10, 100, null, [ "Wieldable" ],
@@ -1627,7 +1640,7 @@ class PlaceBuilderDemo_Items
 
 	swordCold(): ItemDefn
 	{
-		var bladeColor = Color.byName("Cyan");
+		var bladeColor = Color.Instances().Cyan;
 		var damageTypeName = "Cold";
 		var itemSwordVisual = this.sword_Visual(bladeColor);
 		var itemSword = new ItemDefn
@@ -1642,7 +1655,7 @@ class PlaceBuilderDemo_Items
 
 	swordHeat(): ItemDefn
 	{
-		var bladeColor = Color.byName("Yellow");
+		var bladeColor = Color.Instances().Yellow;
 		var damageTypeName = "Heat";
 		var itemSwordVisual = this.sword_Visual(bladeColor);
 		var itemSword = new ItemDefn
@@ -1659,7 +1672,8 @@ class PlaceBuilderDemo_Items
 	toolset(): ItemDefn
 	{
 		var itemToolsetName = "Toolset";
-		var itemToolsetColor = Color.byName("Gray");
+		var colors = Color.Instances();
+		var itemToolsetColor = colors.Gray;
 		var itemToolsetVisual = new VisualGroup
 		([
 			new VisualOffset
@@ -1668,7 +1682,7 @@ class PlaceBuilderDemo_Items
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(this.entityDimension / 4, this.entityDimension),
-					Color.byName("Brown")
+					colors.Brown
 				)
 			),
 			VisualRectangle.fromSizeAndColorFill
@@ -1698,7 +1712,8 @@ class PlaceBuilderDemo_Items
 	torch(): ItemDefn
 	{
 		var itemTorchName = "Torch";
-		var itemTorchColor = Color.byName("Brown");
+		var colors = Color.Instances();
+		var itemTorchColor = colors.Brown;
 
 		var itemTorchVisualBody = VisualRectangle.fromSizeAndColorFill
 		(
@@ -1711,7 +1726,7 @@ class PlaceBuilderDemo_Items
 			this.entityDimensionHalf * .65, // semimajorAxis
 			this.entityDimensionHalf * .45,
 			.25, // rotationInTurns
-			Color.byName("Tan"),
+			colors.Tan,
 			null, // colorBorder
 			false // shouldUseEntityOrientation
 		);
@@ -1776,7 +1791,7 @@ class PlaceBuilderDemo_Items
 	weight(): ItemDefn
 	{
 		var itemWeightName = "Weight";
-		var itemWeightColor = Color.byName("Blue");
+		var itemWeightColor = Color.Instances().Blue;
 		var itemWeightVisual = new VisualGroup
 		([
 			new VisualOffset

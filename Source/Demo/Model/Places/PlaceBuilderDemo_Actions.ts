@@ -141,7 +141,7 @@ class PlaceBuilderDemo_Actions
 								message,
 								this.font,
 								entityActor.locatable().loc.pos,
-								Color.byName("Red")
+								Color.Instances().Red
 							)
 						);
 					}

@@ -82,7 +82,7 @@ export class WordBubble
 					marginSize,
 					portraitSize, // size
 					DataBinding.fromContext(this.visualForPortrait),
-					Color.byName("Black"), // colorBackground
+					Color.Instances().Black, // colorBackground
 					null // colorBorder
 				),
 

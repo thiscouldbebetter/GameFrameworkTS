@@ -118,7 +118,7 @@ var ThisCouldBeBetter;
                 this.transformLocate.loc.overwriteWith(drawableLoc);
                 this.networkTransformed.overwriteWith(this.network).transform(this.transformLocate);
                 var networkTransformed = this.networkTransformed;
-                var colorCyan = GameFramework.Color.byName("Cyan");
+                var colorCyan = GameFramework.Color.Instances().Cyan;
                 var links = networkTransformed.links;
                 for (var i = 0; i < links.length; i++) {
                     var link = links[i];

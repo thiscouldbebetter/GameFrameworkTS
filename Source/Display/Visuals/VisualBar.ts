@@ -123,13 +123,14 @@ export class VisualBar implements Visual<VisualBar>
 			{
 				text = this.text.get();
 			}
+
 			display.drawText
 			(
 				text,
 				FontNameAndHeight.fromHeightInPixels(this.size.y), // fontHeightInPixels
 				pos,
 				colorForBorder,
-				Color.byName("Black"), // colorOutline
+				Color.Instances().Black, // colorOutline
 				true, // isCenteredHorizontally
 				true, // isCenteredVertically
 				null // sizeMaxInPixels

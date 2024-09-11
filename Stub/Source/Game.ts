@@ -28,12 +28,14 @@ class Game
 			new Coords(200, 150, 1),
 		];
 
+		var colors = Color.Instances();
+
 		var display = new Display2D
 		(
 			displaySizesAvailable,
 			"Font", // fontName
 			10, // fontHeightInPixels
-			Color.byName("Gray"), Color.byName("White"), // colorFore, colorBack
+			colors.Gray, colors.White, // colorFore, colorBack
 			null
 		);
 

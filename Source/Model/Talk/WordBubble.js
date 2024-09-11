@@ -37,7 +37,7 @@ var ThisCouldBeBetter;
                 // children
                 [
                     new GameFramework.ControlVisual("visualPortrait", marginSize, portraitSize, // size
-                    GameFramework.DataBinding.fromContext(this.visualForPortrait), GameFramework.Color.byName("Black"), // colorBackground
+                    GameFramework.DataBinding.fromContext(this.visualForPortrait), GameFramework.Color.Instances().Black, // colorBackground
                     null // colorBorder
                     ),
                     new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(portraitSize.x + margin, 0).add(marginSize), wordPaneSize, // size

@@ -27,17 +27,18 @@ var ThisCouldBeBetter;
         GameFramework.ControlColorScheme = ControlColorScheme;
         class ControlColorScheme_Instances {
             constructor() {
+                var colors = GameFramework.Color.Instances();
                 this.Default = new ControlColorScheme("Default", // name
                 GameFramework.Color.fromRGB(240 / 255, 240 / 255, 240 / 255), // colorBackground
-                GameFramework.Color.byName("White"), // colorFill
-                GameFramework.Color.byName("Gray"), // colorBorder
-                GameFramework.Color.byName("GrayLight") // colorDisabled
+                colors.White, // colorFill
+                colors.Gray, // colorBorder
+                colors.GrayLight // colorDisabled
                 );
                 this.Dark = new ControlColorScheme("Dark", // name
-                GameFramework.Color.byName("GrayDark"), // colorBackground
-                GameFramework.Color.byName("Black"), // colorFill
-                GameFramework.Color.byName("White"), // colorBorder
-                GameFramework.Color.byName("GrayLight") // colorDisabled
+                colors.GrayDark, // colorBackground
+                colors.Black, // colorFill
+                colors.White, // colorBorder
+                colors.GrayLight // colorDisabled
                 );
                 this._All =
                     [

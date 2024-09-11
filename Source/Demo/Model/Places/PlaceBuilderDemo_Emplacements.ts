@@ -24,7 +24,7 @@ class PlaceBuilderDemo_Emplacements
 
 		this.parent.textWithColorAddToVisual
 		(
-			anvilName, Color.byName("Blue"), anvilVisual as VisualGroup
+			anvilName, Color.Instances().Blue, anvilVisual as VisualGroup
 		);
 
 		var anvilUse = (uwpe: UniverseWorldPlaceEntities) =>
@@ -85,7 +85,7 @@ class PlaceBuilderDemo_Emplacements
 		var entityDimension = this.entityDimension / 2;
 		var itemDefnName = "Boulder";
 
-		var colorBoulder = Color.byName("Gray");
+		var colorBoulder = Color.Instances().Gray;
 		var itemBoulderVisual = new VisualGroup
 		([
 			new VisualArc
@@ -168,12 +168,13 @@ class PlaceBuilderDemo_Emplacements
 		var entityDimensionHalf = this.entityDimension / 2;
 
 		var campfireName = "Campfire";
-		var campfireColor = Color.byName("Orange");
+		var colors = Color.Instances();
+		var campfireColor = colors.Orange;
 
 		var flameVisual = VisualBuilder.Instance().flame(this.entityDimension);
 		var smokePuffVisual = VisualCircle.fromRadiusAndColorFill
 		(
-			entityDimensionHalf, Color.byName("GrayLight")
+			entityDimensionHalf, colors.GrayLight
 		);
 		var smokeVisual = new VisualParticles
 		(
@@ -258,7 +259,8 @@ class PlaceBuilderDemo_Emplacements
 
 	entityDefnBuildContainer(): Entity
 	{
-		var containerColor = Color.byName("Orange");
+		var colors = Color.Instances();
+		var containerColor = colors.Orange;
 		var entitySize = Coords.fromXY(1.5, 1).multiplyScalar(this.entityDimension);
 		var visual = new VisualGroup
 		([
@@ -268,12 +270,12 @@ class PlaceBuilderDemo_Emplacements
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
-				Coords.fromXY(1.5 * this.entityDimension, 1), Color.byName("Gray")
+				Coords.fromXY(1.5 * this.entityDimension, 1), colors.Gray
 			),
 			VisualRectangle.fromSizeAndColorFill
 			(
 				Coords.fromXY(.5, .5).multiplyScalar(this.entityDimension),
-				Color.byName("Gray")
+				colors.Gray
 			)
 		]);
 
@@ -327,7 +329,8 @@ class PlaceBuilderDemo_Emplacements
 
 	entityDefnBuildExit(): Entity
 	{
-		var exitColor = Color.byName("Brown");
+		var colors = Color.Instances();
+		var exitColor = colors.Brown;
 		var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
 
 		var visual = new VisualGroup
@@ -351,7 +354,7 @@ class PlaceBuilderDemo_Emplacements
 				Coords.fromXY(this.entityDimension / 4, 0 - this.entityDimension * .6),
 				VisualCircle.fromRadiusAndColorFill
 				(
-					this.entityDimension / 8, Color.byName("Yellow")
+					this.entityDimension / 8, colors.Yellow
 				)
 			)
 		]);
@@ -396,7 +399,7 @@ class PlaceBuilderDemo_Emplacements
 	{
 		var entityName = "Hole";
 		var entityDimension = this.entityDimension * 1.5;
-		var itemHoleColor = Color.byName("Brown");
+		var itemHoleColor = Color.Instances().Brown;
 		var itemHoleVisual = new VisualGroup
 		([
 			VisualPolygon.fromPathAndColorFill
@@ -451,7 +454,7 @@ class PlaceBuilderDemo_Emplacements
 
 	entityDefnBuildObstacleBar(): Entity
 	{
-		var obstacleColor = Color.byName("Red");
+		var obstacleColor = Color.Instances().Red;
 
 		var obstacleBarSize = new Coords(6, 2, 1).multiplyScalar(this.entityDimension);
 		var obstacleRotationInTurns = .0625;
@@ -507,7 +510,8 @@ class PlaceBuilderDemo_Emplacements
 
 	entityDefnBuildObstacleMine(): Entity
 	{
-		var obstacleColor = Color.byName("Red");
+		var colors = Color.Instances();
+		var obstacleColor = colors.Red;
 		var obstacleMappedCellSourceAsStrings =
 		[
 			"....xxxx....",
@@ -593,7 +597,8 @@ class PlaceBuilderDemo_Emplacements
 
 	entityDefnBuildObstacleRing(): Entity
 	{
-		var obstacleColor = Color.byName("Gray");
+		var colors = Color.Instances();
+		var obstacleColor = colors.Gray;
 		var obstacleRadiusOuter = this.entityDimension * 3.5;
 		var obstacleRadiusInner = obstacleRadiusOuter - this.entityDimension;
 		var obstacleAngleSpannedInTurns = .85;
@@ -663,7 +668,7 @@ class PlaceBuilderDemo_Emplacements
 
 		this.parent.textWithColorAddToVisual
 		(
-			pillowName, Color.byName("Blue"), pillowVisual as VisualGroup
+			pillowName, Color.Instances().Blue, pillowVisual as VisualGroup
 		);
 
 		var pillowUse = (uwpe: UniverseWorldPlaceEntities) =>
@@ -693,7 +698,7 @@ class PlaceBuilderDemo_Emplacements
 
 	entityDefnBuildPortal(): Entity
 	{
-		var baseColor = "Brown";
+		var baseColor = Color.Instances().Brown;
 
 		var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
 
@@ -712,7 +717,7 @@ class PlaceBuilderDemo_Emplacements
 				(
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
-				Color.byName(baseColor)
+				baseColor
 			),
 			new VisualOffset
 			(
@@ -722,7 +727,6 @@ class PlaceBuilderDemo_Emplacements
 					(uwpe: UniverseWorldPlaceEntities) =>
 					{
 						var e = uwpe.entity;
-						var baseColor = Color.byName("Brown");
 						return VisualText.fromTextImmediateFontAndColor
 						(
 							e.portal().destinationPlaceName,
@@ -759,7 +763,7 @@ class PlaceBuilderDemo_Emplacements
 	{
 		var entityName = "TrafficCone";
 		var entityDimension = this.entityDimension * 1.5;
-		var color = Color.byName("Orange");
+		var color = Color.Instances().Orange;
 		var visual = new VisualGroup
 		([
 			VisualPolygon.fromPathAndColorFill
@@ -831,14 +835,15 @@ class PlaceBuilderDemo_Emplacements
 	{
 		var entityName = "Tree";
 		this.entityDimension *= 1.5;
-		var color = Color.byName("GreenDark");
-		var colorBorder = Color.byName("Black");
+		var colors = Color.Instances();
+		var color = colors.GreenDark;
+		var colorBorder = colors.Black;
 		var visualTree = new VisualGroup
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
 				Coords.fromXY(1, 2).multiplyScalar(this.entityDimension * 0.5),
-				Color.byName("Brown")
+				colors.Brown
 			),
 			new VisualOffset
 			(

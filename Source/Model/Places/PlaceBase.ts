@@ -95,7 +95,7 @@ export class PlaceBase implements Place, Loadable
 		(
 			universe, world, this
 		);
-		var colorBlack = Color.byName("Black");
+		var colorBlack = Color.Instances().Black;
 		display.drawBackground(colorBlack, colorBlack);
 
 		var cameraEntity = this.camera();

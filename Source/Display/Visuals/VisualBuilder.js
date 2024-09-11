@@ -285,9 +285,10 @@ var ThisCouldBeBetter;
             }
             eyesBlinking(visualEyeRadius) {
                 var visualPupilRadius = visualEyeRadius / 2;
+                var colors = GameFramework.Color.Instances();
                 var visualEye = new GameFramework.VisualGroup([
-                    GameFramework.VisualCircle.fromRadiusAndColorFill(visualEyeRadius, GameFramework.Color.byName("White")),
-                    GameFramework.VisualCircle.fromRadiusAndColorFill(visualPupilRadius, GameFramework.Color.byName("Black"))
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(visualEyeRadius, colors.White),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(visualPupilRadius, colors.Black)
                 ]);
                 var visualEyes = new GameFramework.VisualGroup([
                     GameFramework.VisualOffset.fromChildAndOffset(visualEye, GameFramework.Coords.fromXY(-visualEyeRadius, 0)),
@@ -299,17 +300,18 @@ var ThisCouldBeBetter;
             }
             flame(dimension) {
                 var dimensionHalf = dimension / 2;
+                var colors = GameFramework.Color.Instances();
                 var flameVisualStatic = new GameFramework.VisualGroup([
                     GameFramework.VisualPolygon.fromPathAndColorFill(new GameFramework.Path([
                         GameFramework.Coords.fromXY(0, -dimension * 2),
                         GameFramework.Coords.fromXY(dimension, 0),
                         GameFramework.Coords.fromXY(-dimension, 0),
-                    ]), GameFramework.Color.byName("Orange")),
+                    ]), colors.Orange),
                     GameFramework.VisualPolygon.fromPathAndColorFill(new GameFramework.Path([
                         GameFramework.Coords.fromXY(0, -dimension),
                         GameFramework.Coords.fromXY(dimensionHalf, 0),
                         GameFramework.Coords.fromXY(-dimensionHalf, 0),
-                    ]), GameFramework.Color.byName("Yellow"))
+                    ]), colors.Yellow)
                 ]);
                 var flameVisualStaticSmall = flameVisualStatic.clone().transform(new GameFramework.Transform_Scale(new GameFramework.Coords(1, .8, 1)));
                 var flameVisualStaticLarge = flameVisualStatic.clone().transform(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1.2, 1)));
@@ -326,7 +328,7 @@ var ThisCouldBeBetter;
             }
             ice(dimension) {
                 var dimensionHalf = dimension / 2;
-                var color = GameFramework.Color.byName("Cyan");
+                var color = GameFramework.Color.Instances().Cyan;
                 var visual = new GameFramework.VisualGroup([
                     GameFramework.VisualPolygon.fromPathAndColors(new GameFramework.Path([
                         GameFramework.Coords.fromXY(-1, -1),

@@ -812,7 +812,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 						return (i == null ? visualNone : i.defn(world).visual);
 					}
 				),
-				Color.byName("Black") // colorBackground
+				Color.Instances().Black // colorBackground
 			),
 
 			new ControlLabel

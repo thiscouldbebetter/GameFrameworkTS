@@ -171,7 +171,7 @@ class PlaceBuilderDemo // Main.
 		var tunnelsVisual = new VisualGroup([]);
 		var wallThickness = 4; // todo
 		var tunnelWidth = wallThickness * 8;
-		var color = Color.byName("Red");
+		var color = Color.Instances().Red;
 
 		var nodes = network.nodes;
 		for (var i = 0; i < nodes.length; i++)
@@ -1170,7 +1170,7 @@ class PlaceBuilderDemo // Main.
 
 		var wallThickness = this.entityBuildObstacleWalls
 		(
-			Color.byName("Gray"),
+			Color.Instances().Gray,
 			areNeighborsConnectedESWN,
 			namePrefix,
 			placePos,
@@ -1346,7 +1346,7 @@ class PlaceBuilderDemo // Main.
 		numberOfKeysToUnlockGoal: number
 	): Entity
 	{
-		var itemKeyColor = Color.byName("Yellow");
+		var itemKeyColor = Color.Instances().Yellow;
 
 		var goalPos = Coords.create().randomize(this.randomizer).multiplyScalar
 		(
@@ -1359,7 +1359,7 @@ class PlaceBuilderDemo // Main.
 			this.size
 		);
 		var goalLoc = Disposition.fromPos(goalPos);
-		var goalColor = Color.byName("GreenDark");
+		var goalColor = Color.Instances().GreenDark;
 
 		var goalVisual = new VisualGroup
 		([
@@ -1779,7 +1779,7 @@ class PlaceBuilderDemo // Main.
 
 	entityDefnBuildStore(): Entity
 	{
-		var storeColor = Color.byName("Brown");
+		var storeColor = Color.Instances().Brown;
 
 		var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
 
@@ -1796,7 +1796,7 @@ class PlaceBuilderDemo // Main.
 				VisualRectangle.fromSizeAndColorFill
 				(
 					Coords.fromXY(1.1, .2).multiplyScalar(this.entityDimension),
-					Color.byName("Gray")
+					Color.Instances().Gray
 				),
 			),
 		]);
@@ -2022,7 +2022,7 @@ class PlaceBuilderDemo // Main.
 					var explosionRadius = 32;
 					var explosionVisual = VisualCircle.fromRadiusAndColorFill
 					(
-						explosionRadius, Color.byName("Yellow")
+						explosionRadius, Color.Instances().Yellow
 					);
 
 					var explosionCollider = new Sphere(Coords.create(), explosionRadius);
@@ -2224,7 +2224,7 @@ class PlaceBuilderDemo // Main.
 				}
 			};
 
-			var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.byName("Red"));
+			var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
 			var killable = new Killable
 			(
 				1, // integrityMax
@@ -2389,7 +2389,7 @@ class PlaceBuilderDemo // Main.
 					Coords.fromXY(0, 0 - entityDimension * 2.5),
 					VisualText.fromTextImmediateFontAndColor
 					(
-						defnName, this.font, Color.byName("Blue")
+						defnName, this.font, Color.Instances().Blue
 					)
 				)
 			);
@@ -2869,7 +2869,8 @@ class PlaceBuilderDemo // Main.
 		var entityDimensionHalf = this.entityDimension / 2;
 
 		var itemDefnPotionName = "Potion";
-		var itemPotionColor = Color.byName("Blue");
+		var colors = Color.Instances();
+		var itemPotionColor = colors.Blue;
 		var itemPotionVisual = new VisualGroup
 		([
 			VisualPolygon.fromPathAndColors
@@ -2887,7 +2888,7 @@ class PlaceBuilderDemo // Main.
 					Transform_Scale.fromScalar(this.entityDimension)
 				),
 				itemPotionColor,
-				Color.byName("White")
+				colors.White
 			)
 		]);
 
@@ -3034,7 +3035,7 @@ class PlaceBuilderDemo // Main.
 						message,
 						this.font,
 						userPos.clone(),
-						Color.byName("Red")
+						Color.Instances().Red
 					)
 				);
 
@@ -3082,7 +3083,7 @@ class PlaceBuilderDemo // Main.
 				}
 			};
 
-			var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.byName("Red"));
+			var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
 			var killable = new Killable
 			(
 				1, // integrityMax
