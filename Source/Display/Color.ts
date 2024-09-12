@@ -263,6 +263,7 @@ export class Color_Instances
 	GreenMediumLight: Color;
 	Orange: Color;
 	Pink: Color;
+	Purple: Color;
 	Red: Color;
 	RedDark: Color;
 	Tan: Color;
@@ -280,39 +281,42 @@ export class Color_Instances
 
 	constructor()
 	{
-		this._Transparent = new Color("Transparent", ".", [0, 0, 0, 0] );
+		var c = (name: string, code: string, componentsRgba: number[]) => new Color(name, code, componentsRgba);
 
-		this.Black = new Color("Black", "k", [0, 0, 0, 1] );
-		this.BlackHalfTransparent = new Color("BlackHalfTransparent", "K", [0, 0, 0, .5] );
-		this.Blue = new Color("Blue", "b", [0, 0, 1, 1] );
-		this.BlueDark = new Color("BlueDark", "B", [0, 0, .5, 1] );
-		this.BlueLight = new Color("BlueLight", "$", [.5, .5, 1, 1] );
-		this.Brown = new Color("Brown", "O", [0.5, 0.25, 0, 1] );
-		this.Cyan = new Color("Cyan", "c", [0, 1, 1, 1] );
-		this.Gold = new Color("Gold", null, [.5, .5, 0, 1] );
-		this.Gray = new Color("Gray", "a", [0.5, 0.5, 0.5, 1] );
-		this.GrayDark = new Color("GrayDark", "A", [0.25, 0.25, 0.25, 1] );
-		this.GrayDarker = new Color("GrayDarker", "#", [0.125, 0.125, 0.125, 1] );
-		this.GrayLight = new Color("GrayLight","@", [0.75, 0.75, 0.75, 1] );
-		this.GrayLighter = new Color("GrayLighter","-", [0.825, 0.825, 0.825, 1] );
-		this.Green = new Color("Green",	"g", [0, 1, 0, 1] );
-		this.GreenDark = new Color("GreenDark", "G", [0, .5, 0, 1] );
-		this.GreenDarker = new Color("GreenDarker", "", [0, .25, 0, 1] );
-		this.GreenLight = new Color("GreenLight", "%", [.5, 1, .5, 1] );
-		this.GreenMediumDark = new Color("GreenMediumDark", "", [0, .75, 0, 1] );
-		this.GreenMediumLight = new Color("GreenMediumLight", "", [.25, 1, .25, 1] );
-		this.Orange = new Color("Orange", "o", [1, 0.5, 0, 1] );
-		this.Pink = new Color("Pink", "p", [1, 0.5, 0.5, 1] );
-		this.Red = new Color("Red", "r", [1, 0, 0, 1] );
-		this.RedDark = new Color("RedDark", "R", [.5, 0, 0, 1] );
-		this.Tan = new Color("Tan", "T", [.8, .7, .5, 1] );
-		this.Violet = new Color("Violet", "v", [1, 0, 1, 1] );
-		this.VioletDark = new Color("VioletDark", "V2", [.5, 0, .5, 1] );
-		this.VioletEighth = new Color("VioletEighth", "V8", [.125, 0, .125, 1] );
-		this.VioletQuarter = new Color("VioletQuarter", "V4", [.25, 0, .25, 1] );
-		this.White = new Color("White", "w", [1, 1, 1, 1] );
-		this.Yellow = new Color("Yellow", "y", [1, 1, 0, 1] );
-		this.YellowDark = new Color("YellowDark", "Y", [.5, .5, 0, 1] );
+		this._Transparent = c("Transparent", ".", [0, 0, 0, 0] );
+
+		this.Black 					= c("Black", "k", [0, 0, 0, 1] );
+		this.BlackHalfTransparent 	= c("BlackHalfTransparent", "K", [0, 0, 0, .5] );
+		this.Blue 					= c("Blue", "b", [0, 0, 1, 1] );
+		this.BlueDark 				= c("BlueDark", "B", [0, 0, .5, 1] );
+		this.BlueLight 				= c("BlueLight", "$", [.5, .5, 1, 1] );
+		this.Brown 					= c("Brown", "O", [0.5, 0.25, 0, 1] );
+		this.Cyan 					= c("Cyan", "c", [0, 1, 1, 1] );
+		this.Gold 					= c("Gold", null, [.5, .5, 0, 1] );
+		this.Gray 					= c("Gray", "a", [0.5, 0.5, 0.5, 1] );
+		this.GrayDark 				= c("GrayDark", "A", [0.25, 0.25, 0.25, 1] );
+		this.GrayDarker 			= c("GrayDarker", "#", [0.125, 0.125, 0.125, 1] );
+		this.GrayLight 				= c("GrayLight","@", [0.75, 0.75, 0.75, 1] );
+		this.GrayLighter 			= c("GrayLighter","-", [0.825, 0.825, 0.825, 1] );
+		this.Green 					= c("Green",	"g", [0, 1, 0, 1] );
+		this.GreenDark 				= c("GreenDark", "G", [0, .5, 0, 1] );
+		this.GreenDarker 			= c("GreenDarker", "", [0, .25, 0, 1] );
+		this.GreenLight 			= c("GreenLight", "%", [.5, 1, .5, 1] );
+		this.GreenMediumDark 		= c("GreenMediumDark", "", [0, .75, 0, 1] );
+		this.GreenMediumLight 		= c("GreenMediumLight", "", [.25, 1, .25, 1] );
+		this.Orange 				= c("Orange", "o", [1, 0.5, 0, 1] );
+		this.Pink 					= c("Pink", "p", [1, 0.5, 0.5, 1] );
+		this.Purple 				= c("Purple", null, [0.5, 0, 0.5, 1] );
+		this.Red 					= c("Red", "r", [1, 0, 0, 1] );
+		this.RedDark 				= c("RedDark", "R", [.5, 0, 0, 1] );
+		this.Tan 					= c("Tan", "T", [.8, .7, .5, 1] );
+		this.Violet 				= c("Violet", "v", [1, 0, 1, 1] );
+		this.VioletDark 			= c("VioletDark", "V2", [.5, 0, .5, 1] );
+		this.VioletEighth 			= c("VioletEighth", "V8", [.125, 0, .125, 1] );
+		this.VioletQuarter 			= c("VioletQuarter", "V4", [.25, 0, .25, 1] );
+		this.White 					= c("White", "w", [1, 1, 1, 1] );
+		this.Yellow 				= c("Yellow", "y", [1, 1, 0, 1] );
+		this.YellowDark 			= c("YellowDark", "Y", [.5, .5, 0, 1] );
 
 		this._All =
 		[
@@ -339,6 +343,7 @@ export class Color_Instances
 			this.GreenMediumLight,
 			this.Orange,
 			this.Pink,
+			this.Purple,
 			this.Red,
 			this.RedDark,
 			this.Tan,

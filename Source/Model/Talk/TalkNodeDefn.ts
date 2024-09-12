@@ -51,6 +51,7 @@ class TalkNodeDefn_Instances
 	JumpIfFalse: TalkNodeDefn;
 	JumpIfTrue: TalkNodeDefn;
 	Option: TalkNodeDefn;
+	OptionRemove: TalkNodeDefn;
 	OptionsClear: TalkNodeDefn;
 	Pop: TalkNodeDefn;
 	Prompt: TalkNodeDefn;
@@ -79,6 +80,7 @@ class TalkNodeDefn_Instances
 		this.JumpIfFalse 		= tnd("JumpIfFalse", this.jumpIfFalse);
 		this.JumpIfTrue 		= tnd("JumpIfTrue", this.jumpIfTrue);
 		this.Option 			= tnd("Option", this.option);
+		this.OptionRemove 		= tnd("OptionRemove", this.optionRemove);
 		this.OptionsClear 		= tnd("OptionsClear", this.optionsClear);
 		this.Pop 				= tnd("Pop", this.pop);
 		this.Prompt 			= tnd("Prompt", this.prompt);
@@ -102,6 +104,7 @@ class TalkNodeDefn_Instances
 			this.JumpIfFalse,
 			this.JumpIfTrue,
 			this.Option,
+			this.OptionRemove,
 			this.OptionsClear,
 			this.Pop,
 			this.Prompt,
@@ -274,6 +277,27 @@ class TalkNodeDefn_Instances
 		{
 			talkNodesForOptions.push(talkNode);
 			scope.talkNodesForOptionsByName.set(talkNode.name, talkNode);
+		}
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	optionRemove(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var scope = conversationRun.scopeCurrent;
+		var talkNode = conversationRun.talkNodeCurrent();
+
+		var talkNodesForOptions = scope.talkNodesForOptions;
+		var optionToRemoveName = talkNode.next;
+		var optionToRemove = talkNodesForOptions.find(x => x.name == optionToRemoveName);
+		if (optionToRemove != null)
+		{
+			var indexToRemoveAt = talkNodesForOptions.indexOf(optionToRemove);
+			if (indexToRemoveAt >= 0)
+			{
+				talkNodesForOptions.splice(indexToRemoveAt, 1);
+				scope.talkNodesForOptionsByName.remove(optionToRemove.name);
+			}
 		}
 		conversationRun.talkNodeAdvance(universe);
 		conversationRun.talkNodeCurrentExecute(universe);

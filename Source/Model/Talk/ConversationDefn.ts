@@ -319,7 +319,11 @@ export class ConversationDefn
 	{
 		var newline = "\n";
 
+		// Convert any DOS-style line endings to Unix-style.
 		conversationDefnAsPsv = conversationDefnAsPsv.split("\r\n").join(newline);
+
+		// Remove any tabs.
+		conversationDefnAsPsv.split("\t").join("");
 
 		var blankLine = newline + newline;
 		var indexOfFirstBlankLine = conversationDefnAsPsv.indexOf(blankLine);
