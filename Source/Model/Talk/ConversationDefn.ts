@@ -250,7 +250,7 @@ export class ConversationDefn
 						talkNodeToExpandDefnName,
 						textLine,
 						talkNodeToExpand.next,
-						talkNodeToExpand._isDisabled
+						talkNodeToExpand._isEnabled
 					);
 					talkNodesExpanded.push(talkNodeExpanded);
 				}
@@ -323,7 +323,7 @@ export class ConversationDefn
 		conversationDefnAsPsv = conversationDefnAsPsv.split("\r\n").join(newline);
 
 		// Remove any tabs.
-		conversationDefnAsPsv.split("\t").join("");
+		conversationDefnAsPsv = conversationDefnAsPsv.split("\t").join("");
 
 		var blankLine = newline + newline;
 		var indexOfFirstBlankLine = conversationDefnAsPsv.indexOf(blankLine);
@@ -449,16 +449,10 @@ export class ConversationDefn
 				var scriptToRunAsString = "( (u, cr) => " + talkNode.isDisabled + " )";
 				var scriptToRun = eval(scriptToRunAsString);
 
-				talkNode._isDisabled = scriptToRun;
+				talkNode._isEnabled = scriptToRun;
 			}
 		}
 		conversationDefn.talkNodes = talkNodes;
-
-		/*
-		conversationDefn.talkNodesByName = ArrayHelper.addLookupsByName(talkNodes);
-		conversationDefn.talkNodeDefnsByName =
-			ArrayHelper.addLookupsByName(conversationDefn.talkNodeDefns);
-		*/
 
 		conversationDefn.talkNodeDefns = TalkNodeDefn.Instances()._All;
 

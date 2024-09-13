@@ -143,7 +143,7 @@ var ThisCouldBeBetter;
                         var textLinesForTag = tagToTextLinesLookup.get(tag);
                         for (var j = 0; j < textLinesForTag.length; j++) {
                             var textLine = textLinesForTag[j];
-                            var talkNodeExpanded = new GameFramework.TalkNode(talkNodeToExpand.name + "_" + j, talkNodeToExpandDefnName, textLine, talkNodeToExpand.next, talkNodeToExpand._isDisabled);
+                            var talkNodeExpanded = new GameFramework.TalkNode(talkNodeToExpand.name + "_" + j, talkNodeToExpandDefnName, textLine, talkNodeToExpand.next, talkNodeToExpand._isEnabled);
                             talkNodesExpanded.push(talkNodeExpanded);
                         }
                     }
@@ -187,7 +187,7 @@ var ThisCouldBeBetter;
                 // Convert any DOS-style line endings to Unix-style.
                 conversationDefnAsPsv = conversationDefnAsPsv.split("\r\n").join(newline);
                 // Remove any tabs.
-                conversationDefnAsPsv.split("\t").join("");
+                conversationDefnAsPsv = conversationDefnAsPsv.split("\t").join("");
                 var blankLine = newline + newline;
                 var indexOfFirstBlankLine = conversationDefnAsPsv.indexOf(blankLine);
                 var header = conversationDefnAsPsv.substr(0, indexOfFirstBlankLine);
@@ -269,15 +269,10 @@ var ThisCouldBeBetter;
                     if (talkNode.isDisabled != null) {
                         var scriptToRunAsString = "( (u, cr) => " + talkNode.isDisabled + " )";
                         var scriptToRun = eval(scriptToRunAsString);
-                        talkNode._isDisabled = scriptToRun;
+                        talkNode._isEnabled = scriptToRun;
                     }
                 }
                 conversationDefn.talkNodes = talkNodes;
-                /*
-                conversationDefn.talkNodesByName = ArrayHelper.addLookupsByName(talkNodes);
-                conversationDefn.talkNodeDefnsByName =
-                    ArrayHelper.addLookupsByName(conversationDefn.talkNodeDefns);
-                */
                 conversationDefn.talkNodeDefns = GameFramework.TalkNodeDefn.Instances()._All;
                 conversationDefn = conversationDefn.clone(); // hack
                 return conversationDefn;

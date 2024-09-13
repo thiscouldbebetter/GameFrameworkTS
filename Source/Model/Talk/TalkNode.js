@@ -5,12 +5,15 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class TalkNode //
          {
-            constructor(name, defnName, content, next, isDisabled) {
+            constructor(name, defnName, content, next, isEnabled) {
                 this.name = ((name == null || name == "") ? TalkNode.idNext() : name);
                 this.defnName = defnName;
                 this.content = content == "" ? null : content;
                 this.next = next == "" ? null : next;
-                this._isDisabled = isDisabled;
+                this._isEnabled = isEnabled;
+            }
+            static fromDefnName(defnName) {
+                return new TalkNode(null, defnName, null, null, null);
             }
             static idNext() {
                 var returnValue = "_" + TalkNode._idNext;
@@ -20,56 +23,44 @@ var ThisCouldBeBetter;
             // Types.
             static display(name, content) {
                 return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().Display.name, content, null, // next
-                null // isDisabled
+                null // isEnabled
                 );
             }
             static doNothing(name) {
                 return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().DoNothing.name, null, // content
                 null, // next
-                null // isDisabled
+                null // isEnabled
                 );
             }
             static option(name, content, next) {
-                return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().Option.name, content, next, null // isDisabled
+                return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().Option.name, content, next, null // isEnabled
                 );
             }
             static goto(next) {
                 return new TalkNode(null, // name,
                 GameFramework.TalkNodeDefn.Instances().Goto.name, null, // content
-                next, null // isDisabled
+                next, null // isEnabled
                 );
             }
             static pop() {
-                return new TalkNode(null, // name,
-                GameFramework.TalkNodeDefn.Instances().Pop.name, null, // content
-                null, // next
-                null // isDisabled
-                );
+                return TalkNode.fromDefnName(GameFramework.TalkNodeDefn.Instances().Pop.name);
             }
             static prompt() {
-                return new TalkNode(null, // name,
-                GameFramework.TalkNodeDefn.Instances().Prompt.name, null, // content
-                null, // next
-                null // isDisabled
-                );
+                return TalkNode.fromDefnName(GameFramework.TalkNodeDefn.Instances().Prompt.name);
             }
             static push(next) {
                 return new TalkNode(null, // name,
                 GameFramework.TalkNodeDefn.Instances().Push.name, null, // content
-                next, null // isDisabled
+                next, null // isEnabled
                 );
             }
             static quit() {
-                return new TalkNode(null, // name,
-                GameFramework.TalkNodeDefn.Instances().Quit.name, null, // content
-                null, // next
-                null // isDisabled
-                );
+                return TalkNode.fromDefnName(GameFramework.TalkNodeDefn.Instances().Quit.name);
             }
             static script(code) {
                 return new TalkNode(null, // name,
                 GameFramework.TalkNodeDefn.Instances().Script.name, code, null, // next
-                null // isDisabled
+                null // isEnabled
                 );
             }
             static _switch // "switch" is a keyword.
@@ -77,26 +68,26 @@ var ThisCouldBeBetter;
                 var next = variableValueNodeNextNamePairs.map(pair => pair.join(":")).join(";");
                 return new TalkNode(null, // name,
                 GameFramework.TalkNodeDefn.Instances().Switch.name, variableName, // content
-                next, null // isDisabled
+                next, null // isEnabled
                 );
             }
             static variableLoad(name, variableName, variableExpression) {
                 return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().VariableLoad.name, variableName, // content
                 variableExpression, // next
-                null // isDisabled
+                null // isEnabled
                 );
             }
             static variableSet(variableName, variableValueToSet) {
                 return new TalkNode(null, // name,
                 GameFramework.TalkNodeDefn.Instances().VariableSet.name, variableName, // content
                 variableValueToSet, // next
-                null // isDisabled
+                null // isEnabled
                 );
             }
             static variableStore(name, variableName, variableExpression) {
                 return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().VariableStore.name, variableName, // content
                 variableExpression, // next
-                null // isDisabled
+                null // isEnabled
                 );
             }
             // instance methods
@@ -116,11 +107,11 @@ var ThisCouldBeBetter;
                 return conversationDefn.talkNodeDefnsByName.get(this.defnName);
             }
             disable() {
-                this._isDisabled = () => true;
+                this._isEnabled = () => false;
                 return this;
             }
             enable() {
-                this._isDisabled = () => false;
+                this._isEnabled = () => true;
                 return this;
             }
             execute(universe, conversationRun, scope) {
@@ -134,9 +125,9 @@ var ThisCouldBeBetter;
                 return this.isEnabledForUniverseAndConversationRun(u, cr);
             }
             isEnabledForUniverseAndConversationRun(u, cr) {
-                var returnValue = (this._isDisabled == null
+                var returnValue = (this._isEnabled == null
                     ? true
-                    : this._isDisabled(u, cr) == false);
+                    : this._isEnabled(u, cr));
                 return returnValue;
             }
             textForTranscript(conversationRun) {
@@ -148,33 +139,33 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new TalkNode(this.name, this.defnName, this.content, this.next, this._isDisabled);
+                return new TalkNode(this.name, this.defnName, this.content, this.next, this._isEnabled);
             }
             overwriteWith(other) {
                 this.name = other.name;
                 this.defnName = other.defnName;
                 this.content = other.content;
                 this.next = other.next;
-                this._isDisabled = other._isDisabled;
+                this._isEnabled = other._isEnabled;
                 return this;
             }
             // Serialization.
             static fromLinePipeSeparatedValues(talkNodeAsLinePsv) {
                 var fields = talkNodeAsLinePsv.split("|");
-                var isDisabledAsText = fields[4];
-                var isDisabled;
-                if (isDisabledAsText == null) {
-                    isDisabled = null;
+                var isEnabledAsText = fields[4];
+                var isEnabled;
+                if (isEnabledAsText == null) {
+                    isEnabled = null;
                 }
                 else {
-                    var scriptToRunAsString = "( (u, cr) => " + isDisabledAsText + " )";
-                    isDisabled = eval(scriptToRunAsString);
+                    var scriptToRunAsString = "( (u, cr) => " + isEnabledAsText + " )";
+                    isEnabled = eval(scriptToRunAsString);
                 }
                 var returnValue = new TalkNode(fields[0], // name
                 fields[1], // defnName
                 fields[2], // content
                 fields[3], // next
-                isDisabled);
+                isEnabled);
                 return returnValue;
             }
             toPipeSeparatedValues() {
@@ -183,7 +174,7 @@ var ThisCouldBeBetter;
                     this.defnName,
                     this.content,
                     this.next,
-                    this._isDisabled == null ? null : this._isDisabled.toString()
+                    this._isEnabled == null ? null : this._isEnabled.toString()
                 ].join("|");
                 while (returnValue.endsWith("|")) {
                     returnValue = returnValue.substr(0, returnValue.length - 1);

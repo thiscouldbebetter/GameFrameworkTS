@@ -78,13 +78,13 @@ export class ConversationRun
 	enableOrDisable
 	(
 		talkNodeToEnableOrDisableName: string,
-		isDisabledValueToSet: boolean
+		isEnabledValueToSet: boolean
 	): void
 	{
 		var conversationDefn = this.defn;
 		var talkNodeToSet =
 			conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
-		talkNodeToSet._isDisabled = () => isDisabledValueToSet;
+		talkNodeToSet._isEnabled = () => isEnabledValueToSet;
 	}
 
 	goto(talkNodeNameNext: string, universe: Universe): void

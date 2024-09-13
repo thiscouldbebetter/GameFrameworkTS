@@ -35,10 +35,10 @@ var ThisCouldBeBetter;
             enableTalkNodeWithName(talkNodeToActivateName) {
                 this.enableOrDisable(talkNodeToActivateName, false);
             }
-            enableOrDisable(talkNodeToEnableOrDisableName, isDisabledValueToSet) {
+            enableOrDisable(talkNodeToEnableOrDisableName, isEnabledValueToSet) {
                 var conversationDefn = this.defn;
                 var talkNodeToSet = conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
-                talkNodeToSet._isDisabled = () => isDisabledValueToSet;
+                talkNodeToSet._isEnabled = () => isEnabledValueToSet;
             }
             goto(talkNodeNameNext, universe) {
                 this.gotoTalkNodeWithNameForUniverse(talkNodeNameNext, universe);

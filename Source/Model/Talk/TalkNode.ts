@@ -8,7 +8,7 @@ export class TalkNode //
 	defnName: string;
 	content: string;
 	next: string;
-	_isDisabled: (u: Universe, cr: ConversationRun) => boolean;
+	_isEnabled: (u: Universe, cr: ConversationRun) => boolean;
 
 	constructor
 	(
@@ -16,14 +16,19 @@ export class TalkNode //
 		defnName: string,
 		content: string,
 		next: string,
-		isDisabled: (u: Universe, cr: ConversationRun) => boolean
+		isEnabled: (u: Universe, cr: ConversationRun) => boolean
 	)
 	{
 		this.name = ( (name == null || name == "") ? TalkNode.idNext() : name);
 		this.defnName = defnName;
 		this.content = content == "" ? null : content;
 		this.next = next == "" ? null : next;
-		this._isDisabled = isDisabled;
+		this._isEnabled = isEnabled;
+	}
+
+	static fromDefnName(defnName: string): TalkNode
+	{
+		return new TalkNode(null, defnName, null, null, null);
 	}
 
 	// static methods
@@ -46,7 +51,7 @@ export class TalkNode //
 			TalkNodeDefn.Instances().Display.name,
 			content,
 			null, // next
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
@@ -58,7 +63,7 @@ export class TalkNode //
 			TalkNodeDefn.Instances().DoNothing.name,
 			null, // content
 			null, // next
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
@@ -70,7 +75,7 @@ export class TalkNode //
 			TalkNodeDefn.Instances().Option.name,
 			content,
 			next,
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
@@ -82,31 +87,23 @@ export class TalkNode //
 			TalkNodeDefn.Instances().Goto.name,
 			null, // content
 			next,
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
 	static pop(): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromDefnName
 		(
-			null, // name,
 			TalkNodeDefn.Instances().Pop.name,
-			null, // content
-			null, // next
-			null // isDisabled
 		);
 	}
 
 	static prompt(): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromDefnName
 		(
-			null, // name,
 			TalkNodeDefn.Instances().Prompt.name,
-			null, // content
-			null, // next
-			null // isDisabled
 		);
 	}
 
@@ -118,19 +115,15 @@ export class TalkNode //
 			TalkNodeDefn.Instances().Push.name,
 			null, // content
 			next,
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
 	static quit(): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromDefnName
 		(
-			null, // name,
 			TalkNodeDefn.Instances().Quit.name,
-			null, // content
-			null, // next
-			null // isDisabled
 		);
 	}
 
@@ -142,7 +135,7 @@ export class TalkNode //
 			TalkNodeDefn.Instances().Script.name,
 			code,
 			null, // next
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
@@ -163,7 +156,7 @@ export class TalkNode //
 			TalkNodeDefn.Instances().Switch.name,
 			variableName, // content
 			next,
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
@@ -178,7 +171,7 @@ export class TalkNode //
 			TalkNodeDefn.Instances().VariableLoad.name,
 			variableName, // content
 			variableExpression, // next
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
@@ -193,7 +186,7 @@ export class TalkNode //
 			TalkNodeDefn.Instances().VariableSet.name,
 			variableName, // content
 			variableValueToSet, // next
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
@@ -208,7 +201,7 @@ export class TalkNode //
 			TalkNodeDefn.Instances().VariableStore.name,
 			variableName, // content
 			variableExpression, // next
-			null // isDisabled
+			null // isEnabled
 		);
 	}
 
@@ -239,13 +232,13 @@ export class TalkNode //
 
 	disable(): TalkNode
 	{
-		this._isDisabled = () => true;
+		this._isEnabled = () => false;
 		return this;
 	}
 
 	enable(): TalkNode
 	{
-		this._isDisabled = () => false;
+		this._isEnabled = () => true;
 		return this;
 	}
 
@@ -274,9 +267,9 @@ export class TalkNode //
 	{
 		var returnValue =
 		(
-			this._isDisabled == null
+			this._isEnabled == null
 			? true
-			: this._isDisabled(u, cr) == false
+			: this._isEnabled(u, cr)
 		);
 
 		return returnValue;
@@ -304,7 +297,7 @@ export class TalkNode //
 			this.defnName,
 			this.content,
 			this.next,
-			this._isDisabled
+			this._isEnabled
 		);
 	}
 
@@ -314,7 +307,7 @@ export class TalkNode //
 		this.defnName = other.defnName;
 		this.content = other.content;
 		this.next = other.next;
-		this._isDisabled = other._isDisabled;
+		this._isEnabled = other._isEnabled;
 		return this;
 	}
 
@@ -324,17 +317,17 @@ export class TalkNode //
 	{
 		var fields = talkNodeAsLinePsv.split("|");
 
-		var isDisabledAsText = fields[4];
+		var isEnabledAsText = fields[4];
 
-		var isDisabled: any;
-		if (isDisabledAsText == null)
+		var isEnabled: any;
+		if (isEnabledAsText == null)
 		{
-			isDisabled = null;
+			isEnabled = null;
 		}
 		else
 		{
-			var scriptToRunAsString = "( (u, cr) => " + isDisabledAsText + " )";
-			isDisabled = eval(scriptToRunAsString);
+			var scriptToRunAsString = "( (u, cr) => " + isEnabledAsText + " )";
+			isEnabled = eval(scriptToRunAsString);
 		}
 
 		var returnValue = new TalkNode
@@ -343,7 +336,7 @@ export class TalkNode //
 			fields[1], // defnName
 			fields[2], // content
 			fields[3], // next
-			isDisabled
+			isEnabled
 		);
 		return returnValue;
 	}
@@ -356,7 +349,7 @@ export class TalkNode //
 			this.defnName,
 			this.content,
 			this.next,
-			this._isDisabled == null ? null : this._isDisabled.toString()
+			this._isEnabled == null ? null : this._isEnabled.toString()
 		].join("|");
 
 
