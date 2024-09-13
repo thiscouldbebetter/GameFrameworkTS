@@ -184,7 +184,10 @@ var ThisCouldBeBetter;
             }
             static fromPipeSeparatedValues(conversationDefnAsPsv) {
                 var newline = "\n";
+                // Convert any DOS-style line endings to Unix-style.
                 conversationDefnAsPsv = conversationDefnAsPsv.split("\r\n").join(newline);
+                // Remove any tabs.
+                conversationDefnAsPsv.split("\t").join("");
                 var blankLine = newline + newline;
                 var indexOfFirstBlankLine = conversationDefnAsPsv.indexOf(blankLine);
                 var header = conversationDefnAsPsv.substr(0, indexOfFirstBlankLine);

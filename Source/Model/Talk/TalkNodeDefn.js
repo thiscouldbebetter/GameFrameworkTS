@@ -31,6 +31,7 @@ var ThisCouldBeBetter;
                 this.JumpIfFalse = tnd("JumpIfFalse", this.jumpIfFalse);
                 this.JumpIfTrue = tnd("JumpIfTrue", this.jumpIfTrue);
                 this.Option = tnd("Option", this.option);
+                this.OptionRemove = tnd("OptionRemove", this.optionRemove);
                 this.OptionsClear = tnd("OptionsClear", this.optionsClear);
                 this.Pop = tnd("Pop", this.pop);
                 this.Prompt = tnd("Prompt", this.prompt);
@@ -53,6 +54,7 @@ var ThisCouldBeBetter;
                         this.JumpIfFalse,
                         this.JumpIfTrue,
                         this.Option,
+                        this.OptionRemove,
                         this.OptionsClear,
                         this.Pop,
                         this.Prompt,
@@ -153,6 +155,22 @@ var ThisCouldBeBetter;
                 if (talkNodesForOptions.indexOf(talkNode) == -1) {
                     talkNodesForOptions.push(talkNode);
                     scope.talkNodesForOptionsByName.set(talkNode.name, talkNode);
+                }
+                conversationRun.talkNodeAdvance(universe);
+                conversationRun.talkNodeCurrentExecute(universe);
+            }
+            optionRemove(universe, conversationRun) {
+                var scope = conversationRun.scopeCurrent;
+                var talkNode = conversationRun.talkNodeCurrent();
+                var talkNodesForOptions = scope.talkNodesForOptions;
+                var optionToRemoveName = talkNode.next;
+                var optionToRemove = talkNodesForOptions.find(x => x.name == optionToRemoveName);
+                if (optionToRemove != null) {
+                    var indexToRemoveAt = talkNodesForOptions.indexOf(optionToRemove);
+                    if (indexToRemoveAt >= 0) {
+                        talkNodesForOptions.splice(indexToRemoveAt, 1);
+                        scope.talkNodesForOptionsByName.delete(optionToRemove.name);
+                    }
                 }
                 conversationRun.talkNodeAdvance(universe);
                 conversationRun.talkNodeCurrentExecute(universe);

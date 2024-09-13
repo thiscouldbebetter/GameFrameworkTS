@@ -296,7 +296,7 @@ class TalkNodeDefn_Instances
 			if (indexToRemoveAt >= 0)
 			{
 				talkNodesForOptions.splice(indexToRemoveAt, 1);
-				scope.talkNodesForOptionsByName.remove(optionToRemove.name);
+				scope.talkNodesForOptionsByName.delete(optionToRemove.name);
 			}
 		}
 		conversationRun.talkNodeAdvance(universe);
