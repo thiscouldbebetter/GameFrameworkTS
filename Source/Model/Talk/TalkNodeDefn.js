@@ -236,7 +236,8 @@ var ThisCouldBeBetter;
             variableSet(universe, conversationRun) {
                 var talkNode = conversationRun.talkNodeCurrent();
                 var variableName = talkNode.content;
-                var variableValue = talkNode.next;
+                var variableExpression = talkNode.next;
+                var variableValue = eval(variableExpression);
                 conversationRun.variableSet(variableName, variableValue);
                 conversationRun.talkNodeAdvance(universe);
                 conversationRun.talkNodeCurrentExecute(universe); // hack

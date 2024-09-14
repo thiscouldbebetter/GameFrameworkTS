@@ -250,7 +250,8 @@ class TalkNodeDefn_Instances
 		var variableName = talkNode.content;
 		var talkNodeNameToJumpTo = talkNode.next;
 		var variableValue = conversationRun.variableByName(variableName);
-		var variableValueAsString = variableValue == null ? null : variableValue.toString();
+		var variableValueAsString =
+			variableValue == null ? null : variableValue.toString();
 		if (variableValueAsString == "true")
 		{
 			var nodeNext = conversationRun.defn.talkNodeByName
@@ -403,7 +404,8 @@ class TalkNodeDefn_Instances
 	{
 		var talkNode = conversationRun.talkNodeCurrent();
 		var variableName = talkNode.content;
-		var variableValue = talkNode.next;
+		var variableExpression = talkNode.next;
+		var variableValue = eval(variableExpression);
 
 		conversationRun.variableSet(variableName, variableValue);
 

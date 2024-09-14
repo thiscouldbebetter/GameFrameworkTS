@@ -42,9 +42,10 @@ var ThisCouldBeBetter;
                     this.tickFadeStarted = tickCurrent;
                 }
                 var ticksSinceFadeStarted = tickCurrent - this.tickFadeStarted;
+                var millisecondsPerSecond = 1000;
                 var ticksPerFade = this.millisecondsPerFade
                     * timerHelper.ticksPerSecond
-                    / 1000;
+                    / millisecondsPerSecond;
                 var fractionOfFadeCompleted = ticksSinceFadeStarted
                     / ticksPerFade;
                 var alphaOfFadeColor;
