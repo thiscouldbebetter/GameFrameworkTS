@@ -894,7 +894,8 @@ class PlaceBuilderDemo_Movers
 				new Item("Medicine", 4),
 			],
 			null, // weightMax
-			null // reachRadius
+			null, // reachRadius
+			null // retainsItemsWithZeroQuantities
 		);
 
 		var route = new Route
@@ -1434,7 +1435,8 @@ class PlaceBuilderDemo_Movers
 				new Item("Coin", 100),
 			],
 			100, // weightMax
-			20 // reachRadius
+			20, // reachRadius
+			false // retainsItemsWithZeroQuantities
 		);
 
 		var killable = new Killable

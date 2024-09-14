@@ -16,8 +16,7 @@ var ThisCouldBeBetter;
                     var tradeValue = itemToTransfer.defn(world).tradeValue;
                     var itemCurrencyNeeded = new GameFramework.Item(this.itemDefnNameCurrency, tradeValue);
                     var itemDefnCurrency = itemCurrencyNeeded.defn(world);
-                    itemCurrencyNeeded.quantity =
-                        Math.ceil(tradeValue / itemDefnCurrency.tradeValue);
+                    itemCurrencyNeeded.quantitySet(Math.ceil(tradeValue / itemDefnCurrency.tradeValue));
                     if (itemHolderTo.hasItem(itemCurrencyNeeded)) {
                         itemHolderFrom.itemTransferSingleTo(itemToTransfer, itemHolderTo);
                         itemHolderTo.itemTransferTo(itemCurrencyNeeded, itemHolderFrom);

@@ -39,7 +39,7 @@ class PlaceBuilderDemo_Emplacements {
             new Locatable(new Disposition(Coords.create(), null, null)),
             Drawable.fromVisual(anvilVisual),
             anvilItemCrafter,
-            new ItemHolder([], null, null),
+            ItemHolder.create(),
             new Usable(anvilUse)
         ]);
         return itemAnvilEntityDefn;
@@ -74,7 +74,8 @@ class PlaceBuilderDemo_Emplacements {
         (uwpe) => {
             var entityDying = uwpe.entity;
             var entityDropped = entityDying.locatable().entitySpawnWithDefnName(uwpe, "Iron Ore");
-            entityDropped.item().quantity = DiceRoll.roll("1d3", null);
+            var quantityToSet = DiceRoll.roll("1d3", null);
+            entityDropped.item().quantitySet(quantityToSet);
         });
         var itemBoulderEntityDefn = new Entity(itemDefnName, [
             Locatable.create(),
@@ -153,7 +154,7 @@ class PlaceBuilderDemo_Emplacements {
             collidable,
             Drawable.fromVisual(visual),
             new ItemContainer(),
-            new ItemHolder([], null, null),
+            ItemHolder.create(),
             Locatable.create(),
             new Usable((uwpe) => {
                 var universe = uwpe.universe;
@@ -222,7 +223,7 @@ class PlaceBuilderDemo_Emplacements {
         };
         var entityDefn = new Entity(entityName, [
             new ItemContainer(),
-            new ItemHolder([], null, null),
+            ItemHolder.create(),
             Locatable.create(),
             Drawable.fromVisual(itemHoleVisual),
             new Perceptible(false, () => 0, () => 0),

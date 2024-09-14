@@ -113,7 +113,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemArrowVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextImmediateFontAndColor(itemArrowName, this.font, itemArrowColor)));
         }
-        var itemArrow = ItemDefn.fromNameMassValueAndVisual(itemArrowName, .05, 5, itemArrowVisual);
+        var itemArrow = ItemDefn.fromNameEncumbranceValueAndVisual(itemArrowName, .05, 5, itemArrowVisual);
         return itemArrow;
     }
     bomb() {
@@ -249,7 +249,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemCoinVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemCoinName, this.font, itemCoinColor)));
         }
-        var itemCoin = ItemDefn.fromNameMassValueAndVisual(itemCoinName, .01, 1, itemCoinVisual);
+        var itemCoin = ItemDefn.fromNameEncumbranceValueAndVisual(itemCoinName, .01, 1, itemCoinVisual);
         return itemCoin;
     }
     crystal() {
@@ -273,7 +273,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemCrystalVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemCrystalName, this.font, itemCrystalColor)));
         }
-        var itemCrystal = ItemDefn.fromNameMassValueAndVisual(itemCrystalName, .1, 1, itemCrystalVisual);
+        var itemCrystal = ItemDefn.fromNameEncumbranceValueAndVisual(itemCrystalName, .1, 1, itemCrystalVisual);
         return itemCrystal;
     }
     doughnut() {
@@ -336,7 +336,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemFlowerVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimensionHalf * 2), VisualText.fromTextImmediateFontAndColor(itemFlowerName, this.font, colorFlower)));
         }
-        var itemFlower = ItemDefn.fromNameMassValueAndVisual(itemFlowerName, .01, 1, itemFlowerVisual);
+        var itemFlower = ItemDefn.fromNameEncumbranceValueAndVisual(itemFlowerName, .01, 1, itemFlowerVisual);
         return itemFlower;
     }
     fruit() {
@@ -385,7 +385,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemGrassVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimensionHalf * 3), VisualText.fromTextImmediateFontAndColor(itemGrassName, this.font, Color.Instances().GreenDark)));
         }
-        var itemGrass = ItemDefn.fromNameMassValueAndVisual(itemGrassName, .01, 1, itemGrassVisual);
+        var itemGrass = ItemDefn.fromNameEncumbranceValueAndVisual(itemGrassName, .01, 1, itemGrassVisual);
         return itemGrass;
     }
     heart() {
@@ -413,7 +413,7 @@ class PlaceBuilderDemo_Items {
             itemHeartVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextImmediateFontAndColor(itemHeartName, this.font, itemHeartColor)));
         }
         var itemHeartVisualShifted = new VisualOffset(Coords.fromXY(0, -entityDimensionQuarter), itemHeartVisual);
-        var itemHeart = ItemDefn.fromNameMassValueAndVisual(itemHeartName, 10, 1, itemHeartVisualShifted);
+        var itemHeart = ItemDefn.fromNameEncumbranceValueAndVisual(itemHeartName, 10, 1, itemHeartVisualShifted);
         return itemHeart;
     }
     iron() {
@@ -430,7 +430,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemIronVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemIronName, this.font, itemIronColor)));
         }
-        var itemIron = ItemDefn.fromNameMassValueAndVisual(itemIronName, 10, 5, itemIronVisual);
+        var itemIron = ItemDefn.fromNameEncumbranceValueAndVisual(itemIronName, 10, 5, itemIronVisual);
         return itemIron;
     }
     ironOre() {
@@ -446,7 +446,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemIronOreVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextImmediateFontAndColor(itemIronOreName, this.font, itemIronOreColor)));
         }
-        var itemIronOre = ItemDefn.fromNameMassValueAndVisual(itemIronOreName, 10, 1, itemIronOreVisual);
+        var itemIronOre = ItemDefn.fromNameEncumbranceValueAndVisual(itemIronOreName, 10, 1, itemIronOreVisual);
         return itemIronOre;
     }
     key() {
@@ -467,7 +467,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemKeyVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor(itemKeyName, this.font, itemKeyColor)));
         }
-        var itemKey = ItemDefn.fromNameMassValueAndVisual(itemKeyName, .1, 5, itemKeyVisual);
+        var itemKey = ItemDefn.fromNameEncumbranceValueAndVisual(itemKeyName, .1, 5, itemKeyVisual);
         return itemKey;
     }
     log() {
@@ -481,7 +481,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemLogVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemLogName, this.font, itemLogColor)));
         }
-        var itemLog = ItemDefn.fromNameMassValueAndVisual(itemLogName, 10, 1, itemLogVisual);
+        var itemLog = ItemDefn.fromNameEncumbranceValueAndVisual(itemLogName, 10, 1, itemLogVisual);
         return itemLog;
     }
     meat() {
@@ -562,7 +562,7 @@ class PlaceBuilderDemo_Items {
             new VisualOffset(Coords.zeroes(), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimensionHalf / 2, this.entityDimensionHalf), colorStem))
         ]);
         this.parent.textWithColorAddToVisual(itemMushroomName, colorCap, itemMushroomVisual);
-        var itemMushroom = ItemDefn.fromNameMassValueAndVisual(itemMushroomName, .01, 1, itemMushroomVisual);
+        var itemMushroom = ItemDefn.fromNameEncumbranceValueAndVisual(itemMushroomName, .01, 1, itemMushroomVisual);
         return itemMushroom;
     }
     pick() {
@@ -737,7 +737,7 @@ class PlaceBuilderDemo_Items {
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension, this.entityDimension / 2), itemToolsetColor)
         ]);
         this.parent.textWithColorAddToVisual(itemToolsetName, itemToolsetColor, itemToolsetVisual);
-        var itemToolset = ItemDefn.fromNameMassValueAndVisual(itemToolsetName, 1, 30, itemToolsetVisual);
+        var itemToolset = ItemDefn.fromNameEncumbranceValueAndVisual(itemToolsetName, 1, 30, itemToolsetVisual);
         return itemToolset;
     }
     torch() {
@@ -789,7 +789,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension))), itemWeightColor)
         ]);
         this.parent.textWithColorAddToVisual(itemWeightName, itemWeightColor, itemWeightVisual);
-        var itemWeight = ItemDefn.fromNameMassValueAndVisual(itemWeightName, 2000, 5, itemWeightVisual);
+        var itemWeight = ItemDefn.fromNameEncumbranceValueAndVisual(itemWeightName, 2000, 5, itemWeightVisual);
         return itemWeight;
     }
 }

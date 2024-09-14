@@ -7,7 +7,7 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 	name: string;
 	appearance: string;
 	description: string;
-	mass: number;
+	encumbrance: number;
 	tradeValue: number;
 	stackSizeMax: number;
 	categoryNames: string[];
@@ -20,7 +20,7 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 		name: string,
 		appearance: string,
 		description: string,
-		mass: number,
+		encumbrance: number,
 		tradeValue: number,
 		stackSizeMax: number,
 		categoryNames: string[],
@@ -33,7 +33,7 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 
 		this.appearance = appearance || name;
 		this.description = description;
-		this.mass = mass || 1;
+		this.encumbrance = encumbrance || 1;
 		this.tradeValue = tradeValue;
 		this.stackSizeMax = stackSizeMax || Number.POSITIVE_INFINITY;
 		this.categoryNames = categoryNames || [];
@@ -86,15 +86,31 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 		return returnValue;
 	}
 
-	static fromNameMassValueAndVisual
+	static fromNameEncumbranceValueAndVisual
 	(
-		name: string, mass: number, tradeValue: number, visual: VisualBase
+		name: string, encumbrance: number, tradeValue: number, visual: VisualBase
 	): ItemDefn
 	{
 		return new ItemDefn
 		(
-			name, null, null, mass, tradeValue, null, null, null, visual, null
+			name, null, null, encumbrance, tradeValue, null, null, null, visual, null
 		);
+	}
+
+	belongsToCategory(categoryToCheck: ItemCategory): boolean
+	{
+		return this.belongsToCategoryWithName(categoryToCheck.name);
+	}
+
+	belongsToCategoryWithName(categoryToCheckName: string): boolean
+	{
+		return (this.categoryNames.indexOf(categoryToCheckName) >= 0);
+	}
+
+	categoryNameAdd(categoryName: string): ItemDefn
+	{
+		this.categoryNames.push(categoryName);
+		return this;
 	}
 
 	toEntity(uwpe: UniverseWorldPlaceEntities, item: Item): Entity

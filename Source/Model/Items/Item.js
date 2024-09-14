@@ -6,16 +6,38 @@ var ThisCouldBeBetter;
         class Item {
             constructor(defnName, quantity) {
                 this.defnName = defnName;
-                this.quantity = quantity;
+                this.quantity = (quantity == null) ? 1 : quantity;
+            }
+            belongsToCategory(category, world) {
+                return this.defn(world).belongsToCategory(category);
+            }
+            belongsToCategoryWithName(categoryName, world) {
+                return this.defn(world).belongsToCategoryWithName(categoryName);
             }
             defn(world) {
                 return world.defn.itemDefnByName(this.defnName);
             }
+            encumbrance(world) {
+                return this.quantity * this.defn(world).encumbrance;
+            }
             isUsable(world) {
                 return (this.defn(world).use != null);
             }
-            mass(world) {
-                return this.quantity * this.defn(world).mass;
+            quantityAdd(increment) {
+                return this.quantitySet(this.quantity + increment);
+            }
+            quantityClear() {
+                return this.quantitySet(0);
+            }
+            quantitySet(value) {
+                this.quantity = value;
+                return this;
+            }
+            quantitySubtract(decrement) {
+                if (this.quantity < decrement) {
+                    throw new Error("Cannot subtract more than total quantity of item '" + this.defnName + "'.");
+                }
+                return this.quantitySet(this.quantity - decrement);
             }
             toEntity(uwpe) {
                 if (this._entity == null) {
@@ -35,7 +57,7 @@ var ThisCouldBeBetter;
                 var defn = this.defn(uwpe.world);
                 defn.use(uwpe);
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new Item(this.defnName, this.quantity);
             }

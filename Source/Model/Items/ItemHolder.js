@@ -4,27 +4,45 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ItemHolder {
-            constructor(items, massMax, reachRadius) {
-                this.items = [];
-                this.massMax = massMax;
+            constructor(items, encumbranceMax, reachRadius, retainsItemsWithZeroQuantities) {
+                this.items = items || [];
+                this.encumbranceMax = encumbranceMax;
                 this.reachRadius = reachRadius || 20;
+                this.retainsItemsWithZeroQuantities = retainsItemsWithZeroQuantities || false;
                 this.itemsAdd(items || []);
             }
             static create() {
-                return new ItemHolder([], null, null);
+                return new ItemHolder(null, null, null, null);
             }
             static fromItems(items) {
-                return new ItemHolder(items, null, null);
+                return new ItemHolder(items, null, null, null);
             }
-            static fromMassMax(massMax) {
-                return new ItemHolder(null, massMax, null);
+            static fromEncumbranceMax(encumbranceMax) {
+                return new ItemHolder(null, encumbranceMax, null, null);
             }
             // Instance methods.
             clear() {
-                this.items.length = 0;
+                if (this.retainsItemsWithZeroQuantities) {
+                    this.items.forEach(x => x.quantityClear());
+                }
+                else {
+                    this.items.length = 0;
+                }
                 this.itemSelected = null;
                 this.statusMessage = "";
                 return this;
+            }
+            encumbranceOfAllItems(world) {
+                var encumbranceTotal = this.items.reduce((sumSoFar, item) => sumSoFar + item.encumbrance(world), 0 // sumSoFar
+                );
+                return encumbranceTotal;
+            }
+            encumbranceOfAllItemsOverMax(world) {
+                var returnValue = "" + Math.ceil(this.encumbranceOfAllItems(world));
+                if (this.encumbranceMax != null) {
+                    returnValue += "/" + this.encumbranceMax;
+                }
+                return returnValue;
             }
             equipItemInNumberedSlot(universe, entityItemHolder, slotNumber) {
                 var itemToEquip = this.itemSelected;
@@ -66,14 +84,17 @@ var ThisCouldBeBetter;
                     this.items.push(itemToAdd);
                 }
                 else {
-                    itemExisting.quantity += itemToAdd.quantity;
+                    itemExisting.quantityAdd(itemToAdd.quantity);
                 }
             }
+            itemByDefnName(defnName) {
+                return this.itemsByDefnName(defnName)[0];
+            }
             itemCanPickUp(universe, world, place, itemToPickUp) {
-                var massAlreadyHeld = this.massOfAllItems(world);
-                var massOfItem = itemToPickUp.mass(world);
-                var massAfterPickup = massAlreadyHeld + massOfItem;
-                var canPickUp = (massAfterPickup <= this.massMax);
+                var encumbranceAlreadyHeld = this.encumbranceOfAllItems(world);
+                var encumbranceOfItem = itemToPickUp.encumbrance(world);
+                var encumbranceAfterPickup = encumbranceAlreadyHeld + encumbranceOfItem;
+                var canPickUp = (encumbranceAfterPickup <= this.encumbranceMax);
                 return canPickUp;
             }
             itemDrop(uwpe) {
@@ -84,7 +105,7 @@ var ThisCouldBeBetter;
                 if (itemEntityToKeep != null) {
                     var itemToKeep = itemEntityToKeep.item();
                     var itemToDrop = itemToKeep.clone();
-                    itemToDrop.quantity = 1;
+                    itemToDrop.quantitySet(1);
                     var itemToDropDefn = itemToDrop.defn(world);
                     var itemEntityToDrop = itemToDrop.toEntity(uwpe);
                     var itemLocatable = itemEntityToDrop.locatable();
@@ -104,9 +125,6 @@ var ThisCouldBeBetter;
                     }
                     place.entitySpawn(uwpe.clone().entitiesSwap());
                     this.itemSubtract(itemToDrop);
-                    if (itemToKeep.quantity == 0) {
-                        this.itemSelected = null;
-                    }
                     this.statusMessage = itemToDropDefn.appearance + " dropped.";
                     var equipmentUser = entityItemHolder.equipmentUser();
                     if (equipmentUser != null) {
@@ -153,9 +171,9 @@ var ThisCouldBeBetter;
                         itemSplitted = itemToSplit;
                     }
                     else {
-                        itemToSplit.quantity -= quantityToSplit;
+                        itemToSplit.quantitySubtract(quantityToSplit);
                         itemSplitted = itemToSplit.clone();
-                        itemSplitted.quantity = quantityToSplit;
+                        itemSplitted.quantitySet(quantityToSplit);
                         // Add with no join.
                         GameFramework.ArrayHelper.insertElementAfterOther(this.items, itemSplitted, itemToSplit);
                     }
@@ -178,20 +196,38 @@ var ThisCouldBeBetter;
             }
             itemSubtractDefnNameAndQuantity(itemDefnName, quantityToSubtract) {
                 this.itemsWithDefnNameJoin(itemDefnName);
-                var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-                if (itemExisting != null) {
-                    itemExisting.quantity -= quantityToSubtract;
+                var itemExisting = this.itemByDefnName(itemDefnName);
+                if (itemExisting == null) {
+                    throw new Error("Cannot subtract from nonexistent item '" + itemDefnName + "'.");
+                }
+                else {
+                    itemExisting.quantitySubtract(quantityToSubtract);
                     if (itemExisting.quantity <= 0) {
                         var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-                        GameFramework.ArrayHelper.remove(this.items, itemExisting);
+                        if (this.retainsItemsWithZeroQuantities) {
+                            itemExisting.quantityClear();
+                        }
+                        else {
+                            GameFramework.ArrayHelper.remove(this.items, itemExisting);
+                            if (this.itemSelected == itemExisting) {
+                                this.itemSelected = null;
+                            }
+                        }
                     }
                 }
             }
             itemsAdd(itemsToAdd) {
                 itemsToAdd.forEach((x) => this.itemAdd(x));
+                return this;
             }
             itemsAllTransferTo(other) {
                 this.itemsTransferTo(this.items, other);
+            }
+            itemsBelongingToCategory(category, world) {
+                return this.itemsBelongingToCategoryWithName(category.name, world);
+            }
+            itemsBelongingToCategoryWithName(categoryName, world) {
+                return this.items.filter(x => x.belongsToCategoryWithName(categoryName, world));
             }
             itemsByDefnName(defnName) {
                 return this.items.filter(x => x.defnName == defnName);
@@ -213,7 +249,7 @@ var ThisCouldBeBetter;
                 if (itemJoined != null) {
                     for (var i = 1; i < itemsMatching.length; i++) {
                         var itemToJoin = itemsMatching[i];
-                        itemJoined.quantity += itemToJoin.quantity;
+                        itemJoined.quantityAdd(itemToJoin.quantity);
                         GameFramework.ArrayHelper.remove(this.items, itemToJoin);
                     }
                 }
@@ -222,35 +258,12 @@ var ThisCouldBeBetter;
             itemsRemove(itemsToRemove) {
                 itemsToRemove.forEach(x => this.itemRemove(x));
             }
-            /*
-            itemTransferTo2(itemToTransfer: Item, other: ItemHolder): void
-            {
-                var itemDefnName = itemToTransfer.defnName;
-                this.itemsWithDefnNameJoin(itemDefnName);
-                var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-                if (itemExisting != null)
-                {
-                    var itemToTransfer =
-                        this.itemSplit(itemExisting, itemToTransfer.quantity);
-                    other.itemAdd(itemToTransfer.clone());
-                    this.itemSubtract(itemToTransfer);
-                }
-            }
-            */
             itemsByDefnName2(defnName) {
                 return this.itemsByDefnName(defnName);
             }
-            massOfAllItems(world) {
-                var massTotal = this.items.reduce((sumSoFar, item) => sumSoFar + item.mass(world), 0 // sumSoFar
-                );
-                return massTotal;
-            }
-            massOfAllItemsOverMax(world) {
-                var returnValue = "" + Math.ceil(this.massOfAllItems(world));
-                if (this.massMax != null) {
-                    returnValue += "/" + this.massMax;
-                }
-                return returnValue;
+            retainsItemsWithZeroQuantitiesSet(value) {
+                this.retainsItemsWithZeroQuantities = value;
+                return this;
             }
             tradeValueOfAllItems(world) {
                 var tradeValueTotal = this.items.reduce((sumSoFar, item) => sumSoFar + item.tradeValue(world), 0 // sumSoFar
@@ -366,7 +379,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 25), // size
                     true, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => "Weight: " + c.massOfAllItemsOverMax(world)), fontSmall),
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => "Weight: " + c.encumbranceOfAllItemsOverMax(world)), fontSmall),
                     GameFramework.ControlButton.from8("buttonUp", GameFramework.Coords.fromXY(85, 15), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
                     "Up", fontSmall, true, // hasBorder
@@ -515,9 +528,9 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                return new ItemHolder(GameFramework.ArrayHelper.clone(this.items), this.massMax, this.reachRadius);
+                return new ItemHolder(GameFramework.ArrayHelper.clone(this.items), this.encumbranceMax, this.reachRadius, this.retainsItemsWithZeroQuantities);
             }
-            overwriteWith(other) { return this; }
+            overwriteWith(other) { return this; } // todo
         }
         GameFramework.ItemHolder = ItemHolder;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -72,7 +72,7 @@ class PlaceBuilderDemo_Emplacements
 				new Locatable(new Disposition(Coords.create(), null, null) ),
 				Drawable.fromVisual(anvilVisual),
 				anvilItemCrafter,
-				new ItemHolder([], null, null),
+				ItemHolder.create(),
 				new Usable(anvilUse)
 			]
 		);
@@ -145,7 +145,8 @@ class PlaceBuilderDemo_Emplacements
 				(
 					uwpe, "Iron Ore"
 				);
-				entityDropped.item().quantity = DiceRoll.roll("1d3", null);
+				var quantityToSet = DiceRoll.roll("1d3", null);
+				entityDropped.item().quantitySet(quantityToSet);
 			}
 		);
 
@@ -299,7 +300,7 @@ class PlaceBuilderDemo_Emplacements
 				collidable,
 				Drawable.fromVisual(visual),
 				new ItemContainer(),
-				new ItemHolder([], null, null),
+				ItemHolder.create(),
 				Locatable.create(),
 				new Usable
 				(
@@ -441,7 +442,7 @@ class PlaceBuilderDemo_Emplacements
 			entityName,
 			[
 				new ItemContainer(),
-				new ItemHolder([], null, null),
+				ItemHolder.create(),
 				Locatable.create(),
 				Drawable.fromVisual(itemHoleVisual),
 				new Perceptible(false, () => 0, () => 0),

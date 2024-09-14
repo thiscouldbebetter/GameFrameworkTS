@@ -55,7 +55,7 @@ class PlaceBuilderDemo // Main.
         var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
         var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
         var itemOre = itemEntityOre.item();
-        itemOre.quantity = 3; // For crafting.
+        itemOre.quantitySet(3); // For crafting.
         container.itemHolder().itemAdd(itemOre);
         this.entities.push(container);
         var randomizerSeed = this.randomizer.fraction();
@@ -717,7 +717,7 @@ class PlaceBuilderDemo // Main.
             var entity = this.entityBuildFromDefn(entityDefn, posRange, randomizer);
             var entityItem = entity.item();
             if (entityItem != null) {
-                entityItem.quantity = itemQuantityPerEntity || 1;
+                entityItem.quantitySet(itemQuantityPerEntity || 1);
             }
             returnEntities.push(entity);
         }
@@ -974,14 +974,12 @@ class PlaceBuilderDemo // Main.
             Collidable.fromCollider(new Box(Coords.create(), entitySize)),
             Drawable.fromVisual(visual),
             new ItemStore("Coin"),
-            new ItemHolder([
+            ItemHolder.fromItems([
                 new Item("Coin", 100),
                 new Item("Bow", 1),
                 new Item("Key", 10),
                 new Item("Medicine", 100)
-            ], null, // weightMax
-            null // reachRadius
-            ),
+            ]),
             Locatable.create(),
             new Usable((uwpe) => {
                 var eUsed = uwpe.entity2;

@@ -32,8 +32,10 @@ export class ItemStore implements EntityProperty<ItemStore>
 			var itemCurrencyNeeded
 				= new Item(this.itemDefnNameCurrency, tradeValue);
 			var itemDefnCurrency = itemCurrencyNeeded.defn(world);
-			itemCurrencyNeeded.quantity =
-				Math.ceil(tradeValue / itemDefnCurrency.tradeValue);
+			itemCurrencyNeeded.quantitySet
+			(
+				Math.ceil(tradeValue / itemDefnCurrency.tradeValue)
+			);
 
 			if (itemHolderTo.hasItem(itemCurrencyNeeded))
 			{

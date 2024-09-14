@@ -210,7 +210,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemArrow = ItemDefn.fromNameMassValueAndVisual
+		var itemArrow = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemArrowName, .05, 5, itemArrowVisual
 		);
@@ -549,7 +549,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemCoin = ItemDefn.fromNameMassValueAndVisual
+		var itemCoin = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemCoinName, .01, 1, itemCoinVisual
 		);
@@ -616,7 +616,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemCrystal = ItemDefn.fromNameMassValueAndVisual
+		var itemCrystal = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemCrystalName, .1, 1, itemCrystalVisual
 		);
@@ -750,7 +750,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemFlower = ItemDefn.fromNameMassValueAndVisual
+		var itemFlower = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemFlowerName, .01, 1, itemFlowerVisual
 		);
@@ -853,7 +853,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemGrass = ItemDefn.fromNameMassValueAndVisual
+		var itemGrass = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemGrassName, .01, 1, itemGrassVisual
 		);
@@ -932,7 +932,7 @@ class PlaceBuilderDemo_Items
 			itemHeartVisual
 		);
 
-		var itemHeart = ItemDefn.fromNameMassValueAndVisual
+		var itemHeart = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemHeartName, 10, 1, itemHeartVisualShifted
 		);
@@ -979,7 +979,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemIron = ItemDefn.fromNameMassValueAndVisual
+		var itemIron = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemIronName, 10, 5, itemIronVisual
 		);
@@ -1021,7 +1021,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemIronOre = ItemDefn.fromNameMassValueAndVisual
+		var itemIronOre = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemIronOreName, 10, 1, itemIronOreVisual
 		);
@@ -1074,7 +1074,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemKey = ItemDefn.fromNameMassValueAndVisual
+		var itemKey = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemKeyName, .1, 5, itemKeyVisual
 		);
@@ -1126,7 +1126,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemLog = ItemDefn.fromNameMassValueAndVisual
+		var itemLog = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemLogName, 10, 1, itemLogVisual
 		);
@@ -1297,7 +1297,7 @@ class PlaceBuilderDemo_Items
 			itemMushroomName, colorCap, itemMushroomVisual
 		);
 
-		var itemMushroom = ItemDefn.fromNameMassValueAndVisual
+		var itemMushroom = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemMushroomName, .01, 1, itemMushroomVisual
 		);
@@ -1701,7 +1701,7 @@ class PlaceBuilderDemo_Items
 			itemToolsetName, itemToolsetColor, itemToolsetVisual
 		);
 
-		var itemToolset = ItemDefn.fromNameMassValueAndVisual
+		var itemToolset = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemToolsetName, 1, 30, itemToolsetVisual
 		);
@@ -1831,7 +1831,7 @@ class PlaceBuilderDemo_Items
 			itemWeightName, itemWeightColor, itemWeightVisual
 		);
 
-		var itemWeight = ItemDefn.fromNameMassValueAndVisual
+		var itemWeight = ItemDefn.fromNameEncumbranceValueAndVisual
 		(
 			itemWeightName, 2000, 5, itemWeightVisual
 		);

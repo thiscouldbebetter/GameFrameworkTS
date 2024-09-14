@@ -4,11 +4,11 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ItemDefn {
-            constructor(name, appearance, description, mass, tradeValue, stackSizeMax, categoryNames, use, visual, toEntity) {
+            constructor(name, appearance, description, encumbrance, tradeValue, stackSizeMax, categoryNames, use, visual, toEntity) {
                 this.name = name;
                 this.appearance = appearance || name;
                 this.description = description;
-                this.mass = mass || 1;
+                this.encumbrance = encumbrance || 1;
                 this.tradeValue = tradeValue;
                 this.stackSizeMax = stackSizeMax || Number.POSITIVE_INFINITY;
                 this.categoryNames = categoryNames || [];
@@ -33,8 +33,18 @@ var ThisCouldBeBetter;
                 returnValue.use = use;
                 return returnValue;
             }
-            static fromNameMassValueAndVisual(name, mass, tradeValue, visual) {
-                return new ItemDefn(name, null, null, mass, tradeValue, null, null, null, visual, null);
+            static fromNameEncumbranceValueAndVisual(name, encumbrance, tradeValue, visual) {
+                return new ItemDefn(name, null, null, encumbrance, tradeValue, null, null, null, visual, null);
+            }
+            belongsToCategory(categoryToCheck) {
+                return this.belongsToCategoryWithName(categoryToCheck.name);
+            }
+            belongsToCategoryWithName(categoryToCheckName) {
+                return (this.categoryNames.indexOf(categoryToCheckName) >= 0);
+            }
+            categoryNameAdd(categoryName) {
+                this.categoryNames.push(categoryName);
+                return this;
             }
             toEntity(uwpe, item) {
                 var returnValue;

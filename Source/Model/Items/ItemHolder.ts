@@ -5,48 +5,81 @@ namespace ThisCouldBeBetter.GameFramework
 export class ItemHolder implements EntityProperty<ItemHolder>
 {
 	items: Item[];
-	massMax: number;
+	encumbranceMax: number;
 	reachRadius: number;
+	retainsItemsWithZeroQuantities: boolean
 
 	itemSelected: Item;
 	statusMessage: string;
 
 	constructor
 	(
-		items: Item[], massMax: number, reachRadius: number
+		items: Item[],
+		encumbranceMax: number,
+		reachRadius: number,
+		retainsItemsWithZeroQuantities: boolean
 	)
 	{
-		this.items = [];
-		this.massMax = massMax;
+		this.items = items || [];
+		this.encumbranceMax = encumbranceMax;
 		this.reachRadius = reachRadius || 20;
+		this.retainsItemsWithZeroQuantities = retainsItemsWithZeroQuantities || false;
 
 		this.itemsAdd(items || []);
 	}
 
 	static create(): ItemHolder
 	{
-		return new ItemHolder([], null, null);
+		return new ItemHolder(null, null, null, null);
 	}
 
 	static fromItems(items: Item[]): ItemHolder
 	{
-		return new ItemHolder(items, null, null);
+		return new ItemHolder(items, null, null, null);
 	}
 
-	static fromMassMax(massMax: number): ItemHolder
+	static fromEncumbranceMax(encumbranceMax: number): ItemHolder
 	{
-		return new ItemHolder(null, massMax, null);
+		return new ItemHolder(null, encumbranceMax, null, null);
 	}
 
 	// Instance methods.
 
 	clear(): ItemHolder
 	{
-		this.items.length = 0;
+		if (this.retainsItemsWithZeroQuantities)
+		{
+			this.items.forEach(x => x.quantityClear() );
+		}
+		else
+		{
+			this.items.length = 0;
+		}
 		this.itemSelected = null;
 		this.statusMessage = "";
 
 		return this;
+	}
+
+	encumbranceOfAllItems(world: World): number
+	{
+		var encumbranceTotal = this.items.reduce
+		(
+			(sumSoFar, item) => sumSoFar + item.encumbrance(world),
+			0 // sumSoFar
+		);
+
+		return encumbranceTotal;
+	}
+
+	encumbranceOfAllItemsOverMax(world: World): string
+	{
+		var returnValue = "" + Math.ceil(this.encumbranceOfAllItems(world));
+		if (this.encumbranceMax != null)
+		{
+			returnValue += "/" + this.encumbranceMax;
+		}
+		return returnValue;
 	}
 
 	equipItemInNumberedSlot
@@ -131,8 +164,13 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		}
 		else
 		{
-			itemExisting.quantity += itemToAdd.quantity;
+			itemExisting.quantityAdd(itemToAdd.quantity);
 		}
+	}
+
+	itemByDefnName(defnName: string): Item
+	{
+		return this.itemsByDefnName(defnName)[0];
 	}
 
 	itemCanPickUp
@@ -140,10 +178,10 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		universe: Universe, world: World, place: Place, itemToPickUp: Item
 	): boolean
 	{
-		var massAlreadyHeld = this.massOfAllItems(world);
-		var massOfItem = itemToPickUp.mass(world);
-		var massAfterPickup = massAlreadyHeld + massOfItem;
-		var canPickUp = (massAfterPickup <= this.massMax);
+		var encumbranceAlreadyHeld = this.encumbranceOfAllItems(world);
+		var encumbranceOfItem = itemToPickUp.encumbrance(world);
+		var encumbranceAfterPickup = encumbranceAlreadyHeld + encumbranceOfItem;
+		var canPickUp = (encumbranceAfterPickup <= this.encumbranceMax);
 		return canPickUp;
 	}
 
@@ -159,7 +197,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			var itemToKeep = itemEntityToKeep.item();
 
 			var itemToDrop = itemToKeep.clone();
-			itemToDrop.quantity = 1;
+			itemToDrop.quantitySet(1);
 			var itemToDropDefn = itemToDrop.defn(world);
 
 			var itemEntityToDrop = itemToDrop.toEntity(uwpe);
@@ -191,10 +229,6 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				uwpe.clone().entitiesSwap()
 			);
 			this.itemSubtract(itemToDrop);
-			if (itemToKeep.quantity == 0)
-			{
-				this.itemSelected = null;
-			}
 
 			this.statusMessage = itemToDropDefn.appearance + " dropped."
 
@@ -284,10 +318,10 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			}
 			else
 			{
-				itemToSplit.quantity -= quantityToSplit;
+				itemToSplit.quantitySubtract(quantityToSplit);
 
 				itemSplitted = itemToSplit.clone();
-				itemSplitted.quantity = quantityToSplit;
+				itemSplitted.quantitySet(quantityToSplit);
 				// Add with no join.
 				ArrayHelper.insertElementAfterOther
 				(
@@ -329,26 +363,54 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 	): void
 	{
 		this.itemsWithDefnNameJoin(itemDefnName);
-		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-		if (itemExisting != null)
+		var itemExisting = this.itemByDefnName(itemDefnName);
+		if (itemExisting == null)
 		{
-			itemExisting.quantity -= quantityToSubtract;
+			throw new Error("Cannot subtract from nonexistent item '" + itemDefnName + "'.");
+		}
+		else
+		{
+			itemExisting.quantitySubtract(quantityToSubtract);
+
 			if (itemExisting.quantity <= 0)
 			{
 				var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-				ArrayHelper.remove(this.items, itemExisting);
+				if (this.retainsItemsWithZeroQuantities)
+				{
+					itemExisting.quantityClear();
+				}
+				else
+				{
+					ArrayHelper.remove(this.items, itemExisting);
+					if (this.itemSelected == itemExisting)
+					{
+						this.itemSelected = null;
+					}
+				}
+
 			}
 		}
 	}
 
-	itemsAdd(itemsToAdd: Item[]): void
+	itemsAdd(itemsToAdd: Item[]): ItemHolder
 	{
 		itemsToAdd.forEach( (x: Item) => this.itemAdd(x));
+		return this;
 	}
 
 	itemsAllTransferTo(other: ItemHolder): void
 	{
 		this.itemsTransferTo(this.items, other);
+	}
+
+	itemsBelongingToCategory(category: ItemCategory, world: World): Item[]
+	{
+		return this.itemsBelongingToCategoryWithName(category.name, world);
+	}
+
+	itemsBelongingToCategoryWithName(categoryName: string, world: World): Item[]
+	{
+		return this.items.filter(x => x.belongsToCategoryWithName(categoryName, world) );
 	}
 
 	itemsByDefnName(defnName: string): Item[]
@@ -387,7 +449,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			for (var i = 1; i < itemsMatching.length; i++)
 			{
 				var itemToJoin = itemsMatching[i];
-				itemJoined.quantity += itemToJoin.quantity;
+				itemJoined.quantityAdd(itemToJoin.quantity);
 				ArrayHelper.remove(this.items, itemToJoin);
 			}
 		}
@@ -400,46 +462,15 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		itemsToRemove.forEach(x => this.itemRemove(x));
 	}
 
-	/*
-	itemTransferTo2(itemToTransfer: Item, other: ItemHolder): void
-	{
-		var itemDefnName = itemToTransfer.defnName;
-		this.itemsWithDefnNameJoin(itemDefnName);
-		var itemExisting = this.itemsByDefnName(itemDefnName)[0];
-		if (itemExisting != null)
-		{
-			var itemToTransfer =
-				this.itemSplit(itemExisting, itemToTransfer.quantity);
-			other.itemAdd(itemToTransfer.clone());
-			this.itemSubtract(itemToTransfer);
-		}
-	}
-	*/
-
 	itemsByDefnName2(defnName: string): Item[]
 	{
 		return this.itemsByDefnName(defnName);
 	}
 
-	massOfAllItems(world: World): number
+	retainsItemsWithZeroQuantitiesSet(value: boolean): ItemHolder
 	{
-		var massTotal = this.items.reduce
-		(
-			(sumSoFar, item) => sumSoFar + item.mass(world),
-			0 // sumSoFar
-		);
-
-		return massTotal;
-	}
-
-	massOfAllItemsOverMax(world: World): string
-	{
-		var returnValue = "" + Math.ceil(this.massOfAllItems(world));
-		if (this.massMax != null)
-		{
-			returnValue += "/" + this.massMax;
-		}
-		return returnValue;
+		this.retainsItemsWithZeroQuantities = value;
+		return this;
 	}
 
 	tradeValueOfAllItems(world: World): number
@@ -650,7 +681,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				DataBinding.fromContextAndGet
 				(
 					this,
-					(c: ItemHolder) => "Weight: " + c.massOfAllItemsOverMax(world)
+					(c: ItemHolder) => "Weight: " + c.encumbranceOfAllItemsOverMax(world)
 				),
 				fontSmall
 			),
@@ -971,12 +1002,13 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return new ItemHolder
 		(
 			ArrayHelper.clone(this.items),
-			this.massMax,
-			this.reachRadius
+			this.encumbranceMax,
+			this.reachRadius,
+			this.retainsItemsWithZeroQuantities
 		);
 	}
 
-	overwriteWith(other: ItemHolder): ItemHolder { return this; }
+	overwriteWith(other: ItemHolder): ItemHolder { return this; } // todo
 
 }
 

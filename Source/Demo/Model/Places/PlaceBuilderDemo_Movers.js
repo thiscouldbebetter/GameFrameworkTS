@@ -439,7 +439,8 @@ class PlaceBuilderDemo_Movers {
             new Item("Key", 1),
             new Item("Medicine", 4),
         ], null, // weightMax
-        null // reachRadius
+        null, // reachRadius
+        null // retainsItemsWithZeroQuantities
         );
         var route = new Route(Direction.Instances()._ByHeading, // neighborOffsets
         null, // bounds
@@ -724,7 +725,8 @@ class PlaceBuilderDemo_Movers {
         var itemHolder = new ItemHolder([
             new Item("Coin", 100),
         ], 100, // weightMax
-        20 // reachRadius
+        20, // reachRadius
+        false // retainsItemsWithZeroQuantities
         );
         var killable = new Killable(50, // integrity
         (uwpe, damage) => // damageApply

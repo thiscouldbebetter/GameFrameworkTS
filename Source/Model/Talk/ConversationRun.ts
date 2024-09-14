@@ -310,6 +310,12 @@ export class ConversationRun
 		return this.toControl(universe.display.sizeInPixels, universe).toVenue();
 	}
 
+	v(variableName: string): unknown
+	{
+		// This convenience method is tersely named for use in scripts.
+		return this.varGet(variableName);
+	}
+
 	varGet(variableName: string): unknown
 	{
 		// This convenience method is tersely named for use in scripts.

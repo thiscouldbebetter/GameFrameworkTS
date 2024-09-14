@@ -182,6 +182,10 @@ var ThisCouldBeBetter;
             toVenue(universe) {
                 return this.toControl(universe.display.sizeInPixels, universe).toVenue();
             }
+            v(variableName) {
+                // This convenience method is tersely named for use in scripts.
+                return this.varGet(variableName);
+            }
             varGet(variableName) {
                 // This convenience method is tersely named for use in scripts.
                 return this.variableByName(variableName);
