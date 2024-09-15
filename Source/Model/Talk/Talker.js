@@ -12,6 +12,10 @@ var ThisCouldBeBetter;
             static fromConversationDefnName(conversationDefnName) {
                 return new Talker(conversationDefnName, null, null);
             }
+            conversationRunSet(value) {
+                this.conversationRun = value;
+                return this;
+            }
             talk(uwpe) {
                 var universe = uwpe.universe;
                 var entityTalker = uwpe.entity;
@@ -50,9 +54,10 @@ var ThisCouldBeBetter;
                         }
                     };
                 }
-                this.conversationRun = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker, // entityTalker
+                var conversationRun = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker, // entityTalker
                 null // contentsById
                 );
+                this.conversationRunSet(conversationRun);
                 this.conversationRun.talkNodeCurrentExecute(universe);
                 var conversationSize = universe.display.sizeDefault().clone();
                 var conversationAsControl = this.toControl(this.conversationRun, conversationSize, universe);

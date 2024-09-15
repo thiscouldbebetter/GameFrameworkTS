@@ -9,7 +9,10 @@ var ThisCouldBeBetter;
                 this.actions = [];
             }
             static default() {
-                return Actor.fromActivityDefnName(GameFramework.ActivityDefn.Instances().DoNothing.name);
+                return Actor.fromActivityDefn(GameFramework.ActivityDefn.Instances().DoNothing);
+            }
+            static fromActivityDefn(activityDefn) {
+                return Actor.fromActivityDefnName(activityDefn.name);
             }
             static fromActivityDefnName(activityDefnName) {
                 var activity = GameFramework.Activity.fromDefnName(activityDefnName);

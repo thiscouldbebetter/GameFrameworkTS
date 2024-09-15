@@ -27,6 +27,12 @@ export class Talker implements EntityProperty<Talker>
 		return new Talker(conversationDefnName, null, null);
 	}
 
+	conversationRunSet(value: ConversationRun): Talker
+	{
+		this.conversationRun = value;
+		return this;
+	}
+
 	talk(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var universe = uwpe.universe;
@@ -85,7 +91,7 @@ export class Talker implements EntityProperty<Talker>
 				}
 			};
 		}
-		this.conversationRun = new ConversationRun
+		var conversationRun = new ConversationRun
 		(
 			conversationDefn,
 			conversationQuit,
@@ -93,6 +99,7 @@ export class Talker implements EntityProperty<Talker>
 			entityTalker, // entityTalker
 			null // contentsById
 		);
+		this.conversationRunSet(conversationRun);
 		this.conversationRun.talkNodeCurrentExecute(universe);
 		var conversationSize = universe.display.sizeDefault().clone();
 		var conversationAsControl =

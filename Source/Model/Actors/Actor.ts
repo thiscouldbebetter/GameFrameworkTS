@@ -16,10 +16,15 @@ export class Actor implements EntityProperty<Actor>
 
 	static default(): Actor
 	{
-		return Actor.fromActivityDefnName
+		return Actor.fromActivityDefn
 		(
-			ActivityDefn.Instances().DoNothing.name
+			ActivityDefn.Instances().DoNothing
 		);
+	}
+
+	static fromActivityDefn(activityDefn: ActivityDefn): Actor
+	{
+		return Actor.fromActivityDefnName(activityDefn.name);
 	}
 
 	static fromActivityDefnName(activityDefnName: string): Actor
