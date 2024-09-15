@@ -8,7 +8,8 @@ var ThisCouldBeBetter;
                 this.integrityMax = integrityMax;
                 this._damageApply = damageApply;
                 this._die = die;
-                this.integrity = this.integrityMax;
+                this.deathIsIgnored = false;
+                this.integritySetToMax();
             }
             static default() {
                 return Killable.fromIntegrityMax(1);
@@ -41,36 +42,46 @@ var ThisCouldBeBetter;
                 }
                 return damageApplied;
             }
+            deathIsIgnoredSet(value) {
+                this.deathIsIgnored = value;
+                return this;
+            }
             die(uwpe) {
                 if (this._die != null) {
                     this._die(uwpe);
                 }
             }
             integrityAdd(amountToAdd) {
-                this.integrity += amountToAdd;
-                this.integrity = GameFramework.NumberHelper.trimToRangeMax(this.integrity, this.integrityMax);
+                var integrityToSet = this.integrity + amountToAdd;
+                integrityToSet = GameFramework.NumberHelper.trimToRangeMax(this.integrity, this.integrityMax);
+                this.integritySet(integrityToSet);
             }
             integrityCurrentOverMax() {
                 return this.integrity + "/" + this.integrityMax;
             }
+            integritySet(value) {
+                this.integrity = value;
+                return this;
+            }
             integritySetToMax() {
-                this.integrity = this.integrityMax;
+                this.integritySet(this.integrityMax);
             }
             integritySubtract(amountToSubtract) {
                 this.integrityAdd(0 - amountToSubtract);
             }
             kill() {
-                this.integrity = 0;
+                this.integritySet(0);
             }
             isAlive() {
-                return (this.integrity > 0);
+                return (this.integrity > 0 || this.deathIsIgnored);
             }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
             propertyName() { return Killable.name; }
             updateForTimerTick(uwpe) {
-                if (this.isAlive() == false) {
+                var killableIsAlive = this.isAlive();
+                if (killableIsAlive == false) {
                     var place = uwpe.place;
                     var entityKillable = uwpe.entity;
                     place.entityToRemoveAdd(entityKillable);

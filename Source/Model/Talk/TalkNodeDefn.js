@@ -39,6 +39,7 @@ var ThisCouldBeBetter;
                 this.Quit = tnd("Quit", this.quit);
                 this.Script = tnd("Script", this.script);
                 this.Switch = tnd("Switch", this._switch);
+                this.VariableAdd = tnd("VariableAdd", this.variableAdd);
                 this.VariableLoad = tnd("VariableLoad", this.variableLoad);
                 this.VariableSet = tnd("VariableSet", this.variableSet);
                 this.VariableStore = tnd("VariableStore", this.variableStore);
@@ -62,6 +63,7 @@ var ThisCouldBeBetter;
                         this.Quit,
                         this.Script,
                         this.Switch,
+                        this.VariableAdd,
                         this.VariableLoad,
                         this.VariableSet,
                         this.VariableStore,
@@ -224,6 +226,17 @@ var ThisCouldBeBetter;
                 var variableValueAndNodeNextNamePairs = talkNode.next.split(";").map(x => x.split(":"));
                 var talkNodeNextName = variableValueAndNodeNextNamePairs.find(x => x[0] == variableValueActual)[1];
                 conversationRun.goto(talkNodeNextName, universe);
+            }
+            variableAdd(universe, conversationRun) {
+                var talkNode = conversationRun.talkNodeCurrent();
+                var variableName = talkNode.content;
+                var variableIncrementAsString = talkNode.next;
+                var variableIncrement = eval(variableIncrementAsString);
+                var variableValueBeforeIncrement = conversationRun.variableGetWithDefault(variableName, 0);
+                var variableValueAfterIncrement = variableValueBeforeIncrement + variableIncrement;
+                conversationRun.variableSet(variableName, variableValueAfterIncrement);
+                conversationRun.talkNodeAdvance(universe);
+                conversationRun.talkNodeCurrentExecute(universe); // hack
             }
             variableLoad(universe, conversationRun) {
                 var talkNode = conversationRun.talkNodeCurrent();

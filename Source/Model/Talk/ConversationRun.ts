@@ -322,6 +322,12 @@ export class ConversationRun
 		return this.variableByName(variableName);
 	}
 
+	varGetWithDefault(variableName: string, defaultValue: unknown): unknown
+	{
+		// This convenience method is tersely named for use in scripts.
+		return this.variableGetWithDefault(variableName, defaultValue);
+	}
+
 	varSet(variableName: string, variableValue: unknown): unknown
 	{
 		// This convenience method is tersely named for use in scripts.
@@ -331,6 +337,56 @@ export class ConversationRun
 	variableByName(variableName: string): unknown
 	{
 		return this.variablesByName.get(variableName);
+	}
+
+	variableGet(variableName: string): unknown
+	{
+		return this.variableByName(variableName);
+	}
+
+	variableGetWithDefault(variableName: string, defaultValue: unknown): unknown
+	{
+		var variableValue = this.variableGet(variableName);
+		if (variableValue == null)
+		{
+			variableValue = defaultValue;
+			this.variableSet(variableName, variableValue);
+		}
+		return variableValue;
+	}
+
+	variableLoad
+	(
+		universe: Universe,
+		variableName: string,
+		variableExpression: string
+	): void
+	{
+		var scriptText = "( (u, cr) => " + variableExpression + ")";
+		var scriptToRun = eval(scriptText);
+		var variableValue = scriptToRun(universe, this);
+		this.variableSet(variableName, variableValue);
+	}
+
+	variableSet(variableName: string, variableValue: unknown): void
+	{
+		this.variablesByName.set(variableName, variableValue);
+	}
+
+	variableStore
+	(
+		universe: Universe,
+		variableName: string,
+		scriptExpression: string
+	): void
+	{
+		var variableValue = this.variableByName(variableName).toString();
+		var scriptExpressionWithValue =
+			scriptExpression.split("$value").join(variableValue);
+		var scriptToRunAsString =
+			"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
+		var scriptToRun = eval(scriptToRunAsString);
+		scriptToRun(universe, this);
 	}
 
 	variablesExport
@@ -369,40 +425,6 @@ export class ConversationRun
 		{
 			this.variableSet(variableName, variableValue);
 		}
-	}
-
-	variableLoad
-	(
-		universe: Universe,
-		variableName: string,
-		variableExpression: string
-	): void
-	{
-		var scriptText = "( (u, cr) => " + variableExpression + ")";
-		var scriptToRun = eval(scriptText);
-		var variableValue = scriptToRun(universe, this);
-		this.variableSet(variableName, variableValue);
-	}
-
-	variableSet(variableName: string, variableValue: unknown): void
-	{
-		this.variablesByName.set(variableName, variableValue);
-	}
-
-	variableStore
-	(
-		universe: Universe,
-		variableName: string,
-		scriptExpression: string
-	): void
-	{
-		var variableValue = this.variableByName(variableName).toString();
-		var scriptExpressionWithValue =
-			scriptExpression.split("$value").join(variableValue);
-		var scriptToRunAsString =
-			"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-		var scriptToRun = eval(scriptToRunAsString);
-		scriptToRun(universe, this);
 	}
 
 	// controls

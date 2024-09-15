@@ -11,6 +11,7 @@ export class Killable implements EntityProperty<Killable>
 	) => number;
 	_die: (uwpe: UniverseWorldPlaceEntities) => void;
 
+	deathIsIgnored: boolean; // For debugging.
 	integrity: number;
 
 	constructor
@@ -27,7 +28,8 @@ export class Killable implements EntityProperty<Killable>
 		this._damageApply = damageApply;
 		this._die = die;
 
-		this.integrity = this.integrityMax;
+		this.deathIsIgnored = false;
+		this.integritySetToMax();
 	}
 
 	static default(): Killable
@@ -85,6 +87,12 @@ export class Killable implements EntityProperty<Killable>
 		return damageApplied;
 	}
 
+	deathIsIgnoredSet(value: boolean): Killable
+	{
+		this.deathIsIgnored = value;
+		return this;
+	}
+
 	die(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._die != null)
@@ -95,12 +103,13 @@ export class Killable implements EntityProperty<Killable>
 
 	integrityAdd(amountToAdd: number): void
 	{
-		this.integrity += amountToAdd;
-		this.integrity = NumberHelper.trimToRangeMax
+		var integrityToSet = this.integrity + amountToAdd;
+		integrityToSet = NumberHelper.trimToRangeMax
 		(
 			this.integrity,
 			this.integrityMax
 		);
+		this.integritySet(integrityToSet);
 	}
 
 	integrityCurrentOverMax(): string
@@ -108,9 +117,15 @@ export class Killable implements EntityProperty<Killable>
 		return this.integrity + "/" + this.integrityMax;
 	}
 
+	integritySet(value: number): Killable
+	{
+		this.integrity = value;
+		return this;
+	}
+
 	integritySetToMax(): void
 	{
-		this.integrity = this.integrityMax;
+		this.integritySet(this.integrityMax);
 	}
 
 	integritySubtract(amountToSubtract: number): void
@@ -120,12 +135,12 @@ export class Killable implements EntityProperty<Killable>
 
 	kill(): void
 	{
-		this.integrity = 0;
+		this.integritySet(0);
 	}
 
 	isAlive(): boolean
 	{
-		return (this.integrity > 0);
+		return (this.integrity > 0 || this.deathIsIgnored);
 	}
 
 	// EntityProperty.
@@ -140,7 +155,8 @@ export class Killable implements EntityProperty<Killable>
 		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
-		if (this.isAlive() == false)
+		var killableIsAlive = this.isAlive();
+		if (killableIsAlive == false)
 		{
 			var place = uwpe.place;
 			var entityKillable = uwpe.entity;

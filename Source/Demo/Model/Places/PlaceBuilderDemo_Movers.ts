@@ -175,7 +175,7 @@ class PlaceBuilderDemo_Movers
 				)[0];
 				if (grazerInReach != null)
 				{
-					grazerInReach.killable().integrity = 0;
+					grazerInReach.killable().kill();
 				}
 				activity.targetEntitySet(null);
 			}

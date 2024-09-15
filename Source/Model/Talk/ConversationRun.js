@@ -190,12 +190,43 @@ var ThisCouldBeBetter;
                 // This convenience method is tersely named for use in scripts.
                 return this.variableByName(variableName);
             }
+            varGetWithDefault(variableName, defaultValue) {
+                // This convenience method is tersely named for use in scripts.
+                return this.variableGetWithDefault(variableName, defaultValue);
+            }
             varSet(variableName, variableValue) {
                 // This convenience method is tersely named for use in scripts.
                 return this.variableSet(variableName, variableValue);
             }
             variableByName(variableName) {
                 return this.variablesByName.get(variableName);
+            }
+            variableGet(variableName) {
+                return this.variableByName(variableName);
+            }
+            variableGetWithDefault(variableName, defaultValue) {
+                var variableValue = this.variableGet(variableName);
+                if (variableValue == null) {
+                    variableValue = defaultValue;
+                    this.variableSet(variableName, variableValue);
+                }
+                return variableValue;
+            }
+            variableLoad(universe, variableName, variableExpression) {
+                var scriptText = "( (u, cr) => " + variableExpression + ")";
+                var scriptToRun = eval(scriptText);
+                var variableValue = scriptToRun(universe, this);
+                this.variableSet(variableName, variableValue);
+            }
+            variableSet(variableName, variableValue) {
+                this.variablesByName.set(variableName, variableValue);
+            }
+            variableStore(universe, variableName, scriptExpression) {
+                var variableValue = this.variableByName(variableName).toString();
+                var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
+                var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
+                var scriptToRun = eval(scriptToRunAsString);
+                scriptToRun(universe, this);
             }
             variablesExport(universe, variableLookupExpression) {
                 var variablesByNameToExport = this.variablesByName;
@@ -218,22 +249,6 @@ var ThisCouldBeBetter;
                 for (var [variableName, variableValue] of variablesByNameToImportFrom) {
                     this.variableSet(variableName, variableValue);
                 }
-            }
-            variableLoad(universe, variableName, variableExpression) {
-                var scriptText = "( (u, cr) => " + variableExpression + ")";
-                var scriptToRun = eval(scriptText);
-                var variableValue = scriptToRun(universe, this);
-                this.variableSet(variableName, variableValue);
-            }
-            variableSet(variableName, variableValue) {
-                this.variablesByName.set(variableName, variableValue);
-            }
-            variableStore(universe, variableName, scriptExpression) {
-                var variableValue = this.variableByName(variableName).toString();
-                var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
-                var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-                var scriptToRun = eval(scriptToRunAsString);
-                scriptToRun(universe, this);
             }
             // controls
             toControl(size, universe) {

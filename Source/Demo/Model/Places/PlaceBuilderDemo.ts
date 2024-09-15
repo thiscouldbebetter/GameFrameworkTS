@@ -2218,7 +2218,7 @@ class PlaceBuilderDemo // Main.
 					(
 						uwpe, null
 					);
-					entityProjectile.killable().integrity = 0;
+					entityProjectile.killable().kill();
 				}
 			};
 
@@ -2841,7 +2841,7 @@ class PlaceBuilderDemo // Main.
 				)[0];
 				if (boulderInRange != null)
 				{
-					boulderInRange.killable().integrity = 0;
+					boulderInRange.killable().kill();
 				}
 			}
 		);
@@ -3077,7 +3077,7 @@ class PlaceBuilderDemo // Main.
 					(
 						uwpe, damageToApply
 					);
-					entityProjectile.killable().integrity = 0;
+					entityProjectile.killable().kill();
 				}
 			};
 
