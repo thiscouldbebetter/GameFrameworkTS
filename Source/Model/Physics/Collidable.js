@@ -172,10 +172,9 @@ var ThisCouldBeBetter;
             }
             collisionsFindForEntityWithTracker(uwpe, collisionsSoFar) {
                 var universe = uwpe.universe;
-                var world = uwpe.world;
                 var place = uwpe.place;
                 var entity = uwpe.entity;
-                var collisionTracker = place.collisionTracker(world);
+                var collisionTracker = place.collisionTracker(uwpe);
                 collisionTracker.entityReset(entity);
                 collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, entity, universe.collisionHelper, collisionsSoFar // Sometimes ignored.
                 );

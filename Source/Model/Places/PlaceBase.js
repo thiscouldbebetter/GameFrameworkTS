@@ -13,7 +13,8 @@ var ThisCouldBeBetter;
                 this._entities = [];
                 this.entitiesById = new Map();
                 this._entitiesByPropertyName = new Map();
-                this.entitiesToSpawn = entities.slice();
+                this.entitiesToSpawn = [];
+                this.entitiesToSpawnAdd(entities);
                 this.entitiesToRemove = [];
                 this.isLoaded = false;
             }
@@ -85,7 +86,7 @@ var ThisCouldBeBetter;
                 this.entitiesToRemove.push(...entitiesToRemove);
             }
             entitiesToSpawnAdd(entitiesToSpawn) {
-                this.entitiesToSpawn.push(...entitiesToSpawn);
+                entitiesToSpawn.forEach(x => this.entityToSpawnAdd(x));
             }
             entitiesSpawn(uwpe) {
                 uwpe.placeSet(this);
@@ -122,10 +123,11 @@ var ThisCouldBeBetter;
                 if (this._entities.indexOf(entity) == -1) // hack
                  {
                     if (entity.name == null) {
-                        entity.name = "Entity";
+                        entity.name = GameFramework.Entity.name;
                     }
                     this._entities.push(entity);
                     this.entitiesById.set(entity.id, entity);
+                    var placeDefn = this.defn(uwpe.world);
                     var entityProperties = entity.properties;
                     for (var i = 0; i < entityProperties.length; i++) {
                         var property = entityProperties[i];
@@ -133,7 +135,24 @@ var ThisCouldBeBetter;
                         var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
                         entitiesWithProperty.push(entity);
                     }
-                    entity.initialize(uwpe);
+                    var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
+                    if (propertyNamesToProcess == null) {
+                        entity.initialize(uwpe);
+                    }
+                    else {
+                        for (var p = 0; p < propertyNamesToProcess.length; p++) {
+                            var propertyName = propertyNamesToProcess[p];
+                            var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+                            if (entitiesWithProperty != null) {
+                                for (var i = 0; i < entitiesWithProperty.length; i++) {
+                                    var entity = entitiesWithProperty[i];
+                                    var entityProperty = entity.propertyByName(propertyName);
+                                    uwpe.entitySet(entity);
+                                    entityProperty.initialize(uwpe);
+                                }
+                            }
+                        }
+                    }
                 }
             }
             entitySpawn2(universe, world, entity) {
@@ -160,13 +179,26 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 uwpe.placeSet(this);
                 var world = uwpe.world;
-                var defn = this.defn(world);
-                defn.placeInitialize(uwpe);
+                var placeDefn = this.defn(world);
+                placeDefn.placeInitialize(uwpe);
                 this.entitiesSpawn(uwpe);
-                var entities = this._entities;
-                for (var i = 0; i < entities.length; i++) {
-                    var entity = entities[i];
-                    entity.initialize(uwpe);
+                if (placeDefn == null) {
+                    this._entities.forEach(entity => entity.initialize(uwpe));
+                }
+                else {
+                    var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
+                    for (var p = 0; p < propertyNamesToProcess.length; p++) {
+                        var propertyName = propertyNamesToProcess[p];
+                        var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+                        if (entitiesWithProperty != null) {
+                            for (var i = 0; i < entitiesWithProperty.length; i++) {
+                                var entity = entitiesWithProperty[i];
+                                var entityProperty = entity.propertyByName(propertyName);
+                                uwpe.entitySet(entity);
+                                entityProperty.initialize(uwpe);
+                            }
+                        }
+                    }
                 }
             }
             updateForTimerTick(uwpe) {
@@ -230,21 +262,22 @@ var ThisCouldBeBetter;
             collidables() {
                 return this.entitiesByPropertyName(GameFramework.Collidable.name);
             }
-            collisionTracker(world) {
+            collisionTracker(uwpe) {
                 var collisionTrackerAsEntity = this.entityByName(GameFramework.CollisionTrackerBase.name);
                 if (collisionTrackerAsEntity == null) {
                     var collisionTracker = new GameFramework.CollisionTrackerBruteForce();
                     // hack
                     // Must add the CollisionTracker to the propertyNamesToProcess,
                     // or otherwise collisions won't be tracked.
-                    var placeDefn = this.defn(world);
+                    var placeDefn = this.defn(uwpe.world);
                     var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
                     var collisionTrackerPropertyName = collisionTracker.propertyName();
                     if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1) {
                         placeDefnPropertyNames.push(collisionTrackerPropertyName);
                     }
                     var collisionTrackerAsEntity = collisionTracker.toEntity();
-                    this.entitySpawn(GameFramework.UniverseWorldPlaceEntities.fromEntity(collisionTrackerAsEntity));
+                    uwpe.entitySet(collisionTrackerAsEntity);
+                    this.entitySpawn(uwpe);
                 }
                 var returnValue = collisionTrackerAsEntity.properties[0];
                 return returnValue;

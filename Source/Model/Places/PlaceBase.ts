@@ -35,7 +35,8 @@ export class PlaceBase implements Place, Loadable
 		this.entitiesById = new Map<number, Entity>();
 
 		this._entitiesByPropertyName = new Map<string, Entity[]>();
-		this.entitiesToSpawn = entities.slice();
+		this.entitiesToSpawn = [];
+		this.entitiesToSpawnAdd(entities);
 		this.entitiesToRemove = [];
 		this.isLoaded = false;
 	}
@@ -153,7 +154,7 @@ export class PlaceBase implements Place, Loadable
 
 	entitiesToSpawnAdd(entitiesToSpawn: Entity[]): void
 	{
-		this.entitiesToSpawn.push(...entitiesToSpawn);
+		entitiesToSpawn.forEach(x => this.entityToSpawnAdd(x) );
 	}
 
 	entitiesSpawn(uwpe: UniverseWorldPlaceEntities): void
@@ -209,11 +210,13 @@ export class PlaceBase implements Place, Loadable
 		{
 			if (entity.name == null)
 			{
-				entity.name = "Entity";
+				entity.name = Entity.name;
 			}
 
 			this._entities.push(entity);
 			this.entitiesById.set(entity.id, entity);
+
+			var placeDefn = this.defn(uwpe.world);
 
 			var entityProperties = entity.properties;
 			for (var i = 0; i < entityProperties.length; i++)
@@ -224,7 +227,30 @@ export class PlaceBase implements Place, Loadable
 				entitiesWithProperty.push(entity);
 			}
 
-			entity.initialize(uwpe);
+			var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
+
+			if (propertyNamesToProcess == null)
+			{
+				entity.initialize(uwpe);
+			}
+			else
+			{
+				for (var p = 0; p < propertyNamesToProcess.length; p++)
+				{
+					var propertyName = propertyNamesToProcess[p];
+					var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+					if (entitiesWithProperty != null)
+					{
+						for (var i = 0; i < entitiesWithProperty.length; i++)
+						{
+							var entity = entitiesWithProperty[i];
+							var entityProperty = entity.propertyByName(propertyName);
+							uwpe.entitySet(entity);
+							entityProperty.initialize(uwpe);
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -266,14 +292,35 @@ export class PlaceBase implements Place, Loadable
 	{
 		uwpe.placeSet(this);
 		var world = uwpe.world;
-		var defn = this.defn(world);
-		defn.placeInitialize(uwpe);
+		var placeDefn = this.defn(world);
+		placeDefn.placeInitialize(uwpe);
 		this.entitiesSpawn(uwpe);
-		var entities = this._entities;
-		for (var i = 0; i < entities.length; i++)
+
+		if (placeDefn == null)
 		{
-			var entity = entities[i];
-			entity.initialize(uwpe);
+			this._entities.forEach
+			(
+				entity => entity.initialize(uwpe)
+			)
+		}
+		else
+		{
+			var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
+			for (var p = 0; p < propertyNamesToProcess.length; p++)
+			{
+				var propertyName = propertyNamesToProcess[p];
+				var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+				if (entitiesWithProperty != null)
+				{
+					for (var i = 0; i < entitiesWithProperty.length; i++)
+					{
+						var entity = entitiesWithProperty[i];
+						var entityProperty = entity.propertyByName(propertyName);
+						uwpe.entitySet(entity);
+						entityProperty.initialize(uwpe);
+					}
+				}
+			}
 		}
 	}
 
@@ -380,7 +427,7 @@ export class PlaceBase implements Place, Loadable
 		return this.entitiesByPropertyName(Collidable.name);
 	}
 
-	collisionTracker(world: World): CollisionTracker
+	collisionTracker(uwpe: UniverseWorldPlaceEntities): CollisionTracker
 	{
 		var collisionTrackerAsEntity =
 			this.entityByName(CollisionTrackerBase.name);
@@ -393,7 +440,7 @@ export class PlaceBase implements Place, Loadable
 			// hack
 			// Must add the CollisionTracker to the propertyNamesToProcess,
 			// or otherwise collisions won't be tracked.
-			var placeDefn = this.defn(world);
+			var placeDefn = this.defn(uwpe.world);
 			var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
 			var collisionTrackerPropertyName = collisionTracker.propertyName();
 			if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1)
@@ -402,7 +449,8 @@ export class PlaceBase implements Place, Loadable
 			}
 
 			var collisionTrackerAsEntity = collisionTracker.toEntity();
-			this.entitySpawn(UniverseWorldPlaceEntities.fromEntity(collisionTrackerAsEntity));
+			uwpe.entitySet(collisionTrackerAsEntity)
+			this.entitySpawn(uwpe);
 		}
 
 		var returnValue =

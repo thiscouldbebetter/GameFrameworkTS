@@ -243,10 +243,9 @@ export class Camera implements EntityProperty<Camera>
 		entitiesInView: Entity[]
 	): Entity[]
 	{
-		var world = uwpe.world;
 		var place = uwpe.place;
 
-		var collisionTracker = (place as PlaceBase).collisionTracker(world);
+		var collisionTracker = (place as PlaceBase).collisionTracker(uwpe);
 		collisionTracker.entityReset(cameraEntity);
 
 		var cameraCollidable = cameraEntity.collidable();

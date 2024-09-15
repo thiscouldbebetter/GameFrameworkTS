@@ -368,11 +368,10 @@ export class Collidable implements EntityProperty<Collidable>
 	): Collision[]
 	{
 		var universe = uwpe.universe;
-		var world = uwpe.world;
 		var place = uwpe.place;
 		var entity = uwpe.entity;
 
-		var collisionTracker = (place as PlaceBase).collisionTracker(world);
+		var collisionTracker = (place as PlaceBase).collisionTracker(uwpe);
 
 		collisionTracker.entityReset(entity);
 

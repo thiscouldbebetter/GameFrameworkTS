@@ -91,9 +91,8 @@ var ThisCouldBeBetter;
                 this.drawEntitiesInView_2_Draw(uwpe, display, this.entitiesInView);
             }
             drawEntitiesInView_1_FindEntitiesInView(uwpe, cameraEntity, collisionHelper, entitiesInView) {
-                var world = uwpe.world;
                 var place = uwpe.place;
-                var collisionTracker = place.collisionTracker(world);
+                var collisionTracker = place.collisionTracker(uwpe);
                 collisionTracker.entityReset(cameraEntity);
                 var cameraCollidable = cameraEntity.collidable();
                 //cameraCollidable.isDisabled = false;
