@@ -19,7 +19,24 @@ export class TalkNode //
 		isEnabled: (u: Universe, cr: ConversationRun) => boolean
 	)
 	{
-		this.name = ( (name == null || name == "") ? TalkNode.idNext() : name);
+		this.name = name;
+
+		if (defnName == TalkNodeDefn.Instances().Option.name)
+		{
+			// todo
+			// Doing this for nodes with types other than "Option"
+			// causes mysterious errors.
+			if (this.name == null || this.name == "")
+			{
+				this.name = content;
+			}
+		}
+
+		if (this.name == null || this.name == "")
+		{
+			this.name = TalkNode.idNext();
+		}
+
 		this.defnName = defnName;
 		this.content = content == "" ? null : content;
 		this.next = next == "" ? null : next;
@@ -327,7 +344,14 @@ export class TalkNode //
 		else
 		{
 			var scriptToRunAsString = "( (u, cr) => " + isEnabledAsText + " )";
-			isEnabled = eval(scriptToRunAsString);
+			try
+			{
+				isEnabled = eval(scriptToRunAsString);
+			}
+			catch (err)
+			{
+				throw err;
+			}
 		}
 
 		var returnValue = new TalkNode

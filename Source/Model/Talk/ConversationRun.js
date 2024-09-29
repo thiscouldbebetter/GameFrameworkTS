@@ -417,6 +417,9 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // String.
+            toString(u) {
+                return this.toStringForUniverse(u);
+            }
             toStringForUniverse(u) {
                 var returnValue = this.scopeCurrent.toStringForUniverseAndConversationRun(u, this);
                 return returnValue;

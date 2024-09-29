@@ -928,6 +928,11 @@ export class ConversationRun
 
 	// String.
 
+	toString(u: Universe): String
+	{
+		return this.toStringForUniverse(u);
+	}
+
 	toStringForUniverse(u: Universe): string
 	{
 		var returnValue = this.scopeCurrent.toStringForUniverseAndConversationRun(u, this);

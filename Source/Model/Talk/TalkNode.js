@@ -6,7 +6,18 @@ var ThisCouldBeBetter;
         class TalkNode //
          {
             constructor(name, defnName, content, next, isEnabled) {
-                this.name = ((name == null || name == "") ? TalkNode.idNext() : name);
+                this.name = name;
+                if (defnName == GameFramework.TalkNodeDefn.Instances().Option.name) {
+                    // todo
+                    // Doing this for nodes with types other than "Option"
+                    // causes mysterious errors.
+                    if (this.name == null || this.name == "") {
+                        this.name = content;
+                    }
+                }
+                if (this.name == null || this.name == "") {
+                    this.name = TalkNode.idNext();
+                }
                 this.defnName = defnName;
                 this.content = content == "" ? null : content;
                 this.next = next == "" ? null : next;
@@ -159,7 +170,12 @@ var ThisCouldBeBetter;
                 }
                 else {
                     var scriptToRunAsString = "( (u, cr) => " + isEnabledAsText + " )";
-                    isEnabled = eval(scriptToRunAsString);
+                    try {
+                        isEnabled = eval(scriptToRunAsString);
+                    }
+                    catch (err) {
+                        throw err;
+                    }
                 }
                 var returnValue = new TalkNode(fields[0], // name
                 fields[1], // defnName
