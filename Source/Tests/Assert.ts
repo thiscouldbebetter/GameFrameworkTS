@@ -62,11 +62,27 @@ export class Assert
 		}
 	}
 
+	static isEmpty(arrayToCheck: unknown[]): void
+	{
+		if (arrayToCheck.length != 0)
+		{
+			throw new Error("Expected: empty, but was: not empty.");
+		}
+	}
+
 	static isFalse(valueToTest: boolean): void
 	{
 		if (valueToTest != false)
 		{
 			throw new Error("Expected: false, but was: " + valueToTest + ".");
+		}
+	}
+
+	static isNotEmpty(arrayToCheck: unknown[]): void
+	{
+		if (arrayToCheck.length == 0)
+		{
+			throw new Error("Expected: not empty, but was: empty.");
 		}
 	}
 

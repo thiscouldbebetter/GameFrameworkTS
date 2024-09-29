@@ -33,9 +33,19 @@ var ThisCouldBeBetter;
                     throw new Error(errorMessage);
                 }
             }
+            static isEmpty(arrayToCheck) {
+                if (arrayToCheck.length != 0) {
+                    throw new Error("Expected: empty, but was: not empty.");
+                }
+            }
             static isFalse(valueToTest) {
                 if (valueToTest != false) {
                     throw new Error("Expected: false, but was: " + valueToTest + ".");
+                }
+            }
+            static isNotEmpty(arrayToCheck) {
+                if (arrayToCheck.length == 0) {
+                    throw new Error("Expected: not empty, but was: empty.");
                 }
             }
             static isNotNull(valueToTest) {
