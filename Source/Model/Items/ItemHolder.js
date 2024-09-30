@@ -146,6 +146,9 @@ var ThisCouldBeBetter;
             itemEntityPickUp(uwpe) {
                 var place = uwpe.place;
                 var itemEntityToPickUp = uwpe.entity2;
+                this.itemEntityPickUpFromPlace(itemEntityToPickUp, place);
+            }
+            itemEntityPickUpFromPlace(itemEntityToPickUp, place) {
                 var itemToPickUp = itemEntityToPickUp.item();
                 this.itemAdd(itemToPickUp);
                 place.entityToRemoveAdd(itemEntityToPickUp);

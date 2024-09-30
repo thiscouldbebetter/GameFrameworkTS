@@ -275,6 +275,15 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 	{
 		var place = uwpe.place;
 		var itemEntityToPickUp = uwpe.entity2;
+		this.itemEntityPickUpFromPlace(itemEntityToPickUp, place);
+	}
+
+	itemEntityPickUpFromPlace
+	(
+		itemEntityToPickUp: Entity,
+		place: Place
+	): void
+	{
 		var itemToPickUp = itemEntityToPickUp.item();
 		this.itemAdd(itemToPickUp);
 		place.entityToRemoveAdd(itemEntityToPickUp);
