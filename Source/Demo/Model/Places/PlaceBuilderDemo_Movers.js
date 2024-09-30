@@ -86,7 +86,7 @@ class PlaceBuilderDemo_Movers {
                 var reachDistance = 20; // todo
                 var grazerInReach = grazersInPlace.filter((x) => entityActor.locatable().distanceFromEntity(x) < reachDistance)[0];
                 if (grazerInReach != null) {
-                    grazerInReach.killable().integrity = 0;
+                    grazerInReach.killable().kill();
                 }
                 activity.targetEntitySet(null);
             }

@@ -15,6 +15,11 @@ export class Item implements EntityProperty<Item>
 		this.quantity = (quantity == null) ? 1 : quantity;
 	}
 
+	static fromDefnName(defnName: string)
+	{
+		return new Item(defnName, 1);
+	}
+
 	belongsToCategory(category: ItemCategory, world: World): boolean
 	{
 		return this.defn(world).belongsToCategory(category);

@@ -33,6 +33,11 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return new ItemHolder(null, null, null, null);
 	}
 
+	static default(): ItemHolder
+	{
+		return ItemHolder.create();
+	}
+
 	static fromItems(items: Item[]): ItemHolder
 	{
 		return new ItemHolder(items, null, null, null);

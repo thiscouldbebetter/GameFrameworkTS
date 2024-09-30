@@ -4,13 +4,48 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Device {
-            constructor(name, ticksToCharge, initialize, update, use) {
+            constructor(name, initialize, update, canUse, use) {
                 this.name = name;
-                this.ticksToCharge = ticksToCharge;
                 this._initialize = initialize;
-                this.update = update;
-                this.use = use;
+                this._update = update;
+                this._canUse = canUse;
+                this._use = use;
                 this.tickLastUsed = 0 - this.ticksToCharge;
+            }
+            static fromEntity(entity) {
+                return entity.propertyByName(Device.name);
+            }
+            static fromNameCanUseAndUse(name, canUse, use) {
+                return new Device(name, null, null, canUse, use);
+            }
+            static fromNameTicksToChargeAndUse(name, ticksToCharge, use) {
+                return Device.fromNameCanUseAndUse(name, (uwpe) => Device.canUseAfterTicksToCharge(uwpe, ticksToCharge), use);
+            }
+            canUse(uwpe) {
+                return this._canUse == null ? true : this._canUse(uwpe);
+            }
+            static canUseAfterTicksToCharge(uwpe, ticksToCharge) {
+                var entityDevice = uwpe.entity2;
+                var device = Device.fromEntity(entityDevice);
+                var world = uwpe.world;
+                var tickCurrent = world.timerTicksSoFar;
+                var ticksSinceUsed = tickCurrent - device.tickLastUsed;
+                var haveEnoughTicksPassedToCharge = (ticksSinceUsed >= ticksToCharge);
+                return haveEnoughTicksPassedToCharge;
+            }
+            update(uwpe) {
+                if (this._update != null) {
+                    this._update(uwpe);
+                }
+            }
+            use(uwpe) {
+                var canUse = this.canUse(uwpe);
+                if (canUse) {
+                    var world = uwpe.world;
+                    var tickCurrent = world.timerTicksSoFar;
+                    this.tickLastUsed = tickCurrent;
+                    this._use(uwpe);
+                }
             }
             // EntityProperty.
             finalize(uwpe) { }
@@ -21,18 +56,9 @@ var ThisCouldBeBetter;
                     this._initialize(uwpe);
                 }
             }
-            use(uwpe) {
-                var world = uwpe.world;
-                var tickCurrent = world.timerTicksSoFar;
-                var ticksSinceUsed = tickCurrent - this.tickLastUsed;
-                if (ticksSinceUsed >= this.ticksToCharge) {
-                    this.tickLastUsed = tickCurrent;
-                    this._use(uwpe);
-                }
-            }
             // clonable
             clone() {
-                return new Device(this.name, this.ticksToCharge, this._initialize, this.update, this.use);
+                return new Device(this.name, this._initialize, this._update, this._canUse, this._use);
             }
             overwriteWith(other) { return this; }
             // Equatable

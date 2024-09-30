@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.defnName = defnName;
                 this.quantity = (quantity == null) ? 1 : quantity;
             }
+            static fromDefnName(defnName) {
+                return new Item(defnName, 1);
+            }
             belongsToCategory(category, world) {
                 return this.defn(world).belongsToCategory(category);
             }

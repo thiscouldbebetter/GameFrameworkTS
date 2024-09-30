@@ -1049,14 +1049,8 @@ class PlaceBuilderDemo // Main.
         var itemDefnBombName = "Bomb";
         var itemBombVisual = this.itemDefnsByName.get(itemDefnBombName).visual;
         var itemBombCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemBombDevice = new Device("Bomb", 10, // ticksToCharge
-        (uwpe) => // initialize
-         {
-            // todo
-        }, (uwpe) => // update
-         {
-            // todo
-        }, (uwpe) => // use
+        var itemBombDevice = Device.fromNameTicksToChargeAndUse("Bomb", 10, // ticksToCharge
+        (uwpe) => // use
          {
             var entityUser = uwpe.entity;
             var entityDevice = uwpe.entity2;
@@ -1208,7 +1202,7 @@ class PlaceBuilderDemo // Main.
                 var killable = entityOther.killable();
                 if (killable != null) {
                     killable.damageApply(uwpe, null);
-                    entityProjectile.killable().integrity = 0;
+                    entityProjectile.killable().kill();
                 }
             };
             var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
@@ -1236,14 +1230,8 @@ class PlaceBuilderDemo // Main.
             ]);
             p.entityToSpawnAdd(projectileEntity);
         };
-        var itemBowDevice = new Device("Bow", 10, // ticksToCharge
-        (uwpe) => // initialize
-         {
-            // todo
-        }, (uwpe) => // update
-         {
-            // todo
-        }, itemBowUse);
+        var itemBowDevice = Device.fromNameTicksToChargeAndUse("Bow", 10, // ticksToCharge
+        itemBowUse);
         var collidable = Collidable.fromCollider(itemBowCollider);
         var drawable = Drawable.fromVisual(itemBowVisual);
         var equippable = Equippable.default();
@@ -1559,9 +1547,7 @@ class PlaceBuilderDemo // Main.
         var itemDefnName = "Pick";
         var itemPickVisual = this.itemDefnsByName.get(itemDefnName).visual;
         var itemPickCollider = new Sphere(Coords.create(), this.entityDimension / 2);
-        var itemPickDevice = new Device("Pick", 10, // ticksToCharge
-        null, // initialize: (uwpe: UniverseWorldPlaceEntities) => void,
-        null, // update: (uwpe: UniverseWorldPlaceEntities) => void,
+        var itemPickDevice = Device.fromNameTicksToChargeAndUse("Pick", 10, // ticksToCharge
         (uwpe) => // use
          {
             var p = uwpe.place;
@@ -1570,7 +1556,7 @@ class PlaceBuilderDemo // Main.
             var rangeMax = 20; // todo
             var boulderInRange = bouldersInPlace.filter((x) => x.locatable().distanceFromEntity(eUser) < rangeMax)[0];
             if (boulderInRange != null) {
-                boulderInRange.killable().integrity = 0;
+                boulderInRange.killable().kill();
             }
         });
         var itemPickEntityDefn = new Entity(itemDefnName, [
@@ -1614,9 +1600,7 @@ class PlaceBuilderDemo // Main.
         var itemDefnName = "Shovel";
         var itemShovelVisual = this.itemDefnsByName.get(itemDefnName).visual;
         var itemShovelCollider = new Sphere(Coords.create(), this.entityDimension / 2);
-        var itemShovelDevice = new Device("Shovel", 10, // ticksToCharge
-        null, // initialize: (uwpe: UniverseWorldPlaceEntities) => void,
-        null, // update: (uwpe: UniverseWorldPlaceEntities) => void,
+        var itemShovelDevice = Device.fromNameTicksToChargeAndUse("Shovel", 10, // ticksToCharge
         (uwpe) => // use
          {
             var p = uwpe.place;
@@ -1701,7 +1685,7 @@ class PlaceBuilderDemo // Main.
                 if (killable != null) {
                     var damageToApply = entityProjectile.damager().damagePerHit;
                     killable.damageApply(uwpe, damageToApply);
-                    entityProjectile.killable().integrity = 0;
+                    entityProjectile.killable().kill();
                 }
             };
             var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
@@ -1735,7 +1719,7 @@ class PlaceBuilderDemo // Main.
             var projectileDamager = Damager.fromDamagePerHit(new Damage(DiceRoll.fromOffset(10), damageTypeName, effectsAndChances));
             var projectileEntity = new Entity("ProjectileSword", [
                 projectileDamager,
-                new Ephemeral(8, null),
+                Ephemeral.fromTicksToLive(8),
                 killable,
                 new Locatable(projectileLoc),
                 new Collidable(false, // canCollideAgainWithoutSeparating
@@ -1744,10 +1728,7 @@ class PlaceBuilderDemo // Main.
             ]);
             place.entityToSpawnAdd(projectileEntity);
         };
-        var itemSwordDevice = new Device(itemDefnName, 10, // ticksToCharge
-        null, // init
-        null, // update
-        itemSwordDeviceUse);
+        var itemSwordDevice = Device.fromNameTicksToChargeAndUse(itemDefnName, 10, itemSwordDeviceUse);
         var itemSwordVisual = this.itemDefnsByName.get(itemDefnName).visual.clone();
         itemSwordVisual.transform(new Transform_Translate(Coords.fromXY(0, -1.1 * this.entityDimension)));
         var collidable = Collidable.fromCollider(itemSwordCollider);

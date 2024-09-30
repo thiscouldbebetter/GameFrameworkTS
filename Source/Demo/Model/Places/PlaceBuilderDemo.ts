@@ -1954,18 +1954,10 @@ class PlaceBuilderDemo // Main.
 		var itemBombVisual = this.itemDefnsByName.get(itemDefnBombName).visual;
 		var itemBombCollider = new Sphere(Coords.create(), entityDimensionHalf);
 
-		var itemBombDevice = new Device
+		var itemBombDevice = Device.fromNameTicksToChargeAndUse
 		(
 			"Bomb",
 			10, // ticksToCharge
-			(uwpe: UniverseWorldPlaceEntities) => // initialize
-			{
-				// todo
-			},
-			(uwpe: UniverseWorldPlaceEntities) => // update
-			{
-				// todo
-			},
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var entityUser = uwpe.entity;
@@ -2266,18 +2258,10 @@ class PlaceBuilderDemo // Main.
 			p.entityToSpawnAdd(projectileEntity);
 		};
 
-		var itemBowDevice = new Device
+		var itemBowDevice = Device.fromNameTicksToChargeAndUse
 		(
 			"Bow",
 			10, // ticksToCharge
-			(uwpe: UniverseWorldPlaceEntities) => // initialize
-			{
-				// todo
-			},
-			(uwpe: UniverseWorldPlaceEntities) => // update
-			{
-				// todo
-			},
 			itemBowUse
 		);
 
@@ -2821,12 +2805,10 @@ class PlaceBuilderDemo // Main.
 		var itemPickCollider =
 			new Sphere(Coords.create(), this.entityDimension / 2);
 
-		var itemPickDevice = new Device
+		var itemPickDevice = Device.fromNameTicksToChargeAndUse
 		(
 			"Pick",
 			10, // ticksToCharge
-			null, // initialize: (uwpe: UniverseWorldPlaceEntities) => void,
-			null, // update: (uwpe: UniverseWorldPlaceEntities) => void,
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var p = uwpe.place;
@@ -2931,12 +2913,10 @@ class PlaceBuilderDemo // Main.
 		var itemShovelCollider =
 			new Sphere(Coords.create(), this.entityDimension / 2);
 
-		var itemShovelDevice = new Device
+		var itemShovelDevice = Device.fromNameTicksToChargeAndUse
 		(
 			"Shovel",
 			10, // ticksToCharge
-			null, // initialize: (uwpe: UniverseWorldPlaceEntities) => void,
-			null, // update: (uwpe: UniverseWorldPlaceEntities) => void,
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var p = uwpe.place;
@@ -3135,7 +3115,7 @@ class PlaceBuilderDemo // Main.
 				"ProjectileSword",
 				[
 					projectileDamager,
-					new Ephemeral(8, null),
+					Ephemeral.fromTicksToLive(8),
 					killable,
 					new Locatable(projectileLoc),
 					new Collidable
@@ -3150,12 +3130,10 @@ class PlaceBuilderDemo // Main.
 			place.entityToSpawnAdd(projectileEntity);
 		}
 
-		var itemSwordDevice = new Device
+		var itemSwordDevice = Device.fromNameTicksToChargeAndUse
 		(
 			itemDefnName,
-			10, // ticksToCharge
-			null, // init
-			null, // update
+			10,
 			itemSwordDeviceUse
 		);
 

@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new ItemHolder(null, null, null, null);
             }
+            static default() {
+                return ItemHolder.create();
+            }
             static fromItems(items) {
                 return new ItemHolder(items, null, null, null);
             }
