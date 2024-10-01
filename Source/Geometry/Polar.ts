@@ -30,6 +30,11 @@ export class Polar
 		return new Polar(azimuthInTurns, 1, 0);
 	}
 
+	static random2D(): Polar
+	{
+		return new Polar(Math.random(), Math.random(), 0);
+	}
+
 	// constants
 
 	static DegreesPerTurn = 360;
@@ -101,6 +106,12 @@ export class Polar
 
 		this.azimuthInTurns = randomizer.fraction();
 		this.elevationInTurns = randomizer.fraction();
+		return this;
+	}
+
+	radiusSet(value: number): Polar
+	{
+		this.radius = value;
 		return this;
 	}
 

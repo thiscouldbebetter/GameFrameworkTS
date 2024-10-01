@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
             static fromAzimuthInTurns(azimuthInTurns) {
                 return new Polar(azimuthInTurns, 1, 0);
             }
+            static random2D() {
+                return new Polar(Math.random(), Math.random(), 0);
+            }
             // instance methods
             addToAzimuthInTurns(turnsToAdd) {
                 this.azimuthInTurns += turnsToAdd;
@@ -61,6 +64,10 @@ var ThisCouldBeBetter;
                 }
                 this.azimuthInTurns = randomizer.fraction();
                 this.elevationInTurns = randomizer.fraction();
+                return this;
+            }
+            radiusSet(value) {
+                this.radius = value;
                 return this;
             }
             toCoords(coords) {

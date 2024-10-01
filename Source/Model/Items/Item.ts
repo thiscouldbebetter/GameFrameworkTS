@@ -20,6 +20,11 @@ export class Item implements EntityProperty<Item>
 		return new Item(defnName, 1);
 	}
 
+	static fromEntity(entity: Entity): Item
+	{
+		return entity.propertyByName(Item.name) as Item;
+	}
+
 	belongsToCategory(category: ItemCategory, world: World): boolean
 	{
 		return this.defn(world).belongsToCategory(category);
@@ -93,7 +98,8 @@ export class Item implements EntityProperty<Item>
 
 	use(uwpe: UniverseWorldPlaceEntities): void
 	{
-		uwpe.entity2Set(this.toEntity(uwpe) );
+		var itemAsEntity = this.toEntity(uwpe);
+		uwpe.entity2Set(itemAsEntity);
 		var defn = this.defn(uwpe.world);
 		defn.use(uwpe);
 	}

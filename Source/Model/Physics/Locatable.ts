@@ -113,6 +113,11 @@ export class Locatable implements EntityProperty<Locatable>
 		return entityToSpawn;
 	}
 
+	pos(): Coords
+	{
+		return this.loc.pos;
+	}
+
 	toEntity(): Entity
 	{
 		return new Entity(Locatable.name, [ this ] );

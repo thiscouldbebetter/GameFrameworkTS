@@ -56,6 +56,9 @@ var ThisCouldBeBetter;
                 place.entitySpawn(uwpe);
                 return entityToSpawn;
             }
+            pos() {
+                return this.loc.pos;
+            }
             toEntity() {
                 return new GameFramework.Entity(Locatable.name, [this]);
             }

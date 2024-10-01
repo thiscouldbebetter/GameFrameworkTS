@@ -22,6 +22,9 @@ var ThisCouldBeBetter;
                 this.t = this.entityTalker;
                 this.vars = this.variablesByName;
             }
+            static fromConversationDefn(conversationDefn) {
+                return new ConversationRun(conversationDefn, null, null, null, null);
+            }
             // Instance methods.
             disable(talkNodeToDisableName) {
                 this.disableTalkNodeWithName(talkNodeToDisableName);

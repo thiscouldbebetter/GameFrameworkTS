@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
             static fromDefnName(defnName) {
                 return new Item(defnName, 1);
             }
+            static fromEntity(entity) {
+                return entity.propertyByName(Item.name);
+            }
             belongsToCategory(category, world) {
                 return this.defn(world).belongsToCategory(category);
             }
@@ -56,7 +59,8 @@ var ThisCouldBeBetter;
                 return this.quantity * this.defn(world).tradeValue;
             }
             use(uwpe) {
-                uwpe.entity2Set(this.toEntity(uwpe));
+                var itemAsEntity = this.toEntity(uwpe);
+                uwpe.entity2Set(itemAsEntity);
                 var defn = this.defn(uwpe.world);
                 defn.use(uwpe);
             }

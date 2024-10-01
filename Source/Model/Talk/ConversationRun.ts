@@ -53,6 +53,11 @@ export class ConversationRun
 		this.vars = this.variablesByName;
 	}
 
+	static fromConversationDefn(conversationDefn: ConversationDefn): ConversationRun
+	{
+		return new ConversationRun(conversationDefn, null, null, null, null);
+	}
+
 	// Instance methods.
 
 	disable(talkNodeToDisableName: string): void
