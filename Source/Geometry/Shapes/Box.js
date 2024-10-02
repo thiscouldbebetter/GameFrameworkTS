@@ -95,9 +95,6 @@ var ThisCouldBeBetter;
             containsOther(other) {
                 return (this.containsPoint(other.min()) && this.containsPoint(other.max()));
             }
-            containsPoint(pointToCheck) {
-                return pointToCheck.isInRangeMinMax(this.min(), this.max());
-            }
             containsPointXY(pointToCheck) {
                 return pointToCheck.isInRangeMinMaxXY(this.min(), this.max());
             }
@@ -235,6 +232,9 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             collider() { return null; }
+            containsPoint(pointToCheck) {
+                return pointToCheck.isInRangeMinMax(this.min(), this.max());
+            }
             dimensionForSurfaceClosestToPoint(posToCheck, displacementOverSizeHalf) {
                 var greatestAbsoluteDisplacementDimensionSoFar = -1;
                 var dimensionIndex = null;

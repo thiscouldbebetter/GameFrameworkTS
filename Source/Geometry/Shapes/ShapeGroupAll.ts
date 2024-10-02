@@ -32,6 +32,17 @@ export class ShapeGroupAll implements ShapeBase
 
 	collider(): ShapeBase { return null; }
 
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		var doAnyChildShapesNotContainPoint =
+			this.shapes.some(x => x.containsPoint(pointToCheck) == false);
+
+		var doAllChildShapesContainPoint =
+			(doAnyChildShapesNotContainPoint == false);
+
+		return doAllChildShapesContainPoint;
+	}
+
 	locate(loc: Disposition): ShapeBase
 	{
 		throw new Error("Not implemented!");

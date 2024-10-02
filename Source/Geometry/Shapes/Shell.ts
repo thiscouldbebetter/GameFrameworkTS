@@ -42,6 +42,15 @@ export class Shell implements ShapeBase
 		return new Shell(this.sphereOuter.clone(), this.radiusInner);
 	}
 
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		var returnValue =
+			this.sphereOuter.containsPoint(pointToCheck)
+			&& (this.sphereInner.containsPoint(pointToCheck) == false);
+
+		return returnValue;
+	}
+
 	overwriteWith(other: Shell): Shell
 	{
 		this.sphereOuter.overwriteWith(other.sphereOuter);

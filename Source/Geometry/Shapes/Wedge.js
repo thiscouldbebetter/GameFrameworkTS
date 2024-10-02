@@ -69,6 +69,9 @@ var ThisCouldBeBetter;
                 }
                 return this._collider;
             }
+            containsPoint(pointToCheck) {
+                throw new Error("Not yet implemented!");
+            }
             // Clonable.
             clone() {
                 return new Wedge(this.vertex.clone(), this.directionMin.clone(), this.angleSpannedInTurns);

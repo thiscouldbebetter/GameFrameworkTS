@@ -19,6 +19,11 @@ var ThisCouldBeBetter;
             equals(other) { return false; } // todo
             // ShapeBase.
             collider() { return null; }
+            containsPoint(pointToCheck) {
+                var doAnyChildShapesNotContainPoint = this.shapes.some(x => x.containsPoint(pointToCheck) == false);
+                var doAllChildShapesContainPoint = (doAnyChildShapesNotContainPoint == false);
+                return doAllChildShapesContainPoint;
+            }
             locate(loc) {
                 throw new Error("Not implemented!");
             }

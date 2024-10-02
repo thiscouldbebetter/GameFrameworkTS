@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
             equals(other) { return false; } // todo
             // ShapeBase.
             collider() { return null; }
+            containsPoint(pointToCheck) {
+                throw new Error("Not yet implemented!");
+            }
             locate(loc) {
                 throw new Error("Not implemented!");
             }

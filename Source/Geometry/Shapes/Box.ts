@@ -164,11 +164,6 @@ export class Box implements ShapeBase
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
 	}
 
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		return pointToCheck.isInRangeMinMax(this.min(), this.max());
-	}
-
 	containsPointXY(pointToCheck: Coords): boolean
 	{
 		return pointToCheck.isInRangeMinMaxXY(this.min(), this.max());
@@ -386,6 +381,11 @@ export class Box implements ShapeBase
 	// ShapeBase.
 
 	collider(): ShapeBase { return null; }
+
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		return pointToCheck.isInRangeMinMax(this.min(), this.max());
+	}
 
 	dimensionForSurfaceClosestToPoint
 	(

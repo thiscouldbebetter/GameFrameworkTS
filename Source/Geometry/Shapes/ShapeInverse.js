@@ -19,6 +19,9 @@ var ThisCouldBeBetter;
             equals(other) { return false; } // todo
             // ShapeBase.
             collider() { return null; }
+            containsPoint(pointToCheck) {
+                return (this.shape.containsPoint(pointToCheck) == false);
+            }
             locate(loc) {
                 this.shape.locate(loc);
                 return this;

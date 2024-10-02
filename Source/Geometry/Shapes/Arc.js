@@ -44,6 +44,9 @@ var ThisCouldBeBetter;
             collider() {
                 return this._collider;
             }
+            containsPoint(pointToCheck) {
+                throw new Error("Not yet implemented!");
+            }
             locate(loc) {
                 var directionMin = this.wedge.directionMin;
                 directionMin.overwriteWith(loc.orientation.forward);

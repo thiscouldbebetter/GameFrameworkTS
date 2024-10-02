@@ -32,6 +32,11 @@ export class ShapeInverse implements ShapeBase
 
 	collider(): ShapeBase { return null; }
 
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		return (this.shape.containsPoint(pointToCheck) == false);
+	}
+
 	locate(loc: Disposition): ShapeBase
 	{
 		this.shape.locate(loc);

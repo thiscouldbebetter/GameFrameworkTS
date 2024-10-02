@@ -28,10 +28,22 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             containsPoint(pointToCheck) {
-                return (this._displacement.overwriteWith(pointToCheck).subtract(this.center).magnitude() < this.radius);
+                var displacement = this._displacement
+                    .overwriteWith(pointToCheck)
+                    .subtract(this.center);
+                var distanceFromCenter = displacement.magnitude();
+                var containsPoint = (distanceFromCenter < this.radius);
+                return containsPoint;
             }
             pointRandom(randomizer) {
-                return new GameFramework.Polar(0, this.radius, 0).random(null).toCoords(this._pointRandom).add(this.center);
+                // todo
+                // This implementation favors points near the center.
+                var polar = GameFramework.Polar.fromRadius(this.radius);
+                var returnValue = polar
+                    .random(null)
+                    .toCoords(this._pointRandom)
+                    .add(this.center);
+                return returnValue;
             }
             // cloneable
             clone() {

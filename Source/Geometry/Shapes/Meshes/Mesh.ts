@@ -266,6 +266,11 @@ export class Mesh implements ShapeBase
 
 	collider(): ShapeBase { return null; }
 
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		throw new Error("Not yet implemented!");
+	}
+
 	locate(loc: Disposition): ShapeBase
 	{
 		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);

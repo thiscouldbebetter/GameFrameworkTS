@@ -58,6 +58,9 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             collider() { return null; }
+            containsPoint(pointToCheck) {
+                throw new Error("Not yet implemented!");
+            }
             locate(loc) { throw new Error("Not implemented!"); }
             normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
             pointRandom(randomizer) {

@@ -155,6 +155,11 @@ export class Wedge implements ShapeBase
 		return this._collider;
 	}
 
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		throw new Error("Not yet implemented!");
+	}
+
 	// Clonable.
 
 	clone(): Wedge

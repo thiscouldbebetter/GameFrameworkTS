@@ -24,6 +24,11 @@ var ThisCouldBeBetter;
             clone() {
                 return new Shell(this.sphereOuter.clone(), this.radiusInner);
             }
+            containsPoint(pointToCheck) {
+                var returnValue = this.sphereOuter.containsPoint(pointToCheck)
+                    && (this.sphereInner.containsPoint(pointToCheck) == false);
+                return returnValue;
+            }
             overwriteWith(other) {
                 this.sphereOuter.overwriteWith(other.sphereOuter);
                 this.radiusInner = other.radiusInner;

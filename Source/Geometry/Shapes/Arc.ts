@@ -77,6 +77,11 @@ export class Arc implements ShapeBase
 		return this._collider;
 	}
 
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		throw new Error("Not yet implemented!");
+	}
+
 	locate(loc: Disposition): ShapeBase
 	{
 		var directionMin = this.wedge.directionMin;

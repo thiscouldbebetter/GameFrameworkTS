@@ -36,6 +36,9 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             collider() { return null; }
+            containsPoint(pointToCheck) {
+                throw new Error("Not yet implemented!");
+            }
             locate(loc) {
                 return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
             }

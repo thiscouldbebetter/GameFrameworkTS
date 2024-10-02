@@ -24,6 +24,11 @@ export class ShapeNone implements ShapeBase
 
 	collider(): ShapeBase { return null; }
 
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		return false;
+	}
+
 	locate(loc: Disposition): ShapeBase
 	{
 		return this;

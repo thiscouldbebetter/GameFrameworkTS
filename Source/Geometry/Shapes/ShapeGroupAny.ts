@@ -38,6 +38,11 @@ export class ShapeGroupAny implements ShapeBase
 
 	collider(): ShapeBase { return null; }
 
+	containsPoint(pointToCheck: Coords): boolean
+	{
+		throw new Error("Not yet implemented!");
+	}
+
 	locate(loc: Disposition): ShapeBase
 	{
 		throw new Error("Not implemented!");

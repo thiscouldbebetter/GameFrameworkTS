@@ -30,6 +30,11 @@ export class Polar
 		return new Polar(azimuthInTurns, 1, 0);
 	}
 
+	static fromRadius(radius: number): Polar
+	{
+		return new Polar(0, radius, 0);
+	}
+
 	static random2D(): Polar
 	{
 		return new Polar(Math.random(), Math.random(), 0);
