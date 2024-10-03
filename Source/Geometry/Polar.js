@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
             static fromAzimuthInTurns(azimuthInTurns) {
                 return new Polar(azimuthInTurns, 1, 0);
             }
+            static fromAzimuthInTurnsAndRadius(azimuthInTurns, radius) {
+                return new Polar(azimuthInTurns, radius, 0);
+            }
             static fromRadius(radius) {
                 return new Polar(0, radius, 0);
             }
