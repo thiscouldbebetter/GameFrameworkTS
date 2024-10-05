@@ -4,6 +4,16 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ShapeNone implements ShapeBase
 {
+	static _instance: ShapeNone;
+	static Instance(): ShapeNone
+	{
+		if (this._instance == null)
+		{
+			this._instance = new ShapeNone();
+		}
+		return this._instance;
+	}
+
 	// Clonable.
 
 	clone(): ShapeNone

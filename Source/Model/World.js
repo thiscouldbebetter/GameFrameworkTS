@@ -50,7 +50,7 @@ var ThisCouldBeBetter;
                     if (this.placeCurrent != null) {
                         this.placeCurrent.finalize(uwpe);
                     }
-                    this.placeCurrent = this.placeNext;
+                    this.placeCurrentSet(this.placeNext);
                     this.placeNextSet(null);
                 }
                 if (this.placeCurrent != null) {
@@ -60,6 +60,10 @@ var ThisCouldBeBetter;
             }
             place() {
                 return this.placeCurrent;
+            }
+            placeCurrentSet(value) {
+                this.placeCurrent = value;
+                return this;
             }
             placeDefnByName(name) {
                 return this.defn.placeDefnByName(name);
@@ -89,7 +93,7 @@ var ThisCouldBeBetter;
                     if (this.placeCurrent != null) {
                         this.placeCurrent.finalize(uwpe);
                     }
-                    this.placeCurrent = this.placeNext;
+                    this.placeCurrentSet(this.placeNext);
                     this.placeNextSet(null);
                     uwpe.placeSet(this.placeCurrent);
                     this.placeCurrent.initialize(uwpe);

@@ -44,11 +44,12 @@ var ThisCouldBeBetter;
             }
             propertyAddForPlace(propertyToAdd, place) {
                 this.properties.push(propertyToAdd);
-                this.propertiesByName.set(propertyToAdd.constructor.name, propertyToAdd);
+                var propertyName = propertyToAdd.propertyName();
+                this.propertiesByName.set(propertyName, propertyToAdd);
                 if (place != null) {
                     var placeEntities = place.entitiesAll();
                     if (placeEntities.indexOf(this) >= 0) {
-                        var propertyName = propertyToAdd.constructor.name;
+                        var propertyName = propertyToAdd.propertyName();
                         var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
                         entitiesWithProperty.push(this);
                     }

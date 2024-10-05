@@ -4,7 +4,6 @@ class CollidableTests extends TestFixture
 	constructor()
 	{
 		super(CollidableTests.name);
-		
 	}
 
 	tests(): ( () => void )[]

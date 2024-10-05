@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
                 this._uwpe = GameFramework.UniverseWorldPlaceEntities.create();
             }
             static create() {
-                return Collidable.fromCollider(new GameFramework.ShapeNone());
+                return Collidable.fromCollider(GameFramework.ShapeNone.Instance());
             }
             static default() {
                 var collider = GameFramework.Box.fromSize(GameFramework.Coords.ones().multiplyScalar(10));
@@ -42,6 +42,9 @@ var ThisCouldBeBetter;
             }
             static from3(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
                 return new Collidable(false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
+            }
+            static fromShape(shapeAtRest) {
+                return Collidable.fromColliderAndCollideEntities(shapeAtRest, null);
             }
             static wereEntitiesAlreadyColliding(entity0, entity1) {
                 var collidable0 = entity0.collidable();

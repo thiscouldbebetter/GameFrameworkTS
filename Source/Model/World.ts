@@ -107,7 +107,7 @@ export class World //
 			{
 				this.placeCurrent.finalize(uwpe);
 			}
-			this.placeCurrent = this.placeNext;
+			this.placeCurrentSet(this.placeNext);
 			this.placeNextSet(null);
 		}
 
@@ -121,6 +121,12 @@ export class World //
 	place(): Place
 	{
 		return this.placeCurrent;
+	}
+
+	placeCurrentSet(value: Place): World
+	{
+		this.placeCurrent = value;
+		return this;
 	}
 
 	placeDefnByName(name: string): PlaceDefn
@@ -168,7 +174,7 @@ export class World //
 			{
 				this.placeCurrent.finalize(uwpe);
 			}
-			this.placeCurrent = this.placeNext;
+			this.placeCurrentSet(this.placeNext);
 			this.placeNextSet(null);
 			uwpe.placeSet(this.placeCurrent);
 			this.placeCurrent.initialize(uwpe);

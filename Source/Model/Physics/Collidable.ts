@@ -57,7 +57,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	static create(): Collidable
 	{
-		return Collidable.fromCollider(new ShapeNone());
+		return Collidable.fromCollider(ShapeNone.Instance() );
 	}
 
 	static default(): Collidable
@@ -108,6 +108,14 @@ export class Collidable implements EntityProperty<Collidable>
 		return new Collidable
 		(
 			false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities
+		);
+	}
+
+	static fromShape(shapeAtRest: ShapeBase): Collidable
+	{
+		return Collidable.fromColliderAndCollideEntities
+		(
+			shapeAtRest, null
 		);
 	}
 

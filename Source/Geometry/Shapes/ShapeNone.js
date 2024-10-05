@@ -4,6 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ShapeNone {
+            static Instance() {
+                if (this._instance == null) {
+                    this._instance = new ShapeNone();
+                }
+                return this._instance;
+            }
             // Clonable.
             clone() {
                 return new ShapeNone();
