@@ -40,6 +40,9 @@ var ThisCouldBeBetter;
                 returnValue.vel = vel;
                 return returnValue;
             }
+            static fromPosOrientationAndPlaceName(pos, orientation, placeName) {
+                return new Disposition(pos, orientation, placeName);
+            }
             equals(other) {
                 var returnValue = (this.placeName == other.placeName
                     && this.pos.equals(other.pos)

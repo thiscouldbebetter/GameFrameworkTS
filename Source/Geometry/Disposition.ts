@@ -83,6 +83,14 @@ export class Disposition
 		return returnValue;
 	}
 
+	static fromPosOrientationAndPlaceName
+	(
+		pos: Coords, orientation: Orientation, placeName: string
+	): Disposition
+	{
+		return new Disposition(pos, orientation, placeName);
+	}
+
 	equals(other: Disposition): boolean
 	{
 		var returnValue =
