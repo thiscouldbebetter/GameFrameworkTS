@@ -152,6 +152,13 @@ export class WorldDefn
 			ArrayHelper.addLookupsByName(this.entityDefns);
 	}
 
+	itemDefnAdd(itemDefn: ItemDefn): WorldDefn
+	{
+		this.itemDefns.push(itemDefn);
+		this.itemDefnsByName.set(itemDefn.name, itemDefn);
+		return this;
+	}
+
 	itemDefnByName(defnName: string): ItemDefn
 	{
 		var returnValue = this.itemDefnsByName.get(defnName);

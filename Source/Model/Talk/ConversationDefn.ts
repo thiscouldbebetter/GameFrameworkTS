@@ -421,13 +421,6 @@ export class ConversationDefn
 		for (var i = 0; i < talkNodes.length; i++)
 		{
 			var talkNode = talkNodes[i];
-			/*
-			talkNode.name = talkNode["name"];
-			talkNode.defnName = talkNode["defnName"];
-			talkNode.text = talkNode["text"];
-			talkNode.next = talkNode["next"];
-			talkNode.isDisabled = talkNode["isDisabled"];
-			*/
 
 			Object.setPrototypeOf(talkNode, TalkNode.prototype);
 		}

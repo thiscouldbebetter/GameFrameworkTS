@@ -85,6 +85,11 @@ var ThisCouldBeBetter;
                 this.entityDefnsByName =
                     GameFramework.ArrayHelper.addLookupsByName(this.entityDefns);
             }
+            itemDefnAdd(itemDefn) {
+                this.itemDefns.push(itemDefn);
+                this.itemDefnsByName.set(itemDefn.name, itemDefn);
+                return this;
+            }
             itemDefnByName(defnName) {
                 var returnValue = this.itemDefnsByName.get(defnName);
                 return returnValue;
