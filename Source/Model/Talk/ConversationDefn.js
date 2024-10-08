@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 this.talkNodesByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodes);
                 var validationErrors = this.validateAndReturnErrors();
                 if (validationErrors.length > 0) {
-                    var errorMessage = "ConversationDefn '" + this.name + "'is not valid: " + validationErrors.join("; ") + ".";
+                    var errorMessage = "ConversationDefn '" + this.name + "' is not valid: " + validationErrors.join("; ") + ".";
                     throw new Error(errorMessage);
                 }
             }
