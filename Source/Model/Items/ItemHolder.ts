@@ -66,6 +66,12 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return this;
 	}
 
+	encumbranceMaxSet(value: number): ItemHolder
+	{
+		this.encumbranceMax = value;
+		return this;
+	}
+
 	encumbranceOfAllItems(world: World): number
 	{
 		var encumbranceTotal = this.items.reduce

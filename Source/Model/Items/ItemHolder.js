@@ -35,6 +35,10 @@ var ThisCouldBeBetter;
                 this.statusMessage = "";
                 return this;
             }
+            encumbranceMaxSet(value) {
+                this.encumbranceMax = value;
+                return this;
+            }
             encumbranceOfAllItems(world) {
                 var encumbranceTotal = this.items.reduce((sumSoFar, item) => sumSoFar + item.encumbrance(world), 0 // sumSoFar
                 );

@@ -135,7 +135,7 @@ var ThisCouldBeBetter;
                         var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
                         entitiesWithProperty.push(entity);
                     }
-                    var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
+                    var propertyNamesToProcess = placeDefn == null ? null : placeDefn.propertyNamesToProcess;
                     if (propertyNamesToProcess == null) {
                         entity.initialize(uwpe);
                     }
@@ -180,12 +180,13 @@ var ThisCouldBeBetter;
                 uwpe.placeSet(this);
                 var world = uwpe.world;
                 var placeDefn = this.defn(world);
-                placeDefn.placeInitialize(uwpe);
-                this.entitiesSpawn(uwpe);
                 if (placeDefn == null) {
+                    this.entitiesSpawn(uwpe);
                     this._entities.forEach(entity => entity.initialize(uwpe));
                 }
                 else {
+                    placeDefn.placeInitialize(uwpe);
+                    this.entitiesSpawn(uwpe);
                     var propertyNamesToProcess = placeDefn.propertyNamesToProcess;
                     for (var p = 0; p < propertyNamesToProcess.length; p++) {
                         var propertyName = propertyNamesToProcess[p];
