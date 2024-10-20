@@ -217,9 +217,14 @@ var ThisCouldBeBetter;
             }
             variableLoad(universe, variableName, variableExpression) {
                 var scriptText = "( (u, cr) => " + variableExpression + ")";
-                var scriptToRun = eval(scriptText);
-                var variableValue = scriptToRun(universe, this);
-                this.variableSet(variableName, variableValue);
+                try {
+                    var scriptToRun = eval(scriptText);
+                    var variableValue = scriptToRun(universe, this);
+                    this.variableSet(variableName, variableValue);
+                }
+                catch (err) {
+                    throw err;
+                }
             }
             variableSet(variableName, variableValue) {
                 this.variablesByName.set(variableName, variableValue);
