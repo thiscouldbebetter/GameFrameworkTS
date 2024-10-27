@@ -20,6 +20,9 @@ var ThisCouldBeBetter;
                 // For rapid prototyping.
                 return new VisualRectangle(GameFramework.Coords.fromXY(1, 1).multiplyScalar(10), null, colorFill, true);
             }
+            static fromColorFillAndSize(colorFill, size) {
+                return VisualRectangle.fromSizeAndColorFill(size, colorFill);
+            }
             static fromSizeAndColorBorder(size, colorBorder) {
                 return new VisualRectangle(size, null, colorBorder, null);
             }

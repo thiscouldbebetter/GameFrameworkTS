@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
                 this._posSaved = GameFramework.Coords.create();
                 this._orientationSaved = new GameFramework.Orientation(null, null);
             }
+            static fromChildAndPosToAnchorAt(child, posToAnchorAt) {
+                return new VisualAnchor(child, posToAnchorAt, null);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawableLoc = entity.locatable().loc;

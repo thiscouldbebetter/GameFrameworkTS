@@ -43,6 +43,11 @@ export class VisualRectangle implements Visual<VisualRectangle>
 		return new VisualRectangle(Coords.fromXY(1, 1).multiplyScalar(10), null, colorFill, true);
 	}
 
+	static fromColorFillAndSize(colorFill: Color, size: Coords): VisualRectangle
+	{
+		return VisualRectangle.fromSizeAndColorFill(size, colorFill);
+	}
+
 	static fromSizeAndColorBorder(size: Coords, colorBorder: Color): VisualRectangle
 	{
 		return new VisualRectangle(size, null, colorBorder, null);

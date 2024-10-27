@@ -27,6 +27,15 @@ export class VisualAnchor implements Visual<VisualAnchor>
 		this._orientationSaved = new Orientation(null, null);
 	}
 
+	static fromChildAndPosToAnchorAt
+	(
+		child: VisualBase,
+		posToAnchorAt: Coords
+	): VisualAnchor
+	{
+		return new VisualAnchor(child, posToAnchorAt, null);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var entity = uwpe.entity;
