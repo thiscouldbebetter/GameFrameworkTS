@@ -15,7 +15,8 @@ export class VenueControls implements Venue
 
 	constructor
 	(
-		controlRoot: ControlBase, ignoreKeyboardAndGamepadInputs: boolean
+		controlRoot: ControlBase,
+		ignoreKeyboardAndGamepadInputs: boolean
 	)
 	{
 		this.controlRoot = controlRoot;

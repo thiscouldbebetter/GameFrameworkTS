@@ -260,6 +260,18 @@ export class Universe
 		this.displayRecorder.updateForTimerTick(this);
 	}
 
+	v(): Venue
+	{
+		// Convenience accessor.
+		return this.venueCurrent();
+	}
+
+	venue(): Venue
+	{
+		// Convenience accessor.
+		return this.venueCurrent();
+	}
+
 	venueCurrent(): Venue
 	{
 		return this.venueStack.peek();
@@ -315,6 +327,12 @@ export class Universe
 			this.venueCurrent(), venueToTransitionTo
 		);
 		this.venueNextSet(venueNext);
+	}
+
+	w(): World
+	{
+		// Convenience accessor.
+		return this.world;
 	}
 
 	worldCreate(): World

@@ -121,6 +121,14 @@ var ThisCouldBeBetter;
                 venueCurrent.updateForTimerTick(this);
                 this.displayRecorder.updateForTimerTick(this);
             }
+            v() {
+                // Convenience accessor.
+                return this.venueCurrent();
+            }
+            venue() {
+                // Convenience accessor.
+                return this.venueCurrent();
+            }
             venueCurrent() {
                 return this.venueStack.peek();
             }
@@ -154,6 +162,10 @@ var ThisCouldBeBetter;
             venueTransitionTo(venueToTransitionTo) {
                 var venueNext = this.controlBuilder.venueTransitionalFromTo(this.venueCurrent(), venueToTransitionTo);
                 this.venueNextSet(venueNext);
+            }
+            w() {
+                // Convenience accessor.
+                return this.world;
             }
             worldCreate() {
                 var world = this.worldCreator.worldCreate(this, this.worldCreator);

@@ -149,6 +149,9 @@ var ThisCouldBeBetter;
                 // This convenience method is tersely named for use in scripts.
                 return this.scopeCurrent;
             }
+            scriptParse(scriptAsString) {
+                return eval(scriptAsString); // Not possible to catch eval() errors here!
+            }
             talkNodeAdvance(universe) {
                 this.scopeCurrent.talkNodeAdvance(universe, this);
             }
@@ -183,7 +186,7 @@ var ThisCouldBeBetter;
                 return this.entityTalker;
             }
             toVenue(universe) {
-                return this.toControl(universe.display.sizeInPixels, universe).toVenue();
+                return new VenueConversationRun(this, universe);
             }
             v(variableName) {
                 // This convenience method is tersely named for use in scripts.
@@ -218,7 +221,7 @@ var ThisCouldBeBetter;
             variableLoad(universe, variableName, variableExpression) {
                 var scriptText = "( (u, cr) => " + variableExpression + ")";
                 try {
-                    var scriptToRun = eval(scriptText);
+                    var scriptToRun = this.scriptParse(scriptText);
                     var variableValue = scriptToRun(universe, this);
                     this.variableSet(variableName, variableValue);
                 }
@@ -233,7 +236,7 @@ var ThisCouldBeBetter;
                 var variableValue = this.variableByName(variableName).toString();
                 var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
                 var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-                var scriptToRun = eval(scriptToRunAsString);
+                var scriptToRun = this.scriptParse(scriptToRunAsString);
                 scriptToRun(universe, this);
             }
             variablesExport(universe, variableLookupExpression) {
@@ -246,13 +249,13 @@ var ThisCouldBeBetter;
                         .split("$value")
                         .join("\"" + variableValueAsString + "\"");
                     var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-                    var scriptToRun = eval(scriptToRunAsString);
+                    var scriptToRun = this.scriptParse(scriptToRunAsString);
                     scriptToRun(universe, this);
                 }
             }
             variablesImport(universe, variableLookupExpression) {
                 var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
-                var scriptToRun = eval(scriptText);
+                var scriptToRun = this.scriptParse(scriptText);
                 var variablesByNameToImportFrom = scriptToRun(universe, this);
                 for (var [variableName, variableValue] of variablesByNameToImportFrom) {
                     this.variableSet(variableName, variableValue);
@@ -434,5 +437,14 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.ConversationRun = ConversationRun;
+        class VenueConversationRun extends GameFramework.VenueControls {
+            constructor(conversationRun, universe) {
+                super(conversationRun.toControl(universe.display.sizeInPixels, universe), false // ignoreKeypadAndGamepadInputs
+                );
+                this.conversationRun = conversationRun;
+                this.cr = conversationRun;
+            }
+        }
+        GameFramework.VenueConversationRun = VenueConversationRun;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

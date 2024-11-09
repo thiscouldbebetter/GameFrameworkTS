@@ -256,6 +256,11 @@ export class ConversationRun
 		return this.scopeCurrent;
 	}
 
+	scriptParse(scriptAsString: string): any
+	{
+		return eval(scriptAsString); // Not possible to catch eval() errors here!
+	}
+
 	talkNodeAdvance(universe: Universe): void
 	{
 		this.scopeCurrent.talkNodeAdvance(universe, this);
@@ -312,7 +317,7 @@ export class ConversationRun
 
 	toVenue(universe: Universe): Venue
 	{
-		return this.toControl(universe.display.sizeInPixels, universe).toVenue();
+		return new VenueConversationRun(this, universe);
 	}
 
 	v(variableName: string): unknown
@@ -370,7 +375,7 @@ export class ConversationRun
 		var scriptText = "( (u, cr) => " + variableExpression + ")";
 		try
 		{
-			var scriptToRun = eval(scriptText);
+			var scriptToRun = this.scriptParse(scriptText);
 			var variableValue = scriptToRun(universe, this);
 			this.variableSet(variableName, variableValue);
 		}
@@ -397,7 +402,7 @@ export class ConversationRun
 			scriptExpression.split("$value").join(variableValue);
 		var scriptToRunAsString =
 			"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-		var scriptToRun = eval(scriptToRunAsString);
+		var scriptToRun = this.scriptParse(scriptToRunAsString);
 		scriptToRun(universe, this);
 	}
 
@@ -419,7 +424,7 @@ export class ConversationRun
 					.join("\"" + variableValueAsString + "\"");
 			var scriptToRunAsString =
 				"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-			var scriptToRun = eval(scriptToRunAsString);
+			var scriptToRun = this.scriptParse(scriptToRunAsString);
 			scriptToRun(universe, this);
 		}
 	}
@@ -431,7 +436,7 @@ export class ConversationRun
 	): void
 	{
 		var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
-		var scriptToRun = eval(scriptText);
+		var scriptToRun = this.scriptParse(scriptText);
 		var variablesByNameToImportFrom = scriptToRun(universe, this);
 		for (var [variableName, variableValue] of variablesByNameToImportFrom)
 		{
@@ -950,6 +955,28 @@ export class ConversationRun
 		var returnValue = this.scopeCurrent.toStringForUniverseAndConversationRun(u, this);
 
 		return returnValue;
+	}
+}
+
+export class VenueConversationRun extends VenueControls
+{
+	conversationRun: ConversationRun;
+
+	cr: ConversationRun; // Convenience member.
+
+	constructor(conversationRun: ConversationRun, universe: Universe)
+	{
+		super
+		(
+			conversationRun.toControl
+			(
+				universe.display.sizeInPixels, universe
+			),
+			false // ignoreKeypadAndGamepadInputs
+		);
+
+		this.conversationRun = conversationRun;
+		this.cr = conversationRun;
 	}
 }
 
