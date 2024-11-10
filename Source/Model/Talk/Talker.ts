@@ -100,7 +100,10 @@ export class Talker implements EntityProperty<Talker>
 			null // contentsById
 		);
 		this.conversationRunSet(conversationRun);
-		this.conversationRun.talkNodeCurrentExecute(universe);
+
+		// todo - The venue may not yet be right when this runs.
+		//this.conversationRun.talkNodeCurrentExecute(universe);
+
 		var conversationSize = universe.display.sizeDefault().clone();
 		var conversationAsControl =
 			this.toControl(this.conversationRun, conversationSize, universe);
