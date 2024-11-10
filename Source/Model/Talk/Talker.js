@@ -58,11 +58,7 @@ var ThisCouldBeBetter;
                 null // contentsById
                 );
                 this.conversationRunSet(conversationRun);
-                // todo - The venue may not yet be right when this runs.
-                //this.conversationRun.talkNodeCurrentExecute(universe);
-                var conversationSize = universe.display.sizeDefault().clone();
-                var conversationAsControl = this.toControl(this.conversationRun, conversationSize, universe);
-                var venueNext = conversationAsControl.toVenue();
+                var venueNext = new GameFramework.VenueConversationRun(conversationRun, universe);
                 universe.venueTransitionTo(venueNext);
             }
             toControl(conversationRun, size, universe) {
