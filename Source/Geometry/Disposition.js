@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                     orientation = GameFramework.Orientation.Instances().ForwardXDownZ.clone();
                 }
                 this.orientation = orientation;
-                this.placeName = placeName;
+                this.placeNameSet(placeName);
                 this.vel = GameFramework.Coords.create();
                 this.accel = GameFramework.Coords.create();
                 this.force = GameFramework.Coords.create();
@@ -44,13 +44,23 @@ var ThisCouldBeBetter;
                 return new Disposition(pos, orientation, placeName);
             }
             equals(other) {
-                var returnValue = (this.placeName == other.placeName
+                var placeName = this.placeName();
+                var otherPlaceName = other.placeName();
+                var returnValue = (placeName == otherPlaceName
                     && this.pos.equals(other.pos)
                     && this.orientation.equals(other.orientation));
                 return returnValue;
             }
             place(world) {
-                return world.placeGetByName(this.placeName);
+                var placeName = this.placeName();
+                return world.placeGetByName(placeName);
+            }
+            placeName() {
+                return this._placeName;
+            }
+            placeNameSet(value) {
+                this._placeName = value;
+                return this;
             }
             velSet(value) {
                 this.vel.overwriteWith(value);
@@ -58,7 +68,7 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                var returnValue = new Disposition(this.pos.clone(), this.orientation.clone(), this.placeName);
+                var returnValue = new Disposition(this.pos.clone(), this.orientation.clone(), this.placeName());
                 returnValue.vel = this.vel.clone();
                 returnValue.accel = this.accel.clone();
                 returnValue.force = this.force.clone();
@@ -66,7 +76,8 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             overwriteWith(other) {
-                this.placeName = other.placeName;
+                var otherPlaceName = other.placeName();
+                this.placeNameSet(otherPlaceName);
                 this.pos.overwriteWith(other.pos);
                 this.orientation.overwriteWith(other.orientation);
                 this.vel.overwriteWith(other.vel);

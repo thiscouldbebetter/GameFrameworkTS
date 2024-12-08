@@ -6,7 +6,7 @@ export class Disposition
 {
 	pos: Coords;
 	orientation: Orientation;
-	placeName: string;
+	_placeName: string;
 
 	vel: Coords;
 	accel: Coords;
@@ -29,7 +29,7 @@ export class Disposition
 		}
 		this.orientation = orientation;
 
-		this.placeName = placeName;
+		this.placeNameSet(placeName);
 
 		this.vel = Coords.create();
 		this.accel = Coords.create();
@@ -93,9 +93,12 @@ export class Disposition
 
 	equals(other: Disposition): boolean
 	{
+		var placeName = this.placeName();
+		var otherPlaceName = other.placeName();
+
 		var returnValue =
 		(
-			this.placeName == other.placeName
+			placeName == otherPlaceName
 			&& this.pos.equals(other.pos)
 			&& this.orientation.equals(other.orientation)
 		);
@@ -105,7 +108,19 @@ export class Disposition
 
 	place(world: World): Place
 	{
-		return world.placeGetByName(this.placeName);
+		var placeName = this.placeName();
+		return world.placeGetByName(placeName);
+	}
+
+	placeName(): string
+	{
+		return this._placeName;
+	}
+
+	placeNameSet(value: string): Disposition
+	{
+		this._placeName = value;
+		return this;
 	}
 
 	velSet(value: Coords): Disposition
@@ -122,7 +137,7 @@ export class Disposition
 		(
 			this.pos.clone(),
 			this.orientation.clone(),
-			this.placeName
+			this.placeName()
 		);
 
 		returnValue.vel = this.vel.clone();
@@ -135,7 +150,8 @@ export class Disposition
 
 	overwriteWith(other: Disposition): Disposition
 	{
-		this.placeName = other.placeName;
+		var otherPlaceName = other.placeName();
+		this.placeNameSet(otherPlaceName);
 		this.pos.overwriteWith(other.pos);
 		this.orientation.overwriteWith(other.orientation);
 		this.vel.overwriteWith(other.vel);

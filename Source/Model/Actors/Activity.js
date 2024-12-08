@@ -51,6 +51,9 @@ var ThisCouldBeBetter;
                 this.defnNameSet(GameFramework.ActivityDefn.Instances().DoNothing.name);
                 this.targetEntitiesClearAll();
             }
+            isDoNothing() {
+                return (this.defnName == GameFramework.ActivityDefn.Instances().DoNothing.name);
+            }
             isDoneSet(value) {
                 this.isDone = value;
                 return this;

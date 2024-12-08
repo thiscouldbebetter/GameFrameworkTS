@@ -85,7 +85,8 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {
-                this.loc.placeName = (uwpe.place == null ? null : uwpe.place.name);
+                var placeName = (uwpe.place == null ? null : uwpe.place.name);
+                this.loc.placeNameSet(placeName);
             }
             // Equatable
             equals(other) {

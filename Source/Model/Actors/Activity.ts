@@ -96,6 +96,11 @@ export class Activity
 		this.targetEntitiesClearAll();
 	}
 
+	isDoNothing(): boolean
+	{
+		return (this.defnName == ActivityDefn.Instances().DoNothing.name);
+	}
+
 	isDoneSet(value: boolean): Activity
 	{
 		this.isDone = value;
