@@ -267,14 +267,17 @@ var ThisCouldBeBetter;
                 var collisionTrackerAsEntity = this.entityByName(GameFramework.CollisionTrackerBase.name);
                 if (collisionTrackerAsEntity == null) {
                     var collisionTracker = new GameFramework.CollisionTrackerBruteForce();
-                    // hack
-                    // Must add the CollisionTracker to the propertyNamesToProcess,
-                    // or otherwise collisions won't be tracked.
                     var placeDefn = this.defn(uwpe.world);
-                    var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
-                    var collisionTrackerPropertyName = collisionTracker.propertyName();
-                    if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1) {
-                        placeDefnPropertyNames.push(collisionTrackerPropertyName);
+                    if (placeDefn != null) {
+                        // hack
+                        // If the place has a placeDefn, the CollisionTracker
+                        // must be added to the defn's propertyNamesToProcess,
+                        // or otherwise collisions won't be tracked.
+                        var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
+                        var collisionTrackerPropertyName = collisionTracker.propertyName();
+                        if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1) {
+                            placeDefnPropertyNames.push(collisionTrackerPropertyName);
+                        }
                     }
                     var collisionTrackerAsEntity = collisionTracker.toEntity();
                     uwpe.entitySet(collisionTrackerAsEntity);

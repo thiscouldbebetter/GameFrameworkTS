@@ -439,15 +439,19 @@ export class PlaceBase implements Place, Loadable
 			var collisionTracker =
 				new CollisionTrackerBruteForce() as CollisionTrackerBase;
 
-			// hack
-			// Must add the CollisionTracker to the propertyNamesToProcess,
-			// or otherwise collisions won't be tracked.
 			var placeDefn = this.defn(uwpe.world);
-			var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
-			var collisionTrackerPropertyName = collisionTracker.propertyName();
-			if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1)
+			if (placeDefn != null)
 			{
-				placeDefnPropertyNames.push(collisionTrackerPropertyName);
+				// hack
+				// If the place has a placeDefn, the CollisionTracker
+				// must be added to the defn's propertyNamesToProcess,
+				// or otherwise collisions won't be tracked.
+				var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
+				var collisionTrackerPropertyName = collisionTracker.propertyName();
+				if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1)
+				{
+					placeDefnPropertyNames.push(collisionTrackerPropertyName);
+				}
 			}
 
 			var collisionTrackerAsEntity = collisionTracker.toEntity();
