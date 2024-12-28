@@ -137,7 +137,7 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 	{
 		if (this._use == null)
 		{
-			var itemHolder = uwpe.entity.itemHolder();
+			var itemHolder = ItemHolder.of(uwpe.entity);
 			itemHolder.statusMessage = "Can't use " + this.appearance + ".";
 		}
 		else

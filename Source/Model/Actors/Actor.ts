@@ -34,6 +34,11 @@ export class Actor implements EntityProperty<Actor>
 		return returnValue;
 	}
 
+	static of(entity: Entity): Actor
+	{
+		return entity.propertyByName(Actor.name) as Actor;
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

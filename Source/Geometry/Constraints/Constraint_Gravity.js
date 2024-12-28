@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
             }
             constrain(uwpe) {
                 var entity = uwpe.entity;
-                var loc = entity.locatable().loc;
+                var loc = GameFramework.Locatable.of(entity).loc;
                 loc.accel.add(this.accelerationPerTick);
             }
             // Clonable.

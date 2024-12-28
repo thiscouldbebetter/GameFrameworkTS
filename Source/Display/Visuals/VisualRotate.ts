@@ -28,7 +28,7 @@ export class VisualRotate implements Visual<VisualRotate>
 		if (this._rotationInTurnsGet == null)
 		{
 			var entity = uwpe.entity;
-			var entityLoc = entity.locatable().loc;
+			var entityLoc = Locatable.of(entity).loc;
 			rotationInTurns = entityLoc.orientation.forward.headingInTurns();
 		}
 		else
@@ -44,7 +44,7 @@ export class VisualRotate implements Visual<VisualRotate>
 	{
 		var entity = uwpe.entity;
 
-		var entityLoc = entity.locatable().loc;
+		var entityLoc = Locatable.of(entity).loc;
 
 		var rotationInTurns = this.rotationInTurnsGet(uwpe);
 

@@ -5,7 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Constraint_TrimToPlaceSizeXY {
             constrain(uwpe) {
-                var entityLoc = uwpe.entity.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(uwpe.entity).loc;
                 var entityPos = entityLoc.pos;
                 var placeSize = uwpe.place.size();
                 entityPos.trimToRangeMaxXY(placeSize);

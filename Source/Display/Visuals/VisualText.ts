@@ -141,7 +141,7 @@ export class VisualText implements Visual<VisualText>
 		(
 			text,
 			this.fontNameAndHeight,
-			entity.locatable().loc.pos,
+			Locatable.of(entity).loc.pos,
 			this.colorFill,
 			this.colorBorder,
 			true, // isCenteredHorizontally

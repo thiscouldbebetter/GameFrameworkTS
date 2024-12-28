@@ -30,6 +30,11 @@ export class Constrainable implements EntityProperty<Constrainable>
 		return new Constrainable(constraints);
 	}
 
+	static of(entity: Entity): Constrainable
+	{
+		return entity.propertyByName(Constrainable.name) as Constrainable;
+	}
+
 	clear(): Constrainable
 	{
 		this.constraints.length = 0;
@@ -39,7 +44,7 @@ export class Constrainable implements EntityProperty<Constrainable>
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;
-		var constrainable = entity.constrainable();
+		var constrainable = Constrainable.of(entity);
 		var constraints = constrainable.constraints;
 		for (var i = 0; i < constraints.length; i++)
 		{

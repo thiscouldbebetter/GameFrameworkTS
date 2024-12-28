@@ -162,7 +162,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		var animatable =
 			Animatable2 == null
 			? null
-			: entity.animatable();
+			: Animatable2.of(entity);
 
 		var tickStarted =
 			animatable == null

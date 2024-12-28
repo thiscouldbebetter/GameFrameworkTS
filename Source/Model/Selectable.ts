@@ -17,6 +17,11 @@ export class Selectable implements EntityProperty<Selectable>
 		this._deselect = deselect;
 	}
 
+	static of(entity: Entity): Selectable
+	{
+		return entity.propertyByName(Selectable.name) as Selectable;
+	}
+
 	deselect(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._deselect != null)

@@ -52,7 +52,7 @@ var ThisCouldBeBetter;
                     var damage = GameFramework.Damage.fromAmountAndTypeName(1, "Heat");
                     var e = uwpe.entity;
                     uwpe.entity2Set(e);
-                    e.killable().damageApply(uwpe, damage);
+                    GameFramework.Killable.of(e).damageApply(uwpe, damage);
                 });
                 this.Frozen = new Effect("Frozen", 20, // ticksPerCycle
                 5, // cyclesToLive
@@ -60,7 +60,7 @@ var ThisCouldBeBetter;
                     var damage = GameFramework.Damage.fromAmountAndTypeName(1, "Cold");
                     var e = uwpe.entity;
                     uwpe.entity2Set(e);
-                    e.killable().damageApply(uwpe, damage);
+                    GameFramework.Killable.of(e).damageApply(uwpe, damage);
                 });
                 this.Healing = new Effect("Healing", 40, // ticksPerCycle
                 10, // cyclesToLive
@@ -81,7 +81,7 @@ var ThisCouldBeBetter;
                     var damage = GameFramework.Damage.fromAmountAndTypeName(-1, "Healing");
                     var e = uwpe.entity;
                     uwpe.entity2Set(e);
-                    e.killable().damageApply(uwpe, damage);
+                    GameFramework.Killable.of(e).damageApply(uwpe, damage);
                 });
                 this._All =
                     [

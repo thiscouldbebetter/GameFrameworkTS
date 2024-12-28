@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(isBlocking) {
                 this.isBlocking = isBlocking;
             }
+            static of(entity) {
+                return entity.propertyByName(Traversable.name);
+            }
             // Clonable.
             clone() { return this; }
             overwriteWith(other) { return this; }

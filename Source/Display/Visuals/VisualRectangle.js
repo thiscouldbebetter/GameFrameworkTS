@@ -34,7 +34,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawPos = this._drawPos.overwriteWith(entity.locatable().loc.pos);
+                var drawPos = this._drawPos.overwriteWith(GameFramework.Locatable.of(entity).loc.pos);
                 if (this.isCentered) {
                     drawPos.subtract(this.sizeHalf);
                 }

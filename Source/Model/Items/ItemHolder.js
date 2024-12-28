@@ -23,6 +23,9 @@ var ThisCouldBeBetter;
             static fromEncumbranceMax(encumbranceMax) {
                 return new ItemHolder(null, encumbranceMax, null, null);
             }
+            static of(entity) {
+                return entity.propertyByName(ItemHolder.name);
+            }
             // Instance methods.
             clear() {
                 if (this.retainsItemsWithZeroQuantities) {
@@ -56,7 +59,7 @@ var ThisCouldBeBetter;
                 if (itemToEquip != null) {
                     var world = universe.world;
                     var place = world.placeCurrent;
-                    var equipmentUser = entityItemHolder.equipmentUser();
+                    var equipmentUser = GameFramework.EquipmentUser.of(entityItemHolder);
                     var socketName = "Item" + slotNumber;
                     var includeSocketNameInMessage = true;
                     var itemEntityToEquip = itemToEquip.toEntity(new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entityItemHolder, null));
@@ -110,12 +113,12 @@ var ThisCouldBeBetter;
                 var entityItemHolder = uwpe.entity;
                 var itemEntityToKeep = uwpe.entity2;
                 if (itemEntityToKeep != null) {
-                    var itemToKeep = itemEntityToKeep.item();
+                    var itemToKeep = GameFramework.Item.of(itemEntityToKeep);
                     var itemToDrop = itemToKeep.clone();
                     itemToDrop.quantitySet(1);
                     var itemToDropDefn = itemToDrop.defn(world);
                     var itemEntityToDrop = itemToDrop.toEntity(uwpe);
-                    var itemLocatable = itemEntityToDrop.locatable();
+                    var itemLocatable = GameFramework.Locatable.of(itemEntityToDrop);
                     if (itemLocatable == null) {
                         itemLocatable = GameFramework.Locatable.create();
                         itemEntityToDrop.propertyAdd(itemLocatable);
@@ -123,9 +126,9 @@ var ThisCouldBeBetter;
                         // todo - Other properties: Collidable, etc.
                     }
                     var posToDropAt = itemLocatable.loc.pos;
-                    var holderPos = entityItemHolder.locatable().loc.pos;
+                    var holderPos = GameFramework.Locatable.of(entityItemHolder).loc.pos;
                     posToDropAt.overwriteWith(holderPos);
-                    var collidable = itemEntityToDrop.collidable();
+                    var collidable = GameFramework.Collidable.of(itemEntityToDrop);
                     if (collidable != null) {
                         collidable.ticksUntilCanCollide =
                             collidable.ticksToWaitBetweenCollisions;
@@ -133,7 +136,7 @@ var ThisCouldBeBetter;
                     place.entitySpawn(uwpe.clone().entitiesSwap());
                     this.itemSubtract(itemToDrop);
                     this.statusMessage = itemToDropDefn.appearance + " dropped.";
-                    var equipmentUser = entityItemHolder.equipmentUser();
+                    var equipmentUser = GameFramework.EquipmentUser.of(entityItemHolder);
                     if (equipmentUser != null) {
                         equipmentUser.unequipItemsNoLongerHeld(uwpe);
                     }
@@ -146,8 +149,8 @@ var ThisCouldBeBetter;
                 var place = uwpe.place;
                 var entityItemHolder = uwpe.entity;
                 var entityItemsInPlace = place.items();
-                var entityItemClosest = entityItemsInPlace.filter((x) => x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => a.locatable().distanceFromEntity(entityItemHolder)
-                    - b.locatable().distanceFromEntity(entityItemHolder))[0];
+                var entityItemClosest = entityItemsInPlace.filter((x) => GameFramework.Locatable.of(x).distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => GameFramework.Locatable.of(a).distanceFromEntity(entityItemHolder)
+                    - GameFramework.Locatable.of(b).distanceFromEntity(entityItemHolder))[0];
                 return entityItemClosest;
             }
             itemEntityPickUp(uwpe) {
@@ -156,7 +159,7 @@ var ThisCouldBeBetter;
                 this.itemEntityPickUpFromPlace(itemEntityToPickUp, place);
             }
             itemEntityPickUpFromPlace(itemEntityToPickUp, place) {
-                var itemToPickUp = itemEntityToPickUp.item();
+                var itemToPickUp = GameFramework.Item.of(itemEntityToPickUp);
                 this.itemAdd(itemToPickUp);
                 place.entityToRemoveAdd(itemEntityToPickUp);
             }
@@ -311,7 +314,7 @@ var ThisCouldBeBetter;
                 var use = () => {
                     var itemEntityToUse = itemHolder.itemSelected.toEntity(uwpe);
                     if (itemEntityToUse != null) {
-                        var itemToUse = itemEntityToUse.item();
+                        var itemToUse = GameFramework.Item.of(itemEntityToUse);
                         if (itemToUse.use != null) {
                             itemToUse.use(uwpe);
                             if (itemToUse.quantity <= 0) {

@@ -23,7 +23,7 @@ var ThisCouldBeBetter;
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;
                 var image = this.visualImage.image(universe);
-                var entityPos = entity.locatable().loc.pos;
+                var entityPos = GameFramework.Locatable.of(entity).loc.pos;
                 this._posSaved.overwriteWith(entityPos);
                 entityPos.subtract(this.sizeToDrawHalf);
                 display.drawImageScaled(image, entityPos, this.sizeToDraw);

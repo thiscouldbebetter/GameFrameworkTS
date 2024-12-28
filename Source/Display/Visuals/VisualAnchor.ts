@@ -39,7 +39,7 @@ export class VisualAnchor implements Visual<VisualAnchor>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var entity = uwpe.entity;
-		var drawableLoc = entity.locatable().loc;
+		var drawableLoc = Locatable.of(entity).loc;
 		var drawablePos = drawableLoc.pos;
 		var drawableOrientation = drawableLoc.orientation;
 

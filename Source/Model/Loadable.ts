@@ -20,6 +20,11 @@ export class LoadableProperty
 		this._unload = unload;
 	}
 
+	static of(entity: Entity): LoadableProperty
+	{
+		return entity.propertyByName(LoadableProperty.name) as LoadableProperty;
+	}
+
 	finalize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.unload(uwpe);

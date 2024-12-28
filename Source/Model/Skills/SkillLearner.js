@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new SkillLearner(null, null, null);
             }
+            static of(entity) {
+                return entity.propertyByName(SkillLearner.name);
+            }
             isLearningInProgress() {
                 return (this.learningAccumulated > 0);
             }

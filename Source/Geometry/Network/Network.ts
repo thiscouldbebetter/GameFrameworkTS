@@ -194,7 +194,7 @@ export class VisualNetwork implements Visual<VisualNetwork>
 	{
 		var e = uwpe.entity;
 
-		var drawableLoc = e.locatable().loc;
+		var drawableLoc = Locatable.of(e).loc;
 		this.transformLocate.loc.overwriteWith(drawableLoc);
 
 		this.networkTransformed.overwriteWith

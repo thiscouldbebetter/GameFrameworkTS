@@ -18,13 +18,16 @@ var ThisCouldBeBetter;
             static fromConstraints(constraints) {
                 return new Constrainable(constraints);
             }
+            static of(entity) {
+                return entity.propertyByName(Constrainable.name);
+            }
             clear() {
                 this.constraints.length = 0;
                 return this;
             }
             constrain(uwpe) {
                 var entity = uwpe.entity;
-                var constrainable = entity.constrainable();
+                var constrainable = Constrainable.of(entity);
                 var constraints = constrainable.constraints;
                 for (var i = 0; i < constraints.length; i++) {
                     var constraint = constraints[i];

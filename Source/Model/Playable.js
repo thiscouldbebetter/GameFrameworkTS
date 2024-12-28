@@ -4,6 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Playable {
+            static of(entity) {
+                return entity.propertyByName(Playable.name);
+            }
             static toControlMenu(universe, size, entity, venuePrev) {
                 var controlsForTabs = new Array();
                 var fontHeight = 12;
@@ -21,34 +24,34 @@ var ThisCouldBeBetter;
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Time Playing: " + timePlayingAsString), font)
                 ];
-                var killable = entity.killable();
+                var killable = GameFramework.Killable.of(entity);
                 if (killable != null) {
                     var labelHealth = new GameFramework.ControlLabel("labelHealth", GameFramework.Coords.fromXY(marginX, labelSize.y * 3), // pos
                     labelSize.clone(), false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Health: " + entity.killable().integrity
-                        + "/" + entity.killable().integrityMax), font);
+                    GameFramework.DataBinding.fromContext("Health: " + GameFramework.Killable.of(entity).integrity
+                        + "/" + GameFramework.Killable.of(entity).integrityMax), font);
                     controlsForStatusFields.push(labelHealth);
                 }
                 var tabButtonSize = GameFramework.Coords.fromXY(36, 20);
                 var tabPageSize = size.clone().subtract(GameFramework.Coords.fromXY(0, tabButtonSize.y + fontHeight));
                 var includeTitleAndDoneButtonFalse = false;
-                var itemHolder = entity.itemHolder();
+                var itemHolder = GameFramework.ItemHolder.of(entity);
                 if (itemHolder != null) {
                     var itemHolderAsControl = itemHolder.toControl(universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(itemHolderAsControl);
                 }
-                var equipmentUser = entity.equipmentUser();
+                var equipmentUser = GameFramework.EquipmentUser.of(entity);
                 if (equipmentUser != null) {
                     var equipmentUserAsControl = equipmentUser.toControl(universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(equipmentUserAsControl);
                 }
-                var itemCrafter = entity.itemCrafter();
+                var itemCrafter = GameFramework.ItemCrafter.of(entity);
                 if (itemCrafter != null) {
                     var crafterAsControl = itemCrafter.toControl(universe, tabPageSize, entity, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(crafterAsControl);
                 }
-                var skillLearner = entity.skillLearner();
+                var skillLearner = GameFramework.SkillLearner.of(entity);
                 if (skillLearner != null) {
                     var skillLearnerAsControl = skillLearner.toControl(universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(skillLearnerAsControl);
@@ -56,10 +59,10 @@ var ThisCouldBeBetter;
                     labelSize.clone(), false, // isTextCenteredHorizontally
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Experience: "
-                        + entity.skillLearner().learningAccumulated), font);
+                        + GameFramework.SkillLearner.of(entity).learningAccumulated), font);
                     controlsForStatusFields.push(labelExperience);
                 }
-                var journalKeeper = entity.journalKeeper();
+                var journalKeeper = GameFramework.JournalKeeper.of(entity);
                 if (journalKeeper != null) {
                     var journalKeeperAsControl = journalKeeper.toControl(universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(journalKeeperAsControl);
@@ -81,7 +84,7 @@ var ThisCouldBeBetter;
             static toControlWorldOverlay(universe, size, entity) {
                 var world = universe.world;
                 var place = world.placeCurrent;
-                var equipmentUser = entity.equipmentUser();
+                var equipmentUser = GameFramework.EquipmentUser.of(entity);
                 var childControls = new Array();
                 var entityDimension = 10; // todo
                 var fontHeightInPixels = 10;
@@ -89,7 +92,7 @@ var ThisCouldBeBetter;
                 var margin = 10;
                 var worldDefn = world.defn;
                 var playerVisualBarSize = GameFramework.Coords.fromXY(entityDimension * 4, entityDimension);
-                var killable = entity.killable();
+                var killable = GameFramework.Killable.of(entity);
                 var playerVisualHealthBar = new GameFramework.VisualBar(null, // "H", // abbreviation
                 playerVisualBarSize, GameFramework.Color.Instances().Red, GameFramework.DataBinding.fromGet((c) => killable.integrity), null, // amountThreshold
                 GameFramework.DataBinding.fromGet((c) => killable.integrityMax), null, // fractionBelowWhichToShow
@@ -101,7 +104,7 @@ var ThisCouldBeBetter;
                     playerVisualHealthBar,
                     new GameFramework.VisualOffset(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualHealthIcon)
                 ]);
-                var starvable = entity.starvable();
+                var starvable = GameFramework.Starvable.of(entity);
                 var playerVisualSatietyBar = new GameFramework.VisualBar(null, // "F", // abbreviation
                 playerVisualBarSize, GameFramework.Color.Instances().Brown, GameFramework.DataBinding.fromGet((c) => starvable.satiety), null, // amountThreshold
                 GameFramework.DataBinding.fromGet((c) => starvable.satietyMax), null, // fractionBelowWhichToShow
@@ -113,7 +116,7 @@ var ThisCouldBeBetter;
                     playerVisualSatietyBar,
                     new GameFramework.VisualOffset(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualSatietyIcon)
                 ]);
-                var tirable = entity.tirable();
+                var tirable = GameFramework.Tirable.of(entity);
                 var playerVisualStaminaBar = new GameFramework.VisualBar(null, // "S", // abbreviation
                 playerVisualBarSize, GameFramework.Color.Instances().Yellow, GameFramework.DataBinding.fromGet((c) => tirable.stamina), GameFramework.DataBinding.fromGet((c) => tirable.staminaMaxRemainingBeforeSleep), GameFramework.DataBinding.fromGet((c) => tirable.staminaMaxAfterSleep), null, // fractionBelowWhichToShow
                 null, // colorForBorderAsValueBreakGroup
@@ -163,7 +166,7 @@ var ThisCouldBeBetter;
                 GameFramework.DataBinding.fromContext(playerVisualStatusInfo));
                 childControls.push(controlPlayerStatusInfo);
                 // Selection.
-                var selector = entity.selector();
+                var selector = GameFramework.Selector.of(entity);
                 var controlSelectionSize = GameFramework.Coords.fromXY(playerVisualBarSize.x * 1.5, margin * 3);
                 var controlSelectionPos = GameFramework.Coords.fromXY(size.x - controlSelectionSize.x - margin, margin);
                 var controlSelection = selector.toControl(controlSelectionSize, controlSelectionPos);
@@ -200,7 +203,7 @@ var ThisCouldBeBetter;
                         var returnValue = null;
                         var itemEntityEquipped = equipmentUser.itemEntityInSocketWithName("Item" + c);
                         if (itemEntityEquipped != null) {
-                            var item = itemEntityEquipped.item();
+                            var item = GameFramework.Item.of(itemEntityEquipped);
                             returnValue = item.defn(world).visual;
                         }
                         return returnValue;

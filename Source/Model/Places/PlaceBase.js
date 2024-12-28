@@ -55,11 +55,11 @@ var ThisCouldBeBetter;
                 if (cameraEntity == null) {
                     var drawables = this.drawables();
                     drawables.forEach((x) => {
-                        x.drawable().updateForTimerTick(uwpe.entitySet(x));
+                        GameFramework.Drawable.of(x).updateForTimerTick(uwpe.entitySet(x));
                     });
                 }
                 else {
-                    var camera = cameraEntity.camera();
+                    var camera = GameFramework.Camera.of(cameraEntity);
                     camera.drawEntitiesInView(uwpe, cameraEntity, display);
                 }
             }
@@ -232,7 +232,7 @@ var ThisCouldBeBetter;
                 if (this.isLoaded == false) {
                     var loadables = this.loadables();
                     uwpe.placeSet(this);
-                    loadables.forEach(x => x.loadable().load(uwpe.entitySet(x)));
+                    loadables.forEach(x => GameFramework.LoadableProperty.of(x).load(uwpe.entitySet(x)));
                     this.isLoaded = true;
                 }
             }
@@ -240,14 +240,14 @@ var ThisCouldBeBetter;
                 if (this.isLoaded) {
                     var loadables = this.loadables();
                     uwpe.placeSet(this);
-                    loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x)));
+                    loadables.forEach(x => GameFramework.LoadableProperty.of(x).unload(uwpe.entitySet(x)));
                     this.isLoaded = false;
                 }
             }
             // Controllable.
             toControl(universe, world) {
                 var player = this.player();
-                var playerControllable = player.controllable();
+                var playerControllable = GameFramework.Controllable.of(player);
                 var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, world.placeCurrent, player, null);
                 var returnValue = playerControllable.toControl(uwpe, null, null);
                 return returnValue;

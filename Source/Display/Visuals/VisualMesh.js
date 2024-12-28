@@ -23,7 +23,7 @@ var ThisCouldBeBetter;
             // Visual.
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                display.drawMeshWithOrientation(this.mesh, entity.locatable().loc.orientation);
+                display.drawMeshWithOrientation(this.mesh, GameFramework.Locatable.of(entity).loc.orientation);
             }
         }
         GameFramework.VisualMesh = VisualMesh;

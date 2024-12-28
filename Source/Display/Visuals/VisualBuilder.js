@@ -141,7 +141,7 @@ var ThisCouldBeBetter;
                 ]);
                 var selectChildNames = (uwpe, d) => {
                     var e = uwpe.entity;
-                    var entityLoc = e.locatable().loc;
+                    var entityLoc = GameFramework.Locatable.of(e).loc;
                     var entityForward = entityLoc.orientation.forward;
                     var entityForwardInTurns = entityForward.headingInTurns();
                     var childNameToSelect;
@@ -201,11 +201,11 @@ var ThisCouldBeBetter;
                 var visualWieldable = new GameFramework.VisualDynamic((uwpe) => {
                     var w = uwpe.world;
                     var e = uwpe.entity;
-                    var equipmentUser = e.equipmentUser();
+                    var equipmentUser = GameFramework.EquipmentUser.of(e);
                     var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
-                    var itemDrawable = entityWieldableEquipped.drawable();
+                    var itemDrawable = GameFramework.Drawable.of(entityWieldableEquipped);
                     var itemVisual = (itemDrawable == null
-                        ? entityWieldableEquipped.item().defn(w).visual
+                        ? GameFramework.Item.of(entityWieldableEquipped).defn(w).visual
                         : itemDrawable.visual);
                     return itemVisual;
                 });
@@ -249,7 +249,7 @@ var ThisCouldBeBetter;
                 ]), (uwpe, d) => // selectChildNames
                  {
                     var e = uwpe.entity;
-                    var itemEntityWielded = e.equipmentUser().itemEntityInSocketWithName("Wielding");
+                    var itemEntityWielded = GameFramework.EquipmentUser.of(e).itemEntityInSocketWithName("Wielding");
                     var returnValue = (itemEntityWielded == null ? "Hidden" : "Visible");
                     return [returnValue];
                 });

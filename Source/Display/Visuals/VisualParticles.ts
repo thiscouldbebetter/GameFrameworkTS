@@ -57,7 +57,7 @@ export class VisualParticles implements Visual<VisualParticles>
 
 			for (var i = 0; i < particleCountThisTick; i++)
 			{
-				var entityGeneratingLoc = entity.locatable().loc;
+				var entityGeneratingLoc = Locatable.of(entity).loc;
 
 				var particleName =
 					"Particle" + this.name + "-" + this.ticksSoFar + "-" + i;
@@ -85,10 +85,10 @@ export class VisualParticles implements Visual<VisualParticles>
 		var uwpeForParticles = uwpe.clone();
 		this.particleEntities.forEach(particleEntity => {
 
-			var loc = particleEntity.locatable().loc;
+			var loc = Locatable.of(particleEntity).loc;
 			loc.pos.add(loc.vel);
 
-			var ephemeral = particleEntity.ephemeral();
+			var ephemeral = Ephemeral.of(particleEntity);
 			if (ephemeral.ticksToLive <= 0)
 			{
 				ArrayHelper.remove(this.particleEntities, particleEntity);
@@ -96,7 +96,7 @@ export class VisualParticles implements Visual<VisualParticles>
 			else
 			{
 				ephemeral.ticksToLive--;
-				var particleVisual = particleEntity.drawable().visual;
+				var particleVisual = Drawable.of(particleEntity).visual;
 				particleVisual.draw(
 					uwpeForParticles.entitySet(particleEntity), display
 				);

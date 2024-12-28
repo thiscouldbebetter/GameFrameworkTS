@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawableLoc = entity.locatable().loc;
+                var drawableLoc = GameFramework.Locatable.of(entity).loc;
                 var rotationInTurns = this.rotationInTurns;
                 if (this.shouldUseEntityOrientation) {
                     var drawableOrientation = drawableLoc.orientation;

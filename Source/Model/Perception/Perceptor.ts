@@ -13,6 +13,11 @@ export class Perceptor implements EntityProperty<Perceptor>
 		this.hearingThreshold = hearingThreshold;
 	}
 
+	static of(entity: Entity): Perceptor
+	{
+		return entity.propertyByName(Perceptor.name) as Perceptor;
+	}
+
 	// Clonable.
 	clone(): Perceptor { return this; }
 	overwriteWith(other: Perceptor): Perceptor { return this; }

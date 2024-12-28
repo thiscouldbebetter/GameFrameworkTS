@@ -11,7 +11,7 @@ export class Constraint_Stop implements Constraint
 	{
 		var entity = uwpe.entity;
 
-		var entityLoc = entity.locatable().loc;
+		var entityLoc = Locatable.of(entity).loc;
 		var entityVel = entityLoc.vel;
 		entityVel.clear();
 	}

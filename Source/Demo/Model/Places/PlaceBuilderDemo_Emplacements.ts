@@ -33,7 +33,7 @@ class PlaceBuilderDemo_Emplacements
 			var entityUsing = uwpe.entity;
 			var entityUsed = uwpe.entity2;
 
-			var itemCrafter = entityUsed.itemCrafter();
+			var itemCrafter = ItemCrafter.of(entityUsed);
 			var itemCrafterAsControls = itemCrafter.toControl
 			(
 				universe,
@@ -141,12 +141,12 @@ class PlaceBuilderDemo_Emplacements
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var entityDying = uwpe.entity;
-				var entityDropped = entityDying.locatable().entitySpawnWithDefnName
+				var entityDropped = Locatable.of(entityDying).entitySpawnWithDefnName
 				(
 					uwpe, "Iron Ore"
 				);
 				var quantityToSet = DiceRoll.roll("1d3", null);
-				entityDropped.item().quantitySet(quantityToSet);
+				Item.of(entityDropped).quantitySet(quantityToSet);
 			}
 		);
 
@@ -225,11 +225,10 @@ class PlaceBuilderDemo_Emplacements
 		var campfireCollide = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			var entityOther = uwpe.entity2;
-			var entityOtherEffectable = entityOther.effectable();
+			var entityOtherEffectable = Effectable.of(entityOther);
 			if (entityOtherEffectable != null)
 			{
 				entityOtherEffectable.effectAdd(Effect.Instances().Burning.clone());
-				//entityCampfire.collidable().ticksUntilCanCollide = 50;
 			}
 		};
 		var campfireCollidable = new Collidable
@@ -309,8 +308,7 @@ class PlaceBuilderDemo_Emplacements
 						var universe = uwpe.universe;
 						var entityUsing = uwpe.entity;
 						var entityOther = uwpe.entity2;
-						//entityOther.collidable().ticksUntilCanCollide = 50; // hack
-						var itemContainer = entityOther.itemContainer();
+						var itemContainer = ItemContainer.of(entityOther);
 						var itemContainerAsControl = itemContainer.toControl
 						(
 							universe, universe.display.sizeInPixels,
@@ -386,7 +384,7 @@ class PlaceBuilderDemo_Emplacements
 					(uwpe: UniverseWorldPlaceEntities) =>
 					{
 						var eUsed = uwpe.entity2;
-						eUsed.portal().use(uwpe);
+						Portal.of(eUsed).use(uwpe);
 						return null;
 					}
 				)
@@ -429,7 +427,7 @@ class PlaceBuilderDemo_Emplacements
 			var u = uwpe.universe;
 			var eUsing = uwpe.entity;
 			var eUsed = uwpe.entity2;
-			var itemContainerAsControl = eUsed.itemContainer().toControl
+			var itemContainerAsControl = ItemContainer.of(eUsed).toControl
 			(
 				u, u.display.sizeInPixels, eUsing, eUsed, u.venueCurrent()
 			);
@@ -677,7 +675,7 @@ class PlaceBuilderDemo_Emplacements
 			var universe = uwpe.universe;
 			var entityUsing = uwpe.entity;
 
-			var tirable = entityUsing.tirable();
+			var tirable = Tirable.of(entityUsing);
 			tirable.fallAsleep(uwpe);
 			var venueNext = universe.venueCurrent();
 			universe.venueTransitionTo(venueNext);
@@ -730,7 +728,7 @@ class PlaceBuilderDemo_Emplacements
 						var e = uwpe.entity;
 						return VisualText.fromTextImmediateFontAndColor
 						(
-							e.portal().destinationPlaceName,
+							Portal.of(e).destinationPlaceName,
 							this.font,
 							baseColor
 						)
@@ -742,7 +740,7 @@ class PlaceBuilderDemo_Emplacements
 		var portalUse = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			var eUsed = uwpe.entity2;
-			eUsed.portal().use(uwpe);
+			Portal.of(eUsed).use(uwpe);
 		};
 
 		var portalEntity = new Entity

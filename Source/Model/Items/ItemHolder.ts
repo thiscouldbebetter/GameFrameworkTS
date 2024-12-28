@@ -48,6 +48,11 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return new ItemHolder(null, encumbranceMax, null, null);
 	}
 
+	static of(entity: Entity): ItemHolder
+	{
+		return entity.propertyByName(ItemHolder.name) as ItemHolder;
+	}
+
 	// Instance methods.
 
 	clear(): ItemHolder
@@ -103,7 +108,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		{
 			var world = universe.world;
 			var place = world.placeCurrent;
-			var equipmentUser = entityItemHolder.equipmentUser();
+			var equipmentUser = EquipmentUser.of(entityItemHolder);
 			var socketName = "Item" + slotNumber;
 			var includeSocketNameInMessage = true;
 			var itemEntityToEquip = itemToEquip.toEntity
@@ -205,14 +210,14 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 
 		if (itemEntityToKeep != null)
 		{
-			var itemToKeep = itemEntityToKeep.item();
+			var itemToKeep = Item.of(itemEntityToKeep);
 
 			var itemToDrop = itemToKeep.clone();
 			itemToDrop.quantitySet(1);
 			var itemToDropDefn = itemToDrop.defn(world);
 
 			var itemEntityToDrop = itemToDrop.toEntity(uwpe);
-			var itemLocatable = itemEntityToDrop.locatable();
+			var itemLocatable = Locatable.of(itemEntityToDrop);
 			if (itemLocatable == null)
 			{
 				itemLocatable = Locatable.create();
@@ -225,10 +230,10 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			}
 
 			var posToDropAt = itemLocatable.loc.pos;
-			var holderPos = entityItemHolder.locatable().loc.pos;
+			var holderPos = Locatable.of(entityItemHolder).loc.pos;
 			posToDropAt.overwriteWith(holderPos);
 
-			var collidable = itemEntityToDrop.collidable();
+			var collidable = Collidable.of(itemEntityToDrop);
 			if (collidable != null)
 			{
 				collidable.ticksUntilCanCollide =
@@ -243,7 +248,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 
 			this.statusMessage = itemToDropDefn.appearance + " dropped."
 
-			var equipmentUser = entityItemHolder.equipmentUser();
+			var equipmentUser = EquipmentUser.of(entityItemHolder);
 			if (equipmentUser != null)
 			{
 				equipmentUser.unequipItemsNoLongerHeld
@@ -268,12 +273,12 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		var entityItemClosest = entityItemsInPlace.filter
 		(
 			(x: Entity) =>
-				x.locatable().distanceFromEntity(entityItemHolder) < this.reachRadius
+				Locatable.of(x).distanceFromEntity(entityItemHolder) < this.reachRadius
 		).sort
 		(
 			(a: Entity, b: Entity) =>
-				a.locatable().distanceFromEntity(entityItemHolder)
-				- b.locatable().distanceFromEntity(entityItemHolder)
+				Locatable.of(a).distanceFromEntity(entityItemHolder)
+				- Locatable.of(b).distanceFromEntity(entityItemHolder)
 		)[0];
 
 		return entityItemClosest;
@@ -295,7 +300,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		place: Place
 	): void
 	{
-		var itemToPickUp = itemEntityToPickUp.item();
+		var itemToPickUp = Item.of(itemEntityToPickUp);
 		this.itemAdd(itemToPickUp);
 		place.entityToRemoveAdd(itemEntityToPickUp);
 	}
@@ -571,7 +576,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			);
 			if (itemEntityToUse != null)
 			{
-				var itemToUse = itemEntityToUse.item();
+				var itemToUse = Item.of(itemEntityToUse);
 				if (itemToUse.use != null)
 				{
 					itemToUse.use(uwpe);

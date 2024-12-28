@@ -21,6 +21,11 @@ export class Locatable implements EntityProperty<Locatable>
 		return new Locatable(Disposition.fromPos(pos));
 	}
 
+	static of(entity: Entity): Locatable
+	{
+		return entity.propertyByName(Locatable.name) as Locatable;
+	}
+
 	approachOtherWithAccelerationAndSpeedMax
 	(
 		locatableToApproach: Locatable,
@@ -85,7 +90,7 @@ export class Locatable implements EntityProperty<Locatable>
 
 	distanceFromEntity(entity: Entity): number
 	{
-		return this.distanceFromPos(entity.locatable().loc.pos);
+		return this.distanceFromPos(Locatable.of(entity).loc.pos);
 	}
 
 	distanceFromPos(posToCheck: Coords): number
@@ -105,8 +110,8 @@ export class Locatable implements EntityProperty<Locatable>
 		var entityDefnToSpawn =
 			world.defn.entityDefnByName(entityToSpawnDefnName);
 		var entityToSpawn = entityDefnToSpawn.clone();
-		var loc = entityToSpawn.locatable().loc;
-		loc.overwriteWith(entitySpawning.locatable().loc);
+		var loc = Locatable.of(entityToSpawn).loc;
+		loc.overwriteWith(Locatable.of(entitySpawning).loc);
 		loc.accel.clear();
 		loc.vel.clear();
 		place.entitySpawn(uwpe);

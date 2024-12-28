@@ -11,6 +11,11 @@ export class Enemy implements EntityProperty<Enemy>
 		this.weapon = weapon;
 	}
 
+	static of(entity: Entity): Enemy
+	{
+		return entity.propertyByName(Enemy.name) as Enemy;
+	}
+
 	static activityDefnBuild(): ActivityDefn
 	{
 		var enemyActivityPerform = (uwpe: UniverseWorldPlaceEntities) =>
@@ -20,8 +25,8 @@ export class Enemy implements EntityProperty<Enemy>
 			var place = uwpe.place;
 			var actor = uwpe.entity;
 
-			var activity = actor.actor().activity;
-			var actorLocatable = actor.locatable();
+			var activity = Actor.of(actor).activity;
+			var actorLocatable = Locatable.of(actor);
 
 			var entityToTargetPrefix = "Player";
 			var placeEntities = place.entitiesAll();
@@ -34,17 +39,17 @@ export class Enemy implements EntityProperty<Enemy>
 			var sortClosest = (a: Entity, b: Entity) =>
 				displacement.overwriteWith
 				(
-					a.locatable().loc.pos
+					Locatable.of(a).loc.pos
 				).subtract
 				(
-					b.locatable().loc.pos
+					Locatable.of(b).loc.pos
 				).magnitude();
 
 			var targetPreferredInSight = targetsPreferred.filter
 			(
 				(x: Entity) =>
-					x.perceptible() == null
-					|| x.perceptible().canBeSeen
+					Perceptible.of(x) == null
+					|| Perceptible.of(x).canBeSeen
 					(
 						new UniverseWorldPlaceEntities
 						(
@@ -58,21 +63,21 @@ export class Enemy implements EntityProperty<Enemy>
 			if (targetPreferredInSight != null)
 			{
 				targetPosToApproach =
-					targetPreferredInSight.locatable().loc.pos.clone();
+					Locatable.of(targetPreferredInSight).loc.pos.clone();
 			}
 			else
 			{
 				var targetPreferredInHearing = targetsPreferred.filter
 				(
 					(x: Entity) =>
-						x.perceptible() == null
-						|| x.perceptible().canBeHeard(uwpe.entitiesSet(x, actor))
+						Perceptible.of(x) == null
+						|| Perceptible.of(x).canBeHeard(uwpe.entitiesSet(x, actor))
 				).sort(sortClosest)[0];
 
 				if (targetPreferredInHearing != null)
 				{
 					targetPosToApproach =
-						targetPreferredInHearing.locatable().loc.pos.clone();
+						Locatable.of(targetPreferredInHearing).loc.pos.clone();
 				}
 				else
 				{
@@ -85,7 +90,7 @@ export class Enemy implements EntityProperty<Enemy>
 					}
 					else
 					{
-						var targetPosExisting = targetEntity.locatable().loc.pos;
+						var targetPosExisting = Locatable.of(targetEntity).loc.pos;
 						targetPosToApproach = targetPosExisting;
 					}
 				}
@@ -97,7 +102,7 @@ export class Enemy implements EntityProperty<Enemy>
 			// hack
 			var targetLocatable = Locatable.fromPos(targetPosToApproach);
 
-			var enemy = actor.enemy();
+			var enemy = Enemy.of(actor);
 			var weapon = enemy.weapon;
 			var distanceToApproach = (weapon == null ? 4 : weapon.range);
 			var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance

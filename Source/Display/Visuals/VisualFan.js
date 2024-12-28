@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawableLoc = entity.locatable().loc;
+                var drawableLoc = GameFramework.Locatable.of(entity).loc;
                 var drawPos = this._drawPos.overwriteWith(drawableLoc.pos);
                 var drawableAngleInTurns = drawableLoc.orientation.forward.headingInTurns();
                 var wedgeAngleMin = drawableAngleInTurns + this.angleStartInTurns;

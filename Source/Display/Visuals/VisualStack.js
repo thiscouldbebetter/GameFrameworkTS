@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawPos = entity.locatable().loc.pos;
+                var drawPos = GameFramework.Locatable.of(entity).loc.pos;
                 this._posSaved.overwriteWith(drawPos);
                 for (var i = 0; i < this.children.length; i++) {
                     //var child = this.children[i];

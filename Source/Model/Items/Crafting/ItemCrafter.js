@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
                 this.recipesQueued = [];
                 this.statusMessage = "-";
             }
+            static of(entity) {
+                return entity.propertyByName(ItemCrafter.name);
+            }
             isRecipeAvailableSelectedFulfilled(itemHolder) {
                 var returnValue = (this.recipeAvailableSelected == null
                     ? false
@@ -37,7 +40,7 @@ var ThisCouldBeBetter;
                 var itemsOut = recipe.itemsOut;
                 for (var i = 0; i < itemsOut.length; i++) {
                     var itemOut = itemsOut[i];
-                    entityCrafter.itemHolder().itemAdd(itemOut);
+                    GameFramework.ItemHolder.of(entityCrafter).itemAdd(itemOut);
                 }
                 this.itemHolderStaged.items.length = 0;
                 this.recipeInProgressTicksSoFar = 0;
@@ -95,11 +98,11 @@ var ThisCouldBeBetter;
                 var fontSmall = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightSmall);
                 var fontHeightLarge = fontHeight * 1.5;
                 var fontLarge = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
-                var itemHolder = entityItemHolder.itemHolder();
+                var itemHolder = GameFramework.ItemHolder.of(entityItemHolder);
                 var crafter = this;
                 var back = () => universe.venueTransitionTo(venuePrev);
                 var addToQueue = () => {
-                    if (crafter.isRecipeAvailableSelectedFulfilled(entityCrafter.itemHolder())) {
+                    if (crafter.isRecipeAvailableSelectedFulfilled(GameFramework.ItemHolder.of(entityCrafter))) {
                         var recipe = crafter.recipeAvailableSelected;
                         var itemsIn = recipe.itemsIn;
                         for (var i = 0; i < itemsIn.length; i++) {
@@ -131,7 +134,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.from11("buttonCraft", GameFramework.Coords.fromXY(170, 5), // pos
                     GameFramework.Coords.fromXY(20, 10), // size
                     "Craft", fontSmall, true, // hasBorder
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.isRecipeAvailableSelectedFulfilled(entityCrafter.itemHolder())), // isEnabled
+                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.isRecipeAvailableSelectedFulfilled(GameFramework.ItemHolder.of(entityCrafter))), // isEnabled
                     addToQueue, // click
                     null // ?
                     ),

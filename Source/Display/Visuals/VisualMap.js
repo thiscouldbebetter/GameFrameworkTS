@@ -35,7 +35,7 @@ var ThisCouldBeBetter;
             draw_ConvertToImage(uwpe, display) {
                 var entity = uwpe.entity;
                 var mapSizeInCells = this.map.sizeInCells;
-                var drawablePos = entity.locatable().loc.pos;
+                var drawablePos = GameFramework.Locatable.of(entity).loc.pos;
                 this._posSaved.overwriteWith(drawablePos);
                 var cellPosStart = this._cellPosStart.clear();
                 var cellPosEnd = this._cellPosEnd.overwriteWith(mapSizeInCells);
@@ -60,7 +60,7 @@ var ThisCouldBeBetter;
             draw_ConvertToImage_Cells(uwpe, display, cellPosStart, cellPosEnd, displayForImage) {
                 var entity = uwpe.entity;
                 var drawPos = this._drawPos;
-                var drawablePos = entity.locatable().loc.pos;
+                var drawablePos = GameFramework.Locatable.of(entity).loc.pos;
                 var cellPosInCells = this._cellPosInCells;
                 var cellSizeInPixels = this.map.cellSize;
                 for (var y = cellPosStart.y; y < cellPosEnd.y; y++) {

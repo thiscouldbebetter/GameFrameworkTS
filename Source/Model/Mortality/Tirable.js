@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
                 (uwpe) => { } // fallAsleep
                 );
             }
+            static of(entity) {
+                return entity.propertyByName(Tirable.name);
+            }
             fallAsleep(uwpe) {
                 var staminaMaxToRecover = this.staminaMaxAfterSleep - this.staminaMaxRemainingBeforeSleep;
                 var ticksToRecover = Math.ceil(staminaMaxToRecover / this.staminaMaxRecoveredPerTickOfSleep);

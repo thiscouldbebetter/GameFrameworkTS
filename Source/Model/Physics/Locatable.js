@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             static fromPos(pos) {
                 return new Locatable(GameFramework.Disposition.fromPos(pos));
             }
+            static of(entity) {
+                return entity.propertyByName(Locatable.name);
+            }
             approachOtherWithAccelerationAndSpeedMax(locatableToApproach, accelerationPerTick, speedMax) {
                 this.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(locatableToApproach, accelerationPerTick, speedMax);
             }
@@ -38,7 +41,7 @@ var ThisCouldBeBetter;
                 return distanceToTarget;
             }
             distanceFromEntity(entity) {
-                return this.distanceFromPos(entity.locatable().loc.pos);
+                return this.distanceFromPos(Locatable.of(entity).loc.pos);
             }
             distanceFromPos(posToCheck) {
                 return this.loc.pos.clone().subtract(posToCheck).magnitude();
@@ -49,8 +52,8 @@ var ThisCouldBeBetter;
                 var entitySpawning = uwpe.entity;
                 var entityDefnToSpawn = world.defn.entityDefnByName(entityToSpawnDefnName);
                 var entityToSpawn = entityDefnToSpawn.clone();
-                var loc = entityToSpawn.locatable().loc;
-                loc.overwriteWith(entitySpawning.locatable().loc);
+                var loc = Locatable.of(entityToSpawn).loc;
+                loc.overwriteWith(Locatable.of(entitySpawning).loc);
                 loc.accel.clear();
                 loc.vel.clear();
                 place.entitySpawn(uwpe);

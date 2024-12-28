@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 var entity = uwpe.entity;
                 var targetFrictionCoefficient = this.target;
-                var entityLoc = entity.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var entityVel = entityLoc.vel;
                 var entityVelZSaved = entityVel.z;
                 entityVel.z = 0;

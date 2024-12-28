@@ -45,7 +45,7 @@ class PlaceBuilderDemo_Items {
     }
     itemUseEquip(uwpe) {
         var entityUser = uwpe.entity;
-        var equipmentUser = entityUser.equipmentUser();
+        var equipmentUser = EquipmentUser.of(entityUser);
         equipmentUser.equipEntityWithItem(uwpe);
     }
     // Items.
@@ -229,9 +229,9 @@ class PlaceBuilderDemo_Items {
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
-            entityUser.starvable().satietyAdd(10);
-            var item = entityItem.item();
-            var itemHolder = entityUser.itemHolder();
+            Starvable.of(entityUser).satietyAdd(10);
+            var item = Item.of(entityItem);
+            var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
             itemHolder.statusMessage += "You eat the bread.";
         }, itemBreadVisual, null // toEntity
@@ -303,9 +303,9 @@ class PlaceBuilderDemo_Items {
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
-            entityUser.starvable().satietyAdd(2);
-            var item = entityItem.item();
-            var itemHolder = entityUser.itemHolder();
+            Starvable.of(entityUser).satietyAdd(2);
+            var item = Item.of(entityItem);
+            var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
             itemHolder.statusMessage = "You eat the doughnut.";
         }, itemDoughnutVisual, null // toEntity
@@ -356,9 +356,9 @@ class PlaceBuilderDemo_Items {
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
-            entityUser.starvable().satietyAdd(5);
-            var item = entityItem.item();
-            var itemHolder = entityUser.itemHolder();
+            Starvable.of(entityUser).satietyAdd(5);
+            var item = Item.of(entityItem);
+            var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
             itemHolder.statusMessage = "You eat the fruit.";
         }, itemFruitVisual, null // toEntity
@@ -503,9 +503,9 @@ class PlaceBuilderDemo_Items {
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
-            entityUser.starvable().satietyAdd(20);
-            var item = entityItem.item();
-            var itemHolder = entityUser.itemHolder();
+            Starvable.of(entityUser).satietyAdd(20);
+            var item = Item.of(entityItem);
+            var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
             itemHolder.statusMessage = "You eat the meat.";
         }, itemMeatVisual, null);
@@ -540,9 +540,9 @@ class PlaceBuilderDemo_Items {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
             var effectToApply = Effect.Instances().Healing;
-            entityUser.effectable().effectAdd(effectToApply);
-            var item = entityItem.item();
-            var itemHolder = entityUser.itemHolder();
+            Effectable.of(entityUser).effectAdd(effectToApply);
+            var item = Item.of(entityItem);
+            var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
             itemHolder.statusMessage = "You use the medicine.";
         }, itemMedicineVisual, null);
@@ -616,9 +616,9 @@ class PlaceBuilderDemo_Items {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
             var effectToApply = Effect.Instances().Healing;
-            entityUser.effectable().effectAdd(effectToApply);
-            var item = entityItem.item();
-            entityUser.itemHolder().itemSubtractDefnNameAndQuantity(item.defnName, 1);
+            Effectable.of(entityUser).effectAdd(effectToApply);
+            var item = Item.of(entityItem);
+            ItemHolder.of(entityUser).itemSubtractDefnNameAndQuantity(item.defnName, 1);
             var message = "You use the medicine.";
             return message;
         }, itemPotionVisual, null);

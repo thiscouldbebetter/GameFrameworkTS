@@ -274,17 +274,17 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 	{
 		collisionsSoFar.length = 0;
 
-		var entityBoundable = entity.boundable();
+		var entityBoundable = Boundable.of(entity);
 		if (entityBoundable == null)
 		{
 			throw new Error
 			(
-				"Entity.boundable() for '"
+				"Boundable.of(Entity) for '"
 				+ entity.name
 				+ "' is null, which is not allowed when using CollisionTrackerMapped."
 			);
 		}
-		var entityCollidable = entity.collidable();
+		var entityCollidable = Collidable.of(entity);
 
 		var entityBounds = entityBoundable.bounds as Box;
 		var cellsToAddEntityTo = this.collisionMap.cellsInBox
@@ -341,7 +341,7 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 
 	entityReset(entity: Entity): void
 	{
-		var collidable = entity.collidable();
+		var collidable = Collidable.of(entity);
 		var collidableData = collidable.collisionTrackerCollidableData(this)
 		collidableData.resetForEntity(entity);
 	}
@@ -458,7 +458,7 @@ export class CollisionTrackerMappedMapCell
 	{
 		var entitiesMovers = this._entitiesPresent.filter
 		(
-			x => x.collidable().isEntityStationary(x) == false
+			x => Collidable.of(x).isEntityStationary(x) == false
 		);
 		entitiesMovers.forEach
 		(

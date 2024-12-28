@@ -30,7 +30,7 @@ export class VisualLine implements Visual<VisualLine>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		var loc = entity.locatable().loc;
+		var loc = Locatable.of(entity).loc;
 		this._transformLocate.loc = loc;
 
 		var drawPosFrom = this._drawPosFrom.overwriteWith

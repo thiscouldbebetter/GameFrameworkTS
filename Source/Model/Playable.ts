@@ -4,6 +4,11 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Playable implements EntityProperty<Playable>
 {
+	static of(entity: Entity): Playable
+	{
+		return entity.propertyByName(Playable.name) as Playable;
+	}
+
 	static toControlMenu
 	(
 		universe: Universe, size: Coords, entity: Entity, venuePrev: Venue
@@ -50,7 +55,7 @@ export class Playable implements EntityProperty<Playable>
 			)
 		];
 
-		var killable = entity.killable();
+		var killable = Killable.of(entity);
 		if (killable != null)
 		{
 			var labelHealth = new ControlLabel
@@ -62,8 +67,8 @@ export class Playable implements EntityProperty<Playable>
 				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
-					"Health: " + entity.killable().integrity
-					+ "/" + entity.killable().integrityMax
+					"Health: " + Killable.of(entity).integrity
+					+ "/" + Killable.of(entity).integrityMax
 				),
 				font
 			);
@@ -78,7 +83,7 @@ export class Playable implements EntityProperty<Playable>
 
 		var includeTitleAndDoneButtonFalse = false;
 
-		var itemHolder = entity.itemHolder();
+		var itemHolder = ItemHolder.of(entity);
 		if (itemHolder != null)
 		{
 			var itemHolderAsControl = itemHolder.toControl
@@ -88,7 +93,7 @@ export class Playable implements EntityProperty<Playable>
 			controlsForTabs.push(itemHolderAsControl);
 		}
 
-		var equipmentUser = entity.equipmentUser();
+		var equipmentUser = EquipmentUser.of(entity);
 		if (equipmentUser != null)
 		{
 			var equipmentUserAsControl = equipmentUser.toControl
@@ -98,7 +103,7 @@ export class Playable implements EntityProperty<Playable>
 			controlsForTabs.push(equipmentUserAsControl);
 		}
 
-		var itemCrafter = entity.itemCrafter();
+		var itemCrafter = ItemCrafter.of(entity);
 		if (itemCrafter != null)
 		{
 			var crafterAsControl = itemCrafter.toControl
@@ -108,7 +113,7 @@ export class Playable implements EntityProperty<Playable>
 			controlsForTabs.push(crafterAsControl);
 		}
 
-		var skillLearner = entity.skillLearner();
+		var skillLearner = SkillLearner.of(entity);
 		if (skillLearner != null)
 		{
 			var skillLearnerAsControl = skillLearner.toControl
@@ -127,14 +132,14 @@ export class Playable implements EntityProperty<Playable>
 				DataBinding.fromContext
 				(
 					"Experience: "
-					+ entity.skillLearner().learningAccumulated
+					+ SkillLearner.of(entity).learningAccumulated
 				),
 				font
 			);
 			controlsForStatusFields.push(labelExperience);
 		}
 
-		var journalKeeper = entity.journalKeeper();
+		var journalKeeper = JournalKeeper.of(entity);
 		if (journalKeeper != null)
 		{
 			var journalKeeperAsControl = journalKeeper.toControl
@@ -183,7 +188,7 @@ export class Playable implements EntityProperty<Playable>
 	{
 		var world = universe.world;
 		var place = world.placeCurrent;
-		var equipmentUser = entity.equipmentUser();
+		var equipmentUser = EquipmentUser.of(entity);
 
 		var childControls = new Array<ControlBase>();
 
@@ -196,7 +201,7 @@ export class Playable implements EntityProperty<Playable>
 
 		var playerVisualBarSize = Coords.fromXY(entityDimension * 4, entityDimension);
 
-		var killable = entity.killable();
+		var killable = Killable.of(entity);
 		var playerVisualHealthBar = new VisualBar
 		(
 			null, // "H", // abbreviation
@@ -222,7 +227,7 @@ export class Playable implements EntityProperty<Playable>
 			)
 		]);
 
-		var starvable = entity.starvable();
+		var starvable = Starvable.of(entity);
 		var playerVisualSatietyBar = new VisualBar
 		(
 			null, // "F", // abbreviation
@@ -248,7 +253,7 @@ export class Playable implements EntityProperty<Playable>
 			)
 		]);
 
-		var tirable = entity.tirable();
+		var tirable = Tirable.of(entity);
 		var playerVisualStaminaBar = new VisualBar
 		(
 			null, // "S", // abbreviation
@@ -379,7 +384,7 @@ export class Playable implements EntityProperty<Playable>
 
 		// Selection.
 
-		var selector = entity.selector();
+		var selector = Selector.of(entity);
 
 		var controlSelectionSize =
 			Coords.fromXY(playerVisualBarSize.x * 1.5, margin * 3);
@@ -463,7 +468,7 @@ export class Playable implements EntityProperty<Playable>
 							equipmentUser.itemEntityInSocketWithName("Item" + c);
 						if (itemEntityEquipped != null)
 						{
-							var item = itemEntityEquipped.item();
+							var item = Item.of(itemEntityEquipped);
 							returnValue = item.defn(world).visual;
 						}
 						return returnValue;

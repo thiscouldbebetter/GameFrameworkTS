@@ -24,6 +24,11 @@ export class Controllable implements EntityProperty<Controllable>
 		this.toControl = toControl;
 	}
 
+	static of(entity: Entity): Controllable
+	{
+		return entity.propertyByName(Controllable.name) as Controllable;
+	}
+
 	// Clonable.
 	clone(): Controllable { return this; }
 	overwriteWith(other: Controllable): Controllable { return this; }

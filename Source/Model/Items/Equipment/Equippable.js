@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new Equippable(null, null);
             }
+            static of(entity) {
+                return entity.propertyByName(Equippable.name);
+            }
             equip(uwpe) {
                 if (this._equip != null) {
                     this._equip(uwpe);

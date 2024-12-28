@@ -25,6 +25,11 @@ export class Equippable implements EntityProperty<Equippable>
 		return new Equippable(null, null);
 	}
 
+	static of(entity: Entity): Equippable
+	{
+		return entity.propertyByName(Equippable.name) as Equippable;
+	}
+
 	equip(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._equip != null)

@@ -24,7 +24,7 @@ export class EquipmentSocket //
 		(
 			this.itemEntityEquipped == null
 			? "[empty]"
-			: this.itemEntityEquipped.item().toString(world)
+			: Item.of(this.itemEntityEquipped).toString(world)
 		);
 		var returnValue = this.defnName + ": " + itemEntityEquippedAsString;
 		return returnValue;

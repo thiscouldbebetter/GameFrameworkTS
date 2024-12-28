@@ -14,6 +14,11 @@ export class ItemStore implements EntityProperty<ItemStore>
 		this.statusMessage = "-";
 	}
 
+	static of(entity: Entity): ItemStore
+	{
+		return entity.propertyByName(ItemStore.name) as ItemStore;
+	}
+
 	transfer
 	(
 		world: World,
@@ -22,8 +27,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 		messagePrefix: string
 	): void
 	{
-		var itemHolderFrom = entityFrom.itemHolder();
-		var itemHolderTo = entityTo.itemHolder();
+		var itemHolderFrom = ItemHolder.of(entityFrom);
+		var itemHolderTo = ItemHolder.of(entityTo);
 
 		if (itemHolderFrom.itemSelected != null)
 		{
@@ -65,7 +70,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 		var universe = uwpe.universe;
 		var entityUsing = uwpe.entity;
 		var entityUsed = uwpe.entity2;
-		var storeAsControl = entityUsed.itemStore().toControl
+		var storeAsControl = ItemStore.of(entityUsed).toControl
 		(
 			universe,
 			universe.display.sizeInPixels,
@@ -119,8 +124,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 		);
 
 		var itemBarterer = this;
-		var itemHolderCustomer = entityCustomer.itemHolder();
-		var itemHolderStore = entityStore.itemHolder();
+		var itemHolderCustomer = ItemHolder.of(entityCustomer);
+		var itemHolderStore = ItemHolder.of(entityStore);
 
 		var world = universe.world;
 
@@ -156,7 +161,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 			(
 				itemHolderStore,
 				(c: ItemHolder) =>
-					c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
+					c.items
 			), // items
 			DataBinding.fromGet
 			(
@@ -207,7 +212,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 			(
 				itemHolderCustomer,
 				(c: ItemHolder) => 
-					c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
+					c.items
 			), // items
 			DataBinding.fromGet
 			(

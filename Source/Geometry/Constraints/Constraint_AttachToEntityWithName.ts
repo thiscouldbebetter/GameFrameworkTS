@@ -19,8 +19,8 @@ export class Constraint_AttachToEntityWithName implements Constraint
 		var targetEntity = place.entityByName(this.targetEntityName);
 		if (targetEntity != null)
 		{
-			var targetPos = targetEntity.locatable().loc.pos;
-			entity.locatable().loc.pos.overwriteWith(targetPos);
+			var targetPos = Locatable.of(targetEntity).loc.pos;
+			Locatable.of(entity).loc.pos.overwriteWith(targetPos);
 		}
 	}
 

@@ -48,7 +48,7 @@ var ThisCouldBeBetter;
                     this._sizeHalf.overwriteWith(this.size).half();
                     drawPos.add(this._sizeHalf);
                     var entity = this._entity;
-                    entity.locatable().loc.pos.overwriteWith(drawPos);
+                    GameFramework.Locatable.of(entity).loc.pos.overwriteWith(drawPos);
                     var world = universe.world;
                     var place = (world == null ? null : world.placeCurrent);
                     var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entity, null);

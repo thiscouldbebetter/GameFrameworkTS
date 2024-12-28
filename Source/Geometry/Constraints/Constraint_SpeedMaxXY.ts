@@ -14,7 +14,7 @@ export class Constraint_SpeedMaxXY implements Constraint
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var targetSpeedMax = this.targetSpeedMax;
-		var entityLoc = uwpe.entity.locatable().loc;
+		var entityLoc = Locatable.of(uwpe.entity).loc;
 		var entityVel = entityLoc.vel;
 		var zSaved = entityVel.z;
 		entityVel.z = 0;

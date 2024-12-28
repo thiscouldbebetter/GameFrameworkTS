@@ -51,6 +51,11 @@ export class Killable implements EntityProperty<Killable>
 		return new Killable(integrityMax, null, die);
 	}
 
+	static of(entity: Entity): Killable
+	{
+		return entity.propertyByName(Killable.name) as Killable;
+	}
+
 	damageApply
 	(
 		uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
@@ -73,11 +78,11 @@ export class Killable implements EntityProperty<Killable>
 			damageApplied =
 			(
 				damageToApply == null
-				? entityDamager.damager().damagePerHit.amount(randomizer)
+				? Damager.of(entityDamager).damagePerHit.amount(randomizer)
 				: damageToApply.amount(randomizer)
 			);
 
-			var killable = entityKillable.killable();
+			var killable = Killable.of(entityKillable);
 			killable.integritySubtract(damageApplied);
 		}
 		else

@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var targetFrictionCoefficient = this.target;
                 var frictionMagnitude = targetFrictionCoefficient;
-                var entityLoc = entity.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var entityVel = entityLoc.vel;
                 var entitySpeed = entityVel.magnitude();
                 if (entitySpeed <= frictionMagnitude) {

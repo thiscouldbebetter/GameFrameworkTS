@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
             draw(uwpe, display) {
                 //var wasVisible = false;
                 var entity = uwpe.entity;
-                var pos = this._drawPos.overwriteWith(entity.locatable().loc.pos).subtract(this._sizeHalf);
+                var pos = this._drawPos.overwriteWith(GameFramework.Locatable.of(entity).loc.pos).subtract(this._sizeHalf);
                 var _amountCurrent = this.amountCurrent.contextSet(entity).get();
                 var _amountMax = this.amountMax.contextSet(entity).get();
                 var fractionCurrent = _amountCurrent / _amountMax;

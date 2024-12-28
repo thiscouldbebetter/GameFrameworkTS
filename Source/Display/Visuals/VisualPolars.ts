@@ -28,7 +28,7 @@ export class VisualPolars implements Visual<VisualPolars>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		var drawableLoc = entity.locatable().loc;
+		var drawableLoc = Locatable.of(entity).loc;
 		var drawablePos = drawableLoc.pos;
 		var drawableHeadingInTurns = drawableLoc.orientation.forward.headingInTurns();
 

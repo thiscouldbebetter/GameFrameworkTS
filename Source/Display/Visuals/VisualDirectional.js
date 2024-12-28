@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
             headingInTurnsGetForEntity(entity) {
                 var returnValue = null;
                 if (this._headingInTurnsGetForEntity == null) {
-                    var loc = entity.locatable().loc;
+                    var loc = GameFramework.Locatable.of(entity).loc;
                     returnValue = loc.orientation.forward.headingInTurns();
                 }
                 else {

@@ -11,6 +11,11 @@ export class Traversable implements EntityProperty<Traversable>
 		this.isBlocking = isBlocking;
 	}
 
+	static of(entity: Entity): Traversable
+	{
+		return entity.propertyByName(Traversable.name) as Traversable;
+	}
+
 	// Clonable.
 	clone(): Traversable { return this; }
 	overwriteWith(other: Traversable): Traversable { return this; }

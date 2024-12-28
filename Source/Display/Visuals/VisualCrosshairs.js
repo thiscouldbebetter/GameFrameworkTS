@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                display.drawCrosshairs(entity.locatable().loc.pos, this.numberOfLines, this.radiusOuter, this.radiusInner, this.color, this.lineThickness);
+                display.drawCrosshairs(GameFramework.Locatable.of(entity).loc.pos, this.numberOfLines, this.radiusOuter, this.radiusInner, this.color, this.lineThickness);
             }
             // Clonable.
             clone() {

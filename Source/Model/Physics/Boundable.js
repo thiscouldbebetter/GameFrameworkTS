@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
                 var boundable = new Boundable(colliderAsBox);
                 return boundable;
             }
+            static of(entity) {
+                return entity.propertyByName(Boundable.name);
+            }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {
@@ -21,7 +24,7 @@ var ThisCouldBeBetter;
             propertyName() { return Boundable.name; }
             updateForTimerTick(uwpe) {
                 var e = uwpe.entity;
-                this.bounds.locate(e.locatable().loc);
+                this.bounds.locate(GameFramework.Locatable.of(e).loc);
             }
             // Clonable.
             clone() {

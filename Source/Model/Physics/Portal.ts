@@ -19,15 +19,20 @@ export class Portal implements EntityProperty<Portal>
 		this.velocityToApply = velocityToApply;
 	}
 
+	static of(entity: Entity): Portal
+	{
+		return entity.propertyByName(Portal.name) as Portal;
+	}
+
 	use(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var universe = uwpe.universe;
 		var entityPortal = uwpe.entity2;
 
-		var entityPortalCollidable = entityPortal.collidable();
+		var entityPortalCollidable = Collidable.of(entityPortal);
 		entityPortalCollidable.ticksUntilCanCollide = 40; // hack
 
-		var portal = entityPortal.portal();
+		var portal = Portal.of(entityPortal);
 		var venueCurrent = universe.venueCurrent();
 		var messageBoxSize = universe.display.sizeDefault();
 		var messageText =
@@ -60,19 +65,19 @@ export class Portal implements EntityProperty<Portal>
 		destinationPlace.initialize(uwpe);
 		var destinationEntity =
 			destinationPlace.entityByName(this.destinationEntityName);
-		var destinationCollidable = destinationEntity.collidable();
+		var destinationCollidable = Collidable.of(destinationEntity);
 		if (destinationCollidable != null)
 		{
 			destinationCollidable.ticksUntilCanCollide = 50; // hack
 		}
-		var destinationPos = destinationEntity.locatable().loc.pos;
+		var destinationPos = Locatable.of(destinationEntity).loc.pos;
 
-		var entityToTransportLoc = entityToTransport.locatable().loc;
+		var entityToTransportLoc = Locatable.of(entityToTransport).loc;
 		var entityToTransportPos = entityToTransportLoc.pos;
 
 		world.placeNextSet(destinationPlace);
 		entityToTransportPos.overwriteWith(destinationPos);
-		var collidable = entityToTransport.collidable();
+		var collidable = Collidable.of(entityToTransport);
 		collidable.entityAlreadyCollidedWithAddIfNotPresent(destinationEntity);
 
 		if (this.velocityToApply != null)

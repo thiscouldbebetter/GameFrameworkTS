@@ -15,8 +15,8 @@ export class Weapon
 		this.ticksToRecharge = ticksToRecharge;
 		this.entityProjectile = entityProjectile;
 
-		var speedMax = this.entityProjectile.movable().speedMax(null);
-		var ticksToLive = this.entityProjectile.ephemeral().ticksToLive;
+		var speedMax = Movable.of(this.entityProjectile).speedMax(null);
+		var ticksToLive = Ephemeral.of(this.entityProjectile).ticksToLive;
 
 		this.range = speedMax * ticksToLive;
 

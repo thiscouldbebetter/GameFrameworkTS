@@ -19,6 +19,9 @@ var ThisCouldBeBetter;
                 var returnValue = new Actor(activity);
                 return returnValue;
             }
+            static of(entity) {
+                return entity.propertyByName(Actor.name);
+            }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

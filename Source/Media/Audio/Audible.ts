@@ -11,6 +11,11 @@ export class Audible implements EntityProperty<Audible>
 		this.hasBeenHeard = false;
 	}
 
+	static of(entity: Entity): Audible
+	{
+		return entity.propertyByName(Audible.name) as Audible;
+	}
+
 	// Cloneable
 
 	clone(): Audible

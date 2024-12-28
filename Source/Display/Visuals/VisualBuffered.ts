@@ -28,7 +28,7 @@ export class VisualBuffered implements Visual<VisualBuffered>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var entity = uwpe.entity;
-		var drawPos = entity.locatable().loc.pos;
+		var drawPos = Locatable.of(entity).loc.pos;
 		this._posSaved.overwriteWith(drawPos);
 
 		drawPos.overwriteWith(this.sizeHalf);

@@ -10,8 +10,8 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 var targetEntity = uwpe.place.entityById(this.targetEntityId);
                 if (targetEntity != null) {
-                    var targetPos = targetEntity.locatable().loc.pos;
-                    uwpe.entity.locatable().loc.pos.overwriteWith(targetPos);
+                    var targetPos = GameFramework.Locatable.of(targetEntity).loc.pos;
+                    GameFramework.Locatable.of(uwpe.entity).loc.pos.overwriteWith(targetPos);
                 }
             }
             // Clonable.

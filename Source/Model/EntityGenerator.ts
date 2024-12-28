@@ -77,7 +77,7 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 				this.ticksUntilNextGeneration = null;
 
 				var entityForGenerator = uwpe.entity;
-				var generatorLocatable = entityForGenerator.locatable();
+				var generatorLocatable = Locatable.of(entityForGenerator);
 
 				var entitiesToGenerateCount = Math.round
 				(
@@ -87,7 +87,7 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 				for (var i = 0; i < entitiesToGenerateCount; i++)
 				{
 					var entityGenerated = this.entityToGenerate.clone();
-					var entityGeneratedLoc = entityGenerated.locatable().loc;
+					var entityGeneratedLoc = Locatable.of(entityGenerated).loc;
 
 					if (generatorLocatable == null)
 					{

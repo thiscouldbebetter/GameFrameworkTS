@@ -41,7 +41,7 @@ export class VisualDirectional implements Visual<VisualDirectional>
 
 		if (this._headingInTurnsGetForEntity == null)
 		{
-			var loc = entity.locatable().loc;
+			var loc = Locatable.of(entity).loc;
 			returnValue = loc.orientation.forward.headingInTurns();
 		}
 		else

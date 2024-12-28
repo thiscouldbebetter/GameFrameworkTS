@@ -166,8 +166,8 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             collisionOfEntities(entityColliding, entityCollidedWith, collisionOut) {
-                var collider0 = entityColliding.collidable().collider;
-                var collider1 = entityCollidedWith.collidable().collider;
+                var collider0 = GameFramework.Collidable.of(entityColliding).collider;
+                var collider1 = GameFramework.Collidable.of(entityCollidedWith).collider;
                 collisionOut = this.collisionOfColliders(collider0, collider1, collisionOut);
                 collisionOut.entityCollidingAdd(entityColliding);
                 collisionOut.entityCollidingAdd(entityCollidedWith);
@@ -230,8 +230,8 @@ var ThisCouldBeBetter;
             }
             doEntitiesCollide(entity0, entity1) {
                 var doCollidersCollide = false;
-                var collidable0 = entity0.collidable();
-                var collidable1 = entity1.collidable();
+                var collidable0 = GameFramework.Collidable.of(entity0);
+                var collidable1 = GameFramework.Collidable.of(entity1);
                 var collider0 = collidable0.collider;
                 var collider1 = collidable1.collider;
                 doCollidersCollide = this.doCollidersCollide(collider0, collider1);
@@ -312,10 +312,10 @@ var ThisCouldBeBetter;
             // shapes
             // collideEntitiesXAndY
             collideEntitiesBackUp(entity0, entity1) {
-                var collidable0 = entity0.collidable();
-                var collidable1 = entity1.collidable();
-                var entity0Loc = entity0.locatable().loc;
-                var entity1Loc = entity1.locatable().loc;
+                var collidable0 = GameFramework.Collidable.of(entity0);
+                var collidable1 = GameFramework.Collidable.of(entity1);
+                var entity0Loc = GameFramework.Locatable.of(entity0).loc;
+                var entity1Loc = GameFramework.Locatable.of(entity1).loc;
                 var pos0 = entity0Loc.pos;
                 var pos1 = entity1Loc.pos;
                 var vel0 = entity0Loc.vel;
@@ -336,10 +336,10 @@ var ThisCouldBeBetter;
                 }
             }
             collideEntitiesBackUpDistance(entity0, entity1, distanceToBackUp) {
-                var collidable0 = entity0.collidable();
-                var collidable1 = entity1.collidable();
-                var entity0Loc = entity0.locatable().loc;
-                var entity1Loc = entity1.locatable().loc;
+                var collidable0 = GameFramework.Collidable.of(entity0);
+                var collidable1 = GameFramework.Collidable.of(entity1);
+                var entity0Loc = GameFramework.Locatable.of(entity0).loc;
+                var entity1Loc = GameFramework.Locatable.of(entity1).loc;
                 var pos0 = entity0Loc.pos;
                 var pos1 = entity1Loc.pos;
                 var vel0 = entity0Loc.vel;
@@ -360,16 +360,16 @@ var ThisCouldBeBetter;
             }
             collideEntitiesBlockOrBounce(entity0, entity1, coefficientOfRestitution) {
                 var collisionPos = this.collisionOfEntities(entity0, entity1, this._collision).pos;
-                var collidable0 = entity0.collidable();
-                var collidable1 = entity1.collidable();
+                var collidable0 = GameFramework.Collidable.of(entity0);
+                var collidable1 = GameFramework.Collidable.of(entity1);
                 var collider0 = collidable0.collider;
                 var collider1 = collidable1.collider;
                 var normal0 = collider0.normalAtPos(collisionPos, GameFramework.Coords.create() // normalOut
                 );
                 var normal1 = collider1.normalAtPos(collisionPos, GameFramework.Coords.create() // normalOut
                 );
-                var entity0Loc = entity0.locatable().loc;
-                var entity1Loc = entity1.locatable().loc;
+                var entity0Loc = GameFramework.Locatable.of(entity0).loc;
+                var entity1Loc = GameFramework.Locatable.of(entity1).loc;
                 var vel0 = entity0Loc.vel;
                 var vel1 = entity1Loc.vel;
                 var vel0DotNormal1 = vel0.dotProduct(normal1);
@@ -387,9 +387,9 @@ var ThisCouldBeBetter;
                 }
             }
             collideEntitiesSeparate(entity0, entity1) {
-                var entity0Loc = entity0.locatable().loc;
+                var entity0Loc = GameFramework.Locatable.of(entity0).loc;
                 var entity0Pos = entity0Loc.pos;
-                var collidable1 = entity1.collidable();
+                var collidable1 = GameFramework.Collidable.of(entity1);
                 var collider1 = collidable1.collider;
                 var collider1Normal = collider1.normalAtPos(entity0Pos, GameFramework.Coords.create() // normalOut
                 );
@@ -398,7 +398,7 @@ var ThisCouldBeBetter;
                 while (this.doEntitiesCollide(entity0, entity1) && distanceMovedSoFar < distanceToMoveMax) {
                     distanceMovedSoFar++;
                     entity0Pos.add(collider1Normal);
-                    var collidable0 = entity0.collidable();
+                    var collidable0 = GameFramework.Collidable.of(entity0);
                     collidable0.colliderLocateForEntity(entity0);
                 }
             }

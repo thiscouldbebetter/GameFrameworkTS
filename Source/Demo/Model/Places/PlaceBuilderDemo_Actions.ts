@@ -35,13 +35,13 @@ class PlaceBuilderDemo_Actions
 				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
 					var actor = uwpe.entity;
-					var equipmentUser = actor.equipmentUser();
+					var equipmentUser = EquipmentUser.of(actor);
 					var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
 					var actorHasWieldableEquipped = (entityWieldableEquipped != null);
 
 					if (actorHasWieldableEquipped)
 					{
-						var deviceWieldable = entityWieldableEquipped.device();
+						var deviceWieldable = Device.of(entityWieldableEquipped);
 						uwpe.entity2Set(entityWieldableEquipped);
 						deviceWieldable.use(uwpe);
 					}
@@ -54,11 +54,11 @@ class PlaceBuilderDemo_Actions
 				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
 					var actor = uwpe.entity;
-					var learner = actor.skillLearner();
+					var learner = SkillLearner.of(actor);
 					var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
 					if (knowsHowToHide)
 					{
-						var perceptible = actor.perceptible();
+						var perceptible = Perceptible.of(actor);
 						var isAlreadyHiding = perceptible.isHiding;
 						if (isAlreadyHiding)
 						{
@@ -78,11 +78,11 @@ class PlaceBuilderDemo_Actions
 				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
 					var actor = uwpe.entity;
-					var learner = actor.skillLearner();
+					var learner = SkillLearner.of(actor);
 					var canJump = learner.skillsKnownNames.indexOf("Jumping") >= 0;
 					if (canJump)
 					{
-						var loc = actor.locatable().loc;
+						var loc = Locatable.of(actor).loc;
 						var isNotAlreadyJumping = (loc.pos.z >= 0);
 						if (isNotAlreadyJumping)
 						{
@@ -105,7 +105,7 @@ class PlaceBuilderDemo_Actions
 					var place = uwpe.place;
 					var entityActor = uwpe.entity;
 
-					var itemHolder = entityActor.itemHolder();
+					var itemHolder = ItemHolder.of(entityActor);
 					var itemEntityToPickUp = itemHolder.itemEntityFindClosest
 					(
 						uwpe
@@ -118,12 +118,12 @@ class PlaceBuilderDemo_Actions
 
 					var canPickUp = itemHolder.itemCanPickUp
 					(
-						universe, world, place, itemEntityToPickUp.item()
+						universe, world, place, Item.of(itemEntityToPickUp)
 					);
 
 					if (canPickUp)
 					{
-						var actor = entityActor.actor();
+						var actor = Actor.of(entityActor);
 						var activity = actor.activity;
 						activity.targetEntitySetByName
 						(
@@ -140,7 +140,7 @@ class PlaceBuilderDemo_Actions
 							(
 								message,
 								this.font,
-								entityActor.locatable().loc.pos,
+								Locatable.of(entityActor).loc.pos,
 								Color.Instances().Red
 							)
 						);
@@ -154,12 +154,12 @@ class PlaceBuilderDemo_Actions
 				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
 					var actor = uwpe.entity;
-					var learner = actor.skillLearner();
+					var learner = SkillLearner.of(actor);
 					var knowsHowToRun = learner.skillsKnownNames.indexOf("Running") >= 0;
 					// knowsHowToRun = true; // debug
 					if (knowsHowToRun)
 					{
-						var loc = actor.locatable().loc;
+						var loc = Locatable.of(actor).loc;
 						var isOnGround = (loc.pos.z >= 0);
 						if (isOnGround)
 						{
@@ -181,12 +181,12 @@ class PlaceBuilderDemo_Actions
 				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
 					var actor = uwpe.entity;
-					// var learner = actor.skillLearner();
+					// var learner = SkillLearner.of(actor);
 					// var knowsHowToSneak = learner.skillsKnownNames.indexOf("Sneaking") >= 0;
 					var knowsHowToSneak = true; // debug
 					if (knowsHowToSneak)
 					{
-						var loc = actor.locatable().loc;
+						var loc = Locatable.of(actor).loc;
 						var isOnGround = (loc.pos.z >= 0);
 						if (isOnGround)
 						{
@@ -206,18 +206,18 @@ class PlaceBuilderDemo_Actions
 					var actor = uwpe.entity;
 					var place = uwpe.place as PlaceBase;
 					var entityUsablesInPlace = place.usables();
-					var actorPos = actor.locatable().loc.pos;
+					var actorPos = Locatable.of(actor).loc.pos;
 					var radiusOfReach = 20; // todo
 					var entityUsablesWithinReach = entityUsablesInPlace.filter
 					(
 						(x: Entity) =>
-							x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach
+							Locatable.of(x).loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach
 					);
 					if (entityUsablesWithinReach.length > 0)
 					{
 						var entityToUse = entityUsablesWithinReach[0];
 						uwpe.entity2Set(entityToUse);
-						entityToUse.usable().use(uwpe);
+						Usable.of(entityToUse).use(uwpe);
 					}
 				}
 			),
@@ -228,19 +228,19 @@ class PlaceBuilderDemo_Actions
 				(uwpe: UniverseWorldPlaceEntities) => // perform
 				{
 					var actor = uwpe.entity;
-					actor.actor().activity.defnName = "Wait";
+					Actor.of(actor).activity.defnName = "Wait";
 				}
 			),
-			new Action("Item0", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 0)),
-			new Action("Item1", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 1)),
-			new Action("Item2", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 2)),
-			new Action("Item3", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 3)),
-			new Action("Item4", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 4)),
-			new Action("Item5", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 5)),
-			new Action("Item6", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 6)),
-			new Action("Item7", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 7)),
-			new Action("Item8", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 8)),
-			new Action("Item9", (uwpe: UniverseWorldPlaceEntities) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 9)),
+			new Action("Item0", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 0)),
+			new Action("Item1", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 1)),
+			new Action("Item2", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 2)),
+			new Action("Item3", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 3)),
+			new Action("Item4", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 4)),
+			new Action("Item5", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 5)),
+			new Action("Item6", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 6)),
+			new Action("Item7", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 7)),
+			new Action("Item8", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 8)),
+			new Action("Item9", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 9)),
 		];
 
 		return actions;

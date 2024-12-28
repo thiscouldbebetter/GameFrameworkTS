@@ -6,13 +6,18 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 {
 	statusMessage: string;
 
+	static of(entity: Entity): ItemContainer
+	{
+		return entity.propertyByName(ItemContainer.name) as ItemContainer;
+	}
+
 	transfer
 	(
 		world: World, entityFrom: Entity, entityTo: Entity, messagePrefix: string
 	): void
 	{
-		var itemHolderFrom = entityFrom.itemHolder();
-		var itemHolderTo = entityTo.itemHolder();
+		var itemHolderFrom = ItemHolder.of(entityFrom);
+		var itemHolderTo = ItemHolder.of(entityTo);
 
 		if (itemHolderFrom.itemSelected == null)
 		{
@@ -34,7 +39,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 				messagePrefix
 				+ " " + itemToTransfer.defnName + ".";
 
-			var equipmentUser = entityFrom.equipmentUser();
+			var equipmentUser = EquipmentUser.of(entityFrom);
 			if (equipmentUser != null)
 			{
 				var uwpe = new UniverseWorldPlaceEntities
@@ -89,8 +94,8 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 		);
 
 		var itemContainer = this;
-		var itemHolderGetterPutter = entityGetterPutter.itemHolder();
-		var itemHolderContainer = entityContainer.itemHolder();
+		var itemHolderGetterPutter = ItemHolder.of(entityGetterPutter);
+		var itemHolderContainer = ItemHolder.of(entityContainer);
 
 		var world = universe.world;
 

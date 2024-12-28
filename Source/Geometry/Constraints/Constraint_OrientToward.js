@@ -11,12 +11,12 @@ var ThisCouldBeBetter;
                 var place = uwpe.place;
                 var entity = uwpe.entity;
                 var targetEntityName = this.targetEntityName;
-                var constrainableLoc = entity.locatable().loc;
+                var constrainableLoc = GameFramework.Locatable.of(entity).loc;
                 var constrainablePos = constrainableLoc.pos;
                 var constrainableOrientation = constrainableLoc.orientation;
                 var constrainableForward = constrainableOrientation.forward;
                 var target = place.entityByName(targetEntityName);
-                var targetPos = target.locatable().loc.pos;
+                var targetPos = GameFramework.Locatable.of(target).loc.pos;
                 constrainableForward.overwriteWith(targetPos).subtract(constrainablePos).normalize();
                 constrainableOrientation.forwardSet(constrainableForward);
             }

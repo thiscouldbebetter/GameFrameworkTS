@@ -27,6 +27,11 @@ export class Talker implements EntityProperty<Talker>
 		return new Talker(conversationDefnName, null, null);
 	}
 
+	static of(entity: Entity): Talker
+	{
+		return entity.propertyByName(Talker.name) as Talker;
+	}
+
 	conversationRunSet(value: ConversationRun): Talker
 	{
 		this.conversationRun = value;

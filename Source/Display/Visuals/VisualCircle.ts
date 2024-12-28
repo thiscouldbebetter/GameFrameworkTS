@@ -52,7 +52,7 @@ export class VisualCircle implements Visual<VisualCircle>
 		var entity = uwpe.entity;
 		display.drawCircle
 		(
-			entity.locatable().loc.pos,
+			Locatable.of(entity).loc.pos,
 			this.radius,
 			this.colorFill,
 			this.colorBorder,

@@ -20,6 +20,9 @@ var ThisCouldBeBetter;
             static fromIntegrityMaxAndDie(integrityMax, die) {
                 return new Killable(integrityMax, null, die);
             }
+            static of(entity) {
+                return entity.propertyByName(Killable.name);
+            }
             damageApply(uwpe, damageToApply) {
                 if (damageToApply == null) {
                     return 0;
@@ -32,9 +35,9 @@ var ThisCouldBeBetter;
                     var randomizer = universe.randomizer;
                     damageApplied =
                         (damageToApply == null
-                            ? entityDamager.damager().damagePerHit.amount(randomizer)
+                            ? GameFramework.Damager.of(entityDamager).damagePerHit.amount(randomizer)
                             : damageToApply.amount(randomizer));
-                    var killable = entityKillable.killable();
+                    var killable = Killable.of(entityKillable);
                     killable.integritySubtract(damageApplied);
                 }
                 else {

@@ -332,7 +332,7 @@ export class VisualBuilder
 		var selectChildNames = (uwpe: UniverseWorldPlaceEntities, d: Display) =>
 		{
 			var e = uwpe.entity;
-			var entityLoc = e.locatable().loc;
+			var entityLoc = Locatable.of(e).loc;
 			var entityForward = entityLoc.orientation.forward;
 			var entityForwardInTurns = entityForward.headingInTurns();
 			var childNameToSelect;
@@ -425,14 +425,14 @@ export class VisualBuilder
 				var w = uwpe.world;
 				var e = uwpe.entity;
 
-				var equipmentUser = e.equipmentUser();
+				var equipmentUser = EquipmentUser.of(e);
 				var entityWieldableEquipped =
 					equipmentUser.itemEntityInSocketWithName("Wielding");
-				var itemDrawable = entityWieldableEquipped.drawable();
+				var itemDrawable = Drawable.of(entityWieldableEquipped);
 				var itemVisual =
 					(
 						itemDrawable == null
-						? entityWieldableEquipped.item().defn(w).visual
+						? Item.of(entityWieldableEquipped).defn(w).visual
 						: itemDrawable.visual
 					);
 				return itemVisual;
@@ -563,7 +563,7 @@ export class VisualBuilder
 			{
 				var e = uwpe.entity;
 				var itemEntityWielded =
-					e.equipmentUser().itemEntityInSocketWithName("Wielding");
+					EquipmentUser.of(e).itemEntityInSocketWithName("Wielding");
 				var returnValue =
 					(itemEntityWielded == null ? "Hidden" : "Visible");
 				return [ returnValue ];

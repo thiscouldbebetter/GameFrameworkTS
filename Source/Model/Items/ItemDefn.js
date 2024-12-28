@@ -61,7 +61,7 @@ var ThisCouldBeBetter;
             }
             use(uwpe) {
                 if (this._use == null) {
-                    var itemHolder = uwpe.entity.itemHolder();
+                    var itemHolder = GameFramework.ItemHolder.of(uwpe.entity);
                     itemHolder.statusMessage = "Can't use " + this.appearance + ".";
                 }
                 else {

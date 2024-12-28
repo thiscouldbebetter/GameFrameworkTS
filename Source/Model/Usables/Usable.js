@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this._use = use;
                 this.isDisabled = false;
             }
+            static of(entity) {
+                return entity.propertyByName(Usable.name);
+            }
             use(uwpe) {
                 this._use(uwpe);
             }

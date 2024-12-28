@@ -7,8 +7,8 @@ var ThisCouldBeBetter;
             constructor(ticksToRecharge, entityProjectile) {
                 this.ticksToRecharge = ticksToRecharge;
                 this.entityProjectile = entityProjectile;
-                var speedMax = this.entityProjectile.movable().speedMax(null);
-                var ticksToLive = this.entityProjectile.ephemeral().ticksToLive;
+                var speedMax = GameFramework.Movable.of(this.entityProjectile).speedMax(null);
+                var ticksToLive = GameFramework.Ephemeral.of(this.entityProjectile).ticksToLive;
                 this.range = speedMax * ticksToLive;
                 this.tickLastFired = 0 - this.ticksToRecharge;
             }

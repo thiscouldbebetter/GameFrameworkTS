@@ -14,7 +14,7 @@ export class Constraint_StopBelowSpeedMin implements Constraint
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var targetSpeedMin = this.target;
-		var entityLoc = uwpe.entity.locatable().loc;
+		var entityLoc = Locatable.of(uwpe.entity).loc;
 		var entityVel = entityLoc.vel;
 		var speed = entityVel.magnitude();
 		if (speed < targetSpeedMin)

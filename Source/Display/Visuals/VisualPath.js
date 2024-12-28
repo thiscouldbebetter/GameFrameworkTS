@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawablePos = entity.locatable().loc.pos;
+                var drawablePos = GameFramework.Locatable.of(entity).loc.pos;
                 this.transformTranslate.displacement.overwriteWith(drawablePos);
                 this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
                 GameFramework.Transforms.applyTransformToCoordsMany(this.transformTranslate, this.verticesAsPathTransformed.points);

@@ -34,6 +34,11 @@ export class Phased implements EntityProperty<Phased>
 		return returnValue;
 	}
 
+	static of(entity: Entity): Phased
+	{
+		return entity.propertyByName(Phased.name) as Phased;
+	}
+
 	phaseByName(phaseName: string): Phase
 	{
 		return this.phasesByName.get(phaseName);

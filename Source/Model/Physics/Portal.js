@@ -9,12 +9,15 @@ var ThisCouldBeBetter;
                 this.destinationEntityName = destinationEntityName;
                 this.velocityToApply = velocityToApply;
             }
+            static of(entity) {
+                return entity.propertyByName(Portal.name);
+            }
             use(uwpe) {
                 var universe = uwpe.universe;
                 var entityPortal = uwpe.entity2;
-                var entityPortalCollidable = entityPortal.collidable();
+                var entityPortalCollidable = GameFramework.Collidable.of(entityPortal);
                 entityPortalCollidable.ticksUntilCanCollide = 40; // hack
-                var portal = entityPortal.portal();
+                var portal = Portal.of(entityPortal);
                 var venueCurrent = universe.venueCurrent();
                 var messageBoxSize = universe.display.sizeDefault();
                 var messageText = GameFramework.DataBinding.fromContext("Portal to: " + portal.destinationPlaceName);
@@ -34,16 +37,16 @@ var ThisCouldBeBetter;
                 var destinationPlace = world.placeGetByName(this.destinationPlaceName);
                 destinationPlace.initialize(uwpe);
                 var destinationEntity = destinationPlace.entityByName(this.destinationEntityName);
-                var destinationCollidable = destinationEntity.collidable();
+                var destinationCollidable = GameFramework.Collidable.of(destinationEntity);
                 if (destinationCollidable != null) {
                     destinationCollidable.ticksUntilCanCollide = 50; // hack
                 }
-                var destinationPos = destinationEntity.locatable().loc.pos;
-                var entityToTransportLoc = entityToTransport.locatable().loc;
+                var destinationPos = GameFramework.Locatable.of(destinationEntity).loc.pos;
+                var entityToTransportLoc = GameFramework.Locatable.of(entityToTransport).loc;
                 var entityToTransportPos = entityToTransportLoc.pos;
                 world.placeNextSet(destinationPlace);
                 entityToTransportPos.overwriteWith(destinationPos);
-                var collidable = entityToTransport.collidable();
+                var collidable = GameFramework.Collidable.of(entityToTransport);
                 collidable.entityAlreadyCollidedWithAddIfNotPresent(destinationEntity);
                 if (this.velocityToApply != null) {
                     entityToTransportLoc.vel.overwriteWith(this.velocityToApply);

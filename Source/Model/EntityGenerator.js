@@ -37,11 +37,11 @@ var ThisCouldBeBetter;
                     else {
                         this.ticksUntilNextGeneration = null;
                         var entityForGenerator = uwpe.entity;
-                        var generatorLocatable = entityForGenerator.locatable();
+                        var generatorLocatable = GameFramework.Locatable.of(entityForGenerator);
                         var entitiesToGenerateCount = Math.round(this.entitiesPerGenerationAsRange.random(randomizer));
                         for (var i = 0; i < entitiesToGenerateCount; i++) {
                             var entityGenerated = this.entityToGenerate.clone();
-                            var entityGeneratedLoc = entityGenerated.locatable().loc;
+                            var entityGeneratedLoc = GameFramework.Locatable.of(entityGenerated).loc;
                             if (generatorLocatable == null) {
                                 var placeSize = place.size();
                                 entityGeneratedLoc.pos.randomize(randomizer).multiply(placeSize);

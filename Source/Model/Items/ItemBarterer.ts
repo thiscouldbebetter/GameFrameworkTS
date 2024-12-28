@@ -63,11 +63,11 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 	{
 		this.itemHolderCustomerOffer.itemsAllTransferTo
 		(
-			entityCustomer.itemHolder()
+			ItemHolder.of(entityCustomer)
 		);
 		this.itemHolderStoreOffer.itemsAllTransferTo
 		(
-			entityStore.itemHolder()
+			ItemHolder.of(entityStore)
 		);
 	}
 
@@ -78,18 +78,18 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 
 		this.itemHolderCustomerOffer.itemsAllTransferTo
 		(
-			entityStore.itemHolder()
+			ItemHolder.of(entityStore)
 		);
 		this.itemHolderStoreOffer.itemsAllTransferTo
 		(
-			entityCustomer.itemHolder()
+			ItemHolder.of(entityCustomer)
 		);
 
 		var entities = [ entityCustomer, entityStore ];
 		for (var i = 0; i < entities.length; i++)
 		{
 			var entity = entities[i];
-			var entityEquipmentUser = entity.equipmentUser();
+			var entityEquipmentUser = EquipmentUser.of(entity);
 			if (entityEquipmentUser != null)
 			{
 				entityEquipmentUser.unequipItemsNoLongerHeld
@@ -138,8 +138,8 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 		var listSize = Coords.fromXY((size.x - margin * 3) / 2, 80);
 
 		var itemBarterer = this;
-		var itemHolderCustomer = entityCustomer.itemHolder();
-		var itemHolderStore = entityStore.itemHolder();
+		var itemHolderCustomer = ItemHolder.of(entityCustomer);
+		var itemHolderStore = ItemHolder.of(entityStore);
 
 		var world = universe.world;
 
@@ -262,7 +262,7 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					(
 						itemHolderStore,
 						(c: ItemHolder) =>
-							c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
+							c.items
 					), // items
 					DataBinding.fromGet
 					(

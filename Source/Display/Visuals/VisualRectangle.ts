@@ -68,7 +68,7 @@ export class VisualRectangle implements Visual<VisualRectangle>
 		var entity = uwpe.entity;
 		var drawPos = this._drawPos.overwriteWith
 		(
-			entity.locatable().loc.pos
+			Locatable.of(entity).loc.pos
 		)
 
 		if (this.isCentered)

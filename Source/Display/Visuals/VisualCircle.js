@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                display.drawCircle(entity.locatable().loc.pos, this.radius, this.colorFill, this.colorBorder, this.borderThickness);
+                display.drawCircle(GameFramework.Locatable.of(entity).loc.pos, this.radius, this.colorFill, this.colorBorder, this.borderThickness);
             }
             // Clonable.
             clone() {

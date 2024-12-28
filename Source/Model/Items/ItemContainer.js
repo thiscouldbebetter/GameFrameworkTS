@@ -4,9 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ItemContainer {
+            static of(entity) {
+                return entity.propertyByName(ItemContainer.name);
+            }
             transfer(world, entityFrom, entityTo, messagePrefix) {
-                var itemHolderFrom = entityFrom.itemHolder();
-                var itemHolderTo = entityTo.itemHolder();
+                var itemHolderFrom = GameFramework.ItemHolder.of(entityFrom);
+                var itemHolderTo = GameFramework.ItemHolder.of(entityTo);
                 if (itemHolderFrom.itemSelected == null) {
                     this.statusMessage = "Select and click buttons transfer items.";
                 }
@@ -19,7 +22,7 @@ var ThisCouldBeBetter;
                     this.statusMessage =
                         messagePrefix
                             + " " + itemToTransfer.defnName + ".";
-                    var equipmentUser = entityFrom.equipmentUser();
+                    var equipmentUser = GameFramework.EquipmentUser.of(entityFrom);
                     if (equipmentUser != null) {
                         var uwpe = new GameFramework.UniverseWorldPlaceEntities(null, world, null, entityFrom, entityTo);
                         equipmentUser.unequipItemsNoLongerHeld(uwpe);
@@ -47,8 +50,8 @@ var ThisCouldBeBetter;
                 var buttonSize = GameFramework.Coords.fromXY(2, 2).multiplyScalar(fontHeight);
                 var listSize = GameFramework.Coords.fromXY((size.x - margin * 4 - buttonSize.x) / 2, size.y - margin * 4 - fontHeight * 2);
                 var itemContainer = this;
-                var itemHolderGetterPutter = entityGetterPutter.itemHolder();
-                var itemHolderContainer = entityContainer.itemHolder();
+                var itemHolderGetterPutter = GameFramework.ItemHolder.of(entityGetterPutter);
+                var itemHolderContainer = GameFramework.ItemHolder.of(entityContainer);
                 var world = universe.world;
                 var back = () => universe.venueTransitionTo(venuePrev);
                 var get = () => {

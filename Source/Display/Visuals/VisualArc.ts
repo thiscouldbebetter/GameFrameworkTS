@@ -36,7 +36,7 @@ export class VisualArc implements Visual<VisualArc>
 	{
 		var entity = uwpe.entity;
 
-		var drawableLoc = entity.locatable().loc;
+		var drawableLoc = Locatable.of(entity).loc;
 		var drawPos = this._drawPos.overwriteWith
 		(
 			drawableLoc.pos

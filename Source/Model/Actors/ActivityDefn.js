@@ -29,9 +29,9 @@ var ThisCouldBeBetter;
                 (uwpe) => {
                     var w = uwpe.world;
                     var e = uwpe.entity;
-                    var activity = e.actor().activity;
+                    var activity = GameFramework.Actor.of(e).activity;
                     var targetEntity = activity.targetEntity();
-                    var childDefnNames = targetEntity.namable().name.split(";");
+                    var childDefnNames = GameFramework.NamableProperty.of(targetEntity).name.split(";");
                     for (var i = 0; i < childDefnNames.length; i++) {
                         var childDefnName = childDefnNames[i];
                         var childDefn = w.defn.activityDefnByName(childDefnName);

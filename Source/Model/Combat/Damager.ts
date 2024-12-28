@@ -34,6 +34,11 @@ export class Damager implements EntityProperty<Damager>
 		return new Damager(damagePerHit, null, null);
 	}
 
+	static of(entity: Entity): Damager
+	{
+		return entity.propertyByName(Damager.name) as Damager;
+	}
+
 	damageToApply(universe: Universe): Damage
 	{
 		var returnDamage: Damage = null;

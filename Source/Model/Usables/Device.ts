@@ -62,6 +62,11 @@ export class Device implements EntityProperty<Device>
 		);
 	}
 
+	static of(entity: Entity): Device
+	{
+		return entity.propertyByName(Device.name) as Device;
+	}
+
 	canUse(uwpe: UniverseWorldPlaceEntities): boolean
 	{
 		return this._canUse == null ? true : this._canUse(uwpe);

@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.sightThreshold = sightThreshold;
                 this.hearingThreshold = hearingThreshold;
             }
+            static of(entity) {
+                return entity.propertyByName(Perceptor.name);
+            }
             // Clonable.
             clone() { return this; }
             overwriteWith(other) { return this; }

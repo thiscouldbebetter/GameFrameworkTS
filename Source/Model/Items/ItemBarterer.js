@@ -31,18 +31,18 @@ var ThisCouldBeBetter;
                 this.patience = GameFramework.NumberHelper.trimToRangeMax(this.patience + patienceToAdd, this.patienceMax);
             }
             reset(entityCustomer, entityStore) {
-                this.itemHolderCustomerOffer.itemsAllTransferTo(entityCustomer.itemHolder());
-                this.itemHolderStoreOffer.itemsAllTransferTo(entityStore.itemHolder());
+                this.itemHolderCustomerOffer.itemsAllTransferTo(GameFramework.ItemHolder.of(entityCustomer));
+                this.itemHolderStoreOffer.itemsAllTransferTo(GameFramework.ItemHolder.of(entityStore));
             }
             trade(uwpe) {
                 var entityStore = uwpe.entity;
                 var entityCustomer = uwpe.entity;
-                this.itemHolderCustomerOffer.itemsAllTransferTo(entityStore.itemHolder());
-                this.itemHolderStoreOffer.itemsAllTransferTo(entityCustomer.itemHolder());
+                this.itemHolderCustomerOffer.itemsAllTransferTo(GameFramework.ItemHolder.of(entityStore));
+                this.itemHolderStoreOffer.itemsAllTransferTo(GameFramework.ItemHolder.of(entityCustomer));
                 var entities = [entityCustomer, entityStore];
                 for (var i = 0; i < entities.length; i++) {
                     var entity = entities[i];
-                    var entityEquipmentUser = entity.equipmentUser();
+                    var entityEquipmentUser = GameFramework.EquipmentUser.of(entity);
                     if (entityEquipmentUser != null) {
                         entityEquipmentUser.unequipItemsNoLongerHeld(uwpe);
                     }
@@ -68,8 +68,8 @@ var ThisCouldBeBetter;
                 var buttonSizeSmall = GameFramework.Coords.fromXY(2, 2).multiplyScalar(fontHeight);
                 var listSize = GameFramework.Coords.fromXY((size.x - margin * 3) / 2, 80);
                 var itemBarterer = this;
-                var itemHolderCustomer = entityCustomer.itemHolder();
-                var itemHolderStore = entityStore.itemHolder();
+                var itemHolderCustomer = GameFramework.ItemHolder.of(entityCustomer);
+                var itemHolderStore = GameFramework.ItemHolder.of(entityStore);
                 var world = universe.world;
                 var back = () => {
                     itemBarterer.reset(entityCustomer, entityStore);
@@ -135,8 +135,7 @@ var ThisCouldBeBetter;
                     false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityStore.name + ":"), font),
                     new GameFramework.ControlList("listStoreItems", GameFramework.Coords.fromXY(margin, margin + fontHeight), // pos
-                    listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderStore, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
-                    ), // items
+                    listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderStore, (c) => c.items), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
                     font, new GameFramework.DataBinding(itemHolderStore, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue

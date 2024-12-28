@@ -37,7 +37,7 @@ export class VisualMesh implements Visual<VisualMesh>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		display.drawMeshWithOrientation(this.mesh, entity.locatable().loc.orientation);
+		display.drawMeshWithOrientation(this.mesh, Locatable.of(entity).loc.orientation);
 	}
 }
 

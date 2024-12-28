@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
                 returnValue.phaseCurrentSetByName(phaseStartName);
                 return returnValue;
             }
+            static of(entity) {
+                return entity.propertyByName(Phased.name);
+            }
             phaseByName(phaseName) {
                 return this.phasesByName.get(phaseName);
             }

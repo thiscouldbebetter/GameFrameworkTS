@@ -54,7 +54,7 @@ class PlaceBuilderDemo_Movers {
             var universe = uwpe.universe;
             var place = uwpe.place;
             var entityActor = uwpe.entity;
-            var activity = entityActor.actor().activity;
+            var activity = Actor.of(entityActor).activity;
             var targetEntity = activity.targetEntity();
             if (targetEntity == null) {
                 var moversInPlace = place.movables();
@@ -66,13 +66,13 @@ class PlaceBuilderDemo_Movers {
                         Coords.create().randomize(randomizer).multiply(placeSize);
                 }
                 else {
-                    targetPos = grazersInPlace[0].locatable().loc.pos;
+                    targetPos = Locatable.of(grazersInPlace[0]).loc.pos;
                 }
                 targetEntity = Locatable.fromPos(targetPos).toEntity();
                 activity.targetEntitySet(targetEntity);
             }
-            var targetPos = targetEntity.locatable().loc.pos;
-            var actorLoc = entityActor.locatable().loc;
+            var targetPos = Locatable.of(targetEntity).loc.pos;
+            var actorLoc = Locatable.of(entityActor).loc;
             var actorPos = actorLoc.pos;
             var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
             if (distanceToTarget >= 2) {
@@ -84,9 +84,9 @@ class PlaceBuilderDemo_Movers {
                 var moversInPlace = place.movables();
                 var grazersInPlace = moversInPlace.filter((x) => x.name.startsWith("Grazer"));
                 var reachDistance = 20; // todo
-                var grazerInReach = grazersInPlace.filter((x) => entityActor.locatable().distanceFromEntity(x) < reachDistance)[0];
+                var grazerInReach = grazersInPlace.filter((x) => Locatable.of(entityActor).distanceFromEntity(x) < reachDistance)[0];
                 if (grazerInReach != null) {
-                    grazerInReach.killable().kill();
+                    Killable.of(grazerInReach).kill();
                 }
                 activity.targetEntitySet(null);
             }
@@ -97,7 +97,7 @@ class PlaceBuilderDemo_Movers {
         var carnivoreDie = (uwpe) => // die
          {
             var entityDying = uwpe.entity;
-            entityDying.locatable().entitySpawnWithDefnName(uwpe, "Meat");
+            Locatable.of(entityDying).entitySpawnWithDefnName(uwpe, "Meat");
         };
         var carnivoreCollidable = Collidable.fromCollider(carnivoreCollider);
         var carnivoreEntityDefn = new Entity("Carnivore", [
@@ -130,7 +130,7 @@ class PlaceBuilderDemo_Movers {
             var place = uwpe.place;
             var eKillable = uwpe.entity;
             var damageToApplyTypeName = damageToApply.typeName;
-            var damageInflictedByTargetTypeName = eKillable.damager().damagePerHit.typeName;
+            var damageInflictedByTargetTypeName = Damager.of(eKillable).damagePerHit.typeName;
             var damageMultiplier = 1;
             if (damageInflictedByTargetTypeName != null) {
                 if (damageInflictedByTargetTypeName == damageToApplyTypeName) {
@@ -143,12 +143,12 @@ class PlaceBuilderDemo_Movers {
             var randomizer = universe.randomizer;
             var damageToApplyAmount = damageToApply.amount(randomizer);
             var damageApplied = Damage.fromAmountAndTypeName(damageToApplyAmount * damageMultiplier, damageToApplyTypeName);
-            eKillable.killable().integritySubtract(damageToApplyAmount * damageMultiplier);
-            var effectable = eKillable.effectable();
+            Killable.of(eKillable).integritySubtract(damageToApplyAmount * damageMultiplier);
+            var effectable = Effectable.of(eKillable);
             var randomizer = universe.randomizer;
             var effectsToApply = damageToApply.effectsOccurring(randomizer);
             effectsToApply.forEach(effect => effectable.effectAdd(effect.clone()));
-            place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater("" + damageApplied.toString(), this.font, eKillable.locatable().loc.pos, Color.Instances().Red)));
+            place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater("" + damageApplied.toString(), this.font, Locatable.of(eKillable).loc.pos, Color.Instances().Red)));
             var damageAmount = damageApplied.amount(randomizer);
             return damageAmount;
         };
@@ -161,10 +161,10 @@ class PlaceBuilderDemo_Movers {
             var chanceOfDroppingCoin = 1;
             var doesDropCoin = (Math.random() < chanceOfDroppingCoin);
             if (doesDropCoin) {
-                entityDying.locatable().entitySpawnWithDefnName(uwpe, "Coin");
+                Locatable.of(entityDying).entitySpawnWithDefnName(uwpe, "Coin");
             }
             var entityPlayer = place.player();
-            var learner = entityPlayer.skillLearner();
+            var learner = SkillLearner.of(entityPlayer);
             var defns = world.defn;
             var skillsAll = defns.skills;
             var skillsByName = defns.skillsByName;
@@ -172,7 +172,7 @@ class PlaceBuilderDemo_Movers {
             learner.learningIncrement(skillsAll, skillsByName, 1);
             var learningMessage = learner.statusMessage;
             if (learningMessage != null) {
-                place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater(learningMessage, this.font, entityPlayer.locatable().loc.pos, Color.Instances().Green)));
+                place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater(learningMessage, this.font, Locatable.of(entityPlayer).loc.pos, Color.Instances().Green)));
             }
         };
         var enemyKillable = new Killable(integrityMax, enemyDamageApply, enemyDie);
@@ -198,7 +198,7 @@ class PlaceBuilderDemo_Movers {
             var universe = uwpe.universe;
             var place = uwpe.place;
             var actor = uwpe.entity;
-            var activity = actor.actor().activity;
+            var activity = Actor.of(actor).activity;
             var enemyCount = place.entitiesByPropertyName(Enemy.name).filter(x => x.name.startsWith(enemyEntityPrototype.name)).length;
             var enemyCountMax = 1;
             if (enemyCount < enemyCountMax) {
@@ -207,7 +207,7 @@ class PlaceBuilderDemo_Movers {
                     var ticksToDelay = 200;
                     targetEntity = new Ephemeral(ticksToDelay, null).toEntity(); // hack
                 }
-                var targetEphemeral = targetEntity.ephemeral();
+                var targetEphemeral = Ephemeral.of(targetEntity);
                 var ticksToDelayRemaining = targetEphemeral.ticksToLive;
                 ticksToDelayRemaining--;
                 if (ticksToDelayRemaining > 0) {
@@ -224,7 +224,7 @@ class PlaceBuilderDemo_Movers {
                 var enemyPosToStartAt = offsetFromCenter.trimToRangeMinMax(placeSizeHalf.clone().invert(), placeSizeHalf);
                 enemyPosToStartAt.multiplyScalar(1.1);
                 enemyPosToStartAt.add(placeSizeHalf);
-                enemyEntityToPlace.locatable().loc.pos.overwriteWith(enemyPosToStartAt);
+                Locatable.of(enemyEntityToPlace).loc.pos.overwriteWith(enemyPosToStartAt);
                 place.entityToSpawnAdd(enemyEntityToPlace);
             }
         };
@@ -278,7 +278,7 @@ class PlaceBuilderDemo_Movers {
         ];
         var visualEyesWithBrowsDirectional = new VisualDirectional(visualEyesBlinking, // visualForNoDirection
         offsets.map(offset => new VisualOffset(offset.multiplyScalar(visualEyeRadius), visualEyesBlinkingWithBrows)), null);
-        var visualEffect = new VisualAnchor(new VisualDynamic((uwpe) => uwpe.entity.effectable().effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
+        var visualEffect = new VisualAnchor(new VisualDynamic((uwpe) => Effectable.of(uwpe.entity).effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
         var visualStatusInfo = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
         new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
         [
@@ -361,9 +361,6 @@ class PlaceBuilderDemo_Movers {
             var eFriendly = uwpe.entity;
             var eOther = uwpe.entity2;
             var collisionHelper = u.collisionHelper;
-            //eFriendly.locatable().loc.vel.clear();
-            //collisionHelper.collideEntitiesBounce(eFriendly, eOther);
-            //collisionHelper.collideEntitiesSeparate(eFriendly, eOther);
             collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
         };
         var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
@@ -405,7 +402,7 @@ class PlaceBuilderDemo_Movers {
             var universe = uwpe.universe;
             var place = uwpe.place;
             var entityActor = uwpe.entity;
-            var activity = entityActor.actor().activity;
+            var activity = Actor.of(entityActor).activity;
             var targetEntity = activity.targetEntity();
             if (targetEntity == null) {
                 var randomizer = universe.randomizer;
@@ -414,9 +411,9 @@ class PlaceBuilderDemo_Movers {
                 targetEntity = Locatable.fromPos(targetPos).toEntity();
                 activity.targetEntitySet(targetEntity);
             }
-            var actorLoc = entityActor.locatable().loc;
+            var actorLoc = Locatable.of(entityActor).loc;
             var actorPos = actorLoc.pos;
-            var targetPos = targetEntity.locatable().loc.pos;
+            var targetPos = Locatable.of(targetEntity).loc.pos;
             var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
             if (distanceToTarget >= 2) {
                 var accelerationPerTick = .5;
@@ -513,7 +510,7 @@ class PlaceBuilderDemo_Movers {
             ["Elder", grazerVisualElder],
             ["Dead", grazerVisualDead] // todo
         ]), (uwpe) => {
-            var phased = uwpe.entity.phased();
+            var phased = Phased.of(uwpe.entity);
             var phase = phased.phaseCurrent();
             return [phase.name];
         });
@@ -525,12 +522,12 @@ class PlaceBuilderDemo_Movers {
             var universe = uwpe.universe;
             var place = uwpe.place;
             var entityActor = uwpe.entity;
-            var activity = entityActor.actor().activity;
+            var activity = Actor.of(entityActor).activity;
             var targetEntity = activity.targetEntity();
             if (targetEntity == null) {
                 var targetPos = null;
                 var itemsInPlace = place.items();
-                var itemsGrassInPlace = itemsInPlace.filter((x) => x.item().defnName == "Grass");
+                var itemsGrassInPlace = itemsInPlace.filter((x) => Item.of(x).defnName == "Grass");
                 if (itemsGrassInPlace.length == 0) {
                     var randomizer = universe.randomizer;
                     var placeSize = place.size();
@@ -538,14 +535,14 @@ class PlaceBuilderDemo_Movers {
                         Coords.create().randomize(randomizer).multiply(placeSize);
                 }
                 else {
-                    targetPos = itemsGrassInPlace[0].locatable().loc.pos;
+                    targetPos = Locatable.of(itemsGrassInPlace[0]).loc.pos;
                 }
                 targetEntity = Locatable.fromPos(targetPos).toEntity();
                 activity.targetEntitySet(targetEntity);
             }
-            var actorLoc = entityActor.locatable().loc;
+            var actorLoc = Locatable.of(entityActor).loc;
             var actorPos = actorLoc.pos;
-            var targetPos = targetEntity.locatable().loc.pos;
+            var targetPos = Locatable.of(targetEntity).loc.pos;
             var distanceToTarget = targetPos.clone().subtract(actorPos).magnitude();
             if (distanceToTarget >= 2) {
                 actorLoc.vel.overwriteWith(targetPos).subtract(actorPos).normalize();
@@ -554,9 +551,9 @@ class PlaceBuilderDemo_Movers {
             else {
                 actorPos.overwriteWith(targetPos);
                 var itemsInPlace = place.items();
-                var itemsGrassInPlace = itemsInPlace.filter((x) => x.item().defnName == "Grass");
+                var itemsGrassInPlace = itemsInPlace.filter((x) => Item.of(x).defnName == "Grass");
                 var reachDistance = 20; // todo
-                var itemGrassInReach = itemsGrassInPlace.filter((x) => (entityActor.locatable().distanceFromEntity(x) < reachDistance))[0];
+                var itemGrassInReach = itemsGrassInPlace.filter((x) => (Locatable.of(entityActor).distanceFromEntity(x) < reachDistance))[0];
                 if (itemGrassInReach != null) {
                     place.entityToRemoveAdd(itemGrassInReach);
                 }
@@ -569,7 +566,7 @@ class PlaceBuilderDemo_Movers {
         var grazerDie = (uwpe) => // die
          {
             var entityDying = uwpe.entity;
-            entityDying.locatable().entitySpawnWithDefnName(uwpe, "Meat");
+            Locatable.of(entityDying).entitySpawnWithDefnName(uwpe, "Meat");
         };
         var grazerPhased = new Phased(0, // phaseCurrentIndex
         0, // ticksOnPhaseCurrent
@@ -584,8 +581,8 @@ class PlaceBuilderDemo_Movers {
             (uwpe) => {
                 var p = uwpe.place;
                 var e = uwpe.entity;
-                e.propertyRemoveForPlace(e.actor(), p);
-                e.locatable().loc.vel.clear();
+                e.propertyRemoveForPlace(Actor.of(e), p);
+                Locatable.of(e).loc.vel.clear();
                 var ephemeral = new Ephemeral(300, null);
                 e.propertyAddForPlace(ephemeral, p);
             })
@@ -624,7 +621,7 @@ class PlaceBuilderDemo_Movers {
         ]), (uwpe, d) => // selectChildNames
          {
             var e = uwpe.entity;
-            return [(e.perceptible().isHiding ? "Hidden" : "Normal")];
+            return [(Perceptible.of(e).isHiding ? "Hidden" : "Normal")];
         });
         var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, 
         // visualShadow
@@ -632,18 +629,18 @@ class PlaceBuilderDemo_Movers {
         ), null);
         var playerVisualBarSize = Coords.fromXY(this.entityDimension * 3, this.entityDimension * 0.8);
         var playerVisualHealthBar = new VisualBar("H", // abbreviation
-        playerVisualBarSize, colors.Red, DataBinding.fromGet((c) => c.killable().integrity), null, // amountThreshold
-        DataBinding.fromGet((c) => c.killable().integrityMax), 1, // fractionBelowWhichToShow
+        playerVisualBarSize, colors.Red, DataBinding.fromGet((c) => Killable.of(c).integrity), null, // amountThreshold
+        DataBinding.fromGet((c) => Killable.of(c).integrityMax), 1, // fractionBelowWhichToShow
         null, // colorForBorderAsValueBreakGroup
         null // text
         );
         var playerVisualSatietyBar = new VisualBar("F", // abbreviation
-        playerVisualBarSize, colors.Brown, DataBinding.fromGet((c) => { return c.starvable().satiety; }), null, // amountThreshold
-        DataBinding.fromGet((c) => { return c.starvable().satietyMax; }), .5, // fractionBelowWhichToShow
+        playerVisualBarSize, colors.Brown, DataBinding.fromGet((c) => { return Starvable.of(c).satiety; }), null, // amountThreshold
+        DataBinding.fromGet((c) => { return Starvable.of(c).satietyMax; }), .5, // fractionBelowWhichToShow
         null, // colorForBorderAsValueBreakGroup
         null // text
         );
-        var playerVisualEffect = new VisualAnchor(new VisualDynamic((uwpe) => uwpe.entity.effectable().effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
+        var playerVisualEffect = new VisualAnchor(new VisualDynamic((uwpe) => Effectable.of(uwpe.entity).effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
         var playerVisualsForStatusInfo = [
             playerVisualHealthBar,
             playerVisualSatietyBar,
@@ -664,19 +661,19 @@ class PlaceBuilderDemo_Movers {
             var entityOther = uwpe.entity2;
             var soundHelper = universe.soundHelper;
             var collisionHelper = universe.collisionHelper;
-            var entityOtherDamager = entityOther.damager();
+            var entityOtherDamager = Damager.of(entityOther);
             if (entityOtherDamager != null) {
                 collisionHelper.collideEntitiesBounce(entityPlayer, entityOther);
                 //collisionHelper.collideEntitiesBackUp(entityPlayer, entityOther);
                 //collisionHelper.collideEntitiesBlock(entityPlayer, entityOther);
                 var damageToApply = entityOtherDamager.damageToApply(universe);
-                entityPlayer.killable().damageApply(uwpe, damageToApply);
+                Killable.of(entityPlayer).damageApply(uwpe, damageToApply);
                 soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
             }
             else if (entityOther.propertiesByName.get(Goal.name) != null) {
                 var itemDefnKeyName = "Key";
                 var keysRequired = new Item(itemDefnKeyName, entityOther.propertiesByName.get(Goal.name).numberOfKeysToUnlock);
-                if (entityPlayer.itemHolder().hasItem(keysRequired)) {
+                if (ItemHolder.of(entityPlayer).hasItem(keysRequired)) {
                     var venueMessage = new VenueMessage(DataBinding.fromContext("You win!"), () => // acknowledge
                      {
                         var venueNext = universe.controlBuilder.title(universe, null).toVenue();
@@ -688,16 +685,16 @@ class PlaceBuilderDemo_Movers {
                     universe.venueTransitionTo(venueMessage);
                 }
             }
-            else if (entityOther.talker() != null) {
-                entityOther.collidable().ticksUntilCanCollide = 100; // hack
-                entityOther.talker().talk(uwpe.clone().entitiesSwap());
+            else if (Talker.of(entityOther) != null) {
+                Collidable.of(entityOther).ticksUntilCanCollide = 100; // hack
+                Talker.of(entityOther).talk(uwpe.clone().entitiesSwap());
             }
         };
         var constrainable = new Constrainable([
             new Constraint_Gravity(new Coords(0, 0, 1)),
             new Constraint_ContainInHemispace(new Hemispace(new Plane(new Coords(0, 0, 1), 0))),
             new Constraint_SpeedMaxXY(5),
-            new Constraint_Conditional((uwpe) => (uwpe.entity.locatable().loc.pos.z >= 0), new Constraint_FrictionXY(.03, .5)),
+            new Constraint_Conditional((uwpe) => (Locatable.of(uwpe.entity).loc.pos.z >= 0), new Constraint_FrictionXY(.03, .5)),
         ]);
         var itemCategoriesForQuickSlots = [
             "Consumable"
@@ -736,16 +733,16 @@ class PlaceBuilderDemo_Movers {
             var entityKillable = uwpe.entity;
             var randomizer = universe.randomizer;
             var damageAmount = damage.amount(randomizer);
-            var equipmentUser = entityKillable.equipmentUser();
+            var equipmentUser = EquipmentUser.of(entityKillable);
             var armorEquipped = equipmentUser.itemEntityInSocketWithName("Armor");
             if (armorEquipped != null) {
                 var armor = armorEquipped.propertiesByName.get(Armor.name);
                 damageAmount *= armor.damageMultiplier;
             }
-            entityKillable.killable().integritySubtract(damageAmount);
+            Killable.of(entityKillable).integritySubtract(damageAmount);
             var damageAmountAsString = "" + (damageAmount > 0 ? "" : "+") + (0 - damageAmount);
             var messageColorName = (damageAmount > 0 ? "Red" : "Green");
-            var messageEntity = universe.entityBuilder.messageFloater(damageAmountAsString, this.font, entityKillable.locatable().loc.pos, Color.byName(messageColorName));
+            var messageEntity = universe.entityBuilder.messageFloater(damageAmountAsString, this.font, Locatable.of(entityKillable).loc.pos, Color.byName(messageColorName));
             uwpe.entitySet(messageEntity);
             place.entitySpawn(uwpe);
             return damageAmount;
@@ -765,7 +762,7 @@ class PlaceBuilderDemo_Movers {
         var starvable = new Starvable(100, // satietyMax
         .001, // satietyToLosePerTick
         (uwpe) => {
-            uwpe.entity.killable().integritySubtract(.1);
+            Killable.of(uwpe.entity).integritySubtract(.1);
         });
         var tirable = new Tirable(100, // staminaMaxAfterSleep
         .1, // staminaRecoveredPerTick
@@ -778,29 +775,6 @@ class PlaceBuilderDemo_Movers {
         var movable = Movable.fromAccelerationAndSpeedMax(0.5, // accelerationPerTick
         1 // speedMax
         );
-        /*
-            // todo - Restore functionality of speed boots.
-
-            (uwpe: UniverseWorldPlaceEntities) => // accelerate
-            {
-                var entityMovable = uwpe.entity;
-                var equipmentUser = entityMovable.equipmentUser();
-                var accessoryEquipped =
-                    equipmentUser.itemEntityInSocketWithName("Accessory");
-                var areSpeedBootsEquipped =
-                (
-                    accessoryEquipped != null
-                    && accessoryEquipped.item().defnName == "Speed Boots"
-                );
-                entityMovable.movable().accelerateForward(uwpe);
-                var accelerationMultiplier = (areSpeedBootsEquipped ? 2 : 1);
-                entityMovable.locatable().loc.accel.multiplyScalar
-                (
-                    accelerationMultiplier
-                );
-            }
-        );
-        */
         var itemCrafter = new ItemCrafter([
             new CraftingRecipe("Iron", 0, // ticksToComplete
             [
@@ -823,8 +797,8 @@ class PlaceBuilderDemo_Movers {
         var playerActivity = Activity.fromDefnName(playerActivityDefn.name);
         var playerActivityWaitPerform = (uwpe) => {
             var entityPlayer = uwpe.entity;
-            var activity = entityPlayer.actor().activity;
-            var drawable = entityPlayer.drawable();
+            var activity = Actor.of(entityPlayer).activity;
+            var drawable = Drawable.of(entityPlayer);
             var targetEntity = activity.targetEntity();
             if (targetEntity == null) {
                 drawable.visual = new VisualGroup([
@@ -836,7 +810,7 @@ class PlaceBuilderDemo_Movers {
                 activity.targetEntitySet(targetEntity);
             }
             else {
-                var targetEphemeral = targetEntity.ephemeral();
+                var targetEphemeral = Ephemeral.of(targetEntity);
                 var ticksToWait = targetEphemeral.ticksToLive;
                 if (ticksToWait > 0) {
                     ticksToWait--;
@@ -869,14 +843,6 @@ class PlaceBuilderDemo_Movers {
             Drawable.fromVisual(playerVisual),
             new Effectable([]),
             equipmentUser,
-            /*
-            new Idleable
-            (
-                1, // ticksUntilIdle
-                (uwpe: UniverseWorldPlaceEntities) =>
-                    e.locatable().loc.orientation.forward.clear()
-            ),
-            */
             itemCrafter,
             itemHolder,
             journalKeeper,
@@ -900,7 +866,7 @@ class PlaceBuilderDemo_Movers {
         var inputHelper = universe.inputHelper;
         if (inputHelper.isMouseClicked()) {
             inputHelper.mouseClickedSet(false);
-            var selector = entityPlayer.selector();
+            var selector = Selector.of(entityPlayer);
             selector.entityAtMouseClickPosSelect(uwpe);
         }
         var placeDefn = place.defn(world);
@@ -911,22 +877,22 @@ class PlaceBuilderDemo_Movers {
             var action = actionsToPerform[i];
             action.perform(uwpe);
         }
-        var activity = entityPlayer.actor().activity;
+        var activity = Actor.of(entityPlayer).activity;
         var itemEntityToPickUp = activity.targetEntityByName("ItemEntityToPickUp");
         if (itemEntityToPickUp != null) {
             var entityPickingUp = entityPlayer;
             var itemEntityGettingPickedUp = itemEntityToPickUp;
             uwpe.entity2Set(itemEntityGettingPickedUp);
-            var entityPickingUpLocatable = entityPickingUp.locatable();
-            var itemLocatable = itemEntityGettingPickedUp.locatable();
+            var entityPickingUpLocatable = Locatable.of(entityPickingUp);
+            var itemLocatable = Locatable.of(itemEntityGettingPickedUp);
             var distance = itemLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(entityPickingUpLocatable, .5, 4 //, 1
             );
             itemLocatable.loc.orientation.default(); // hack
             if (distance < 1) {
                 activity.targetEntityClearByName("ItemEntityToPickUp");
-                var itemHolder = entityPickingUp.itemHolder();
+                var itemHolder = ItemHolder.of(entityPickingUp);
                 itemHolder.itemEntityPickUp(uwpe);
-                var equipmentUser = entityPickingUp.equipmentUser();
+                var equipmentUser = EquipmentUser.of(entityPickingUp);
                 if (equipmentUser != null) {
                     equipmentUser.equipItemEntityInFirstOpenQuickSlot(uwpe, true // includeSocketNameInMessage
                     );

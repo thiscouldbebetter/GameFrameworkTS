@@ -68,6 +68,11 @@ export class Camera implements EntityProperty<Camera>
 		);
 	}
 
+	static of(entity: Entity): Camera
+	{
+		return entity.propertyByName(Camera.name) as Camera;
+	}
+
 	clipPlanes(): Plane[]
 	{
 		if (this._clipPlanes == null)
@@ -248,7 +253,7 @@ export class Camera implements EntityProperty<Camera>
 		var collisionTracker = (place as PlaceBase).collisionTracker(uwpe);
 		collisionTracker.entityReset(cameraEntity);
 
-		var cameraCollidable = cameraEntity.collidable();
+		var cameraCollidable = Collidable.of(cameraEntity);
 		//cameraCollidable.isDisabled = false;
 		cameraCollidable.entitiesAlreadyCollidedWithClear();
 		var collisions = collisionTracker.entityCollidableAddAndFindCollisions
@@ -256,7 +261,7 @@ export class Camera implements EntityProperty<Camera>
 			uwpe, cameraEntity, collisionHelper, new Array<Collision>()
 		);
 		var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
-		var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
+		var entitiesInView = entitiesCollidedWith.filter(x => Drawable.of(x) != null);
 		entitiesInView =
 			entitiesInView.filter( (x, i) => entitiesInView.indexOf(x) == i); // Distinct.
 		//cameraCollidable.isDisabled = true;
@@ -264,60 +269,11 @@ export class Camera implements EntityProperty<Camera>
 		// Now draw the unboundables.
 
 		var drawablesAll = place.drawables();
-		var drawablesUnboundable = drawablesAll.filter(x => x.boundable() == null);
+		var drawablesUnboundable = drawablesAll.filter(x => Boundable.of(x) == null);
 		entitiesInView.push(...drawablesUnboundable);
 
 		return entitiesInView;
 	}
-
-	/*
-	drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
-	(
-		place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
-	): Entity[]
-	{
-		entitiesInView.length = 0;
-
-		var placeEntitiesDrawable = place.drawables();
-
-		for (var i = 0; i < placeEntitiesDrawable.length; i++)
-		{
-			var entity = placeEntitiesDrawable[i];
-			var drawable = entity.drawable();
-			if (drawable.isVisible)
-			{
-				var entityPos = entity.locatable().loc.pos;
-				this._posSaved.overwriteWith(entityPos);
-
-				this.coordsTransformWorldToView(entityPos);
-
-				var isEntityInView = false;
-				var boundable = entity.boundable();
-				if (boundable == null) // todo
-				{
-					isEntityInView = true;
-				}
-				else
-				{
-					var entityCollider = boundable.bounds;
-					isEntityInView = collisionHelper.doCollidersCollide
-					(
-						entityCollider, this.viewCollider
-					);
-				}
-
-				if (isEntityInView)
-				{
-					entitiesInView.push(entity);
-				}
-
-				entityPos.overwriteWith(this._posSaved);
-			}
-		}
-
-		return entitiesInView;
-	}
-	*/
 
 	drawEntitiesInView_2_Draw
 	(
@@ -332,9 +288,9 @@ export class Camera implements EntityProperty<Camera>
 			var entity = entitiesInView[i];
 			uwpe.entitySet(entity);
 
-			var visual = entity.drawable().visual;
+			var visual = Drawable.of(entity).visual;
 
-			var entityPos = entity.locatable().loc.pos;
+			var entityPos = Locatable.of(entity).loc.pos;
 
 			this._posSaved.overwriteWith(entityPos);
 
@@ -371,8 +327,8 @@ export class Camera implements EntityProperty<Camera>
 		(
 			(a, b) =>
 			{
-				var aRenderingOrder = a.drawable().renderingOrder;
-				var bRenderingOrder = b.drawable().renderingOrder;
+				var aRenderingOrder = Drawable.of(a).renderingOrder;
+				var bRenderingOrder = Drawable.of(b).renderingOrder;
 
 				if (aRenderingOrder != bRenderingOrder)
 				{
@@ -380,8 +336,8 @@ export class Camera implements EntityProperty<Camera>
 				}
 				else
 				{
-					var aPos = a.locatable().loc.pos;
-					var bPos = b.locatable().loc.pos;
+					var aPos = Locatable.of(a).loc.pos;
+					var bPos = Locatable.of(b).loc.pos;
 					var returnValue;
 					if (aPos.z != bPos.z)
 					{

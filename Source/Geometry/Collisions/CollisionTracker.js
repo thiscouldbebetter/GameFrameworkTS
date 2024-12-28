@@ -135,13 +135,13 @@ var ThisCouldBeBetter;
             }
             entityCollidableAddAndFindCollisions(uwpe, entity, collisionHelper, collisionsSoFar) {
                 collisionsSoFar.length = 0;
-                var entityBoundable = entity.boundable();
+                var entityBoundable = GameFramework.Boundable.of(entity);
                 if (entityBoundable == null) {
-                    throw new Error("Entity.boundable() for '"
+                    throw new Error("Boundable.of(Entity) for '"
                         + entity.name
                         + "' is null, which is not allowed when using CollisionTrackerMapped.");
                 }
-                var entityCollidable = entity.collidable();
+                var entityCollidable = GameFramework.Collidable.of(entity);
                 var entityBounds = entityBoundable.bounds;
                 var cellsToAddEntityTo = this.collisionMap.cellsInBox(entityBounds, GameFramework.ArrayHelper.clear(this._cells));
                 var data = entityCollidable.collisionTrackerCollidableData(this);
@@ -170,7 +170,7 @@ var ThisCouldBeBetter;
                 return collisionsSoFar;
             }
             entityReset(entity) {
-                var collidable = entity.collidable();
+                var collidable = GameFramework.Collidable.of(entity);
                 var collidableData = collidable.collisionTrackerCollidableData(this);
                 collidableData.resetForEntity(entity);
             }
@@ -235,7 +235,7 @@ var ThisCouldBeBetter;
                 return this._entitiesPresent;
             }
             entitiesPresentRemoveMovers() {
-                var entitiesMovers = this._entitiesPresent.filter(x => x.collidable().isEntityStationary(x) == false);
+                var entitiesMovers = this._entitiesPresent.filter(x => GameFramework.Collidable.of(x).isEntityStationary(x) == false);
                 entitiesMovers.forEach(x => this.entityPresentRemove(x));
             }
             entityPresentAdd(entity) {

@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             static fromSatietyMax(satietyMax) {
                 return new Starvable(satietyMax, null, null);
             }
+            static of(entity) {
+                return entity.propertyByName(Starvable.name);
+            }
             starve(uwpe) {
                 if (this._starve != null) {
                     this._starve(uwpe);

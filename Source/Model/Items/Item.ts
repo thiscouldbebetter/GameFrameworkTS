@@ -25,6 +25,11 @@ export class Item implements EntityProperty<Item>
 		return entity.propertyByName(Item.name) as Item;
 	}
 
+	static of(entity: Entity): Item
+	{
+		return entity.propertyByName(Item.name) as Item;
+	}
+
 	belongsToCategory(category: ItemCategory, world: World): boolean
 	{
 		return this.defn(world).belongsToCategory(category);

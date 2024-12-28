@@ -25,6 +25,9 @@ var ThisCouldBeBetter;
             static fromVisualAndRenderingOrder(visual, renderingOrder) {
                 return new Drawable(visual, renderingOrder, null);
             }
+            static of(entity) {
+                return entity.propertyByName(Drawable.name);
+            }
             draw(uwpe) {
                 if (this.isVisible) {
                     this.visual.draw(uwpe, uwpe.universe.display);

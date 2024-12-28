@@ -47,7 +47,7 @@ export class VisualImageImmediate implements VisualImage
 		var imageSize = image.sizeInPixels;
 		var drawPos = this._drawPos.clear().subtract(imageSize).half().add
 		(
-			entity.locatable().loc.pos
+			Locatable.of(entity).loc.pos
 		);
 		if (this.isScaled)
 		{

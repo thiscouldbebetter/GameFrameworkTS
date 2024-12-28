@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawPos = entity.locatable().loc.pos;
+                var drawPos = GameFramework.Locatable.of(entity).loc.pos;
                 display.drawCircleWithGradient(drawPos, this.radius, this.gradientFill, this.colorBorder);
             }
             // Clonable.

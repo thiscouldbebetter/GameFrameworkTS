@@ -26,15 +26,20 @@ export class Perceptible implements EntityProperty<Perceptible>
 		this._isHidingPrev = null;
 	}
 
+	static of(entity: Entity): Perceptible
+	{
+		return entity.propertyByName(Perceptible.name) as Perceptible;
+	}
+
 	canBeSeen(uwpe: UniverseWorldPlaceEntities): boolean
 	{
 		var entityPerceptible = uwpe.entity;
 		var entityPerceptor = uwpe.entity2;
 
-		var perceptibleLoc = entityPerceptible.locatable().loc;
+		var perceptibleLoc = Locatable.of(entityPerceptible).loc;
 		var perceptiblePos = perceptibleLoc.pos;
 		var displacement = this._displacement;
-		var perceptorLoc = entityPerceptor.locatable().loc;
+		var perceptorLoc = Locatable.of(entityPerceptor).loc;
 		var perceptorPos = perceptorLoc.pos;
 		var perceptorForward = perceptorLoc.orientation.forward;
 		displacement.overwriteWith(perceptiblePos).subtract(perceptorPos);
@@ -43,12 +48,12 @@ export class Perceptible implements EntityProperty<Perceptible>
 		var isInSight = false;
 		if (distanceForward > 0)
 		{
-			var visibilityBase = entityPerceptible.perceptible().visibility
+			var visibilityBase = Perceptible.of(entityPerceptible).visibility
 			(
 				uwpe
 			);
 			var visibilityAdjusted = visibilityBase / Math.abs(distance);
-			var sightThreshold = entityPerceptor.perceptor().sightThreshold;
+			var sightThreshold = Perceptor.of(entityPerceptor).sightThreshold;
 			isInSight = (visibilityAdjusted >= sightThreshold);
 		}
 		return isInSight;
@@ -59,17 +64,17 @@ export class Perceptible implements EntityProperty<Perceptible>
 		var entityPerceptible = uwpe.entity;
 		var entityPerceptor = uwpe.entity2;
 
-		var perceptibleLoc = entityPerceptible.locatable().loc;
+		var perceptibleLoc = Locatable.of(entityPerceptible).loc;
 		var perceptiblePos = perceptibleLoc.pos;
 		var displacement = this._displacement;
-		var perceptorLoc = entityPerceptor.locatable().loc;
+		var perceptorLoc = Locatable.of(entityPerceptor).loc;
 		var perceptorPos = perceptorLoc.pos;
 		displacement.overwriteWith(perceptiblePos).subtract(perceptorPos);
 		var distance = displacement.magnitude();
 		var audibilityBase =
-			entityPerceptible.perceptible().audibility(uwpe);
+			Perceptible.of(entityPerceptible).audibility(uwpe);
 		var audibilityAdjusted = audibilityBase / (distance * distance);
-		var hearingThreshold = entityPerceptor.perceptor().hearingThreshold;
+		var hearingThreshold = Perceptor.of(entityPerceptor).hearingThreshold;
 		var isInHearing = (audibilityAdjusted >= hearingThreshold);
 		return isInHearing;
 	}
@@ -88,8 +93,8 @@ export class Perceptible implements EntityProperty<Perceptible>
 			this._isHidingPrev = this.isHiding;
 
 			var entity = uwpe.entity;
-			entity.drawable().isVisible = (this.isHiding == false);
-			var usable = entity.usable();
+			Drawable.of(entity).isVisible = (this.isHiding == false);
+			var usable = Usable.of(entity);
 			if (usable != null)
 			{
 				usable.isDisabled = this.isHiding;

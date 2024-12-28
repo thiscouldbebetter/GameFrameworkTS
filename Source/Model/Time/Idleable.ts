@@ -57,7 +57,7 @@ export class Idleable implements EntityProperty<Idleable>
 	{
 		var world = uwpe.world;
 		var entity = uwpe.entity;
-		var actor = entity.actor();
+		var actor = Actor.of(entity);
 		var actorIsActing = actor.actions.length > 0;
 		if (actorIsActing)
 		{

@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawPos = entity.locatable().loc.pos;
+                var drawPos = GameFramework.Locatable.of(entity).loc.pos;
                 this._posSaved.overwriteWith(drawPos);
                 drawPos.overwriteWith(this.sizeHalf);
                 this.child.draw(uwpe, this.displayForBuffer);

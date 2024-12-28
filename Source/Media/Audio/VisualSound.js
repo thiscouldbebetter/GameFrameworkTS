@@ -18,7 +18,7 @@ var ThisCouldBeBetter;
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;
                 var soundHelper = universe.soundHelper;
-                var audible = entity.audible();
+                var audible = GameFramework.Audible.of(entity);
                 if (audible != null) {
                     if (audible.hasBeenHeard == false) {
                         if (this.isMusic) {

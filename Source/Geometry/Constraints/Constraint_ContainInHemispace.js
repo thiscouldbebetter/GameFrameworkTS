@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var hemispace = this.hemispaceToContainWithin;
                 var plane = hemispace.plane;
-                var loc = entity.locatable().loc;
+                var loc = GameFramework.Locatable.of(entity).loc;
                 var pos = loc.pos;
                 // Can't use Hemispace.trimCoords(),
                 // because we also need to trim velocity and acceleration.

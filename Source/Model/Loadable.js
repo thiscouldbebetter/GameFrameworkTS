@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this._load = load;
                 this._unload = unload;
             }
+            static of(entity) {
+                return entity.propertyByName(LoadableProperty.name);
+            }
             finalize(uwpe) {
                 this.unload(uwpe);
             }

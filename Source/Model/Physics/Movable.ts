@@ -57,6 +57,11 @@ export class Movable implements EntityProperty<Movable>
 		return new Movable(speedMaxGet, speedMaxGet, null);
 	}
 
+	static of(entity: Entity): Movable
+	{
+		return entity.propertyByName(Movable.name) as Movable;
+	}
+
 	accelerationPerTick(uwpe: UniverseWorldPlaceEntities): number
 	{
 		return this._accelerationPerTick(uwpe);
@@ -65,7 +70,7 @@ export class Movable implements EntityProperty<Movable>
 	accelerateForward(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entityMovable = uwpe.entity;
-		var entityLoc = entityMovable.locatable().loc;
+		var entityLoc = Locatable.of(entityMovable).loc;
 		var forward = entityLoc.orientation.forward;
 		var accel = this.accelerationPerTick(uwpe);
 
@@ -93,12 +98,12 @@ export class Movable implements EntityProperty<Movable>
 	): void
 	{
 		var entity = uwpe.entity;
-		var entityLoc = entity.locatable().loc;
+		var entityLoc = Locatable.of(entity).loc;
 		var canAccelerate = this.canAccelerate(uwpe);
 		if (canAccelerate)
 		{
 			entityLoc.orientation.forwardSet(directionToMove);
-			entity.movable().accelerateForward(uwpe);
+			Movable.of(entity).accelerateForward(uwpe);
 		}
 	}
 
@@ -166,7 +171,7 @@ export class Movable implements EntityProperty<Movable>
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var actor = uwpe.entity;
-				var movable = actor.movable();
+				var movable = Movable.of(actor);
 				var direction = Coords.Instances().ZeroOneZero;
 				movable.accelerateInDirectionIfAble(uwpe, direction);
 			}
@@ -182,7 +187,7 @@ export class Movable implements EntityProperty<Movable>
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var actor = uwpe.entity;
-				var movable = actor.movable();
+				var movable = Movable.of(actor);
 				var direction = Coords.Instances().MinusOneZeroZero;
 				movable.accelerateInDirectionIfAble(uwpe, direction);
 			}
@@ -198,7 +203,7 @@ export class Movable implements EntityProperty<Movable>
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var actor = uwpe.entity;
-				var movable = actor.movable();
+				var movable = Movable.of(actor);
 				var direction = Coords.Instances().OneZeroZero;
 				movable.accelerateInDirectionIfAble(uwpe, direction);
 			}
@@ -214,7 +219,7 @@ export class Movable implements EntityProperty<Movable>
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var actor = uwpe.entity;
-				var movable = actor.movable();
+				var movable = Movable.of(actor);
 				var direction = Coords.Instances().ZeroMinusOneZero;
 				movable.accelerateInDirectionIfAble(uwpe, direction);
 			}
@@ -232,7 +237,7 @@ export class Movable implements EntityProperty<Movable>
 			{
 				var entityActor = uwpe.entity;
 
-				var actor = entityActor.actor();
+				var actor = Actor.of(entityActor);
 				var activity = actor.activity;
 				var targetEntity = activity.targetEntity();
 				if (targetEntity == null)
@@ -252,9 +257,9 @@ export class Movable implements EntityProperty<Movable>
 					activity.targetEntitySet(targetEntity);
 				}
 
-				var movable = entityActor.movable();
-				var actorLocatable = entityActor.locatable();
-				var targetLocatable = targetEntity.locatable();
+				var movable = Movable.of(entityActor);
+				var actorLocatable = Locatable.of(entityActor);
+				var targetLocatable = Locatable.of(targetEntity);
 				var accelerationPerTick = movable.accelerationPerTick(uwpe);
 				var speedMax = movable.speedMax(uwpe);
 				var distanceToTarget =

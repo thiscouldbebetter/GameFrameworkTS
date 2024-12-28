@@ -15,6 +15,11 @@ export class Usable implements EntityProperty<Usable>
 		this.isDisabled = false;
 	}
 
+	static of(entity: Entity): Usable
+	{
+		return entity.propertyByName(Usable.name) as Usable;
+	}
+
 	use(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this._use(uwpe);

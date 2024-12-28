@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawPos = entity.locatable().loc.pos;
+                var drawPos = GameFramework.Locatable.of(entity).loc.pos;
                 this._drawablePosToRestore.overwriteWith(drawPos);
                 var drawPosWrapped = this._drawPosWrapped.overwriteWith(drawPos).wrapToRangeMax(this.cellSize);
                 var cellPos = this._cellPos;

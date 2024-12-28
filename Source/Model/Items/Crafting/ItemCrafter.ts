@@ -25,6 +25,11 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 		this.statusMessage = "-";
 	}
 
+	static of(entity: Entity): ItemCrafter
+	{
+		return entity.propertyByName(ItemCrafter.name) as ItemCrafter;
+	}
+
 	isRecipeAvailableSelectedFulfilled(itemHolder: ItemHolder): boolean
 	{
 		var returnValue =
@@ -68,7 +73,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 		for (var i = 0; i < itemsOut.length; i++)
 		{
 			var itemOut = itemsOut[i];
-			entityCrafter.itemHolder().itemAdd(itemOut);
+			ItemHolder.of(entityCrafter).itemAdd(itemOut);
 		}
 
 		this.itemHolderStaged.items.length = 0;
@@ -158,14 +163,14 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 		var fontHeightLarge = fontHeight * 1.5;
 		var fontLarge = FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
 
-		var itemHolder = entityItemHolder.itemHolder();
+		var itemHolder = ItemHolder.of(entityItemHolder);
 		var crafter = this;
 
 		var back = () => universe.venueTransitionTo(venuePrev);
 
 		var addToQueue = () =>
 		{
-			if (crafter.isRecipeAvailableSelectedFulfilled( entityCrafter.itemHolder() ) )
+			if (crafter.isRecipeAvailableSelectedFulfilled( ItemHolder.of(entityCrafter) ) )
 			{
 				var recipe = crafter.recipeAvailableSelected;
 
@@ -245,7 +250,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					(
 						this,
 						(c: ItemCrafter) =>
-							c.isRecipeAvailableSelectedFulfilled(entityCrafter.itemHolder())
+							c.isRecipeAvailableSelectedFulfilled(ItemHolder.of(entityCrafter))
 					), // isEnabled
 					addToQueue, // click
 					null // ?

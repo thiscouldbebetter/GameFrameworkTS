@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
             static fromConversationDefnName(conversationDefnName) {
                 return new Talker(conversationDefnName, null, null);
             }
+            static of(entity) {
+                return entity.propertyByName(Talker.name);
+            }
             conversationRunSet(value) {
                 this.conversationRun = value;
                 return this;

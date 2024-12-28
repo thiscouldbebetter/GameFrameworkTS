@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawableLoc = entity.locatable().loc;
+                var drawableLoc = GameFramework.Locatable.of(entity).loc;
                 var drawablePos = drawableLoc.pos;
                 var drawableHeadingInTurns = drawableLoc.orientation.forward.headingInTurns();
                 var polar = this._polar;

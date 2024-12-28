@@ -16,12 +16,17 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
 	}
 
+	static of(entity: Entity): EquipmentUser
+	{
+		return entity.propertyByName(EquipmentUser.name) as EquipmentUser;
+	}
+
 	equipAll(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var world = uwpe.world;
 		var entityEquipmentUser = uwpe.entity;
 
-		var itemHolder = entityEquipmentUser.itemHolder();
+		var itemHolder = ItemHolder.of(entityEquipmentUser);
 		var itemsNotYetEquipped = itemHolder.items;
 		var sockets = this.socketGroup.sockets;
 		for (var s = 0; s < sockets.length; s++)
@@ -68,7 +73,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		}
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
-		var itemToEquip = itemEntityToEquip.item();
+		var itemToEquip = Item.of(itemEntityToEquip);
 		var itemDefn = itemToEquip.defn(world);
 
 		var socketFound = sockets.filter
@@ -105,7 +110,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 	): void
 	{
 		var itemEntityToEquip = uwpe.entity2;
-		var itemToEquipDefnName = itemEntityToEquip.item().defnName;
+		var itemToEquipDefnName = Item.of(itemEntityToEquip).defnName;
 		var socketFound = null;
 
 		var itemQuickSlotCount = 10;
@@ -120,7 +125,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			else if (socket.itemEntityEquipped != null)
 			{
 				var itemInSocketDefnName =
-					socket.itemEntityEquipped.item().defnName;
+					Item.of(socket.itemEntityEquipped).defnName;
 				if (itemInSocketDefnName == itemToEquipDefnName)
 				{
 					socketFound = socket;
@@ -154,9 +159,9 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		}
 		else
 		{
-			var itemToEquip = itemEntityToEquip.item();
+			var itemToEquip = Item.of(itemEntityToEquip);
 			var itemDefn = itemToEquip.defn(world);
-			var equippable = itemEntityToEquip.equippable();
+			var equippable = Equippable.of(itemEntityToEquip);
 
 			message = itemDefn.appearance;
 
@@ -223,7 +228,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			else
 			{
 				socketToUnequipFrom.itemEntityEquipped = null;
-				var itemToUnequip = itemEntityToUnequip.item();
+				var itemToUnequip = Item.of(itemEntityToUnequip);
 				var itemDefn = itemToUnequip.defn(world);
 				message = itemDefn.appearance + " unequipped."
 			}
@@ -235,7 +240,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 	unequipItemsNoLongerHeld(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entityEquipmentUser = uwpe.entity;
-		var itemHolder = entityEquipmentUser.itemHolder();
+		var itemHolder = ItemHolder.of(entityEquipmentUser);
 		var itemsHeld = itemHolder.items;
 		var sockets = this.socketGroup.sockets;
 		for (var i = 0; i < sockets.length; i++)
@@ -244,7 +249,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			var socketItemEntity = socket.itemEntityEquipped;
 			if (socketItemEntity != null)
 			{
-				var socketItem = socketItemEntity.item();
+				var socketItem = Item.of(socketItemEntity);
 				var socketItemDefnName = socketItem.defnName;
 				if (itemsHeld.indexOf(socketItem) == -1)
 				{
@@ -272,7 +277,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 	{
 		var socket = this.socketGroup.sockets.filter
 		(
-			x => x.itemEntityEquipped.item() == itemToUnequip
+			x => Item.of(x.itemEntityEquipped) == itemToUnequip
 		)[0];
 		if (socket != null)
 		{
@@ -286,12 +291,12 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 	): void
 	{
 		var actor = uwpe.entity;
-		var equipmentUser = actor.equipmentUser();
+		var equipmentUser = EquipmentUser.of(actor);
 		var socketName = "Item" + socketNumber;
 		var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
 		if (entityItemEquipped != null)
 		{
-			var itemEquipped = entityItemEquipped.item();
+			var itemEquipped = Item.of(entityItemEquipped);
 			uwpe.entity2Set(entityItemEquipped);
 			itemEquipped.use(uwpe);
 		}
@@ -328,7 +333,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		var fontHeightLarge = fontHeight * 1.5;
 		var fontLarge = FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
 
-		var itemHolder = entityEquipmentUser.itemHolder();
+		var itemHolder = ItemHolder.of(entityEquipmentUser);
 		var equipmentUser = this;
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
@@ -363,7 +368,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		);
 		var itemEntitiesEquippable = itemEntities.filter
 		(
-			x => x.equippable() != null
+			x => Equippable.of(x) != null
 		);
 
 		var world = universe.world;
@@ -389,7 +394,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			), // items
 			DataBinding.fromGet
 			(
-				(c: Entity) => c.item().toString(world),
+				(c: Entity) => Item.of(c).toString(world),
 			), // bindingForItemText
 			fontSmall,
 			new DataBinding

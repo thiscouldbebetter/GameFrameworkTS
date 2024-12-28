@@ -24,6 +24,9 @@ var ThisCouldBeBetter;
                 150, // focalLength
                 GameFramework.Disposition.fromPosAndOrientation(new GameFramework.Coords(0, 0, -150), GameFramework.Orientation.Instances().ForwardZDownY.clone()), entitiesInViewSort);
             }
+            static of(entity) {
+                return entity.propertyByName(Camera.name);
+            }
             clipPlanes() {
                 if (this._clipPlanes == null) {
                     this._clipPlanes =
@@ -94,76 +97,28 @@ var ThisCouldBeBetter;
                 var place = uwpe.place;
                 var collisionTracker = place.collisionTracker(uwpe);
                 collisionTracker.entityReset(cameraEntity);
-                var cameraCollidable = cameraEntity.collidable();
+                var cameraCollidable = GameFramework.Collidable.of(cameraEntity);
                 //cameraCollidable.isDisabled = false;
                 cameraCollidable.entitiesAlreadyCollidedWithClear();
                 var collisions = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, cameraEntity, collisionHelper, new Array());
                 var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
-                var entitiesInView = entitiesCollidedWith.filter(x => x.drawable() != null);
+                var entitiesInView = entitiesCollidedWith.filter(x => GameFramework.Drawable.of(x) != null);
                 entitiesInView =
                     entitiesInView.filter((x, i) => entitiesInView.indexOf(x) == i); // Distinct.
                 //cameraCollidable.isDisabled = true;
                 // Now draw the unboundables.
                 var drawablesAll = place.drawables();
-                var drawablesUnboundable = drawablesAll.filter(x => x.boundable() == null);
+                var drawablesUnboundable = drawablesAll.filter(x => GameFramework.Boundable.of(x) == null);
                 entitiesInView.push(...drawablesUnboundable);
                 return entitiesInView;
             }
-            /*
-            drawEntitiesInView_1_FindEntitiesInView_WithoutTracker
-            (
-                place: Place, collisionHelper: CollisionHelper, entitiesInView: Entity[]
-            ): Entity[]
-            {
-                entitiesInView.length = 0;
-        
-                var placeEntitiesDrawable = place.drawables();
-        
-                for (var i = 0; i < placeEntitiesDrawable.length; i++)
-                {
-                    var entity = placeEntitiesDrawable[i];
-                    var drawable = entity.drawable();
-                    if (drawable.isVisible)
-                    {
-                        var entityPos = entity.locatable().loc.pos;
-                        this._posSaved.overwriteWith(entityPos);
-        
-                        this.coordsTransformWorldToView(entityPos);
-        
-                        var isEntityInView = false;
-                        var boundable = entity.boundable();
-                        if (boundable == null) // todo
-                        {
-                            isEntityInView = true;
-                        }
-                        else
-                        {
-                            var entityCollider = boundable.bounds;
-                            isEntityInView = collisionHelper.doCollidersCollide
-                            (
-                                entityCollider, this.viewCollider
-                            );
-                        }
-        
-                        if (isEntityInView)
-                        {
-                            entitiesInView.push(entity);
-                        }
-        
-                        entityPos.overwriteWith(this._posSaved);
-                    }
-                }
-        
-                return entitiesInView;
-            }
-            */
             drawEntitiesInView_2_Draw(uwpe, display, entitiesInView) {
                 this.entitiesInViewSort(entitiesInView);
                 for (var i = 0; i < entitiesInView.length; i++) {
                     var entity = entitiesInView[i];
                     uwpe.entitySet(entity);
-                    var visual = entity.drawable().visual;
-                    var entityPos = entity.locatable().loc.pos;
+                    var visual = GameFramework.Drawable.of(entity).visual;
+                    var entityPos = GameFramework.Locatable.of(entity).loc.pos;
                     this._posSaved.overwriteWith(entityPos);
                     this.coordsTransformWorldToView(entityPos);
                     visual.draw(uwpe, display);
@@ -182,14 +137,14 @@ var ThisCouldBeBetter;
             }
             static entitiesSortByRenderingOrderThenZThenY(entitiesToSort) {
                 entitiesToSort.sort((a, b) => {
-                    var aRenderingOrder = a.drawable().renderingOrder;
-                    var bRenderingOrder = b.drawable().renderingOrder;
+                    var aRenderingOrder = GameFramework.Drawable.of(a).renderingOrder;
+                    var bRenderingOrder = GameFramework.Drawable.of(b).renderingOrder;
                     if (aRenderingOrder != bRenderingOrder) {
                         returnValue = bRenderingOrder - aRenderingOrder;
                     }
                     else {
-                        var aPos = a.locatable().loc.pos;
-                        var bPos = b.locatable().loc.pos;
+                        var aPos = GameFramework.Locatable.of(a).loc.pos;
+                        var bPos = GameFramework.Locatable.of(b).loc.pos;
                         var returnValue;
                         if (aPos.z != bPos.z) {
                             returnValue = bPos.z - aPos.z;

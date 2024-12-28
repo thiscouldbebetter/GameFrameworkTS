@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this.timesRecurredSoFar = 0;
                 this.ticksUntilRecurrence = this.ticksPerRecurrence;
             }
+            static of(entity) {
+                return entity.propertyByName(Recurrent.name);
+            }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }

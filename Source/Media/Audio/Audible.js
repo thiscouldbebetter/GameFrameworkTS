@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor() {
                 this.hasBeenHeard = false;
             }
+            static of(entity) {
+                return entity.propertyByName(Audible.name);
+            }
             // Cloneable
             clone() {
                 return new Audible();

@@ -119,10 +119,15 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 	}
 
+	static of(entity: Entity): Collidable
+	{
+		return entity.propertyByName(Collidable.name) as Collidable;
+	}
+
 	static wereEntitiesAlreadyColliding(entity0: Entity, entity1: Entity): boolean
 	{
-		var collidable0 = entity0.collidable();
-		var collidable1 = entity1.collidable();
+		var collidable0 = Collidable.of(entity0);
+		var collidable1 = Collidable.of(entity1);
 
 		var wereEntitiesAlreadyColliding =
 			collidable0.wasAlreadyCollidingWithEntity(entity1)
@@ -230,7 +235,7 @@ export class Collidable implements EntityProperty<Collidable>
 	colliderLocateForEntity(entity: Entity): void
 	{
 		this.colliderResetToRestPosition();
-		var entityLoc = entity.locatable().loc;
+		var entityLoc = Locatable.of(entity).loc;
 		this.collider.locate(entityLoc);
 	}
 
@@ -255,7 +260,7 @@ export class Collidable implements EntityProperty<Collidable>
 				uwpe, collision
 			);
 
-			var entityOtherCollidable = entityOther.collidable();
+			var entityOtherCollidable = Collidable.of(entityOther);
 			uwpe.entitiesSwap();
 			entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
 			(
@@ -263,8 +268,8 @@ export class Collidable implements EntityProperty<Collidable>
 			);
 			uwpe.entitiesSwap();
 
-			entity.collidable().entityAlreadyCollidedWithAddIfNotPresent(entityOther);
-			entityOther.collidable().entityAlreadyCollidedWithAddIfNotPresent(entity);
+			Collidable.of(entity).entityAlreadyCollidedWithAddIfNotPresent(entityOther);
+			Collidable.of(entityOther).entityAlreadyCollidedWithAddIfNotPresent(entity);
 		}
 	}
 
@@ -275,8 +280,8 @@ export class Collidable implements EntityProperty<Collidable>
 		var entityThis = collision.entitiesColliding[0];
 		var entityOther = collision.entitiesColliding[1];
 
-		var collidableThis = entityThis.collidable();
-		var collidableOther = entityOther.collidable();
+		var collidableThis = Collidable.of(entityThis);
+		var collidableOther = Collidable.of(entityOther);
 
 		var eitherCollidableIsDisabled =
 			collidableThis.isDisabled
@@ -333,7 +338,7 @@ export class Collidable implements EntityProperty<Collidable>
 		if (this.isDisabled == false)
 		{
 			var entity = uwpe.entity;
-			var entityLoc = entity.locatable().loc;
+			var entityLoc = Locatable.of(entity).loc;
 			this.locPrev.overwriteWith(entityLoc);
 
 			this.colliderLocateForEntity(entity);
@@ -466,8 +471,8 @@ export class Collidable implements EntityProperty<Collidable>
 	{
 		var doEntitiesCollide = false;
 
-		var collidable0Boundable = entity0.boundable();
-		var collidable1Boundable = entity1.boundable();
+		var collidable0Boundable = Boundable.of(entity0);
+		var collidable1Boundable = Boundable.of(entity1);
 
 		var isEitherUnboundable =
 		(
@@ -493,8 +498,8 @@ export class Collidable implements EntityProperty<Collidable>
 
 		if (isEitherUnboundableOrDoBoundsCollide)
 		{
-			var collidable0 = entity0.collidable();
-			var collidable1 = entity1.collidable();
+			var collidable0 = Collidable.of(entity0);
+			var collidable1 = Collidable.of(entity1);
 
 			var collider0 = collidable0.collider;
 			var collider1 = collidable1.collider;
@@ -556,9 +561,9 @@ export class Collidable implements EntityProperty<Collidable>
 		// In the demo game, when you walk into view of three
 		// of the four corners of the 'Battlefield' rooms,
 		// the walls shift inward suddenly!
-		//return (entity.locatable().loc.equals(this.locPrev));
+		//return (Locatable.of(entity).loc.equals(this.locPrev));
 
-		return (entity.movable() == null);
+		return (Movable.of(entity) == null);
 	}
 
 	mustCoolDownBeforeCollidingAgain(): boolean
@@ -573,8 +578,8 @@ export class Collidable implements EntityProperty<Collidable>
 	{
 		var additionalResponseRequired: boolean;
 
-		var collidableThis = entityThis.collidable();
-		var collidableOther = entityOther.collidable();
+		var collidableThis = Collidable.of(entityThis);
+		var collidableOther = Collidable.of(entityOther);
 
 		var eitherCollidableCanCollideAgainWithoutSeparating =
 			collidableThis.canCollideAgainWithoutSeparating

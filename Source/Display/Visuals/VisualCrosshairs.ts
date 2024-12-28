@@ -33,7 +33,7 @@ export class VisualCrosshairs implements Visual<VisualCrosshairs>
 		var entity = uwpe.entity;
 		display.drawCrosshairs
 		(
-			entity.locatable().loc.pos,
+			Locatable.of(entity).loc.pos,
 			this.numberOfLines,
 			this.radiusOuter,
 			this.radiusInner,

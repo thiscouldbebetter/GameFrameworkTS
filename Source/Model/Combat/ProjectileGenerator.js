@@ -8,13 +8,16 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.projectileGenerations = projectileGenerations;
             }
+            static of(entity) {
+                return entity.propertyByName(ProjectileGenerator.name);
+            }
             static actionFire() {
                 return new GameFramework.Action("Fire", 
                 // perform
                 (uwpe) => {
                     var place = uwpe.place;
                     var entityActor = uwpe.entity;
-                    var projectileGenerator = entityActor.projectileGenerator();
+                    var projectileGenerator = ProjectileGenerator.of(entityActor);
                     var projectileEntities = projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
                     place.entitiesToSpawnAdd(projectileEntities);
                 });
@@ -53,7 +56,7 @@ var ThisCouldBeBetter;
                 visual);
             }
             projectileEntityFromEntityFiring(entityFiring) {
-                var userLoc = entityFiring.locatable().loc;
+                var userLoc = GameFramework.Locatable.of(entityFiring).loc;
                 var userPos = userLoc.pos;
                 var userVel = userLoc.vel;
                 var userSpeed = userVel.magnitude();
@@ -88,11 +91,11 @@ var ThisCouldBeBetter;
             collide(uwpe) {
                 var entityProjectile = uwpe.entity;
                 var entityOther = uwpe.entity2;
-                var targetKillable = entityOther.killable();
+                var targetKillable = GameFramework.Killable.of(entityOther);
                 if (targetKillable != null) {
-                    var damageToApply = entityProjectile.damager().damagePerHit;
+                    var damageToApply = GameFramework.Damager.of(entityProjectile).damagePerHit;
                     targetKillable.damageApply(uwpe, damageToApply);
-                    var projectileKillable = entityProjectile.killable();
+                    var projectileKillable = GameFramework.Killable.of(entityProjectile);
                     if (projectileKillable != null) {
                         projectileKillable.kill();
                     }

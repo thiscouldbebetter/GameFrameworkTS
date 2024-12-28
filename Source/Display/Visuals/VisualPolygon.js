@@ -44,7 +44,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawableLoc = entity.locatable().loc;
+                var drawableLoc = GameFramework.Locatable.of(entity).loc;
                 this.transformLocate.loc.overwriteWith(drawableLoc);
                 if (this.shouldUseEntityOrientation == false) {
                     this.transformLocate.loc.orientation.default();

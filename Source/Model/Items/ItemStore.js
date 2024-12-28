@@ -8,9 +8,12 @@ var ThisCouldBeBetter;
                 this.itemDefnNameCurrency = itemDefnNameCurrency;
                 this.statusMessage = "-";
             }
+            static of(entity) {
+                return entity.propertyByName(ItemStore.name);
+            }
             transfer(world, entityFrom, entityTo, messagePrefix) {
-                var itemHolderFrom = entityFrom.itemHolder();
-                var itemHolderTo = entityTo.itemHolder();
+                var itemHolderFrom = GameFramework.ItemHolder.of(entityFrom);
+                var itemHolderTo = GameFramework.ItemHolder.of(entityTo);
                 if (itemHolderFrom.itemSelected != null) {
                     var itemToTransfer = itemHolderFrom.itemSelected;
                     var tradeValue = itemToTransfer.defn(world).tradeValue;
@@ -34,7 +37,7 @@ var ThisCouldBeBetter;
                 var universe = uwpe.universe;
                 var entityUsing = uwpe.entity;
                 var entityUsed = uwpe.entity2;
-                var storeAsControl = entityUsed.itemStore().toControl(universe, universe.display.sizeInPixels, entityUsing, entityUsed, universe.venueCurrent());
+                var storeAsControl = ItemStore.of(entityUsed).toControl(universe, universe.display.sizeInPixels, entityUsing, entityUsed, universe.venueCurrent());
                 var venueNext = storeAsControl.toVenue();
                 universe.venueTransitionTo(venueNext);
             }
@@ -59,8 +62,8 @@ var ThisCouldBeBetter;
                 var buttonSize = GameFramework.Coords.fromXY(4, 2).multiplyScalar(fontHeight);
                 var listSize = GameFramework.Coords.fromXY((size.x - margin * 3) / 2, size.y - margin * 4 - buttonSize.y - fontHeight);
                 var itemBarterer = this;
-                var itemHolderCustomer = entityCustomer.itemHolder();
-                var itemHolderStore = entityStore.itemHolder();
+                var itemHolderCustomer = GameFramework.ItemHolder.of(entityCustomer);
+                var itemHolderStore = GameFramework.ItemHolder.of(entityStore);
                 var world = universe.world;
                 var back = () => {
                     universe.venueTransitionTo(venuePrev);
@@ -75,8 +78,7 @@ var ThisCouldBeBetter;
                 GameFramework.Coords.fromXY(listSize.x, 25), // size
                 GameFramework.DataBinding.fromContext(entityStore.name + ":"), font);
                 var listStoreItems = GameFramework.ControlList.from10("listStoreItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
-                listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderStore, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
-                ), // items
+                listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderStore, (c) => c.items), // items
                 GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
                 font, new GameFramework.DataBinding(itemHolderStore, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                 GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
@@ -92,8 +94,7 @@ var ThisCouldBeBetter;
                 buy // click
                 );
                 var listCustomerItems = GameFramework.ControlList.from10("listCustomerItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
-                listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderCustomer, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
-                ), // items
+                listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderCustomer, (c) => c.items), // items
                 GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
                 font, new GameFramework.DataBinding(itemHolderCustomer, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                 GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue

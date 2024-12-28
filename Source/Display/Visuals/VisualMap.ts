@@ -73,7 +73,7 @@ export class VisualMap implements Visual<VisualMap>
 	{
 		var entity = uwpe.entity;
 		var mapSizeInCells = this.map.sizeInCells;
-		var drawablePos = entity.locatable().loc.pos;
+		var drawablePos = Locatable.of(entity).loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
 
 		var cellPosStart = this._cellPosStart.clear();
@@ -127,7 +127,7 @@ export class VisualMap implements Visual<VisualMap>
 		var entity = uwpe.entity;
 
 		var drawPos = this._drawPos;
-		var drawablePos = entity.locatable().loc.pos;
+		var drawablePos = Locatable.of(entity).loc.pos;
 		var cellPosInCells = this._cellPosInCells;
 		var cellSizeInPixels = this.map.cellSize;
 

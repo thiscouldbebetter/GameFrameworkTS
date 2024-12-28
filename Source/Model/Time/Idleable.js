@@ -34,7 +34,7 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) {
                 var world = uwpe.world;
                 var entity = uwpe.entity;
-                var actor = entity.actor();
+                var actor = GameFramework.Actor.of(entity);
                 var actorIsActing = actor.actions.length > 0;
                 if (actorIsActing) {
                     this.tickLastActionPerformed = world.timerTicksSoFar;

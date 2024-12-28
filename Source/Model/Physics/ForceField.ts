@@ -13,9 +13,14 @@ export class ForceField implements EntityProperty<ForceField>
 		this.velocityToApply = velocityToApply;
 	}
 
+	static of(entity: Entity): ForceField
+	{
+		return entity.propertyByName(ForceField.name) as ForceField;
+	}
+
 	applyToEntity(entityToApplyTo: Entity): void
 	{
-		var entityLoc = entityToApplyTo.locatable().loc;
+		var entityLoc = Locatable.of(entityToApplyTo).loc;
 
 		if (this.accelerationToApply != null)
 		{

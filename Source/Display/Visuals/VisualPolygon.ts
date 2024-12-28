@@ -109,7 +109,7 @@ export class VisualPolygon implements Visual<VisualPolygon>
 	{
 		var entity = uwpe.entity;
 
-		var drawableLoc = entity.locatable().loc;
+		var drawableLoc = Locatable.of(entity).loc;
 
 		this.transformLocate.loc.overwriteWith(drawableLoc);
 		if (this.shouldUseEntityOrientation == false)

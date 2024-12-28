@@ -46,9 +46,12 @@ var ThisCouldBeBetter;
             static fromShape(shapeAtRest) {
                 return Collidable.fromColliderAndCollideEntities(shapeAtRest, null);
             }
+            static of(entity) {
+                return entity.propertyByName(Collidable.name);
+            }
             static wereEntitiesAlreadyColliding(entity0, entity1) {
-                var collidable0 = entity0.collidable();
-                var collidable1 = entity1.collidable();
+                var collidable0 = Collidable.of(entity0);
+                var collidable1 = Collidable.of(entity1);
                 var wereEntitiesAlreadyColliding = collidable0.wasAlreadyCollidingWithEntity(entity1)
                     || collidable1.wasAlreadyCollidingWithEntity(entity0);
                 return wereEntitiesAlreadyColliding;
@@ -94,7 +97,7 @@ var ThisCouldBeBetter;
             }
             colliderLocateForEntity(entity) {
                 this.colliderResetToRestPosition();
-                var entityLoc = entity.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(entity).loc;
                 this.collider.locate(entityLoc);
             }
             colliderResetToRestPosition() {
@@ -108,20 +111,20 @@ var ThisCouldBeBetter;
                     var entityOther = entitiesColliding[1];
                     uwpe.entitySet(entity).entity2Set(entityOther);
                     this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
-                    var entityOtherCollidable = entityOther.collidable();
+                    var entityOtherCollidable = Collidable.of(entityOther);
                     uwpe.entitiesSwap();
                     entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
                     uwpe.entitiesSwap();
-                    entity.collidable().entityAlreadyCollidedWithAddIfNotPresent(entityOther);
-                    entityOther.collidable().entityAlreadyCollidedWithAddIfNotPresent(entity);
+                    Collidable.of(entity).entityAlreadyCollidedWithAddIfNotPresent(entityOther);
+                    Collidable.of(entityOther).entityAlreadyCollidedWithAddIfNotPresent(entity);
                 }
             }
             collisionShouldBeIgnored(collision) {
                 var collisionShouldBeIgnored;
                 var entityThis = collision.entitiesColliding[0];
                 var entityOther = collision.entitiesColliding[1];
-                var collidableThis = entityThis.collidable();
-                var collidableOther = entityOther.collidable();
+                var collidableThis = Collidable.of(entityThis);
+                var collidableOther = Collidable.of(entityOther);
                 var eitherCollidableIsDisabled = collidableThis.isDisabled
                     || collidableOther.isDisabled;
                 if (eitherCollidableIsDisabled) {
@@ -154,7 +157,7 @@ var ThisCouldBeBetter;
                 var collisions = GameFramework.ArrayHelper.clear(this._collisions);
                 if (this.isDisabled == false) {
                     var entity = uwpe.entity;
-                    var entityLoc = entity.locatable().loc;
+                    var entityLoc = GameFramework.Locatable.of(entity).loc;
                     this.locPrev.overwriteWith(entityLoc);
                     this.colliderLocateForEntity(entity);
                     if (this.ticksUntilCanCollide > 0) {
@@ -218,8 +221,8 @@ var ThisCouldBeBetter;
             }
             static doEntitiesCollide(entity0, entity1, collisionHelper) {
                 var doEntitiesCollide = false;
-                var collidable0Boundable = entity0.boundable();
-                var collidable1Boundable = entity1.boundable();
+                var collidable0Boundable = GameFramework.Boundable.of(entity0);
+                var collidable1Boundable = GameFramework.Boundable.of(entity1);
                 var isEitherUnboundable = (collidable0Boundable == null
                     || collidable1Boundable == null);
                 var isEitherUnboundableOrDoBoundsCollide;
@@ -231,8 +234,8 @@ var ThisCouldBeBetter;
                     isEitherUnboundableOrDoBoundsCollide = doBoundsCollide;
                 }
                 if (isEitherUnboundableOrDoBoundsCollide) {
-                    var collidable0 = entity0.collidable();
-                    var collidable1 = entity1.collidable();
+                    var collidable0 = Collidable.of(entity0);
+                    var collidable1 = Collidable.of(entity1);
                     var collider0 = collidable0.collider;
                     var collider1 = collidable1.collider;
                     doEntitiesCollide =
@@ -271,16 +274,16 @@ var ThisCouldBeBetter;
                 // In the demo game, when you walk into view of three
                 // of the four corners of the 'Battlefield' rooms,
                 // the walls shift inward suddenly!
-                //return (entity.locatable().loc.equals(this.locPrev));
-                return (entity.movable() == null);
+                //return (Locatable.of(entity).loc.equals(this.locPrev));
+                return (GameFramework.Movable.of(entity) == null);
             }
             mustCoolDownBeforeCollidingAgain() {
                 return (this.ticksUntilCanCollide > 0);
             }
             ongoingCollisionOfCollidablesRequiresAdditionalResponse(entityThis, entityOther) {
                 var additionalResponseRequired;
-                var collidableThis = entityThis.collidable();
-                var collidableOther = entityOther.collidable();
+                var collidableThis = Collidable.of(entityThis);
+                var collidableOther = Collidable.of(entityOther);
                 var eitherCollidableCanCollideAgainWithoutSeparating = collidableThis.canCollideAgainWithoutSeparating
                     || collidableOther.canCollideAgainWithoutSeparating;
                 if (eitherCollidableCanCollideAgainWithoutSeparating) {

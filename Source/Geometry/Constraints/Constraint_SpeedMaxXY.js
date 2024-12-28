@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
             }
             constrain(uwpe) {
                 var targetSpeedMax = this.targetSpeedMax;
-                var entityLoc = uwpe.entity.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(uwpe.entity).loc;
                 var entityVel = entityLoc.vel;
                 var zSaved = entityVel.z;
                 entityVel.z = 0;

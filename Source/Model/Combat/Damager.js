@@ -16,6 +16,9 @@ var ThisCouldBeBetter;
             static fromDamagePerHit(damagePerHit) {
                 return new Damager(damagePerHit, null, null);
             }
+            static of(entity) {
+                return entity.propertyByName(Damager.name);
+            }
             damageToApply(universe) {
                 var returnDamage = null;
                 if (this.ticksUntilCanAttempt <= 0) {

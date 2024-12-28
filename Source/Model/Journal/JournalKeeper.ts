@@ -15,6 +15,11 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 		this.journal = journal;
 	}
 
+	static of(entity: Entity): JournalKeeper
+	{
+		return entity.propertyByName(JournalKeeper.name) as JournalKeeper;
+	}
+
 	// Clonable.
 	clone(): JournalKeeper { return this; }
 	overwriteWith(other: JournalKeeper): JournalKeeper { return this; }
@@ -39,7 +44,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 	): ControlBase
 	{
 		var world = universe.world;
-		var journalKeeper = entityJournalKeeper.journalKeeper();
+		var journalKeeper = JournalKeeper.of(entityJournalKeeper);
 
 		this.statusMessage = "Read and edit journal entries.";
 

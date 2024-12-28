@@ -13,6 +13,11 @@ export class ProjectileGenerator
 		this.projectileGenerations = projectileGenerations;
 	}
 
+	static of(entity: Entity): ProjectileGenerator
+	{
+		return entity.propertyByName(ProjectileGenerator.name) as ProjectileGenerator;
+	}
+
 	static actionFire(): Action
 	{
 		return new Action
@@ -24,7 +29,7 @@ export class ProjectileGenerator
 				var place = uwpe.place;
 				var entityActor = uwpe.entity;
 
-				var projectileGenerator = entityActor.projectileGenerator();
+				var projectileGenerator = ProjectileGenerator.of(entityActor);
 				var projectileEntities =
 					projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
 				place.entitiesToSpawnAdd(projectileEntities);
@@ -99,7 +104,7 @@ export class ProjectileGeneration
 
 	projectileEntityFromEntityFiring(entityFiring: Entity): Entity
 	{
-		var userLoc = entityFiring.locatable().loc;
+		var userLoc = Locatable.of(entityFiring).loc;
 		var userPos = userLoc.pos;
 		var userVel = userLoc.vel;
 		var userSpeed = userVel.magnitude();
@@ -159,13 +164,13 @@ export class ProjectileGeneration
 	{
 		var entityProjectile = uwpe.entity;
 		var entityOther = uwpe.entity2;
-		var targetKillable = entityOther.killable();
+		var targetKillable = Killable.of(entityOther);
 		if (targetKillable != null)
 		{
-			var damageToApply = entityProjectile.damager().damagePerHit;
+			var damageToApply = Damager.of(entityProjectile).damagePerHit;
 			targetKillable.damageApply(uwpe, damageToApply);
 
-			var projectileKillable = entityProjectile.killable();
+			var projectileKillable = Killable.of(entityProjectile);
 			if (projectileKillable != null)
 			{
 				projectileKillable.kill();

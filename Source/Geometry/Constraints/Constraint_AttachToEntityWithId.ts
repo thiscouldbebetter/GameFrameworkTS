@@ -16,8 +16,8 @@ export class Constraint_AttachToEntityWithId implements Constraint
 		var targetEntity = uwpe.place.entityById(this.targetEntityId);
 		if (targetEntity != null)
 		{
-			var targetPos = targetEntity.locatable().loc.pos;
-			uwpe.entity.locatable().loc.pos.overwriteWith(targetPos);
+			var targetPos = Locatable.of(targetEntity).loc.pos;
+			Locatable.of(uwpe.entity).loc.pos.overwriteWith(targetPos);
 		}
 	}
 

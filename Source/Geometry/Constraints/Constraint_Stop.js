@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor() { }
             constrain(uwpe) {
                 var entity = uwpe.entity;
-                var entityLoc = entity.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var entityVel = entityLoc.vel;
                 entityVel.clear();
             }

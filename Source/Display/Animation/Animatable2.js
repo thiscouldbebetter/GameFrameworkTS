@@ -16,6 +16,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new Animatable2(null, null, null);
             }
+            static of(entity) {
+                return entity.propertyByName(Animatable2.name);
+            }
             animationStartByName(name, world) {
                 if (this.ticksStartedByAnimationName.has(name) == false) {
                     this.ticksStartedByAnimationName.set(name, world.timerTicksSoFar);

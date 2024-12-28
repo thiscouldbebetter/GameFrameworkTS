@@ -268,8 +268,8 @@ export class CollisionHelper
 		collisionOut: Collision
 	): Collision
 	{
-		var collider0 = entityColliding.collidable().collider;
-		var collider1 = entityCollidedWith.collidable().collider;
+		var collider0 = Collidable.of(entityColliding).collider;
+		var collider1 = Collidable.of(entityCollidedWith).collider;
 
 		collisionOut = this.collisionOfColliders(collider0, collider1, collisionOut);
 
@@ -377,8 +377,8 @@ export class CollisionHelper
 	{
 		var doCollidersCollide = false;
 
-		var collidable0 = entity0.collidable();
-		var collidable1 = entity1.collidable();
+		var collidable0 = Collidable.of(entity0);
+		var collidable1 = Collidable.of(entity1);
 
 		var collider0 = collidable0.collider;
 		var collider1 = collidable1.collider;
@@ -514,11 +514,11 @@ export class CollisionHelper
 
 	collideEntitiesBackUp(entity0: Entity, entity1: Entity): void
 	{
-		var collidable0 = entity0.collidable();
-		var collidable1 = entity1.collidable();
+		var collidable0 = Collidable.of(entity0);
+		var collidable1 = Collidable.of(entity1);
 
-		var entity0Loc = entity0.locatable().loc;
-		var entity1Loc = entity1.locatable().loc;
+		var entity0Loc = Locatable.of(entity0).loc;
+		var entity1Loc = Locatable.of(entity1).loc;
 
 		var pos0 = entity0Loc.pos;
 		var pos1 = entity1Loc.pos;
@@ -558,11 +558,11 @@ export class CollisionHelper
 		entity0: Entity, entity1: Entity, distanceToBackUp: number
 	): void
 	{
-		var collidable0 = entity0.collidable();
-		var collidable1 = entity1.collidable();
+		var collidable0 = Collidable.of(entity0);
+		var collidable1 = Collidable.of(entity1);
 
-		var entity0Loc = entity0.locatable().loc;
-		var entity1Loc = entity1.locatable().loc;
+		var entity0Loc = Locatable.of(entity0).loc;
+		var entity1Loc = Locatable.of(entity1).loc;
 
 		var pos0 = entity0Loc.pos;
 		var pos1 = entity1Loc.pos;
@@ -600,8 +600,8 @@ export class CollisionHelper
 			entity0, entity1, this._collision
 		).pos;
 
-		var collidable0 = entity0.collidable();
-		var collidable1 = entity1.collidable();
+		var collidable0 = Collidable.of(entity0);
+		var collidable1 = Collidable.of(entity1);
 
 		var collider0 = collidable0.collider;
 		var collider1 = collidable1.collider;
@@ -615,8 +615,8 @@ export class CollisionHelper
 			collisionPos, Coords.create() // normalOut
 		);
 
-		var entity0Loc = entity0.locatable().loc;
-		var entity1Loc = entity1.locatable().loc;
+		var entity0Loc = Locatable.of(entity0).loc;
+		var entity1Loc = Locatable.of(entity1).loc;
 
 		var vel0 = entity0Loc.vel;
 		var vel1 = entity1Loc.vel;
@@ -662,9 +662,9 @@ export class CollisionHelper
 
 	collideEntitiesSeparate(entity0: Entity, entity1: Entity): void
 	{
-		var entity0Loc = entity0.locatable().loc;
+		var entity0Loc = Locatable.of(entity0).loc;
 		var entity0Pos = entity0Loc.pos;
-		var collidable1 = entity1.collidable();
+		var collidable1 = Collidable.of(entity1);
 		var collider1 = collidable1.collider;
 
 		var collider1Normal = collider1.normalAtPos
@@ -680,7 +680,7 @@ export class CollisionHelper
 			distanceMovedSoFar++;
 			entity0Pos.add(collider1Normal);
 
-			var collidable0 = entity0.collidable();
+			var collidable0 = Collidable.of(entity0);
 			collidable0.colliderLocateForEntity(entity0);
 		}
 	}

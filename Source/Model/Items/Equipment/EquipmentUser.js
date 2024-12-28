@@ -7,10 +7,13 @@ var ThisCouldBeBetter;
             constructor(socketDefnGroup) {
                 this.socketGroup = new GameFramework.EquipmentSocketGroup(socketDefnGroup);
             }
+            static of(entity) {
+                return entity.propertyByName(EquipmentUser.name);
+            }
             equipAll(uwpe) {
                 var world = uwpe.world;
                 var entityEquipmentUser = uwpe.entity;
-                var itemHolder = entityEquipmentUser.itemHolder();
+                var itemHolder = GameFramework.ItemHolder.of(entityEquipmentUser);
                 var itemsNotYetEquipped = itemHolder.items;
                 var sockets = this.socketGroup.sockets;
                 for (var s = 0; s < sockets.length; s++) {
@@ -37,7 +40,7 @@ var ThisCouldBeBetter;
                 }
                 var sockets = this.socketGroup.sockets;
                 var socketDefnGroup = this.socketGroup.defnGroup;
-                var itemToEquip = itemEntityToEquip.item();
+                var itemToEquip = GameFramework.Item.of(itemEntityToEquip);
                 var itemDefn = itemToEquip.defn(world);
                 var socketFound = sockets.filter((socket) => {
                     var socketDefn = socket.defn(socketDefnGroup);
@@ -54,7 +57,7 @@ var ThisCouldBeBetter;
             }
             equipItemEntityInFirstOpenQuickSlot(uwpe, includeSocketNameInMessage) {
                 var itemEntityToEquip = uwpe.entity2;
-                var itemToEquipDefnName = itemEntityToEquip.item().defnName;
+                var itemToEquipDefnName = GameFramework.Item.of(itemEntityToEquip).defnName;
                 var socketFound = null;
                 var itemQuickSlotCount = 10;
                 for (var i = 0; i < itemQuickSlotCount; i++) {
@@ -64,7 +67,7 @@ var ThisCouldBeBetter;
                         socketFound = socket;
                     }
                     else if (socket.itemEntityEquipped != null) {
-                        var itemInSocketDefnName = socket.itemEntityEquipped.item().defnName;
+                        var itemInSocketDefnName = GameFramework.Item.of(socket.itemEntityEquipped).defnName;
                         if (itemInSocketDefnName == itemToEquipDefnName) {
                             socketFound = socket;
                             break;
@@ -83,9 +86,9 @@ var ThisCouldBeBetter;
                     message = "Nothing to equip!";
                 }
                 else {
-                    var itemToEquip = itemEntityToEquip.item();
+                    var itemToEquip = GameFramework.Item.of(itemEntityToEquip);
                     var itemDefn = itemToEquip.defn(world);
-                    var equippable = itemEntityToEquip.equippable();
+                    var equippable = GameFramework.Equippable.of(itemEntityToEquip);
                     message = itemDefn.appearance;
                     var socket = this.socketByName(socketName);
                     if (socket == null) {
@@ -132,7 +135,7 @@ var ThisCouldBeBetter;
                     }
                     else {
                         socketToUnequipFrom.itemEntityEquipped = null;
-                        var itemToUnequip = itemEntityToUnequip.item();
+                        var itemToUnequip = GameFramework.Item.of(itemEntityToUnequip);
                         var itemDefn = itemToUnequip.defn(world);
                         message = itemDefn.appearance + " unequipped.";
                     }
@@ -141,14 +144,14 @@ var ThisCouldBeBetter;
             }
             unequipItemsNoLongerHeld(uwpe) {
                 var entityEquipmentUser = uwpe.entity;
-                var itemHolder = entityEquipmentUser.itemHolder();
+                var itemHolder = GameFramework.ItemHolder.of(entityEquipmentUser);
                 var itemsHeld = itemHolder.items;
                 var sockets = this.socketGroup.sockets;
                 for (var i = 0; i < sockets.length; i++) {
                     var socket = sockets[i];
                     var socketItemEntity = socket.itemEntityEquipped;
                     if (socketItemEntity != null) {
-                        var socketItem = socketItemEntity.item();
+                        var socketItem = GameFramework.Item.of(socketItemEntity);
                         var socketItemDefnName = socketItem.defnName;
                         if (itemsHeld.indexOf(socketItem) == -1) {
                             var itemOfSameTypeStillHeld = itemsHeld.filter(x => x.defnName == socketItemDefnName)[0];
@@ -163,18 +166,18 @@ var ThisCouldBeBetter;
                 }
             }
             unequipItem(itemToUnequip) {
-                var socket = this.socketGroup.sockets.filter(x => x.itemEntityEquipped.item() == itemToUnequip)[0];
+                var socket = this.socketGroup.sockets.filter(x => GameFramework.Item.of(x.itemEntityEquipped) == itemToUnequip)[0];
                 if (socket != null) {
                     socket.itemEntityEquipped = null;
                 }
             }
             useItemInSocketNumbered(uwpe, socketNumber) {
                 var actor = uwpe.entity;
-                var equipmentUser = actor.equipmentUser();
+                var equipmentUser = EquipmentUser.of(actor);
                 var socketName = "Item" + socketNumber;
                 var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
                 if (entityItemEquipped != null) {
-                    var itemEquipped = entityItemEquipped.item();
+                    var itemEquipped = GameFramework.Item.of(entityItemEquipped);
                     uwpe.entity2Set(entityItemEquipped);
                     itemEquipped.use(uwpe);
                 }
@@ -197,7 +200,7 @@ var ThisCouldBeBetter;
                 var fontSmall = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightSmall);
                 var fontHeightLarge = fontHeight * 1.5;
                 var fontLarge = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
-                var itemHolder = entityEquipmentUser.itemHolder();
+                var itemHolder = GameFramework.ItemHolder.of(entityEquipmentUser);
                 var equipmentUser = this;
                 var sockets = this.socketGroup.sockets;
                 var socketDefnGroup = this.socketGroup.defnGroup;
@@ -217,7 +220,7 @@ var ThisCouldBeBetter;
                 var place = world.placeCurrent;
                 var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, place, entityEquipmentUser, null);
                 var itemEntities = itemHolder.itemEntities(uwpe);
-                var itemEntitiesEquippable = itemEntities.filter(x => x.equippable() != null);
+                var itemEntitiesEquippable = itemEntities.filter(x => GameFramework.Equippable.of(x) != null);
                 var world = universe.world;
                 var place = world.placeCurrent;
                 var listHeight = 100;
@@ -229,7 +232,7 @@ var ThisCouldBeBetter;
                 var listEquippables = new GameFramework.ControlList("listEquippables", GameFramework.Coords.fromXY(10, 15), // pos
                 GameFramework.Coords.fromXY(70, listHeight), // size
                 GameFramework.DataBinding.fromContextAndGet(this, (c) => itemEntitiesEquippable), // items
-                GameFramework.DataBinding.fromGet((c) => c.item().toString(world)), // bindingForItemText
+                GameFramework.DataBinding.fromGet((c) => GameFramework.Item.of(c).toString(world)), // bindingForItemText
                 fontSmall, new GameFramework.DataBinding(this, (c) => c.itemEntitySelected, (c, v) => c.itemEntitySelected = v), // bindingForItemSelected
                 GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                 null, // bindingForIsEnabled

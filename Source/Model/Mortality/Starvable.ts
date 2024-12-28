@@ -29,6 +29,11 @@ export class Starvable implements EntityProperty<Starvable>
 		return new Starvable(satietyMax, null, null);
 	}
 
+	static of(entity: Entity): Starvable
+	{
+		return entity.propertyByName(Starvable.name) as Starvable;
+	}
+
 	starve(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._starve != null)

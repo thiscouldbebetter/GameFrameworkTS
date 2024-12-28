@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var image = this.image(universe);
                 var imageSize = image.sizeInPixels;
-                var drawPos = this._drawPos.clear().subtract(imageSize).half().add(entity.locatable().loc.pos);
+                var drawPos = this._drawPos.clear().subtract(imageSize).half().add(GameFramework.Locatable.of(entity).loc.pos);
                 display.drawImageScaled(image, drawPos, imageSize);
             }
             // Clonable.

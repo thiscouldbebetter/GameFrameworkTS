@@ -23,7 +23,7 @@ var ThisCouldBeBetter;
             // Visual.
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var entityPos = entity.locatable().loc.pos;
+                var entityPos = GameFramework.Locatable.of(entity).loc.pos;
                 var posBeforeProjection = this._posBeforeProjection.overwriteWith(entityPos);
                 var transform = this.transformCamera(uwpe);
                 transform.transformCoords(entityPos);

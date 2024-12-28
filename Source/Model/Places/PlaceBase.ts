@@ -107,13 +107,13 @@ export class PlaceBase implements Place, Loadable
 			(
 				(x: Entity) =>
 				{
-					x.drawable().updateForTimerTick(uwpe.entitySet(x) );
+					Drawable.of(x).updateForTimerTick(uwpe.entitySet(x) );
 				}
 			)
 		}
 		else
 		{
-			var camera = cameraEntity.camera();
+			var camera = Camera.of(cameraEntity);
 			camera.drawEntitiesInView(uwpe, cameraEntity, display);
 		}
 	}
@@ -377,7 +377,7 @@ export class PlaceBase implements Place, Loadable
 		{
 			var loadables = this.loadables();
 			uwpe.placeSet(this);
-			loadables.forEach(x => x.loadable().load(uwpe.entitySet(x) ) );
+			loadables.forEach(x => LoadableProperty.of(x).load(uwpe.entitySet(x) ) );
 			this.isLoaded = true;
 		}
 	}
@@ -388,7 +388,7 @@ export class PlaceBase implements Place, Loadable
 		{
 			var loadables = this.loadables();
 			uwpe.placeSet(this);
-			loadables.forEach(x => x.loadable().unload(uwpe.entitySet(x) ) );
+			loadables.forEach(x => LoadableProperty.of(x).unload(uwpe.entitySet(x) ) );
 			this.isLoaded = false;
 		}
 	}
@@ -398,7 +398,7 @@ export class PlaceBase implements Place, Loadable
 	toControl(universe: Universe, world: World): ControlBase
 	{
 		var player = this.player();
-		var playerControllable = player.controllable();
+		var playerControllable = Controllable.of(player);
 		var uwpe = new UniverseWorldPlaceEntities
 		(
 			universe, world, world.placeCurrent, player, null

@@ -79,7 +79,7 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 		var entity = uwpe.entity;
 
 		var image = this.visualImageToExtractFrom.image(universe);
-		var entityPos = entity.locatable().loc.pos;
+		var entityPos = Locatable.of(entity).loc.pos;
 		this._posSaved.overwriteWith(entityPos);
 		entityPos.subtract(this.sizeToDrawHalf);
 		display.drawImagePartialScaled

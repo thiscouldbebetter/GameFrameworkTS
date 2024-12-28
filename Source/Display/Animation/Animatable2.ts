@@ -33,6 +33,11 @@ export class Animatable2 implements EntityProperty<Animatable2>
 		return new Animatable2(null, null, null);
 	}
 
+	static of(entity: Entity): Animatable2
+	{
+		return entity.propertyByName(Animatable2.name) as Animatable2;
+	}
+
 	animationStartByName(name: string, world: World): void
 	{
 		if (this.ticksStartedByAnimationName.has(name) == false)

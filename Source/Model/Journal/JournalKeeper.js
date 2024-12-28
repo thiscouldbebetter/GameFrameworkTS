@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(journal) {
                 this.journal = journal;
             }
+            static of(entity) {
+                return entity.propertyByName(JournalKeeper.name);
+            }
             // Clonable.
             clone() { return this; }
             overwriteWith(other) { return this; }
@@ -20,7 +23,7 @@ var ThisCouldBeBetter;
             // Controls.
             toControl(universe, size, entityJournalKeeper, venuePrev, includeTitleAndDoneButton) {
                 var world = universe.world;
-                var journalKeeper = entityJournalKeeper.journalKeeper();
+                var journalKeeper = JournalKeeper.of(entityJournalKeeper);
                 this.statusMessage = "Read and edit journal entries.";
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();

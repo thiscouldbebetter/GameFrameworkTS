@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 var rotationInTurns = 0;
                 if (this._rotationInTurnsGet == null) {
                     var entity = uwpe.entity;
-                    var entityLoc = entity.locatable().loc;
+                    var entityLoc = GameFramework.Locatable.of(entity).loc;
                     rotationInTurns = entityLoc.orientation.forward.headingInTurns();
                 }
                 else {
@@ -26,7 +26,7 @@ var ThisCouldBeBetter;
             // Visual.
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var entityLoc = entity.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var rotationInTurns = this.rotationInTurnsGet(uwpe);
                 display.stateSave();
                 display.rotateTurnsAroundCenter(rotationInTurns, entityLoc.pos);

@@ -12,8 +12,8 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var targetEntity = place.entityByName(this.targetEntityName);
                 if (targetEntity != null) {
-                    var targetPos = targetEntity.locatable().loc.pos;
-                    entity.locatable().loc.pos.overwriteWith(targetPos);
+                    var targetPos = GameFramework.Locatable.of(targetEntity).loc.pos;
+                    GameFramework.Locatable.of(entity).loc.pos.overwriteWith(targetPos);
                 }
             }
             // Clonable.

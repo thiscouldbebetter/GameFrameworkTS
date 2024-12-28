@@ -85,7 +85,7 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var animatable = GameFramework.Animatable2 == null
                     ? null
-                    : entity.animatable();
+                    : GameFramework.Animatable2.of(entity);
                 var tickStarted = animatable == null
                     ? 0
                     : animatable.animationWithNameStartIfNecessary(this.name, world);

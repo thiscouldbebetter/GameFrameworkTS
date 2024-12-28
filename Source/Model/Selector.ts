@@ -76,6 +76,11 @@ export class Selector implements EntityProperty<Selector>
 		return new Selector(cursorDimension, null, null);
 	}
 
+	static of(entity: Entity): Selector
+	{
+		return entity.propertyByName(Selector.name) as Selector;
+	}
+
 	static actionEntityAtMouseClickPosSelect(): Action
 	{
 		return new Action
@@ -90,7 +95,7 @@ export class Selector implements EntityProperty<Selector>
 		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
-		var selector = uwpe.entity.selector();
+		var selector = Selector.of(uwpe.entity);
 		selector.entityAtMouseClickPosSelect(uwpe);
 	}
 
@@ -112,7 +117,7 @@ export class Selector implements EntityProperty<Selector>
 			this._entityDeselect(uwpe);
 		}
 
-		var selectable = entityToDeselect.selectable();
+		var selectable = Selectable.of(entityToDeselect);
 		if (selectable != null)
 		{
 			selectable.deselect(uwpe);
@@ -129,7 +134,7 @@ export class Selector implements EntityProperty<Selector>
 			this._entitySelect(uwpe);
 		}
 
-		var selectable = entityToSelect.selectable();
+		var selectable = Selectable.of(entityToSelect);
 		if (selectable != null)
 		{
 			selectable.select(uwpe);
@@ -151,7 +156,7 @@ export class Selector implements EntityProperty<Selector>
 		(
 			(x: Entity) =>
 			{
-				var locatable = x.locatable();
+				var locatable = Locatable.of(x);
 				var entityNotAlreadySelectedInRange =
 				(
 					x != this.entityForCursor
@@ -164,8 +169,8 @@ export class Selector implements EntityProperty<Selector>
 		).sort
 		(
 			(a: Entity, b: Entity) =>
-				a.locatable().distanceFromPos(mousePosAbsolute)
-				- b.locatable().distanceFromPos(mousePosAbsolute)
+				Locatable.of(a).distanceFromPos(mousePosAbsolute)
+				- Locatable.of(b).distanceFromPos(mousePosAbsolute)
 		)[0];
 
 		this.entitiesDeselectAll(uwpe);
@@ -209,7 +214,7 @@ export class Selector implements EntityProperty<Selector>
 
 		if (cameraEntity != null)
 		{
-			var camera = cameraEntity.camera();
+			var camera = Camera.of(cameraEntity);
 
 			mousePosAbsolute.divide
 			(
@@ -319,7 +324,7 @@ export class Selector implements EntityProperty<Selector>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var cursorPos = this.entityForCursor.locatable().loc.pos;
+		var cursorPos = Locatable.of(this.entityForCursor).loc.pos;
 		var mousePosAbsolute = this.mouseMovePosAbsoluteGet(uwpe);
 		cursorPos.overwriteWith(mousePosAbsolute);
 
@@ -327,12 +332,12 @@ export class Selector implements EntityProperty<Selector>
 		var isEntitySelected = (entitySelected != null);
 		if (isEntitySelected)
 		{
-			var haloLoc = this.entityForHalo.locatable().loc;
-			var entitySelectedLoc = entitySelected.locatable().loc
+			var haloLoc = Locatable.of(this.entityForHalo).loc;
+			var entitySelectedLoc = Locatable.of(entitySelected).loc
 			haloLoc.overwriteWith(entitySelectedLoc);
 			haloLoc.pos.z--;
 			var uwpeHalo = uwpe.clone().entitySet(this.entityForHalo);
-			this.entityForHalo.drawable().updateForTimerTick(uwpeHalo);
+			Drawable.of(this.entityForHalo).updateForTimerTick(uwpeHalo);
 		}
 
 		if (this._control != null)

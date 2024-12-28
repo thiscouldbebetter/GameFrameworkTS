@@ -30,7 +30,7 @@ var ThisCouldBeBetter;
                     var actionsToPerform = inputHelper.actionsFromInput(actionsByName, placeDefn.actionToInputsMappingsByInputName);
                     var vehicle = entityVehicle.propertiesByName.get(Vehicle.name);
                     vehicle.steeringDirection = 0;
-                    var vehicleLoc = entityVehicle.locatable().loc;
+                    var vehicleLoc = GameFramework.Locatable.of(entityVehicle).loc;
                     var vehicleOrientation = vehicleLoc.orientation;
                     var vehicleForward = vehicleOrientation.forward;
                     var vehicleRight = vehicleOrientation.right;
@@ -51,7 +51,7 @@ var ThisCouldBeBetter;
                             vehicle.steeringDirection = 1;
                         }
                         else if (actionName == "Use") {
-                            var occupantLoc = this.entityOccupant.locatable().loc;
+                            var occupantLoc = GameFramework.Locatable.of(this.entityOccupant).loc;
                             occupantLoc.pos.overwriteWith(vehicleLoc.pos);
                             occupantLoc.vel.clear();
                             place.entityToSpawnAdd(this.entityOccupant);

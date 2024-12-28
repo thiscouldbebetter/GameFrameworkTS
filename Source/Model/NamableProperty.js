@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(name) {
                 this.name = name;
             }
+            static of(entity) {
+                return entity.propertyByName(NamableProperty.name);
+            }
             // Clonable.
             clone() { return this; }
             overwriteWith(other) { return this; }

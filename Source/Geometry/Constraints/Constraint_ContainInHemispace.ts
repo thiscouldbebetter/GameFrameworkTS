@@ -20,7 +20,7 @@ export class Constraint_ContainInHemispace implements Constraint
 
 		var hemispace = this.hemispaceToContainWithin;
 		var plane = hemispace.plane;
-		var loc = entity.locatable().loc;
+		var loc = Locatable.of(entity).loc;
 		var pos = loc.pos;
 
 		// Can't use Hemispace.trimCoords(),

@@ -42,7 +42,7 @@ export class VisualTransformEntityPos implements Visual<VisualTransformEntityPos
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		var entityPos = uwpe.entity.locatable().loc.pos;
+		var entityPos = Locatable.of(uwpe.entity).loc.pos;
 		this._entityPosSaved.overwriteWith(entityPos);
 		this.transformToApply.transformCoords(entityPos);
 		this.child.draw(uwpe, display);

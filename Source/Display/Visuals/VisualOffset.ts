@@ -31,7 +31,7 @@ export class VisualOffset implements Visual<VisualOffset>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		var drawablePos = entity.locatable().loc.pos;
+		var drawablePos = Locatable.of(entity).loc.pos;
 		this._posSaved.overwriteWith(drawablePos);
 		drawablePos.add(this.offset);
 		this.child.draw(uwpe, display);

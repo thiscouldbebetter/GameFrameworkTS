@@ -34,11 +34,14 @@ var ThisCouldBeBetter;
             static fromCursorDimension(cursorDimension) {
                 return new Selector(cursorDimension, null, null);
             }
+            static of(entity) {
+                return entity.propertyByName(Selector.name);
+            }
             static actionEntityAtMouseClickPosSelect() {
                 return new GameFramework.Action("Recording Start/Stop", Selector.actionEntityAtMouseClickPosSelectPerform);
             }
             static actionEntityAtMouseClickPosSelectPerform(uwpe) {
-                var selector = uwpe.entity.selector();
+                var selector = Selector.of(uwpe.entity);
                 selector.entityAtMouseClickPosSelect(uwpe);
             }
             entitiesDeselectAll(uwpe) {
@@ -50,7 +53,7 @@ var ThisCouldBeBetter;
                 if (this._entityDeselect != null) {
                     this._entityDeselect(uwpe);
                 }
-                var selectable = entityToDeselect.selectable();
+                var selectable = GameFramework.Selectable.of(entityToDeselect);
                 if (selectable != null) {
                     selectable.deselect(uwpe);
                 }
@@ -61,7 +64,7 @@ var ThisCouldBeBetter;
                 if (this._entitySelect != null) {
                     this._entitySelect(uwpe);
                 }
-                var selectable = entityToSelect.selectable();
+                var selectable = GameFramework.Selectable.of(entityToSelect);
                 if (selectable != null) {
                     selectable.select(uwpe);
                 }
@@ -72,14 +75,14 @@ var ThisCouldBeBetter;
                 var entitiesInPlace = place.entitiesAll();
                 var range = this.cursorDimension / 2;
                 var entityToSelect = entitiesInPlace.filter((x) => {
-                    var locatable = x.locatable();
+                    var locatable = GameFramework.Locatable.of(x);
                     var entityNotAlreadySelectedInRange = (x != this.entityForCursor
                         && this.entitiesSelected.indexOf(x) == -1
                         && locatable != null
                         && locatable.distanceFromPos(mousePosAbsolute) < range);
                     return entityNotAlreadySelectedInRange;
-                }).sort((a, b) => a.locatable().distanceFromPos(mousePosAbsolute)
-                    - b.locatable().distanceFromPos(mousePosAbsolute))[0];
+                }).sort((a, b) => GameFramework.Locatable.of(a).distanceFromPos(mousePosAbsolute)
+                    - GameFramework.Locatable.of(b).distanceFromPos(mousePosAbsolute))[0];
                 this.entitiesDeselectAll(uwpe);
                 if (entityToSelect != null) {
                     uwpe.entity2Set(entityToSelect);
@@ -98,7 +101,7 @@ var ThisCouldBeBetter;
                 var place = uwpe.place;
                 var cameraEntity = place.camera();
                 if (cameraEntity != null) {
-                    var camera = cameraEntity.camera();
+                    var camera = GameFramework.Camera.of(cameraEntity);
                     mousePosAbsolute.divide(uwpe.universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();
                 }
                 return mousePosAbsolute;
@@ -144,18 +147,18 @@ var ThisCouldBeBetter;
             }
             propertyName() { return Selector.name; }
             updateForTimerTick(uwpe) {
-                var cursorPos = this.entityForCursor.locatable().loc.pos;
+                var cursorPos = GameFramework.Locatable.of(this.entityForCursor).loc.pos;
                 var mousePosAbsolute = this.mouseMovePosAbsoluteGet(uwpe);
                 cursorPos.overwriteWith(mousePosAbsolute);
                 var entitySelected = this.entitiesSelected[0];
                 var isEntitySelected = (entitySelected != null);
                 if (isEntitySelected) {
-                    var haloLoc = this.entityForHalo.locatable().loc;
-                    var entitySelectedLoc = entitySelected.locatable().loc;
+                    var haloLoc = GameFramework.Locatable.of(this.entityForHalo).loc;
+                    var entitySelectedLoc = GameFramework.Locatable.of(entitySelected).loc;
                     haloLoc.overwriteWith(entitySelectedLoc);
                     haloLoc.pos.z--;
                     var uwpeHalo = uwpe.clone().entitySet(this.entityForHalo);
-                    this.entityForHalo.drawable().updateForTimerTick(uwpeHalo);
+                    GameFramework.Drawable.of(this.entityForHalo).updateForTimerTick(uwpeHalo);
                 }
                 if (this._control != null) {
                     this._control._isVisible = isEntitySelected;

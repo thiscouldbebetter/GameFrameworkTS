@@ -33,7 +33,7 @@ export class VisualFan implements Visual<VisualFan>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		var drawableLoc = entity.locatable().loc;
+		var drawableLoc = Locatable.of(entity).loc;
 		var drawPos = this._drawPos.overwriteWith
 		(
 			drawableLoc.pos

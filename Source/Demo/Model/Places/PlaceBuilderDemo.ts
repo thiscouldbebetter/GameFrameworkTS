@@ -93,15 +93,15 @@ class PlaceBuilderDemo // Main.
 		(
 			entityDefns.get("Ring"), 1, null, entityPosRange, randomizer
 		)[0];
-		var ringLoc = ring.locatable().loc;
+		var ringLoc = Locatable.of(ring).loc;
 		ringLoc.spin.angleInTurnsRef.value = .001;
 		this.entities.push(ring);
 
 		var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
 		var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
-		var itemOre = itemEntityOre.item();
+		var itemOre = Item.of(itemEntityOre);
 		itemOre.quantitySet(3); // For crafting.
-		container.itemHolder().itemAdd(itemOre);
+		ItemHolder.of(container).itemAdd(itemOre);
 		this.entities.push(container);
 
 		var randomizerSeed = this.randomizer.fraction();
@@ -129,7 +129,7 @@ class PlaceBuilderDemo // Main.
 		}
 		this.entitiesAllGround();
 		var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
-		this.entities.splice(0, 0, ...this.entityBuildBackground(entityCamera.camera() ) );
+		this.entities.splice(0, 0, ...this.entityBuildBackground(Camera.of(entityCamera) ) );
 
 		var randomizerSeed = this.randomizer.fraction();
 		var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
@@ -148,7 +148,7 @@ class PlaceBuilderDemo // Main.
 		this.build_Camera(this.cameraViewSize, this.size);
 
 		var entityCamera = this.build_Camera(this.cameraViewSize, this.size);
-		this.entities.splice(0, 0, ...this.entityBuildBackground(entityCamera.camera() ) );
+		this.entities.splice(0, 0, ...this.entityBuildBackground(Camera.of(entityCamera) ) );
 
 		var randomizerSeed = this.randomizer.fraction();
 		var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
@@ -431,7 +431,7 @@ class PlaceBuilderDemo // Main.
 		(
 			this.entityDefnsByName.get("Exit"), entityExitPosRange, this.randomizer
 		);
-		var exitPortal = exit.portal();
+		var exitPortal = Portal.of(exit);
 		exitPortal.destinationPlaceName = placeNameToReturnTo;
 		exitPortal.destinationEntityName = this.name;
 		this.entities.push(exit);
@@ -440,7 +440,7 @@ class PlaceBuilderDemo // Main.
 		var cellCollide = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			var e0 = uwpe.entity;
-			var traversable = e0.traversable();
+			var traversable = Traversable.of(e0);
 			if (traversable != null)
 			{
 				if (traversable.isBlocking)
@@ -1099,7 +1099,7 @@ class PlaceBuilderDemo // Main.
 		entities.push(entityMineLoader);
 
 		var entityRadioMessage =
-			this.entityBuildRadioMessage(entityDefns.get("Friendly").drawable().visual, "This is " + this.name + ".");
+			this.entityBuildRadioMessage(Drawable.of(entityDefns.get("Friendly") ).visual, "This is " + this.name + ".");
 		entities.push(entityRadioMessage);
 
 		placeNamesToIncludePortalsTo.forEach(placeName =>
@@ -1107,7 +1107,7 @@ class PlaceBuilderDemo // Main.
 			var entityDefnPortal = this.entityDefnsByName.get("Portal");
 			var entityPortal = this.entityBuildFromDefn(entityDefnPortal, entityPosRange, randomizer);
 			entityPortal.name = placeName;
-			entityPortal.portal().destinationPlaceName = placeName;
+			Portal.of(entityPortal).destinationPlaceName = placeName;
 			entities.push(entityPortal);
 		});
 		entities.push( this.entityBuildFromDefn( entityDefns.get("Store"), entityPosRange, randomizer) );
@@ -1136,8 +1136,8 @@ class PlaceBuilderDemo // Main.
 		(
 			entityDefns.get("Ring"), entityPosRange, this.randomizer
 		);
-		var ringLoc = entityRing.locatable().loc;
-		ringLoc.pos.overwriteWith(goalEntity.locatable().loc.pos);
+		var ringLoc = Locatable.of(entityRing).loc;
+		ringLoc.pos.overwriteWith(Locatable.of(goalEntity).loc.pos);
 		ringLoc.spin.angleInTurnsRef.value = .001;
 
 		entities.push(entityRing);
@@ -1211,7 +1211,7 @@ class PlaceBuilderDemo // Main.
 			(entities: Entity[]) => Camera.entitiesSortByRenderingOrderThenZThenY(entities)
 		);
 		var cameraEntity = camera.toEntity();
-		cameraEntity.constrainable().constraintAdd(new Constraint_ContainInBox(cameraPosBox) );
+		Constrainable.of(cameraEntity).constraintAdd(new Constraint_ContainInBox(cameraPosBox) );
 		return cameraEntity;
 	}
 
@@ -1274,7 +1274,7 @@ class PlaceBuilderDemo // Main.
 	{
 		var entityPosRange = new Box(this.size.clone().half(), this.size.clone().subtract(this.marginSize) );
 		var exit = this.entityBuildFromDefn(this.entityDefnsByName.get("Exit"), entityPosRange, this.randomizer);
-		var exitPortal = exit.portal();
+		var exitPortal = Portal.of(exit);
 		exitPortal.destinationPlaceName = placeNameToReturnTo;
 		exitPortal.destinationEntityName = this.name;
 		this.entities.push(exit);
@@ -1285,7 +1285,7 @@ class PlaceBuilderDemo // Main.
 	{
 		this.entities.forEach
 		(
-			(x: Entity) => { if (x.locatable() != null) { x.locatable().loc.pos.z = 0; } }
+			(x: Entity) => { if (Locatable.of(x) != null) { Locatable.of(x).loc.pos.z = 0; } }
 		);
 	}
 
@@ -1304,7 +1304,7 @@ class PlaceBuilderDemo // Main.
 				entityDefn, posRange, randomizer
 			);
 
-			var entityItem = entity.item();
+			var entityItem = Item.of(entity);
 			if (entityItem != null)
 			{
 				entityItem.quantitySet(itemQuantityPerEntity || 1);
@@ -1322,7 +1322,7 @@ class PlaceBuilderDemo // Main.
 	): Entity
 	{
 		var entity = entityDefn.clone();
-		var entityLocatable = entity.locatable();
+		var entityLocatable = Locatable.of(entity);
 		if (entityLocatable != null)
 		{
 			entityLocatable.loc.pos.randomize
@@ -1513,13 +1513,13 @@ class PlaceBuilderDemo // Main.
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var eOther = uwpe.entity2;
-				if (eOther.playable() != null)
+				if (Playable.of(eOther) != null)
 				{
 					var ePortal = uwpe.entity;
-					var usable = ePortal.usable();
+					var usable = Usable.of(ePortal);
 					if (usable == null)
 					{
-						var portal = ePortal.portal();
+						var portal = Portal.of(ePortal);
 						uwpe.entitiesSwap(); // hack
 						portal.use(uwpe);
 						uwpe.entitiesSwap();
@@ -1531,10 +1531,10 @@ class PlaceBuilderDemo // Main.
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var eOther = uwpe.entity2;
-				if (eOther.playable() != null)
+				if (Playable.of(eOther) != null)
 				{
 					var ePortal = uwpe.entity;
-					var forceField = ePortal.forceField();
+					var forceField = ForceField.of(ePortal);
 					if (forceField != null)
 					{
 						forceField.applyToEntity(eOther);
@@ -1739,12 +1739,12 @@ class PlaceBuilderDemo // Main.
 						var e = uwpe.entity;
 
 						var player = p.player();
-						var playerItemHolder = player.itemHolder();
+						var playerItemHolder = ItemHolder.of(player);
 						var itemRadio = new Item("Walkie-Talkie", 1);
 						var doesPlayerHaveRadio = playerItemHolder.hasItem(itemRadio);
 						if (doesPlayerHaveRadio == false)
 						{
-							e.recurrent().timesRecurredSoFar = 0;
+							Recurrent.of(e).timesRecurredSoFar = 0;
 						}
 						else
 						{
@@ -1840,7 +1840,7 @@ class PlaceBuilderDemo // Main.
 					(uwpe: UniverseWorldPlaceEntities) =>
 					{
 						var eUsed = uwpe.entity2;
-						eUsed.itemStore().use(uwpe);
+						ItemStore.of(eUsed).use(uwpe);
 						return null;
 					}
 				)
@@ -1963,7 +1963,7 @@ class PlaceBuilderDemo // Main.
 				var entityUser = uwpe.entity;
 				var entityDevice = uwpe.entity2;
 
-				var userAsItemHolder = entityUser.itemHolder();
+				var userAsItemHolder = ItemHolder.of(entityUser);
 				var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Bomb", 1);
 				if (hasAmmo == false)
 				{
@@ -1971,12 +1971,12 @@ class PlaceBuilderDemo // Main.
 				}
 
 				userAsItemHolder.itemSubtractDefnNameAndQuantity("Bomb", 1);
-				entityUser.equipmentUser().unequipItemsNoLongerHeld
+				EquipmentUser.of(entityUser).unequipItemsNoLongerHeld
 				(
 					uwpe
 				);
 
-				var userLoc = entityUser.locatable().loc;
+				var userLoc = Locatable.of(entityUser).loc;
 				var userPos = userLoc.pos;
 				var userVel = userLoc.vel;
 				var userSpeed = userVel.magnitude();
@@ -1985,12 +1985,12 @@ class PlaceBuilderDemo // Main.
 				var projectileDimension = 1.5;
 				var projectileVisual = new VisualGroup
 				([
-					entityDevice.drawable().visual
+					Drawable.of(entityDevice).visual
 					// todo - Add sparks?
 				]);
 
 				var userDirection = userVel.clone().normalize();
-				var userRadius = (entityUser.collidable().collider as Sphere).radius;
+				var userRadius = (Collidable.of(entityUser).collider as Sphere).radius;
 				var projectilePos = userPos.clone().add
 				(
 					userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
@@ -2021,12 +2021,12 @@ class PlaceBuilderDemo // Main.
 					{
 						var entityProjectile = uwpe.entity;
 						var entityOther = uwpe.entity2;
-						var killable = entityOther.killable();
+						var killable = Killable.of(entityOther);
 						if (killable != null)
 						{
 							killable.damageApply
 							(
-								uwpe, entityProjectile.damager().damagePerHit
+								uwpe, Damager.of(entityProjectile).damagePerHit
 							);
 						}
 					};
@@ -2048,7 +2048,7 @@ class PlaceBuilderDemo // Main.
 							Damager.fromDamagePerHit(Damage.fromAmount(20)),
 							Drawable.fromVisual(explosionVisual),
 							new Ephemeral(8, null),
-							entityDying.locatable()
+							Locatable.of(entityDying)
 						]
 					);
 					uwpe.place.entityToSpawnAdd(explosionEntity);
@@ -2148,7 +2148,7 @@ class PlaceBuilderDemo // Main.
 			var entityUser = uwpe.entity;
 			var entityDevice = uwpe.entity2;
 
-			var device = entityDevice.device();
+			var device = Device.of(entityDevice);
 			var tickCurrent = w.timerTicksSoFar;
 			var ticksSinceUsed = tickCurrent - device.tickLastUsed;
 			if (ticksSinceUsed < device.ticksToCharge)
@@ -2156,7 +2156,7 @@ class PlaceBuilderDemo // Main.
 				return;
 			}
 
-			var userAsItemHolder = entityUser.itemHolder();
+			var userAsItemHolder = ItemHolder.of(entityUser);
 			var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Arrow", 1);
 			if (hasAmmo == false)
 			{
@@ -2164,14 +2164,14 @@ class PlaceBuilderDemo // Main.
 			}
 
 			userAsItemHolder.itemSubtractDefnNameAndQuantity("Arrow", 1);
-			entityUser.equipmentUser().unequipItemsNoLongerHeld
+			EquipmentUser.of(entityUser).unequipItemsNoLongerHeld
 			(
 				uwpe
 			);
 
 			device.tickLastUsed = tickCurrent;
 
-			var userLoc = entityUser.locatable().loc;
+			var userLoc = Locatable.of(entityUser).loc;
 			var userPos = userLoc.pos;
 			var userVel = userLoc.vel;
 			var userSpeed = userVel.magnitude();
@@ -2184,7 +2184,7 @@ class PlaceBuilderDemo // Main.
 			var projectileVisual = itemArrowDefn.visual;
 
 			var userDirection = userVel.clone().normalize();
-			var userRadius = (entityUser.collidable().collider as Sphere).radius;
+			var userRadius = (Collidable.of(entityUser).collider as Sphere).radius;
 			var projectilePos = userPos.clone().add
 			(
 				userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
@@ -2203,14 +2203,14 @@ class PlaceBuilderDemo // Main.
 			{
 				var entityProjectile = uwpe.entity;
 				var entityOther = uwpe.entity2;
-				var killable = entityOther.killable();
+				var killable = Killable.of(entityOther);
 				if (killable != null)
 				{
 					killable.damageApply
 					(
 						uwpe, null
 					);
-					entityProjectile.killable().kill();
+					Killable.of(entityProjectile).kill();
 				}
 			};
 
@@ -2228,7 +2228,7 @@ class PlaceBuilderDemo // Main.
 						[
 							new Ephemeral(8, null),
 							Drawable.fromVisual(visualStrike),
-							entityKillable.locatable()
+							Locatable.of(entityKillable)
 						]
 					);
 					uwpe.place.entityToSpawnAdd(entityStrike);
@@ -2383,12 +2383,12 @@ class PlaceBuilderDemo // Main.
 		{
 			var entityVehicle = uwpe.entity;
 			var entityOther = uwpe.entity2;
-			if (entityOther.portal() != null)
+			if (Portal.of(entityOther) != null)
 			{
-				var usable = entityOther.usable();
+				var usable = Usable.of(entityOther);
 				if (usable == null)
 				{
-					var portal = entityOther.portal();
+					var portal = Portal.of(entityOther);
 					portal.use(uwpe);
 				}
 			}
@@ -2819,11 +2819,11 @@ class PlaceBuilderDemo // Main.
 				var rangeMax = 20; // todo
 				var boulderInRange = bouldersInPlace.filter
 				(
-					(x: Entity) => x.locatable().distanceFromEntity(eUser) < rangeMax
+					(x: Entity) => Locatable.of(x).distanceFromEntity(eUser) < rangeMax
 				)[0];
 				if (boulderInRange != null)
 				{
-					boulderInRange.killable().kill();
+					Killable.of(boulderInRange).kill();
 				}
 			}
 		);
@@ -2926,25 +2926,25 @@ class PlaceBuilderDemo // Main.
 				var rangeMax = 20; // todo
 				var holeInRange = holesInPlace.filter
 				(
-					x => x.locatable().distanceFromEntity(eUser) < rangeMax
+					x => Locatable.of(x).distanceFromEntity(eUser) < rangeMax
 				)[0];
 				if (holeInRange != null)
 				{
-					var isHoleEmpty = (holeInRange.itemHolder().items.length == 0);
+					var isHoleEmpty = (ItemHolder.of(holeInRange).items.length == 0);
 					if (isHoleEmpty)
 					{
 						p.entityToRemoveAdd(holeInRange);
 					}
 					else
 					{
-						var holeInRangePerceptible = holeInRange.perceptible();
+						var holeInRangePerceptible = Perceptible.of(holeInRange);
 						holeInRangePerceptible.isHiding =
 							(holeInRangePerceptible.isHiding == false);
 					}
 				}
 				else
 				{
-					eUser.locatable().entitySpawnWithDefnName(uwpe, "Hole");
+					Locatable.of(eUser).entitySpawnWithDefnName(uwpe, "Hole");
 				}
 			}
 		);
@@ -2994,13 +2994,13 @@ class PlaceBuilderDemo // Main.
 			var entityUser = uwpe.entity;
 			var entityDevice = uwpe.entity2;
 
-			var userLoc = entityUser.locatable().loc;
+			var userLoc = Locatable.of(entityUser).loc;
 			var userPos = userLoc.pos;
 			var userVel = userLoc.vel;
 			var userSpeed = userVel.magnitude();
 			if (userSpeed == 0) { return; }
 
-			var userTirable = entityUser.tirable();
+			var userTirable = Tirable.of(entityUser);
 			var staminaToFire = 10;
 			if (userTirable.stamina < staminaToFire)
 			{
@@ -3023,7 +3023,7 @@ class PlaceBuilderDemo // Main.
 			userTirable.staminaSubtract(staminaToFire);
 
 			var userDirection = userVel.clone().normalize();
-			var userRadius = (entityUser.collidable().collider as Sphere).radius;
+			var userRadius = (Collidable.of(entityUser).collider as Sphere).radius;
 			var projectileDimension = 1.5;
 
 			var projectilePos = userPos.clone().add
@@ -3035,7 +3035,7 @@ class PlaceBuilderDemo // Main.
 				userVel.clone().normalize(), null
 			);
 
-			var projectileVisual = entityDevice.drawable().visual;
+			var projectileVisual = Drawable.of(entityDevice).visual;
 			projectileVisual = (projectileVisual as VisualGroup).children[0].clone();
 			projectileVisual.transform(new Transform_RotateRight(1));
 
@@ -3049,15 +3049,15 @@ class PlaceBuilderDemo // Main.
 			{
 				var entityProjectile = uwpe.entity;
 				var entityOther = uwpe.entity2;
-				var killable = entityOther.killable();
+				var killable = Killable.of(entityOther);
 				if (killable != null)
 				{
-					var damageToApply = entityProjectile.damager().damagePerHit;
+					var damageToApply = Damager.of(entityProjectile).damagePerHit;
 					killable.damageApply
 					(
 						uwpe, damageToApply
 					);
-					entityProjectile.killable().kill();
+					Killable.of(entityProjectile).kill();
 				}
 			};
 
@@ -3075,7 +3075,7 @@ class PlaceBuilderDemo // Main.
 						[
 							new Ephemeral(8, null),
 							Drawable.fromVisual(visualStrike),
-							entityKillable.locatable()
+							Locatable.of(entityKillable)
 						]
 					);
 					place.entityToSpawnAdd(entityStrike);

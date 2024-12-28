@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
             static fromNameTicksToChargeAndUse(name, ticksToCharge, use) {
                 return Device.fromNameCanUseAndUse(name, (uwpe) => Device.canUseAfterTicksToCharge(uwpe, ticksToCharge), use);
             }
+            static of(entity) {
+                return entity.propertyByName(Device.name);
+            }
             canUse(uwpe) {
                 return this._canUse == null ? true : this._canUse(uwpe);
             }

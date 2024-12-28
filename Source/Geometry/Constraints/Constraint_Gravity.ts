@@ -13,7 +13,7 @@ export class Constraint_Gravity implements Constraint
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;
-		var loc = entity.locatable().loc;
+		var loc = Locatable.of(entity).loc;
 		loc.accel.add(this.accelerationPerTick);
 	}
 

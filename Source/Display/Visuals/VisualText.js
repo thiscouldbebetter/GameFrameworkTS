@@ -40,7 +40,7 @@ var ThisCouldBeBetter;
                     this._text.contextSet(uwpe);
                 }
                 var text = this.text();
-                display.drawText(text, this.fontNameAndHeight, entity.locatable().loc.pos, this.colorFill, this.colorBorder, true, // isCenteredHorizontally
+                display.drawText(text, this.fontNameAndHeight, GameFramework.Locatable.of(entity).loc.pos, this.colorFill, this.colorBorder, true, // isCenteredHorizontally
                 true, // isCenteredVertically
                 null // sizeMaxInPixels
                 );

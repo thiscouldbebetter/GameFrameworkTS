@@ -13,7 +13,7 @@ export class Constraint_ContainInBox implements Constraint
 
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.boxToContainWithin.trimCoords(uwpe.entity.locatable().loc.pos);
+		this.boxToContainWithin.trimCoords(Locatable.of(uwpe.entity).loc.pos);
 	}
 
 	// Clonable.

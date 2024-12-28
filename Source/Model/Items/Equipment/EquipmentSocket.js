@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
             toString(world) {
                 var itemEntityEquippedAsString = (this.itemEntityEquipped == null
                     ? "[empty]"
-                    : this.itemEntityEquipped.item().toString(world));
+                    : GameFramework.Item.of(this.itemEntityEquipped).toString(world));
                 var returnValue = this.defnName + ": " + itemEntityEquippedAsString;
                 return returnValue;
             }

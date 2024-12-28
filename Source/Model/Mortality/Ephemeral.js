@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
             static default() {
                 return Ephemeral.fromTicksToLive(100);
             }
+            static of(entity) {
+                return entity.propertyByName(Ephemeral.name);
+            }
             static fromTicksToLive(ticksToLive) {
                 return new Ephemeral(ticksToLive, null);
             }

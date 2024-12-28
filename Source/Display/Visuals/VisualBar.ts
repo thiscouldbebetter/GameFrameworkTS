@@ -53,7 +53,7 @@ export class VisualBar implements Visual<VisualBar>
 		var entity = uwpe.entity;
 		var pos = this._drawPos.overwriteWith
 		(
-			entity.locatable().loc.pos
+			Locatable.of(entity).loc.pos
 		).subtract(this._sizeHalf);
 		var _amountCurrent: number =
 			this.amountCurrent.contextSet(entity).get() as number;

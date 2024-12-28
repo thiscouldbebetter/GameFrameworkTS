@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.transformToApply = transformToApply;
             }
             constrain(uwpe) {
-                var constrainablePos = uwpe.entity.locatable().loc.pos;
+                var constrainablePos = GameFramework.Locatable.of(uwpe.entity).loc.pos;
                 this.transformToApply.transformCoords(constrainablePos);
             }
             // Clonable.

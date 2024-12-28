@@ -18,7 +18,7 @@ export class Constraint_FrictionXY implements Constraint
 		var entity = uwpe.entity;
 
 		var targetFrictionCoefficient = this.target;
-		var entityLoc = entity.locatable().loc;
+		var entityLoc = Locatable.of(entity).loc;
 		var entityVel = entityLoc.vel;
 		var entityVelZSaved = entityVel.z;
 		entityVel.z = 0;

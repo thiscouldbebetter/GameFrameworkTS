@@ -56,7 +56,7 @@ export class VisualRepeating implements Visual<VisualRepeating>
 	{
 		var entity = uwpe.entity;
 
-		var drawPos = entity.locatable().loc.pos;
+		var drawPos = Locatable.of(entity).loc.pos;
 
 		this._drawablePosToRestore.overwriteWith(drawPos);
 

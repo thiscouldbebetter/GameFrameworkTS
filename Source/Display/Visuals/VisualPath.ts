@@ -29,7 +29,7 @@ export class VisualPath implements Visual<VisualPath>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		var drawablePos = entity.locatable().loc.pos;
+		var drawablePos = Locatable.of(entity).loc.pos;
 		this.transformTranslate.displacement.overwriteWith(drawablePos);
 
 		this.verticesAsPathTransformed.overwriteWith

@@ -40,7 +40,7 @@ export class VisualEllipse implements Visual<VisualEllipse>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		var drawableLoc = entity.locatable().loc;
+		var drawableLoc = Locatable.of(entity).loc;
 
 		var rotationInTurns = this.rotationInTurns;
 

@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawableLoc = entity.locatable().loc;
+                var drawableLoc = GameFramework.Locatable.of(entity).loc;
                 var drawablePos = drawableLoc.pos;
                 var drawableOrientation = drawableLoc.orientation;
                 this._posSaved.overwriteWith(drawablePos);

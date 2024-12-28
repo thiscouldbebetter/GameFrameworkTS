@@ -10,7 +10,7 @@ export class Constraint_WrapToPlaceSizeX implements Constraint
 
 		var placeSize = place.size();
 
-		var entityLoc = entity.locatable().loc;
+		var entityLoc = Locatable.of(entity).loc;
 		var entityPos = entityLoc.pos;
 
 		entityPos.x = NumberHelper.wrapToRangeMax(entityPos.x, placeSize.x);

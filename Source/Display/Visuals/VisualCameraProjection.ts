@@ -44,7 +44,7 @@ export class VisualCameraProjection implements Visual<VisualCameraProjection>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		var entityPos = entity.locatable().loc.pos;
+		var entityPos = Locatable.of(entity).loc.pos;
 		var posBeforeProjection = this._posBeforeProjection.overwriteWith(entityPos);
 		var transform = this.transformCamera(uwpe);
 		transform.transformCoords(entityPos);

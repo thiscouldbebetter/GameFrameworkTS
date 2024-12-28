@@ -38,9 +38,9 @@ export class VisualJump2D implements Visual<VisualJump2D>
 	{
 		var world = uwpe.world;
 		var entity = uwpe.entity;
-		var entityPos = entity.locatable().loc.pos;
+		var entityPos = Locatable.of(entity).loc.pos;
 		var entityPosZ = entityPos.z;
-		var camera = world.placeCurrent.camera().camera(); // hack
+		var camera = Camera.of(world.placeCurrent.camera() ); // hack
 		entityPosZ -= camera.focalLength;
 		var height = 0 - entityPosZ;
 		if (height <= 0)

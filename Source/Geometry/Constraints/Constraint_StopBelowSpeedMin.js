@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
             }
             constrain(uwpe) {
                 var targetSpeedMin = this.target;
-                var entityLoc = uwpe.entity.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(uwpe.entity).loc;
                 var entityVel = entityLoc.vel;
                 var speed = entityVel.magnitude();
                 if (speed < targetSpeedMin) {

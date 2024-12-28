@@ -44,6 +44,11 @@ export class Tirable implements EntityProperty<Tirable>
 		);
 	}
 
+	static of(entity: Entity): Tirable
+	{
+		return entity.propertyByName(Tirable.name) as Tirable;
+	}
+
 	fallAsleep(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var staminaMaxToRecover =

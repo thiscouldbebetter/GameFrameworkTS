@@ -63,7 +63,7 @@ class Action_Instances
 			{
 				var universe = uwpe.universe;
 				var actor = uwpe.entity;
-				var control = actor.controllable().toControl
+				var control = Controllable.of(actor).toControl
 				(
 					uwpe, null, "ShowMenuPlayer"
 				);

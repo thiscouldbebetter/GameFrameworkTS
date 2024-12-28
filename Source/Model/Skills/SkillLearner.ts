@@ -28,6 +28,11 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 		return new SkillLearner(null, null, null);
 	}
 
+	static of(entity: Entity): SkillLearner
+	{
+		return entity.propertyByName(SkillLearner.name) as SkillLearner;
+	}
+
 	isLearningInProgress(): boolean
 	{
 		return (this.learningAccumulated > 0);

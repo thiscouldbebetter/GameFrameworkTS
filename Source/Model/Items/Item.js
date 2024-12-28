@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
             static fromEntity(entity) {
                 return entity.propertyByName(Item.name);
             }
+            static of(entity) {
+                return entity.propertyByName(Item.name);
+            }
             belongsToCategory(category, world) {
                 return this.defn(world).belongsToCategory(category);
             }

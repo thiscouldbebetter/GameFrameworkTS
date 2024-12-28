@@ -26,6 +26,11 @@ export class Recurrent implements EntityProperty<Recurrent>
 		this.ticksUntilRecurrence = this.ticksPerRecurrence;
 	}
 
+	static of(entity: Entity): Recurrent
+	{
+		return entity.propertyByName(Recurrent.name) as Recurrent;
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

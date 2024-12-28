@@ -8,8 +8,11 @@ var ThisCouldBeBetter;
                 this.accelerationToApply = accelerationToApply;
                 this.velocityToApply = velocityToApply;
             }
+            static of(entity) {
+                return entity.propertyByName(ForceField.name);
+            }
             applyToEntity(entityToApplyTo) {
-                var entityLoc = entityToApplyTo.locatable().loc;
+                var entityLoc = GameFramework.Locatable.of(entityToApplyTo).loc;
                 if (this.accelerationToApply != null) {
                     entityLoc.accel.add(this.accelerationToApply);
                 }

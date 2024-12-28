@@ -22,7 +22,7 @@ var ThisCouldBeBetter;
             updateForTimerTick(uwpe) {
                 super.updateForTimerTick(uwpe);
                 var entityToFollow = this.entityByName(this.entityToFollowName);
-                var entityToFollowPos = entityToFollow.locatable().loc.pos;
+                var entityToFollowPos = GameFramework.Locatable.of(entityToFollow).loc.pos;
                 var zoneCentralPrev = this.zoneCentral;
                 var zoneCentralNext = this.zoneAtPos(entityToFollowPos);
                 var hasZoneChanged = (zoneCentralNext != zoneCentralPrev);
@@ -37,7 +37,7 @@ var ThisCouldBeBetter;
                         var zonesToInitialize = zoneCentralAndNeighborsNext.filter(x => zoneCentralAndNeighborsPrev.indexOf(x) == -1);
                         zonesToFinalize.forEach(zone => {
                             zone.entities.forEach(entity => {
-                                var entityPos = entity.locatable().loc.pos;
+                                var entityPos = GameFramework.Locatable.of(entity).loc.pos;
                                 var zoneMin = zone.bounds.min();
                                 entityPos.subtract(zoneMin);
                                 this.entityToRemoveAdd(entity);
@@ -45,7 +45,7 @@ var ThisCouldBeBetter;
                         });
                         zonesToInitialize.forEach(zone => {
                             zone.entities.forEach(entity => {
-                                var entityPos = entity.locatable().loc.pos;
+                                var entityPos = GameFramework.Locatable.of(entity).loc.pos;
                                 var zoneMin = zone.bounds.min();
                                 entityPos.add(zoneMin);
                                 this.entityToSpawnAdd(entity);

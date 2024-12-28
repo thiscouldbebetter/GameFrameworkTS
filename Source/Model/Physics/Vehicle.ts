@@ -55,7 +55,7 @@ export class Vehicle implements EntityProperty<Vehicle>
 			var vehicle = entityVehicle.propertiesByName.get(Vehicle.name) as Vehicle;
 			vehicle.steeringDirection = 0;
 
-			var vehicleLoc = entityVehicle.locatable().loc;
+			var vehicleLoc = Locatable.of(entityVehicle).loc;
 			var vehicleOrientation = vehicleLoc.orientation;
 			var vehicleForward = vehicleOrientation.forward;
 			var vehicleRight = vehicleOrientation.right;
@@ -83,7 +83,7 @@ export class Vehicle implements EntityProperty<Vehicle>
 				}
 				else if (actionName == "Use")
 				{
-					var occupantLoc = this.entityOccupant.locatable().loc;
+					var occupantLoc = Locatable.of(this.entityOccupant).loc;
 					occupantLoc.pos.overwriteWith(vehicleLoc.pos);
 					occupantLoc.vel.clear();
 					place.entityToSpawnAdd(this.entityOccupant);

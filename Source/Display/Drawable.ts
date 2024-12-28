@@ -51,6 +51,11 @@ export class Drawable implements EntityProperty<Drawable>
 		return new Drawable(visual, renderingOrder, null);
 	}
 
+	static of(entity: Entity): Drawable
+	{
+		return entity.propertyByName(Drawable.name) as Drawable;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isVisible)

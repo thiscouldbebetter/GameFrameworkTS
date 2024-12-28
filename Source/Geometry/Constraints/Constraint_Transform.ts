@@ -13,7 +13,7 @@ export class Constraint_Transform implements Constraint
 
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var constrainablePos = uwpe.entity.locatable().loc.pos;
+		var constrainablePos = Locatable.of(uwpe.entity).loc.pos;
 		this.transformToApply.transformCoords(constrainablePos);
 	}
 

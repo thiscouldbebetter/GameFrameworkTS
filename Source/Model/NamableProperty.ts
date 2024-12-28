@@ -11,6 +11,11 @@ export class NamableProperty implements EntityProperty<NamableProperty>
 		this.name = name;
 	}
 
+	static of(entity: Entity): NamableProperty
+	{
+		return entity.propertyByName(NamableProperty.name) as NamableProperty;
+	}
+
 	// Clonable.
 
 	clone(): NamableProperty { return this; }

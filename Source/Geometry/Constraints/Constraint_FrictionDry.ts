@@ -17,7 +17,7 @@ export class Constraint_FrictionDry implements Constraint
 
 		var targetFrictionCoefficient = this.target;
 		var frictionMagnitude = targetFrictionCoefficient;
-		var entityLoc = entity.locatable().loc;
+		var entityLoc = Locatable.of(entity).loc;
 		var entityVel = entityLoc.vel;
 		var entitySpeed = entityVel.magnitude();
 		if (entitySpeed <= frictionMagnitude)

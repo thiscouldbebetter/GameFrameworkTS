@@ -34,7 +34,7 @@ export class VisualSound implements Visual<VisualSound>
 
 		var soundHelper = universe.soundHelper;
 
-		var audible = entity.audible();
+		var audible = Audible.of(entity);
 		if (audible != null)
 		{
 			if (audible.hasBeenHeard == false)

@@ -51,7 +51,7 @@ export class PlaceZoned extends PlaceBase
 		super.updateForTimerTick(uwpe);
 
 		var entityToFollow = this.entityByName(this.entityToFollowName);
-		var entityToFollowPos = entityToFollow.locatable().loc.pos;
+		var entityToFollowPos = Locatable.of(entityToFollow).loc.pos;
 		var zoneCentralPrev = this.zoneCentral;
 		var zoneCentralNext = this.zoneAtPos(entityToFollowPos);
 		var hasZoneChanged = (zoneCentralNext != zoneCentralPrev);
@@ -94,7 +94,7 @@ export class PlaceZoned extends PlaceBase
 						(
 							entity =>
 							{
-								var entityPos = entity.locatable().loc.pos;
+								var entityPos = Locatable.of(entity).loc.pos;
 								var zoneMin = zone.bounds.min();
 								entityPos.subtract(zoneMin);
 								this.entityToRemoveAdd(entity);
@@ -111,7 +111,7 @@ export class PlaceZoned extends PlaceBase
 						(
 							entity =>
 							{
-								var entityPos = entity.locatable().loc.pos;
+								var entityPos = Locatable.of(entity).loc.pos;
 								var zoneMin = zone.bounds.min();
 								entityPos.add(zoneMin);
 								this.entityToSpawnAdd(entity);

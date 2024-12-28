@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(toControl) {
                 this.toControl = toControl;
             }
+            static of(entity) {
+                return entity.propertyByName(Controllable.name);
+            }
             // Clonable.
             clone() { return this; }
             overwriteWith(other) { return this; }

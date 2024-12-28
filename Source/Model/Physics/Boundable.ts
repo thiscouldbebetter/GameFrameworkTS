@@ -25,6 +25,11 @@ export class Boundable<TBounds extends ShapeBase>
 		return boundable;
 	}
 
+	static of(entity: Entity): BoundableBase
+	{
+		return entity.propertyByName(Boundable.name) as BoundableBase;
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
@@ -39,7 +44,7 @@ export class Boundable<TBounds extends ShapeBase>
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var e = uwpe.entity;
-		this.bounds.locate(e.locatable().loc);
+		this.bounds.locate(Locatable.of(e).loc);
 	}
 
 	// Clonable.

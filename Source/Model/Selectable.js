@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this._select = select;
                 this._deselect = deselect;
             }
+            static of(entity) {
+                return entity.propertyByName(Selectable.name);
+            }
             deselect(uwpe) {
                 if (this._deselect != null) {
                     this._deselect(uwpe);

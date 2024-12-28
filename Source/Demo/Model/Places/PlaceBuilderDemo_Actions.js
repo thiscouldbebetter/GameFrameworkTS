@@ -18,11 +18,11 @@ class PlaceBuilderDemo_Actions {
             new Action("Fire", (uwpe) => // perform
              {
                 var actor = uwpe.entity;
-                var equipmentUser = actor.equipmentUser();
+                var equipmentUser = EquipmentUser.of(actor);
                 var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
                 var actorHasWieldableEquipped = (entityWieldableEquipped != null);
                 if (actorHasWieldableEquipped) {
-                    var deviceWieldable = entityWieldableEquipped.device();
+                    var deviceWieldable = Device.of(entityWieldableEquipped);
                     uwpe.entity2Set(entityWieldableEquipped);
                     deviceWieldable.use(uwpe);
                 }
@@ -30,10 +30,10 @@ class PlaceBuilderDemo_Actions {
             new Action("Hide", (uwpe) => // perform
              {
                 var actor = uwpe.entity;
-                var learner = actor.skillLearner();
+                var learner = SkillLearner.of(actor);
                 var knowsHowToHide = learner.skillsKnownNames.indexOf("Hiding") >= 0;
                 if (knowsHowToHide) {
-                    var perceptible = actor.perceptible();
+                    var perceptible = Perceptible.of(actor);
                     var isAlreadyHiding = perceptible.isHiding;
                     if (isAlreadyHiding) {
                         perceptible.isHiding = false;
@@ -46,10 +46,10 @@ class PlaceBuilderDemo_Actions {
             new Action("Jump", (uwpe) => // perform
              {
                 var actor = uwpe.entity;
-                var learner = actor.skillLearner();
+                var learner = SkillLearner.of(actor);
                 var canJump = learner.skillsKnownNames.indexOf("Jumping") >= 0;
                 if (canJump) {
-                    var loc = actor.locatable().loc;
+                    var loc = Locatable.of(actor).loc;
                     var isNotAlreadyJumping = (loc.pos.z >= 0);
                     if (isNotAlreadyJumping) {
                         // For unknown reasons, setting accel instead of vel
@@ -65,30 +65,30 @@ class PlaceBuilderDemo_Actions {
                 var world = uwpe.world;
                 var place = uwpe.place;
                 var entityActor = uwpe.entity;
-                var itemHolder = entityActor.itemHolder();
+                var itemHolder = ItemHolder.of(entityActor);
                 var itemEntityToPickUp = itemHolder.itemEntityFindClosest(uwpe);
                 if (itemEntityToPickUp == null) {
                     return;
                 }
-                var canPickUp = itemHolder.itemCanPickUp(universe, world, place, itemEntityToPickUp.item());
+                var canPickUp = itemHolder.itemCanPickUp(universe, world, place, Item.of(itemEntityToPickUp));
                 if (canPickUp) {
-                    var actor = entityActor.actor();
+                    var actor = Actor.of(entityActor);
                     var activity = actor.activity;
                     activity.targetEntitySetByName("ItemEntityToPickUp", itemEntityToPickUp);
                 }
                 else {
                     var message = "Can't pick up!";
-                    place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.font, entityActor.locatable().loc.pos, Color.Instances().Red));
+                    place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.font, Locatable.of(entityActor).loc.pos, Color.Instances().Red));
                 }
             }),
             new Action("Run", (uwpe) => // perform
              {
                 var actor = uwpe.entity;
-                var learner = actor.skillLearner();
+                var learner = SkillLearner.of(actor);
                 var knowsHowToRun = learner.skillsKnownNames.indexOf("Running") >= 0;
                 // knowsHowToRun = true; // debug
                 if (knowsHowToRun) {
-                    var loc = actor.locatable().loc;
+                    var loc = Locatable.of(actor).loc;
                     var isOnGround = (loc.pos.z >= 0);
                     if (isOnGround) {
                         var vel = loc.vel;
@@ -103,11 +103,11 @@ class PlaceBuilderDemo_Actions {
             new Action("Sneak", (uwpe) => // perform
              {
                 var actor = uwpe.entity;
-                // var learner = actor.skillLearner();
+                // var learner = SkillLearner.of(actor);
                 // var knowsHowToSneak = learner.skillsKnownNames.indexOf("Sneaking") >= 0;
                 var knowsHowToSneak = true; // debug
                 if (knowsHowToSneak) {
-                    var loc = actor.locatable().loc;
+                    var loc = Locatable.of(actor).loc;
                     var isOnGround = (loc.pos.z >= 0);
                     if (isOnGround) {
                         var vel = loc.vel;
@@ -121,30 +121,30 @@ class PlaceBuilderDemo_Actions {
                 var actor = uwpe.entity;
                 var place = uwpe.place;
                 var entityUsablesInPlace = place.usables();
-                var actorPos = actor.locatable().loc.pos;
+                var actorPos = Locatable.of(actor).loc.pos;
                 var radiusOfReach = 20; // todo
-                var entityUsablesWithinReach = entityUsablesInPlace.filter((x) => x.locatable().loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach);
+                var entityUsablesWithinReach = entityUsablesInPlace.filter((x) => Locatable.of(x).loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach);
                 if (entityUsablesWithinReach.length > 0) {
                     var entityToUse = entityUsablesWithinReach[0];
                     uwpe.entity2Set(entityToUse);
-                    entityToUse.usable().use(uwpe);
+                    Usable.of(entityToUse).use(uwpe);
                 }
             }),
             new Action("Wait", (uwpe) => // perform
              {
                 var actor = uwpe.entity;
-                actor.actor().activity.defnName = "Wait";
+                Actor.of(actor).activity.defnName = "Wait";
             }),
-            new Action("Item0", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 0)),
-            new Action("Item1", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 1)),
-            new Action("Item2", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 2)),
-            new Action("Item3", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 3)),
-            new Action("Item4", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 4)),
-            new Action("Item5", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 5)),
-            new Action("Item6", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 6)),
-            new Action("Item7", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 7)),
-            new Action("Item8", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 8)),
-            new Action("Item9", (uwpe) => uwpe.entity.equipmentUser().useItemInSocketNumbered(uwpe, 9)),
+            new Action("Item0", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 0)),
+            new Action("Item1", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 1)),
+            new Action("Item2", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 2)),
+            new Action("Item3", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 3)),
+            new Action("Item4", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 4)),
+            new Action("Item5", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 5)),
+            new Action("Item6", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 6)),
+            new Action("Item7", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 7)),
+            new Action("Item8", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 8)),
+            new Action("Item9", (uwpe) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 9)),
         ];
         return actions;
     }

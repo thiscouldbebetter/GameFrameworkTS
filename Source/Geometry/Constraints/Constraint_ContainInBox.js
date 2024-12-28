@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.boxToContainWithin = boxToContainWithin;
             }
             constrain(uwpe) {
-                this.boxToContainWithin.trimCoords(uwpe.entity.locatable().loc.pos);
+                this.boxToContainWithin.trimCoords(GameFramework.Locatable.of(uwpe.entity).loc.pos);
             }
             // Clonable.
             clone() {
