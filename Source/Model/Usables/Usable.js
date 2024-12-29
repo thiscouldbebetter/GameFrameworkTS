@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this._use = use;
                 this.isDisabled = false;
             }
+            static entitiesFromPlace(place) {
+                return place.entitiesByPropertyName(Usable.name);
+            }
             static of(entity) {
                 return entity.propertyByName(Usable.name);
             }

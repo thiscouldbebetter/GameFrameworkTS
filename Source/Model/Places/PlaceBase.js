@@ -51,9 +51,9 @@ var ThisCouldBeBetter;
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseWorldAndPlace(universe, world, this);
                 var colorBlack = GameFramework.Color.Instances().Black;
                 display.drawBackground(colorBlack, colorBlack);
-                var cameraEntity = this.camera();
+                var cameraEntity = GameFramework.Camera.entityFromPlace(this);
                 if (cameraEntity == null) {
-                    var drawables = this.drawables();
+                    var drawables = GameFramework.Drawable.entitiesFromPlace(this);
                     drawables.forEach((x) => {
                         GameFramework.Drawable.of(x).updateForTimerTick(uwpe.entitySet(x));
                     });
@@ -230,7 +230,7 @@ var ThisCouldBeBetter;
             // Loadable.
             load(uwpe, callback) {
                 if (this.isLoaded == false) {
-                    var loadables = this.loadables();
+                    var loadables = GameFramework.LoadableProperty.entitiesFromPlace(this);
                     uwpe.placeSet(this);
                     loadables.forEach(x => GameFramework.LoadableProperty.of(x).load(uwpe.entitySet(x)));
                     this.isLoaded = true;
@@ -238,7 +238,7 @@ var ThisCouldBeBetter;
             }
             unload(uwpe) {
                 if (this.isLoaded) {
-                    var loadables = this.loadables();
+                    var loadables = GameFramework.LoadableProperty.entitiesFromPlace(this);
                     uwpe.placeSet(this);
                     loadables.forEach(x => GameFramework.LoadableProperty.of(x).unload(uwpe.entitySet(x)));
                     this.isLoaded = false;
@@ -246,7 +246,7 @@ var ThisCouldBeBetter;
             }
             // Controllable.
             toControl(universe, world) {
-                var player = this.player();
+                var player = GameFramework.Playable.entityFromPlace(this);
                 var playerControllable = GameFramework.Controllable.of(player);
                 var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, world.placeCurrent, player, null);
                 var returnValue = playerControllable.toControl(uwpe, null, null);
@@ -255,54 +255,6 @@ var ThisCouldBeBetter;
             // Equatable.
             equals(other) {
                 return (this.name == other.name);
-            }
-            // Entity convenience accessors.
-            camera() {
-                return this.entitiesByPropertyName(GameFramework.Camera.name)[0];
-            }
-            collidables() {
-                return this.entitiesByPropertyName(GameFramework.Collidable.name);
-            }
-            collisionTracker(uwpe) {
-                var collisionTrackerAsEntity = this.entityByName(GameFramework.CollisionTrackerBase.name);
-                if (collisionTrackerAsEntity == null) {
-                    var collisionTracker = new GameFramework.CollisionTrackerBruteForce();
-                    var placeDefn = this.defn(uwpe.world);
-                    if (placeDefn != null) {
-                        // hack
-                        // If the place has a placeDefn, the CollisionTracker
-                        // must be added to the defn's propertyNamesToProcess,
-                        // or otherwise collisions won't be tracked.
-                        var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
-                        var collisionTrackerPropertyName = collisionTracker.propertyName();
-                        if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1) {
-                            placeDefnPropertyNames.push(collisionTrackerPropertyName);
-                        }
-                    }
-                    var collisionTrackerAsEntity = collisionTracker.toEntity();
-                    uwpe.entitySet(collisionTrackerAsEntity);
-                    this.entitySpawn(uwpe);
-                }
-                var returnValue = collisionTrackerAsEntity.properties[0];
-                return returnValue;
-            }
-            drawables() {
-                return this.entitiesByPropertyName(GameFramework.Drawable.name);
-            }
-            items() {
-                return this.entitiesByPropertyName(GameFramework.Item.name);
-            }
-            loadables() {
-                return this.entitiesByPropertyName(GameFramework.LoadableProperty.name);
-            }
-            movables() {
-                return this.entitiesByPropertyName(GameFramework.Movable.name);
-            }
-            player() {
-                return this.entitiesByPropertyName(GameFramework.Playable.name)[0];
-            }
-            usables() {
-                return this.entitiesByPropertyName(GameFramework.Usable.name);
             }
         }
         GameFramework.PlaceBase = PlaceBase;

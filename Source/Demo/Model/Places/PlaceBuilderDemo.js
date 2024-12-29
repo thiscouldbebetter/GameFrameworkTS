@@ -939,7 +939,7 @@ class PlaceBuilderDemo // Main.
                 var u = uwpe.universe;
                 var p = uwpe.place;
                 var e = uwpe.entity;
-                var player = p.player();
+                var player = Playable.entityFromPlace(p);
                 var playerItemHolder = ItemHolder.of(player);
                 var itemRadio = new Item("Walkie-Talkie", 1);
                 var doesPlayerHaveRadio = playerItemHolder.hasItem(itemRadio);

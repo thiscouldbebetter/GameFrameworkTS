@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this._load = load;
                 this._unload = unload;
             }
+            static entitiesFromPlace(place) {
+                return place.entitiesByPropertyName(LoadableProperty.name);
+            }
             static of(entity) {
                 return entity.propertyByName(LoadableProperty.name);
             }

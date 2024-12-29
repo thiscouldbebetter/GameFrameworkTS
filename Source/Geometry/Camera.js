@@ -19,6 +19,9 @@ var ThisCouldBeBetter;
             static default() {
                 return Camera.fromEntitiesInViewSort(null);
             }
+            static entityFromPlace(place) {
+                return place.entitiesByPropertyName(Camera.name)[0];
+            }
             static fromEntitiesInViewSort(entitiesInViewSort) {
                 return new Camera(new GameFramework.Coords(400, 300, 1000), // viewSize
                 150, // focalLength
@@ -95,7 +98,7 @@ var ThisCouldBeBetter;
             }
             drawEntitiesInView_1_FindEntitiesInView(uwpe, cameraEntity, collisionHelper, entitiesInView) {
                 var place = uwpe.place;
-                var collisionTracker = place.collisionTracker(uwpe);
+                var collisionTracker = GameFramework.CollisionTrackerBase.fromPlace(uwpe);
                 collisionTracker.entityReset(cameraEntity);
                 var cameraCollidable = GameFramework.Collidable.of(cameraEntity);
                 //cameraCollidable.isDisabled = false;
@@ -107,7 +110,7 @@ var ThisCouldBeBetter;
                     entitiesInView.filter((x, i) => entitiesInView.indexOf(x) == i); // Distinct.
                 //cameraCollidable.isDisabled = true;
                 // Now draw the unboundables.
-                var drawablesAll = place.drawables();
+                var drawablesAll = GameFramework.Drawable.entitiesFromPlace(place);
                 var drawablesUnboundable = drawablesAll.filter(x => GameFramework.Boundable.of(x) == null);
                 entitiesInView.push(...drawablesUnboundable);
                 return entitiesInView;

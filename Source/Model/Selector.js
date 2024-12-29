@@ -99,7 +99,7 @@ var ThisCouldBeBetter;
             mousePosConvertToAbsolute(uwpe, mousePosRelativeToCameraView) {
                 var mousePosAbsolute = mousePosRelativeToCameraView.clone();
                 var place = uwpe.place;
-                var cameraEntity = place.camera();
+                var cameraEntity = GameFramework.Camera.entityFromPlace(place);
                 if (cameraEntity != null) {
                     var camera = GameFramework.Camera.of(cameraEntity);
                     mousePosAbsolute.divide(uwpe.universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();

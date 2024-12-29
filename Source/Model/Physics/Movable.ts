@@ -34,6 +34,11 @@ export class Movable implements EntityProperty<Movable>
 		return new Movable(null, null, null);
 	}
 
+	static entitiesFromPlace(place: Place): Entity[]
+	{
+		return place.entitiesByPropertyName(Movable.name);
+	}
+
 	static fromAccelerationAndSpeedMax
 	(
 		accelerationPerTick: number,

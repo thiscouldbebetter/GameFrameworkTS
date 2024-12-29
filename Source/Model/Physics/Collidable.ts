@@ -74,6 +74,11 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 	}
 
+	static entitiesFromPlace(place: Place): Entity[]
+	{
+		return place.entitiesByPropertyName(Collidable.name);
+	}
+
 	static fromCollider(colliderAtRest: ShapeBase): Collidable
 	{
 		return Collidable.fromColliderAndCollideEntities
@@ -381,10 +386,9 @@ export class Collidable implements EntityProperty<Collidable>
 	): Collision[]
 	{
 		var universe = uwpe.universe;
-		var place = uwpe.place;
 		var entity = uwpe.entity;
 
-		var collisionTracker = (place as PlaceBase).collisionTracker(uwpe);
+		var collisionTracker = CollisionTrackerBase.fromPlace(uwpe);
 
 		collisionTracker.entityReset(entity);
 

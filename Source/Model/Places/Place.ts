@@ -4,10 +4,10 @@ namespace ThisCouldBeBetter.GameFramework
 
 export interface Place extends Namable, Equatable<Place>
 {
-	camera(): Entity;
+	//camera(): Entity;
 	defn(world: World): PlaceDefn;
 	draw(universe: Universe, world: World, display: Display): void;
-	drawables(): Entity[];
+	//drawables(): Entity[];
 	entitiesAll(): Entity[];
 	entitiesByPropertyName(propertyName: string): Entity[];
 	entitiesRemove(): void;

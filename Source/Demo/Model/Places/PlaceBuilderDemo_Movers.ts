@@ -119,7 +119,7 @@ class PlaceBuilderDemo_Movers
 			var targetEntity = activity.targetEntity();
 			if (targetEntity == null)
 			{
-				var moversInPlace = place.movables();
+				var moversInPlace = Movable.entitiesFromPlace(place);
 				var grazersInPlace =
 					moversInPlace.filter( (x: Entity) => x.name.startsWith("Grazer"));
 				if (grazersInPlace.length == 0)
@@ -162,7 +162,7 @@ class PlaceBuilderDemo_Movers
 			else
 			{
 				actorPos.overwriteWith(targetPos);
-				var moversInPlace = place.movables();
+				var moversInPlace = Movable.entitiesFromPlace(place);
 				var grazersInPlace = moversInPlace.filter
 				(
 					(x: Entity) => x.name.startsWith("Grazer")
@@ -324,7 +324,7 @@ class PlaceBuilderDemo_Movers
 				);
 			}
 
-			var entityPlayer = place.player();
+			var entityPlayer = Playable.entityFromPlace(place);
 			var learner = SkillLearner.of(entityPlayer);
 			var defns = world.defn;
 			var skillsAll = defns.skills;
@@ -1051,7 +1051,7 @@ class PlaceBuilderDemo_Movers
 			{
 				var targetPos: Coords = null;
 
-				var itemsInPlace = place.items();
+				var itemsInPlace = Item.entitiesFromPlace(place);
 				var itemsGrassInPlace = itemsInPlace.filter
 				(
 					(x: Entity) => Item.of(x).defnName == "Grass"
@@ -1096,7 +1096,7 @@ class PlaceBuilderDemo_Movers
 			else
 			{
 				actorPos.overwriteWith(targetPos);
-				var itemsInPlace = place.items();
+				var itemsInPlace = Item.entitiesFromPlace(place);
 				var itemsGrassInPlace = itemsInPlace.filter
 				(
 					(x: Entity) => Item.of(x).defnName == "Grass"

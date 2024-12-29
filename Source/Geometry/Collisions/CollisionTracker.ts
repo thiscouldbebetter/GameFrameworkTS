@@ -23,6 +23,44 @@ export interface CollisionTracker
 
 export class CollisionTrackerBase implements CollisionTracker, EntityProperty<CollisionTrackerBase>
 {
+	static fromPlace(uwpe: UniverseWorldPlaceEntities): CollisionTracker
+	{
+		var place = uwpe.place;
+
+		var collisionTrackerAsEntity =
+			place.entityByName(CollisionTrackerBase.name);
+
+		if (collisionTrackerAsEntity == null)
+		{
+			var collisionTracker =
+				new CollisionTrackerBruteForce() as CollisionTrackerBase;
+
+			var placeDefn = place.defn(uwpe.world);
+			if (placeDefn != null)
+			{
+				// hack
+				// If the place has a placeDefn, the CollisionTracker
+				// must be added to the defn's propertyNamesToProcess,
+				// or otherwise collisions won't be tracked.
+				var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
+				var collisionTrackerPropertyName = collisionTracker.propertyName();
+				if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1)
+				{
+					placeDefnPropertyNames.push(collisionTrackerPropertyName);
+				}
+			}
+
+			var collisionTrackerAsEntity = collisionTracker.toEntity();
+			uwpe.entitySet(collisionTrackerAsEntity);
+			place.entitySpawn(uwpe);
+		}
+
+		var returnValue =
+			collisionTrackerAsEntity.properties[0] as CollisionTrackerBase;
+
+		return returnValue;
+	}
+
 	collidableDataCreate(): CollisionTrackerCollidableData
 	{
 		throw new Error("Must be overridden in subclass.");
@@ -98,7 +136,7 @@ export class CollisionTrackerBruteForce extends CollisionTrackerBase implements 
 	): Collision[]
 	{
 		var place = uwpe.place;
-		var entitiesCollidable = (place as PlaceBase).collidables();
+		var entitiesCollidable = Collidable.entitiesFromPlace(place);
 
 		for (var i = 0; i < entitiesCollidable.length; i++)
 		{

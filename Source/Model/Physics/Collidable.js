@@ -31,6 +31,9 @@ var ThisCouldBeBetter;
                 var collider = GameFramework.Box.fromSize(GameFramework.Coords.ones().multiplyScalar(10));
                 return Collidable.fromColliderAndCollideEntities(collider, Collidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog);
             }
+            static entitiesFromPlace(place) {
+                return place.entitiesByPropertyName(Collidable.name);
+            }
             static fromCollider(colliderAtRest) {
                 return Collidable.fromColliderAndCollideEntities(colliderAtRest, null);
             }
@@ -178,9 +181,8 @@ var ThisCouldBeBetter;
             }
             collisionsFindForEntityWithTracker(uwpe, collisionsSoFar) {
                 var universe = uwpe.universe;
-                var place = uwpe.place;
                 var entity = uwpe.entity;
-                var collisionTracker = place.collisionTracker(uwpe);
+                var collisionTracker = GameFramework.CollisionTrackerBase.fromPlace(uwpe);
                 collisionTracker.entityReset(entity);
                 collisionsSoFar = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, entity, universe.collisionHelper, collisionsSoFar // Sometimes ignored.
                 );

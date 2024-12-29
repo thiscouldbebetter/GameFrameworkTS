@@ -99,10 +99,10 @@ export class PlaceBase implements Place, Loadable
 		var colorBlack = Color.Instances().Black;
 		display.drawBackground(colorBlack, colorBlack);
 
-		var cameraEntity = this.camera();
+		var cameraEntity = Camera.entityFromPlace(this);
 		if (cameraEntity == null)
 		{
-			var drawables = this.drawables();
+			var drawables = Drawable.entitiesFromPlace(this);
 			drawables.forEach
 			(
 				(x: Entity) =>
@@ -375,9 +375,12 @@ export class PlaceBase implements Place, Loadable
 	{
 		if (this.isLoaded == false)
 		{
-			var loadables = this.loadables();
+			var loadables = LoadableProperty.entitiesFromPlace(this);
 			uwpe.placeSet(this);
-			loadables.forEach(x => LoadableProperty.of(x).load(uwpe.entitySet(x) ) );
+			loadables.forEach
+			(
+				x => LoadableProperty.of(x).load(uwpe.entitySet(x) )
+			);
 			this.isLoaded = true;
 		}
 	}
@@ -386,7 +389,7 @@ export class PlaceBase implements Place, Loadable
 	{
 		if (this.isLoaded)
 		{
-			var loadables = this.loadables();
+			var loadables = LoadableProperty.entitiesFromPlace(this);
 			uwpe.placeSet(this);
 			loadables.forEach(x => LoadableProperty.of(x).unload(uwpe.entitySet(x) ) );
 			this.isLoaded = false;
@@ -397,7 +400,7 @@ export class PlaceBase implements Place, Loadable
 
 	toControl(universe: Universe, world: World): ControlBase
 	{
-		var player = this.player();
+		var player = Playable.entityFromPlace(this);
 		var playerControllable = Controllable.of(player);
 		var uwpe = new UniverseWorldPlaceEntities
 		(
@@ -415,84 +418,6 @@ export class PlaceBase implements Place, Loadable
 	equals(other: Place): boolean
 	{
 		return (this.name == other.name);
-	}
-
-	// Entity convenience accessors.
-
-	camera(): Entity
-	{
-		return this.entitiesByPropertyName(Camera.name)[0];
-	}
-
-	collidables(): Entity[]
-	{
-		return this.entitiesByPropertyName(Collidable.name);
-	}
-
-	collisionTracker(uwpe: UniverseWorldPlaceEntities): CollisionTracker
-	{
-		var collisionTrackerAsEntity =
-			this.entityByName(CollisionTrackerBase.name);
-
-		if (collisionTrackerAsEntity == null)
-		{
-			var collisionTracker =
-				new CollisionTrackerBruteForce() as CollisionTrackerBase;
-
-			var placeDefn = this.defn(uwpe.world);
-			if (placeDefn != null)
-			{
-				// hack
-				// If the place has a placeDefn, the CollisionTracker
-				// must be added to the defn's propertyNamesToProcess,
-				// or otherwise collisions won't be tracked.
-				var placeDefnPropertyNames = placeDefn.propertyNamesToProcess;
-				var collisionTrackerPropertyName = collisionTracker.propertyName();
-				if (placeDefnPropertyNames.indexOf(collisionTrackerPropertyName) == -1)
-				{
-					placeDefnPropertyNames.push(collisionTrackerPropertyName);
-				}
-			}
-
-			var collisionTrackerAsEntity = collisionTracker.toEntity();
-			uwpe.entitySet(collisionTrackerAsEntity)
-			this.entitySpawn(uwpe);
-		}
-
-		var returnValue =
-			collisionTrackerAsEntity.properties[0] as CollisionTrackerBase;
-
-		return returnValue;
-	}
-
-	drawables(): Entity[]
-	{
-		return this.entitiesByPropertyName(Drawable.name);
-	}
-
-	items(): Entity[]
-	{
-		return this.entitiesByPropertyName(Item.name);
-	}
-
-	loadables(): Entity[]
-	{
-		return this.entitiesByPropertyName(LoadableProperty.name);
-	}
-
-	movables(): Entity[]
-	{
-		return this.entitiesByPropertyName(Movable.name);
-	}
-
-	player(): Entity
-	{
-		return this.entitiesByPropertyName(Playable.name)[0];
-	}
-
-	usables(): Entity[]
-	{
-		return this.entitiesByPropertyName(Usable.name);
 	}
 
 }

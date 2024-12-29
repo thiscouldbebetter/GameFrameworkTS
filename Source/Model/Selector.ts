@@ -210,7 +210,7 @@ export class Selector implements EntityProperty<Selector>
 		var mousePosAbsolute = mousePosRelativeToCameraView.clone();
 
 		var place = uwpe.place;
-		var cameraEntity = place.camera();
+		var cameraEntity = Camera.entityFromPlace(place);
 
 		if (cameraEntity != null)
 		{

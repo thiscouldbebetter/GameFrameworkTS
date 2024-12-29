@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.defnName = defnName;
                 this.quantity = (quantity == null) ? 1 : quantity;
             }
+            static entitiesFromPlace(place) {
+                return place.entitiesByPropertyName(Item.name);
+            }
             static fromDefnName(defnName) {
                 return new Item(defnName, 1);
             }

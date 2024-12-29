@@ -148,7 +148,7 @@ var ThisCouldBeBetter;
             itemEntityFindClosest(uwpe) {
                 var place = uwpe.place;
                 var entityItemHolder = uwpe.entity;
-                var entityItemsInPlace = place.items();
+                var entityItemsInPlace = GameFramework.Item.entitiesFromPlace(place);
                 var entityItemClosest = entityItemsInPlace.filter((x) => GameFramework.Locatable.of(x).distanceFromEntity(entityItemHolder) < this.reachRadius).sort((a, b) => GameFramework.Locatable.of(a).distanceFromEntity(entityItemHolder)
                     - GameFramework.Locatable.of(b).distanceFromEntity(entityItemHolder))[0];
                 return entityItemClosest;

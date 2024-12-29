@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new Movable(null, null, null);
             }
+            static entitiesFromPlace(place) {
+                return place.entitiesByPropertyName(Movable.name);
+            }
             static fromAccelerationAndSpeedMax(accelerationPerTick, speedMax) {
                 return new Movable((uwpe) => accelerationPerTick, (uwpe) => speedMax, null);
             }

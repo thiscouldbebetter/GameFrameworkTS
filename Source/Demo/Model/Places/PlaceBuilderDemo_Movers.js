@@ -57,7 +57,7 @@ class PlaceBuilderDemo_Movers {
             var activity = Actor.of(entityActor).activity;
             var targetEntity = activity.targetEntity();
             if (targetEntity == null) {
-                var moversInPlace = place.movables();
+                var moversInPlace = Movable.entitiesFromPlace(place);
                 var grazersInPlace = moversInPlace.filter((x) => x.name.startsWith("Grazer"));
                 if (grazersInPlace.length == 0) {
                     var randomizer = universe.randomizer;
@@ -81,7 +81,7 @@ class PlaceBuilderDemo_Movers {
             }
             else {
                 actorPos.overwriteWith(targetPos);
-                var moversInPlace = place.movables();
+                var moversInPlace = Movable.entitiesFromPlace(place);
                 var grazersInPlace = moversInPlace.filter((x) => x.name.startsWith("Grazer"));
                 var reachDistance = 20; // todo
                 var grazerInReach = grazersInPlace.filter((x) => Locatable.of(entityActor).distanceFromEntity(x) < reachDistance)[0];
@@ -163,7 +163,7 @@ class PlaceBuilderDemo_Movers {
             if (doesDropCoin) {
                 Locatable.of(entityDying).entitySpawnWithDefnName(uwpe, "Coin");
             }
-            var entityPlayer = place.player();
+            var entityPlayer = Playable.entityFromPlace(place);
             var learner = SkillLearner.of(entityPlayer);
             var defns = world.defn;
             var skillsAll = defns.skills;
@@ -526,7 +526,7 @@ class PlaceBuilderDemo_Movers {
             var targetEntity = activity.targetEntity();
             if (targetEntity == null) {
                 var targetPos = null;
-                var itemsInPlace = place.items();
+                var itemsInPlace = Item.entitiesFromPlace(place);
                 var itemsGrassInPlace = itemsInPlace.filter((x) => Item.of(x).defnName == "Grass");
                 if (itemsGrassInPlace.length == 0) {
                     var randomizer = universe.randomizer;
@@ -550,7 +550,7 @@ class PlaceBuilderDemo_Movers {
             }
             else {
                 actorPos.overwriteWith(targetPos);
-                var itemsInPlace = place.items();
+                var itemsInPlace = Item.entitiesFromPlace(place);
                 var itemsGrassInPlace = itemsInPlace.filter((x) => Item.of(x).defnName == "Grass");
                 var reachDistance = 20; // todo
                 var itemGrassInReach = itemsGrassInPlace.filter((x) => (Locatable.of(entityActor).distanceFromEntity(x) < reachDistance))[0];

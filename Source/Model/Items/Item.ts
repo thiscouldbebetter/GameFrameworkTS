@@ -15,6 +15,11 @@ export class Item implements EntityProperty<Item>
 		this.quantity = (quantity == null) ? 1 : quantity;
 	}
 
+	static entitiesFromPlace(place: Place): Entity[]
+	{
+		return place.entitiesByPropertyName(Item.name);
+	}
+
 	static fromDefnName(defnName: string)
 	{
 		return new Item(defnName, 1);

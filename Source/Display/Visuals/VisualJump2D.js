@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var entityPos = GameFramework.Locatable.of(entity).loc.pos;
                 var entityPosZ = entityPos.z;
-                var camera = GameFramework.Camera.of(world.placeCurrent.camera()); // hack
+                var camera = GameFramework.Camera.of(GameFramework.Camera.entityFromPlace(world.placeCurrent)); // hack
                 entityPosZ -= camera.focalLength;
                 var height = 0 - entityPosZ;
                 if (height <= 0) {

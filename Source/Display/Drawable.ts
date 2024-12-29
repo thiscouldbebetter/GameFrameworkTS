@@ -33,6 +33,11 @@ export class Drawable implements EntityProperty<Drawable>
 		);
 	}
 
+	static entitiesFromPlace(place: Place): Entity[]
+	{
+		return place.entitiesByPropertyName(Drawable.name);
+	}
+
 	static fromVisual(visual: VisualBase): Drawable
 	{
 		return new Drawable(visual, null, null);

@@ -269,7 +269,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		var place = uwpe.place as PlaceBase;
 		var entityItemHolder = uwpe.entity;
 
-		var entityItemsInPlace = place.items();
+		var entityItemsInPlace = Item.entitiesFromPlace(place);
 		var entityItemClosest = entityItemsInPlace.filter
 		(
 			(x: Entity) =>

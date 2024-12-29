@@ -15,6 +15,11 @@ export class Usable implements EntityProperty<Usable>
 		this.isDisabled = false;
 	}
 
+	static entitiesFromPlace(place: Place): Entity[]
+	{
+		return place.entitiesByPropertyName(Usable.name);
+	}
+
 	static of(entity: Entity): Usable
 	{
 		return entity.propertyByName(Usable.name) as Usable;

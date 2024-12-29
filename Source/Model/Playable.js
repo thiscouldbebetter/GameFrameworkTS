@@ -4,6 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Playable {
+            static entityFromPlace(place) {
+                return place.entitiesByPropertyName(Playable.name)[0];
+            }
             static of(entity) {
                 return entity.propertyByName(Playable.name);
             }

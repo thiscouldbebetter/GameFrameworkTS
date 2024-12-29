@@ -16,6 +16,9 @@ var ThisCouldBeBetter;
                 // For rapid prototyping.
                 return Drawable.fromVisual(GameFramework.VisualRectangle.default());
             }
+            static entitiesFromPlace(place) {
+                return place.entitiesByPropertyName(Drawable.name);
+            }
             static fromVisual(visual) {
                 return new Drawable(visual, null, null);
             }

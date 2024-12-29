@@ -4,6 +4,11 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Playable implements EntityProperty<Playable>
 {
+	static entityFromPlace(place: Place): Entity
+	{
+		return place.entitiesByPropertyName(Playable.name)[0];
+	}
+
 	static of(entity: Entity): Playable
 	{
 		return entity.propertyByName(Playable.name) as Playable;

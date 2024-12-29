@@ -1738,7 +1738,7 @@ class PlaceBuilderDemo // Main.
 						var p = uwpe.place as PlaceBase;
 						var e = uwpe.entity;
 
-						var player = p.player();
+						var player = Playable.entityFromPlace(p);
 						var playerItemHolder = ItemHolder.of(player);
 						var itemRadio = new Item("Walkie-Talkie", 1);
 						var doesPlayerHaveRadio = playerItemHolder.hasItem(itemRadio);

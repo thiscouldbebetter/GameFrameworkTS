@@ -120,7 +120,7 @@ class PlaceBuilderDemo_Actions {
              {
                 var actor = uwpe.entity;
                 var place = uwpe.place;
-                var entityUsablesInPlace = place.usables();
+                var entityUsablesInPlace = Usable.entitiesFromPlace(place);
                 var actorPos = Locatable.of(actor).loc.pos;
                 var radiusOfReach = 20; // todo
                 var entityUsablesWithinReach = entityUsablesInPlace.filter((x) => Locatable.of(x).loc.pos.clone().subtract(actorPos).magnitude() < radiusOfReach);

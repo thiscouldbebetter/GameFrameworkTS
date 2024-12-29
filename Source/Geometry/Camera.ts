@@ -50,6 +50,12 @@ export class Camera implements EntityProperty<Camera>
 		);
 	}
 
+	static entityFromPlace(place: Place): Entity
+	{
+		return place.entitiesByPropertyName(Camera.name)[0];
+	}
+
+
 	static fromEntitiesInViewSort
 	(
 		entitiesInViewSort: (e: Entity[]) => Entity[]
@@ -250,7 +256,7 @@ export class Camera implements EntityProperty<Camera>
 	{
 		var place = uwpe.place;
 
-		var collisionTracker = (place as PlaceBase).collisionTracker(uwpe);
+		var collisionTracker = CollisionTrackerBase.fromPlace(uwpe);
 		collisionTracker.entityReset(cameraEntity);
 
 		var cameraCollidable = Collidable.of(cameraEntity);
@@ -268,7 +274,7 @@ export class Camera implements EntityProperty<Camera>
 
 		// Now draw the unboundables.
 
-		var drawablesAll = place.drawables();
+		var drawablesAll = Drawable.entitiesFromPlace(place);
 		var drawablesUnboundable = drawablesAll.filter(x => Boundable.of(x) == null);
 		entitiesInView.push(...drawablesUnboundable);
 

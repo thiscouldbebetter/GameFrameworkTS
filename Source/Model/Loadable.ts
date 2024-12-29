@@ -20,6 +20,11 @@ export class LoadableProperty
 		this._unload = unload;
 	}
 
+	static entitiesFromPlace(place: Place): Entity[]
+	{
+		return place.entitiesByPropertyName(LoadableProperty.name);
+	}
+
 	static of(entity: Entity): LoadableProperty
 	{
 		return entity.propertyByName(LoadableProperty.name) as LoadableProperty;
