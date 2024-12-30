@@ -44,7 +44,8 @@ var ThisCouldBeBetter;
                 null, // soundHelper,
                 null, // mediaLibrary
                 null, // controlBuilder
-                null);
+                null // worldCreator
+                );
                 return universe;
             }
             static fromMediaLibraryAndWorldCreator(mediaLibrary, worldCreator) {

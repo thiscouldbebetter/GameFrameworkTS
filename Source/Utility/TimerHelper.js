@@ -10,7 +10,10 @@ var ThisCouldBeBetter;
                 this.millisecondsPerTick = Math.floor(millisecondsPerSecond / this.ticksPerSecond);
             }
             static default() {
-                return new TimerHelper(25);
+                return TimerHelper.fromTicksPerSecond(25);
+            }
+            static fromTicksPerSecond(ticksPerSecond) {
+                return new TimerHelper(ticksPerSecond);
             }
             initialize(handleEventTimerTick) {
                 this.handleEventTimerTick = handleEventTimerTick;

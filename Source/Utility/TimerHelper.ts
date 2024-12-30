@@ -24,7 +24,12 @@ export class TimerHelper
 
 	static default(): TimerHelper
 	{
-		return new TimerHelper(25);
+		return TimerHelper.fromTicksPerSecond(25);
+	}
+
+	static fromTicksPerSecond(ticksPerSecond: number): TimerHelper
+	{
+		return new TimerHelper(ticksPerSecond);
 	}
 
 	initialize(handleEventTimerTick: () => void): void

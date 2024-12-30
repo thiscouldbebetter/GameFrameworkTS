@@ -119,7 +119,7 @@ export class Universe
 			null, // soundHelper,
 			null, // mediaLibrary
 			null, // controlBuilder
-			null, // worldCreator
+			null // worldCreator
 		);
 
 		return universe;
