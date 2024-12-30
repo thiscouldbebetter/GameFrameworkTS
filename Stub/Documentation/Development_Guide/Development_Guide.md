@@ -25,15 +25,13 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 1.7. In the DefenderClone directory, open the Source directory.
 
-1.8. Delete the files "GameStub-RunsInPlace.html" and "./Setup-Git-Init_Repo_and_Add_Framework_Submodule.sh", as they will no longer be needed.  Also, delete all the existing ".js" files in the directory, since we'll be renaming one of the corresponding ".ts" files and if we don't delete it, the .js file with the old name will just hang around forever.
+1.8. Delete the files "GameStub-RunsInPlace.html", as it will no longer be needed.  Also, carefully delete all the existing ".js" files in the directory, since we'll be renaming one of the corresponding ".ts" files and if we don't delete it, the .js file with the old name will just hang around forever.
 
 1.9. In the Source directory, rename the file "GameStub.html" to "DefenderClone.html".  
 
-1.10. Still in the Source directory, open the file "Game.ts" in a text editor, locate the call to Universe.create(), change the first argument from "GameStub" to "DefenderClone", and save.  This string will be used to name any saved game files.
+1.10. Most of the gameplay in classic arcade games take place on "levels", so let's rename the PlaceStub class accordingly.  Still in the Source directory, rename the file "PlaceStub.ts" to "PlaceLevel.ts".
 
-1.11. Most of the gameplay in classic arcade games take place on "levels", so let's rename the PlaceStub class accordingly.  Still in the Source directory, rename the file "PlaceStub.ts" to "PlaceLevel.ts".
-
-1.12. Open the newly renamed file PlaceLevel.ts in a text editor, replace all instances of the text "Stub" with "Level" (there are four of them), and save.  When you're done, it should look like this:
+1.11. Open the newly renamed file PlaceLevel.ts in a text editor, replace all instances of the text "Stub" with "Level" (there are four of them), and save.  When you're done, it should look like this:
 
 	class PlaceLevel extends Place
 	{
@@ -95,47 +93,53 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		}
 	}
 
-1.13. Still in the Source directory, open the file "WorldGame.ts" in a text editor.  Locate the constructor, and change the first argument to the super() constructor from "GameStub" to "DefenderClone".  Replace both instances of the text "PlaceStub" with "PlaceLevel".  Save the file.  When you're done, it should look like the following:
+1.12. Still in the Source directory, open the file "WorldGame.ts" in a text editor.  Locate the constructor, and change the assignment of the string "WorldGame" to "DefenderClone".  Replace both instances of the text "PlaceStub" with "PlaceLevel".  Save the file.  When you're done, it should look like the following:
 
-	class WorldGame extends World
+class WorldGame extends World
+{
+	constructor()
 	{
-		constructor()
-		{
-			super
-			(
-				"DefenderClone",
-				DateTime.now(),
-				WorldGame.defnBuild(),
-				[ new PlaceLevel() ]
-			);
-		}
+		var name = "DefenderClone";
+		var timeCreated = DateTime.now();
+		var defn = WorldGame.defnBuild();
+		var place = new PlaceLevel();
+		var places = [ place ];
+		var placesByName = new Map(places.map(x => [x.name, x]) );
+		var placeGetByName = (placeName: string) => placesByName.get(placeName);
+		var placeInitialName = places[0].name;
 
-		static defnBuild(): WorldDefn
-		{
-			return new WorldDefn
-			([
-				[
-					ActivityDefn.Instances().HandleUserInput
-				],
-				[
-					PlaceLevel.defnBuild()
-				]
-			]);
-		}
-
-		toControl(): ControlBase
-		{
-			return new ControlNone();
-		}
+		super
+		(
+			name, timeCreated, defn, placeGetByName, placeInitialName
+		);
 	}
 
-1.14. From the Source directory, run the command "tsc" to compile the program.  Wait for the command to complete, and verify that no errors are displayed and that a .js file is generated for each of the .ts files in the Source directory.
+	static defnBuild(): WorldDefn
+	{
+		return new WorldDefn
+		([
+			[
+				UserInputListener.activityDefn()
+			],
+			[
+				PlaceLevel.defnBuild()
+			]
+		]);
+	}
 
-1.15. Open the file "DefenderClone.html" in a text editor.  This is the file that hosts your program, and it contains references to every class file you use in your program.  Change the reference to "PlaceStub.js" to instead reference "PlaceLevel.js".  You'll need to add a corresponding entry to this file every time you start using a new class.  The edited line for the reference to PlaceLevel will look like this.
+	toControl(): ControlBase
+	{
+		return new ControlNone();
+	}
+}
+
+1.13. From the Source directory, run one of the scripts "_Build.bat" or "_Build.sh", depending on the computer's operating system, to compile the program.  These scripts will generate a _BuildRecord.ts file, then run the "tsc" command to "transpile" the TypeScript files into JavaScript.  Wait for the command to complete.  Verify that the file _BuildErrors.txt is empty, and that a .js file is generated for each of the .ts files in the Source directory.  (Note that these scripts are prone to errors, especially the .bat, due to inconsistencies in date format due to user settings and different versions of Windows.  If the script fails to produce working code, and it is not desired to spend the time and effort to adjust it, as an alternative one may revert the changes to _BuildRecord.ts, then simply open a command prompt within the directory and run "tsc" directly instead.)
+
+1.14. Open the file "DefenderClone.html" in a text editor.  This is the file that hosts your program, and it contains references to every class file you use in your program.  Change the reference to "PlaceStub.js" to instead reference "PlaceLevel.js".  You'll need to add a corresponding entry to this file every time you start using a new class.  The edited line for the reference to PlaceLevel will look like this.
 
 	<script type="text/javascript" src="PlaceLevel.js"></script>
 
-1.15. Open the file DefenderClone.html in a web browser that runs JavaScript.  Click the "Start" buttons on the opening, producer, and title screens to dismiss 
+1.15. Open the file DefenderClone.html in a web browser, and, if necessary, enable JavaScript.  Click the "Start" buttons on the opening, producer, and title screens to dismiss 
  them, then click the "Skip" button to skip creation of a player profile.  A black screen will displayed.  If you'd like, you can press the Escape key to see some game and settings menus.
  
 <img src="Screenshot-1-Blank.png" />
