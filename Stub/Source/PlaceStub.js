@@ -1,5 +1,5 @@
 "use strict";
-class PlaceStub extends Place {
+class PlaceStub extends PlaceBase {
     constructor() {
         super(PlaceStub.name, PlaceStub.defnBuild().name, null, // parentName
         Coords.fromXY(400, 300), // size

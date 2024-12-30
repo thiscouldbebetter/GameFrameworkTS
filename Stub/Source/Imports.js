@@ -12,7 +12,6 @@ var NumberHelper = gf.NumberHelper;
 var StringHelper = gf.StringHelper;
 // Entity.
 var Entity = gf.Entity;
-var EntityProperty = gf.EntityProperty;
 // Controls.
 var ControlActionNames = gf.ControlActionNames;
 var ControlBase = gf.ControlBase;
@@ -37,12 +36,10 @@ var VenueMessage = gf.VenueMessage;
 // Display.
 var Color = gf.Color;
 var Drawable = gf.Drawable;
-var Display = gf.Display;
 var Display2D = gf.Display2D;
 var DisplayRecorder = gf.DisplayRecorder;
 var VenueFader = gf.VenueFader;
 var VenueLayered = gf.VenueLayered;
-var Visual = gf.Visual;
 // Display - Visuals.
 var VisualGroup = gf.VisualGroup;
 var VisualImageFromLibrary = gf.VisualImageFromLibrary;
@@ -53,7 +50,6 @@ var VisualNone = gf.VisualNone;
 var Camera = gf.Camera;
 var Collision = gf.Collision;
 var CollisionHelper = gf.CollisionHelper;
-var CollisionTracker = gf.CollisionTracker;
 var Coords = gf.Coords;
 var Direction = gf.Direction;
 var Disposition = gf.Disposition;
@@ -74,7 +70,6 @@ var Face = gf.Face;
 var Hemispace = gf.Hemispace;
 var Plane = gf.Plane;
 var Ray = gf.Ray;
-var ShapeBase = gf.ShapeBase;
 var ShapeContainer = gf.ShapeContainer;
 var ShapeGroupAll = gf.ShapeGroupAll;
 var ShapeGroupAny = gf.ShapeGroupAny;
@@ -82,14 +77,10 @@ var ShapeInverse = gf.ShapeInverse;
 var Shell = gf.Shell;
 var Sphere = gf.Sphere;
 var Wedge = gf.Wedge;
-// Geometry - Shapes - Map.
-var MapCell = gf.MapCell;
 var MapLocated = gf.MapLocated;
 var MapOfCells = gf.MapOfCells;
 // Geometry - Shapes - Meshes.
 var Mesh = gf.Mesh;
-// Geometry - Transforms.
-var Transform = gf.Transform;
 var Transform_Dynamic = gf.Transform_Dynamic;
 var Transform_Locate = gf.Transform_Locate;
 var Transform_Multiple = gf.Transform_Multiple;
@@ -98,7 +89,6 @@ var Transform_Rotate2D = gf.Transform_Rotate2D;
 var Transform_RotateRight = gf.Transform_RotateRight;
 var Transform_Scale = gf.Transform_Scale;
 var Transform_Translate = gf.Transform_Translate;
-var Transformable = gf.Transformable;
 var Transforms = gf.Transforms;
 // Input.
 var ActionToInputsMapping = gf.ActionToInputsMapping;
@@ -110,8 +100,6 @@ var Audible = gf.Audible;
 var Font = gf.Font;
 var Image2 = gf.Image2; // Name conflicts with a built-in class.
 var MediaLibrary = gf.MediaLibrary;
-var Sound = gf.Sound;
-var SoundHelper = gf.SoundHelper;
 var SoundHelperLive = gf.SoundHelperLive;
 var TextString = gf.TextString;
 var VenueVideo = gf.VenueVideo;
@@ -121,13 +109,10 @@ var VisualSound = gf.VisualSound;
 // Model.
 var EntityBuilder = gf.EntityBuilder;
 var EntityGenerator = gf.EntityGenerator;
-var Loadable = gf.Loadable;
-var Namable = gf.Namable;
 var Playable = gf.Playable;
 var Selector = gf.Selector;
 var Universe = gf.Universe;
 var UniverseWorldPlaceEntities = gf.UniverseWorldPlaceEntities;
-var Venue = gf.Venue;
 var VenueWorld = gf.VenueWorld;
 var World = gf.World;
 var WorldCreator = gf.WorldCreator;
@@ -171,8 +156,6 @@ var Movable = gf.Movable;
 var Obstacle = gf.Obstacle;
 var Portal = gf.Portal;
 var Traversable = gf.Traversable;
-// Model - Places.
-var Place = gf.Place;
 var PlaceBase = gf.PlaceBase;
 var PlaceDefn = gf.PlaceDefn;
 var PlaceZoned = gf.PlaceZoned;

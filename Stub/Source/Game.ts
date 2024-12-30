@@ -16,48 +16,23 @@ class Game
 
 		var mediaFilePaths = this.mediaFilePathsBuild();
 
-		var mediaLibrary = MediaLibrary.fromFilePaths("../Content/", mediaFilePaths);
-
-		var displaySizesAvailable =
-		[
-			new Coords(400, 300, 1),
-			new Coords(640, 480, 1),
-			new Coords(800, 600, 1),
-			new Coords(1200, 900, 1),
-			// Wrap.
-			new Coords(200, 150, 1),
-		];
-
-		var colors = Color.Instances();
-
-		var display = new Display2D
-		(
-			displaySizesAvailable,
-			"Font", // fontName
-			10, // fontHeightInPixels
-			colors.Gray, colors.White, // colorFore, colorBack
-			null
-		);
-
-		var timerHelper = new TimerHelper(20);
-
-		var controlBuilder = ControlBuilder.default();
+		var mediaLibrary =
+			MediaLibrary.fromContentDirectoryPathAndMediaFilePaths
+			(
+				"../Content/", mediaFilePaths
+			);
 
 		var worldCreator = WorldCreator.fromWorldCreate
 		(
 			() => new WorldGame()
 		);
 
-		var universe = Universe.create
+		var universe = Universe.fromMediaLibraryAndWorldCreator
 		(
-			"Game",
-			null, // version
-			timerHelper,
-			display,
 			mediaLibrary,
-			controlBuilder,
 			worldCreator
 		);
+
 		universe.initialize
 		(
 			() => { universe.start(); }
