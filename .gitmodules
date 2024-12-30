@@ -1,6 +1,3 @@
 [submodule "Source/Media/Audio/MusicTracker"]
 	path = Source/Media/Audio/MusicTracker
 	url = https://github.com/thiscouldbebetter/MusicTracker
-[submodule "Source/Media/Text/BinaryFileToImageTranscoder"]
-	path = Source/Media/Text/BinaryFileToImageTranscoder
-	url = https://github.com/thiscouldbebetter/BinaryFileToImageTranscoder

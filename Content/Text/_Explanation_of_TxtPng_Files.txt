@@ -1,3 +1,0 @@
-The .txtpng files in this directory are created using the ThisCouldBeBetter BinaryFileToImageTranscoder, which is included as a submodule of the GameFrameworkTS Git repository, in the directory Source/Media/Text/BinaryFileToImageTranscoder.  A UI to create .txtpng files from text or other binary files is located in that submodule's subdirectory, at Source/BinaryFileToImageTranscoder.html.
-
-The text has been converted to an image so that it can be loaded when running from the local filesystem without causing errors due to cross-site scripting or other security restrictions.

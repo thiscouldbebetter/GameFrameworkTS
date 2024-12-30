@@ -205,6 +205,7 @@ import Traversable = gf.Traversable;
 
 // Model - Places.
 import Place = gf.Place;
+import PlaceBase = gf.PlaceBase;
 import PlaceDefn = gf.PlaceDefn;
 import PlaceZoned = gf.PlaceZoned;
 import Zone = gf.Zone;
@@ -243,7 +244,6 @@ var TarFileEntry = gf.TarFileEntry;
 var TarFileEntryHeader = gf.TarFileEntryHeader;
 var TarFileTypeFlag = gf.TarFileTypeFlag;
 
-
 // Utility.
 import DateTime = gf.DateTime;
 import IDHelper = gf.IDHelper;
@@ -257,5 +257,3 @@ import URLParser = gf.URLParser;
 import ValueBreak = gf.ValueBreak;
 import ValueBreakGroup = gf.ValueBreakGroup;
 import VenueTask = gf.VenueTask;
-
-// Utility - Network.

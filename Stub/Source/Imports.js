@@ -173,6 +173,7 @@ var Portal = gf.Portal;
 var Traversable = gf.Traversable;
 // Model - Places.
 var Place = gf.Place;
+var PlaceBase = gf.PlaceBase;
 var PlaceDefn = gf.PlaceDefn;
 var PlaceZoned = gf.PlaceZoned;
 var Zone = gf.Zone;
@@ -208,6 +209,7 @@ var PlatformHelper = gf.PlatformHelper;
 var Randomizer = gf.Randomizer;
 var RandomizerSystem = gf.RandomizerSystem;
 var Reference = gf.Reference;
+var Stack = gf.Stack;
 var TimerHelper = gf.TimerHelper;
 var URLParser = gf.URLParser;
 var ValueBreak = gf.ValueBreak;
