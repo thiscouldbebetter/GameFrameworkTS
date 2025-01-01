@@ -129,10 +129,8 @@ var ThisCouldBeBetter;
                 size.clone(), 
                 // children
                 [
-                    new GameFramework.ControlLabel("labelStoreName", GameFramework.Coords.fromXY(margin, margin - fontHeight / 2), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(margin, margin - fontHeight / 2), // pos
                     GameFramework.Coords.fromXY(listSize.x, 25), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityStore.name + ":"), font),
                     new GameFramework.ControlList("listStoreItems", GameFramework.Coords.fromXY(margin, margin + fontHeight), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderStore, (c) => c.items), // items
@@ -141,21 +139,15 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     itemOfferStore, null),
-                    GameFramework.ControlButton.from8("buttonStoreOffer", GameFramework.Coords.fromXY(listSize.x - buttonSizeSmall.x * 2, margin * 2 + fontHeight + listSize.y), // pos
-                    buttonSizeSmall.clone(), "v", font, true, // hasBorder
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (itemHolderStore.itemSelected != null)), // isEnabled
-                    itemOfferStore // click
-                    ),
-                    GameFramework.ControlButton.from8("buttonStoreUnoffer", GameFramework.Coords.fromXY(margin + listSize.x - buttonSizeSmall.x, margin * 2 + fontHeight + listSize.y), // pos
-                    buttonSizeSmall.clone(), "^", font, true, // hasBorder
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemHolderStoreOffer.itemSelected != null)), // isEnabled
-                    itemUnofferStore // click
-                    ),
-                    new GameFramework.ControlLabel("labelItemsOfferedStore", GameFramework.Coords.fromXY(margin, margin * 2 + fontHeight + listSize.y
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(listSize.x - buttonSizeSmall.x * 2, margin * 2 + fontHeight + listSize.y), // pos
+                    buttonSizeSmall.clone(), "v", font, itemOfferStore // click
+                    ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (itemHolderStore.itemSelected != null))),
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(margin + listSize.x - buttonSizeSmall.x, margin * 2 + fontHeight + listSize.y), // pos
+                    buttonSizeSmall.clone(), "^", font, itemUnofferStore // click
+                    ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemHolderStoreOffer.itemSelected != null))),
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(margin, margin * 2 + fontHeight + listSize.y
                         + buttonSize.y - fontHeight / 2), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Offered:"), font),
                     new GameFramework.ControlList("listItemsOfferedByStore", GameFramework.Coords.fromXY(margin, margin * 2 + fontHeight * 2 + listSize.y + buttonSize.y), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(this.itemHolderStoreOffer, (c) => c.items), // items
@@ -164,10 +156,8 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     itemUnofferStore, null),
-                    new GameFramework.ControlLabel("labelCustomerName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin - fontHeight / 2), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin - fontHeight / 2), // pos
                     GameFramework.Coords.fromXY(85, 25), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityCustomer.name + ":"), font),
                     new GameFramework.ControlList("listCustomerItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin + fontHeight), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderCustomer, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
@@ -177,20 +167,14 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     itemOfferCustomer, null),
-                    GameFramework.ControlButton.from8("buttonCustomerOffer", GameFramework.Coords.fromXY(size.x - margin * 2 - buttonSizeSmall.x * 2, margin * 2 + fontHeight + listSize.y), // pos
-                    buttonSizeSmall.clone(), "v", font, true, // hasBorder
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => (itemHolderCustomer.itemSelected != null)), // isEnabled
-                    itemOfferCustomer // click
-                    ),
-                    GameFramework.ControlButton.from8("buttonCustomerUnoffer", GameFramework.Coords.fromXY(size.x - margin - buttonSizeSmall.x, margin * 2 + fontHeight + listSize.y), // pos
-                    buttonSizeSmall.clone(), "^", font, true, // hasBorder
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.itemHolderCustomerOffer.itemSelected != null), // isEnabled
-                    itemUnofferCustomer // click
-                    ),
-                    new GameFramework.ControlLabel("labelItemsOfferedCustomer", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2 + fontHeight + listSize.y + buttonSize.y - fontHeight / 2), // pos
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin * 2 - buttonSizeSmall.x * 2, margin * 2 + fontHeight + listSize.y), // pos
+                    buttonSizeSmall.clone(), "v", font, itemOfferCustomer // click
+                    ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (itemHolderCustomer.itemSelected != null))),
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin - buttonSizeSmall.x, margin * 2 + fontHeight + listSize.y), // pos
+                    buttonSizeSmall.clone(), "^", font, itemUnofferCustomer // click
+                    ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => c.itemHolderCustomerOffer.itemSelected != null)),
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2 + fontHeight + listSize.y + buttonSize.y - fontHeight / 2), // pos
                     GameFramework.Coords.fromXY(100, 15), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Offered:"), font),
                     GameFramework.ControlList.from10("listItemsOfferedByCustomer", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2 + fontHeight * 2 + listSize.y + buttonSize.y), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(this, (c) => c.itemHolderCustomerOffer.items), // items
@@ -199,25 +183,17 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     itemOfferCustomer),
-                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(0, size.y - margin * 2 - buttonSize.y), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(0, size.y - margin * 2 - buttonSize.y), // pos
                     GameFramework.Coords.fromXY(size.x, fontHeight), // size
-                    true, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), font),
-                    GameFramework.ControlButton.from8("buttonReset", GameFramework.Coords.fromXY(margin, size.y - margin - buttonSize.y), // pos
-                    buttonSize.clone(), "Reset", font, true, // hasBorder
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.isAnythingBeingOffered()), // isEnabled
-                    () => // click
-                     itemBarterer.reset(entityCustomer, entityStore)),
-                    GameFramework.ControlButton.from8("buttonOffer", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, size.y - margin - buttonSize.y), // pos
-                    buttonSize.clone(), "Offer", font, true, // hasBorder
-                    GameFramework.DataBinding.fromContextAndGet(this, (c) => c.isAnythingBeingOffered()), // isEnabled
-                    offer // click
-                    ),
-                    GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
-                    buttonSize.clone(), "Done", font, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    back // click
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(margin, size.y - margin - buttonSize.y), // pos
+                    buttonSize.clone(), "Reset", font, () => // click
+                     itemBarterer.reset(entityCustomer, entityStore)).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => c.isAnythingBeingOffered())),
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, size.y - margin - buttonSize.y), // pos
+                    buttonSize.clone(), "Offer", font, offer // click
+                    ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => c.isAnythingBeingOffered())),
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
+                    buttonSize.clone(), "Done", font, back // click
                     )
                 ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true)]);
                 return returnValue;

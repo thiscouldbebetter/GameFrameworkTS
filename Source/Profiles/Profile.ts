@@ -12,6 +12,7 @@ export class Profile
 	{
 		this.name = name;
 		this.saveStates = saveStates;
+
 		this.saveStateNameSelected = null;
 	}
 
@@ -26,9 +27,18 @@ export class Profile
 		return profile;
 	}
 
+	static blank(): Profile
+	{
+		return new Profile("", []);
+	}
+
 	saveStateSelected(): SaveStateBase
 	{
-		return this.saveStates.filter(x => x.name == this.saveStateNameSelected)[0];
+		var returnValue = this.saveStates.filter
+		(
+			x => x.name == this.saveStateNameSelected
+		)[0];
+		return returnValue;
 	}
 
 	// controls
@@ -39,7 +49,11 @@ export class Profile
 	): ControlBase
 	{
 		var isLoadNotSave = true;
-		return Profile.toControlSaveStateLoadOrSave(universe, size, venuePrev, isLoadNotSave);
+		var returnValue = Profile.toControlSaveStateLoadOrSave
+		(
+			universe, size, venuePrev, isLoadNotSave
+		);
+		return returnValue;
 	}
 
 	static toControlSaveStateSave
@@ -48,7 +62,11 @@ export class Profile
 	): ControlBase
 	{
 		var isLoadNotSave = false;
-		return Profile.toControlSaveStateLoadOrSave(universe, size, venuePrev, isLoadNotSave);
+		var returnValue = Profile.toControlSaveStateLoadOrSave
+		(
+			universe, size, venuePrev, isLoadNotSave
+		);
+		return returnValue;
 	}
 
 	static toControlSaveStateLoadOrSave
@@ -74,7 +92,8 @@ export class Profile
 		var buttonSize = Coords.fromXY(1.5, 1).multiplyScalar(buttonHeightBase);
 		var colors = Color.Instances();
 
-		var visualThumbnailSize = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
+		var visualThumbnailSize =
+			Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
 
 		var venueToReturnTo = universe.venueCurrent();
 
@@ -89,7 +108,7 @@ export class Profile
 			);
 		};
 
-		var labelProfileName = ControlLabel.from4CenteredHorizontally
+		var labelProfileName = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
 			Coords.fromXY(margin, margin), // pos
 			Coords.fromXY(sizeBase.x, fontHeight), // size
@@ -100,7 +119,7 @@ export class Profile
 			fontNameAndHeight
 		);
 
-		var labelChooseAState = ControlLabel.from4CenteredHorizontally
+		var labelChooseAState = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
 			Coords.fromXY(margin, margin * 2), // pos
 			Coords.fromXY(sizeBase.x, 25), // size
@@ -135,7 +154,11 @@ export class Profile
 				(c: SaveStateBase) =>
 				{
 					var timeSaved = c.timeSaved;
-					return (timeSaved == null ? "-" : timeSaved.toStringYYYY_MM_DD_HH_MM_SS() )
+					var timeSavedAsString =
+						timeSaved == null
+						? "-"
+						: timeSaved.toStringYYYY_MM_DD_HH_MM_SS();
+					return timeSavedAsString;
 				}
 			), // bindingForOptionText
 			fontNameAndHeight,
@@ -156,7 +179,7 @@ export class Profile
 
 		var buttonPosY = sizeBase.y - margin - buttonSize.y;
 
-		var buttonNew = ControlButton.from5
+		var buttonNew = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(margin, buttonPosY), // pos
 			buttonSize.clone(),
@@ -173,9 +196,8 @@ export class Profile
 			) // click
 		);
 
-		var buttonSelect = ControlButton.from11
+		var buttonSelect = ControlButton.fromPosSizeTextFontClick<Profile>
 		(
-			"buttonSelect",
 			Coords.fromXY
 			(
 				margin * 2 + buttonSize.x,
@@ -184,22 +206,21 @@ export class Profile
 			buttonSize.clone(),
 			(isLoadNotSave ? "Load" : "Save"),
 			fontNameAndHeight,
-			true, // hasBorder
-			// isEnabled
-			DataBinding.fromContextAndGet
-			(
-				universe.profile,
-				(c: Profile) => (c.saveStateNameSelected != null)
-			),
 			(
 				isLoadNotSave
 				? () => Profile.toControlSaveStateLoadOrSave_LoadSelectedSlotFromLocalStorage(universe)
 				: saveToLocalStorageOverwritingSlotSelected
-			), // click
-			false // canBeHeldDown
+			)
+		).isEnabledSet
+		(
+			DataBinding.fromContextAndGet
+			(
+				universe.profile,
+				(c: Profile) => (c.saveStateNameSelected != null)
+			)
 		);
 
-		var buttonFile = ControlButton.from5
+		var buttonFile = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY
 			(
@@ -216,26 +237,30 @@ export class Profile
 			) // click
 		);
 
-		var buttonDelete = ControlButton.from8
+		var deleteSaveStateSelected = () =>
+		{
+			Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected(universe, size);
+		};
+
+		var buttonDelete = ControlButton.fromPosSizeTextFontClick<Profile>
 		(
-			"buttonDelete",
 			Coords.fromXY(margin * 4 + buttonSize.x * 3, buttonPosY), // pos
 			buttonSize.clone(),
 			"Delete",
 			fontNameAndHeight,
-			true, // hasBorder
-			// isEnabled
-			DataBinding.fromContextAndGet
+			deleteSaveStateSelected
+		).isEnabledSet
+		(
+			DataBinding.fromContextAndGet<Profile, boolean>
 			(
 				universe.profile,
 				(c: Profile) => (c.saveStateNameSelected != null)
-			),
-			() => Profile.toControlSaveStateLoadOrSave_DeleteSaveSelected(universe, size) // click
+			)
 		);
 
 		var imagePosX = margin * 2 + listSize.x;
 
-		var visualSnapshot = ControlVisual.from5
+		var visualSnapshot = ControlVisual.fromNamePosSizeVisualColorBackground
 		(
 			"visualSnapshot",
 			Coords.fromXY(imagePosX, listPosY),
@@ -270,7 +295,7 @@ export class Profile
 
 		var labelSize = Coords.fromXY(120, buttonHeightBase);
 
-		var labelPlaceName = ControlLabel.from4Uncentered
+		var labelPlaceName = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY
 			(
@@ -290,7 +315,7 @@ export class Profile
 			fontNameAndHeight
 		);
 
-		var labelTimePlaying = ControlLabel.from4Uncentered
+		var labelTimePlaying = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY
 			(
@@ -310,7 +335,7 @@ export class Profile
 			fontNameAndHeight
 		);
 
-		var labelTimeSavedYMD = ControlLabel.from4Uncentered
+		var labelTimeSavedYMD = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(imagePosX, 100), // pos
 			labelSize.clone(),
@@ -337,7 +362,7 @@ export class Profile
 			fontNameAndHeight
 		);
 
-		var labelTimeSavedHMS = ControlLabel.from4Uncentered
+		var labelTimeSavedHMS = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(imagePosX, 110), // pos
 			labelSize.clone(),
@@ -353,7 +378,7 @@ export class Profile
 			fontNameAndHeight
 		);
 
-		var buttonBack = ControlButton.from5
+		var buttonBack = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY
 			(
@@ -823,7 +848,7 @@ export class Profile
 			var venueControls = universe.venueCurrent() as VenueControls;
 			var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
 			var textBoxName =
-				controlRootAsContainer.childrenByName.get("textBoxName") as ControlTextBox<any>;
+				controlRootAsContainer.childByName("textBoxName") as ControlTextBox<any>;
 			var profileName = textBoxName.text(null);
 			if (profileName == "")
 			{
@@ -842,7 +867,7 @@ export class Profile
 			storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
 			storageHelper.save(profileName, profile);
 
-			universe.profile = profile;
+			universe.profileSet(profile);
 			var venueNext: Venue = Profile.toControlSaveStateLoad
 			(
 				universe, null, universe.venueCurrent()
@@ -850,20 +875,26 @@ export class Profile
 			universe.venueTransitionTo(venueNext);
 		};
 
-		var returnValue = ControlContainer.from4
+		var cancel = () => // click
+		{
+			var venueNext = Profile.toControlProfileSelect
+			(
+				universe, null, universe.venueCurrent()
+			).toVenue();
+			universe.venueTransitionTo(venueNext);
+		};
+
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerProfileNew",
 			Coords.create(), // pos
 			sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCentered
 				(
-					"labelName",
 					Coords.fromXY(50, 35), // pos
 					Coords.fromXY(100, 15), // size
-					true, // isTextCenteredHorizontally
-					true, // isTextCenteredVertically
 					DataBinding.fromContext("Profile Name:"),
 					fontNameAndHeight
 				),
@@ -884,40 +915,29 @@ export class Profile
 					DataBinding.fromTrue() // isEnabled
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<Profile>
 				(
-					"buttonCreate",
 					Coords.fromXY(50, 80), // pos
 					Coords.fromXY(45, buttonHeightBase), // size
 					"Create",
 					fontNameAndHeight,
-					true, // hasBorder
-					// isEnabled
+					create
+				).isEnabledSet
+				(
 					DataBinding.fromContextAndGet
 					(
 						universe.profile,
 						(c: Profile) => { return c.name.length > 0; }
 					),
-					create
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonCancel",
 					Coords.fromXY(105, 80), // pos
 					Coords.fromXY(45, buttonHeightBase), // size
 					"Cancel",
 					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					() => // click
-					{
-						var venueNext = Profile.toControlProfileSelect
-						(
-							universe, null, universe.venueCurrent()
-						).toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
+					cancel
 				),
 			]
 		);
@@ -944,29 +964,34 @@ export class Profile
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
 
 		var storageHelper = universe.storageHelper;
-		var profileNames = storageHelper.load(Profile.StorageKeyProfileNames) as Array<string>;
+		var profileNames =
+			storageHelper.load(Profile.StorageKeyProfileNames) as Array<string>;
 		if (profileNames == null)
 		{
 			profileNames = [];
 			storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
 		}
-		var profiles = profileNames.map(x => storageHelper.load<Profile>(x));
+		var profiles =
+			profileNames.map(x => storageHelper.load<Profile>(x));
 
 		var create = () =>
 		{
-			universe.profile = new Profile("", null);
+			var profile = Profile.blank();
+			universe.profileSet(profile);
 			var venueNext = Profile.toControlProfileNew(universe, null).toVenue();
 			universe.venueTransitionTo(venueNext);
 		};
 
 		var select = () =>
 		{
-			var venueControls = universe.venueCurrent() as VenueControls;
-			var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
+			var venueControls =
+				universe.venueCurrent() as VenueControls;
+			var controlRootAsContainer =
+				venueControls.controlRoot as ControlContainer;
 			var listProfiles =
-				controlRootAsContainer.childrenByName.get("listProfiles") as ControlList<Universe, Profile, string>;
+				controlRootAsContainer.childByName("listProfiles") as ControlList<Universe, Profile, string>;
 			var profileSelected = listProfiles.itemSelected();
-			universe.profile = profileSelected;
+			universe.profileSet(profileSelected);
 			if (profileSelected != null)
 			{
 				var venueNext = Profile.toControlSaveStateLoad
@@ -1011,20 +1036,17 @@ export class Profile
 			}
 		};
 
-		var returnValue = ControlContainer.from4
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerProfileSelect",
 			Coords.create(), // pos
 			sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCentered
 				(
-					"labelSelectAProfile",
 					Coords.fromXY(30, 35), // pos
 					Coords.fromXY(140, 15), // size
-					true, // isTextCenteredHorizontally
-					true, // isTextCenteredVertically
 					DataBinding.fromContext("Select a Profile:"),
 					fontNameAndHeight
 				),
@@ -1047,7 +1069,7 @@ export class Profile
 					(
 						universe,
 						(c: Universe) => c.profile,
-						(c: Universe, v: Profile) => c.profile = v
+						(c: Universe, v: Profile) => c.profileSet(v)
 					), // bindingForOptionSelected
 					DataBinding.fromGet( (c: Profile) => c.name ), // value
 					null, // bindingForIsEnabled
@@ -1055,75 +1077,64 @@ export class Profile
 					null // widthInItems
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonNew",
 					Coords.fromXY(30, 95), // pos
 					Coords.fromXY(35, buttonHeightBase), // size
 					"New",
 					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					create // click
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<Universe>
 				(
-					"buttonSelect",
 					Coords.fromXY(70, 95), // pos
 					Coords.fromXY(35, buttonHeightBase), // size
 					"Select",
 					fontNameAndHeight,
-					true, // hasBorder
-					// isEnabled
+					select // click
+				).isEnabledSet
+				(
 					DataBinding.fromContextAndGet
 					(
 						universe,
 						(c: Universe) => { return (c.profile != null); }
-					),
-					select // click
+					)
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonSkip",
 					Coords.fromXY(110, 95), // pos
 					Coords.fromXY(35, buttonHeightBase), // size
 					"Skip",
 					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					// click
 					() =>
 					{
-						universe.profile = Profile.anonymous();
-						universe.venueTransitionTo
-						(
-							universe.worldCreator.toVenue(universe)
-						)
+						var profile = Profile.anonymous();
+						universe.profileSet(profile);
+						var venueNext = universe.worldCreator.toVenue(universe);
+						universe.venueTransitionTo(venueNext)
 					}
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<Universe>
 				(
-					"buttonDelete",
 					Coords.fromXY(150, 95), // pos
 					Coords.fromXY(20, buttonHeightBase), // size
 					"X",
 					fontNameAndHeight,
-					true, // hasBorder
-					// isEnabled
+					deleteProfile // click
+				).isEnabledSet
+				(
 					DataBinding.fromContextAndGet
 					(
 						universe,
 						(c: Universe) => { return (c.profile != null); }
 					),
-					deleteProfile // click
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonBack",
 					Coords.fromXY
 					(
 						sizeBase.x - 10 - 25,
@@ -1132,8 +1143,6 @@ export class Profile
 					Coords.fromXY(25, 20), // size
 					"Back",
 					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						universe.venueTransitionTo(venuePrev);

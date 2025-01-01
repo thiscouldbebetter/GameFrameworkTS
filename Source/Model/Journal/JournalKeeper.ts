@@ -68,9 +68,45 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 
 		var buttonSize = Coords.fromXY(20, 10);
 
+		var entrySelectedDelete =
+			() =>
+			{
+				var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
+				(
+					universe,
+					universe.display.sizeInPixels, // size
+					"Are you sure you want to delete this entry?",
+					universe.venueCurrent(),
+					() => // confirm
+					{
+						var journal = journalKeeper.journal;
+						var entryToDelete = journalKeeper.journalEntrySelected;
+						ArrayHelper.remove(journal.entries, entryToDelete);
+						journalKeeper.journalEntrySelected = null;
+					},
+					null // cancel
+				);
+
+				var venueNext = controlConfirm.toVenue();
+				universe.venueTransitionTo(venueNext);
+
+			};
+
+		var entrySelectedEdit =
+			() =>
+			{
+				journalKeeper.isJournalEntrySelectedEditable = true;
+			};
+
+		var entrySelectedLock =
+			() =>
+			{
+				journalKeeper.isJournalEntrySelectedEditable = false;
+			};
+
 		var childControls: ControlBase[] =
 		[
-			ControlLabel.from4Uncentered
+			ControlLabel.fromPosSizeTextFontUncentered
 			(
 				Coords.fromXY(10, 5), // pos
 				Coords.fromXY(70, 25), // size
@@ -78,15 +114,12 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				fontSmall
 			),
 
-			ControlButton.from11
+			ControlButton.fromPosSizeTextFontClick<JournalKeeper>
 			(
-				"buttonEntryNew",
 				Coords.fromXY(65, 5), // pos
 				Coords.fromXY(30, 8), // size
 				"New",
 				fontSmall,
-				true, // hasBorder,
-				DataBinding.fromTrueWithContext(this), // isEnabled
 				() =>
 				{
 					var journal = journalKeeper.journal;
@@ -98,7 +131,9 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 					);
 					journal.entries.push(entryNew);
 				}, // click
-				false // canBeHeldDown
+			).isEnabledSet
+			(
+				DataBinding.fromTrueWithContext<JournalKeeper>(this) // Is this necessary?
 			),
 
 			new ControlList
@@ -135,26 +170,24 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				null
 			),
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontUncentered
 			(
-				"labelEntrySelected",
 				Coords.fromXY(105, 5), // pos
 				Coords.fromXY(100, 15), // size
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext("Entry Selected:"),
 				fontSmall
 			),
 
-			ControlButton.from11
+			ControlButton.fromPosSizeTextFontClick<JournalKeeper>
 			(
-				"buttonEntrySelectedEdit",
 				Coords.fromXY(146, 5), // pos
 				Coords.fromXY(15, 8), // size
 				"Lock",
 				fontSmall,
-				true, // hasBorder,
-				DataBinding.fromContextAndGet
+				entrySelectedLock
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<JournalKeeper, boolean>
 				(
 					this,
 					(c: JournalKeeper) =>
@@ -162,23 +195,19 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 						c.journalEntrySelected != null
 						&& c.isJournalEntrySelectedEditable
 					)
-				), // isEnabled
-				() =>
-				{
-					journalKeeper.isJournalEntrySelectedEditable = false;
-				}, // click
-				false, // canBeHeldDown
+				)
 			),
 
-			ControlButton.from11
+			ControlButton.fromPosSizeTextFontClick<JournalKeeper>
 			(
-				"buttonEntrySelectedEdit",
 				Coords.fromXY(164, 5), // pos
 				Coords.fromXY(15, 8), // size
 				"Edit",
 				fontSmall,
-				true, // hasBorder,
-				DataBinding.fromContextAndGet
+				entrySelectedEdit
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<JournalKeeper, boolean>
 				(
 					this,
 					(c: JournalKeeper) =>
@@ -186,53 +215,26 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 						c.journalEntrySelected != null
 						&& c.isJournalEntrySelectedEditable == false
 					)
-				), // isEnabled
-				() =>
-				{
-					journalKeeper.isJournalEntrySelectedEditable = true;
-				}, // click
-				false, // canBeHeldDown
+				)
 			),
 
-			ControlButton.from11
+			ControlButton.fromPosSizeTextFontClick<JournalKeeper>
 			(
-				"buttonEntrySelectedDelete",
 				Coords.fromXY(182, 5), // pos
 				Coords.fromXY(8, 8), // size
 				"X",
 				fontSmall,
-				true, // hasBorder,
-				DataBinding.fromContextAndGet
+				entrySelectedDelete
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<JournalKeeper, boolean>
 				(
 					this,
 					(c: JournalKeeper) => (c.journalEntrySelected != null)
-				), // isEnabled
-				() =>
-				{
-					var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
-					(
-						universe,
-						universe.display.sizeInPixels, // size
-						"Are you sure you want to delete this entry?",
-						universe.venueCurrent(),
-						() => // confirm
-						{
-							var journal = journalKeeper.journal;
-							var entryToDelete = journalKeeper.journalEntrySelected;
-							ArrayHelper.remove(journal.entries, entryToDelete);
-							journalKeeper.journalEntrySelected = null;
-						},
-						null // cancel
-					);
-
-					var venueNext = controlConfirm.toVenue();
-					universe.venueTransitionTo(venueNext);
-
-				}, // click
-				false // canBeHeldDown
+				)
 			),
 
-			ControlLabel.from4Uncentered
+			ControlLabel.fromPosSizeTextFontUncentered
 			(
 				Coords.fromXY(105, 15), // pos
 				Coords.fromXY(100, 15), // size
@@ -240,7 +242,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				fontSmall
 			),
 
-			ControlLabel.from4Uncentered
+			ControlLabel.fromPosSizeTextFontUncentered
 			(
 				Coords.fromXY(145, 15), // pos
 				Coords.fromXY(100, 15), // size
@@ -319,13 +321,10 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 				) // isEnabled
 			),
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
-				"infoStatus",
 				Coords.fromXY(150, 120), // pos
 				Coords.fromXY(200, 15), // size
-				true, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -359,28 +358,22 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 			(
 				0, // indexToInsertAt
 				0,
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"labelTitle",
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Journal"),
 					fontLarge
 				)
 			);
 			childControls.push
 			(
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonDone",
 					Coords.fromXY(170, 115), // pos
 					buttonSize.clone(),
 					"Done",
 					fontSmall,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			);

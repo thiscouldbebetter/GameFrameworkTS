@@ -65,7 +65,7 @@ export class WordBubble
 
 		var wordBubble = this;
 
-		var containerWordBubble = ControlContainer.from4
+		var containerWordBubble = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerWordBubble",
 			Coords.fromXY
@@ -86,9 +86,8 @@ export class WordBubble
 					null // colorBorder
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelSlideText",
 					Coords.fromXY
 					(
 						portraitSize.x + margin, 0
@@ -97,8 +96,6 @@ export class WordBubble
 						marginSize
 					),
 					wordPaneSize, // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -107,9 +104,8 @@ export class WordBubble
 					font
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonNext",
 					Coords.fromXY
 					(
 						containerSize.x - marginSize.x - buttonSize.x,
@@ -118,8 +114,6 @@ export class WordBubble
 					buttonSize,
 					"Next",
 					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					() => wordBubble.statementAdvance(universe)
 				)
 			]

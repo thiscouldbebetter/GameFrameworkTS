@@ -48,13 +48,13 @@ var ThisCouldBeBetter;
                 );
                 return returnValue;
             }
-            static from6(name, pos, size, items, bindingForItemText, fontNameAndHeight) {
+            static fromNamePosSizeItemsTextFont(name, pos, size, items, bindingForItemText, fontNameAndHeight) {
                 return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, null, null, null, null, null);
             }
-            static from7(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected) {
+            static fromNamePosSizeItemsTextFontSelected(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected) {
                 return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, null, null, null, null);
             }
-            static from8(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue) {
+            static fromNamePosSizeItemsTextFontSelectedValue(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue) {
                 return new ControlList(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue, null, null, null);
             }
             static from9(name, pos, size, items, bindingForItemText, fontNameAndHeight, bindingForItemSelected, bindingForItemValue, bindingForIsEnabled) {

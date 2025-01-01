@@ -118,13 +118,10 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 			size.clone(),
 			// children
 			[
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelContainerName",
 					Coords.fromXY(margin, margin), // pos
 					Coords.fromXY(listSize.x, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityContainer.name + ":"),
 					font
 				),
@@ -156,9 +153,8 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					null
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonGet",
 					Coords.fromXY
 					(
 						(size.x - buttonSize.x) / 2,
@@ -167,14 +163,11 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					buttonSize.clone(),
 					">",
 					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					get // click
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonPut",
 					Coords.fromXY
 					(
 						(size.x - buttonSize.x) / 2,
@@ -183,18 +176,13 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					buttonSize.clone(),
 					"<",
 					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					put // click
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelGetterPutterName",
 					Coords.fromXY(size.x - margin - listSize.x, margin), // pos
 					Coords.fromXY(85, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityGetterPutter.name + ":"),
 					font
 				),
@@ -228,20 +216,16 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					null
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"infoStatus",
 					Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
 					Coords.fromXY(size.x, fontHeight), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet(this, c => c.statusMessage),
 					font
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonDone",
 					Coords.fromXY
 					(
 						size.x - margin - buttonSize.x,
@@ -250,8 +234,6 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 					buttonSize.clone(),
 					"Done",
 					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			],

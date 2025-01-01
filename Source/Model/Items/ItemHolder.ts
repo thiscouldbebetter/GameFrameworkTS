@@ -636,37 +636,14 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		var buttonSize = Coords.fromXY(20, 10);
 		var visualNone = new VisualNone();
 
-		/*
-		// todo
-		var controlVisualBackground = ControlVisual.from4
-		(
-			"imageBackground",
-			Coords.zeroes(),
-			sizeBase.clone(), // size
-			DataBinding.fromContext<Visual>
-			(
-				new VisualGroup
-				([
-					new VisualImageScaled
-					(
-						new VisualImageFromLibrary("Titles_Title"), size
-					)
-				])
-			)
-		);
-		*/
-
 		var childControls =
 		[
 			//controlVisualBackground,
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
-				"labelItemsHeld",
 				Coords.fromXY(10, 5), // pos
 				Coords.fromXY(70, 25), // size
-				true, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext("Items Held:"),
 				fontSmall
 			),
@@ -696,13 +673,10 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				use
 			),
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
-				"infoWeight",
 				Coords.fromXY(10, 115), // pos
 				Coords.fromXY(100, 25), // size
-				true, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -711,15 +685,16 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				fontSmall
 			),
 
-			ControlButton.from8
+			ControlButton.fromPosSizeTextFontClick<ItemHolder>
 			(
-				"buttonUp",
 				Coords.fromXY(85, 15), // pos
 				Coords.fromXY(15, 10), // size
 				"Up",
 				fontSmall,
-				true, // hasBorder
-				DataBinding.fromContextAndGet
+				up // click
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<ItemHolder, boolean>
 				(
 					this,
 					(c: ItemHolder) =>
@@ -731,19 +706,19 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 						);
 						return returnValue;
 					}
-				), // isEnabled
-				up // click
+				)
 			),
 
-			ControlButton.from8
+			ControlButton.fromPosSizeTextFontClick<ItemHolder>
 			(
-				"buttonDown",
 				Coords.fromXY(85, 30), // pos
 				Coords.fromXY(15, 10), // size
 				"Down",
 				fontSmall,
-				true, // hasBorder
-				DataBinding.fromContextAndGet
+				down
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<ItemHolder, boolean>
 				(
 					this,
 					(c: ItemHolder) =>
@@ -755,19 +730,19 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 						);
 						return returnValue;
 					}
-				), // isEnabled
-				down
+				)
 			),
 
-			ControlButton.from8
+			ControlButton.fromPosSizeTextFontClick<ItemHolder>
 			(
-				"buttonSplit",
 				Coords.fromXY(85, 45), // pos
 				Coords.fromXY(15, 10), // size
 				"Split",
 				fontSmall,
-				true, // hasBorder
-				DataBinding.fromContextAndGet
+				split
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<ItemHolder, boolean>
 				(
 					this,
 					(c: ItemHolder) =>
@@ -780,19 +755,19 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 						);
 						return returnValue;
 					}
-				), // isEnabled
-				split
+				)
 			),
 
-			ControlButton.from8
+			ControlButton.fromPosSizeTextFontClick<ItemHolder>
 			(
-				"buttonJoin",
 				Coords.fromXY(85, 60), // pos
 				Coords.fromXY(15, 10), // size
 				"Join",
 				fontSmall,
-				true, // hasBorder
-				DataBinding.fromContextAndGet
+				join
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<ItemHolder, boolean>
 				(
 					this,
 					(c: ItemHolder) =>
@@ -804,44 +779,37 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 								(x: Item) => x.defnName == c.itemSelected.defnName
 							).length > 1
 						)
-				), // isEnabled
-				join
+				) // isEnabled
 			),
 
-			ControlButton.from8
+			ControlButton.fromPosSizeTextFontClick<ItemHolder>
 			(
-				"buttonSort",
 				Coords.fromXY(85, 75), // pos
 				Coords.fromXY(15, 10), // size
 				"Sort",
 				fontSmall,
-				true, // hasBorder
-				DataBinding.fromContextAndGet
+				sort
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<ItemHolder, boolean>
 				(
 					this,
 					(c: ItemHolder) => (c.itemEntities.length > 1)
-				), // isEnabled
-				sort
+				)
 			),
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
-				"labelItemSelected",
 				Coords.fromXY(150, 10), // pos
 				Coords.fromXY(100, 15), // size
-				true, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext("Item Selected:"),
 				fontSmall
 			),
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
-				"infoItemSelected",
 				Coords.fromXY(150, 20), // pos
 				Coords.fromXY(200, 15), // size
-				true, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -854,7 +822,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				fontSmall
 			),
 
-			ControlVisual.from5
+			ControlVisual.fromNamePosSizeVisualColorBackground
 			(
 				"visualImage",
 				Coords.fromXY(125, 25), // pos
@@ -871,13 +839,10 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Color.Instances().Black // colorBackground
 			),
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
-				"infoStatus",
 				Coords.fromXY(150, 115), // pos
 				Coords.fromXY(200, 15), // size
-				true, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -886,15 +851,16 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				fontSmall
 			),
 
-			ControlButton.from8
+			ControlButton.fromPosSizeTextFontClick<ItemHolder>
 			(
-				"buttonUse",
 				Coords.fromXY(132.5, 95), // pos
 				Coords.fromXY(15, 10), // size
 				"Use",
 				fontSmall,
-				true, // hasBorder
-				DataBinding.fromContextAndGet
+				use // click
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<ItemHolder, boolean>
 				(
 					this,
 					(c: ItemHolder) =>
@@ -902,24 +868,23 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 						var item = c.itemSelected;
 						return (item != null && item.isUsable(world));
 					}
-				), // isEnabled
-				use // click
+				)
 			),
 
-			ControlButton.from8
+			ControlButton.fromPosSizeTextFontClick<ItemHolder>
 			(
-				"buttonDrop",
 				Coords.fromXY(152.5, 95), // pos
 				Coords.fromXY(15, 10), // size
 				"Drop",
 				fontSmall,
-				true, // hasBorder
-				DataBinding.fromContextAndGet
+				drop // click
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet<ItemHolder, boolean>
 				(
 					this,
 					(c: ItemHolder) => (c.itemSelected != null)
-				), // isEnabled
-				drop // click
+				)
 			)
 		];
 
@@ -983,28 +948,22 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			(
 				0, // indexToInsertAt
 				0,
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"labelItems",
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Items"),
 					fontLarge
 				)
 			);
 			childControls.push
 			(
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonDone",
 					Coords.fromXY(170, 115), // pos
 					buttonSize.clone(),
 					"Done",
 					fontSmall,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			);

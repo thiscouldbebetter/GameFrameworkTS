@@ -73,7 +73,8 @@ var ThisCouldBeBetter;
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
                 var venueInitial = null;
                 if (this.debuggingModeName == "SkipOpening") {
-                    this.profile = GameFramework.Profile.anonymous();
+                    var profile = GameFramework.Profile.anonymous();
+                    this.profileSet(profile);
                     venueInitial = this.worldCreator.toVenue(this);
                 }
                 else {
@@ -85,6 +86,10 @@ var ThisCouldBeBetter;
                 this.inputHelper.initialize(this);
                 var universe = this;
                 this.mediaLibrary.waitForItemsAllToLoad(() => callback(universe));
+            }
+            profileSet(value) {
+                this.profile = value;
+                return this;
             }
             reset() {
                 // hack

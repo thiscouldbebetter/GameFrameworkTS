@@ -8,9 +8,12 @@ var ThisCouldBeBetter;
                 this.childrenByName = childrenByName;
                 this.selectChildNames = selectChildNames;
             }
+            childByName(childName) {
+                return this.childrenByName.get(childName);
+            }
             draw(uwpe, display) {
                 var childrenToSelectNames = this.selectChildNames(uwpe, display);
-                var childrenSelected = childrenToSelectNames.map(childToSelectName => this.childrenByName.get(childToSelectName));
+                var childrenSelected = childrenToSelectNames.map(childToSelectName => this.childByName(childToSelectName));
                 childrenSelected.forEach(childSelected => childSelected.draw(uwpe, display));
             }
             // Clonable.

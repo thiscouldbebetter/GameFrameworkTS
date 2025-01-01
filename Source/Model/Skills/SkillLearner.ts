@@ -262,25 +262,22 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 		var skillsAll = defns.skills;
 		var skillsAllByName = defns.skillsByName;
 
-		var returnValue = ControlContainer.from4
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"Skills", // name,
 			Coords.create(), // pos,
 			size.clone(),
 			// children
 			[
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelSkillsKnown", // name,
 					Coords.fromXY(margin, 40), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills Known:"), //text
 					labelFont // fontNameAndHeight
 				),
 
-				ControlList.from6
+				ControlList.fromNamePosSizeItemsTextFont
 				(
 					"listSkillsKnown",
 					Coords.fromXY(margin, 60), // pos
@@ -291,13 +288,10 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					labelFont // fontNameAndHeight
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelSkillsAvailable", // name,
 					Coords.fromXY(size.x - margin - listSize.x, 40), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills Available:"), // text
 					labelFont // fontNameAndHeight
 				),
@@ -341,24 +335,18 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					} // confirm
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelSkillSelected", // name,
 					Coords.fromXY(margin, 220), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Selected:"), // text
 					fontNameAndHeight
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelSkillSelected", // name,
 					Coords.fromXY(80, 220), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this, (c: SkillLearner) => (c.skillSelectedName || "-")
@@ -366,13 +354,10 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					fontNameAndHeight
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelSkillSelectedDescription", // name,
 					Coords.fromXY(margin, 232), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -385,24 +370,18 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					fontNameAndHeight
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelSkillBeingLearned", // name,
 					Coords.fromXY(margin, size.y - margin - labelHeight * 2), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skill Being Learned:"), // text
 					fontNameAndHeight
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"textSkillBeingLearned", // name,
 					Coords.fromXY(145, size.y - margin - labelHeight * 2), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -414,24 +393,18 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 					fontNameAndHeight
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelLearningAccumulated", // name,
 					Coords.fromXY(margin, size.y - margin - labelHeight), // pos,
 					Coords.fromXY(size.x - margin * 2, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Learning Accumulated:"), // text
 					fontNameAndHeight
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"textLearningAccumulated", // name,
 					Coords.fromXY(145, size.y - margin - labelHeight), // pos,
 					Coords.fromXY(30, labelHeight), // size,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -449,13 +422,10 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 			(
 				0, // indexToInsertAt
 				0, // elementsToDelete
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"labelSkills",
 					Coords.fromXY(200, 20), // pos
 					Coords.fromXY(120, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Skills"),
 					labelLargeFont
 				)

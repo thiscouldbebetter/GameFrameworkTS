@@ -636,15 +636,12 @@ export class ConversationRun
 
 		var childControls: ControlBase[] =
 		[
-			ControlButton.from8
+			ControlButton.fromPosSizeTextFontClick
 			(
-				"buttonNextUnderPortrait",
 				portraitPos,
 				portraitSize,
 				"Next",
 				fontNameAndHeight,
-				true, // hasBorder
-				DataBinding.fromTrue(), // isEnabled
 				next // click
 			),
 
@@ -674,7 +671,7 @@ export class ConversationRun
 				fontNameAndHeight
 			),
 
-			ControlLabel.from4Uncentered
+			ControlLabel.fromPosSizeTextFontUncentered
 			(
 				Coords.fromXY
 				(
@@ -730,7 +727,7 @@ export class ConversationRun
 		{
 			var visualSound: VisualBase = new VisualSound(soundMusicName, true);
 
-			var visualMusic = ControlVisual.from4
+			var visualMusic = ControlVisual.fromNamePosSizeVisual
 			(
 				"visualMusic",
 				portraitPos,
@@ -746,9 +743,8 @@ export class ConversationRun
 
 		if (containerButtonsPos != null)
 		{
-			var buttonNext = ControlButton.from8
+			var buttonNext = ControlButton.fromPosSizeTextFontClick
 			(
-				"buttonNext",
 				Coords.fromXY
 				(
 					containerButtonsMarginSize.x,
@@ -757,12 +753,10 @@ export class ConversationRun
 				buttonSize.clone(),
 				"Next",
 				fontNameAndHeight,
-				true, // hasBorder
-				DataBinding.fromTrue(), // isEnabled
 				next // click
 			);
 
-			var buttonTranscript = ControlButton.from5
+			var buttonTranscript = ControlButton.fromPosSizeTextFontClick
 			(
 				Coords.fromXY
 				(
@@ -799,7 +793,7 @@ export class ConversationRun
 					new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true )
 				);
 
-				var buttonLeave = ControlButton.from5
+				var buttonLeave = ControlButton.fromPosSizeTextFontClick
 				(
 					Coords.fromXY
 					(
@@ -821,7 +815,7 @@ export class ConversationRun
 				buttonSize.y * (buttons.length) + marginSize.y * (buttons.length + 1)
 			);
 
-			var containerButtonsInner = ControlContainer.from4
+			var containerButtonsInner = ControlContainer.fromNamePosSizeChildren
 			(
 				"containerButtons",
 				containerButtonsPos,
@@ -880,43 +874,37 @@ export class ConversationRun
 			size.y - labelHeight - marginSize.y * 3
 		);
 
-		var returnValue = ControlContainer.from4
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerConversation",
 			Coords.create(), // pos
 			size,
 			// children
 			[
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"labelTranscript",
 					Coords.fromXY
 					(
 						0, marginSize.y
 					), // pos
 					Coords.fromXY(size.x, fontHeight), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Transcript"),
 					fontNameAndHeight
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonBack",
 					marginSize, // pos
 					Coords.fromXY(1, 1).multiplyScalar(buttonHeight), // size
 					"<",
 					fontNameAndHeight,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					() => // click
 					{
 						universe.venueTransitionTo(venueToReturnTo);
 					}
 				),
 
-				ControlList.from6
+				ControlList.fromNamePosSizeItemsTextFont
 				(
 					"listEntries",
 					Coords.fromXY

@@ -64,10 +64,8 @@ var ThisCouldBeBetter;
                 size.clone(), 
                 // children
                 [
-                    new GameFramework.ControlLabel("labelContainerName", GameFramework.Coords.fromXY(margin, margin), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(margin, margin), // pos
                     GameFramework.Coords.fromXY(listSize.x, 25), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityContainer.name + ":"), font),
                     new GameFramework.ControlList("listContainerItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderContainer, (c) => c.items), // items
@@ -77,20 +75,14 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     get, // confirm
                     null),
-                    GameFramework.ControlButton.from8("buttonGet", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y - buttonSize.y - margin) / 2), // pos
-                    buttonSize.clone(), ">", font, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    get // click
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y - buttonSize.y - margin) / 2), // pos
+                    buttonSize.clone(), ">", font, get // click
                     ),
-                    GameFramework.ControlButton.from8("buttonPut", GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y + buttonSize.y + margin) / 2), // pos
-                    buttonSize.clone(), "<", font, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    put // click
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y + buttonSize.y + margin) / 2), // pos
+                    buttonSize.clone(), "<", font, put // click
                     ),
-                    new GameFramework.ControlLabel("labelGetterPutterName", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
                     GameFramework.Coords.fromXY(85, 25), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext(entityGetterPutter.name + ":"), font),
                     new GameFramework.ControlList("listOtherItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderGetterPutter, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
@@ -101,15 +93,11 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     put, // confirm
                     null),
-                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
                     GameFramework.Coords.fromXY(size.x, fontHeight), // size
-                    true, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), font),
-                    GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
-                    buttonSize.clone(), "Done", font, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    back // click
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
+                    buttonSize.clone(), "Done", font, back // click
                     )
                 ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true)]);
                 return returnValue;

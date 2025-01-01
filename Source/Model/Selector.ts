@@ -268,24 +268,18 @@ export class Selector implements EntityProperty<Selector>
 			pos,
 			size,
 			[
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelSelected",
 					Coords.fromXY(1, 0).multiplyScalar(margin), // pos
 					labelSize,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Selected:"),
 					font
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"textEntitySelectedName",
 					Coords.fromXY(1, 1.5).multiplyScalar(margin), // pos
 					labelSize,
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,

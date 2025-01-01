@@ -24,10 +24,9 @@ var ThisCouldBeBetter;
                     child.pos.y += tabPaneHeight;
                     var childName = child.name;
                     var buttonPos = GameFramework.Coords.fromXY(marginSize + this.tabButtonSize.x * i, marginSize);
-                    var button = GameFramework.ControlButton.from8("button" + childName, buttonPos, this.tabButtonSize.clone(), childName, // text
-                    this.fontNameAndHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrueWithContext(this.context), // isEnabled
-                    null // click - Assigned below.
+                    var button = GameFramework.ControlButton.fromPosSizeTextFontClick(buttonPos, this.tabButtonSize.clone(), childName, // text
+                    this.fontNameAndHeight, null // click - Assigned below.
+                    ).isEnabledSet(GameFramework.DataBinding.fromTrueWithContext(this.context) // Is this necessary?
                     );
                     buttonsForChildren.push(button);
                 }
@@ -82,11 +81,10 @@ var ThisCouldBeBetter;
                 }
                 if (this.cancel != null) {
                     this.childrenForTabs.push(null);
-                    var button = GameFramework.ControlButton.from8("buttonCancel", GameFramework.Coords.fromXY(this.size.x - marginSize - this.tabButtonSize.x, marginSize), // pos
+                    var button = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(this.size.x - marginSize - this.tabButtonSize.x, marginSize), // pos
                     this.tabButtonSize.clone(), "Done", // text
-                    this.fontNameAndHeight, true, // hasBorder
-                    GameFramework.DataBinding.fromTrueWithContext(this.context), // isEnabled
-                    this.cancel // click
+                    this.fontNameAndHeight, this.cancel // click
+                    ).isEnabledSet(GameFramework.DataBinding.fromTrueWithContext(this.context) // Is this necessary?
                     );
                     buttonsForChildren.push(button);
                 }

@@ -74,7 +74,7 @@ var ThisCouldBeBetter;
                 var sell = () => {
                     itemBarterer.transfer(world, entityCustomer, entityStore, "Sold");
                 };
-                var labelStoreName = GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(margin, margin), // pos
+                var labelStoreName = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(margin, margin), // pos
                 GameFramework.Coords.fromXY(listSize.x, 25), // size
                 GameFramework.DataBinding.fromContext(entityStore.name + ":"), font);
                 var listStoreItems = GameFramework.ControlList.from10("listStoreItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
@@ -85,13 +85,11 @@ var ThisCouldBeBetter;
                 GameFramework.DataBinding.fromTrue(), // isEnabled
                 buy // confirm
                 );
-                var labelCustomerName = GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
+                var labelCustomerName = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
                 GameFramework.Coords.fromXY(85, 25), // size
                 GameFramework.DataBinding.fromContext(entityCustomer.name + ":"), font);
-                var buttonBuy = GameFramework.ControlButton.from8("buttonBuy", GameFramework.Coords.fromXY(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y), // pos
-                buttonSize.clone(), "Buy", font, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled
-                buy // click
+                var buttonBuy = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x / 2 - buttonSize.x - margin / 2, size.y - margin - buttonSize.y), // pos
+                buttonSize.clone(), "Buy", font, buy // click
                 );
                 var listCustomerItems = GameFramework.ControlList.from10("listCustomerItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
                 listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderCustomer, (c) => c.items), // items
@@ -101,15 +99,13 @@ var ThisCouldBeBetter;
                 GameFramework.DataBinding.fromTrue(), // isEnabled
                 sell // confirm
                 );
-                var buttonSell = GameFramework.ControlButton.from8("buttonSell", GameFramework.Coords.fromXY(size.x / 2 + margin / 2, size.y - margin - buttonSize.y), // pos
-                buttonSize.clone(), "Sell", font, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled
-                sell // click
+                var buttonSell = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x / 2 + margin / 2, size.y - margin - buttonSize.y), // pos
+                buttonSize.clone(), "Sell", font, sell // click
                 );
-                var infoStatus = GameFramework.ControlLabel.from4CenteredHorizontally(GameFramework.Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
+                var infoStatus = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
                 GameFramework.Coords.fromXY(size.x, fontHeight), // size
                 GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), font);
-                var buttonDone = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
+                var buttonDone = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                 buttonSize.clone(), "Done", font, back // click
                 );
                 var returnValue = new GameFramework.ControlContainer("containerTransfer", GameFramework.Coords.create(), // pos

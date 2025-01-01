@@ -33,51 +33,6 @@ export class ControlLabel<TContext> extends ControlBase
 		this._drawPos = Coords.create();
 	}
 
-	static from4Centered<TContext> 
-	(
-		pos: Coords,
-		size: Coords,
-		text: DataBinding<TContext, string>,
-		fontNameAndHeight: FontNameAndHeight
-	): ControlLabel<TContext>
-	{
-		return ControlLabel.fromPosSizeTextFontCentered
-		(
-			pos, size, text, fontNameAndHeight
-		);
-	}
-
-	static from4CenteredHorizontally<TContext> 
-	(
-		pos: Coords,
-		size: Coords,
-		text: DataBinding<TContext, string>,
-		fontNameAndHeight: FontNameAndHeight
-	): ControlLabel<TContext>
-	{
-		return ControlLabel.fromPosSizeTextFontCenteredHorizontally
-		(
-			pos, size, text, fontNameAndHeight
-		);
-	}
-
-	static from4Uncentered<TContext> 
-	(
-		pos: Coords,
-		size: Coords,
-		text: DataBinding<TContext, string>,
-		fontNameAndHeight: FontNameAndHeight
-	): ControlLabel<TContext>
-	{
-		return ControlLabel.fromPosSizeTextFontUncentered<TContext> 
-		(
-			pos,
-			size,
-			text,
-			fontNameAndHeight
-		);
-	}
-
 	static fromPosAndText<TContext>
 	(
 		pos: Coords,

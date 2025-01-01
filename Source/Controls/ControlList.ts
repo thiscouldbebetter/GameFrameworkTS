@@ -123,7 +123,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		return returnValue;
 	}
 
-	static from6<TContext, TItem, TValue>
+	static fromNamePosSizeItemsTextFont<TContext, TItem, TValue>
 	(
 		name: string,
 		pos: Coords,
@@ -140,7 +140,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		);
 	}
 
-	static from7<TContext, TItem, TValue>
+	static fromNamePosSizeItemsTextFontSelected<TContext, TItem, TValue>
 	(
 		name: string,
 		pos: Coords,
@@ -158,7 +158,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 		);
 	}
 
-	static from8<TContext, TItem, TValue>
+	static fromNamePosSizeItemsTextFontSelectedValue<TContext, TItem, TValue>
 	(
 		name: string,
 		pos: Coords,

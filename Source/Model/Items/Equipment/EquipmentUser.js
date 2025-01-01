@@ -256,22 +256,18 @@ var ThisCouldBeBetter;
                     );
                 };
                 var fontButton = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 0.8);
-                var buttonEquip = GameFramework.ControlButton.from8("buttonEquip", GameFramework.Coords.fromXY(85, 50), // pos
+                var buttonEquip = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 50), // pos
                 GameFramework.Coords.fromXY(10, 10), // size
                 ">", // text
-                fontButton, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled - todo
-                equipItemSelectedToSocketSelected);
+                fontButton, equipItemSelectedToSocketSelected);
                 var unequipFromSocketSelected = () => {
                     var socketToUnequipFrom = equipmentUser.socketSelected;
                     equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
                 };
-                var buttonUnequip = GameFramework.ControlButton.from8("buttonEquip", GameFramework.Coords.fromXY(85, 65), // pos
+                var buttonUnequip = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 65), // pos
                 GameFramework.Coords.fromXY(10, 10), // size
                 "<", // text
-                fontButton, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled - todo
-                unequipFromSocketSelected);
+                fontButton, unequipFromSocketSelected);
                 var listEquipped = new GameFramework.ControlList("listEquipped", GameFramework.Coords.fromXY(100, 15), // pos
                 GameFramework.Coords.fromXY(90, listHeight), // size
                 GameFramework.DataBinding.fromContextAndGet(this, (c) => c.socketGroup.sockets), // items
@@ -286,24 +282,18 @@ var ThisCouldBeBetter;
                 sizeBase.clone(), // size
                 // children
                 [
-                    new GameFramework.ControlLabel("labelEquippable", GameFramework.Coords.fromXY(10, 5), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Equippable:"), fontSmall),
                     listEquippables,
                     buttonEquip,
                     buttonUnequip,
-                    new GameFramework.ControlLabel("labelEquipped", GameFramework.Coords.fromXY(100, 5), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(100, 5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Equipped:"), fontSmall),
                     listEquipped,
-                    new GameFramework.ControlLabel("infoStatus", GameFramework.Coords.fromXY(sizeBase.x / 2, 125), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(sizeBase.x / 2, 125), // pos
                     GameFramework.Coords.fromXY(sizeBase.x, 15), // size
-                    true, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontSmall)
                 ], [
@@ -333,16 +323,12 @@ var ThisCouldBeBetter;
                 ]);
                 if (includeTitleAndDoneButton) {
                     var childControls = returnValue.children;
-                    childControls.splice(0, 0, new GameFramework.ControlLabel("labelEquipment", GameFramework.Coords.fromXY(100, -5), // pos
+                    childControls.splice(0, 0, GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(100, -5), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
-                    true, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
                     GameFramework.DataBinding.fromContext("Equip"), fontLarge));
-                    childControls.push(GameFramework.ControlButton.from8("buttonDone", GameFramework.Coords.fromXY(170, 115), // pos
+                    childControls.push(GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(170, 115), // pos
                     GameFramework.Coords.fromXY(20, 10), // size
-                    "Done", fontSmall, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    back // click
+                    "Done", fontSmall, back // click
                     ));
                     var titleHeight = GameFramework.Coords.fromXY(0, 15);
                     sizeBase.add(titleHeight);

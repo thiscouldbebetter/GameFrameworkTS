@@ -19,11 +19,11 @@ var ThisCouldBeBetter;
                 return ControlButton.fromPosSizeTextFontClick(pos, size, text, fontNameAndHeight, click);
             }
             static fromPosSizeTextFontClick(pos, size, textAsString, fontNameAndHeight, click) {
-                return ControlButton.from8("button" + textAsString.split(" ").join(""), pos, size, textAsString, fontNameAndHeight, true, // hasBorder
+                return ControlButton.fromNamePosSizeTextFontBorderEnabledClick("button" + textAsString.split(" ").join(""), pos, size, textAsString, fontNameAndHeight, true, // hasBorder
                 GameFramework.DataBinding.fromTrue(), // isEnabled,
                 click);
             }
-            static from8(name, pos, size, textAsString, fontNameAndHeight, hasBorder, isEnabled, click) {
+            static fromNamePosSizeTextFontBorderEnabledClick(name, pos, size, textAsString, fontNameAndHeight, hasBorder, isEnabled, click) {
                 var textAsBinding = GameFramework.DataBinding.fromGet((c) => textAsString);
                 return new ControlButton(name, pos, size, textAsBinding, fontNameAndHeight, hasBorder, isEnabled, click, false // canBeHeldDown
                 );
@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 return new ControlButton(name, pos, size, textAsBinding, fontNameAndHeight, hasBorder, isEnabled, click, false // canBeHeldDown
                 );
             }
-            static from11(name, pos, size, textAsString, fontNameAndHeight, hasBorder, isEnabled, click, canBeHeldDown) {
+            static from9(name, pos, size, textAsString, fontNameAndHeight, hasBorder, isEnabled, click, canBeHeldDown) {
                 return new ControlButton(name, pos, size, GameFramework.DataBinding.fromGet((c) => textAsString), fontNameAndHeight, hasBorder, isEnabled, click, canBeHeldDown);
             }
             actionHandle(actionNameToHandle, universe) {
@@ -44,8 +44,20 @@ var ThisCouldBeBetter;
             click() {
                 this._click();
             }
+            clickSet(value) {
+                this._click = value;
+                return this;
+            }
             isEnabled() {
                 return this._isEnabled.get();
+            }
+            hasBorderSet(value) {
+                this.hasBorder = value;
+                return this;
+            }
+            isEnabledSet(value) {
+                this._isEnabled = value;
+                return this;
             }
             text() {
                 return this._text.get();

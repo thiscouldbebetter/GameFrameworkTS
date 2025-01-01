@@ -144,7 +144,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 			itemBarterer.transfer(world, entityCustomer, entityStore, "Sold");
 		};
 
-		var labelStoreName = ControlLabel.from4Uncentered
+		var labelStoreName = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(margin, margin), // pos
 			Coords.fromXY(listSize.x, 25), // size
@@ -179,7 +179,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 			buy // confirm
 		);
 
-		var labelCustomerName = ControlLabel.from4Uncentered
+		var labelCustomerName = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(size.x - margin - listSize.x, margin), // pos
 			Coords.fromXY(85, 25), // size
@@ -187,9 +187,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 			font
 		);
 
-		var buttonBuy = ControlButton.from8
+		var buttonBuy = ControlButton.fromPosSizeTextFontClick
 		(
-			"buttonBuy",
 			Coords.fromXY
 			(
 				size.x / 2 - buttonSize.x - margin / 2,
@@ -198,8 +197,6 @@ export class ItemStore implements EntityProperty<ItemStore>
 			buttonSize.clone(),
 			"Buy",
 			font,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
 			buy // click
 		);
 
@@ -230,9 +227,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 			sell // confirm
 		);
 
-		var buttonSell = ControlButton.from8
+		var buttonSell = ControlButton.fromPosSizeTextFontClick
 		(
-			"buttonSell",
 			Coords.fromXY
 			(
 				size.x / 2 + margin / 2,
@@ -241,12 +237,10 @@ export class ItemStore implements EntityProperty<ItemStore>
 			buttonSize.clone(),
 			"Sell",
 			font,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
 			sell // click
 		);
 
-		var infoStatus = ControlLabel.from4CenteredHorizontally
+		var infoStatus = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
 			Coords.fromXY(size.x / 2, size.y - margin * 2 - buttonSize.y), // pos
 			Coords.fromXY(size.x, fontHeight), // size
@@ -254,7 +248,7 @@ export class ItemStore implements EntityProperty<ItemStore>
 			font
 		);
 
-		var buttonDone = ControlButton.from5
+		var buttonDone = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY
 			(

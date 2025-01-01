@@ -242,13 +242,10 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 			size.clone(),
 			// children
 			[
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelStoreName",
 					Coords.fromXY(margin, margin - fontHeight / 2), // pos
 					Coords.fromXY(listSize.x, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityStore.name + ":"),
 					font
 				),
@@ -281,9 +278,8 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					null
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<ItemBarterer>
 				(
-					"buttonStoreOffer",
 					Coords.fromXY
 					(
 						listSize.x - buttonSizeSmall.x * 2,
@@ -292,19 +288,19 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					buttonSizeSmall.clone(),
 					"v",
 					font,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					itemOfferStore // click
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<ItemBarterer, boolean>
 					(
 						this,
 						(c: ItemBarterer) =>
 							(itemHolderStore.itemSelected != null)
-					), // isEnabled
-					itemOfferStore // click
+					)
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<ItemBarterer>
 				(
-					"buttonStoreUnoffer",
 					Coords.fromXY
 					(
 						margin + listSize.x - buttonSizeSmall.x,
@@ -313,19 +309,19 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					buttonSizeSmall.clone(),
 					"^",
 					font,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					itemUnofferStore // click
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<ItemBarterer, boolean>
 					(
 						this,
 						(c: ItemBarterer) =>
 							(c.itemHolderStoreOffer.itemSelected != null)
-					), // isEnabled
-					itemUnofferStore // click
+					)
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelItemsOfferedStore",
 					Coords.fromXY
 					(
 						margin,
@@ -333,8 +329,6 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 						+ buttonSize.y - fontHeight / 2
 					), // pos
 					Coords.fromXY(100, 15), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Offered:"),
 					font
 				),
@@ -370,16 +364,13 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					null
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelCustomerName",
 					Coords.fromXY
 					(
 						size.x - margin - listSize.x, margin - fontHeight / 2
 					), // pos
 					Coords.fromXY(85, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext(entityCustomer.name + ":"),
 					font
 				),
@@ -415,9 +406,8 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					null
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<ItemBarterer>
 				(
-					"buttonCustomerOffer",
 					Coords.fromXY
 					(
 						size.x - margin * 2 - buttonSizeSmall.x * 2,
@@ -426,19 +416,19 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					buttonSizeSmall.clone(),
 					"v",
 					font,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					itemOfferCustomer // click
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<ItemBarterer, boolean>
 					(
 						this,
 						(c: ItemBarterer) =>
 							(itemHolderCustomer.itemSelected != null)
-					), // isEnabled
-					itemOfferCustomer // click
+					)
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<ItemBarterer>
 				(
-					"buttonCustomerUnoffer",
 					Coords.fromXY
 					(
 						size.x - margin - buttonSizeSmall.x,
@@ -447,27 +437,25 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					buttonSizeSmall.clone(),
 					"^",
 					font,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					itemUnofferCustomer // click
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<ItemBarterer, boolean>
 					(
 						this,
 						(c: ItemBarterer) =>
 							c.itemHolderCustomerOffer.itemSelected != null
-					), // isEnabled
-					itemUnofferCustomer // click
+					)
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelItemsOfferedCustomer",
 					Coords.fromXY
 					(
 						size.x - margin - listSize.x,
 						margin * 2 + fontHeight + listSize.y + buttonSize.y - fontHeight / 2
 					), // pos
 					Coords.fromXY(100, 15), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Offered:"),
 					font
 				),
@@ -504,37 +492,33 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					itemOfferCustomer
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"infoStatus",
 					Coords.fromXY(0, size.y - margin * 2 - buttonSize.y), // pos
 					Coords.fromXY(size.x, fontHeight), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet(this, c => c.statusMessage),
 					font
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<ItemBarterer>
 				(
-					"buttonReset",
 					Coords.fromXY(margin, size.y - margin - buttonSize.y), // pos
 					buttonSize.clone(),
 					"Reset",
 					font,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					() => // click
+						itemBarterer.reset(entityCustomer, entityStore)
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<ItemBarterer, boolean>
 					(
 						this,
 						(c: ItemBarterer) => c.isAnythingBeingOffered()
-					), // isEnabled
-					() => // click
-						itemBarterer.reset(entityCustomer, entityStore)
+					)
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<ItemBarterer>
 				(
-					"buttonOffer",
 					Coords.fromXY
 					(
 						(size.x - buttonSize.x) / 2,
@@ -543,18 +527,18 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					buttonSize.clone(),
 					"Offer",
 					font,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					offer // click
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<ItemBarterer, boolean>
 					(
 						this,
 						(c: ItemBarterer) => c.isAnythingBeingOffered()
-					), // isEnabled
-					offer // click
+					)
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonDone",
 					Coords.fromXY
 					(
 						size.x - margin - buttonSize.x,
@@ -563,8 +547,6 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 					buttonSize.clone(),
 					"Done",
 					font,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			],

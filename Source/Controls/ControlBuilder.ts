@@ -119,7 +119,7 @@ export class ControlBuilder
 		var labelMessagePos = Coords.fromXY(0, 0);
 		var labelMessageSize = Coords.fromXY(this.sizeBase.x, labelMessageSizeY);
 
-		var labelMessage = ControlLabel.from4Centered
+		var labelMessage = ControlLabel.fromPosSizeTextFontCentered
 		(
 			labelMessagePos,
 			labelMessageSize,
@@ -145,7 +145,7 @@ export class ControlBuilder
 			{
 				var optionName = optionNames[i];
 
-				var button = ControlButton.from5
+				var button = ControlButton.fromPosSizeTextFontClick
 				(
 					Coords.fromXY
 					(
@@ -246,7 +246,7 @@ export class ControlBuilder
 			size.y - labelSize.y - buttonSize.y - marginSize.y * 4
 		);
 
-		var listOptions = ControlList.from8
+		var listOptions = ControlList.fromNamePosSizeItemsTextFontSelectedValue
 		(
 			"listOptions",
 			Coords.fromXY(marginSize.x, labelSize.y + marginSize.y * 2),
@@ -258,13 +258,13 @@ export class ControlBuilder
 			null // bindingForItemValue
 		);
 
-		var returnValue = ControlContainer.from4
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerChoice",
 			Coords.create(),
 			size,
 			[
-				ControlLabel.from4CenteredHorizontally
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
 					Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2),
 					labelSize,
@@ -274,7 +274,7 @@ export class ControlBuilder
 
 				listOptions,
 
-				ControlButton.from5
+				ControlButton.fromPosSizeTextFontClick
 				(
 					Coords.fromXY(marginSize.x, size.y - marginSize.y - buttonSize.y),
 					buttonSize,
@@ -449,7 +449,7 @@ export class ControlBuilder
 
 		var back = () => ControlBuilder.game_Back(universe, venuePrev);
 
-		var buttonSave = ControlButton.from5
+		var buttonSave = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(posX, row0PosY), // pos
 			buttonSize.clone(),
@@ -458,7 +458,7 @@ export class ControlBuilder
 			save
 		);
 
-		var buttonLoad = ControlButton.from5
+		var buttonLoad = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(posX, row1PosY), // pos
 			buttonSize.clone(),
@@ -467,7 +467,7 @@ export class ControlBuilder
 			load
 		);
 
-		var buttonAbout = ControlButton.from5
+		var buttonAbout = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(posX, row2PosY), // pos
 			buttonSize.clone(),
@@ -476,7 +476,7 @@ export class ControlBuilder
 			about
 		);
 
-		var buttonQuit = ControlButton.from5
+		var buttonQuit = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(posX, row3PosY), // pos
 			buttonSize.clone(),
@@ -485,7 +485,7 @@ export class ControlBuilder
 			quit
 		);
 
-		var buttonBack = ControlButton.from5
+		var buttonBack = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(posX, row4PosY), // pos
 			buttonSize.clone(),
@@ -594,21 +594,24 @@ export class ControlBuilder
 		var row2PosY = row1PosY + rowHeight;
 		var buttonSize = Coords.fromXY(buttonWidth, buttonHeight);
 
-		var buttonGame = ControlButton.from5
+		var transitionToGameMenu =
+			() =>
+			{
+				var venueNext =
+					controlBuilder.game(universe, null, universe.venueCurrent() ).toVenue();
+				universe.venueTransitionTo(venueNext);
+			};
+
+		var buttonGame = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(margin.x, row0PosY), // pos
 			buttonSize.clone(),
 			"Game",
 			font,
-			() => // click
-			{
-				var venueNext =
-					controlBuilder.game(universe, null, universe.venueCurrent() ).toVenue();
-				universe.venueTransitionTo(venueNext);
-			}
+			transitionToGameMenu
 		);
 
-		var buttonSettings = ControlButton.from5
+		var buttonSettings = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(margin.x, row1PosY), // pos
 			buttonSize.clone(),
@@ -645,7 +648,7 @@ export class ControlBuilder
 				universe.venueTransitionTo(venuePrev);
 			};
 
-			var buttonResume = ControlButton.from5
+			var buttonResume = ControlButton.fromPosSizeTextFontClick
 			(
 				Coords.fromXY(margin.x, row2PosY), // pos
 				Coords.fromXY(buttonWidth, buttonHeight), // size
@@ -687,14 +690,85 @@ export class ControlBuilder
 		var placeCurrent = world.placeCurrent;
 		var placeDefn = placeCurrent.defn(world);
 
-		var returnValue = ControlContainer.from4
+		var add = () =>
+		{
+			var mappingSelected = placeDefn.actionToInputsMappingSelected;
+			if (mappingSelected != null)
+			{
+				var venueInputCapture = new VenueInputCapture
+				(
+					universe.venueCurrent(),
+					(inputCaptured: Input) =>
+					{
+						var inputName = inputCaptured.name;
+						mappingSelected.inputNames.push(inputName);
+					}
+				);
+				universe.venueTransitionTo(venueInputCapture)
+			}
+		};
+
+		var resetSelectedToDefault = () =>
+		{
+			var mappingSelected = placeDefn.actionToInputsMappingSelected;
+			if (mappingSelected != null)
+			{
+				var mappingDefault = placeDefn.actionToInputsMappingsDefault.filter
+				(
+					(x: ActionToInputsMapping) => (x.actionName == mappingSelected.actionName)
+				)[0];
+				mappingSelected.inputNames = mappingDefault.inputNames.slice();
+			}
+		};
+
+		var resetAllToDefault = () =>
+		{
+			var venueInputs = universe.venueCurrent();
+			var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
+			(
+				universe,
+				size,
+				"Are you sure you want to restore defaults?",
+				venueInputs,
+				() => // confirm
+				{
+					placeDefn.actionToInputsMappingsRestoreDefaults();
+				},
+				null // cancel
+			);
+			var venueNext = controlConfirm.toVenue();
+			universe.venueTransitionTo(venueNext);
+		};
+
+		var clear = () =>
+		{
+			var mappingSelected =
+				placeDefn.actionToInputsMappingSelected;
+			if (mappingSelected != null)
+			{
+				mappingSelected.inputNames.length = 0;
+			}
+		};
+
+		var save = () =>
+		{
+			placeDefn.actionToInputsMappingsSave();
+			universe.venueTransitionTo(venuePrev);
+		};
+
+		var cancel = () =>
+		{
+			universe.venueTransitionTo(venuePrev);
+		}
+
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerGameControls",
 			this._zeroes, // pos
 			this.sizeBase.clone(), // size
 			// children
 			[
-				ControlLabel.from4CenteredHorizontally
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
 					Coords.fromXY(100, 15), // pos
 					Coords.fromXY(100, 20), // size
@@ -702,7 +776,7 @@ export class ControlBuilder
 					font
 				),
 
-				ControlList.from8
+				ControlList.fromNamePosSizeItemsTextFontSelectedValue
 				(
 					"listActions",
 					Coords.fromXY(50, 25), // pos
@@ -725,7 +799,7 @@ export class ControlBuilder
 					DataBinding.fromGet( (c: ActionToInputsMapping) => c ) // bindingForItemValue
 				),
 
-				ControlLabel.from4CenteredHorizontally
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
 					Coords.fromXY(100, 70), // pos
 					Coords.fromXY(100, 15), // size
@@ -733,7 +807,7 @@ export class ControlBuilder
 					font
 				),
 
-				ControlLabel.from4CenteredHorizontally
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
 					Coords.fromXY(100, 80), // pos
 					Coords.fromXY(200, 15), // size
@@ -749,136 +823,82 @@ export class ControlBuilder
 					font
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<PlaceDefn>
 				(
-					"buttonClear",
 					Coords.fromXY(25, 90), // pos
 					Coords.fromXY(45, 15), // size
 					"Clear",
 					font,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					clear
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<PlaceDefn, boolean>
 					(
 						placeDefn,
-						(c: PlaceDefn) => { return c.actionToInputsMappingSelected != null}
-					), // isEnabled
-					() => // click
-					{
-						var mappingSelected = placeDefn.actionToInputsMappingSelected;
-						if (mappingSelected != null)
-						{
-							mappingSelected.inputNames.length = 0;
-						}
-					}
+						(c: PlaceDefn) => (c.actionToInputsMappingSelected != null)
+					)
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<PlaceDefn>
 				(
-					"buttonAdd",
 					Coords.fromXY(80, 90), // pos
 					Coords.fromXY(45, 15), // size
 					"Add",
 					font,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					add
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<PlaceDefn, boolean>
 					(
 						placeDefn,
 						(c: PlaceDefn) => (c.actionToInputsMappingSelected != null)
-					), // isEnabled
-					() => // click
-					{
-						var mappingSelected = placeDefn.actionToInputsMappingSelected;
-						if (mappingSelected != null)
-						{
-							var venueInputCapture = new VenueInputCapture
-							(
-								universe.venueCurrent(),
-								(inputCaptured: Input) =>
-								{
-									var inputName = inputCaptured.name;
-									mappingSelected.inputNames.push(inputName);
-								}
-							);
-							universe.venueTransitionTo(venueInputCapture)
-						}
-					}
+					)
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<PlaceDefn>
 				(
-					"buttonRestoreDefault",
 					Coords.fromXY(135, 90), // pos
 					Coords.fromXY(45, 15), // size
 					"Default",
 					font,
-					true, // hasBorder
+					resetSelectedToDefault
+				).isEnabledSet
+				(
 					DataBinding.fromContextAndGet
 					(
 						placeDefn,
 						(c: PlaceDefn) => (c.actionToInputsMappingSelected != null)
-					), // isEnabled
-					() => // click
-					{
-						var mappingSelected = placeDefn.actionToInputsMappingSelected;
-						if (mappingSelected != null)
-						{
-							var mappingDefault = placeDefn.actionToInputsMappingsDefault.filter
-							(
-								(x: ActionToInputsMapping) => (x.actionName == mappingSelected.actionName)
-							)[0];
-							mappingSelected.inputNames = mappingDefault.inputNames.slice();
-						}
-					}
+					)
 				),
 
-				ControlButton.from5
+				ControlButton.fromPosSizeTextFontClick
 				(
 					Coords.fromXY(50, 110), // pos
 					Coords.fromXY(100, 15), // size
 					"Default All",
 					font,
-					() =>
-					{
-						var venueInputs = universe.venueCurrent();
-						var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
-						(
-							universe,
-							size,
-							"Are you sure you want to restore defaults?",
-							venueInputs,
-							() => // confirm
-							{
-								placeDefn.actionToInputsMappingsRestoreDefaults();
-							},
-							null // cancel
-						);
-						var venueNext = controlConfirm.toVenue();
-						universe.venueTransitionTo(venueNext);
-					}
+					resetAllToDefault
 				),
 
-				ControlButton.from5
+				ControlButton.fromPosSizeTextFontClick
 				(
 					Coords.fromXY(50, 130), // pos
 					Coords.fromXY(45, 15), // size
 					"Cancel",
 					font,
-					() => // click
-					{
-						universe.venueTransitionTo(venuePrev);
-					}
+					cancel
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<PlaceDefn>
 				(
-					"buttonSave",
 					Coords.fromXY(105, 130), // pos
 					Coords.fromXY(45, 15), // size
 					"Save",
 					font,
-					true, // hasBorder
-					// isEnabled
-					DataBinding.fromContextAndGet
+					save
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<PlaceDefn, boolean>
 					(
 						placeDefn,
 						(c: PlaceDefn) =>
@@ -890,12 +910,7 @@ export class ControlBuilder
 							);
 							return (doAnyActionsLackInputs == false);
 						}
-					),
-					() => // click
-					{
-						placeDefn.actionToInputsMappingsSave();
-						universe.venueTransitionTo(venuePrev);
-					}
+					)
 				)
 			]
 		);
@@ -997,17 +1012,14 @@ export class ControlBuilder
 					null, null // colors
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonNext",
 					Coords.fromXY(75, 120), // pos
 					Coords.fromXY(50, fontHeight * 2), // size
 					"Next",
 					FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
-					false, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
-					goToVenueNext // click
-				)
+					goToVenueNext
+				).hasBorderSet(false)
 			], // end children
 
 			[
@@ -1070,17 +1082,14 @@ export class ControlBuilder
 					null, null // colors
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonNext",
 					Coords.fromXY(75, 120), // pos
 					Coords.fromXY(50, fontHeight * 2), // size
 					"Next",
 					FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
-					false, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					goToVenueNext // click
-				)
+				).hasBorderSet(false)
 			], // end children
 
 			[
@@ -1125,7 +1134,7 @@ export class ControlBuilder
 			universe.venueTransitionTo(venuePrev);
 		};
 
-		var labelMusic = ControlLabel.from4Uncentered
+		var labelMusic = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(30, row1PosY + labelPadding), // pos
 			Coords.fromXY(75, buttonHeight), // size
@@ -1160,7 +1169,7 @@ export class ControlBuilder
 			font
 		);
 
-		var labelSound = ControlLabel.from4Uncentered
+		var labelSound = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(105, row1PosY + labelPadding), // pos
 			Coords.fromXY(75, buttonHeight), // size
@@ -1195,7 +1204,7 @@ export class ControlBuilder
 			font
 		);
 
-		var labelDisplay = ControlLabel.from4Uncentered
+		var labelDisplay = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(30, row2PosY + labelPadding), // pos
 			Coords.fromXY(75, buttonHeight), // size
@@ -1230,7 +1239,7 @@ export class ControlBuilder
 			var controlRootAsContainer =
 				venueControls.controlRoot as ControlContainer;
 			var selectDisplaySizeAsControl =
-				controlRootAsContainer.childrenByName.get("selectDisplaySize");
+				controlRootAsContainer.childByName("selectDisplaySize");
 			var selectDisplaySize =
 				selectDisplaySizeAsControl as ControlSelect<Coords, Coords, Coords>;
 			var displaySizeSpecified = selectDisplaySize.optionSelected();
@@ -1251,7 +1260,7 @@ export class ControlBuilder
 			universe.venueTransitionTo(venueNext);
 		};
 
-		var buttonChange = ControlButton.from5
+		var buttonChange = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(140, row2PosY), // pos
 			Coords.fromXY(30, buttonHeight), // size
@@ -1260,7 +1269,7 @@ export class ControlBuilder
 			change
 		);
 
-		var buttonInputs = ControlButton.from5
+		var buttonInputs = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(70, row3PosY), // pos
 			Coords.fromXY(65, buttonHeight), // size
@@ -1276,7 +1285,7 @@ export class ControlBuilder
 			}
 		);
 
-		var buttonDone = ControlButton.from5
+		var buttonDone = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(70, row4PosY), // pos
 			Coords.fromXY(65, buttonHeight), // size
@@ -1375,7 +1384,7 @@ export class ControlBuilder
 				null, null // colorBackground, colorBorder
 			);
 
-			var labelSlideText = ControlLabel.from4CenteredHorizontally
+			var labelSlideText = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
 				Coords.fromXY(0, this.fontHeightInPixelsBase), // pos
 				Coords.fromXY
@@ -1387,7 +1396,7 @@ export class ControlBuilder
 				this.fontBase
 			);
 
-			var buttonNext = ControlButton.from5
+			var buttonNext = ControlButton.fromPosSizeTextFontClick
 			(
 				Coords.fromXY(75, 120), // pos
 				Coords.fromXY(50, 40), // size
@@ -1472,7 +1481,7 @@ export class ControlBuilder
 			this.sizeBase.clone(), // size
 			// children
 			[
-				ControlVisual.from4
+				ControlVisual.fromNamePosSizeVisual
 				(
 					"imageTitle",
 					this._zeroes.clone(),
@@ -1480,17 +1489,14 @@ export class ControlBuilder
 					DataBinding.fromContext(visual)
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonStart",
 					Coords.fromXY(75, 120), // pos
 					Coords.fromXY(50, fontHeight * 2), // size
 					"Start",
 					FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
-					false, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					start // click
-				)
+				).hasBorderSet(false)
 			], // end children
 
 			[
@@ -1526,13 +1532,10 @@ export class ControlBuilder
 		var dateCreated = world.dateCreated;
 		var dateSaved = world.dateSaved;
 
-		var labelProfileName = new ControlLabel
+		var labelProfileName = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
-			"labelProfileName",
 			Coords.fromXY(0, 40), // pos
 			Coords.fromXY(sizeBase.x, 20), // size
-			true, // isTextCenteredHorizontally
-			false, // isTextCenteredVertically
 			DataBinding.fromContext
 			(
 				"Profile: " + universe.profile.name
@@ -1540,24 +1543,18 @@ export class ControlBuilder
 			font
 		);
 
-		var labelWorldName = new ControlLabel
+		var labelWorldName = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
-			"labelWorldName",
 			Coords.fromXY(0, 55), // pos
 			Coords.fromXY(sizeBase.x, 25), // size
-			true, // isTextCenteredHorizontally
-			false, // isTextCenteredVertically
 			DataBinding.fromContext("World: " + world.name),
 			font
 		);
 
-		var labelStartDate = new ControlLabel
+		var labelStartDate = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
-			"labelStartDate",
 			Coords.fromXY(0, 70), // pos
 			Coords.fromXY(sizeBase.x, 25), // size
-			true, // isTextCenteredHorizontally
-			false, // isTextCenteredVertically
 			DataBinding.fromContext
 			(
 				"Started: " + dateCreated.toStringTimestamp()
@@ -1565,13 +1562,10 @@ export class ControlBuilder
 			font
 		);
 
-		var labelSavedDate = new ControlLabel
+		var labelSavedDate = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
-			"labelSavedDate",
 			Coords.fromXY(0, 85), // pos
 			Coords.fromXY(sizeBase.x, 25), // size
-			true, // isTextCenteredHorizontally
-			false, // isTextCenteredVertically
 			DataBinding.fromContext
 			(
 				"Saved: "
@@ -1580,7 +1574,7 @@ export class ControlBuilder
 			font
 		);
 
-		var start = () => // click
+		var start = () =>
 		{
 			var world = universe.world;
 			var venueWorld = world.toVenue();
@@ -1620,7 +1614,7 @@ export class ControlBuilder
 			universe.venueTransitionTo(venueNext);
 		};
 
-		var buttonStart = ControlButton.from5
+		var buttonStart = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(50, 100), // pos
 			Coords.fromXY(100, this.buttonHeightBase), // size
@@ -1629,65 +1623,63 @@ export class ControlBuilder
 			start
 		);
 
-		var buttonBack = ControlButton.from8
+		var buttonBack = ControlButton.fromPosSizeTextFontClick
 		(
-			"buttonBack",
 			Coords.fromXY(10, 10), // pos
 			Coords.fromXY(15, 15), // size
 			"<",
 			font,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
 			() => // click
 			{
 				universe.venueTransitionTo(venuePrev);
 			}
 		);
 
-		var buttonDelete = ControlButton.from8
+		var deleteSaveStateSelected = () =>
+		{
+			var saveState = universe.profile.saveStateSelected();
+			var saveStateName = saveState.name;
+
+			var confirm = () =>
+			{
+				var storageHelper = universe.storageHelper;
+
+				var profile = universe.profile;
+
+				var saveStates = profile.saveStates;
+				ArrayHelper.remove(saveStates, saveState);
+				storageHelper.save(profile.name, profile);
+
+				universe.worldSet(null);
+				storageHelper.delete(saveStateName);
+			};
+
+			var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
+			(
+				universe,
+				size,
+				"Delete save \""
+					+ saveStateName
+					+ "\"?",
+				universe.venueCurrent(),
+				confirm,
+				null // cancel
+			);
+
+			var venueNext = controlConfirm.toVenue();
+			universe.venueTransitionTo(venueNext);
+		};
+
+		var buttonDelete = ControlButton.fromPosSizeTextFontClick
 		(
-			"buttonDelete",
 			Coords.fromXY(180, 10), // pos
 			Coords.fromXY(15, 15), // size
 			"x",
 			font,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
-			() => // click
-			{
-				var saveState = universe.profile.saveStateSelected();
-				var saveStateName = saveState.name;
-
-				var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
-				(
-					universe,
-					size,
-					"Delete save \""
-						+ saveStateName
-						+ "\"?",
-					universe.venueCurrent(),
-					() => // confirm
-					{
-						var storageHelper = universe.storageHelper;
-
-						var profile = universe.profile;
-
-						var saveStates = profile.saveStates;
-						ArrayHelper.remove(saveStates, saveState);
-						storageHelper.save(profile.name, profile);
-
-						universe.worldSet(null);
-						storageHelper.delete(saveStateName);
-					},
-					null // cancel
-				);
-
-				var venueNext = controlConfirm.toVenue();
-				universe.venueTransitionTo(venueNext);
-			}
+			deleteSaveStateSelected
 		);
 
-		var returnValue = ControlContainer.from4
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerWorldDetail",
 			this._zeroes, // pos
@@ -1841,7 +1833,7 @@ export class ControlBuilder
 			universe.venueTransitionTo(venueFileUpload);
 		};
 
-		var labelProfileName = ControlLabel.from4CenteredHorizontally
+		var labelProfileName = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
 			Coords.fromXY(100, 25), // pos
 			Coords.fromXY(120, 25), // size
@@ -1852,7 +1844,7 @@ export class ControlBuilder
 			font
 		);
 
-		var labelSelectASave = ControlLabel.from4CenteredHorizontally
+		var labelSelectASave = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
 			Coords.fromXY(100, 40), // pos
 			Coords.fromXY(100, 25), // size
@@ -1860,7 +1852,7 @@ export class ControlBuilder
 			font
 		);
 
-		var listSaveStates = ControlList.from8
+		var listSaveStates = ControlList.fromNamePosSizeItemsTextFontSelectedValue
 		(
 			"listSaveStates",
 			Coords.fromXY(30, 50), // pos
@@ -1882,7 +1874,7 @@ export class ControlBuilder
 			DataBinding.fromGet( (v: SaveStateBase) => v.name ), // value
 		);
 
-		var buttonLoadFromServer = ControlButton.from5
+		var buttonLoadFromServer = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(30, 105), // pos
 			Coords.fromXY(40, this.buttonHeightBase), // size
@@ -1900,7 +1892,7 @@ export class ControlBuilder
 			}
 		);
 
-		var buttonLoadFromFile = ControlButton.from5
+		var buttonLoadFromFile = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(80, 105), // pos
 			Coords.fromXY(40, this.buttonHeightBase), // size
@@ -1909,7 +1901,7 @@ export class ControlBuilder
 			loadFile
 		);
 
-		var buttonReturn = ControlButton.from5
+		var buttonReturn = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY(130, 105), // pos
 			Coords.fromXY(40, this.buttonHeightBase), // size
@@ -1925,7 +1917,7 @@ export class ControlBuilder
 			}
 		);
 
-		var returnValue = ControlContainer.from4
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerWorldLoad",
 			this._zeroes, // pos

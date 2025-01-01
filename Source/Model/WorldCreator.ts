@@ -40,7 +40,7 @@ export class WorldCreator
 		var buttonSize =
 			Coords.fromXY(4, 1).multiplyScalar(controlHeight);
 
-		var labelWorldCreationSettings = ControlLabel.from4Uncentered
+		var labelWorldCreationSettings = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(margin, margin), // pos
 			Coords.fromXY(size.x - margin * 2, controlHeight),
@@ -48,7 +48,7 @@ export class WorldCreator
 			fontNameAndHeight
 		);
 
-		var labelWorldName = ControlLabel.from4Uncentered
+		var labelWorldName = ControlLabel.fromPosSizeTextFontUncentered
 		(
 			Coords.fromXY(margin, margin * 2 + controlHeight), // pos
 			Coords.fromXY(size.x - margin * 2, controlHeight),
@@ -72,7 +72,7 @@ export class WorldCreator
 			DataBinding.fromTrue() // isEnabled
 		);
 
-		var buttonCreate = ControlButton.from5
+		var buttonCreate = ControlButton.fromPosSizeTextFontClick
 		(
 			Coords.fromXY
 			(
@@ -89,7 +89,7 @@ export class WorldCreator
 				)
 		);
 
-		var returnControl = ControlContainer.from4
+		var returnControl = ControlContainer.fromNamePosSizeChildren
 		(
 			"containerWorldCreator",
 			Coords.zeroes(), // pos

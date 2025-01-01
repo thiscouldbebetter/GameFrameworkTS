@@ -38,14 +38,14 @@ export class ControlButton<TContext> extends ControlBase
 		this._sizeHalf = Coords.create();
 	}
 
-	static from5
+	static from5<TContext>
 	(
 		pos: Coords,
 		size: Coords,
 		text: string,
 		fontNameAndHeight: FontNameAndHeight,
 		click: () => void
-	)
+	): ControlButton<TContext>
 	{
 		return ControlButton.fromPosSizeTextFontClick
 		(
@@ -60,9 +60,9 @@ export class ControlButton<TContext> extends ControlBase
 		textAsString: string,
 		fontNameAndHeight: FontNameAndHeight,
 		click: () => void
-	)
+	): ControlButton<TContext>
 	{
-		return ControlButton.from8
+		return ControlButton.fromNamePosSizeTextFontBorderEnabledClick
 		(
 			"button" + textAsString.split(" ").join(""),
 			pos,
@@ -75,7 +75,7 @@ export class ControlButton<TContext> extends ControlBase
 		);
 	}
 
-	static from8<TContext>
+	static fromNamePosSizeTextFontBorderEnabledClick<TContext>
 	(
 		name: string,
 		pos: Coords,
@@ -85,7 +85,7 @@ export class ControlButton<TContext> extends ControlBase
 		hasBorder: boolean,
 		isEnabled: DataBinding<TContext, boolean>,
 		click: () => void
-	)
+	): ControlButton<TContext>
 	{
 		var textAsBinding = DataBinding.fromGet( (c: TContext) => textAsString);
 
@@ -113,7 +113,7 @@ export class ControlButton<TContext> extends ControlBase
 		hasBorder: boolean,
 		isEnabled: DataBinding<TContext, boolean>,
 		click: () => void
-	)
+	): ControlButton<TContext>
 	{
 		return new ControlButton
 		(
@@ -129,7 +129,7 @@ export class ControlButton<TContext> extends ControlBase
 		);
 	}
 
-	static from11<TContext>
+	static from9<TContext>
 	(
 		name: string,
 		pos: Coords,
@@ -140,7 +140,7 @@ export class ControlButton<TContext> extends ControlBase
 		isEnabled: DataBinding<TContext, boolean>,
 		click: () => void,
 		canBeHeldDown: boolean
-	)
+	): ControlButton<TContext>
 	{
 		return new ControlButton
 		(
@@ -171,9 +171,30 @@ export class ControlButton<TContext> extends ControlBase
 		this._click();
 	}
 
+	clickSet(value: () => void): ControlButton<TContext>
+	{
+		this._click = value;
+		return this;
+	}
+
 	isEnabled(): boolean
 	{
 		return this._isEnabled.get();
+	}
+
+	hasBorderSet(value: boolean): ControlButton<TContext>
+	{
+		this.hasBorder = value;
+		return this;
+	}
+
+	isEnabledSet
+	(
+		value: DataBinding<TContext, boolean>
+	): ControlButton<TContext>
+	{
+		this._isEnabled = value;
+		return this;
 	}
 
 	text(): string

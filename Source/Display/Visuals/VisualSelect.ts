@@ -17,13 +17,18 @@ export class VisualSelect implements Visual<VisualSelect>
 		this.selectChildNames = selectChildNames;
 	}
 
+	childByName(childName: string): VisualBase
+	{
+		return this.childrenByName.get(childName);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var childrenToSelectNames =
 			this.selectChildNames(uwpe, display);
 		var childrenSelected = childrenToSelectNames.map
 		(
-			childToSelectName => this.childrenByName.get(childToSelectName)
+			childToSelectName => this.childByName(childToSelectName)
 		);
 		childrenSelected.forEach
 		(

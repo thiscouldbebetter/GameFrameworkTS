@@ -19,9 +19,9 @@ var ThisCouldBeBetter;
                 var fontHeightInPixels = fontNameAndHeight.heightInPixels;
                 var controlHeight = fontHeightInPixels + margin;
                 var buttonSize = GameFramework.Coords.fromXY(4, 1).multiplyScalar(controlHeight);
-                var labelWorldCreationSettings = GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(margin, margin), // pos
+                var labelWorldCreationSettings = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(margin, margin), // pos
                 GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), GameFramework.DataBinding.fromContext("World Creation Settings"), fontNameAndHeight);
-                var labelWorldName = GameFramework.ControlLabel.from4Uncentered(GameFramework.Coords.fromXY(margin, margin * 2 + controlHeight), // pos
+                var labelWorldName = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(margin, margin * 2 + controlHeight), // pos
                 GameFramework.Coords.fromXY(size.x - margin * 2, controlHeight), GameFramework.DataBinding.fromContext("World Name:"), fontNameAndHeight);
                 var textWorldName = new GameFramework.ControlTextBox("textBoxWorldName", GameFramework.Coords.fromXY(margin * 8, margin * 2 + controlHeight), // pos
                 GameFramework.Coords.fromXY(margin * 12, controlHeight), // size
@@ -29,8 +29,8 @@ var ThisCouldBeBetter;
                 fontNameAndHeight, 64, // charCountMax
                 GameFramework.DataBinding.fromTrue() // isEnabled
                 );
-                var buttonCreate = GameFramework.ControlButton.from5(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), buttonSize, "Create", fontNameAndHeight, () => universe.venueTransitionTo(worldCreator.venueWorldGenerate(universe)));
-                var returnControl = GameFramework.ControlContainer.from4("containerWorldCreator", GameFramework.Coords.zeroes(), // pos
+                var buttonCreate = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), buttonSize, "Create", fontNameAndHeight, () => universe.venueTransitionTo(worldCreator.venueWorldGenerate(universe)));
+                var returnControl = GameFramework.ControlContainer.fromNamePosSizeChildren("containerWorldCreator", GameFramework.Coords.zeroes(), // pos
                 size, [
                     labelWorldCreationSettings,
                     labelWorldName,

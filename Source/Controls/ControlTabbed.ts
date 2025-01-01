@@ -65,16 +65,16 @@ export class ControlTabbed<TContext> extends ControlBase
 				marginSize + this.tabButtonSize.x * i, marginSize
 			);
 
-			var button = ControlButton.from8<TContext>
+			var button = ControlButton.fromPosSizeTextFontClick<TContext>
 			(
-				"button" + childName,
 				buttonPos,
 				this.tabButtonSize.clone(),
 				childName, // text
 				this.fontNameAndHeight,
-				true, // hasBorder
-				DataBinding.fromTrueWithContext(this.context), // isEnabled
 				null // click - Assigned below.
+			).isEnabledSet
+			(
+				DataBinding.fromTrueWithContext(this.context) // Is this necessary?
 			);
 
 			buttonsForChildren.push(button);
@@ -148,9 +148,8 @@ export class ControlTabbed<TContext> extends ControlBase
 		if (this.cancel != null)
 		{
 			this.childrenForTabs.push(null);
-			var button = ControlButton.from8<TContext>
+			var button = ControlButton.fromPosSizeTextFontClick<TContext>
 			(
-				"buttonCancel",
 				Coords.fromXY
 				(
 					this.size.x - marginSize - this.tabButtonSize.x,
@@ -159,9 +158,10 @@ export class ControlTabbed<TContext> extends ControlBase
 				this.tabButtonSize.clone(),
 				"Done", // text
 				this.fontNameAndHeight,
-				true, // hasBorder
-				DataBinding.fromTrueWithContext(this.context), // isEnabled
 				this.cancel // click
+			).isEnabledSet
+			(
+				DataBinding.fromTrueWithContext<TContext>(this.context) // Is this necessary?
 			);
 			buttonsForChildren.push(button);
 		}

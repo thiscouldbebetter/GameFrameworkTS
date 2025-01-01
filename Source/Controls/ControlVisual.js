@@ -18,10 +18,10 @@ var ThisCouldBeBetter;
                 ]);
                 this._sizeHalf = GameFramework.Coords.create();
             }
-            static from4(name, pos, size, visual) {
+            static fromNamePosSizeVisual(name, pos, size, visual) {
                 return new ControlVisual(name, pos, size, visual, null, null);
             }
-            static from5(name, pos, size, visual, colorBackground) {
+            static fromNamePosSizeVisualColorBackground(name, pos, size, visual, colorBackground) {
                 return new ControlVisual(name, pos, size, visual, colorBackground, null);
             }
             actionHandle(actionName, universe) {

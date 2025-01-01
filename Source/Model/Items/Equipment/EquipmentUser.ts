@@ -442,15 +442,12 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 
 		var fontButton = FontNameAndHeight.fromHeightInPixels(fontHeight * 0.8);
 
-		var buttonEquip = ControlButton.from8
+		var buttonEquip = ControlButton.fromPosSizeTextFontClick
 		(
-			"buttonEquip",
 			Coords.fromXY(85, 50), // pos
 			Coords.fromXY(10, 10), // size
 			">", // text
 			fontButton,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled - todo
 			equipItemSelectedToSocketSelected
 		);
 
@@ -463,15 +460,12 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			);
 		};
 
-		var buttonUnequip = ControlButton.from8
+		var buttonUnequip = ControlButton.fromPosSizeTextFontClick
 		(
-			"buttonEquip",
 			Coords.fromXY(85, 65), // pos
 			Coords.fromXY(10, 10), // size
 			"<", // text
 			fontButton,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled - todo
 			unequipFromSocketSelected
 		);
 
@@ -511,13 +505,10 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			sizeBase.clone(), // size
 			// children
 			[
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelEquippable",
 					Coords.fromXY(10, 5), // pos
 					Coords.fromXY(70, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equippable:"),
 					fontSmall
 				),
@@ -528,26 +519,20 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 
 				buttonUnequip,
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
-					"labelEquipped",
 					Coords.fromXY(100, 5), // pos
 					Coords.fromXY(100, 25), // size
-					false, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equipped:"),
 					fontSmall
 				),
 
 				listEquipped,
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"infoStatus",
 					Coords.fromXY(sizeBase.x / 2, 125), // pos
 					Coords.fromXY(sizeBase.x, 15), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -594,28 +579,22 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			childControls.splice
 			(
 				0, 0,
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"labelEquipment",
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Equip"),
 					fontLarge
 				)
 			);
 			childControls.push
 			(
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonDone",
 					Coords.fromXY(170, 115), // pos
 					Coords.fromXY(20, 10), // size
 					"Done",
 					fontSmall,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			);

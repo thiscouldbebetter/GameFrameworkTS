@@ -11,21 +11,15 @@ var ThisCouldBeBetter;
                 this._sliderPosInItems = sliderPosInItems;
                 this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
                 this.handleSize = GameFramework.Coords.fromXY(this.size.x, this.size.x);
-                this.buttonScrollUp = GameFramework.ControlButton.from8("buttonScrollUp", // name
-                GameFramework.Coords.create(), // pos
+                this.buttonScrollUp = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.create(), // pos
                 this.handleSize.clone(), // size
                 "-", // text
-                this.fontNameAndHeight, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled
-                this.scrollUp // click
+                this.fontNameAndHeight, this.scrollUp // click
                 );
-                this.buttonScrollDown = GameFramework.ControlButton.from8("buttonScrollDown", // name
-                GameFramework.Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
+                this.buttonScrollDown = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
                 this.handleSize.clone(), // size
                 "+", // text
-                this.fontNameAndHeight, true, // hasBorder
-                GameFramework.DataBinding.fromTrue(), // isEnabled
-                this.scrollDown // click
+                this.fontNameAndHeight, this.scrollDown // click
                 );
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();

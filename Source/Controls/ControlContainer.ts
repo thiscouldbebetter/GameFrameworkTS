@@ -63,18 +63,7 @@ export class ControlContainer extends ControlBase
 		this._posToCheck = Coords.create();
 	}
 
-	static from3
-	(
-		name: string,
-		pos: Coords,
-		size: Coords,
-		children: ControlBase[]
-	): ControlContainer
-	{
-		return ControlContainer.from4(ControlContainer.name, pos, size, children);
-	}
-
-	static from4
+	static fromNamePosSizeChildren
 	(
 		name: string,
 		pos: Coords,

@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
                 var buttonSize = GameFramework.Coords.fromXY(3, 1.2).multiplyScalar(fontHeight);
                 var wordBubble = this;
-                var containerWordBubble = GameFramework.ControlContainer.from4("containerWordBubble", GameFramework.Coords.fromXY(margin, sizeBase.y - margin - containerSize.y), // pos
+                var containerWordBubble = GameFramework.ControlContainer.fromNamePosSizeChildren("containerWordBubble", GameFramework.Coords.fromXY(margin, sizeBase.y - margin - containerSize.y), // pos
                 containerSize, 
                 // children
                 [
@@ -40,13 +40,9 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContext(this.visualForPortrait), GameFramework.Color.Instances().Black, // colorBackground
                     null // colorBorder
                     ),
-                    new GameFramework.ControlLabel("labelSlideText", GameFramework.Coords.fromXY(portraitSize.x + margin, 0).add(marginSize), wordPaneSize, // size
-                    false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(portraitSize.x + margin, 0).add(marginSize), wordPaneSize, // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statementCurrent()), font),
-                    GameFramework.ControlButton.from8("buttonNext", GameFramework.Coords.fromXY(containerSize.x - marginSize.x - buttonSize.x, containerSize.y - marginSize.y - buttonSize.y), buttonSize, "Next", font, true, // hasBorder
-                    GameFramework.DataBinding.fromTrue(), // isEnabled
-                    () => wordBubble.statementAdvance(universe))
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(containerSize.x - marginSize.x - buttonSize.x, containerSize.y - marginSize.y - buttonSize.y), buttonSize, "Next", font, () => wordBubble.statementAdvance(universe))
                 ]);
                 return containerWordBubble;
             }

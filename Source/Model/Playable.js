@@ -18,21 +18,15 @@ var ThisCouldBeBetter;
                 var marginX = fontHeight;
                 var timePlayingAsString = universe.world.timePlayingAsStringLong(universe);
                 var controlsForStatusFields = [
-                    new GameFramework.ControlLabel("labelProfile", GameFramework.Coords.fromXY(marginX, labelSize.y), // pos
-                    labelSize.clone(), false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), font),
-                    new GameFramework.ControlLabel("labelTimePlaying", GameFramework.Coords.fromXY(marginX, labelSize.y * 2), // pos
-                    labelSize.clone(), false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Time Playing: " + timePlayingAsString), font)
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginX, labelSize.y), // pos
+                    labelSize.clone(), GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), font),
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginX, labelSize.y * 2), // pos
+                    labelSize.clone(), GameFramework.DataBinding.fromContext("Time Playing: " + timePlayingAsString), font)
                 ];
                 var killable = GameFramework.Killable.of(entity);
                 if (killable != null) {
-                    var labelHealth = new GameFramework.ControlLabel("labelHealth", GameFramework.Coords.fromXY(marginX, labelSize.y * 3), // pos
-                    labelSize.clone(), false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Health: " + GameFramework.Killable.of(entity).integrity
+                    var labelHealth = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginX, labelSize.y * 3), // pos
+                    labelSize.clone(), GameFramework.DataBinding.fromContext("Health: " + GameFramework.Killable.of(entity).integrity
                         + "/" + GameFramework.Killable.of(entity).integrityMax), font);
                     controlsForStatusFields.push(labelHealth);
                 }
@@ -58,10 +52,8 @@ var ThisCouldBeBetter;
                 if (skillLearner != null) {
                     var skillLearnerAsControl = skillLearner.toControl(universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(skillLearnerAsControl);
-                    var labelExperience = new GameFramework.ControlLabel("labelExperience", GameFramework.Coords.fromXY(marginX, labelSize.y * 4), // pos
-                    labelSize.clone(), false, // isTextCenteredHorizontally
-                    false, // isTextCenteredVertically
-                    GameFramework.DataBinding.fromContext("Experience: "
+                    var labelExperience = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginX, labelSize.y * 4), // pos
+                    labelSize.clone(), GameFramework.DataBinding.fromContext("Experience: "
                         + GameFramework.SkillLearner.of(entity).learningAccumulated), font);
                     controlsForStatusFields.push(labelExperience);
                 }
@@ -73,7 +65,7 @@ var ThisCouldBeBetter;
                 var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings(universe, tabPageSize, universe.venueCurrent(), false // includeResumeButton
                 );
                 controlsForTabs.push(gameAndSettingsMenuAsControl);
-                var statusAsControl = GameFramework.ControlContainer.from4("Status", GameFramework.Coords.create(), // pos
+                var statusAsControl = GameFramework.ControlContainer.fromNamePosSizeChildren("Status", GameFramework.Coords.create(), // pos
                 size.clone().addDimensions(0, -32, 0), // size
                 // children
                 controlsForStatusFields);
@@ -164,7 +156,7 @@ var ThisCouldBeBetter;
                     new GameFramework.VisualOffset(childSpacing.clone().double(), playerVisualStaminaBarPlusIcon),
                     new GameFramework.VisualOffset(childSpacing.clone().multiplyScalar(3), playerVisualTimeBarPlusIcon)
                 ]);
-                var controlPlayerStatusInfo = GameFramework.ControlVisual.from4("visualPlayerStatusInfo", GameFramework.Coords.fromXY(5, 2).multiplyScalar(playerVisualBarSize.y), // pos
+                var controlPlayerStatusInfo = GameFramework.ControlVisual.fromNamePosSizeVisual("visualPlayerStatusInfo", GameFramework.Coords.fromXY(5, 2).multiplyScalar(playerVisualBarSize.y), // pos
                 GameFramework.Coords.create(), // size
                 GameFramework.DataBinding.fromContext(playerVisualStatusInfo));
                 childControls.push(controlPlayerStatusInfo);
@@ -198,11 +190,11 @@ var ThisCouldBeBetter;
                 ];
                 for (var i = 0; i < itemQuickSlotCount; i++) {
                     var buttonText = "\n   " + i;
-                    var button = GameFramework.ControlButton.from11("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, font, false, // hasBorder
+                    var button = GameFramework.ControlButton.from9("buttonItemQuickSlot" + i, buttonPos.clone(), buttonSize, buttonText, font, false, // hasBorder
                     GameFramework.DataBinding.fromTrue(), // isEnabled,
                     buttonClicks[i], false // canBeHeldDown
                     );
-                    var visualItemInQuickSlot = GameFramework.ControlVisual.from4("visualItemInQuickSlot", buttonPos.clone(), buttonSize, GameFramework.DataBinding.fromContextAndGet(i, (c) => {
+                    var visualItemInQuickSlot = GameFramework.ControlVisual.fromNamePosSizeVisual("visualItemInQuickSlot", buttonPos.clone(), buttonSize, GameFramework.DataBinding.fromContextAndGet(i, (c) => {
                         var returnValue = null;
                         var itemEntityEquipped = equipmentUser.itemEntityInSocketWithName("Item" + c);
                         if (itemEntityEquipped != null) {

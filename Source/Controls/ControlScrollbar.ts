@@ -34,27 +34,21 @@ export class ControlScrollbar<TContext, TItem> extends ControlBase
 
 		this.handleSize = Coords.fromXY(this.size.x, this.size.x);
 
-		this.buttonScrollUp = ControlButton.from8
+		this.buttonScrollUp = ControlButton.fromPosSizeTextFontClick
 		(
-			"buttonScrollUp", // name
 			Coords.create(), // pos
 			this.handleSize.clone(), // size
 			"-", // text
 			this.fontNameAndHeight,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
 			this.scrollUp // click
 		);
 
-		this.buttonScrollDown = ControlButton.from8
+		this.buttonScrollDown = ControlButton.fromPosSizeTextFontClick
 		(
-			"buttonScrollDown", // name
 			Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
 			this.handleSize.clone(), // size
 			"+", // text
 			this.fontNameAndHeight,
-			true, // hasBorder
-			DataBinding.fromTrue(), // isEnabled
 			this.scrollDown // click
 		);
 

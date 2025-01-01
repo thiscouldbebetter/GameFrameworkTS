@@ -31,13 +31,10 @@ export class Playable implements EntityProperty<Playable>
 
 		var controlsForStatusFields =
 		[
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontUncentered
 			(
-				"labelProfile",
 				Coords.fromXY(marginX, labelSize.y), // pos
 				labelSize.clone(),
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
 					"Profile: " + universe.profile.name
@@ -45,13 +42,10 @@ export class Playable implements EntityProperty<Playable>
 				font
 			),
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontUncentered
 			(
-				"labelTimePlaying",
 				Coords.fromXY(marginX, labelSize.y * 2), // pos
 				labelSize.clone(),
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
 					"Time Playing: " + timePlayingAsString
@@ -63,13 +57,10 @@ export class Playable implements EntityProperty<Playable>
 		var killable = Killable.of(entity);
 		if (killable != null)
 		{
-			var labelHealth = new ControlLabel
+			var labelHealth = ControlLabel.fromPosSizeTextFontUncentered
 			(
-				"labelHealth",
 				Coords.fromXY(marginX, labelSize.y * 3), // pos
 				labelSize.clone(),
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
 					"Health: " + Killable.of(entity).integrity
@@ -127,13 +118,10 @@ export class Playable implements EntityProperty<Playable>
 			);
 			controlsForTabs.push(skillLearnerAsControl);
 
-			var labelExperience = new ControlLabel
+			var labelExperience = ControlLabel.fromPosSizeTextFontUncentered
 			(
-				"labelExperience",
 				Coords.fromXY(marginX, labelSize.y * 4), // pos
 				labelSize.clone(),
-				false, // isTextCenteredHorizontally
-				false, // isTextCenteredVertically
 				DataBinding.fromContext
 				(
 					"Experience: "
@@ -160,7 +148,7 @@ export class Playable implements EntityProperty<Playable>
 		);
 		controlsForTabs.push(gameAndSettingsMenuAsControl);
 
-		var statusAsControl = ControlContainer.from4
+		var statusAsControl = ControlContainer.fromNamePosSizeChildren
 		(
 			"Status",
 			Coords.create(), // pos
@@ -377,7 +365,7 @@ export class Playable implements EntityProperty<Playable>
 			)
 		]);
 
-		var controlPlayerStatusInfo = ControlVisual.from4
+		var controlPlayerStatusInfo = ControlVisual.fromNamePosSizeVisual
 		(
 			"visualPlayerStatusInfo",
 			Coords.fromXY(5, 2).multiplyScalar(playerVisualBarSize.y), // pos
@@ -445,7 +433,7 @@ export class Playable implements EntityProperty<Playable>
 		{
 			var buttonText = "\n   " + i;
 
-			var button = ControlButton.from11
+			var button = ControlButton.from9
 			(
 				"buttonItemQuickSlot" + i,
 				buttonPos.clone(),
@@ -458,7 +446,7 @@ export class Playable implements EntityProperty<Playable>
 				false // canBeHeldDown
 			);
 
-			var visualItemInQuickSlot = ControlVisual.from4
+			var visualItemInQuickSlot = ControlVisual.fromNamePosSizeVisual
 			(
 				"visualItemInQuickSlot",
 				buttonPos.clone(),

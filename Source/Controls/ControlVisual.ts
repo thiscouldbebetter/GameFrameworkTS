@@ -40,18 +40,24 @@ export class ControlVisual extends ControlBase
 		this._sizeHalf = Coords.create();
 	}
 
-	static from4
+	static fromNamePosSizeVisual
 	(
-		name: string, pos: Coords, size: Coords, visual: DataBinding<any, VisualBase>
+		name: string,
+		pos: Coords,
+		size: Coords,
+		visual: DataBinding<any, VisualBase>
 	)
 	{
 		return new ControlVisual(name, pos, size, visual, null, null);
 	}
 
-	static from5
+	static fromNamePosSizeVisualColorBackground
 	(
-		name: string, pos: Coords, size: Coords,
-		visual: DataBinding<any, VisualBase>, colorBackground: Color
+		name: string,
+		pos: Coords,
+		size: Coords,
+		visual: DataBinding<any, VisualBase>,
+		colorBackground: Color
 	)
 	{
 		return new ControlVisual(name, pos, size, visual, colorBackground, null);

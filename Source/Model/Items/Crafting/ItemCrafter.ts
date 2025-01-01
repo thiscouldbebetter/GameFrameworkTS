@@ -191,7 +191,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 			sizeBase.clone(), // size
 			// children
 			[
-				ControlLabel.from4Uncentered
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
 					Coords.fromXY(10, 5), // pos
 					Coords.fromXY(70, 25), // size
@@ -230,7 +230,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					null
 				),
 
-				ControlLabel.from4Uncentered
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
 					Coords.fromXY(105, 5), // pos
 					Coords.fromXY(70, 25), // size
@@ -238,25 +238,24 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					fontSmall
 				),
 
-				ControlButton.from11
+				ControlButton.fromPosSizeTextFontClick<ItemCrafter>
 				(
-					"buttonCraft",
 					Coords.fromXY(170, 5), // pos
 					Coords.fromXY(20, 10), // size
 					"Craft",
 					fontSmall,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					addToQueue
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<ItemCrafter, boolean>
 					(
 						this,
 						(c: ItemCrafter) =>
 							c.isRecipeAvailableSelectedFulfilled(ItemHolder.of(entityCrafter))
-					), // isEnabled
-					addToQueue, // click
-					null // ?
+					) // isEnabled
 				),
 
-				ControlLabel.from4Uncentered
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
 					Coords.fromXY(105, 10), // pos
 					Coords.fromXY(75, 25), // size
@@ -273,7 +272,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					fontSmall
 				),
 
-				ControlList.from8
+				ControlList.fromNamePosSizeItemsTextFontSelectedValue
 				(
 					"listItemsInRecipe",
 					Coords.fromXY(105, 20), // pos
@@ -305,7 +304,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					null // bindingForItemValue
 				),
 
-				ControlLabel.from4Uncentered
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
 					Coords.fromXY(105, 50), // pos
 					Coords.fromXY(75, 25), // size
@@ -313,23 +312,23 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					fontSmall
 				),
 
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick<ItemCrafter>
 				(
-					"buttonCancel",
 					Coords.fromXY(170, 50), // pos
 					Coords.fromXY(20, 10), // size
 					"Cancel",
 					fontSmall,
-					true, // hasBorder
-					DataBinding.fromContextAndGet
+					crafter.recipeInProgressCancel // click
+				).isEnabledSet
+				(
+					DataBinding.fromContextAndGet<ItemCrafter, boolean>
 					(
 						this,
 						(c: ItemCrafter) => (c.recipesQueued.length > 0)
-					), // isEnabled
-					crafter.recipeInProgressCancel // click
+					) // isEnabled
 				),
 
-				ControlLabel.from4Uncentered
+				ControlLabel.fromPosSizeTextFontUncentered
 				(
 					Coords.fromXY(105, 55), // pos
 					Coords.fromXY(75, 25), // size
@@ -341,7 +340,7 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					fontSmall
 				),
 
-				ControlList.from8
+				ControlList.fromNamePosSizeItemsTextFontSelectedValue
 				(
 					"listCraftingsQueued",
 					Coords.fromXY(105, 65), // pos
@@ -366,13 +365,10 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 					DataBinding.fromGet( (c: CraftingRecipe) => c ) // bindingForItemValue
 				),
 
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"infoStatus",
 					Coords.fromXY(100, 125), // pos
 					Coords.fromXY(200, 15), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContextAndGet
 					(
 						this,
@@ -397,13 +393,10 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 			returnValue.children.splice
 			(
 				0, 0,
-				new ControlLabel
+				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					"labelCrafting",
 					Coords.fromXY(100, -5), // pos
 					Coords.fromXY(100, 25), // size
-					true, // isTextCenteredHorizontally
-					false, // isTextCenteredVertically
 					DataBinding.fromContext("Craft"),
 					fontLarge
 				)
@@ -411,15 +404,12 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 
 			returnValue.children.push
 			(
-				ControlButton.from8
+				ControlButton.fromPosSizeTextFontClick
 				(
-					"buttonDone",
 					Coords.fromXY(170, 115), // pos
 					Coords.fromXY(20, 10), // size
 					"Done",
 					fontSmall,
-					true, // hasBorder
-					DataBinding.fromTrue(), // isEnabled
 					back // click
 				)
 			);

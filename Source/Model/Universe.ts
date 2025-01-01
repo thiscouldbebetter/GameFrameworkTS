@@ -175,7 +175,8 @@ export class Universe
 
 		if (this.debuggingModeName == "SkipOpening")
 		{
-			this.profile = Profile.anonymous();
+			var profile = Profile.anonymous();
+			this.profileSet(profile);
 			venueInitial = this.worldCreator.toVenue(this);
 		}
 		else
@@ -201,6 +202,12 @@ export class Universe
 		(
 			() => callback(universe)
 		);
+	}
+
+	profileSet(value: Profile): Universe
+	{
+		this.profile = value;
+		return this;
 	}
 
 	reset(): void
