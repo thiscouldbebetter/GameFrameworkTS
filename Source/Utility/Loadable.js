@@ -18,10 +18,12 @@ var ThisCouldBeBetter;
                         }
                     });
                 });
+                return this;
             }
             unload(uwpe) {
                 this.loadables.forEach(x => x.unload(uwpe));
                 this.isLoaded = false;
+                return this;
             }
         }
         GameFramework.LoadableGroup = LoadableGroup;

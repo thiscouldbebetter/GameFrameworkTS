@@ -55,8 +55,24 @@ export class Video implements MediaItemBase
 	// Loadable.
 
 	isLoaded: boolean;
-	load(): void {}
-	unload(): void {}
+	load
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		callback: (x: Loadable) => void
+	): Video
+	{
+		if (this.isLoaded == false)
+		{
+			// todo
+			this.isLoaded = true;
+			if (callback != null)
+			{
+				callback(this);
+			}
+		}
+		return this;
+	}
+	unload(uwpe: UniverseWorldPlaceEntities): Video { throw new Error("todo"); }
 }
 
 }

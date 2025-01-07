@@ -27,8 +27,9 @@ var ThisCouldBeBetter;
                     }
                 };
                 xmlHttpRequest.send();
+                return this;
             }
-            unload(uwpe) { }
+            unload(uwpe) { throw new Error("todo"); }
         }
         GameFramework.BinaryFile = BinaryFile;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

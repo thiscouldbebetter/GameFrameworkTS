@@ -25,8 +25,10 @@ var ThisCouldBeBetter;
                 }
             }
             load(uwpe) {
-                this._binaryFileInner = new GameFramework.BinaryFile(this.name, this.sourceFilePath);
+                this._binaryFileInner =
+                    new GameFramework.BinaryFile(this.name, this.sourceFilePath);
                 this._binaryFileInner.load(uwpe, this.load_binaryFileInnerLoaded.bind(this));
+                return this;
             }
             load_binaryFileInnerLoaded(result) {
                 var soundFileAsBinaryFile = result;
@@ -37,7 +39,7 @@ var ThisCouldBeBetter;
                 this._soundInner = modFileAsSong.toSound();
             }
             unload(uwpe) {
-                // todo
+                throw new Error("todo");
             }
         }
         GameFramework.SoundFromFileMod = SoundFromFileMod;

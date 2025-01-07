@@ -9,8 +9,8 @@ export interface Loadable
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		callback: (result: Loadable) => void
-	): void;
-	unload(uwpe: UniverseWorldPlaceEntities): void;
+	): Loadable;
+	unload(uwpe: UniverseWorldPlaceEntities): Loadable;
 }
 
 export class LoadableGroup implements Loadable
@@ -27,7 +27,7 @@ export class LoadableGroup implements Loadable
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		callback: (result: Loadable) => void
-	): void
+	): LoadableGroup
 	{
 		var group = this;
 
@@ -52,12 +52,15 @@ export class LoadableGroup implements Loadable
 				)
 			}
 		);
+
+		return this;
 	}
 
-	unload(uwpe: UniverseWorldPlaceEntities): void
+	unload(uwpe: UniverseWorldPlaceEntities): LoadableGroup
 	{
 		this.loadables.forEach(x => x.unload(uwpe));
 		this.isLoaded = false;
+		return this;
 	}
 
 }

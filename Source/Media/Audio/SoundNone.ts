@@ -15,8 +15,16 @@ export class SoundNone implements Sound
 	// Loadable.
 
 	isLoaded: boolean;
-	load(uwpe: UniverseWorldPlaceEntities): void {}
-	unload(uwpe: UniverseWorldPlaceEntities): void {}
+	load(uwpe: UniverseWorldPlaceEntities): SoundNone
+	{
+		this.isLoaded = true;
+		return this;
+	}
+	unload(uwpe: UniverseWorldPlaceEntities): SoundNone
+	{
+		this.isLoaded = false;
+		return this;
+	}
 }
 
 }

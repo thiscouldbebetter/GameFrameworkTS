@@ -232,9 +232,13 @@ var ThisCouldBeBetter;
                 if (this.isLoaded == false) {
                     var loadables = GameFramework.LoadableProperty.entitiesFromPlace(this);
                     uwpe.placeSet(this);
-                    loadables.forEach(x => GameFramework.LoadableProperty.of(x).load(uwpe.entitySet(x)));
+                    loadables.forEach(x => {
+                        var prop = GameFramework.LoadableProperty.of(x);
+                        prop.load(uwpe.entitySet(x), null); // todo
+                    });
                     this.isLoaded = true;
                 }
+                return this;
             }
             unload(uwpe) {
                 if (this.isLoaded) {
@@ -243,6 +247,7 @@ var ThisCouldBeBetter;
                     loadables.forEach(x => GameFramework.LoadableProperty.of(x).unload(uwpe.entitySet(x)));
                     this.isLoaded = false;
                 }
+                return this;
             }
             // Controllable.
             toControl(universe, world) {

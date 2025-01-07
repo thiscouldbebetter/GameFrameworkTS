@@ -30,6 +30,7 @@ var ThisCouldBeBetter;
                 this.collectionsByName.set("Videos", this.videosByName);
                 this.collectionsByName.set("Fonts", this.fontsByName);
                 this.collectionsByName.set("TextStrings", this.textStringsByName);
+                this.millisecondsPerCheckToSeeIfItemLoaded = 100;
             }
             static default() {
                 return MediaLibrary.fromMediaFilePaths([]);
@@ -143,7 +144,9 @@ var ThisCouldBeBetter;
                 return returnValues;
             }
             waitForItemToLoad(collectionName, itemName, callback) {
-                var itemToLoad = this.collectionsByName.get(collectionName).get(itemName);
+                var itemToLoad = this.collectionsByName
+                    .get(collectionName)
+                    .get(itemName);
                 itemToLoad.load(null, null);
                 this.timerHandle = setInterval(this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback), 100 // milliseconds
                 );
@@ -155,12 +158,16 @@ var ThisCouldBeBetter;
                 }
             }
             waitForItemsAllToLoad(callback) {
-                this.itemsAll().forEach(x => x.load(null, null));
-                this.timerHandle = setInterval(this.waitForItemsAllToLoad_TimerTick.bind(this, callback), 100 // milliseconds
-                );
+                var itemsToLoad = this.itemsAll();
+                this.waitForItemsToLoad(itemsToLoad, callback);
             }
-            waitForItemsAllToLoad_TimerTick(callback) {
-                if (this.areAllItemsLoaded()) {
+            waitForItemsToLoad(itemsToLoad, callback) {
+                itemsToLoad.forEach(x => x.load(null, null));
+                this.timerHandle = setInterval(this.waitForItemsToLoad_TimerTick.bind(this, itemsToLoad, callback), this.millisecondsPerCheckToSeeIfItemLoaded);
+            }
+            waitForItemsToLoad_TimerTick(itemsToLoad, callback) {
+                var atLeastOneItemIsNotLoaded = itemsToLoad.some(x => x.isLoaded == false);
+                if (atLeastOneItemIsNotLoaded == false) {
                     clearInterval(this.timerHandle);
                     callback();
                 }

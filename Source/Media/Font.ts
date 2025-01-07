@@ -17,19 +17,37 @@ export class Font implements MediaItemBase
 		//this.load();
 	}
 
-	load(): void
+	id(): string
 	{
-		var fontAsStyleElement = document.createElement("style");
-		fontAsStyleElement.innerHTML = 
-			"@font-face { "
-			+ "font-family: '" + this.name + "';"
-			+ "src: url('" + this.sourcePath + "');"; 
-			+ "}";
-		document.head.appendChild(fontAsStyleElement);
-		this.isLoaded = true;
+		return Font.name + this.name;
 	}
 
-	unload(): void {} // todo
+	load
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		callback: (result: Loadable) => void
+	): Font
+	{
+		if (this.isLoaded == false)
+		{
+			var fontAsStyleElement = document.createElement("style");
+			fontAsStyleElement.id = this.id();
+			fontAsStyleElement.innerHTML = 
+				"@font-face { "
+				+ "font-family: '" + this.name + "';"
+				+ "src: url('" + this.sourcePath + "');"; 
+				+ "}";
+			document.head.appendChild(fontAsStyleElement);
+			this.isLoaded = true;
+		}
+
+		return this;
+	}
+
+	unload(uwpe: UniverseWorldPlaceEntities): Font
+	{
+		throw new Error("todo");
+	}
 }
 
 }

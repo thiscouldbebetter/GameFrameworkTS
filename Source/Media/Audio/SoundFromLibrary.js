@@ -30,9 +30,11 @@ var ThisCouldBeBetter;
             }
             load(uwpe, callback) {
                 this.soundInner(uwpe.universe).load(uwpe, callback);
+                return this;
             }
             unload(uwpe) {
                 this.soundInner(uwpe.universe).unload(uwpe);
+                return this;
             }
         }
         GameFramework.SoundFromLibrary = SoundFromLibrary;

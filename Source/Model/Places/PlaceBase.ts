@@ -371,7 +371,7 @@ export class PlaceBase implements Place, Loadable
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		callback: (placeLoaded: Loadable) => void
-	): void
+	): PlaceBase
 	{
 		if (this.isLoaded == false)
 		{
@@ -379,13 +379,19 @@ export class PlaceBase implements Place, Loadable
 			uwpe.placeSet(this);
 			loadables.forEach
 			(
-				x => LoadableProperty.of(x).load(uwpe.entitySet(x) )
+				x =>
+				{
+					var prop = LoadableProperty.of(x);
+					prop.load(uwpe.entitySet(x), null); // todo
+				}
 			);
 			this.isLoaded = true;
 		}
+
+		return this;
 	}
 
-	unload(uwpe: UniverseWorldPlaceEntities): void
+	unload(uwpe: UniverseWorldPlaceEntities): PlaceBase
 	{
 		if (this.isLoaded)
 		{
@@ -394,6 +400,8 @@ export class PlaceBase implements Place, Loadable
 			loadables.forEach(x => LoadableProperty.of(x).unload(uwpe.entitySet(x) ) );
 			this.isLoaded = false;
 		}
+
+		return this;
 	}
 
 	// Controllable.

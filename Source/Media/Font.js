@@ -10,17 +10,26 @@ var ThisCouldBeBetter;
                 this.isLoaded = false;
                 //this.load();
             }
-            load() {
-                var fontAsStyleElement = document.createElement("style");
-                fontAsStyleElement.innerHTML =
-                    "@font-face { "
-                        + "font-family: '" + this.name + "';"
-                        + "src: url('" + this.sourcePath + "');";
-                +"}";
-                document.head.appendChild(fontAsStyleElement);
-                this.isLoaded = true;
+            id() {
+                return Font.name + this.name;
             }
-            unload() { } // todo
+            load(uwpe, callback) {
+                if (this.isLoaded == false) {
+                    var fontAsStyleElement = document.createElement("style");
+                    fontAsStyleElement.id = this.id();
+                    fontAsStyleElement.innerHTML =
+                        "@font-face { "
+                            + "font-family: '" + this.name + "';"
+                            + "src: url('" + this.sourcePath + "');";
+                    +"}";
+                    document.head.appendChild(fontAsStyleElement);
+                    this.isLoaded = true;
+                }
+                return this;
+            }
+            unload(uwpe) {
+                throw new Error("todo");
+            }
         }
         GameFramework.Font = Font;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

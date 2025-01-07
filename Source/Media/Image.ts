@@ -126,40 +126,50 @@ export class Image2 implements MediaItemBase
 
 	// Loadable.
 
-	load(callback: any): Image2
+	load
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		callback: (result: Loadable) => void
+	): Image2
 	{
-		if (this.sourcePath != null)
+		if (this.isLoaded == false)
 		{
-			var image = this;
-
-			var imgElement = document.createElement("img");
-			imgElement.onerror = (event) =>
+			if (this.sourcePath != null)
 			{
-				throw new Error("Error loading image: " + image.name);
-			}
-			imgElement.onload = (event) =>
-			{
-				var imgLoaded = event.target as HTMLImageElement;
-				image.isLoaded = true;
-				image.systemImage = imgLoaded;
-				image.sizeInPixels = new Coords
-				(
-					imgLoaded.width, imgLoaded.height, 0
-				);
+				var image = this;
 
-				if (callback != null)
+				var imgElement = document.createElement("img");
+				imgElement.onerror = (event) =>
 				{
-					callback(this);
+					throw new Error("Error loading image: " + image.name);
 				}
-			};
-			imgElement.src = this.sourcePath;
+				imgElement.onload = (event) =>
+				{
+					var imgLoaded = event.target as HTMLImageElement;
+					image.isLoaded = true;
+					image.systemImage = imgLoaded;
+					image.sizeInPixels = new Coords
+					(
+						imgLoaded.width, imgLoaded.height, 0
+					);
+
+					if (callback != null)
+					{
+						callback(this);
+					}
+				};
+				imgElement.src = this.sourcePath;
+			}
 		}
+
 		return this;
 	}
 
-	unload(): Image2
+	unload(uwpe: UniverseWorldPlaceEntities): Image2
 	{
 		this.systemImage = null;
+		this.isLoaded = false;
+
 		return this;
 	}
 }

@@ -31,8 +31,17 @@ var ThisCouldBeBetter;
                 platformHelper.platformableRemove(this);
                 this.isFinished = true;
             }
-            load() { }
-            unload() { }
+            load(uwpe, callback) {
+                if (this.isLoaded == false) {
+                    // todo
+                    this.isLoaded = true;
+                    if (callback != null) {
+                        callback(this);
+                    }
+                }
+                return this;
+            }
+            unload(uwpe) { throw new Error("todo"); }
         }
         GameFramework.Video = Video;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

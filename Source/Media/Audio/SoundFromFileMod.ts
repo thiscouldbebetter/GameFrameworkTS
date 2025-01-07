@@ -51,10 +51,18 @@ export class SoundFromFileMod implements Sound
 
 	isLoaded: boolean;
 
-	load(uwpe: UniverseWorldPlaceEntities): void
+	load(uwpe: UniverseWorldPlaceEntities): SoundFromFileMod
 	{
-		this._binaryFileInner = new BinaryFile(this.name, this.sourceFilePath);
-		this._binaryFileInner.load(uwpe, this.load_binaryFileInnerLoaded.bind(this));
+		this._binaryFileInner =
+			new BinaryFile(this.name, this.sourceFilePath);
+
+		this._binaryFileInner.load
+		(
+			uwpe,
+			this.load_binaryFileInnerLoaded.bind(this)
+		);
+
+		return this;
 	}
 
 	load_binaryFileInnerLoaded(result: Loadable): void
@@ -73,9 +81,9 @@ export class SoundFromFileMod implements Sound
 		this._soundInner = modFileAsSong.toSound();
 	}
 
-	unload(uwpe: UniverseWorldPlaceEntities): void
+	unload(uwpe: UniverseWorldPlaceEntities): SoundFromFileMod
 	{
-		// todo
+		throw new Error("todo");
 	}
 
 }

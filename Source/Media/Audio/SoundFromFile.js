@@ -47,8 +47,10 @@ var ThisCouldBeBetter;
                     this.stop(universe);
                 }
             }
-            load(uwpe) { }
-            unload(uwpe) { }
+            load(uwpe, callback) {
+                return this;
+            }
+            unload(uwpe) { throw new Error("todo"); }
             // platformable
             toDomElement() {
                 return this.domElement;

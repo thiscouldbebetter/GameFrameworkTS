@@ -241,7 +241,8 @@ export class World //
 	{
 		var imageSnapshotFull = this.toImageSnapshot(universe);
 
-		var imageSizeThumbnail = Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
+		var imageSizeThumbnail =
+			Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
 		var displayThumbnail = Display2D.fromSizeAndIsInvisible
 		(
 			imageSizeThumbnail, true
@@ -253,8 +254,14 @@ export class World //
 		);
 		var imageThumbnailFromDisplay =
 			displayThumbnail.toImage(SaveStateBase.name);
-		var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
-		var imageThumbnail = new Image2("Snapshot", imageThumbnailAsDataUrl).unload();
+		var imageThumbnailAsDataUrl =
+			imageThumbnailFromDisplay.systemImage.toDataURL();
+		var imageThumbnail =
+			new Image2("Snapshot", imageThumbnailAsDataUrl);
+
+		// Is this necessary?
+		var uwpe = UniverseWorldPlaceEntities.fromUniverse(universe);
+		imageThumbnail.unload(uwpe);
 
 		return imageThumbnail;
 	}

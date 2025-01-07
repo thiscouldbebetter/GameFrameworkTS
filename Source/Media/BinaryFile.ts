@@ -23,7 +23,7 @@ export class BinaryFile implements MediaItemBase
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		callback: (result: Loadable) => void
-	): void
+	): BinaryFile
 	{
 		var binaryFile = this;
 
@@ -48,9 +48,10 @@ export class BinaryFile implements MediaItemBase
 		};
 		xmlHttpRequest.send();
 
+		return this;
 	}
 
-	unload(uwpe: UniverseWorldPlaceEntities): void {}
+	unload(uwpe: UniverseWorldPlaceEntities): BinaryFile { throw new Error("todo"); }
 }
 
 }

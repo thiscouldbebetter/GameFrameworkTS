@@ -59,28 +59,31 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Loadable.
-            load(callback) {
-                if (this.sourcePath != null) {
-                    var image = this;
-                    var imgElement = document.createElement("img");
-                    imgElement.onerror = (event) => {
-                        throw new Error("Error loading image: " + image.name);
-                    };
-                    imgElement.onload = (event) => {
-                        var imgLoaded = event.target;
-                        image.isLoaded = true;
-                        image.systemImage = imgLoaded;
-                        image.sizeInPixels = new GameFramework.Coords(imgLoaded.width, imgLoaded.height, 0);
-                        if (callback != null) {
-                            callback(this);
-                        }
-                    };
-                    imgElement.src = this.sourcePath;
+            load(uwpe, callback) {
+                if (this.isLoaded == false) {
+                    if (this.sourcePath != null) {
+                        var image = this;
+                        var imgElement = document.createElement("img");
+                        imgElement.onerror = (event) => {
+                            throw new Error("Error loading image: " + image.name);
+                        };
+                        imgElement.onload = (event) => {
+                            var imgLoaded = event.target;
+                            image.isLoaded = true;
+                            image.systemImage = imgLoaded;
+                            image.sizeInPixels = new GameFramework.Coords(imgLoaded.width, imgLoaded.height, 0);
+                            if (callback != null) {
+                                callback(this);
+                            }
+                        };
+                        imgElement.src = this.sourcePath;
+                    }
                 }
                 return this;
             }
-            unload() {
+            unload(uwpe) {
                 this.systemImage = null;
+                this.isLoaded = false;
                 return this;
             }
         }

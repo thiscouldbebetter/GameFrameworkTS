@@ -84,7 +84,11 @@ export class Playable implements EntityProperty<Playable>
 		{
 			var itemHolderAsControl = itemHolder.toControl
 			(
-				universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse
+				universe,
+				tabPageSize,
+				entity,
+				venuePrev,
+				includeTitleAndDoneButtonFalse
 			);
 			controlsForTabs.push(itemHolderAsControl);
 		}
@@ -104,7 +108,12 @@ export class Playable implements EntityProperty<Playable>
 		{
 			var crafterAsControl = itemCrafter.toControl
 			(
-				universe, tabPageSize, entity, entity, venuePrev, includeTitleAndDoneButtonFalse
+				universe,
+				tabPageSize,
+				entity,
+				entity,
+				venuePrev,
+				includeTitleAndDoneButtonFalse
 			);
 			controlsForTabs.push(crafterAsControl);
 		}
@@ -114,7 +123,11 @@ export class Playable implements EntityProperty<Playable>
 		{
 			var skillLearnerAsControl = skillLearner.toControl
 			(
-				universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse
+				universe,
+				tabPageSize,
+				entity,
+				venuePrev,
+				includeTitleAndDoneButtonFalse
 			);
 			controlsForTabs.push(skillLearnerAsControl);
 

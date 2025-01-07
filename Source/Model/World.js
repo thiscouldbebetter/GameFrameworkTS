@@ -140,7 +140,10 @@ var ThisCouldBeBetter;
                 displayThumbnail.drawImageScaled(imageSnapshotFull, GameFramework.Coords.Instances().Zeroes, imageSizeThumbnail);
                 var imageThumbnailFromDisplay = displayThumbnail.toImage(GameFramework.SaveStateBase.name);
                 var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
-                var imageThumbnail = new GameFramework.Image2("Snapshot", imageThumbnailAsDataUrl).unload();
+                var imageThumbnail = new GameFramework.Image2("Snapshot", imageThumbnailAsDataUrl);
+                // Is this necessary?
+                var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe);
+                imageThumbnail.unload(uwpe);
                 return imageThumbnail;
             }
             toSaveState(universe) {

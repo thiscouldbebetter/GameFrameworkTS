@@ -275,7 +275,7 @@ export class Profile
 					(
 						saveState == null
 						? null
-						: saveState.imageSnapshot.load(null)
+						: saveState.imageSnapshot.load(null, null)
 					);
 					var returnValue =
 					(

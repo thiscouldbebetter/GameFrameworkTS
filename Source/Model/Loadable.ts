@@ -37,31 +37,7 @@ export class LoadableProperty
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.load(uwpe);
-	}
-
-	load(uwpe: UniverseWorldPlaceEntities): void
-	{
-		if (this.isLoaded == false)
-		{
-			if (this._load != null)
-			{
-				this._load(uwpe);
-			}
-			this.isLoaded = true;
-		}
-	}
-
-	unload(uwpe: UniverseWorldPlaceEntities): void
-	{
-		if (this.isLoaded)
-		{
-			if (this._unload != null)
-			{
-				this._unload(uwpe);
-			}
-			this.isLoaded = false;
-		}
+		this.load(uwpe, null);
 	}
 
 	propertyName(): string { return LoadableProperty.name; }
@@ -76,8 +52,38 @@ export class LoadableProperty
 	overwriteWith(other: LoadableProperty): LoadableProperty { return this; }
 
 	// Equatable
-
 	equals(other: LoadableProperty): boolean { return false; } // todo
+
+	// Loadable.
+	load
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		callback: (x: Loadable) => void
+	): Loadable
+	{
+		if (this.isLoaded == false)
+		{
+			if (this._load != null)
+			{
+				this._load(uwpe);
+			}
+			this.isLoaded = true;
+		}
+		return this;
+	}
+
+	unload(uwpe: UniverseWorldPlaceEntities): Loadable
+	{
+		if (this.isLoaded)
+		{
+			if (this._unload != null)
+			{
+				this._unload(uwpe);
+			}
+			this.isLoaded = false;
+		}
+		return this;
+	}
 
 }
 

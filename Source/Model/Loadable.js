@@ -19,23 +19,7 @@ var ThisCouldBeBetter;
                 this.unload(uwpe);
             }
             initialize(uwpe) {
-                this.load(uwpe);
-            }
-            load(uwpe) {
-                if (this.isLoaded == false) {
-                    if (this._load != null) {
-                        this._load(uwpe);
-                    }
-                    this.isLoaded = true;
-                }
-            }
-            unload(uwpe) {
-                if (this.isLoaded) {
-                    if (this._unload != null) {
-                        this._unload(uwpe);
-                    }
-                    this.isLoaded = false;
-                }
+                this.load(uwpe, null);
             }
             propertyName() { return LoadableProperty.name; }
             updateForTimerTick(uwpe) {
@@ -46,6 +30,25 @@ var ThisCouldBeBetter;
             overwriteWith(other) { return this; }
             // Equatable
             equals(other) { return false; } // todo
+            // Loadable.
+            load(uwpe, callback) {
+                if (this.isLoaded == false) {
+                    if (this._load != null) {
+                        this._load(uwpe);
+                    }
+                    this.isLoaded = true;
+                }
+                return this;
+            }
+            unload(uwpe) {
+                if (this.isLoaded) {
+                    if (this._unload != null) {
+                        this._unload(uwpe);
+                    }
+                    this.isLoaded = false;
+                }
+                return this;
+            }
         }
         GameFramework.LoadableProperty = LoadableProperty;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

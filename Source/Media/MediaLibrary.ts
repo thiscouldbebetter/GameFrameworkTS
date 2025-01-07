@@ -23,6 +23,7 @@ export class MediaLibrary
 	collectionsAll: MediaItemBase[][];
 	collectionsByName: Map<string, Map<string, MediaItemBase>>;
 
+	millisecondsPerCheckToSeeIfItemLoaded: number;
 	timerHandle: number;
 
 	constructor
@@ -63,6 +64,8 @@ export class MediaLibrary
 		this.collectionsByName.set("Videos", this.videosByName);
 		this.collectionsByName.set("Fonts", this.fontsByName);
 		this.collectionsByName.set("TextStrings", this.textStringsByName);
+
+		this.millisecondsPerCheckToSeeIfItemLoaded = 100;
 	}
 
 	static default()
@@ -252,11 +255,18 @@ export class MediaLibrary
 
 	waitForItemToLoad
 	(
-		collectionName: string, itemName: string, callback: () => void
+		collectionName: string,
+		itemName: string,
+		callback: () => void
 	): void
 	{
-		var itemToLoad = this.collectionsByName.get(collectionName).get(itemName);
+		var itemToLoad =
+			this.collectionsByName
+				.get(collectionName)
+				.get(itemName);
+
 		itemToLoad.load(null, null);
+
 		this.timerHandle = setInterval
 		(
 			this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback),
@@ -278,17 +288,33 @@ export class MediaLibrary
 
 	waitForItemsAllToLoad(callback: () => void): void
 	{
-		this.itemsAll().forEach(x => x.load(null, null));
+		var itemsToLoad = this.itemsAll();
+		this.waitForItemsToLoad(itemsToLoad, callback);
+	}
+
+	waitForItemsToLoad
+	(
+		itemsToLoad: MediaItemBase[],
+		callback: () => void
+	): void
+	{
+		itemsToLoad.forEach(x => x.load(null, null));
 		this.timerHandle = setInterval
 		(
-			this.waitForItemsAllToLoad_TimerTick.bind(this, callback),
-			100 // milliseconds
+			this.waitForItemsToLoad_TimerTick.bind(this, itemsToLoad, callback),
+			this.millisecondsPerCheckToSeeIfItemLoaded
 		);
 	}
 
-	waitForItemsAllToLoad_TimerTick(callback: () => void)
+	waitForItemsToLoad_TimerTick
+	(
+		itemsToLoad: MediaItemBase[],
+		callback: () => void
+	)
 	{
-		if (this.areAllItemsLoaded())
+		var atLeastOneItemIsNotLoaded =
+			itemsToLoad.some(x => x.isLoaded == false);
+		if (atLeastOneItemIsNotLoaded == false)
 		{
 			clearInterval(this.timerHandle);
 			callback();

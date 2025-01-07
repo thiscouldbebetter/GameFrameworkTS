@@ -57,14 +57,16 @@ export class SoundFromLibrary implements Sound
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		callback: (loadableLoaded: Loadable) => void
-	): void
+	): SoundFromLibrary
 	{
 		this.soundInner(uwpe.universe).load(uwpe, callback);
+		return this;
 	}
 
-	unload(uwpe: UniverseWorldPlaceEntities): void
+	unload(uwpe: UniverseWorldPlaceEntities): SoundFromLibrary
 	{
 		this.soundInner(uwpe.universe).unload(uwpe);
+		return this;
 	}
 }
 

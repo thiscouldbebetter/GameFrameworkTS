@@ -83,8 +83,11 @@ export class SoundFromFile implements Sound
 	// Loadable.
 
 	isLoaded: boolean;
-	load(uwpe: UniverseWorldPlaceEntities): void {}
-	unload(uwpe: UniverseWorldPlaceEntities): void {}
+	load(uwpe: UniverseWorldPlaceEntities, callback: (result: Loadable) => void): Loadable
+	{
+		return this;
+	}
+	unload(uwpe: UniverseWorldPlaceEntities): Loadable { throw new Error("todo") }
 
 	// platformable
 

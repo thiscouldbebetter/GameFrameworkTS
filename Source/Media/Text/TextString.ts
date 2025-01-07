@@ -40,7 +40,7 @@ export class TextString implements MediaItemBase
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		callback: (result: Loadable) => void
-	): void
+	): TextString
 	{
 		if (this.isLoaded)
 		{
@@ -66,24 +66,12 @@ export class TextString implements MediaItemBase
 				}
 			};
 			xmlHttpRequest.send();
-
-			/*
-			fetch(this.sourcePath).then
-			(
-				response => response.json()
-			).then
-			(
-				data =>
-				{
-					text.value = data;
-					text.isLoaded = true;
-				}
-			);
-			*/
 		}
+
+		return this;
 	}
 
-	unload(uwpe: UniverseWorldPlaceEntities): void {}
+	unload(uwpe: UniverseWorldPlaceEntities): TextString { throw new Error("todo"); }
 }
 
 }

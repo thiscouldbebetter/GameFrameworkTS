@@ -36,22 +36,10 @@ var ThisCouldBeBetter;
                         }
                     };
                     xmlHttpRequest.send();
-                    /*
-                    fetch(this.sourcePath).then
-                    (
-                        response => response.json()
-                    ).then
-                    (
-                        data =>
-                        {
-                            text.value = data;
-                            text.isLoaded = true;
-                        }
-                    );
-                    */
                 }
+                return this;
             }
-            unload(uwpe) { }
+            unload(uwpe) { throw new Error("todo"); }
         }
         GameFramework.TextString = TextString;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

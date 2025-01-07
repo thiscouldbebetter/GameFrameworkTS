@@ -8,8 +8,14 @@ var ThisCouldBeBetter;
             play(universe, volume) { }
             seek(offsetInSeconds) { }
             stop(universe) { }
-            load(uwpe) { }
-            unload(uwpe) { }
+            load(uwpe) {
+                this.isLoaded = true;
+                return this;
+            }
+            unload(uwpe) {
+                this.isLoaded = false;
+                return this;
+            }
         }
         GameFramework.SoundNone = SoundNone;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
