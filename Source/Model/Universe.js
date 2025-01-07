@@ -85,7 +85,8 @@ var ThisCouldBeBetter;
                 this.inputHelper = new GameFramework.InputHelper();
                 this.inputHelper.initialize(this);
                 var universe = this;
-                this.mediaLibrary.waitForItemsAllToLoad(() => callback(universe));
+                //this.mediaLibrary.shouldLoadAllItemsBeforehandSet(false); // todo
+                this.mediaLibrary.loadItemsBeforehandIfNecessary(() => callback(universe));
             }
             profileSet(value) {
                 this.profile = value;

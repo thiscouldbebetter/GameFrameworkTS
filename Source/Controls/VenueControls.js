@@ -45,8 +45,12 @@ var ThisCouldBeBetter;
                 var styleOverrideNone = null;
                 this.controlRoot.draw(universe, display, drawLoc, styleOverrideNone);
             }
-            finalize(universe) { }
-            initialize(universe) { }
+            finalize(universe) {
+                this.controlRoot.finalize(universe);
+            }
+            initialize(universe) {
+                this.controlRoot.initialize(universe);
+            }
             updateForTimerTick(universe) {
                 this.draw(universe);
                 var inputHelper = universe.inputHelper;

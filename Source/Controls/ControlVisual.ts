@@ -68,6 +68,21 @@ export class ControlVisual extends ControlBase
 		return false;
 	}
 
+	finalize(universe: Universe): void
+	{
+		// todo - Implement Visual.finalize().
+		/*
+		var visualToDraw = this.visual.get();
+		visualToDraw.finalize(UniverseWorldPlaceEntities.fromUniverse(universe) );
+		*/
+	}
+
+	initialize(universe: Universe): void
+	{
+		var visualToDraw = this.visual.get();
+		visualToDraw.initialize(UniverseWorldPlaceEntities.fromUniverse(universe) );
+	}
+
 	isEnabled(): boolean
 	{
 		return false;

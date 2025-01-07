@@ -30,6 +30,7 @@ var ThisCouldBeBetter;
                 this.collectionsByName.set("Videos", this.videosByName);
                 this.collectionsByName.set("Fonts", this.fontsByName);
                 this.collectionsByName.set("TextStrings", this.textStringsByName);
+                this.shouldLoadAllItemsBeforehand = true;
                 this.millisecondsPerCheckToSeeIfItemLoaded = 100;
             }
             static default() {
@@ -142,6 +143,18 @@ var ThisCouldBeBetter;
                     }
                 }
                 return returnValues;
+            }
+            loadItemsBeforehandIfNecessary(callback) {
+                if (this.shouldLoadAllItemsBeforehand) {
+                    this.waitForItemsAllToLoad(callback);
+                }
+                else {
+                    callback();
+                }
+            }
+            shouldLoadAllItemsBeforehandSet(value) {
+                this.shouldLoadAllItemsBeforehand = value;
+                return this;
             }
             waitForItemToLoad(collectionName, itemName, callback) {
                 var itemToLoad = this.collectionsByName

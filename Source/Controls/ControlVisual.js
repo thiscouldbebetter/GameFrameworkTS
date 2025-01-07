@@ -27,6 +27,17 @@ var ThisCouldBeBetter;
             actionHandle(actionName, universe) {
                 return false;
             }
+            finalize(universe) {
+                // todo - Implement Visual.finalize().
+                /*
+                var visualToDraw = this.visual.get();
+                visualToDraw.finalize(UniverseWorldPlaceEntities.fromUniverse(universe) );
+                */
+            }
+            initialize(universe) {
+                var visualToDraw = this.visual.get();
+                visualToDraw.initialize(GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe));
+            }
             isEnabled() {
                 return false;
             }

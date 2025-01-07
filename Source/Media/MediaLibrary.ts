@@ -23,6 +23,7 @@ export class MediaLibrary
 	collectionsAll: MediaItemBase[][];
 	collectionsByName: Map<string, Map<string, MediaItemBase>>;
 
+	shouldLoadAllItemsBeforehand: boolean;
 	millisecondsPerCheckToSeeIfItemLoaded: number;
 	timerHandle: number;
 
@@ -65,6 +66,7 @@ export class MediaLibrary
 		this.collectionsByName.set("Fonts", this.fontsByName);
 		this.collectionsByName.set("TextStrings", this.textStringsByName);
 
+		this.shouldLoadAllItemsBeforehand = true;
 		this.millisecondsPerCheckToSeeIfItemLoaded = 100;
 	}
 
@@ -251,6 +253,24 @@ export class MediaLibrary
 		}
 
 		return returnValues;
+	}
+
+	loadItemsBeforehandIfNecessary(callback: () => void): void
+	{
+		if (this.shouldLoadAllItemsBeforehand)
+		{
+			this.waitForItemsAllToLoad(callback);
+		}
+		else
+		{
+			callback();
+		}
+	}
+
+	shouldLoadAllItemsBeforehandSet(value: boolean): MediaLibrary
+	{
+		this.shouldLoadAllItemsBeforehand = value;
+		return this;
 	}
 
 	waitForItemToLoad

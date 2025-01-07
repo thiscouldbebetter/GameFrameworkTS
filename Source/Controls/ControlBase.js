@@ -39,6 +39,8 @@ var ThisCouldBeBetter;
             actionToInputsMappings() { return new Array(); }
             childWithFocus() { return null; }
             draw(u, d, drawLoc, style) { }
+            finalize(u) { }
+            initialize(u) { }
             isEnabled() { return true; }
             isVisible() { return this._isVisible; }
             scalePosAndSize(scaleFactors) {

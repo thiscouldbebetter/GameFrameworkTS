@@ -234,6 +234,12 @@ var ThisCouldBeBetter;
                 return new GameFramework.ControlContainerTransparent(this);
             }
             // Drawable.
+            finalize(universe) {
+                this.children.forEach(x => x.finalize(universe));
+            }
+            initialize(universe) {
+                this.children.forEach(x => x.initialize(universe));
+            }
             draw(universe, display, drawLoc, style) {
                 drawLoc = this._drawLoc.overwriteWith(drawLoc);
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);

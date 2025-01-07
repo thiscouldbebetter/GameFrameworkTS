@@ -70,6 +70,8 @@ export class ControlBase
 	actionToInputsMappings(): ActionToInputsMapping[] { return new Array<ActionToInputsMapping>(); }
 	childWithFocus(): ControlBase { return null; }
 	draw(u: Universe, d: Display, drawLoc: Disposition, style: ControlStyle): void {}
+	finalize(u: Universe): void {}
+	initialize(u: Universe): void {}
 	isEnabled(): boolean { return true; }
 	isVisible(): boolean { return this._isVisible; }
 	scalePosAndSize(scaleFactors: Coords): ControlBase

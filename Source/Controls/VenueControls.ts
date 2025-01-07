@@ -148,9 +148,15 @@ export class VenueControls implements Venue
 		this.controlRoot.draw(universe, display, drawLoc, styleOverrideNone);
 	}
 
-	finalize(universe: Universe) {}
+	finalize(universe: Universe)
+	{
+		this.controlRoot.finalize(universe);
+	}
 
-	initialize(universe: Universe) {}
+	initialize(universe: Universe)
+	{
+		this.controlRoot.initialize(universe);
+	}
 
 	updateForTimerTick(universe: Universe)
 	{

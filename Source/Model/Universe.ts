@@ -198,7 +198,8 @@ export class Universe
 		this.inputHelper.initialize(this);
 
 		var universe = this;
-		this.mediaLibrary.waitForItemsAllToLoad
+		//this.mediaLibrary.shouldLoadAllItemsBeforehandSet(false); // todo
+		this.mediaLibrary.loadItemsBeforehandIfNecessary
 		(
 			() => callback(universe)
 		);

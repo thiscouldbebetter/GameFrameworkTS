@@ -431,6 +431,16 @@ export class ControlContainer extends ControlBase
 
 	// Drawable.
 
+	finalize(universe: Universe): void
+	{
+		this.children.forEach(x => x.finalize(universe) );
+	}
+
+	initialize(universe: Universe): void
+	{
+		this.children.forEach(x => x.initialize(universe) );
+	}
+
 	draw
 	(
 		universe: Universe, display: Display, drawLoc: Disposition,
