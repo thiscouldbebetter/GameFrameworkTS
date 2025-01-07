@@ -19,6 +19,10 @@ var ThisCouldBeBetter;
                 this._drawPos = GameFramework.Coords.create();
                 this._posSaved = GameFramework.Coords.create();
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 if (this.shouldConvertToImage) {
                     if (this.visualImage == null) {

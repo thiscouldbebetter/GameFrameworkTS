@@ -25,6 +25,13 @@ export class VisualPolars implements Visual<VisualPolars>
 		this._toPos = Coords.create();
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

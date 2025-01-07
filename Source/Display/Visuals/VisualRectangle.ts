@@ -58,9 +58,19 @@ export class VisualRectangle implements Visual<VisualRectangle>
 		return new VisualRectangle(size, colorFill, null, null);
 	}
 
-	static fromSizeAndColorsFillAndBorder(size: Coords, colorFill: Color, colorBorder: Color): VisualRectangle
+	static fromSizeAndColorsFillAndBorder
+	(
+		size: Coords, colorFill: Color, colorBorder: Color
+	): VisualRectangle
 	{
 		return new VisualRectangle(size, colorFill, colorBorder, null);
+	}
+
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
 	}
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void

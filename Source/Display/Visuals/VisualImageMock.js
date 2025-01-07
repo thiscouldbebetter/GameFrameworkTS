@@ -12,7 +12,12 @@ var ThisCouldBeBetter;
                 return this;
             }
             // Visual.
-            draw(uwpe, display) { }
+            initialize(uwpe) {
+                // Do nothing.
+            }
+            draw(uwpe, display) {
+                // Do nothing.
+            }
             // Clonable.
             clone() { return this; }
             overwriteWith(x) { return this; }

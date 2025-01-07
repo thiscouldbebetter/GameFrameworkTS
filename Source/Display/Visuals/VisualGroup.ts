@@ -11,6 +11,13 @@ export class VisualGroup implements Visual<VisualGroup>
 		this.children = children;
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.children.forEach(x => x.initialize(uwpe) );
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		for (var i = 0; i < this.children.length; i++)

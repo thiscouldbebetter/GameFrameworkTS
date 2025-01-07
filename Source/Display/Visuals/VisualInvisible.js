@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 // Do nothing.
             }

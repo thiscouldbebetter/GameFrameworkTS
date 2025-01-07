@@ -80,6 +80,9 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Visual.
+            initialize(uwpe) {
+                throw new Error("todo");
+            }
             draw(uwpe, display) {
                 var world = uwpe.world;
                 var entity = uwpe.entity;

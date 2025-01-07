@@ -41,6 +41,11 @@ export class VisualCameraProjection implements Visual<VisualCameraProjection>
 
 	// Visual.
 
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.child.initialize(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

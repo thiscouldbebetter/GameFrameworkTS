@@ -73,6 +73,13 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 		return returnVisuals;
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.visualImageToExtractFrom.initialize(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var universe = uwpe.universe;

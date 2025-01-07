@@ -28,6 +28,13 @@ export class VisualCrosshairs implements Visual<VisualCrosshairs>
 		return new VisualCrosshairs(null, radiusOuter, radiusInner, null, null);
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

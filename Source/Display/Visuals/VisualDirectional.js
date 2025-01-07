@@ -25,6 +25,10 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Visual.
+            initialize(uwpe) {
+                this.visualForNoDirection.initialize(uwpe);
+                this.visualsForDirections.forEach(x => x.initialize(uwpe));
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var headingInTurns = this.headingInTurnsGetForEntity(entity);

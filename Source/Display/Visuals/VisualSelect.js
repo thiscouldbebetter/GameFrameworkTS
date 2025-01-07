@@ -11,6 +11,13 @@ var ThisCouldBeBetter;
             childByName(childName) {
                 return this.childrenByName.get(childName);
             }
+            // Visual.
+            initialize(uwpe) {
+                for (var childName in this.childrenByName) {
+                    var child = this.childrenByName.get(childName);
+                    child.initialize(uwpe);
+                }
+            }
             draw(uwpe, display) {
                 var childrenToSelectNames = this.selectChildNames(uwpe, display);
                 var childrenSelected = childrenToSelectNames.map(childToSelectName => this.childByName(childToSelectName));

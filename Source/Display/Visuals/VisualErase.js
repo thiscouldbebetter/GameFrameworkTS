@@ -7,6 +7,10 @@ var ThisCouldBeBetter;
             constructor(child) {
                 this.child = child;
             }
+            // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 display.stateSave();
                 display.eraseModeSet(true);

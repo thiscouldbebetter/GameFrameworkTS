@@ -190,6 +190,13 @@ export class VisualNetwork implements Visual<VisualNetwork>
 		this.transformLocate = new Transform_Locate(null);
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var e = uwpe.entity;

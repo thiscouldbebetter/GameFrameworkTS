@@ -54,6 +54,12 @@ export class VisualDirectional implements Visual<VisualDirectional>
 
 	// Visual.
 
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.visualForNoDirection.initialize(uwpe);
+		this.visualsForDirections.forEach(x => x.initialize(uwpe) );
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

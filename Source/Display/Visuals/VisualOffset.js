@@ -16,6 +16,10 @@ var ThisCouldBeBetter;
             static fromOffsetAndChild(offset, child) {
                 return new VisualOffset(offset, child);
             }
+            // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawablePos = GameFramework.Locatable.of(entity).loc.pos;

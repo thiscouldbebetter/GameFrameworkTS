@@ -28,6 +28,13 @@ export class VisualOffset implements Visual<VisualOffset>
 		return new VisualOffset(offset, child);
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.child.initialize(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

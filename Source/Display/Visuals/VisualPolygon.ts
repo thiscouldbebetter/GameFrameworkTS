@@ -105,6 +105,13 @@ export class VisualPolygon implements Visual<VisualPolygon>
 		return VisualPolygon.fromPathAndColorFill(verticesAsPath, colorFill);
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

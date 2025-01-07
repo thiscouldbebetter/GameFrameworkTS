@@ -27,6 +27,10 @@ var ThisCouldBeBetter;
                 }
                 return returnVisuals;
             }
+            // Visual.
+            initialize(uwpe) {
+                this.visualImageToExtractFrom.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;

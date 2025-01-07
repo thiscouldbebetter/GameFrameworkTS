@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
                 return this._visualCached;
             }
             // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var visual = this.visualGet(uwpe);
                 visual.draw(uwpe, display);

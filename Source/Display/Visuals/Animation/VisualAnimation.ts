@@ -154,6 +154,11 @@ export class VisualAnimation implements Visual<VisualAnimation>
 
 	// Visual.
 
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		throw new Error("todo");
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var world = uwpe.world;

@@ -24,6 +24,9 @@ var ThisCouldBeBetter;
                 return rotationInTurns;
             }
             // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var entityLoc = GameFramework.Locatable.of(entity).loc;

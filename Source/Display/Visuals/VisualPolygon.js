@@ -42,6 +42,10 @@ var ThisCouldBeBetter;
                 var verticesAsPath = new GameFramework.Path(vertices);
                 return VisualPolygon.fromPathAndColorFill(verticesAsPath, colorFill);
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawableLoc = GameFramework.Locatable.of(entity).loc;

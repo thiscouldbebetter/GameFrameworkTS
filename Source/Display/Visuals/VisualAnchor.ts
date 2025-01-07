@@ -36,6 +36,13 @@ export class VisualAnchor implements Visual<VisualAnchor>
 		return new VisualAnchor(child, posToAnchorAt, null);
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.child.initialize(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var entity = uwpe.entity;

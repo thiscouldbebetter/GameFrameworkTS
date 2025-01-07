@@ -32,6 +32,10 @@ var ThisCouldBeBetter;
             static fromSizeAndColorsFillAndBorder(size, colorFill, colorBorder) {
                 return new VisualRectangle(size, colorFill, colorBorder, null);
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawPos = this._drawPos.overwriteWith(GameFramework.Locatable.of(entity).loc.pos);

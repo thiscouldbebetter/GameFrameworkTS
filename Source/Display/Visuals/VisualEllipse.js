@@ -15,6 +15,10 @@ var ThisCouldBeBetter;
             static fromSemiaxesAndColorFill(semiaxisHorizontal, semiaxisVertical, colorFill) {
                 return new VisualEllipse(semiaxisHorizontal, semiaxisVertical, null, colorFill, null, null);
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawableLoc = GameFramework.Locatable.of(entity).loc;

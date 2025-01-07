@@ -16,6 +16,10 @@ var ThisCouldBeBetter;
                 return this;
             }
             // Visual.
+            initialize(uwpe) {
+                this.visualJumper.initialize(uwpe);
+                this.visualShadow.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var world = uwpe.world;
                 var entity = uwpe.entity;

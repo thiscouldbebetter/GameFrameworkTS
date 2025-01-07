@@ -9,6 +9,10 @@ var ThisCouldBeBetter;
                 this.gradientFill = gradientFill;
                 this.colorBorder = colorBorder;
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawPos = GameFramework.Locatable.of(entity).loc.pos;

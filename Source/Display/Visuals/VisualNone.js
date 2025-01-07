@@ -4,8 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualNone {
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
-                // do nothing
+                // Do nothing.
             }
             // Clonable.
             clone() {

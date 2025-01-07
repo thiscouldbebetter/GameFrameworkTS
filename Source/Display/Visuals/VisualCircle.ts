@@ -47,6 +47,13 @@ export class VisualCircle implements Visual<VisualCircle>
 		return new VisualCircle(radius, colorFill, colorBorder, null);
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

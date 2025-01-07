@@ -24,7 +24,10 @@ var ThisCouldBeBetter;
             transform(transformToApply) {
                 return this; // todo
             }
-            // VisualBase.
+            // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var isVisible = this.isVisible(uwpe);
                 if (isVisible) {

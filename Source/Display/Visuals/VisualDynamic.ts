@@ -11,6 +11,13 @@ export class VisualDynamic implements Visual<VisualDynamic>
 		this.methodForVisual = methodForVisual;
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var visual = this.methodForVisual.call(this, uwpe);

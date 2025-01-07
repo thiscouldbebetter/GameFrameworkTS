@@ -34,6 +34,12 @@ export class VisualJump2D implements Visual<VisualJump2D>
 
 	// Visual.
 
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.visualJumper.initialize(uwpe);
+		this.visualShadow.initialize(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var world = uwpe.world;

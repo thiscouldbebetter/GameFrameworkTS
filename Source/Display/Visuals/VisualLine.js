@@ -14,6 +14,10 @@ var ThisCouldBeBetter;
                 this._drawPosTo = GameFramework.Coords.create();
                 this._transformLocate = new GameFramework.Transform_Locate(null);
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var loc = GameFramework.Locatable.of(entity).loc;

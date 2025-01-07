@@ -14,6 +14,10 @@ var ThisCouldBeBetter;
             static fromSoundName(soundName) {
                 return new VisualSound(soundName, false); // isMusic
             }
+            // Visual.
+            initialize(uwpe) {
+                // todo - Initialize the sound.
+            }
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;

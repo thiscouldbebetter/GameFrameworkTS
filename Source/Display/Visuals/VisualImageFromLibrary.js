@@ -26,7 +26,11 @@ var ThisCouldBeBetter;
             sizeInPixels(universe) {
                 return this.image(universe).sizeInPixels;
             }
-            // visual
+            // Visual.
+            initialize(uwpe) {
+                var image = this.image(uwpe.universe);
+                image.load(uwpe, null);
+            }
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;

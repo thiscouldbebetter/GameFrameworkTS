@@ -18,6 +18,10 @@ var ThisCouldBeBetter;
                 this._sizeCurrent = this.size.clone();
                 this._sizeHalf = this.size.clone().half();
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 //var wasVisible = false;
                 var entity = uwpe.entity;

@@ -17,6 +17,13 @@ export class VisualStack implements Visual<VisualStack>
 		this._posSaved = Coords.create();
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.children.forEach(x => x.initialize(uwpe) );
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var entity = uwpe.entity;

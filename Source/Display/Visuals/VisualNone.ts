@@ -6,9 +6,16 @@ export class VisualNone implements Visual<VisualNone>
 {
 	static Instance: VisualNone = new VisualNone();
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		// do nothing
+		// Do nothing.
 	}
 
 	// Clonable.

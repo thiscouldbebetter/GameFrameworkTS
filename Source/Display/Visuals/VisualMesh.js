@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 display.drawMeshWithOrientation(this.mesh, GameFramework.Locatable.of(entity).loc.orientation);

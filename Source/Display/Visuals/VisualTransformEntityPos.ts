@@ -40,6 +40,11 @@ export class VisualTransformEntityPos implements Visual<VisualTransformEntityPos
 
 	// Visual.
 
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.child.initialize(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entityPos = Locatable.of(uwpe.entity).loc.pos;

@@ -7,6 +7,10 @@ var ThisCouldBeBetter;
             constructor(children) {
                 this.children = children;
             }
+            // Visual.
+            initialize(uwpe) {
+                this.children.forEach(x => x.initialize(uwpe));
+            }
             draw(uwpe, display) {
                 for (var i = 0; i < this.children.length; i++) {
                     var child = this.children[i];

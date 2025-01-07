@@ -15,6 +15,10 @@ var ThisCouldBeBetter;
             static fromChildAndPosToAnchorAt(child, posToAnchorAt) {
                 return new VisualAnchor(child, posToAnchorAt, null);
             }
+            // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawableLoc = GameFramework.Locatable.of(entity).loc;

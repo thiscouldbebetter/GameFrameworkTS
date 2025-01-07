@@ -23,6 +23,10 @@ var ThisCouldBeBetter;
             static fromRadiusAndColors(radius, colorFill, colorBorder) {
                 return new VisualCircle(radius, colorFill, colorBorder, null);
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 display.drawCircle(GameFramework.Locatable.of(entity).loc.pos, this.radius, this.colorFill, this.colorBorder, this.borderThickness);

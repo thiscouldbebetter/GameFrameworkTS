@@ -46,6 +46,13 @@ export class VisualBar implements Visual<VisualBar>
 		this._sizeHalf = this.size.clone().half();
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		//var wasVisible = false;

@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
                 return this._transformCamera;
             }
             // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var entityPos = GameFramework.Locatable.of(entity).loc.pos;

@@ -30,6 +30,13 @@ export class VisualFan implements Visual<VisualFan>
 		this._polar = Polar.create();
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

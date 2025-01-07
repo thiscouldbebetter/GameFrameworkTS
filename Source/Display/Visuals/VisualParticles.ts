@@ -38,6 +38,13 @@ export class VisualParticles implements Visual<VisualParticles>
 		this.particleEntities = [];
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null)

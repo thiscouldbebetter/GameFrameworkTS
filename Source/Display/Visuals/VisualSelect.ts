@@ -22,6 +22,17 @@ export class VisualSelect implements Visual<VisualSelect>
 		return this.childrenByName.get(childName);
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		for (var childName in this.childrenByName)
+		{
+			var child = this.childrenByName.get(childName);
+			child.initialize(uwpe);
+		}
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var childrenToSelectNames =

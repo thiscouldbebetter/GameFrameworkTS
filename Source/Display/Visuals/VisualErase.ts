@@ -11,6 +11,13 @@ export class VisualErase implements Visual<VisualErase>
 		this.child = child;
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.child.initialize(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		display.stateSave();

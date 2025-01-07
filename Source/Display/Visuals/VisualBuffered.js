@@ -12,6 +12,10 @@ var ThisCouldBeBetter;
                 this._posSaved = GameFramework.Coords.create();
                 this.displayForBuffer.initialize(null);
             }
+            // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawPos = GameFramework.Locatable.of(entity).loc.pos;

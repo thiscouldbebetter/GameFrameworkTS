@@ -26,6 +26,13 @@ export class VisualPath implements Visual<VisualPath>
 		this.transformTranslate = new Transform_Translate(Coords.create());
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

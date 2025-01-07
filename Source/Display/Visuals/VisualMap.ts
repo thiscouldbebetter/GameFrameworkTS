@@ -43,6 +43,13 @@ export class VisualMap implements Visual<VisualMap>
 		this._posSaved = Coords.create();
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		if (this.shouldConvertToImage)

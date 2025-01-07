@@ -47,7 +47,13 @@ export class VisualImageFromLibrary implements VisualImage
 		return this.image(universe).sizeInPixels;
 	}
 
-	// visual
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var image = this.image(uwpe.universe);
+		image.load(uwpe, null);
+	}
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{

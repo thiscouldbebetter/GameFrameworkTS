@@ -112,6 +112,10 @@ var ThisCouldBeBetter;
                 this.networkTransformed = this.network.clone();
                 this.transformLocate = new GameFramework.Transform_Locate(null);
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 var e = uwpe.entity;
                 var drawableLoc = GameFramework.Locatable.of(e).loc;

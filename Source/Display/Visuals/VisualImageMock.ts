@@ -20,8 +20,15 @@ export class VisualImageMock implements VisualImage
 
 	// Visual.
 
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
-	{}
+	{
+		// Do nothing.
+	}
 
 	// Clonable.
 

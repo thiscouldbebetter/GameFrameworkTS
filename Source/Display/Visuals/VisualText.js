@@ -32,6 +32,10 @@ var ThisCouldBeBetter;
             static fromTextImmediateFontAndColorsFillAndBorder(text, font, colorFill, colorBorder) {
                 return new VisualText(GameFramework.DataBinding.fromContext(text), font, colorFill, colorBorder);
             }
+            // Visual.
+            initialize(uwpe) {
+                // todo - Load the font?
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var contextOld = this._text.context;

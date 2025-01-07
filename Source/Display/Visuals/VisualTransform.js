@@ -23,6 +23,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 this._childTransformed.overwriteWith(this.child);
                 this.transformToApply.transform(this._childTransformed);

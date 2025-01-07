@@ -15,6 +15,10 @@ var ThisCouldBeBetter;
                 this.ticksSoFar = 0;
                 this.particleEntities = [];
             }
+            // Visual.
+            initialize(uwpe) {
+                // Do nothing.
+            }
             draw(uwpe, display) {
                 if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null) {
                     var particleCountThisTick;

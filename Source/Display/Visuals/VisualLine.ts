@@ -27,6 +27,13 @@ export class VisualLine implements Visual<VisualLine>
 		this._transformLocate = new Transform_Locate(null);
 	}
 
+	// Visual.
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// Do nothing.
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

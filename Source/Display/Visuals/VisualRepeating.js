@@ -23,6 +23,10 @@ var ThisCouldBeBetter;
                     this._endPosInCells.addDimensions(1, 1, 0);
                 }
             }
+            // Visual.
+            initialize(uwpe) {
+                this.child.initialize(uwpe);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawPos = GameFramework.Locatable.of(entity).loc.pos;
