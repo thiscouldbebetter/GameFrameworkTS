@@ -173,7 +173,7 @@ export class Universe
 
 		var venueInitial: Venue = null;
 
-		if (this.debuggingModeName == "SkipOpening")
+		if (this.debuggingModeName == DebuggingModeNames.SkipOpening)
 		{
 			var profile = Profile.anonymous();
 			this.profileSet(profile);
@@ -263,9 +263,15 @@ export class Universe
 		}
 
 		var venueCurrent = this.venueCurrent();
-		venueCurrent.updateForTimerTick(this);
+		var venueCurrentIsInitialized =
+			venueCurrent.initializeIsComplete(this);
 
-		this.displayRecorder.updateForTimerTick(this);
+		if (venueCurrentIsInitialized)
+		{
+			venueCurrent.updateForTimerTick(this);
+
+			this.displayRecorder.updateForTimerTick(this);
+		}
 	}
 
 	v(): Venue

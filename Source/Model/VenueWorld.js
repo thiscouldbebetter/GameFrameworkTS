@@ -20,6 +20,7 @@ var ThisCouldBeBetter;
                 }
                 */
             }
+            finalizeIsComplete() { return true; }
             initialize(universe) {
                 universe.worldSet(this.world);
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseAndWorld(universe, this.world);
@@ -31,6 +32,7 @@ var ThisCouldBeBetter;
                 this.venueControls = new GameFramework.VenueControls(this.world.toControl(universe), true // ignoreKeyboardAndGamepadInputs
                 );
             }
+            initializeIsComplete() { return true; }
             updateForTimerTick(universe) {
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseAndWorld(universe, this.world);
                 this.world.updateForTimerTick(uwpe);

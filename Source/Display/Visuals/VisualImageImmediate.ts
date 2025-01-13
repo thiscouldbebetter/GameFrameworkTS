@@ -44,6 +44,14 @@ export class VisualImageImmediate implements VisualImage
 		image.load(uwpe, null);
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		var image = this.image(uwpe.universe);
+		var imageIsLoaded = image.isLoaded;
+		return imageIsLoaded;
+	}
+
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var universe = uwpe.universe;

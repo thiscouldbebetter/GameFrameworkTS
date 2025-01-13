@@ -31,6 +31,8 @@ export class VenueWorld implements Venue
 		*/
 	}
 
+	finalizeIsComplete(): boolean { return true; }
+
 	initialize(universe: Universe): void
 	{
 		universe.worldSet(this.world);
@@ -51,6 +53,8 @@ export class VenueWorld implements Venue
 			true // ignoreKeyboardAndGamepadInputs
 		);
 	}
+
+	initializeIsComplete(): boolean { return true; }
 
 	updateForTimerTick(universe: Universe): void
 	{

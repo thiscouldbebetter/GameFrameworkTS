@@ -31,6 +31,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 this.visualImageToExtractFrom.initialize(uwpe);
             }
+            initializeIsComplete(uwpe) {
+                return this.visualImageToExtractFrom.initializeIsComplete(uwpe);
+            }
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;

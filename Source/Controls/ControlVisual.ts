@@ -83,6 +83,14 @@ export class ControlVisual extends ControlBase
 		visualToDraw.initialize(UniverseWorldPlaceEntities.fromUniverse(universe) );
 	}
 
+	initializeIsComplete(universe: Universe): boolean
+	{
+		var visualToDraw = this.visual.get();
+		var visualToDrawIsLoaded =
+			visualToDraw.initializeIsComplete(UniverseWorldPlaceEntities.fromUniverse(universe) );
+		return visualToDrawIsLoaded;
+	}
+
 	isEnabled(): boolean
 	{
 		return false;

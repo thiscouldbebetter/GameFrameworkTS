@@ -47,7 +47,9 @@ var ThisCouldBeBetter;
                 this.venueInner(universe).draw(universe);
             }
             finalize(universe) { }
+            finalizeIsComplete() { return true; }
             initialize(universe) { }
+            initializeIsComplete() { return true; }
             updateForTimerTick(universe) {
                 var venueInner = this.venueInner(universe);
                 venueInner.updateForTimerTick(universe);

@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
             static fromHeightInPixels(heightInPixels) {
                 return new FontNameAndHeight(null, heightInPixels);
             }
+            font(universe) {
+                return universe.mediaLibrary.fontGetByName(this.name);
+            }
             toStringSystemFont() {
                 return this.heightInPixels + "px " + this.name;
             }

@@ -50,6 +50,11 @@ export class VisualHidable implements Visual<VisualHidable>
 		this.child.initialize(uwpe);
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return this.child.initializeIsComplete(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var isVisible = this.isVisible(uwpe);

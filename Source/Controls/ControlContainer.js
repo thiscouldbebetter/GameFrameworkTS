@@ -237,8 +237,16 @@ var ThisCouldBeBetter;
             finalize(universe) {
                 this.children.forEach(x => x.finalize(universe));
             }
+            finalizeIsComplete() {
+                var childrenAreAllFinalized = (this.children.some(x => x.finalizeIsComplete() == false) == false);
+                return childrenAreAllFinalized;
+            }
             initialize(universe) {
                 this.children.forEach(x => x.initialize(universe));
+            }
+            initializeIsComplete(universe) {
+                var childrenAreAllInitialized = (this.children.some(x => x.initializeIsComplete(universe) == false) == false);
+                return childrenAreAllInitialized;
             }
             draw(universe, display, drawLoc, style) {
                 drawLoc = this._drawLoc.overwriteWith(drawLoc);

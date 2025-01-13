@@ -13,7 +13,9 @@ var ThisCouldBeBetter;
                 // Do nothing.
             }
             finalize(universe) { }
+            finalizeIsComplete() { return true; }
             initialize(universe) { }
+            initializeIsComplete() { return true; }
             updateForTimerTick(universe) {
                 var inputHelper = universe.inputHelper;
                 if (this.isFirstTime) {

@@ -25,6 +25,7 @@ var ThisCouldBeBetter;
                 display.drawBackground(colorBlack, null);
                 platformHelper.platformableShow(display);
             }
+            finalizeIsComplete() { return true; }
             initialize(universe) {
                 var display = universe.display;
                 universe.platformHelper.platformableHide(display);
@@ -63,6 +64,7 @@ var ThisCouldBeBetter;
                     inputFileUpload.focus();
                 }
             }
+            initializeIsComplete() { return true; }
             updateForTimerTick(universe) {
                 var inputHelper = universe.inputHelper;
                 var inputsPressed = inputHelper.inputsPressed;

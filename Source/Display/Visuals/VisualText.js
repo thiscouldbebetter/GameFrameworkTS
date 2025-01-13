@@ -36,6 +36,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // todo - Load the font?
             }
+            initializeIsComplete(uwpe) {
+                return true;
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var contextOld = this._text.context;

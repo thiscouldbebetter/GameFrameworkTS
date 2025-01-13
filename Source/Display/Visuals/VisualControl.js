@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // Do nothing.
             }
+            initializeIsComplete(uwpe) {
+                return true;
+            }
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var display = universe.display;

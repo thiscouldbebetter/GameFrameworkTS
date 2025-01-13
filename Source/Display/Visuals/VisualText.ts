@@ -128,6 +128,11 @@ export class VisualText implements Visual<VisualText>
 		// todo - Load the font?
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

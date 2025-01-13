@@ -71,7 +71,9 @@ export class ControlBase
 	childWithFocus(): ControlBase { return null; }
 	draw(u: Universe, d: Display, drawLoc: Disposition, style: ControlStyle): void {}
 	finalize(u: Universe): void {}
+	finalizeIsComplete(): boolean { return true; }
 	initialize(u: Universe): void {}
+	initializeIsComplete(u: Universe): boolean { return true; }
 	isEnabled(): boolean { return true; }
 	isVisible(): boolean { return this._isVisible; }
 	scalePosAndSize(scaleFactors: Coords): ControlBase

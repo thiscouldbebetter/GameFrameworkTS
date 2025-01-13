@@ -27,6 +27,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // Do nothing.
             }
+            initializeIsComplete(uwpe) {
+                return true;
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 display.drawCircle(GameFramework.Locatable.of(entity).loc.pos, this.radius, this.colorFill, this.colorBorder, this.borderThickness);

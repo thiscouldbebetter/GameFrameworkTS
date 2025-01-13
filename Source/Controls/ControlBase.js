@@ -40,7 +40,9 @@ var ThisCouldBeBetter;
             childWithFocus() { return null; }
             draw(u, d, drawLoc, style) { }
             finalize(u) { }
+            finalizeIsComplete() { return true; }
             initialize(u) { }
+            initializeIsComplete(u) { return true; }
             isEnabled() { return true; }
             isVisible() { return this._isVisible; }
             scalePosAndSize(scaleFactors) {

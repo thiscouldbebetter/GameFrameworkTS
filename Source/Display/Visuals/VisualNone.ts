@@ -13,6 +13,11 @@ export class VisualNone implements Visual<VisualNone>
 		// Do nothing.
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		// Do nothing.

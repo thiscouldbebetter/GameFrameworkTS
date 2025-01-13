@@ -26,6 +26,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 this.child.initialize(uwpe);
             }
+            initializeIsComplete(uwpe) {
+                return this.child.initializeIsComplete(uwpe);
+            }
             draw(uwpe, display) {
                 this._childTransformed.overwriteWith(this.child);
                 this.transformToApply.transform(this._childTransformed);

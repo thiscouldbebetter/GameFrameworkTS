@@ -45,6 +45,8 @@ export class VenueFileUpload implements Venue
 		platformHelper.platformableShow(display);
 	}
 
+	finalizeIsComplete(): boolean { return true; }
+
 	initialize(universe: Universe): void
 	{
 		var display = universe.display;
@@ -97,6 +99,8 @@ export class VenueFileUpload implements Venue
 			inputFileUpload.focus();
 		}
 	}
+
+	initializeIsComplete(): boolean { return true; }
 
 	updateForTimerTick(universe: Universe): void
 	{

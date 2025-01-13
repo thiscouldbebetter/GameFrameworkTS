@@ -33,6 +33,23 @@ export class VisualSelect implements Visual<VisualSelect>
 		}
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		var childrenAreAllInitializedSoFar = true;
+
+		for (var childName in this.childrenByName)
+		{
+			var child = this.childrenByName.get(childName);
+			var childIsInitialized = child.initializeIsComplete(uwpe);
+			if (childIsInitialized == false)
+			{
+				childrenAreAllInitializedSoFar = false;
+			}
+		}
+
+		return childrenAreAllInitializedSoFar;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var childrenToSelectNames =

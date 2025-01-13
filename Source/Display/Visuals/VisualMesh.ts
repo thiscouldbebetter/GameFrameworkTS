@@ -36,7 +36,13 @@ export class VisualMesh implements Visual<VisualMesh>
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
+		// todo
 		// Do nothing.
+	}
+
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true; // todo
 	}
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void

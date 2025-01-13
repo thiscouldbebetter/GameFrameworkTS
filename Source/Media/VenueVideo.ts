@@ -39,15 +39,20 @@ export class VenueVideo implements Venue
 			);
 	}
 
-	draw()
+	draw(): void
 	{
 		// do nothing
 	}
 
-	finalize(universe: Universe) {}
-	initialize(universe: Universe) {}
+	finalize(universe: Universe): void {}
 
-	updateForTimerTick(universe: Universe)
+	finalizeIsComplete(): boolean { return true; }
+
+	initialize(universe: Universe): void {}
+
+	initializeIsComplete(): boolean { return true; }
+
+	updateForTimerTick(universe: Universe): void
 	{
 		if (this.video == null)
 		{
@@ -75,7 +80,9 @@ export class VenueVideo implements Venue
 					var inputPressed = inputsPressed[i];
 					if (inputPressed.isActive)
 					{
-						var actionToInputsMapping = this.actionToInputsMappingsByInputName.get(inputPressed.name);
+						var actionToInputsMapping =
+							this.actionToInputsMappingsByInputName.get(inputPressed.name);
+
 						if (actionToInputsMapping != null)
 						{
 							inputPressed.isActive = false;

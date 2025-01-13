@@ -22,6 +22,37 @@ export class VenueControls implements Venue
 		this.controlRoot = controlRoot;
 		ignoreKeyboardAndGamepadInputs = ignoreKeyboardAndGamepadInputs || false;
 
+		this.actionToInputsMappings =
+			this.constructor_ActionToInputsMappingsBuild();
+
+		if (ignoreKeyboardAndGamepadInputs)
+		{
+			this.actionToInputsMappings.length = 0;
+		}
+
+		var mappingsGet = this.controlRoot.actionToInputsMappings;
+		if (mappingsGet != null)
+		{
+			var mappings = mappingsGet.call(this.controlRoot);
+			this.actionToInputsMappings.push(...mappings);
+		}
+
+		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
+		(
+			this.actionToInputsMappings,
+			(x: ActionToInputsMapping) => x.inputNames
+		);
+
+		// Helper variables.
+
+		this._drawLoc = Disposition.create();
+		this._mouseClickPos = Coords.create();
+		this._mouseMovePos = Coords.create();
+		this._mouseMovePosPrev = Coords.create();
+	}
+
+	constructor_ActionToInputsMappingsBuild(): ActionToInputsMapping[]
+	{
 		var buildGamepadInputs = (inputName: string) =>
 		{
 			var numberOfGamepads = 1; // todo
@@ -41,7 +72,8 @@ export class VenueControls implements Venue
 		var inputNames = Input.Names();
 
 		var inactivate = true;
-		this.actionToInputsMappings = new Array<ActionToInputsMapping>
+
+		return new Array<ActionToInputsMapping>
 		(
 			new ActionToInputsMapping
 			(
@@ -107,31 +139,6 @@ export class VenueControls implements Venue
 				inactivate
 			)
 		);
-
-		if (ignoreKeyboardAndGamepadInputs)
-		{
-			this.actionToInputsMappings.length = 0;
-		}
-
-		var mappingsGet = this.controlRoot.actionToInputsMappings;
-		if (mappingsGet != null)
-		{
-			var mappings = mappingsGet.call(this.controlRoot);
-			this.actionToInputsMappings.push(...mappings);
-		}
-
-		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
-		(
-			this.actionToInputsMappings,
-			(x: ActionToInputsMapping) => x.inputNames
-		);
-
-		// Helper variables.
-
-		this._drawLoc = Disposition.create();
-		this._mouseClickPos = Coords.create();
-		this._mouseMovePos = Coords.create();
-		this._mouseMovePosPrev = Coords.create();
 	}
 
 	static fromControl(controlRoot: ControlBase): VenueControls
@@ -153,9 +160,19 @@ export class VenueControls implements Venue
 		this.controlRoot.finalize(universe);
 	}
 
+	finalizeIsComplete(): boolean
+	{
+		return true; // todo
+	}
+
 	initialize(universe: Universe)
 	{
 		this.controlRoot.initialize(universe);
+	}
+
+	initializeIsComplete(universe: Universe): boolean
+	{
+		return this.controlRoot.initializeIsComplete(universe);
 	}
 
 	updateForTimerTick(universe: Universe)
@@ -164,80 +181,90 @@ export class VenueControls implements Venue
 
 		var inputHelper = universe.inputHelper;
 		var inputsPressed = inputHelper.inputsPressed;
-		var inputNames = Input.Names();
 
 		for (var i = 0; i < inputsPressed.length; i++)
 		{
 			var inputPressed = inputsPressed[i];
 			if (inputPressed.isActive)
 			{
-				var inputPressedName = inputPressed.name;
+				this.updateForTimerTick_InputPressedIsActive
+				(
+					universe, inputPressed
+				);
+			}
+		}
+	}
 
-				var mapping = this.actionToInputsMappingsByInputName.get(inputPressedName);
+	updateForTimerTick_InputPressedIsActive(universe: Universe, inputPressed: Input): void
+	{
+		var inputHelper = universe.inputHelper;
+		var inputNames = Input.Names();
 
-				if (inputPressedName.startsWith("Mouse") == false)
+		var inputPressedName = inputPressed.name;
+
+		var mapping = this.actionToInputsMappingsByInputName.get(inputPressedName);
+
+		if (inputPressedName.startsWith("Mouse") == false)
+		{
+			if (mapping == null)
+			{
+				// Pass the raw input, to allow for text entry.
+				var wasActionHandled =
+					this.controlRoot.actionHandle(inputPressedName, universe);
+				if (wasActionHandled)
 				{
-					if (mapping == null)
-					{
-						// Pass the raw input, to allow for text entry.
-						var wasActionHandled = this.controlRoot.actionHandle(inputPressedName, universe);
-						if (wasActionHandled)
-						{
-							inputPressed.isActive = false;
-						}
-					}
-					else
-					{
-						var actionName = mapping.actionName;
-						this.controlRoot.actionHandle(actionName, universe);
-						if (mapping.inactivateInputWhenActionPerformed)
-						{
-							inputPressed.isActive = false;
-						}
-					}
+					inputPressed.isActive = false;
 				}
-				else if (inputPressedName == inputNames.MouseClick)
+			}
+			else
+			{
+				var actionName = mapping.actionName;
+				this.controlRoot.actionHandle(actionName, universe);
+				if (mapping.inactivateInputWhenActionPerformed)
 				{
-					this._mouseClickPos.overwriteWith
-					(
-						inputHelper.mouseClickPos
-					).divide
-					(
-						universe.display.scaleFactor()
-					);
-					var wasClickHandled = this.controlRoot.mouseClick(this._mouseClickPos);
-					if (wasClickHandled)
-					{
-						//inputHelper.inputRemove(inputPressed);
-						inputPressed.isActive = false;
-					}
+					inputPressed.isActive = false;
 				}
-				else if (inputPressedName == inputNames.MouseMove)
-				{
-					this._mouseMovePos.overwriteWith
-					(
-						inputHelper.mouseMovePos
-					).divide
-					(
-						universe.display.scaleFactor()
-					);
-					this._mouseMovePosPrev.overwriteWith
-					(
-						inputHelper.mouseMovePosPrev
-					).divide
-					(
-						universe.display.scaleFactor()
-					);
+			}
+		}
+		else if (inputPressedName == inputNames.MouseClick)
+		{
+			this._mouseClickPos.overwriteWith
+			(
+				inputHelper.mouseClickPos
+			).divide
+			(
+				universe.display.scaleFactor()
+			);
+			var wasClickHandled =
+				this.controlRoot.mouseClick(this._mouseClickPos);
+			if (wasClickHandled)
+			{
+				//inputHelper.inputRemove(inputPressed);
+				inputPressed.isActive = false;
+			}
+		}
+		else if (inputPressedName == inputNames.MouseMove)
+		{
+			this._mouseMovePos.overwriteWith
+			(
+				inputHelper.mouseMovePos
+			).divide
+			(
+				universe.display.scaleFactor()
+			);
+			this._mouseMovePosPrev.overwriteWith
+			(
+				inputHelper.mouseMovePosPrev
+			).divide
+			(
+				universe.display.scaleFactor()
+			);
 
-					this.controlRoot.mouseMove
-					(
-						this._mouseMovePos //, this._mouseMovePosPrev
-					);
-				}
-
-			} // end if isActive
-
-		} // end for
+			this.controlRoot.mouseMove
+			(
+				this._mouseMovePos //, this._mouseMovePosPrev
+			);
+		}
 
 	}
 

@@ -23,6 +23,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // Do nothing.
             }
+            initializeIsComplete(uwpe) {
+                return true; // todo
+            }
             draw(uwpe, display) {
                 if (this.shouldConvertToImage) {
                     if (this.visualImage == null) {

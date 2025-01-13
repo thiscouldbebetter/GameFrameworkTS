@@ -59,6 +59,19 @@ var ThisCouldBeBetter;
             actionHandle(actionName) {
                 return false; // wasActionHandled
             }
+            font(universe) {
+                return this.fontNameAndHeight.font(universe);
+            }
+            initialize(universe) {
+                var font = this.font(universe);
+                var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe);
+                font.load(uwpe, null);
+            }
+            initializeIsComplete(universe) {
+                var font = this.font(universe);
+                var fontIsInitialized = font.isLoaded;
+                return fontIsInitialized;
+            }
             isEnabled() {
                 return false;
             }

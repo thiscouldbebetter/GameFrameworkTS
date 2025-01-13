@@ -72,7 +72,7 @@ var ThisCouldBeBetter;
                 this.soundHelper.initialize(this.mediaLibrary.sounds);
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
                 var venueInitial = null;
-                if (this.debuggingModeName == "SkipOpening") {
+                if (this.debuggingModeName == GameFramework.DebuggingModeNames.SkipOpening) {
                     var profile = GameFramework.Profile.anonymous();
                     this.profileSet(profile);
                     venueInitial = this.worldCreator.toVenue(this);
@@ -125,8 +125,11 @@ var ThisCouldBeBetter;
                     venueCurrent.initialize(this);
                 }
                 var venueCurrent = this.venueCurrent();
-                venueCurrent.updateForTimerTick(this);
-                this.displayRecorder.updateForTimerTick(this);
+                var venueCurrentIsInitialized = venueCurrent.initializeIsComplete(this);
+                if (venueCurrentIsInitialized) {
+                    venueCurrent.updateForTimerTick(this);
+                    this.displayRecorder.updateForTimerTick(this);
+                }
             }
             v() {
                 // Convenience accessor.

@@ -436,9 +436,23 @@ export class ControlContainer extends ControlBase
 		this.children.forEach(x => x.finalize(universe) );
 	}
 
+	finalizeIsComplete(): boolean
+	{
+		var childrenAreAllFinalized =
+			(this.children.some(x => x.finalizeIsComplete() == false) == false);
+		return childrenAreAllFinalized;
+	}
+
 	initialize(universe: Universe): void
 	{
 		this.children.forEach(x => x.initialize(universe) );
+	}
+
+	initializeIsComplete(universe: Universe): boolean
+	{
+		var childrenAreAllInitialized =
+			(this.children.some(x => x.initializeIsComplete(universe) == false) == false);
+		return childrenAreAllInitialized;
 	}
 
 	draw

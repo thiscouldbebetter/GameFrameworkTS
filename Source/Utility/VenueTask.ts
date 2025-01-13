@@ -46,7 +46,11 @@ export class VenueTask<TResult> implements Venue
 
 	finalize(universe: Universe) {}
 
+	finalizeIsComplete(): boolean { return true; }
+
 	initialize(universe: Universe) {}
+
+	initializeIsComplete(): boolean { return true; }
 
 	updateForTimerTick(universe: Universe)
 	{

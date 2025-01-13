@@ -56,10 +56,20 @@ export class VenueFader implements Venue
 		universe.venueNextSet(venueToFadeTo);
 	}
 
+	finalizeIsComplete(): boolean { return true; }
+
 	initialize(universe: Universe): void
 	{
 		var venueToFadeTo = this.venueToFadeTo();
 		venueToFadeTo.initialize(universe);
+	}
+
+	initializeIsComplete(universe: Universe): boolean
+	{
+		var venueCurrent = this.venueCurrent();
+		var venueCurrentIsInitialized =
+			venueCurrent.initializeIsComplete(universe);
+		return venueCurrentIsInitialized;
 	}
 
 	updateForTimerTick(universe: Universe): void

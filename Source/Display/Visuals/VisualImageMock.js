@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // Do nothing.
             }
+            initializeIsComplete(uwpe) {
+                return true;
+            }
             draw(uwpe, display) {
                 // Do nothing.
             }

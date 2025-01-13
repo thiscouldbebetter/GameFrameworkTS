@@ -13,6 +13,10 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 this.children.forEach(x => x.initialize(uwpe));
             }
+            initializeIsComplete(uwpe) {
+                var childrenAreAllInitialized = (this.children.some(x => x.initializeIsComplete(uwpe) == false) == false);
+                return childrenAreAllInitialized;
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawPos = GameFramework.Locatable.of(entity).loc.pos;

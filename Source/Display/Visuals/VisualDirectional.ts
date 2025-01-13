@@ -60,6 +60,15 @@ export class VisualDirectional implements Visual<VisualDirectional>
 		this.visualsForDirections.forEach(x => x.initialize(uwpe) );
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		var childrenAreAllInitialized =
+			this.visualForNoDirection.initializeIsComplete(uwpe)
+			&& this.visualsForDirections.some(x => x.initializeIsComplete(uwpe) == false) == false;
+
+		return childrenAreAllInitialized;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

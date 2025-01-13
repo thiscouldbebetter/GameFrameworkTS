@@ -407,7 +407,8 @@ class PlaceBuilderDemo // Main.
         var terrainNameToVisual = (terrainName) => {
             var imageName = "Terrain-" + terrainName;
             var terrainVisualImageCombined = new VisualImageFromLibrary(imageName);
-            var imageSizeInPixels = terrainVisualImageCombined.image(universe).sizeInPixels;
+            var image = terrainVisualImageCombined.image(universe);
+            var imageSizeInPixels = image.sizeInPixels;
             var imageSizeInTiles = new Coords(5, 5, 1);
             var tileSizeInPixels = imageSizeInPixels.clone().divide(imageSizeInTiles);
             var tileSizeInPixelsHalf = tileSizeInPixels.clone().half();

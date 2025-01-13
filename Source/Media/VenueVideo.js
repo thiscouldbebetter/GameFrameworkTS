@@ -21,7 +21,9 @@ var ThisCouldBeBetter;
                 // do nothing
             }
             finalize(universe) { }
+            finalizeIsComplete() { return true; }
             initialize(universe) { }
+            initializeIsComplete() { return true; }
             updateForTimerTick(universe) {
                 if (this.video == null) {
                     universe.platformHelper.platformableHide(universe.display);

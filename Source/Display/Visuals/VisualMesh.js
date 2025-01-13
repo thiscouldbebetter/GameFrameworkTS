@@ -22,7 +22,11 @@ var ThisCouldBeBetter;
             }
             // Visual.
             initialize(uwpe) {
+                // todo
                 // Do nothing.
+            }
+            initializeIsComplete(uwpe) {
+                return true; // todo
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;

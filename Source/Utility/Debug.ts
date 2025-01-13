@@ -12,4 +12,9 @@ export class Debug
 	}
 }
 
+export class DebuggingModeNames
+{
+	static SkipOpening: string = "SkipOpening";
+}
+
 }

@@ -41,6 +41,11 @@ export class VisualImageScaled implements VisualImage
 		this.visualImage.initialize(uwpe);
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return this.visualImage.initializeIsComplete(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var universe = uwpe.universe;

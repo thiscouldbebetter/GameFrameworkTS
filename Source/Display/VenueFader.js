@@ -30,9 +30,15 @@ var ThisCouldBeBetter;
                 var venueToFadeTo = this.venuesToFadeFromAndTo[1];
                 universe.venueNextSet(venueToFadeTo);
             }
+            finalizeIsComplete() { return true; }
             initialize(universe) {
                 var venueToFadeTo = this.venueToFadeTo();
                 venueToFadeTo.initialize(universe);
+            }
+            initializeIsComplete(universe) {
+                var venueCurrent = this.venueCurrent();
+                var venueCurrentIsInitialized = venueCurrent.initializeIsComplete(universe);
+                return venueCurrentIsInitialized;
             }
             updateForTimerTick(universe) {
                 this.draw(universe);

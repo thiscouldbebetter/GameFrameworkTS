@@ -156,8 +156,19 @@ export class VisualAnimation implements Visual<VisualAnimation>
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		throw new Error("todo");
+		this.frames.forEach(x => x.initialize(uwpe) );
 	}
+
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		if (this._initializeIsComplete == false)
+		{
+			this._initializeIsComplete =
+				(this.frames.some(x => x.initializeIsComplete(uwpe) == false) == false);
+		}
+		return this._initializeIsComplete;
+	}
+	private _initializeIsComplete: boolean;
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{

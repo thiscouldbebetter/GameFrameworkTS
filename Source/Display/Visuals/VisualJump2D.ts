@@ -40,6 +40,16 @@ export class VisualJump2D implements Visual<VisualJump2D>
 		this.visualShadow.initialize(uwpe);
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		var childrenAreInitialized =
+			this.visualJumper.initializeIsComplete(uwpe)
+			&& this.visualShadow.initializeIsComplete(uwpe);
+
+		return childrenAreInitialized;
+	}
+
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var world = uwpe.world;

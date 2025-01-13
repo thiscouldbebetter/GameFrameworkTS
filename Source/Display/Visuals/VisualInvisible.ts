@@ -39,6 +39,11 @@ export class VisualInvisible implements Visual<VisualInvisible>
 		this.child.initialize(uwpe);
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return this.child.initializeIsComplete(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		// Do nothing.

@@ -81,7 +81,14 @@ var ThisCouldBeBetter;
             }
             // Visual.
             initialize(uwpe) {
-                throw new Error("todo");
+                this.frames.forEach(x => x.initialize(uwpe));
+            }
+            initializeIsComplete(uwpe) {
+                if (this._initializeIsComplete == false) {
+                    this._initializeIsComplete =
+                        (this.frames.some(x => x.initializeIsComplete(uwpe) == false) == false);
+                }
+                return this._initializeIsComplete;
             }
             draw(uwpe, display) {
                 var world = uwpe.world;

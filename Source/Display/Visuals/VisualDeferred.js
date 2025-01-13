@@ -17,6 +17,11 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // Do nothing.
             }
+            initializeIsComplete(uwpe) {
+                var visual = this.visualGet(uwpe);
+                var visualIsInitialized = visual.initializeIsComplete(uwpe);
+                return visualIsInitialized;
+            }
             draw(uwpe, display) {
                 var visual = this.visualGet(uwpe);
                 visual.draw(uwpe, display);

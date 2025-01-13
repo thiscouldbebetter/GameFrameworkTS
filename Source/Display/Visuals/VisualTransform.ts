@@ -45,6 +45,11 @@ export class VisualTransform implements Visual<VisualTransform>
 		this.child.initialize(uwpe);
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return this.child.initializeIsComplete(uwpe);
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		this._childTransformed.overwriteWith(this.child);

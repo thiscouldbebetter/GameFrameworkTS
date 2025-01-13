@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // todo - Initialize the sound.
             }
+            initializeIsComplete(uwpe) {
+                return true; // todo
+            }
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;

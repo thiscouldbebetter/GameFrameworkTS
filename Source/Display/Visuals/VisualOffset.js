@@ -20,6 +20,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 this.child.initialize(uwpe);
             }
+            initializeIsComplete(uwpe) {
+                return this.child.initializeIsComplete(uwpe);
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawablePos = GameFramework.Locatable.of(entity).loc.pos;

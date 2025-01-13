@@ -9,6 +9,7 @@ var ThisCouldBeBetter;
                 this.colorToOverlayBetweenChildren = colorToOverlayBetweenChildren;
             }
             finalize(universe) { }
+            finalizeIsComplete() { return true; }
             initialize(universe) {
                 for (var i = 0; i < this.children.length; i++) {
                     var child = this.children[i];
@@ -17,8 +18,13 @@ var ThisCouldBeBetter;
                     }
                 }
             }
+            initializeIsComplete(universe) {
+                var childrenAreInitialized = this.children.some(x => x.initializeIsComplete(universe) == false) == false;
+                return childrenAreInitialized;
+            }
             updateForTimerTick(universe) {
-                this.children[this.children.length - 1].updateForTimerTick(universe);
+                var childTop = this.children[this.children.length - 1];
+                childTop.updateForTimerTick(universe);
             }
             draw(universe) {
                 for (var i = 0; i < this.children.length; i++) {

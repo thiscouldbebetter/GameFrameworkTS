@@ -177,6 +177,11 @@ export class ControlButton<TContext> extends ControlBase
 		return this;
 	}
 
+	font(universe: Universe): Font
+	{
+		return this.fontNameAndHeight.font(universe);
+	}
+
 	isEnabled(): boolean
 	{
 		return this._isEnabled.get();
@@ -186,6 +191,20 @@ export class ControlButton<TContext> extends ControlBase
 	{
 		this.hasBorder = value;
 		return this;
+	}
+
+	initialize(universe: Universe): void
+	{
+		var font = this.font(universe);
+		var uwpe = UniverseWorldPlaceEntities.fromUniverse(universe);
+		font.load(uwpe, null);
+	}
+
+	initializeIsComplete(universe: Universe): boolean
+	{
+		var font = this.font(universe);
+		var fontIsInitialized = font.isLoaded;
+		return fontIsInitialized;
 	}
 
 	isEnabledSet

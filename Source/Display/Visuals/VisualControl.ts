@@ -23,6 +23,11 @@ export class VisualControl implements Visual<VisualControl>
 		// Do nothing.
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var universe = uwpe.universe;

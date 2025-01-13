@@ -24,7 +24,9 @@ var ThisCouldBeBetter;
                 this.venueInner.draw(universe);
             }
             finalize(universe) { }
+            finalizeIsComplete() { return true; }
             initialize(universe) { }
+            initializeIsComplete() { return true; }
             updateForTimerTick(universe) {
                 this.venueInner.updateForTimerTick(universe);
                 this.timeStarted = new Date();

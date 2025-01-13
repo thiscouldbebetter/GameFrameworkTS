@@ -48,12 +48,25 @@ var ThisCouldBeBetter;
                 this._click = value;
                 return this;
             }
+            font(universe) {
+                return this.fontNameAndHeight.font(universe);
+            }
             isEnabled() {
                 return this._isEnabled.get();
             }
             hasBorderSet(value) {
                 this.hasBorder = value;
                 return this;
+            }
+            initialize(universe) {
+                var font = this.font(universe);
+                var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe);
+                font.load(uwpe, null);
+            }
+            initializeIsComplete(universe) {
+                var font = this.font(universe);
+                var fontIsInitialized = font.isLoaded;
+                return fontIsInitialized;
             }
             isEnabledSet(value) {
                 this._isEnabled = value;

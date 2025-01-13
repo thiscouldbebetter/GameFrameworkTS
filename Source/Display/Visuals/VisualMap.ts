@@ -50,6 +50,11 @@ export class VisualMap implements Visual<VisualMap>
 		// Do nothing.
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true; // todo
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		if (this.shouldConvertToImage)

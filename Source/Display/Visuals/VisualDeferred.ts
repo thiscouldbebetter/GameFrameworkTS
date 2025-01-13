@@ -33,6 +33,13 @@ export class VisualDeferred implements Visual<VisualDeferred>
 		// Do nothing.
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		var visual = this.visualGet(uwpe);
+		var visualIsInitialized = visual.initializeIsComplete(uwpe);
+		return visualIsInitialized;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var visual = this.visualGet(uwpe);

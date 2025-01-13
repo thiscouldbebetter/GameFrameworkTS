@@ -45,6 +45,11 @@ export class VisualParticles implements Visual<VisualParticles>
 		// Do nothing.
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true; // todo
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null)

@@ -34,6 +34,11 @@ export class VisualSound implements Visual<VisualSound>
 		// todo - Initialize the sound.
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true; // todo
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var universe = uwpe.universe;

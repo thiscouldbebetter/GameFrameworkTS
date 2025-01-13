@@ -20,6 +20,11 @@ var ThisCouldBeBetter;
                 this.visualJumper.initialize(uwpe);
                 this.visualShadow.initialize(uwpe);
             }
+            initializeIsComplete(uwpe) {
+                var childrenAreInitialized = this.visualJumper.initializeIsComplete(uwpe)
+                    && this.visualShadow.initializeIsComplete(uwpe);
+                return childrenAreInitialized;
+            }
             draw(uwpe, display) {
                 var world = uwpe.world;
                 var entity = uwpe.entity;

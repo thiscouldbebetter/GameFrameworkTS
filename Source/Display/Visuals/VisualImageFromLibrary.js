@@ -31,6 +31,11 @@ var ThisCouldBeBetter;
                 var image = this.image(uwpe.universe);
                 image.load(uwpe, null);
             }
+            initializeIsComplete(uwpe) {
+                var image = this.image(uwpe.universe);
+                var imageIsLoaded = image.isLoaded;
+                return imageIsLoaded;
+            }
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;

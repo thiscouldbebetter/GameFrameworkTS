@@ -24,6 +24,13 @@ export class VisualStack implements Visual<VisualStack>
 		this.children.forEach(x => x.initialize(uwpe) );
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		var childrenAreAllInitialized =
+			(this.children.some(x => x.initializeIsComplete(uwpe) == false) == false);
+		return childrenAreAllInitialized;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var entity = uwpe.entity;

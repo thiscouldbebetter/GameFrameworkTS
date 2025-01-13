@@ -15,6 +15,8 @@ export class VenueLayered implements Venue
 
 	finalize(universe: Universe) {}
 
+	finalizeIsComplete(): boolean { return true; }
+
 	initialize(universe: Universe)
 	{
 		for (var i = 0; i < this.children.length; i++)
@@ -27,9 +29,20 @@ export class VenueLayered implements Venue
 		}
 	}
 
+	initializeIsComplete(universe: Universe): boolean
+	{
+		var childrenAreInitialized =
+			this.children.some
+			(
+				x => x.initializeIsComplete(universe) == false
+			) == false;
+		return childrenAreInitialized;
+	}
+
 	updateForTimerTick(universe: Universe)
 	{
-		this.children[this.children.length - 1].updateForTimerTick(universe);
+		var childTop = this.children[this.children.length - 1];
+		childTop.updateForTimerTick(universe);
 	}
 
 	draw(universe: Universe)

@@ -197,6 +197,11 @@ export class VisualNetwork implements Visual<VisualNetwork>
 		// Do nothing.
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display)
 	{
 		var e = uwpe.entity;

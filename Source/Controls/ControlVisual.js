@@ -38,6 +38,11 @@ var ThisCouldBeBetter;
                 var visualToDraw = this.visual.get();
                 visualToDraw.initialize(GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe));
             }
+            initializeIsComplete(universe) {
+                var visualToDraw = this.visual.get();
+                var visualToDrawIsLoaded = visualToDraw.initializeIsComplete(GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe));
+                return visualToDrawIsLoaded;
+            }
             isEnabled() {
                 return false;
             }

@@ -35,6 +35,11 @@ export class VisualCrosshairs implements Visual<VisualCrosshairs>
 		// Do nothing.
 	}
 
+	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
+	{
+		return true;
+	}
+
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;

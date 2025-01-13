@@ -36,6 +36,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 // Do nothing.
             }
+            initializeIsComplete(uwpe) {
+                return true;
+            }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
                 var drawPos = this._drawPos.overwriteWith(GameFramework.Locatable.of(entity).loc.pos);

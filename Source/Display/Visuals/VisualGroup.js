@@ -11,6 +11,10 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 this.children.forEach(x => x.initialize(uwpe));
             }
+            initializeIsComplete(uwpe) {
+                var childrenAreAllInitialized = (this.children.some(x => x.initializeIsComplete(uwpe) == false) == false);
+                return childrenAreAllInitialized;
+            }
             draw(uwpe, display) {
                 for (var i = 0; i < this.children.length; i++) {
                     var child = this.children[i];

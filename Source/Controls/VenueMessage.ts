@@ -139,7 +139,11 @@ export class VenueMessage<TContext> implements Venue
 
 	finalize(universe: Universe): void {}
 
+	finalizeIsComplete(): boolean { return true; }
+
 	initialize(universe: Universe): void {}
+
+	initializeIsComplete(): boolean { return true; }
 
 	updateForTimerTick(universe: Universe): void
 	{

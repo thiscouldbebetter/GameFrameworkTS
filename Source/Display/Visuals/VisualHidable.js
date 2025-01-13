@@ -28,6 +28,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) {
                 this.child.initialize(uwpe);
             }
+            initializeIsComplete(uwpe) {
+                return this.child.initializeIsComplete(uwpe);
+            }
             draw(uwpe, display) {
                 var isVisible = this.isVisible(uwpe);
                 if (isVisible) {
