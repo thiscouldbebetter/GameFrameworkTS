@@ -61,7 +61,7 @@ var ThisCouldBeBetter;
                 if (this.video.isFinished) {
                     var display = universe.display;
                     var colorBlack = GameFramework.Color.Instances().Black;
-                    display.drawBackground(colorBlack, colorBlack);
+                    display.drawBackgroundWithColorsBackAndBorder(colorBlack, null);
                     universe.platformHelper.platformableShow(display);
                     universe.venueTransitionTo(this.venueNext);
                 }

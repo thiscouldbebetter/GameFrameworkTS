@@ -136,6 +136,18 @@ export class Display2D implements Display
 		return colorOut;
 	}
 
+	colorBackSet(value: Color): Display
+	{
+		this.colorBack = value;
+		return this;
+	}
+
+	colorForeSet(value: Color): Display
+	{
+		this.colorFore = value;
+		return this;
+	}
+
 	displayToUse(): Display
 	{
 		return this;
@@ -206,14 +218,25 @@ export class Display2D implements Display
 		}
 	}
 
-	drawBackground(colorBack: Color, colorBorder: Color): void
+	drawBackground(): void // colorBack: Color, colorBorder: Color): void
+	{
+		this.drawBackgroundWithColorsBackAndBorder
+		(
+			this.colorBack, this.colorFore
+		);
+	}
+
+	drawBackgroundWithColorsBackAndBorder
+	(
+		colorBack: Color, colorBorder: Color
+	): void
 	{
 		this.drawRectangle
 		(
 			this._zeroes,
 			this.sizeDefault(), // Automatic scaling.
-			colorBack || this.colorBack,
-			colorBorder || this.colorFore
+			colorBack,
+			colorBorder
 		);
 	}
 

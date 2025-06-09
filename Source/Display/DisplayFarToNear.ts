@@ -69,6 +69,18 @@ export class DisplayFarToNear implements Display
 		return this.displayInner.colorAtPos(pos, colorOut);
 	}
 
+	colorBackSet(value: Color): Display
+	{
+		this.colorBack = value;
+		return this;
+	}
+
+	colorForeSet(value: Color): Display
+	{
+		this.colorFore = value;
+		return this;
+	}
+
 	displayToUse(): Display
 	{
 		return this.displayInner.displayToUse();
@@ -94,12 +106,24 @@ export class DisplayFarToNear implements Display
 		);
 	}
 
-	drawBackground(colorBack: Color, colorBorder: Color): void
+	drawBackground(): void
+	{
+		this.drawBackgroundWithColorsBackAndBorder(this.colorBack, this.colorFore)
+	}
+
+	drawBackgroundWithColorsBackAndBorder
+	(
+		colorBack: Color, colorBorder: Color
+	): void
 	{
 		this.drawMethodAddAtDistance
 		(
 			Number.POSITIVE_INFINITY,
-			() => this.displayInner.drawBackground(colorBack, colorBorder)
+			() =>
+				this.displayInner.drawBackgroundWithColorsBackAndBorder
+				(
+					colorBack, colorBorder
+				)
 		);
 	}
 

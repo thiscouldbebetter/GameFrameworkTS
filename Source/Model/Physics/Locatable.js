@@ -10,6 +10,12 @@ var ThisCouldBeBetter;
             static create() {
                 return new Locatable(null);
             }
+            static default() {
+                return new Locatable(GameFramework.Disposition.default());
+            }
+            static fromLoc(loc) {
+                return new Locatable(loc);
+            }
             static fromPos(pos) {
                 return new Locatable(GameFramework.Disposition.fromPos(pos));
             }

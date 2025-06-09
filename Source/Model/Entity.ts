@@ -18,6 +18,15 @@ export class Entity implements Clonable<Entity>
 		this.propertiesByName = new Map<string, any>(this.properties.map(x => [x.propertyName(), x] ) );
 	}
 
+	static fromNameAndProperties
+	(
+		name: string,
+		properties: EntityPropertyBase[]
+	): Entity
+	{
+		return new Entity(name, properties);
+	}
+
 	static fromProperty(property: EntityPropertyBase): Entity
 	{
 		return new Entity(null, [ property ] );

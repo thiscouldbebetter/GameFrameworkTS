@@ -68,6 +68,14 @@ var ThisCouldBeBetter;
                 colorOut.overwriteWithComponentsRGBA255(colorAsComponentsRGBA);
                 return colorOut;
             }
+            colorBackSet(value) {
+                this.colorBack = value;
+                return this;
+            }
+            colorForeSet(value) {
+                this.colorFore = value;
+                return this;
+            }
             displayToUse() {
                 return this;
             }
@@ -98,9 +106,12 @@ var ThisCouldBeBetter;
                     this.graphics.stroke();
                 }
             }
-            drawBackground(colorBack, colorBorder) {
+            drawBackground() {
+                this.drawBackgroundWithColorsBackAndBorder(this.colorBack, this.colorFore);
+            }
+            drawBackgroundWithColorsBackAndBorder(colorBack, colorBorder) {
                 this.drawRectangle(this._zeroes, this.sizeDefault(), // Automatic scaling.
-                colorBack || this.colorBack, colorBorder || this.colorFore);
+                colorBack, colorBorder);
             }
             drawCircle(center, radius, colorFill, colorBorder, borderThickness) {
                 var drawPos = this._drawPos.overwriteWith(center);

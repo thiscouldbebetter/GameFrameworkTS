@@ -37,6 +37,14 @@ var ThisCouldBeBetter;
             colorAtPos(pos, colorOut) {
                 throw new Error("Not yet implemented!");
             }
+            colorBackSet(value) {
+                this.colorBack = value;
+                return this;
+            }
+            colorForeSet(value) {
+                this.colorFore = value;
+                return this;
+            }
             displayToUse() {
                 return this;
             }
@@ -193,8 +201,11 @@ var ThisCouldBeBetter;
             drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
                 this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
             }
-            drawBackground(colorBack, colorBorder) {
-                this._display2DOverlay.drawBackground(colorBack, colorBorder);
+            drawBackground() {
+                this._display2DOverlay.drawBackground();
+            }
+            drawBackgroundWithColorsBackAndBorder(colorBack, colorBorder) {
+                this._display2DOverlay.drawBackgroundWithColorsBackAndBorder(colorBack, colorBorder);
             }
             drawCircle(center, radius, colorFill, colorBorder, borderThickness) {
                 this._display2DOverlay.drawCircle(center, radius, colorFill, colorBorder, borderThickness);

@@ -22,7 +22,7 @@ var ThisCouldBeBetter;
                 platformHelper.platformableRemove(this);
                 var display = universe.display;
                 var colorBlack = GameFramework.Color.Instances().Black;
-                display.drawBackground(colorBlack, null);
+                display.drawBackgroundWithColorsBackAndBorder(colorBlack, null);
                 platformHelper.platformableShow(display);
             }
             finalizeIsComplete() { return true; }

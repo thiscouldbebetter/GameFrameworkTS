@@ -38,6 +38,14 @@ var ThisCouldBeBetter;
             colorAtPos(pos, colorOut) {
                 return this.displayInner.colorAtPos(pos, colorOut);
             }
+            colorBackSet(value) {
+                this.colorBack = value;
+                return this;
+            }
+            colorForeSet(value) {
+                this.colorFore = value;
+                return this;
+            }
             displayToUse() {
                 return this.displayInner.displayToUse();
             }
@@ -45,8 +53,11 @@ var ThisCouldBeBetter;
                 center = center.clone();
                 this.drawMethodAddAtDistance(center.z, () => this.displayInner.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder));
             }
-            drawBackground(colorBack, colorBorder) {
-                this.drawMethodAddAtDistance(Number.POSITIVE_INFINITY, () => this.displayInner.drawBackground(colorBack, colorBorder));
+            drawBackground() {
+                this.drawBackgroundWithColorsBackAndBorder(this.colorBack, this.colorFore);
+            }
+            drawBackgroundWithColorsBackAndBorder(colorBack, colorBorder) {
+                this.drawMethodAddAtDistance(Number.POSITIVE_INFINITY, () => this.displayInner.drawBackgroundWithColorsBackAndBorder(colorBack, colorBorder));
             }
             drawCircle(center, radius, colorFill, colorBorder, borderThickness) {
                 center = center.clone();

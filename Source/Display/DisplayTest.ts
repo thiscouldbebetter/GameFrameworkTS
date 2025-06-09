@@ -54,6 +54,18 @@ export class DisplayTest implements Display
 		throw new Error("Not implemented!");
 	}
 
+	colorBackSet(value: Color): Display
+	{
+		this.colorBack = value;
+		return this;
+	}
+
+	colorForeSet(value: Color): Display
+	{
+		this.colorFore = value;
+		return this;
+	}
+
 	displayToUse(): Display
 	{
 		return this;
@@ -67,7 +79,10 @@ export class DisplayTest implements Display
 	): void
 	{}
 
-	drawBackground(colorBack: Color, colorBorder: Color): void
+	drawBackground(): void
+	{}
+
+	drawBackgroundWithColorsBackAndBorder(colorBack: Color, colorBorder: Color): void
 	{}
 
 	drawCircle

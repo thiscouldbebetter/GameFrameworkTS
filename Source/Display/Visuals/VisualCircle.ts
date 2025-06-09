@@ -29,6 +29,11 @@ export class VisualCircle implements Visual<VisualCircle>
 		return new VisualCircle(10, null, Color.Instances().Cyan, null);
 	}
 
+	static fromRadius(radius: number): VisualCircle
+	{
+		return VisualCircle.fromRadiusAndColorBorder(radius, Color.Instances().Cyan);
+	}
+
 	static fromRadiusAndColorBorder(radius: number, colorBorder: Color): VisualCircle
 	{
 		return new VisualCircle(radius, null, colorBorder, null);

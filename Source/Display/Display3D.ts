@@ -110,6 +110,18 @@ export class Display3D implements Display
 		throw new Error("Not yet implemented!");
 	}
 
+	colorBackSet(value: Color): Display
+	{
+		this.colorBack = value;
+		return this;
+	}
+
+	colorForeSet(value: Color): Display
+	{
+		this.colorFore = value;
+		return this;
+	}
+
 	displayToUse(): Display
 	{
 		return this;
@@ -468,9 +480,20 @@ export class Display3D implements Display
 		this._display2DOverlay.drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder);
 	}
 
-	drawBackground(colorBack: Color, colorBorder: Color): void
+	drawBackground(): void
 	{
-		this._display2DOverlay.drawBackground(colorBack, colorBorder);
+		this._display2DOverlay.drawBackground();
+	}
+
+	drawBackgroundWithColorsBackAndBorder
+	(
+		colorBack: Color, colorBorder: Color
+	): void
+	{
+		this._display2DOverlay.drawBackgroundWithColorsBackAndBorder
+		(
+			colorBack, colorBorder
+		);
 	}
 
 	drawCircle

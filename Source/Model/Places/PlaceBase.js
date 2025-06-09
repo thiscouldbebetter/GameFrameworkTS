@@ -50,7 +50,7 @@ var ThisCouldBeBetter;
             draw(universe, world, display) {
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseWorldAndPlace(universe, world, this);
                 var colorBlack = GameFramework.Color.Instances().Black;
-                display.drawBackground(colorBlack, colorBlack);
+                display.drawBackgroundWithColorsBackAndBorder(colorBlack, null);
                 var cameraEntity = GameFramework.Camera.entityFromPlace(this);
                 if (cameraEntity == null) {
                     var drawables = GameFramework.Drawable.entitiesFromPlace(this);

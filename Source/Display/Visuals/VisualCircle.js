@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
                 // Convenience method for rapid prototyping.
                 return new VisualCircle(10, null, GameFramework.Color.Instances().Cyan, null);
             }
+            static fromRadius(radius) {
+                return VisualCircle.fromRadiusAndColorBorder(radius, GameFramework.Color.Instances().Cyan);
+            }
             static fromRadiusAndColorBorder(radius, colorBorder) {
                 return new VisualCircle(radius, null, colorBorder, null);
             }

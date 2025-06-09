@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this.properties = properties;
                 this.propertiesByName = new Map(this.properties.map(x => [x.propertyName(), x]));
             }
+            static fromNameAndProperties(name, properties) {
+                return new Entity(name, properties);
+            }
             static fromProperty(property) {
                 return new Entity(null, [property]);
             }

@@ -106,7 +106,7 @@ export class VenueVideo implements Venue
 		{
 			var display = universe.display;
 			var colorBlack = Color.Instances().Black;
-			display.drawBackground(colorBlack, colorBlack);
+			display.drawBackgroundWithColorsBackAndBorder(colorBlack, null);
 			universe.platformHelper.platformableShow(display);
 			universe.venueTransitionTo(this.venueNext);
 		}

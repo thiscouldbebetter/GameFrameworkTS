@@ -27,11 +27,20 @@ var ThisCouldBeBetter;
             colorAtPos(pos, colorOut) {
                 throw new Error("Not implemented!");
             }
+            colorBackSet(value) {
+                this.colorBack = value;
+                return this;
+            }
+            colorForeSet(value) {
+                this.colorFore = value;
+                return this;
+            }
             displayToUse() {
                 return this;
             }
             drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }
-            drawBackground(colorBack, colorBorder) { }
+            drawBackground() { }
+            drawBackgroundWithColorsBackAndBorder(colorBack, colorBorder) { }
             drawCircle(center, radius, colorFill, colorBorder, borderThickness) { }
             drawCircleWithGradient(center, radius, gradientFill, colorBorder) { }
             drawCrosshairs(center, numberOfLines, radiusOuter, radiusInner, color, lineThickness) { }

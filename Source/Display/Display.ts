@@ -13,6 +13,8 @@ export interface Display
 
 	clear(): void;
 	colorAtPos(pos: Coords, colorOut: Color): Color;
+	colorBackSet(value: Color): Display;
+	colorForeSet(value: Color): Display;
 	displayToUse() : Display;
 	drawArc
 	(
@@ -20,7 +22,11 @@ export interface Display
 		angleStartInTurns: number, angleStopInTurns: number, colorFill: Color,
 		colorBorder: Color
 	): void;
-	drawBackground(colorBack: Color, colorBorder: Color): void;
+	drawBackground(): void;
+	drawBackgroundWithColorsBackAndBorder
+	(
+		colorBack: Color, colorBorder: Color
+	): void;
 	drawCircle
 	(
 		center: Coords, radius: number, colorFill: Color, colorBorder: Color,
