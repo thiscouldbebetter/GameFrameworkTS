@@ -74,6 +74,11 @@ export class Coords
 		return new Coords(2, 2, 2);
 	}
 
+	static zeroZeroOne(): Coords
+	{
+		return new Coords(0, 0, 1);
+	}
+
 	static zeroes(): Coords
 	{
 		// Same as create().

@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
                 this._posSaved = GameFramework.Coords.create();
                 this._orientationSaved = new GameFramework.Orientation(null, null);
             }
+            static fromChildAndOrientationToAnchorAt(child, orientationToAnchorAt) {
+                return new VisualAnchor(child, null, orientationToAnchorAt);
+            }
             static fromChildAndPosToAnchorAt(child, posToAnchorAt) {
                 return new VisualAnchor(child, posToAnchorAt, null);
             }

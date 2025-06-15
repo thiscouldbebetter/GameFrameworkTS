@@ -7,6 +7,13 @@ var ThisCouldBeBetter;
             constructor(children) {
                 this.children = children;
             }
+            static fromChildren(children) {
+                return new VisualGroup(children);
+            }
+            childAdd(childToAdd) {
+                this.children.push(childToAdd);
+                return this;
+            }
             // Visual.
             initialize(uwpe) {
                 this.children.forEach(x => x.initialize(uwpe));

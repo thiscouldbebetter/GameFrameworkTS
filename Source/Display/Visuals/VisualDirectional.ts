@@ -24,9 +24,10 @@ export class VisualDirectional implements Visual<VisualDirectional>
 		this.numberOfDirections = this.visualsForDirections.length;
 	}
 
-	static fromVisuals
+	static fromVisualForNoDirectionAndVisualsForDirections
 	(
-		visualForNoDirection: VisualBase, visualsForDirections: VisualBase[],
+		visualForNoDirection: VisualBase,
+		visualsForDirections: VisualBase[],
 	): VisualDirectional
 	{
 		return new VisualDirectional

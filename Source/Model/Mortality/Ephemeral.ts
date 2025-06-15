@@ -22,14 +22,14 @@ export class Ephemeral implements EntityProperty<Ephemeral>
 		return Ephemeral.fromTicksToLive(100);
 	}
 
-	static of(entity: Entity): Ephemeral
-	{
-		return entity.propertyByName(Ephemeral.name) as Ephemeral;
-	}
-
 	static fromTicksToLive(ticksToLive: number): Ephemeral
 	{
 		return new Ephemeral(ticksToLive, null);
+	}
+
+	static of(entity: Entity): Ephemeral
+	{
+		return entity.propertyByName(Ephemeral.name) as Ephemeral;
 	}
 
 	toEntity(): Entity { return new Entity(Ephemeral.name, [ this ] ); }

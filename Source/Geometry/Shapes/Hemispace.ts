@@ -15,6 +15,11 @@ export class Hemispace implements ShapeBase
 		this._displacement = Coords.create();
 	}
 
+	static fromPlane(plane: Plane): Hemispace
+	{
+		return new Hemispace(plane);
+	}
+
 	containsPoint(pointToCheck: Coords): boolean
 	{
 		var distanceOfPointAbovePlane =

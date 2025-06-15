@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this._perform = perform;
             }
+            static fromNameAndPerform(name, perform) {
+                return new ActivityDefn(name, perform);
+            }
             static Instances() {
                 if (ActivityDefn._instances == null) {
                     ActivityDefn._instances = new ActivityDefn_Instances();
@@ -21,10 +24,10 @@ var ThisCouldBeBetter;
         GameFramework.ActivityDefn = ActivityDefn;
         class ActivityDefn_Instances {
             constructor() {
-                this.DoNothing = new ActivityDefn("DoNothing", 
+                this.DoNothing = ActivityDefn.fromNameAndPerform("DoNothing", 
                 // perform
                 (uwpe) => { });
-                this.Simultaneous = new ActivityDefn("Simultaneous", 
+                this.Simultaneous = ActivityDefn.fromNameAndPerform("Simultaneous", 
                 // perform
                 (uwpe) => {
                     var w = uwpe.world;

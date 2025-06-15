@@ -20,9 +20,14 @@ export class Item implements EntityProperty<Item>
 		return place.entitiesByPropertyName(Item.name);
 	}
 
-	static fromDefnName(defnName: string)
+	static fromDefnName(defnName: string): Item
 	{
 		return new Item(defnName, 1);
+	}
+
+	static fromDefnNameAndQuantity(defnName: string, quantity: number): Item
+	{
+		return new Item(defnName, quantity);
 	}
 
 	static fromEntity(entity: Entity): Item

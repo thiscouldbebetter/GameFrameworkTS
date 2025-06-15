@@ -10,6 +10,10 @@ var ThisCouldBeBetter;
                 this.itemsIn = itemsIn;
                 this.itemsOut = itemsOut;
             }
+            static fromItemsInAndItemOut(itemsIn, itemOut) {
+                return new CraftingRecipe(itemOut.defnName, 0, // ticksToComplete
+                itemsIn, [itemOut]);
+            }
             isFulfilledByItemHolder(itemHolderStaged) {
                 var itemsStaged = itemHolderStaged.items;
                 var areAllRequirementsFulfilledSoFar = true;

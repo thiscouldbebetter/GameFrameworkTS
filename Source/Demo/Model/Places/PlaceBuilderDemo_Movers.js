@@ -604,57 +604,124 @@ class PlaceBuilderDemo_Movers {
     }
     entityDefnBuildPlayer(displaySize) {
         var entityDefnNamePlayer = "Player";
-        var visualEyeRadius = this.entityDimension * .75 / 2;
-        var visualBuilder = new VisualBuilder();
-        var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
         var playerHeadRadius = this.entityDimension * .75;
-        var playerCollider = new Sphere(Coords.create(), playerHeadRadius);
-        var colors = Color.Instances();
-        var playerColor = colors.Gray;
-        var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArms(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
-        var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, colors.Black, visualEyeRadius, visualEyesBlinking);
-        var playerVisualBodyHidable = new VisualSelect(
-        // childrenByName
-        new Map([
-            ["Normal", playerVisualBodyNormal],
-            ["Hidden", playerVisualBodyHidden]
-        ]), (uwpe, d) => // selectChildNames
-         {
-            var e = uwpe.entity;
-            return [(Perceptible.of(e).isHiding ? "Hidden" : "Normal")];
-        });
-        var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, 
-        // visualShadow
-        new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, colors.GrayDark, colors.Black, false // shouldUseEntityOrientation
-        ), null);
-        var playerVisualBarSize = Coords.fromXY(this.entityDimension * 3, this.entityDimension * 0.8);
-        var playerVisualHealthBar = new VisualBar("H", // abbreviation
-        playerVisualBarSize, colors.Red, DataBinding.fromGet((c) => Killable.of(c).integrity), null, // amountThreshold
-        DataBinding.fromGet((c) => Killable.of(c).integrityMax), 1, // fractionBelowWhichToShow
-        null, // colorForBorderAsValueBreakGroup
-        null // text
-        );
-        var playerVisualSatietyBar = new VisualBar("F", // abbreviation
-        playerVisualBarSize, colors.Brown, DataBinding.fromGet((c) => { return Starvable.of(c).satiety; }), null, // amountThreshold
-        DataBinding.fromGet((c) => { return Starvable.of(c).satietyMax; }), .5, // fractionBelowWhichToShow
-        null, // colorForBorderAsValueBreakGroup
-        null // text
-        );
-        var playerVisualEffect = new VisualAnchor(new VisualDynamic((uwpe) => Effectable.of(uwpe.entity).effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
-        var playerVisualsForStatusInfo = [
-            playerVisualHealthBar,
-            playerVisualSatietyBar,
-            playerVisualEffect
-        ];
-        if (this.parent.visualsHaveText) {
-            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextImmediateFontAndColor(entityDefnNamePlayer, this.font, playerColor));
-        }
-        var playerVisualStatusInfo = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
-        new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
-        playerVisualsForStatusInfo));
-        var playerVisual = new VisualGroup([
-            playerVisualBodyJumpable, playerVisualStatusInfo
+        var playerVisual = this.entityDefnBuildPlayer_Visual(entityDefnNamePlayer, playerHeadRadius);
+        var playerCollider = Sphere.fromRadius(playerHeadRadius);
+        var playerBounds = playerCollider.toBox(null);
+        var boundable = new Boundable(playerBounds);
+        var collidable = this.entityDefnBuildPlayer_Collidable(playerCollider);
+        var constrainable = this.entityBuildDefnPlayer_Constrainable();
+        var equipmentUser = this.entityDefnBuildPlayer_EquipmentUser();
+        var journal = new Journal([
+            new JournalEntry(0, "First Entry", "I started a journal.  We'll see how it goes."),
         ]);
+        var journalKeeper = new JournalKeeper(journal);
+        var itemHolder = new ItemHolder([
+            new Item("Coin", 100),
+        ], 100, // weightMax
+        20, // reachRadius
+        false // retainsItemsWithZeroQuantities
+        );
+        var killable = this.entityDefnBuildPlayer_Killable();
+        var starvable = new Starvable(100, // satietyMax
+        .001, // satietyToLosePerTick
+        (uwpe) => {
+            Killable.of(uwpe.entity).integritySubtract(.1);
+        });
+        var tirable = new Tirable(100, // staminaMaxAfterSleep
+        .1, // staminaRecoveredPerTick
+        .001, // staminaMaxLostPerTick: number,
+        .002, // staminaMaxRecoveredPerTickOfSleep: number,
+        (uwpe) => // fallAsleep
+         {
+            // todo
+        });
+        var movable = Movable.fromAccelerationAndSpeedMax(0.5, // accelerationPerTick
+        1 // speedMax
+        );
+        var itemCrafter = ItemCrafter.fromRecipesAvailable([
+            CraftingRecipe.fromItemsInAndItemOut([
+                Item.fromDefnNameAndQuantity("Iron Ore", 3),
+            ], Item.fromDefnName("Iron")),
+            CraftingRecipe.fromItemsInAndItemOut([
+                Item.fromDefnName("Crystal"),
+                Item.fromDefnName("Flower"),
+                Item.fromDefnName("Mushroom")
+            ], Item.fromDefnName("Potion"))
+        ]);
+        var controllable = this.entityDefnBuildPlayer_Controllable();
+        var playerActivityDefn = ActivityDefn.fromNameAndPerform("Player", (uwpe) => this.entityDefnBuildPlayer_PlayerActivityPerform(uwpe));
+        this.parent.activityDefns.push(playerActivityDefn);
+        var playerActivity = Activity.fromDefnName(playerActivityDefn.name);
+        var actor = new Actor(playerActivity);
+        var playerActivityWaitPerform = (uwpe) => {
+            var entityPlayer = uwpe.entity;
+            var activity = Actor.of(entityPlayer).activity;
+            var drawable = Drawable.of(entityPlayer);
+            var targetEntity = activity.targetEntity();
+            if (targetEntity == null) {
+                drawable.visual = new VisualGroup([
+                    drawable.visual,
+                    new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateFontAndColor("Waiting", this.font, Color.Instances().Gray))
+                ]);
+                ticksToWait = 60; // 3 seconds.
+                targetEntity = Ephemeral.fromTicksToLive(ticksToWait).toEntity();
+                activity.targetEntitySet(targetEntity);
+            }
+            else {
+                var targetEphemeral = Ephemeral.of(targetEntity);
+                var ticksToWait = targetEphemeral.ticksToLive;
+                if (ticksToWait > 0) {
+                    ticksToWait--;
+                    targetEphemeral.ticksToLive = ticksToWait;
+                }
+                else {
+                    activity.defnName = "Player";
+                    drawable.visual =
+                        drawable.visual.children[0];
+                    activity.targetEntityClear();
+                }
+            }
+        };
+        var playerActivityDefnWait = new ActivityDefn("Wait", playerActivityWaitPerform);
+        this.parent.activityDefns.push(playerActivityDefnWait);
+        var perceptible = new Perceptible(false, // hiding
+        (uwpe) => 150, // visibility
+        (uwpe) => 5000 // audibility
+        );
+        var animatable = Animatable2.create();
+        var drawable = Drawable.fromVisual(playerVisual);
+        var effectable = Effectable.default();
+        var locatable = Locatable.create();
+        var playable = new Playable();
+        var selector = Selector.default();
+        var skillLearner = SkillLearner.default();
+        var playerEntityDefn = new Entity(entityDefnNamePlayer, [
+            actor,
+            animatable,
+            boundable,
+            collidable,
+            constrainable,
+            controllable,
+            drawable,
+            effectable,
+            equipmentUser,
+            itemCrafter,
+            itemHolder,
+            journalKeeper,
+            locatable,
+            killable,
+            movable,
+            perceptible,
+            playable,
+            selector,
+            skillLearner,
+            starvable,
+            tirable
+        ]);
+        return playerEntityDefn;
+    }
+    entityDefnBuildPlayer_Collidable(playerCollider) {
         var playerCollide = (uwpe) => {
             var universe = uwpe.universe;
             var entityPlayer = uwpe.entity;
@@ -690,42 +757,66 @@ class PlaceBuilderDemo_Movers {
                 Talker.of(entityOther).talk(uwpe.clone().entitiesSwap());
             }
         };
+        var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
+        0, // ticksToWaitBetweenCollisions
+        playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
+        playerCollide);
+        return collidable;
+    }
+    entityBuildDefnPlayer_Constrainable() {
         var constrainable = new Constrainable([
-            new Constraint_Gravity(new Coords(0, 0, 1)),
-            new Constraint_ContainInHemispace(new Hemispace(new Plane(new Coords(0, 0, 1), 0))),
+            new Constraint_Gravity(Coords.zeroZeroOne()),
+            new Constraint_ContainInHemispace(Hemispace.fromPlane(Plane.fromNormalAndDistanceFromOrigin(Coords.zeroZeroOne(), 0))),
             new Constraint_SpeedMaxXY(5),
             new Constraint_Conditional((uwpe) => (Locatable.of(uwpe.entity).loc.pos.z >= 0), new Constraint_FrictionXY(.03, .5)),
         ]);
+        return constrainable;
+    }
+    entityDefnBuildPlayer_Controllable() {
+        var toControl = (uwpe) => {
+            var universe = uwpe.universe;
+            var size = universe.display.sizeInPixels;
+            var entity = uwpe.entity;
+            var venuePrev = universe.venueCurrent();
+            var isMenu = universe.inputHelper.inputsPressed.some(x => x.name == "Escape" || x.name == "Tab" // hack
+            );
+            var returnValue;
+            if (isMenu) {
+                returnValue = Playable.toControlMenu(universe, size, entity, venuePrev);
+            }
+            else {
+                returnValue = Playable.toControlWorldOverlay(universe, size, entity);
+            }
+            return returnValue;
+        };
+        var controllable = new Controllable(toControl);
+        return controllable;
+    }
+    entityDefnBuildPlayer_EquipmentUser() {
         var itemCategoriesForQuickSlots = [
             "Consumable"
         ];
+        var eqd = (a, b) => new EquipmentSocketDefn(a, b);
         var equipmentSocketDefnGroup = new EquipmentSocketDefnGroup("Equippable", [
-            new EquipmentSocketDefn("Wielding", ["Wieldable"]),
-            new EquipmentSocketDefn("Armor", ["Armor"]),
-            new EquipmentSocketDefn("Accessory", ["Accessory"]),
-            new EquipmentSocketDefn("Item0", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item1", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item2", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item3", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item4", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item5", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item6", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item7", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item8", itemCategoriesForQuickSlots),
-            new EquipmentSocketDefn("Item9", itemCategoriesForQuickSlots),
+            eqd("Wielding", ["Wieldable"]),
+            eqd("Armor", ["Armor"]),
+            eqd("Accessory", ["Accessory"]),
+            eqd("Item0", itemCategoriesForQuickSlots),
+            eqd("Item1", itemCategoriesForQuickSlots),
+            eqd("Item2", itemCategoriesForQuickSlots),
+            eqd("Item3", itemCategoriesForQuickSlots),
+            eqd("Item4", itemCategoriesForQuickSlots),
+            eqd("Item5", itemCategoriesForQuickSlots),
+            eqd("Item6", itemCategoriesForQuickSlots),
+            eqd("Item7", itemCategoriesForQuickSlots),
+            eqd("Item8", itemCategoriesForQuickSlots),
+            eqd("Item9", itemCategoriesForQuickSlots),
         ]);
         var equipmentUser = new EquipmentUser(equipmentSocketDefnGroup);
-        var journal = new Journal([
-            new JournalEntry(0, "First Entry", "I started a journal.  We'll see how it goes."),
-        ]);
-        var journalKeeper = new JournalKeeper(journal);
-        var itemHolder = new ItemHolder([
-            new Item("Coin", 100),
-        ], 100, // weightMax
-        20, // reachRadius
-        false // retainsItemsWithZeroQuantities
-        );
-        var killable = new Killable(50, // integrity
+        return equipmentUser;
+    }
+    entityDefnBuildPlayer_Killable() {
+        var killable = Killable.fromIntegrityMaxDamageApplyAndDie(50, // integrity
         (uwpe, damage) => // damageApply
          {
             var universe = uwpe.universe;
@@ -759,104 +850,7 @@ class PlaceBuilderDemo_Movers {
             );
             uwpe.universe.venueTransitionTo(venueMessage);
         });
-        var starvable = new Starvable(100, // satietyMax
-        .001, // satietyToLosePerTick
-        (uwpe) => {
-            Killable.of(uwpe.entity).integritySubtract(.1);
-        });
-        var tirable = new Tirable(100, // staminaMaxAfterSleep
-        .1, // staminaRecoveredPerTick
-        .001, // staminaMaxLostPerTick: number,
-        .002, // staminaMaxRecoveredPerTickOfSleep: number,
-        (uwpe) => // fallAsleep
-         {
-            // todo
-        });
-        var movable = Movable.fromAccelerationAndSpeedMax(0.5, // accelerationPerTick
-        1 // speedMax
-        );
-        var itemCrafter = new ItemCrafter([
-            new CraftingRecipe("Iron", 0, // ticksToComplete
-            [
-                new Item("Iron Ore", 3),
-            ], [
-                new Item("Iron", 1),
-            ]),
-            new CraftingRecipe("Potion", 0, // ticksToComplete
-            [
-                new Item("Crystal", 1),
-                new Item("Flower", 1),
-                new Item("Mushroom", 1)
-            ], [
-                new Item("Potion", 1),
-            ])
-        ]);
-        var controllable = this.entityDefnBuildPlayer_Controllable();
-        var playerActivityDefn = new ActivityDefn("Player", (uwpe) => this.entityDefnBuildPlayer_PlayerActivityPerform(uwpe));
-        this.parent.activityDefns.push(playerActivityDefn);
-        var playerActivity = Activity.fromDefnName(playerActivityDefn.name);
-        var playerActivityWaitPerform = (uwpe) => {
-            var entityPlayer = uwpe.entity;
-            var activity = Actor.of(entityPlayer).activity;
-            var drawable = Drawable.of(entityPlayer);
-            var targetEntity = activity.targetEntity();
-            if (targetEntity == null) {
-                drawable.visual = new VisualGroup([
-                    drawable.visual,
-                    new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateFontAndColor("Waiting", this.font, colors.Gray))
-                ]);
-                ticksToWait = 60; // 3 seconds.
-                targetEntity = new Ephemeral(ticksToWait, null).toEntity();
-                activity.targetEntitySet(targetEntity);
-            }
-            else {
-                var targetEphemeral = Ephemeral.of(targetEntity);
-                var ticksToWait = targetEphemeral.ticksToLive;
-                if (ticksToWait > 0) {
-                    ticksToWait--;
-                    targetEphemeral.ticksToLive = ticksToWait;
-                }
-                else {
-                    activity.defnName = "Player";
-                    drawable.visual =
-                        drawable.visual.children[0];
-                    activity.targetEntityClear();
-                }
-            }
-        };
-        var playerActivityDefnWait = new ActivityDefn("Wait", playerActivityWaitPerform);
-        this.parent.activityDefns.push(playerActivityDefnWait);
-        var perceptible = new Perceptible(false, // hiding
-        (uwpe) => 150, // visibility
-        (uwpe) => 5000 // audibility
-        );
-        var playerEntityDefn = new Entity(entityDefnNamePlayer, [
-            new Actor(playerActivity),
-            Animatable2.create(),
-            new Boundable(playerCollider.toBox(null)),
-            new Collidable(false, // canCollideAgainWithoutSeparating
-            0, // ticksToWaitBetweenCollisions
-            playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
-            playerCollide),
-            constrainable,
-            controllable,
-            Drawable.fromVisual(playerVisual),
-            new Effectable([]),
-            equipmentUser,
-            itemCrafter,
-            itemHolder,
-            journalKeeper,
-            Locatable.create(),
-            killable,
-            movable,
-            perceptible,
-            new Playable(),
-            Selector.default(),
-            SkillLearner.default(),
-            starvable,
-            tirable
-        ]);
-        return playerEntityDefn;
+        return killable;
     }
     entityDefnBuildPlayer_PlayerActivityPerform(uwpe) {
         var universe = uwpe.universe;
@@ -901,24 +895,56 @@ class PlaceBuilderDemo_Movers {
             }
         }
     }
-    entityDefnBuildPlayer_Controllable() {
-        var toControl = (uwpe) => {
-            var universe = uwpe.universe;
-            var size = universe.display.sizeInPixels;
-            var entity = uwpe.entity;
-            var venuePrev = universe.venueCurrent();
-            var isMenu = universe.inputHelper.inputsPressed.some(x => x.name == "Escape" || x.name == "Tab" // hack
-            );
-            var returnValue;
-            if (isMenu) {
-                returnValue = Playable.toControlMenu(universe, size, entity, venuePrev);
-            }
-            else {
-                returnValue = Playable.toControlWorldOverlay(universe, size, entity);
-            }
-            return returnValue;
-        };
-        var controllable = new Controllable(toControl);
-        return controllable;
+    entityDefnBuildPlayer_Visual(entityDefnNamePlayer, playerHeadRadius) {
+        var visualEyeRadius = this.entityDimension * .75 / 2;
+        var visualBuilder = new VisualBuilder();
+        var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
+        var colors = Color.Instances();
+        var playerColor = colors.Gray;
+        var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArmsWithWieldable(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
+        var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, colors.Black, visualEyeRadius, visualEyesBlinking);
+        var playerVisualBodyHidable = new VisualSelect(
+        // childrenByName
+        new Map([
+            ["Normal", playerVisualBodyNormal],
+            ["Hidden", playerVisualBodyHidden]
+        ]), (uwpe, d) => // selectChildNames
+         {
+            var e = uwpe.entity;
+            return [(Perceptible.of(e).isHiding ? "Hidden" : "Normal")];
+        });
+        var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, 
+        // visualShadow
+        new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, colors.GrayDark, colors.Black, false // shouldUseEntityOrientation
+        ), null);
+        var playerVisualBarSize = Coords.fromXY(this.entityDimension * 3, this.entityDimension * 0.8);
+        var playerVisualHealthBar = new VisualBar("H", // abbreviation
+        playerVisualBarSize, colors.Red, DataBinding.fromGet((c) => Killable.of(c).integrity), null, // amountThreshold
+        DataBinding.fromGet((c) => Killable.of(c).integrityMax), 1, // fractionBelowWhichToShow
+        null, // colorForBorderAsValueBreakGroup
+        null // text
+        );
+        var playerVisualSatietyBar = new VisualBar("F", // abbreviation
+        playerVisualBarSize, colors.Brown, DataBinding.fromGet((c) => { return Starvable.of(c).satiety; }), null, // amountThreshold
+        DataBinding.fromGet((c) => { return Starvable.of(c).satietyMax; }), .5, // fractionBelowWhichToShow
+        null, // colorForBorderAsValueBreakGroup
+        null // text
+        );
+        var playerVisualEffect = new VisualAnchor(new VisualDynamic((uwpe) => Effectable.of(uwpe.entity).effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
+        var playerVisualsForStatusInfo = [
+            playerVisualHealthBar,
+            playerVisualSatietyBar,
+            playerVisualEffect
+        ];
+        if (this.parent.visualsHaveText) {
+            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextImmediateFontAndColor(entityDefnNamePlayer, this.font, playerColor));
+        }
+        var playerVisualStatusInfo = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
+        new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
+        playerVisualsForStatusInfo));
+        var playerVisual = new VisualGroup([
+            playerVisualBodyJumpable, playerVisualStatusInfo
+        ]);
+        return playerVisual;
     }
 }

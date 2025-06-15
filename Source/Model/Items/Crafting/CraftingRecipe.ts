@@ -11,7 +11,9 @@ export class CraftingRecipe
 
 	constructor
 	(
-		name: string, ticksToComplete: number, itemsIn: Item[],
+		name: string,
+		ticksToComplete: number,
+		itemsIn: Item[],
 		itemsOut: Item[]
 	)
 	{
@@ -19,6 +21,17 @@ export class CraftingRecipe
 		this.ticksToComplete = ticksToComplete;
 		this.itemsIn = itemsIn;
 		this.itemsOut = itemsOut;
+	}
+
+	static fromItemsInAndItemOut(itemsIn: Item[], itemOut: Item): CraftingRecipe
+	{
+		return new CraftingRecipe
+		(
+			itemOut.defnName,
+			0, // ticksToComplete
+			itemsIn,
+			[ itemOut ]
+		);
 	}
 
 	isFulfilledByItemHolder(itemHolderStaged: ItemHolder): boolean

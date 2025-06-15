@@ -195,9 +195,10 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             circleWithEyesAndLegsAndArms(circleRadius, circleColor, eyeRadius, visualEyes) {
-                var lineThickness = 2;
-                var circleWithEyesAndLegs = this.circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes);
-                var visualNone = new GameFramework.VisualNone();
+                return this.circleWithEyesAndLegsAndArmsAndWieldable(circleRadius, circleColor, eyeRadius, visualEyes, null // wieldable
+                );
+            }
+            circleWithEyesAndLegsAndArmsWithWieldable(circleRadius, circleColor, eyeRadius, visualEyes) {
                 var visualWieldable = new GameFramework.VisualDynamic((uwpe) => {
                     var w = uwpe.world;
                     var e = uwpe.entity;
@@ -209,54 +210,52 @@ var ThisCouldBeBetter;
                         : itemDrawable.visual);
                     return itemVisual;
                 });
+                return this.circleWithEyesAndLegsAndArmsAndWieldable(circleRadius, circleColor, eyeRadius, visualEyes, visualWieldable);
+            }
+            circleWithEyesAndLegsAndArmsAndWieldable(circleRadius, circleColor, eyeRadius, visualEyes, visualWieldable) {
+                var lineThickness = 2;
+                var circleWithEyesAndLegs = this.circleWithEyesAndLegs(circleRadius, circleColor, eyeRadius, visualEyes);
+                var visualNone = new GameFramework.VisualNone();
                 var orientationToAnchorTo = GameFramework.Orientation.Instances().ForwardXDownZ;
-                visualWieldable = new GameFramework.VisualAnchor(visualWieldable, null, orientationToAnchorTo);
-                var visualArmAndWieldableFacingRight = new GameFramework.VisualGroup([
-                    // arm
-                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(GameFramework.Coords.create(), GameFramework.Coords.fromXY(2, 1).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
-                    // wieldable
-                    GameFramework.VisualOffset.fromChildAndOffset(visualWieldable, GameFramework.Coords.fromXY(2, 1).multiplyScalar(circleRadius))
-                ]);
-                var visualArmAndWieldableFacingDown = new GameFramework.VisualGroup([
-                    // arm
-                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(GameFramework.Coords.create(), GameFramework.Coords.fromXY(-2, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
-                    // wieldable
-                    GameFramework.VisualOffset.fromChildAndOffset(visualWieldable, GameFramework.Coords.fromXY(-2, 0).multiplyScalar(circleRadius))
-                ]);
-                var visualArmAndWieldableFacingLeft = new GameFramework.VisualGroup([
-                    // arm
-                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(GameFramework.Coords.create(), GameFramework.Coords.fromXY(-2, 1).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
-                    // wieldable
-                    GameFramework.VisualOffset.fromChildAndOffset(visualWieldable, GameFramework.Coords.fromXY(-2, 1).multiplyScalar(circleRadius))
-                ]);
-                var visualArmAndWieldableFacingUp = new GameFramework.VisualGroup([
-                    // arm
-                    new GameFramework.VisualAnchor(new GameFramework.VisualLine(GameFramework.Coords.create(), GameFramework.Coords.fromXY(2, 0).multiplyScalar(circleRadius), circleColor, lineThickness), null, orientationToAnchorTo),
-                    // wieldable
-                    GameFramework.VisualOffset.fromChildAndOffset(visualWieldable, GameFramework.Coords.fromXY(2, 0).multiplyScalar(circleRadius))
-                ]);
-                var visualArmAndWieldableDirectional = new GameFramework.VisualDirectional(visualArmAndWieldableFacingDown, // visualForNoDirection,
-                [
-                    visualArmAndWieldableFacingRight,
-                    visualArmAndWieldableFacingDown,
-                    visualArmAndWieldableFacingLeft,
-                    visualArmAndWieldableFacingUp
-                ], null);
-                var visualArmAndWieldableDirectionalOffset = GameFramework.VisualOffset.fromChildAndOffset(visualArmAndWieldableDirectional, new GameFramework.Coords(0, 0 - circleRadius, 0));
-                var visualWielding = new GameFramework.VisualSelect(new Map([
-                    ["Visible", visualArmAndWieldableDirectionalOffset],
-                    ["Hidden", visualNone]
-                ]), (uwpe, d) => // selectChildNames
-                 {
-                    var e = uwpe.entity;
-                    var itemEntityWielded = GameFramework.EquipmentUser.of(e).itemEntityInSocketWithName("Wielding");
-                    var returnValue = (itemEntityWielded == null ? "Hidden" : "Visible");
-                    return [returnValue];
+                if (visualWieldable != null) {
+                    visualWieldable = new GameFramework.VisualAnchor(visualWieldable, null, orientationToAnchorTo);
+                }
+                var offsetsToHandWhenFacingRightDownLeftUp = [
+                    GameFramework.Coords.fromXY(2, 1),
+                    GameFramework.Coords.fromXY(-2, 0),
+                    GameFramework.Coords.fromXY(-2, 1),
+                    GameFramework.Coords.fromXY(2, 0)
+                ];
+                var visualsForArmAndWieldableWhenFacingRightDownLeftUp = offsetsToHandWhenFacingRightDownLeftUp.map(offsetToHand => {
+                    var visualForArm = GameFramework.VisualAnchor.fromChildAndOrientationToAnchorAt(GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.create(), offsetToHand.clone().multiplyScalar(circleRadius), circleColor, lineThickness), orientationToAnchorTo);
+                    if (visualWieldable != null) {
+                        var visualWieldableOffsetToHand = GameFramework.VisualOffset.fromChildAndOffset(visualWieldable, offsetToHand.clone().multiplyScalar(circleRadius));
+                        visualForArm = GameFramework.VisualGroup.fromChildren([
+                            visualForArm,
+                            visualWieldableOffsetToHand
+                        ]);
+                    }
+                    return visualForArm;
                 });
-                var returnValue = new GameFramework.VisualGroup([
-                    visualWielding,
-                    circleWithEyesAndLegs
-                ]);
+                var visualArmAndWieldableDirectional = GameFramework.VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections(visualsForArmAndWieldableWhenFacingRightDownLeftUp[1], visualsForArmAndWieldableWhenFacingRightDownLeftUp);
+                var visualArmAndWieldableDirectionalOffset = GameFramework.VisualOffset.fromChildAndOffset(visualArmAndWieldableDirectional, GameFramework.Coords.fromXY(0, 0 - circleRadius));
+                var returnValue = circleWithEyesAndLegs;
+                if (visualWieldable != null) {
+                    var visualWielding = new GameFramework.VisualSelect(new Map([
+                        ["Visible", visualArmAndWieldableDirectionalOffset],
+                        ["Hidden", visualNone]
+                    ]), (uwpe, d) => // selectChildNames
+                     {
+                        var e = uwpe.entity;
+                        var itemEntityWielded = GameFramework.EquipmentUser.of(e).itemEntityInSocketWithName("Wielding");
+                        var returnValue = (itemEntityWielded == null ? "Hidden" : "Visible");
+                        return [returnValue];
+                    });
+                    returnValue = new GameFramework.VisualGroup([
+                        visualWielding,
+                        returnValue
+                    ]);
+                }
                 return returnValue;
             }
             directionalAnimationsFromTiledImage(visualImageSource, imageSource, imageSourceSizeInTiles, tileSizeToDraw) {
@@ -280,7 +279,7 @@ var ThisCouldBeBetter;
                     var visualForDirection = GameFramework.VisualAnimation.fromNameAndFrames("Direction" + y, frames);
                     directions.push(visualForDirection);
                 }
-                var returnValue = GameFramework.VisualDirectional.fromVisuals(directions[1], directions);
+                var returnValue = GameFramework.VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections(directions[1], directions);
                 return returnValue;
             }
             eyesBlinking(visualEyeRadius) {

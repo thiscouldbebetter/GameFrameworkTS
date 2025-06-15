@@ -406,18 +406,27 @@ export class VisualBuilder
 
 	circleWithEyesAndLegsAndArms
 	(
-		circleRadius: number, circleColor: Color, eyeRadius: number,
+		circleRadius: number,
+		circleColor: Color,
+		eyeRadius: number,
 		visualEyes: VisualBase
 	): VisualBase
 	{
-		var lineThickness = 2;
-
-		var circleWithEyesAndLegs = this.circleWithEyesAndLegs
+		return this.circleWithEyesAndLegsAndArmsAndWieldable
 		(
-			circleRadius, circleColor, eyeRadius, visualEyes
+			circleRadius, circleColor, eyeRadius, visualEyes,
+			null // wieldable
 		);
+	}
 
-		var visualNone = new VisualNone();
+	circleWithEyesAndLegsAndArmsWithWieldable
+	(
+		circleRadius: number,
+		circleColor: Color,
+		eyeRadius: number,
+		visualEyes: VisualBase
+	): VisualBase
+	{
 		var visualWieldable: VisualBase = new VisualDynamic
 		(
 			(uwpe: UniverseWorldPlaceEntities) =>
@@ -439,142 +448,126 @@ export class VisualBuilder
 			}
 		);
 
+		return this.circleWithEyesAndLegsAndArmsAndWieldable
+		(
+			circleRadius, circleColor, eyeRadius, visualEyes,
+			visualWieldable
+		);
+	}
+
+	circleWithEyesAndLegsAndArmsAndWieldable
+	(
+		circleRadius: number,
+		circleColor: Color,
+		eyeRadius: number,
+		visualEyes: VisualBase,
+		visualWieldable: VisualBase
+	): VisualBase
+	{
+		var lineThickness = 2;
+
+		var circleWithEyesAndLegs = this.circleWithEyesAndLegs
+		(
+			circleRadius, circleColor, eyeRadius, visualEyes
+		);
+
+		var visualNone = new VisualNone();
+
 		var orientationToAnchorTo = Orientation.Instances().ForwardXDownZ;
 
-		visualWieldable = new VisualAnchor
-		(
-			visualWieldable, null, orientationToAnchorTo
-		);
+		if (visualWieldable != null)
+		{
+			visualWieldable = VisualAnchor.fromChildAndOrientationToAnchorAt
+			(
+				visualWieldable, orientationToAnchorTo
+			);
+		}
 
-		var visualArmAndWieldableFacingRight = new VisualGroup
-		([
-			// arm
-			new VisualAnchor
-			(
-				new VisualLine
-				(
-					Coords.create(),
-					Coords.fromXY(2, 1).multiplyScalar(circleRadius),
-					circleColor,
-					lineThickness
-				),
-				null, orientationToAnchorTo
-			),
-			// wieldable
-			VisualOffset.fromChildAndOffset
-			(
-				visualWieldable,
-				Coords.fromXY(2, 1).multiplyScalar(circleRadius)
-			)
-		]);
+		var offsetsToHandWhenFacingRightDownLeftUp =
+		[
+			Coords.fromXY(2, 1),
+			Coords.fromXY(-2, 0),
+			Coords.fromXY(-2, 1),
+			Coords.fromXY(2, 0)
+		];
 
-		var visualArmAndWieldableFacingDown = new VisualGroup
-		([
-			// arm
-			new VisualAnchor
+		var visualsForArmAndWieldableWhenFacingRightDownLeftUp =
+			offsetsToHandWhenFacingRightDownLeftUp.map
 			(
-				new VisualLine
-				(
-					Coords.create(),
-					Coords.fromXY(-2, 0).multiplyScalar(circleRadius),
-					circleColor,
-					lineThickness
-				),
-				null, orientationToAnchorTo
-			),
-			// wieldable
-			VisualOffset.fromChildAndOffset
-			(
-				visualWieldable,
-				Coords.fromXY(-2, 0).multiplyScalar(circleRadius)
-			)
-		]);
+				offsetToHand =>
+				{
+					var visualForArm : VisualBase = VisualAnchor.fromChildAndOrientationToAnchorAt
+					(
+						VisualLine.fromFromAndToPosColorAndThickness
+						(
+							Coords.create(),
+							offsetToHand.clone().multiplyScalar(circleRadius),
+							circleColor,
+							lineThickness
+						),
+						orientationToAnchorTo
+					);
 
-		var visualArmAndWieldableFacingLeft = new VisualGroup
-		([
-			// arm
-			new VisualAnchor
-			(
-				new VisualLine
-				(
-					Coords.create(),
-					Coords.fromXY(-2, 1).multiplyScalar(circleRadius),
-					circleColor,
-					lineThickness
-				),
-				null, orientationToAnchorTo
-			),
-			// wieldable
-			VisualOffset.fromChildAndOffset
-			(
-				visualWieldable,
-				Coords.fromXY(-2, 1).multiplyScalar(circleRadius)
-			)
-		]);
+					if (visualWieldable != null)
+					{
+						var visualWieldableOffsetToHand = VisualOffset.fromChildAndOffset
+						(
+							visualWieldable,
+							offsetToHand.clone().multiplyScalar(circleRadius)
+						);
 
-		var visualArmAndWieldableFacingUp = new VisualGroup
-		([
-			// arm
-			new VisualAnchor
-			(
-				new VisualLine
-				(
-					Coords.create(),
-					Coords.fromXY(2, 0).multiplyScalar(circleRadius),
-					circleColor,
-					lineThickness
-				),
-				null, orientationToAnchorTo
-			),
-			// wieldable
-			VisualOffset.fromChildAndOffset
-			(
-				visualWieldable,
-				Coords.fromXY(2, 0).multiplyScalar(circleRadius)
-			)
-		]);
+						visualForArm = VisualGroup.fromChildren
+						([
+							visualForArm,
+							visualWieldableOffsetToHand
+						]);
+					}
 
-		var visualArmAndWieldableDirectional = new VisualDirectional
-		(
-			visualArmAndWieldableFacingDown, // visualForNoDirection,
-			[
-				visualArmAndWieldableFacingRight,
-				visualArmAndWieldableFacingDown,
-				visualArmAndWieldableFacingLeft,
-				visualArmAndWieldableFacingUp
-			],
-			null
-		);
+					return visualForArm;
+				}
+			);
+
+		var visualArmAndWieldableDirectional =
+			VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections
+			(
+				visualsForArmAndWieldableWhenFacingRightDownLeftUp[1],
+				visualsForArmAndWieldableWhenFacingRightDownLeftUp
+			);
 
 		var visualArmAndWieldableDirectionalOffset = VisualOffset.fromChildAndOffset
 		(
 			visualArmAndWieldableDirectional,
-			new Coords(0, 0 - circleRadius, 0)
+			Coords.fromXY(0, 0 - circleRadius)
 		);
 
-		var visualWielding = new VisualSelect
-		(
-			new Map<string, VisualBase>
+		var returnValue = circleWithEyesAndLegs;
+
+		if (visualWieldable != null)
+		{
+			var visualWielding = new VisualSelect
+			(
+				new Map<string, VisualBase>
+				([
+					[ "Visible", visualArmAndWieldableDirectionalOffset ],
+					[ "Hidden", visualNone ]
+				]),
+				(uwpe: UniverseWorldPlaceEntities, d: Display) => // selectChildNames
+				{
+					var e = uwpe.entity;
+					var itemEntityWielded =
+						EquipmentUser.of(e).itemEntityInSocketWithName("Wielding");
+					var returnValue =
+						(itemEntityWielded == null ? "Hidden" : "Visible");
+					return [ returnValue ];
+				}
+			);
+
+			returnValue = new VisualGroup
 			([
-				[ "Visible", visualArmAndWieldableDirectionalOffset ],
-				[ "Hidden", visualNone ]
-			]),
-			(uwpe: UniverseWorldPlaceEntities, d: Display) => // selectChildNames
-			{
-				var e = uwpe.entity;
-				var itemEntityWielded =
-					EquipmentUser.of(e).itemEntityInSocketWithName("Wielding");
-				var returnValue =
-					(itemEntityWielded == null ? "Hidden" : "Visible");
-				return [ returnValue ];
-			}
-		);
-
-		var returnValue = new VisualGroup
-		([
-			visualWielding,
-			circleWithEyesAndLegs
-		]);
+				visualWielding,
+				returnValue
+			]);
+		}
 
 		return returnValue;
 	}
@@ -635,7 +628,7 @@ export class VisualBuilder
 			directions.push(visualForDirection);
 		}
 
-		var returnValue = VisualDirectional.fromVisuals
+		var returnValue = VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections
 		(
 			directions[1], directions
 		);

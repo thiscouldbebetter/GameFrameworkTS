@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.distanceFromOrigin = distanceFromOrigin;
                 this._displacementFromPoint0To2 = GameFramework.Coords.create();
             }
+            static fromNormalAndDistanceFromOrigin(normal, distanceFromOrigin) {
+                return new Plane(normal, distanceFromOrigin);
+            }
             distanceToPointAlongNormal(point) {
                 return point.dotProduct(this.normal) - this.distanceFromOrigin;
             }

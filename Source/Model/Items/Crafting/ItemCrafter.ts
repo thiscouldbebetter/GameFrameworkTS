@@ -25,6 +25,14 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 		this.statusMessage = "-";
 	}
 
+	static fromRecipesAvailable
+	(
+		recipesAvailable: CraftingRecipe[]
+	): ItemCrafter
+	{
+		return new ItemCrafter(recipesAvailable);
+	}
+
 	static of(entity: Entity): ItemCrafter
 	{
 		return entity.propertyByName(ItemCrafter.name) as ItemCrafter;

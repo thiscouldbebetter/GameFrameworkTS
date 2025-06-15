@@ -27,6 +27,14 @@ export class VisualLine implements Visual<VisualLine>
 		this._transformLocate = new Transform_Locate(null);
 	}
 
+	static fromFromAndToPosColorAndThickness
+	(
+		fromPos: Coords, toPos: Coords, color: Color, lineThickness: number
+	): VisualLine
+	{
+		return new VisualLine(fromPos, toPos, color, lineThickness);
+	}
+
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void

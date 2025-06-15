@@ -97,6 +97,7 @@
 <script type="text/javascript" src="../Source/Geometry/Shapes/BoxRotated.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Shapes/Edge.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Shapes/Face.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Path.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Shapes/Plane.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Shapes/ShapeContainer.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Shapes/ShapeGroupAny.js"></script>
@@ -233,9 +234,11 @@
 		<label for="textareaVisualAsJavaScript">
 			Visual as JavaScript:
 		</label>
-		<button onclick="buttonDemo_Clicked()">Load Demo:</button>
-		<select id="selectDemo">
+		<label for="selectDemo">Load Demo:</label>
+		<select id="selectDemo" onchange="selectDemo_Changed(this)";>
+			<option>[none]</option>
 			<option>Circle</option>
+			<option>CircleWithEyesAndLimbs</option>
 			<option>Ellipse</option>
 			<option>Fan</option>
 			<option>Rectangle</option>
@@ -260,6 +263,33 @@ function visualDemoCreateCircle()
 	return "VisualCircle.fromRadius(20)";
 }
 
+function visualDemoCreateCircleWithEyesAndLimbs()
+{
+	var codeLines = 
+	[
+		"var create = () =>",
+		"{",
+		"	var visualBuilder = new VisualBuilder();",
+		"	var colors = Color.Instances();",
+		"	var eyeRadius = 5;",
+		"	var visualEyesBlinking = visualBuilder.eyesBlinking()",
+		"	var headRadius = 10;",
+		"	var headColor = colors.Gray;",
+		"	var visual = visualBuilder.circleWithEyesAndLegsAndArms",
+		"	(",
+		"		headRadius, headColor, eyeRadius, visualEyesBlinking",
+		"	)",
+		"	return visual;",
+		"};",
+		"",
+		"create();"
+	];
+
+	var newline = "\n";
+	var code = codeLines.join(newline);
+	return code;
+}
+
 function visualDemoCreateEllipse()
 {
 	return "VisualEllipse.fromSemiaxesHorizontalAndVertical(20, 15)";
@@ -275,19 +305,27 @@ function visualDemoCreateRectangle()
 	return "VisualRectangle.fromSize(Coords.fromXY(40, 30) )";
 }
 
-function buttonDemo_Clicked()
+// UI events.
+
+function selectDemo_Changed(selectDemo)
 {
 	var d = document;
-	var selectDemo =
-		d.getElementById("selectDemo");
 	var demoName = selectDemo.value;
 	var textareaVisualAsJavaScript =
 		d.getElementById("textareaVisualAsJavaScript");
 
 	var visualAsJavaScript;
-	if (demoName == "Circle")
+	if (demoName == "[none]")
+	{
+		visualAsJavaScript = "";
+	}
+	else if (demoName == "Circle")
 	{
 		visualAsJavaScript = visualDemoCreateCircle();
+	}
+	else if (demoName == "CircleWithEyesAndLimbs")
+	{
+		visualAsJavaScript = visualDemoCreateCircleWithEyesAndLimbs();
 	}
 	else if (demoName == "Ellipse")
 	{
@@ -303,7 +341,7 @@ function buttonDemo_Clicked()
 	}
 	else
 	{
-		visualAsJavaScript = "[Demo name not recognized.]";
+		visualAsJavaScript = "[ERROR: Demo name not recognized.]";
 	}
 
 	textareaVisualAsJavaScript.value =

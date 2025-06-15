@@ -17,6 +17,14 @@ export class Plane implements ShapeBase
 		this._displacementFromPoint0To2 = Coords.create();
 	}
 
+	static fromNormalAndDistanceFromOrigin
+	(
+		normal: Coords, distanceFromOrigin: number
+	): Plane
+	{
+		return new Plane(normal, distanceFromOrigin);
+	}
+
 	distanceToPointAlongNormal(point: Coords)
 	{
 		return point.dotProduct

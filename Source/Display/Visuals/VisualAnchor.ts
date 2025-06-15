@@ -27,6 +27,15 @@ export class VisualAnchor implements Visual<VisualAnchor>
 		this._orientationSaved = new Orientation(null, null);
 	}
 
+	static fromChildAndOrientationToAnchorAt
+	(
+		child: VisualBase,
+		orientationToAnchorAt: Orientation
+	): VisualAnchor
+	{
+		return new VisualAnchor(child, null, orientationToAnchorAt);
+	}
+
 	static fromChildAndPosToAnchorAt
 	(
 		child: VisualBase,

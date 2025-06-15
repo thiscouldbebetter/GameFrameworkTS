@@ -17,6 +17,15 @@ export class ActivityDefn
 		this._perform = perform;
 	}
 
+	static fromNameAndPerform
+	(
+		name: string,
+		perform: (uwpe: UniverseWorldPlaceEntities) => void
+	): ActivityDefn
+	{
+		return new ActivityDefn(name, perform);
+	}
+
 	static _instances: ActivityDefn_Instances;
 	static Instances()
 	{
@@ -43,7 +52,7 @@ class ActivityDefn_Instances
 
 	constructor()
 	{
-		this.DoNothing = new ActivityDefn
+		this.DoNothing = ActivityDefn.fromNameAndPerform
 		(
 			"DoNothing",
 			// perform
@@ -51,7 +60,7 @@ class ActivityDefn_Instances
 			{}
 		);
 
-		this.Simultaneous = new ActivityDefn
+		this.Simultaneous = ActivityDefn.fromNameAndPerform
 		(
 			"Simultaneous",
 			// perform

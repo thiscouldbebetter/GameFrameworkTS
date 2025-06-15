@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.plane = plane;
                 this._displacement = GameFramework.Coords.create();
             }
+            static fromPlane(plane) {
+                return new Hemispace(plane);
+            }
             containsPoint(pointToCheck) {
                 var distanceOfPointAbovePlane = pointToCheck.dotProduct(this.plane.normal)
                     - this.plane.distanceFromOrigin;

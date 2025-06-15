@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
             static fromDefnName(defnName) {
                 return new Item(defnName, 1);
             }
+            static fromDefnNameAndQuantity(defnName, quantity) {
+                return new Item(defnName, quantity);
+            }
             static fromEntity(entity) {
                 return entity.propertyByName(Item.name);
             }

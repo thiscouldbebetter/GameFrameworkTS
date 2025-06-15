@@ -41,6 +41,9 @@ var ThisCouldBeBetter;
             static twos() {
                 return new Coords(2, 2, 2);
             }
+            static zeroZeroOne() {
+                return new Coords(0, 0, 1);
+            }
             static zeroes() {
                 // Same as create().
                 return new Coords(0, 0, 0);

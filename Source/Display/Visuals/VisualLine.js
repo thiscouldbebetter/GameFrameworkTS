@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
                 this._drawPosTo = GameFramework.Coords.create();
                 this._transformLocate = new GameFramework.Transform_Locate(null);
             }
+            static fromFromAndToPosColorAndThickness(fromPos, toPos, color, lineThickness) {
+                return new VisualLine(fromPos, toPos, color, lineThickness);
+            }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.

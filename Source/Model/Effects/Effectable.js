@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(effects) {
                 this.effects = effects || new Array();
             }
+            static default() {
+                return new Effectable([]);
+            }
             static of(entity) {
                 return entity.propertyByName(Effectable.name);
             }

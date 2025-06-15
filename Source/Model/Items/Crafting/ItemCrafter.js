@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
                 this.recipesQueued = [];
                 this.statusMessage = "-";
             }
+            static fromRecipesAvailable(recipesAvailable) {
+                return new ItemCrafter(recipesAvailable);
+            }
             static of(entity) {
                 return entity.propertyByName(ItemCrafter.name);
             }

@@ -11,6 +11,17 @@ export class VisualGroup implements Visual<VisualGroup>
 		this.children = children;
 	}
 
+	static fromChildren(children: VisualBase[]): VisualGroup
+	{
+		return new VisualGroup(children);
+	}
+
+	childAdd(childToAdd: VisualBase): VisualGroup
+	{
+		this.children.push(childToAdd);
+		return this;
+	}
+
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
