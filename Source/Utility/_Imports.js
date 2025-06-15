@@ -1,0 +1,14 @@
+"use strict";
+var DateTime = gf.DateTime;
+var DiceRoll = gf.DiceRoll;
+var IDHelper = gf.IDHelper;
+var PlatformHelper = gf.PlatformHelper;
+var Randomizer = gf.Randomizer;
+var RandomizerSystem = gf.RandomizerSystem;
+var Reference = gf.Reference;
+var Stack = gf.Stack;
+var TimerHelper = gf.TimerHelper;
+var URLParser = gf.URLParser;
+var ValueBreak = gf.ValueBreak;
+var ValueBreakGroup = gf.ValueBreakGroup;
+var VenueTask = gf.VenueTask;
