@@ -1,0 +1,45 @@
+"use strict";
+// Display.
+var Color = gf.Color;
+var Drawable = gf.Drawable;
+var Display2D = gf.Display2D;
+var DisplayRecorder = gf.DisplayRecorder;
+var VenueFader = gf.VenueFader;
+var VenueLayered = gf.VenueLayered;
+var VisualAnchor = gf.VisualAnchor;
+var VisualArc = gf.VisualArc;
+var VisualBar = gf.VisualBar;
+var VisualBuffered = gf.VisualBuffered;
+var VisualBuilder = gf.VisualBuilder;
+var VisualCircle = gf.VisualCircle;
+var VisualCircleGradient = gf.VisualCircleGradient;
+var VisualCrosshairs = gf.VisualCrosshairs;
+var VisualDeferred = gf.VisualDeferred;
+var VisualDirectional = gf.VisualDirectional;
+var VisualDynamic = gf.VisualDynamic;
+var VisualEllipse = gf.VisualEllipse;
+var VisualErase = gf.VisualErase;
+var VisualFan = gf.VisualFan;
+var VisualGroup = gf.VisualGroup;
+var VisualImageFromLibrary = gf.VisualImageFromLibrary;
+var VisualImageImmediate = gf.VisualImageImmediate;
+var VisualImageScaled = gf.VisualImageScaled;
+var VisualImageScaledPartial = gf.VisualImageScaledPartial;
+var VisualJump2D = gf.VisualJump2D;
+var VisualLine = gf.VisualLine;
+var VisualMap = gf.VisualMap;
+var VisualNone = gf.VisualNone;
+var VisualOffset = gf.VisualOffset;
+var VisualParticles = gf.VisualParticles;
+var VisualPath = gf.VisualPath;
+var VisualPolars = gf.VisualPolars;
+var VisualPolygon = gf.VisualPolygon;
+var VisualRectangle = gf.VisualRectangle;
+var VisualRepeating = gf.VisualRepeating;
+var VisualRotate = gf.VisualRotate;
+var VisualSelect = gf.VisualSelect;
+var VisualStack = gf.VisualStack;
+var VisualText = gf.VisualText;
+// Display - Visuals - Animation.
+var Animatable2 = gf.Animatable2; // Possibly conflicts with a built-in class?
+var VisualAnimation = gf.VisualAnimation;
