@@ -265,8 +265,7 @@ function visualDemoCreateEllipse()
 	return "VisualEllipse.fromSemiaxesHorizontalAndVertical(20, 15)";
 }
 
-
-function visualDemoCreateEllipse()
+function visualDemoCreateFan()
 {
 	return "VisualFan.fromRadiusAndAnglesStartAndSpanned(20, 0, .25)";
 }
@@ -296,7 +295,7 @@ function buttonDemo_Clicked()
 	}
 	else if (demoName == "Fan")
 	{
-		visualAsJavaScript = visualDemoCreateEllipse();
+		visualAsJavaScript = visualDemoCreateFan();
 	}
 	else if (demoName == "Rectangle")
 	{
