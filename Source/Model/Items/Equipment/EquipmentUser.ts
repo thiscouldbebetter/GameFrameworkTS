@@ -334,7 +334,6 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		var fontLarge = FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
 
 		var itemHolder = ItemHolder.of(entityEquipmentUser);
-		var equipmentUser = this;
 		var sockets = this.socketGroup.sockets;
 		var socketDefnGroup = this.socketGroup.defnGroup;
 
@@ -377,11 +376,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		var listHeight = 100;
 
 		var equipItemSelectedToSocketDefault = () =>
-		{
-			var itemEntityToEquip = equipmentUser.itemEntitySelected;
-			uwpe.entity2Set(itemEntityToEquip);
-			equipmentUser.equipEntityWithItem(uwpe);
-		};
+			this.equipItemSelectedToSocketDefault(uwpe);
 
 		var listEquippables = new ControlList
 		(
@@ -409,38 +404,10 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			null
 		);
 
-		var equipItemSelectedToSocketSelected = () =>
-		{
-			var itemEntityToEquip = equipmentUser.itemEntitySelected;
-			uwpe.entity2Set(itemEntityToEquip);
-
-			var socketSelected = equipmentUser.socketSelected;
-			if (socketSelected == null)
-			{
-				equipmentUser.equipEntityWithItem(uwpe);
-			}
-			else
-			{
-				equipmentUser.equipItemEntityInSocketWithName
-				(
-					uwpe,
-					socketSelected.defnName, true // includeSocketNameInMessage
-				)
-			}
-		};
-
-		var equipItemSelectedInQuickSlot = (quickSlotNumber: number) =>
-		{
-			uwpe.entity2Set(equipmentUser.itemEntitySelected);
-			equipmentUser.equipItemEntityInSocketWithName
-			(
-				uwpe,
-				"Item" + quickSlotNumber, // socketName
-				true // includeSocketNameInMessage
-			);
-		};
-
 		var fontButton = FontNameAndHeight.fromHeightInPixels(fontHeight * 0.8);
+
+		var equipItemSelectedToSocketSelected = () =>
+			this.equipItemSelectedToSocketSelected(uwpe);
 
 		var buttonEquip = ControlButton.fromPosSizeTextFontClick
 		(
@@ -452,13 +419,7 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		);
 
 		var unequipFromSocketSelected = () =>
-		{
-			var socketToUnequipFrom = equipmentUser.socketSelected;
-			equipmentUser.unequipItemFromSocketWithName
-			(
-				world, socketToUnequipFrom.defnName
-			);
-		};
+			this.unequipFromSocketSelected(uwpe);
 
 		var buttonUnequip = ControlButton.fromPosSizeTextFontClick
 		(
@@ -497,6 +458,15 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		);
 
 		var back = () => universe.venueTransitionTo(venuePrev);
+
+		var equipItemSelectedInQuickSlot = (quickSlotNumber: number) =>
+			this.equipItemSelectedInQuickSlot(uwpe, quickSlotNumber);
+
+		var textEquipItemSelectedInQuickSlot = "EquipItemSelectedInQuickSlot";
+
+		var a = (a: string, b: any) => new Action(a, b);
+		var atim = (a: string, b: string[]) =>
+			new ActionToInputsMapping(a, b, true);
 
 		var returnValue = new ControlContainer
 		(
@@ -543,31 +513,31 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 			],
 
 			[
-				new Action("Back", back),
-				new Action("EquipItemSelectedInQuickSlot0", () => equipItemSelectedInQuickSlot(0)),
-				new Action("EquipItemSelectedInQuickSlot1", () => equipItemSelectedInQuickSlot(1)),
-				new Action("EquipItemSelectedInQuickSlot2", () => equipItemSelectedInQuickSlot(2)),
-				new Action("EquipItemSelectedInQuickSlot3", () => equipItemSelectedInQuickSlot(3)),
-				new Action("EquipItemSelectedInQuickSlot4", () => equipItemSelectedInQuickSlot(4)),
-				new Action("EquipItemSelectedInQuickSlot5", () => equipItemSelectedInQuickSlot(5)),
-				new Action("EquipItemSelectedInQuickSlot6", () => equipItemSelectedInQuickSlot(6)),
-				new Action("EquipItemSelectedInQuickSlot7", () => equipItemSelectedInQuickSlot(7)),
-				new Action("EquipItemSelectedInQuickSlot8", () => equipItemSelectedInQuickSlot(8)),
-				new Action("EquipItemSelectedInQuickSlot9", () => equipItemSelectedInQuickSlot(9))
+				a("Back", back),
+				a(textEquipItemSelectedInQuickSlot + "0", () => equipItemSelectedInQuickSlot(0)),
+				a(textEquipItemSelectedInQuickSlot + "1", () => equipItemSelectedInQuickSlot(1)),
+				a(textEquipItemSelectedInQuickSlot + "2", () => equipItemSelectedInQuickSlot(2)),
+				a(textEquipItemSelectedInQuickSlot + "3", () => equipItemSelectedInQuickSlot(3)),
+				a(textEquipItemSelectedInQuickSlot + "4", () => equipItemSelectedInQuickSlot(4)),
+				a(textEquipItemSelectedInQuickSlot + "5", () => equipItemSelectedInQuickSlot(5)),
+				a(textEquipItemSelectedInQuickSlot + "6", () => equipItemSelectedInQuickSlot(6)),
+				a(textEquipItemSelectedInQuickSlot + "7", () => equipItemSelectedInQuickSlot(7)),
+				a(textEquipItemSelectedInQuickSlot + "8", () => equipItemSelectedInQuickSlot(8)),
+				a(textEquipItemSelectedInQuickSlot + "9", () => equipItemSelectedInQuickSlot(9))
 			],
 
 			[
-				new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot0", [ "_0" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot1", [ "_1" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot2", [ "_2" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot3", [ "_3" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot4", [ "_4" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot5", [ "_5" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot6", [ "_6" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot7", [ "_7" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot8", [ "_8" ], true ),
-				new ActionToInputsMapping( "EquipItemSelectedInQuickSlot9", [ "_9" ], true )
+				atim("Back", [ Input.Names().Escape ] ),
+				atim(textEquipItemSelectedInQuickSlot + "0", [ "_0" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "1", [ "_1" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "2", [ "_2" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "3", [ "_3" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "4", [ "_4" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "5", [ "_5" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "6", [ "_6" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "7", [ "_7" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "8", [ "_8" ] ),
+				atim(textEquipItemSelectedInQuickSlot + "9", [ "_9" ] )
 			]
 
 		);
@@ -609,6 +579,65 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
+	}
+
+	// Actions.
+
+	equipItemSelectedToSocketDefault
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): void
+	{
+		var itemEntityToEquip = this.itemEntitySelected;
+		uwpe.entity2Set(itemEntityToEquip);
+		this.equipEntityWithItem(uwpe);
+	};
+
+	equipItemSelectedToSocketSelected
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): void
+	{
+		var itemEntityToEquip = this.itemEntitySelected;
+		uwpe.entity2Set(itemEntityToEquip);
+
+		var socketSelected = this.socketSelected;
+		if (socketSelected == null)
+		{
+			this.equipEntityWithItem(uwpe);
+		}
+		else
+		{
+			this.equipItemEntityInSocketWithName
+			(
+				uwpe,
+				socketSelected.defnName, true // includeSocketNameInMessage
+			)
+		}
+	}
+
+	equipItemSelectedInQuickSlot
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		quickSlotNumber: number
+	): void
+	{
+		uwpe.entity2Set(this.itemEntitySelected);
+		this.equipItemEntityInSocketWithName
+		(
+			uwpe,
+			"Item" + quickSlotNumber, // socketName
+			true // includeSocketNameInMessage
+		);
+	}
+
+	unequipFromSocketSelected(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var socketToUnequipFrom = this.socketSelected;
+		this.unequipItemFromSocketWithName
+		(
+			uwpe.world, socketToUnequipFrom.defnName
+		);
 	}
 
 	// Clonable.

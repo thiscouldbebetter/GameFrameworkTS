@@ -233,7 +233,7 @@ class PlaceBuilderDemo_Items {
             var item = Item.of(entityItem);
             var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            itemHolder.statusMessage += "You eat the bread.";
+            itemHolder.statusMessageSet("You eat the bread.");
         }, itemBreadVisual, null // toEntity
         );
         return itemBread;
@@ -307,7 +307,7 @@ class PlaceBuilderDemo_Items {
             var item = Item.of(entityItem);
             var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            itemHolder.statusMessage = "You eat the doughnut.";
+            itemHolder.statusMessageSet("You eat the doughnut.");
         }, itemDoughnutVisual, null // toEntity
         );
         return itemDoughnut;
@@ -360,7 +360,7 @@ class PlaceBuilderDemo_Items {
             var item = Item.of(entityItem);
             var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            itemHolder.statusMessage = "You eat the fruit.";
+            itemHolder.statusMessageSet("You eat the fruit.");
         }, itemFruitVisual, null // toEntity
         );
         return itemFruit;
@@ -507,7 +507,7 @@ class PlaceBuilderDemo_Items {
             var item = Item.of(entityItem);
             var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            itemHolder.statusMessage = "You eat the meat.";
+            itemHolder.statusMessageSet("You eat the meat.");
         }, itemMeatVisual, null);
         return itemMeat;
     }
@@ -544,7 +544,7 @@ class PlaceBuilderDemo_Items {
             var item = Item.of(entityItem);
             var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-            itemHolder.statusMessage = "You use the medicine.";
+            itemHolder.statusMessageSet("You use the medicine.");
         }, itemMedicineVisual, null);
         return itemMedicine;
     }
@@ -718,14 +718,14 @@ class PlaceBuilderDemo_Items {
         var bladeColor = Color.Instances().Cyan;
         var damageTypeName = "Cold";
         var itemSwordVisual = this.sword_Visual(bladeColor);
-        var itemSword = new ItemDefn("Sword" + damageTypeName, null, null, 10, 100, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual, null);
+        var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual("Sword" + damageTypeName, 10, 100, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual);
         return itemSword;
     }
     swordHeat() {
         var bladeColor = Color.Instances().Yellow;
         var damageTypeName = "Heat";
         var itemSwordVisual = this.sword_Visual(bladeColor);
-        var itemSword = new ItemDefn("Sword" + damageTypeName, null, null, 10, 100, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual, null);
+        var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual("Sword" + damageTypeName, 10, 100, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual);
         return itemSword;
     }
     toolset() {

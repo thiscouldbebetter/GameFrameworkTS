@@ -29,6 +29,7 @@ class WorldDemo extends World {
             Actor.name,
             Effectable.name,
             EntityGenerator.name,
+            Item.name,
             ItemCrafter.name,
             Playable.name,
             SkillLearner.name,

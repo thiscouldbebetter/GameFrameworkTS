@@ -36,6 +36,9 @@ var ThisCouldBeBetter;
             static fromNameEncumbranceValueAndVisual(name, encumbrance, tradeValue, visual) {
                 return new ItemDefn(name, null, null, encumbrance, tradeValue, null, null, null, visual, null);
             }
+            static fromNameEncumbranceValueCategoryNamesUseAndVisual(name, encumbrance, tradeValue, categoryNames, use, visual) {
+                return new ItemDefn(name, null, null, encumbrance, tradeValue, null, categoryNames, null, visual, null);
+            }
             belongsToCategory(categoryToCheck) {
                 return this.belongsToCategoryWithName(categoryToCheck.name);
             }
@@ -62,7 +65,7 @@ var ThisCouldBeBetter;
             use(uwpe) {
                 if (this._use == null) {
                     var itemHolder = GameFramework.ItemHolder.of(uwpe.entity);
-                    itemHolder.statusMessage = "Can't use " + this.appearance + ".";
+                    itemHolder.statusMessageSet("Can't use " + this.appearance + ".");
                 }
                 else {
                     this._use(uwpe);

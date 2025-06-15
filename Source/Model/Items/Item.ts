@@ -136,7 +136,11 @@ export class Item implements EntityProperty<Item>
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this._entity = uwpe.entity;
+	}
 
 	propertyName(): string { return Item.name; }
 

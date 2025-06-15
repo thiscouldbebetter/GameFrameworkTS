@@ -35,7 +35,7 @@ var ThisCouldBeBetter;
                     this.items.length = 0;
                 }
                 this.itemSelected = null;
-                this.statusMessage = "";
+                this.statusMessageSet("");
                 return this;
             }
             encumbranceMaxSet(value) {
@@ -135,7 +135,7 @@ var ThisCouldBeBetter;
                     }
                     place.entitySpawn(uwpe.clone().entitiesSwap());
                     this.itemSubtract(itemToDrop);
-                    this.statusMessage = itemToDropDefn.appearance + " dropped.";
+                    this.statusMessageSet(itemToDropDefn.appearance + " dropped.");
                     var equipmentUser = GameFramework.EquipmentUser.of(entityItemHolder);
                     if (equipmentUser != null) {
                         equipmentUser.unequipItemsNoLongerHeld(uwpe);
@@ -278,6 +278,10 @@ var ThisCouldBeBetter;
                 this.retainsItemsWithZeroQuantities = value;
                 return this;
             }
+            statusMessageSet(value) {
+                this.statusMessage = value;
+                return this;
+            }
             tradeValueOfAllItems(world) {
                 var tradeValueTotal = this.items.reduce((sumSoFar, item) => sumSoFar + item.tradeValue(world), 0 // sumSoFar
                 );
@@ -292,7 +296,7 @@ var ThisCouldBeBetter;
             equals(other) { return false; } // todo
             // Controllable.
             toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton) {
-                this.statusMessage = "Use, drop, and sort items.";
+                this.statusMessageSet("Use, drop, and sort items.");
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
@@ -305,53 +309,6 @@ var ThisCouldBeBetter;
                 var fontLarge = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
                 var itemHolder = this;
                 var world = universe.world;
-                var back = () => universe.venueTransitionTo(venuePrev);
-                var drop = () => {
-                    if (itemHolder.itemSelected != null) {
-                        itemHolder.itemDrop(uwpe.entity2Set(itemHolder.itemSelected.toEntity(uwpe)));
-                    }
-                };
-                var use = () => {
-                    var itemEntityToUse = itemHolder.itemSelected.toEntity(uwpe);
-                    if (itemEntityToUse != null) {
-                        var itemToUse = GameFramework.Item.of(itemEntityToUse);
-                        if (itemToUse.use != null) {
-                            itemToUse.use(uwpe);
-                            if (itemToUse.quantity <= 0) {
-                                itemHolder.itemSelected = null;
-                            }
-                        }
-                    }
-                };
-                var up = () => {
-                    var itemToMove = itemHolder.itemSelected;
-                    var itemsAll = itemHolder.items;
-                    var index = itemsAll.indexOf(itemToMove);
-                    if (index > 0) {
-                        itemsAll.splice(index, 1);
-                        itemsAll.splice(index - 1, 0, itemToMove);
-                    }
-                };
-                var down = () => {
-                    var itemToMove = itemHolder.itemSelected;
-                    var itemsAll = itemHolder.items;
-                    var index = itemsAll.indexOf(itemToMove);
-                    if (index < itemsAll.length - 1) {
-                        itemsAll.splice(index, 1);
-                        itemsAll.splice(index + 1, 0, itemToMove);
-                    }
-                };
-                var split = () => {
-                    itemHolder.itemSplit(itemHolder.itemSelected, null);
-                };
-                var join = () => {
-                    var itemToJoin = itemHolder.itemSelected;
-                    var itemJoined = itemHolder.itemsWithDefnNameJoin(itemToJoin.defnName);
-                    itemHolder.itemSelected = itemJoined;
-                };
-                var sort = () => {
-                    itemHolder.items.sort((x, y) => (x.defnName > y.defnName ? 1 : -1));
-                };
                 var buttonSize = GameFramework.Coords.fromXY(20, 10);
                 var visualNone = new GameFramework.VisualNone();
                 var childControls = [
@@ -366,13 +323,13 @@ var ThisCouldBeBetter;
                     fontSmall, new GameFramework.DataBinding(this, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                     GameFramework.DataBinding.fromTrue(), // isEnabled
-                    use),
+                    () => this.use(uwpe)),
                     GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(10, 115), // pos
                     GameFramework.Coords.fromXY(100, 25), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => "Weight: " + c.encumbranceOfAllItemsOverMax(world)), fontSmall),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 15), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
-                    "Up", fontSmall, up // click
+                    "Up", fontSmall, () => this.up() // click
                     ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var returnValue = (c.itemSelected != null
                             && c.items.indexOf(c.itemSelected) > 0);
@@ -380,14 +337,14 @@ var ThisCouldBeBetter;
                     })),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 30), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
-                    "Down", fontSmall, down).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                    "Down", fontSmall, () => this.down()).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var returnValue = (c.itemSelected != null
                             && c.items.indexOf(c.itemSelected) < c.items.length - 1);
                         return returnValue;
                     })),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 45), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
-                    "Split", fontSmall, split).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => {
+                    "Split", fontSmall, () => this.split()).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var item = c.itemSelected;
                         var returnValue = (item != null
                             && (item.quantity > 1));
@@ -395,13 +352,13 @@ var ThisCouldBeBetter;
                     })),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 60), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
-                    "Join", fontSmall, join).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => c.itemSelected != null
+                    "Join", fontSmall, () => this.join()).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => c.itemSelected != null
                         &&
                             (c.items.filter((x) => x.defnName == c.itemSelected.defnName).length > 1)) // isEnabled
                     ),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 75), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
-                    "Sort", fontSmall, sort).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemEntities.length > 1))),
+                    "Sort", fontSmall, () => this.sort()).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemEntities.length > 1))),
                     GameFramework.ControlLabel.fromPosTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 10), // pos
                     GameFramework.DataBinding.fromContext("Item Selected:"), fontSmall),
                     GameFramework.ControlLabel.fromPosTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 15), // pos
@@ -418,61 +375,64 @@ var ThisCouldBeBetter;
                     }), GameFramework.Color.Instances().Black // colorBackground
                     ),
                     GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 115), // pos
-                    GameFramework.Coords.fromXY(200, 15), // size
+                    null, // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontSmall),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(132.5, 95), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
-                    "Use", fontSmall, use // click
+                    "Use", fontSmall, () => this.use(uwpe) // click
                     ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var item = c.itemSelected;
                         return (item != null && item.isUsable(world));
                     })),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(152.5, 95), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
-                    "Drop", fontSmall, drop // click
+                    "Drop", fontSmall, () => this.drop(uwpe) // click
                     ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemSelected != null)))
                 ];
+                var a = (a, b) => new GameFramework.Action(a, b);
+                var atim = (a, b) => new GameFramework.ActionToInputsMapping(a, b, true);
+                var itemNPerform = (quickSlotNumber) => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, quickSlotNumber);
                 var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 childControls, [
-                    new GameFramework.Action("Back", back),
-                    new GameFramework.Action("Up", up),
-                    new GameFramework.Action("Down", down),
-                    new GameFramework.Action("Split", split),
-                    new GameFramework.Action("Join", join),
-                    new GameFramework.Action("Sort", sort),
-                    new GameFramework.Action("Drop", drop),
-                    new GameFramework.Action("Use", use),
-                    new GameFramework.Action("Item0", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, null)),
-                    new GameFramework.Action("Item1", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 1)),
-                    new GameFramework.Action("Item2", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 2)),
-                    new GameFramework.Action("Item3", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 3)),
-                    new GameFramework.Action("Item4", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 4)),
-                    new GameFramework.Action("Item5", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 5)),
-                    new GameFramework.Action("Item6", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 6)),
-                    new GameFramework.Action("Item7", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 7)),
-                    new GameFramework.Action("Item8", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 8)),
-                    new GameFramework.Action("Item9", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 9)),
+                    a("Back", () => this.back(universe, venuePrev)),
+                    a("Up", () => this.up()),
+                    a("Down", () => this.down()),
+                    a("Split", () => this.split()),
+                    a("Join", () => this.join()),
+                    a("Sort", () => this.sort()),
+                    a("Drop", () => this.drop(uwpe)),
+                    a("Use", () => this.use(uwpe)),
+                    a("Item0", () => itemNPerform(null)),
+                    a("Item1", () => itemNPerform(1)),
+                    a("Item2", () => itemNPerform(2)),
+                    a("Item3", () => itemNPerform(3)),
+                    a("Item4", () => itemNPerform(4)),
+                    a("Item5", () => itemNPerform(5)),
+                    a("Item6", () => itemNPerform(6)),
+                    a("Item7", () => itemNPerform(7)),
+                    a("Item8", () => itemNPerform(8)),
+                    a("Item9", () => itemNPerform(9)),
                 ], [
-                    new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true),
-                    new GameFramework.ActionToInputsMapping("Up", ["["], true),
-                    new GameFramework.ActionToInputsMapping("Down", ["]"], true),
-                    new GameFramework.ActionToInputsMapping("Sort", ["\\"], true),
-                    new GameFramework.ActionToInputsMapping("Split", ["/"], true),
-                    new GameFramework.ActionToInputsMapping("Join", ["="], true),
-                    new GameFramework.ActionToInputsMapping("Drop", ["d"], true),
-                    new GameFramework.ActionToInputsMapping("Use", ["e"], true),
-                    new GameFramework.ActionToInputsMapping("Item0", ["_0"], true),
-                    new GameFramework.ActionToInputsMapping("Item1", ["_1"], true),
-                    new GameFramework.ActionToInputsMapping("Item2", ["_2"], true),
-                    new GameFramework.ActionToInputsMapping("Item3", ["_3"], true),
-                    new GameFramework.ActionToInputsMapping("Item4", ["_4"], true),
-                    new GameFramework.ActionToInputsMapping("Item5", ["_5"], true),
-                    new GameFramework.ActionToInputsMapping("Item6", ["_6"], true),
-                    new GameFramework.ActionToInputsMapping("Item7", ["_7"], true),
-                    new GameFramework.ActionToInputsMapping("Item8", ["_8"], true),
-                    new GameFramework.ActionToInputsMapping("Item9", ["_9"], true),
+                    atim("Back", [GameFramework.Input.Names().Escape]),
+                    atim("Up", ["["]),
+                    atim("Down", ["]"]),
+                    atim("Sort", ["\\"]),
+                    atim("Split", ["/"]),
+                    atim("Join", ["="]),
+                    atim("Drop", ["d"]),
+                    atim("Use", ["e"]),
+                    atim("Item0", ["_0"]),
+                    atim("Item1", ["_1"]),
+                    atim("Item2", ["_2"]),
+                    atim("Item3", ["_3"]),
+                    atim("Item4", ["_4"]),
+                    atim("Item5", ["_5"]),
+                    atim("Item6", ["_6"]),
+                    atim("Item7", ["_7"]),
+                    atim("Item8", ["_8"]),
+                    atim("Item9", ["_9"]),
                 ]);
                 if (includeTitleAndDoneButton) {
                     childControls.splice(0, // indexToInsertAt
@@ -480,7 +440,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 25), // size
                     GameFramework.DataBinding.fromContext("Items"), fontLarge));
                     childControls.push(GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(170, 115), // pos
-                    buttonSize.clone(), "Done", fontSmall, back // click
+                    buttonSize.clone(), "Done", fontSmall, () => this.back(universe, venuePrev) // click
                     ));
                     var titleHeight = GameFramework.Coords.fromXY(0, 15);
                     sizeBase.add(titleHeight);
@@ -491,7 +451,59 @@ var ThisCouldBeBetter;
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
-            // cloneable
+            // Control actions.
+            back(universe, venuePrev) {
+                universe.venueTransitionTo(venuePrev);
+            }
+            drop(uwpe) {
+                if (this.itemSelected != null) {
+                    var itemSelectedEntity = this.itemSelected.toEntity(uwpe);
+                    this.itemDrop(uwpe.entity2Set(itemSelectedEntity));
+                }
+            }
+            use(uwpe) {
+                var itemEntityToUse = this.itemSelected.toEntity(uwpe);
+                if (itemEntityToUse != null) {
+                    var itemToUse = GameFramework.Item.of(itemEntityToUse);
+                    if (itemToUse.use != null) {
+                        itemToUse.use(uwpe);
+                        if (itemToUse.quantity <= 0) {
+                            this.itemSelected = null;
+                        }
+                    }
+                }
+            }
+            ;
+            up() {
+                var itemToMove = this.itemSelected;
+                var itemsAll = this.items;
+                var index = itemsAll.indexOf(itemToMove);
+                if (index > 0) {
+                    itemsAll.splice(index, 1);
+                    itemsAll.splice(index - 1, 0, itemToMove);
+                }
+            }
+            down() {
+                var itemToMove = this.itemSelected;
+                var itemsAll = this.items;
+                var index = itemsAll.indexOf(itemToMove);
+                if (index < itemsAll.length - 1) {
+                    itemsAll.splice(index, 1);
+                    itemsAll.splice(index + 1, 0, itemToMove);
+                }
+            }
+            split() {
+                this.itemSplit(this.itemSelected, null);
+            }
+            join() {
+                var itemToJoin = this.itemSelected;
+                var itemJoined = this.itemsWithDefnNameJoin(itemToJoin.defnName);
+                this.itemSelected = itemJoined;
+            }
+            sort() {
+                this.items.sort((x, y) => (x.defnName > y.defnName ? 1 : -1));
+            }
+            // Clonable.
             clone() {
                 return new ItemHolder(GameFramework.ArrayHelper.clone(this.items), this.encumbranceMax, this.reachRadius, this.retainsItemsWithZeroQuantities);
             }

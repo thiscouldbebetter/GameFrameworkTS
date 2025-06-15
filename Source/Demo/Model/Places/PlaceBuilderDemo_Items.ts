@@ -508,7 +508,7 @@ class PlaceBuilderDemo_Items
 				var item = Item.of(entityItem);
 				var itemHolder = ItemHolder.of(entityUser);
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				itemHolder.statusMessage += "You eat the bread.";
+				itemHolder.statusMessageSet("You eat the bread.");
 			},
 			itemBreadVisual,
 			null // toEntity
@@ -683,7 +683,7 @@ class PlaceBuilderDemo_Items
 				var item = Item.of(entityItem);
 				var itemHolder = ItemHolder.of(entityUser);
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				itemHolder.statusMessage = "You eat the doughnut.";
+				itemHolder.statusMessageSet("You eat the doughnut.");
 			},
 			itemDoughnutVisual, null // toEntity
 		);
@@ -806,7 +806,7 @@ class PlaceBuilderDemo_Items
 				var item = Item.of(entityItem);
 				var itemHolder = ItemHolder.of(entityUser);
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				itemHolder.statusMessage = "You eat the fruit.";
+				itemHolder.statusMessageSet("You eat the fruit.");
 			},
 			itemFruitVisual,
 			null // toEntity
@@ -1188,7 +1188,7 @@ class PlaceBuilderDemo_Items
 				var item = Item.of(entityItem);
 				var itemHolder = ItemHolder.of(entityUser);
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				itemHolder.statusMessage = "You eat the meat.";
+				itemHolder.statusMessageSet("You eat the meat.");
 			},
 			itemMeatVisual,
 			null
@@ -1251,7 +1251,7 @@ class PlaceBuilderDemo_Items
 				var item = Item.of(entityItem);
 				var itemHolder = ItemHolder.of(entityUser);
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
-				itemHolder.statusMessage = "You use the medicine.";
+				itemHolder.statusMessageSet("You use the medicine.");
 			},
 			itemMedicineVisual,
 			null
@@ -1643,12 +1643,14 @@ class PlaceBuilderDemo_Items
 		var bladeColor = Color.Instances().Cyan;
 		var damageTypeName = "Cold";
 		var itemSwordVisual = this.sword_Visual(bladeColor);
-		var itemSword = new ItemDefn
+		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			"Sword" + damageTypeName, null, null, 10, 100, null,
+			"Sword" + damageTypeName,
+			10,
+			100,
 			[ "Wieldable" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemSwordVisual, null
+			itemSwordVisual
 		);
 		return itemSword;
 	}
@@ -1658,13 +1660,14 @@ class PlaceBuilderDemo_Items
 		var bladeColor = Color.Instances().Yellow;
 		var damageTypeName = "Heat";
 		var itemSwordVisual = this.sword_Visual(bladeColor);
-		var itemSword = new ItemDefn
+		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			"Sword" + damageTypeName, null, null, 10, 100, null,
+			"Sword" + damageTypeName,
+			10,
+			100,
 			[ "Wieldable" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemSwordVisual,
-			null
+			itemSwordVisual
 		);
 		return itemSword;
 	}

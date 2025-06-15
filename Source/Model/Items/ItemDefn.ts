@@ -97,6 +97,22 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 		);
 	}
 
+	static fromNameEncumbranceValueCategoryNamesUseAndVisual
+	(
+		name: string,
+		encumbrance: number,
+		tradeValue: number,
+		categoryNames: string[],
+		use: (uwpe: UniverseWorldPlaceEntities) => void,
+		visual: VisualBase
+	): ItemDefn
+	{
+		return new ItemDefn
+		(
+			name, null, null, encumbrance, tradeValue, null, categoryNames, null, visual, null
+		);
+	}
+
 	belongsToCategory(categoryToCheck: ItemCategory): boolean
 	{
 		return this.belongsToCategoryWithName(categoryToCheck.name);
@@ -138,7 +154,7 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 		if (this._use == null)
 		{
 			var itemHolder = ItemHolder.of(uwpe.entity);
-			itemHolder.statusMessage = "Can't use " + this.appearance + ".";
+			itemHolder.statusMessageSet("Can't use " + this.appearance + ".");
 		}
 		else
 		{

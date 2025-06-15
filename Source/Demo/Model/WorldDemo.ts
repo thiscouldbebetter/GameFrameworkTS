@@ -49,6 +49,7 @@ class WorldDemo extends World
 
 			Effectable.name,
 			EntityGenerator.name,
+			Item.name,
 			ItemCrafter.name,
 			Playable.name,
 			SkillLearner.name,

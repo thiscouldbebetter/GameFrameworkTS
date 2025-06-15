@@ -43,6 +43,12 @@ export class ControlBase
 		return this;
 	}
 
+	nameSet(value: string): ControlBase
+	{
+		this.name = value;
+		return this;
+	}
+
 	posSet(value: Coords): ControlBase
 	{
 		this.pos.overwriteWith(value);

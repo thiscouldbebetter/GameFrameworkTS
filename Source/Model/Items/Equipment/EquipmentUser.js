@@ -201,7 +201,6 @@ var ThisCouldBeBetter;
                 var fontHeightLarge = fontHeight * 1.5;
                 var fontLarge = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightLarge);
                 var itemHolder = GameFramework.ItemHolder.of(entityEquipmentUser);
-                var equipmentUser = this;
                 var sockets = this.socketGroup.sockets;
                 var socketDefnGroup = this.socketGroup.defnGroup;
                 var itemCategoriesForAllSockets = [];
@@ -224,11 +223,7 @@ var ThisCouldBeBetter;
                 var world = universe.world;
                 var place = world.placeCurrent;
                 var listHeight = 100;
-                var equipItemSelectedToSocketDefault = () => {
-                    var itemEntityToEquip = equipmentUser.itemEntitySelected;
-                    uwpe.entity2Set(itemEntityToEquip);
-                    equipmentUser.equipEntityWithItem(uwpe);
-                };
+                var equipItemSelectedToSocketDefault = () => this.equipItemSelectedToSocketDefault(uwpe);
                 var listEquippables = new GameFramework.ControlList("listEquippables", GameFramework.Coords.fromXY(10, 15), // pos
                 GameFramework.Coords.fromXY(70, listHeight), // size
                 GameFramework.DataBinding.fromContextAndGet(this, (c) => itemEntitiesEquippable), // items
@@ -237,33 +232,13 @@ var ThisCouldBeBetter;
                 GameFramework.DataBinding.fromGet((c) => c), // bindingForItemValue
                 null, // bindingForIsEnabled
                 equipItemSelectedToSocketDefault, null);
-                var equipItemSelectedToSocketSelected = () => {
-                    var itemEntityToEquip = equipmentUser.itemEntitySelected;
-                    uwpe.entity2Set(itemEntityToEquip);
-                    var socketSelected = equipmentUser.socketSelected;
-                    if (socketSelected == null) {
-                        equipmentUser.equipEntityWithItem(uwpe);
-                    }
-                    else {
-                        equipmentUser.equipItemEntityInSocketWithName(uwpe, socketSelected.defnName, true // includeSocketNameInMessage
-                        );
-                    }
-                };
-                var equipItemSelectedInQuickSlot = (quickSlotNumber) => {
-                    uwpe.entity2Set(equipmentUser.itemEntitySelected);
-                    equipmentUser.equipItemEntityInSocketWithName(uwpe, "Item" + quickSlotNumber, // socketName
-                    true // includeSocketNameInMessage
-                    );
-                };
                 var fontButton = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 0.8);
+                var equipItemSelectedToSocketSelected = () => this.equipItemSelectedToSocketSelected(uwpe);
                 var buttonEquip = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 50), // pos
                 GameFramework.Coords.fromXY(10, 10), // size
                 ">", // text
                 fontButton, equipItemSelectedToSocketSelected);
-                var unequipFromSocketSelected = () => {
-                    var socketToUnequipFrom = equipmentUser.socketSelected;
-                    equipmentUser.unequipItemFromSocketWithName(world, socketToUnequipFrom.defnName);
-                };
+                var unequipFromSocketSelected = () => this.unequipFromSocketSelected(uwpe);
                 var buttonUnequip = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 65), // pos
                 GameFramework.Coords.fromXY(10, 10), // size
                 "<", // text
@@ -278,6 +253,10 @@ var ThisCouldBeBetter;
                 unequipFromSocketSelected, // confirm
                 null);
                 var back = () => universe.venueTransitionTo(venuePrev);
+                var equipItemSelectedInQuickSlot = (quickSlotNumber) => this.equipItemSelectedInQuickSlot(uwpe, quickSlotNumber);
+                var textEquipItemSelectedInQuickSlot = "EquipItemSelectedInQuickSlot";
+                var a = (a, b) => new GameFramework.Action(a, b);
+                var atim = (a, b) => new GameFramework.ActionToInputsMapping(a, b, true);
                 var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
@@ -297,29 +276,29 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontSmall)
                 ], [
-                    new GameFramework.Action("Back", back),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot0", () => equipItemSelectedInQuickSlot(0)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot1", () => equipItemSelectedInQuickSlot(1)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot2", () => equipItemSelectedInQuickSlot(2)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot3", () => equipItemSelectedInQuickSlot(3)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot4", () => equipItemSelectedInQuickSlot(4)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot5", () => equipItemSelectedInQuickSlot(5)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot6", () => equipItemSelectedInQuickSlot(6)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot7", () => equipItemSelectedInQuickSlot(7)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot8", () => equipItemSelectedInQuickSlot(8)),
-                    new GameFramework.Action("EquipItemSelectedInQuickSlot9", () => equipItemSelectedInQuickSlot(9))
+                    a("Back", back),
+                    a(textEquipItemSelectedInQuickSlot + "0", () => equipItemSelectedInQuickSlot(0)),
+                    a(textEquipItemSelectedInQuickSlot + "1", () => equipItemSelectedInQuickSlot(1)),
+                    a(textEquipItemSelectedInQuickSlot + "2", () => equipItemSelectedInQuickSlot(2)),
+                    a(textEquipItemSelectedInQuickSlot + "3", () => equipItemSelectedInQuickSlot(3)),
+                    a(textEquipItemSelectedInQuickSlot + "4", () => equipItemSelectedInQuickSlot(4)),
+                    a(textEquipItemSelectedInQuickSlot + "5", () => equipItemSelectedInQuickSlot(5)),
+                    a(textEquipItemSelectedInQuickSlot + "6", () => equipItemSelectedInQuickSlot(6)),
+                    a(textEquipItemSelectedInQuickSlot + "7", () => equipItemSelectedInQuickSlot(7)),
+                    a(textEquipItemSelectedInQuickSlot + "8", () => equipItemSelectedInQuickSlot(8)),
+                    a(textEquipItemSelectedInQuickSlot + "9", () => equipItemSelectedInQuickSlot(9))
                 ], [
-                    new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot0", ["_0"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot1", ["_1"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot2", ["_2"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot3", ["_3"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot4", ["_4"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot5", ["_5"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot6", ["_6"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot7", ["_7"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot8", ["_8"], true),
-                    new GameFramework.ActionToInputsMapping("EquipItemSelectedInQuickSlot9", ["_9"], true)
+                    atim("Back", [GameFramework.Input.Names().Escape]),
+                    atim(textEquipItemSelectedInQuickSlot + "0", ["_0"]),
+                    atim(textEquipItemSelectedInQuickSlot + "1", ["_1"]),
+                    atim(textEquipItemSelectedInQuickSlot + "2", ["_2"]),
+                    atim(textEquipItemSelectedInQuickSlot + "3", ["_3"]),
+                    atim(textEquipItemSelectedInQuickSlot + "4", ["_4"]),
+                    atim(textEquipItemSelectedInQuickSlot + "5", ["_5"]),
+                    atim(textEquipItemSelectedInQuickSlot + "6", ["_6"]),
+                    atim(textEquipItemSelectedInQuickSlot + "7", ["_7"]),
+                    atim(textEquipItemSelectedInQuickSlot + "8", ["_8"]),
+                    atim(textEquipItemSelectedInQuickSlot + "9", ["_9"])
                 ]);
                 if (includeTitleAndDoneButton) {
                     var childControls = returnValue.children;
@@ -338,6 +317,35 @@ var ThisCouldBeBetter;
                 var scaleMultiplier = size.clone().divide(sizeBase);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
+            }
+            // Actions.
+            equipItemSelectedToSocketDefault(uwpe) {
+                var itemEntityToEquip = this.itemEntitySelected;
+                uwpe.entity2Set(itemEntityToEquip);
+                this.equipEntityWithItem(uwpe);
+            }
+            ;
+            equipItemSelectedToSocketSelected(uwpe) {
+                var itemEntityToEquip = this.itemEntitySelected;
+                uwpe.entity2Set(itemEntityToEquip);
+                var socketSelected = this.socketSelected;
+                if (socketSelected == null) {
+                    this.equipEntityWithItem(uwpe);
+                }
+                else {
+                    this.equipItemEntityInSocketWithName(uwpe, socketSelected.defnName, true // includeSocketNameInMessage
+                    );
+                }
+            }
+            equipItemSelectedInQuickSlot(uwpe, quickSlotNumber) {
+                uwpe.entity2Set(this.itemEntitySelected);
+                this.equipItemEntityInSocketWithName(uwpe, "Item" + quickSlotNumber, // socketName
+                true // includeSocketNameInMessage
+                );
+            }
+            unequipFromSocketSelected(uwpe) {
+                var socketToUnequipFrom = this.socketSelected;
+                this.unequipItemFromSocketWithName(uwpe.world, socketToUnequipFrom.defnName);
             }
             // Clonable.
             clone() { return this; }

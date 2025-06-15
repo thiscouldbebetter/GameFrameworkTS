@@ -19,6 +19,10 @@ var ThisCouldBeBetter;
                 this.fontNameAndHeight.overwriteWith(value);
                 return this;
             }
+            nameSet(value) {
+                this.name = value;
+                return this;
+            }
             posSet(value) {
                 this.pos.overwriteWith(value);
                 return this;

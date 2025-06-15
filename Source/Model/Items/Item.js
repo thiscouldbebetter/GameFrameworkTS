@@ -84,7 +84,9 @@ var ThisCouldBeBetter;
             }
             // EntityProperty.
             finalize(uwpe) { }
-            initialize(uwpe) { }
+            initialize(uwpe) {
+                this._entity = uwpe.entity;
+            }
             propertyName() { return Item.name; }
             updateForTimerTick(uwpe) { }
             // Equatable

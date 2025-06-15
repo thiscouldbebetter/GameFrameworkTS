@@ -66,7 +66,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			this.items.length = 0;
 		}
 		this.itemSelected = null;
-		this.statusMessage = "";
+		this.statusMessageSet("");
 
 		return this;
 	}
@@ -246,7 +246,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			);
 			this.itemSubtract(itemToDrop);
 
-			this.statusMessage = itemToDropDefn.appearance + " dropped."
+			this.statusMessageSet(itemToDropDefn.appearance + " dropped.");
 
 			var equipmentUser = EquipmentUser.of(entityItemHolder);
 			if (equipmentUser != null)
@@ -498,6 +498,12 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return this;
 	}
 
+	statusMessageSet(value: string): ItemHolder
+	{
+		this.statusMessage = value;
+		return this;
+	}
+
 	tradeValueOfAllItems(world: World): number
 	{
 		var tradeValueTotal = this.items.reduce
@@ -530,7 +536,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		venuePrev: Venue, includeTitleAndDoneButton: boolean
 	): ControlBase
 	{
-		this.statusMessage = "Use, drop, and sort items.";
+		this.statusMessageSet("Use, drop, and sort items.");
 
 		if (size == null)
 		{
@@ -553,85 +559,6 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 
 		var itemHolder = this;
 		var world = universe.world;
-
-		var back = () => universe.venueTransitionTo(venuePrev);
-
-		var drop = () =>
-		{
-			if (itemHolder.itemSelected != null)
-			{
-				itemHolder.itemDrop
-				(
-					uwpe.entity2Set(itemHolder.itemSelected.toEntity(uwpe))
-				);
-			}
-			
-		};
-
-		var use = () =>
-		{
-			var itemEntityToUse = itemHolder.itemSelected.toEntity
-			(
-				uwpe
-			);
-			if (itemEntityToUse != null)
-			{
-				var itemToUse = Item.of(itemEntityToUse);
-				if (itemToUse.use != null)
-				{
-					itemToUse.use(uwpe);
-					if (itemToUse.quantity <= 0)
-					{
-						itemHolder.itemSelected = null;
-					}
-				}
-			}
-		};
-
-		var up = () =>
-		{
-			var itemToMove = itemHolder.itemSelected;
-			var itemsAll = itemHolder.items;
-			var index = itemsAll.indexOf(itemToMove);
-			if (index > 0)
-			{
-				itemsAll.splice(index, 1);
-				itemsAll.splice(index - 1, 0, itemToMove);
-			}
-		};
-
-		var down = () =>
-		{
-			var itemToMove = itemHolder.itemSelected;
-			var itemsAll = itemHolder.items;
-			var index = itemsAll.indexOf(itemToMove);
-			if (index < itemsAll.length - 1)
-			{
-				itemsAll.splice(index, 1);
-				itemsAll.splice(index + 1, 0, itemToMove);
-			}
-		};
-
-		var split = () =>
-		{
-			itemHolder.itemSplit(itemHolder.itemSelected, null);
-		};
-
-		var join = () =>
-		{
-			var itemToJoin = itemHolder.itemSelected;
-			var itemJoined =
-				itemHolder.itemsWithDefnNameJoin(itemToJoin.defnName);
-			itemHolder.itemSelected = itemJoined;
-		};
-
-		var sort = () =>
-		{
-			itemHolder.items.sort
-			(
-				(x, y) => (x.defnName > y.defnName ? 1 : -1)
-			);
-		};
 
 		var buttonSize = Coords.fromXY(20, 10);
 		var visualNone = new VisualNone();
@@ -670,7 +597,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				), // bindingForItemSelected
 				DataBinding.fromGet( (c: Item) => c ), // bindingForItemValue
 				DataBinding.fromTrue(), // isEnabled
-				use
+				() => this.use(uwpe)
 			),
 
 			ControlLabel.fromPosSizeTextFontCenteredHorizontally
@@ -691,7 +618,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(15, 10), // size
 				"Up",
 				fontSmall,
-				up // click
+				() => this.up() // click
 			).isEnabledSet
 			(
 				DataBinding.fromContextAndGet<ItemHolder, boolean>
@@ -715,7 +642,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(15, 10), // size
 				"Down",
 				fontSmall,
-				down
+				() => this.down()
 			).isEnabledSet
 			(
 				DataBinding.fromContextAndGet<ItemHolder, boolean>
@@ -739,7 +666,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(15, 10), // size
 				"Split",
 				fontSmall,
-				split
+				() => this.split()
 			).isEnabledSet
 			(
 				DataBinding.fromContextAndGet<ItemHolder, boolean>
@@ -764,7 +691,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(15, 10), // size
 				"Join",
 				fontSmall,
-				join
+				() => this.join()
 			).isEnabledSet
 			(
 				DataBinding.fromContextAndGet<ItemHolder, boolean>
@@ -788,7 +715,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(15, 10), // size
 				"Sort",
 				fontSmall,
-				sort
+				() => this.sort()
 			).isEnabledSet
 			(
 				DataBinding.fromContextAndGet<ItemHolder, boolean>
@@ -840,7 +767,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
 				Coords.fromXY(150, 115), // pos
-				Coords.fromXY(200, 15), // size
+				null, // size
 				DataBinding.fromContextAndGet
 				(
 					this,
@@ -855,7 +782,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(15, 10), // size
 				"Use",
 				fontSmall,
-				use // click
+				() => this.use(uwpe) // click
 			).isEnabledSet
 			(
 				DataBinding.fromContextAndGet<ItemHolder, boolean>
@@ -875,7 +802,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				Coords.fromXY(15, 10), // size
 				"Drop",
 				fontSmall,
-				drop // click
+				() => this.drop(uwpe) // click
 			).isEnabledSet
 			(
 				DataBinding.fromContextAndGet<ItemHolder, boolean>
@@ -886,6 +813,13 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			)
 		];
 
+		var a = (a: string, b: any) => new Action(a, b);
+		var atim = (a: string, b: string[]) =>
+			new ActionToInputsMapping(a, b, true);
+
+		var itemNPerform = (quickSlotNumber: number) =>
+			itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, quickSlotNumber);
+
 		var returnValue = new ControlContainer
 		(
 			"Items",
@@ -893,49 +827,49 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			sizeBase.clone(), // size
 			childControls,
 			[
-				new Action("Back", back),
+				a("Back", () => this.back(universe, venuePrev) ),
 
-				new Action("Up", up),
-				new Action("Down", down),
-				new Action("Split", split),
-				new Action("Join", join),
-				new Action("Sort", sort),
-				new Action("Drop", drop),
-				new Action("Use", use),
+				a("Up", () => this.up() ),
+				a("Down", () => this.down() ),
+				a("Split", () => this.split() ),
+				a("Join", () => this.join() ),
+				a("Sort", () => this.sort() ),
+				a("Drop", () => this.drop(uwpe) ),
+				a("Use", () => this.use(uwpe) ),
 
-				new Action("Item0", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, null) ),
-				new Action("Item1", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 1) ),
-				new Action("Item2", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 2) ),
-				new Action("Item3", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 3) ),
-				new Action("Item4", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 4) ),
-				new Action("Item5", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 5) ),
-				new Action("Item6", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 6) ),
-				new Action("Item7", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 7) ),
-				new Action("Item8", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 8) ),
-				new Action("Item9", () => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, 9) ),
+				a("Item0", () => itemNPerform(null) ),
+				a("Item1", () => itemNPerform(1) ),
+				a("Item2", () => itemNPerform(2) ),
+				a("Item3", () => itemNPerform(3) ),
+				a("Item4", () => itemNPerform(4) ),
+				a("Item5", () => itemNPerform(5) ),
+				a("Item6", () => itemNPerform(6) ),
+				a("Item7", () => itemNPerform(7) ),
+				a("Item8", () => itemNPerform(8) ),
+				a("Item9", () => itemNPerform(9) ),
 			],
 
 			[
-				new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ),
+				atim("Back", [ Input.Names().Escape ] ),
 
-				new ActionToInputsMapping( "Up", [ "[" ], true ),
-				new ActionToInputsMapping( "Down", [ "]" ], true ),
-				new ActionToInputsMapping( "Sort", [ "\\" ], true ),
-				new ActionToInputsMapping( "Split", [ "/" ], true ),
-				new ActionToInputsMapping( "Join", [ "=" ], true ),
-				new ActionToInputsMapping( "Drop", [ "d" ], true ),
-				new ActionToInputsMapping( "Use", [ "e" ], true ),
+				atim("Up", [ "[" ] ),
+				atim("Down", [ "]" ]),
+				atim("Sort", [ "\\" ]),
+				atim("Split", [ "/" ]),
+				atim("Join", [ "=" ]),
+				atim("Drop", [ "d" ]),
+				atim("Use", [ "e" ]),
 
-				new ActionToInputsMapping( "Item0", [ "_0" ], true ),
-				new ActionToInputsMapping( "Item1", [ "_1" ], true ),
-				new ActionToInputsMapping( "Item2", [ "_2" ], true ),
-				new ActionToInputsMapping( "Item3", [ "_3" ], true ),
-				new ActionToInputsMapping( "Item4", [ "_4" ], true ),
-				new ActionToInputsMapping( "Item5", [ "_5" ], true ),
-				new ActionToInputsMapping( "Item6", [ "_6" ], true ),
-				new ActionToInputsMapping( "Item7", [ "_7" ], true ),
-				new ActionToInputsMapping( "Item8", [ "_8" ], true ),
-				new ActionToInputsMapping( "Item9", [ "_9" ], true ),
+				atim("Item0", [ "_0" ] ),
+				atim("Item1", [ "_1" ] ),
+				atim("Item2", [ "_2" ] ),
+				atim("Item3", [ "_3" ] ),
+				atim("Item4", [ "_4" ] ),
+				atim("Item5", [ "_5" ] ),
+				atim("Item6", [ "_6" ] ),
+				atim("Item7", [ "_7" ] ),
+				atim("Item8", [ "_8" ] ),
+				atim("Item9", [ "_9" ] ),
 
 			]
 		);
@@ -962,7 +896,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 					buttonSize.clone(),
 					"Done",
 					fontSmall,
-					back // click
+					() => this.back(universe, venuePrev) // click
 				)
 			);
 			var titleHeight = Coords.fromXY(0, 15);
@@ -977,7 +911,93 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		return returnValue;
 	}
 
-	// cloneable
+	// Control actions.
+
+	back(universe: Universe, venuePrev: Venue): void
+	{
+		universe.venueTransitionTo(venuePrev)
+	}
+
+	drop(uwpe: UniverseWorldPlaceEntities): void
+	{
+		if (this.itemSelected != null)
+		{
+			var itemSelectedEntity =
+				this.itemSelected.toEntity(uwpe);
+			this.itemDrop
+			(
+				uwpe.entity2Set(itemSelectedEntity)
+			);
+		}
+	}
+
+	use(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var itemEntityToUse = this.itemSelected.toEntity
+		(
+			uwpe
+		);
+
+		if (itemEntityToUse != null)
+		{
+			var itemToUse = Item.of(itemEntityToUse);
+			if (itemToUse.use != null)
+			{
+				itemToUse.use(uwpe);
+				if (itemToUse.quantity <= 0)
+				{
+					this.itemSelected = null;
+				}
+			}
+		}
+	};
+
+	up(): void
+	{
+		var itemToMove = this.itemSelected;
+		var itemsAll = this.items;
+		var index = itemsAll.indexOf(itemToMove);
+		if (index > 0)
+		{
+			itemsAll.splice(index, 1);
+			itemsAll.splice(index - 1, 0, itemToMove);
+		}
+	}
+
+	down(): void
+	{
+		var itemToMove = this.itemSelected;
+		var itemsAll = this.items;
+		var index = itemsAll.indexOf(itemToMove);
+		if (index < itemsAll.length - 1)
+		{
+			itemsAll.splice(index, 1);
+			itemsAll.splice(index + 1, 0, itemToMove);
+		}
+	}
+
+	split(): void
+	{
+		this.itemSplit(this.itemSelected, null);
+	}
+
+	join(): void
+	{
+		var itemToJoin = this.itemSelected;
+		var itemJoined =
+			this.itemsWithDefnNameJoin(itemToJoin.defnName);
+		this.itemSelected = itemJoined;
+	}
+
+	sort(): void
+	{
+		this.items.sort
+		(
+			(x, y) => (x.defnName > y.defnName ? 1 : -1)
+		);
+	}
+
+	// Clonable.
 
 	clone(): ItemHolder
 	{
