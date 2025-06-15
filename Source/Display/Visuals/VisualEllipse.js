@@ -12,7 +12,13 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 this.shouldUseEntityOrientation = shouldUseEntityOrientation || false;
             }
-            static fromSemiaxesAndColorFill(semiaxisHorizontal, semiaxisVertical, colorFill) {
+            static fromSemiaxesHorizontalAndVertical(semiaxisHorizontal, semiaxisVertical) {
+                return VisualEllipse.fromSemiaxesHorizontalAndVerticalAndColorBorder(semiaxisHorizontal, semiaxisVertical, GameFramework.Color.Instances().Cyan);
+            }
+            static fromSemiaxesHorizontalAndVerticalAndColorBorder(semiaxisHorizontal, semiaxisVertical, colorBorder) {
+                return new VisualEllipse(semiaxisHorizontal, semiaxisVertical, null, null, colorBorder, null);
+            }
+            static fromSemiaxesHorizontalAndVerticalAndColorFill(semiaxisHorizontal, semiaxisVertical, colorFill) {
                 return new VisualEllipse(semiaxisHorizontal, semiaxisVertical, null, colorFill, null, null);
             }
             // Visual.

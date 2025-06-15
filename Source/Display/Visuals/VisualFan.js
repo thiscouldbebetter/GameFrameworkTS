@@ -14,6 +14,13 @@ var ThisCouldBeBetter;
                 this._drawPos = GameFramework.Coords.create();
                 this._polar = GameFramework.Polar.create();
             }
+            static fromRadiusAndAnglesStartAndSpanned(radius, angleStartInTurns, angleSpannedInTurns) {
+                return VisualFan.fromRadiusAnglesStartAndSpannedAndColorsFillAndBorder(radius, angleStartInTurns, angleSpannedInTurns, null, // colorFill
+                GameFramework.Color.Instances().Cyan);
+            }
+            static fromRadiusAnglesStartAndSpannedAndColorsFillAndBorder(radius, angleStartInTurns, angleSpannedInTurns, colorFill, colorBorder) {
+                return new VisualFan(radius, angleStartInTurns, angleSpannedInTurns, colorFill, colorBorder);
+            }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.

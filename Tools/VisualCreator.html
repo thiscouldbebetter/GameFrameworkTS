@@ -1,0 +1,355 @@
+<html>
+<body>
+
+<script type="text/javascript" src="../Source/Helpers/ArrayHelper.js"></script>
+<script type="text/javascript" src="../Source/Helpers/ByteHelper.js"></script>
+<script type="text/javascript" src="../Source/Helpers/NumberHelper.js"></script>
+<script type="text/javascript" src="../Source/Helpers/StringHelper.js"></script>
+
+<script type="text/javascript" src="../Source/Model/Entity.js"></script>
+<script type="text/javascript" src="../Source/Model/EntityProperty.js"></script>
+
+<script type="text/javascript" src="../Source/Controls/ControlActionNames.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlBase.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlBuilder.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlButton.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlColorScheme.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlContainer.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlLabel.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlList.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlNone.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlScrollbar.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlSelect.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlSelectOption.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlSoundScheme.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlStyle.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlTextBox.js"></script>
+<script type="text/javascript" src="../Source/Controls/ControlVisual.js"></script>
+<script type="text/javascript" src="../Source/Controls/DataBinding.js"></script>
+<script type="text/javascript" src="../Source/Controls/VenueControls.js"></script>
+<script type="text/javascript" src="../Source/Controls/VenueMessage.js"></script>
+
+<script type="text/javascript" src="../Source/Display/Color.js"></script>
+<script type="text/javascript" src="../Source/Display/Display2D.js"></script>
+<script type="text/javascript" src="../Source/Display/DisplayRecorder.js"></script>
+<script type="text/javascript" src="../Source/Display/Drawable.js"></script>
+<script type="text/javascript" src="../Source/Display/VenueFader.js"></script>
+<script type="text/javascript" src="../Source/Display/VenueLayered.js"></script>
+
+<script type="text/javascript" src="../Source/Display/Visuals/VisualAnchor.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualArc.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualBar.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualBuffered.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualBuilder.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualCameraProjection.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualCircle.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualCircleGradient.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualControl.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualCrosshairs.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualDeferred.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualDirectional.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualDynamic.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualEllipse.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualErase.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualFan.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualGroup.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualHidable.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualImage.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualImageFromLibrary.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualImageImmediate.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualImageScaled.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualImageScaledPartial.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualInvisible.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualJump2D.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualLine.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualMap.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualMesh.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualNone.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualOffset.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualParticles.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualPath.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualPolars.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualPolygon.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualRectangle.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualRepeating.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualRotate.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualSelect.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualStack.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualText.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualTransform.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualTransformEntityPos.js"></script>
+
+<script type="text/javascript" src="../Source/Display/Visuals/Animation/VisualAnimation.js"></script>
+
+<script type="text/javascript" src="../Source/Geometry/Camera.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Coords.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Disposition.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Orientation.js"></script>
+<script type="text/javascript" src="../Source/Geometry/RangeExtent.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Rotation.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Polar.js"></script>
+
+<script type="text/javascript" src="../Source/Geometry/Collisions/Collision.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Collisions/CollisionHelper.js"></script>
+
+<script type="text/javascript" src="../Source/Geometry/Shapes/Arc.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Box.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/BoxRotated.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Edge.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Face.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Plane.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/ShapeContainer.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/ShapeGroupAny.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/ShapeGroupAll.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/ShapeHelper.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/ShapeInverse.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Shell.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Sphere.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Shapes/Wedge.js"></script>
+
+<script type="text/javascript" src="../Source/Geometry/Shapes/Maps/MapLocated.js"></script>
+
+<script type="text/javascript" src="../Source/Geometry/Shapes/Meshes/Mesh.js"></script>
+
+<script type="text/javascript" src="../Source/Geometry/Transforms/Transform_Locate.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Transforms/Transform_Orient.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Transforms/Transform_Translate.js"></script>
+<script type="text/javascript" src="../Source/Geometry/Transforms/Transforms.js"></script>
+
+<script type="text/javascript" src="../Source/Input/ActionToInputsMapping.js"></script>
+<script type="text/javascript" src="../Source/Input/Input.js"></script>
+<script type="text/javascript" src="../Source/Input/InputHelper.js"></script>
+<script type="text/javascript" src="../Source/Input/UserInputListener.js"></script>
+
+<script type="text/javascript" src="../Source/Media/BinaryFile.js"></script>
+<script type="text/javascript" src="../Source/Media/Font.js"></script>
+<script type="text/javascript" src="../Source/Media/FontNameAndHeight.js"></script>
+<script type="text/javascript" src="../Source/Media/Image.js"></script>
+<script type="text/javascript" src="../Source/Media/MediaLibrary.js"></script>
+<script type="text/javascript" src="../Source/Media/VenueVideo.js"></script>
+<script type="text/javascript" src="../Source/Media/Video.js"></script>
+<script type="text/javascript" src="../Source/Media/VideoHelper.js"></script>
+
+<script type="text/javascript" src="../Source/Media/Audio/Audible.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/Sound.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/SoundFromFile.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/SoundFromFileMod.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/SoundHelper.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/VisualSound.js"></script>
+
+<script type="text/javascript" src="../Source/Media/Text/TextString.js"></script>
+
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Extensions/ArrayHelper.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Extensions/StringHelper.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/FileFormats/Base64Encoder.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/FileFormats/ByteConverter.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/FileFormats/ByteStreamBigEndian.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/FileFormats/ByteStreamLittleEndian.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/FileFormats/Constants.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/FileFormats/Sound.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/FileFormats/ModFile.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/FileFormats/WavFile.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Model/Instrument.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Model/Octave.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Model/Pitch.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Model/Song.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Model/Note.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Model/Sequence.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Model/Track.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/Model/Tracker.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/SoundSources/SoundSource.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/SoundSources/SoundSourceChild.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/SoundSources/SoundSourceType.js"></script>
+<script type="text/javascript" src="../Source/Media/Audio/MusicTracker/Source/SoundSources/SoundSource_WavFile.js"></script>
+
+<script type="text/javascript" src="../Source/Model/EntityBuilder.js"></script>
+<script type="text/javascript" src="../Source/Model/Selector.js"></script>
+<script type="text/javascript" src="../Source/Model/Universe.js"></script>
+<script type="text/javascript" src="../Source/Model/UniverseWorldPlaceEntities.js"></script>
+<script type="text/javascript" src="../Source/Model/VenueWorld.js"></script>
+<script type="text/javascript" src="../Source/Model/World.js"></script>
+<script type="text/javascript" src="../Source/Model/WorldCreator.js"></script>
+<script type="text/javascript" src="../Source/Model/WorldDefn.js"></script>
+
+<script type="text/javascript" src="../Source/Model/Actors/Action.js"></script>
+<script type="text/javascript" src="../Source/Model/Actors/Activity.js"></script>
+<script type="text/javascript" src="../Source/Model/Actors/ActivityDefn.js"></script>
+<script type="text/javascript" src="../Source/Model/Actors/Actor.js"></script>
+
+<script type="text/javascript" src="../Source/Model/Items/Item.js"></script>
+<script type="text/javascript" src="../Source/Model/Items/ItemDefn.js"></script>
+
+<script type="text/javascript" src="../Source/Model/Physics/Boundable.js"></script>
+<script type="text/javascript" src="../Source/Model/Physics/Collidable.js"></script>
+<script type="text/javascript" src="../Source/Model/Physics/Constrainable.js"></script>
+<script type="text/javascript" src="../Source/Model/Physics/Locatable.js"></script>
+<script type="text/javascript" src="../Source/Model/Physics/Movable.js"></script>
+
+<script type="text/javascript" src="../Source/Model/Places/Place.js"></script>
+<script type="text/javascript" src="../Source/Model/Places/PlaceBase.js"></script>
+<script type="text/javascript" src="../Source/Model/Places/PlaceDefn.js"></script>
+
+<script type="text/javascript" src="../Source/Profiles/Profile.js"></script>
+
+<script type="text/javascript" src="../Source/Storage/FileHelper.js"></script>
+<script type="text/javascript" src="../Source/Storage/Serializer.js"></script>
+<script type="text/javascript" src="../Source/Storage/StorageHelper.js"></script>
+<script type="text/javascript" src="../Source/Storage/VenueFileUpload.js"></script>
+
+<script type="text/javascript" src="../Source/Storage/Compressor/BitStream.js"></script>
+<script type="text/javascript" src="../Source/Storage/Compressor/ByteStreamFromBytes.js"></script>
+<script type="text/javascript" src="../Source/Storage/Compressor/ByteStreamFromString.js"></script>
+<script type="text/javascript" src="../Source/Storage/Compressor/CompressorLZW.js"></script>
+
+<script type="text/javascript" src="../Source/Storage/TarFiles/TarFile.js"></script>
+<script type="text/javascript" src="../Source/Storage/TarFiles/TarFileEntry.js"></script>
+<script type="text/javascript" src="../Source/Storage/TarFiles/TarFileEntryHeader.js"></script>
+<script type="text/javascript" src="../Source/Storage/TarFiles/TarFileTypeFlag.js"></script>
+
+<script type="text/javascript" src="../Source/Utility/DateTime.js"></script>
+<script type="text/javascript" src="../Source/Utility/IDHelper.js"></script>
+<script type="text/javascript" src="../Source/Utility/PlatformHelper.js"></script>
+<script type="text/javascript" src="../Source/Utility/Randomizer.js"></script>
+<script type="text/javascript" src="../Source/Utility/RandomizerSystem.js"></script>
+<script type="text/javascript" src="../Source/Utility/Reference.js"></script>
+<script type="text/javascript" src="../Source/Utility/Stack.js"></script>
+<script type="text/javascript" src="../Source/Utility/TimerHelper.js"></script>
+<script type="text/javascript" src="../Source/Utility/URLParser.js"></script>
+<script type="text/javascript" src="../Source/Utility/VenueTask.js"></script>
+
+<script type="text/javascript" src="../Source/Imports.js"></script>
+
+<div id="divUi">
+
+	<h3>GameFramework Visual Creator</h3>
+
+	<p>
+		Enter JavaScript that creates
+		an instance of the Visual interface,
+		then click the Render button.
+	</p>
+
+	<div>
+		<label for="textareaVisualAsJavaScript">
+			Visual as JavaScript:
+		</label>
+		<button onclick="buttonDemo_Clicked()">Load Demo:</button>
+		<select id="selectDemo">
+			<option>Circle</option>
+			<option>Ellipse</option>
+			<option>Fan</option>
+			<option>Rectangle</option>
+		</select>
+		<br />
+		<textarea
+			id="textareaVisualAsJavaScript"
+			cols="80" rows="20"
+		></textarea>
+	</div>
+
+	<button onclick="buttonRender_Clicked()">Render</button>
+
+	<div id="divMain"></div>
+
+</div>
+
+<script type="text/javascript">
+
+function visualDemoCreateCircle()
+{
+	return "VisualCircle.fromRadius(20)";
+}
+
+function visualDemoCreateEllipse()
+{
+	return "VisualEllipse.fromSemiaxesHorizontalAndVertical(20, 15)";
+}
+
+
+function visualDemoCreateEllipse()
+{
+	return "VisualFan.fromRadiusAndAnglesStartAndSpanned(20, 0, .25)";
+}
+
+function visualDemoCreateRectangle()
+{
+	return "VisualRectangle.fromSize(Coords.fromXY(40, 30) )";
+}
+
+function buttonDemo_Clicked()
+{
+	var d = document;
+	var selectDemo =
+		d.getElementById("selectDemo");
+	var demoName = selectDemo.value;
+	var textareaVisualAsJavaScript =
+		d.getElementById("textareaVisualAsJavaScript");
+
+	var visualAsJavaScript;
+	if (demoName == "Circle")
+	{
+		visualAsJavaScript = visualDemoCreateCircle();
+	}
+	else if (demoName == "Ellipse")
+	{
+		visualAsJavaScript = visualDemoCreateEllipse();
+	}
+	else if (demoName == "Fan")
+	{
+		visualAsJavaScript = visualDemoCreateEllipse();
+	}
+	else if (demoName == "Rectangle")
+	{
+		visualAsJavaScript = visualDemoCreateRectangle();
+	}
+	else
+	{
+		visualAsJavaScript = "[Demo name not recognized.]";
+	}
+
+	textareaVisualAsJavaScript.value =
+		visualAsJavaScript;
+}
+
+function buttonRender_Clicked()
+{
+	var d = document;
+	var divMain = d.getElementById("divMain");
+	divMain.innerHTML = "";
+	var display = Display2D.default();
+	display.initialize(null);
+	var entityLoc = Disposition.default();
+	var entityPos = entityLoc.pos;
+	entityPos.overwriteWith(display.sizeInPixelsHalf)
+	var entity = Entity.fromNameAndProperties
+	(
+		"Drawable",
+		[
+			Locatable.fromLoc(entityLoc)
+		]
+	);
+	display.colorBackSet(Color.Instances().Black);
+	display.drawBackground();
+	var universe = new Universe();
+	var world = new World();
+	var place = new PlaceBase();
+	var uwpe = new UniverseWorldPlaceEntities
+	(
+		universe,
+		world,
+		place,
+		entity,
+		null
+	);
+	var textareaVisualAsJavaScript =
+		d.getElementById("textareaVisualAsJavaScript");
+	var visualAsJavaScript = textareaVisualAsJavaScript.value;
+	var visual = eval(visualAsJavaScript);
+	visual.draw(uwpe, display);
+}
+
+</script>
+
+</body>
+</html>
+

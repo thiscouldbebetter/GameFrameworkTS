@@ -51,6 +51,7 @@ var VisualDirectional = gf.VisualDirectional;
 var VisualDynamic = gf.VisualDynamic;
 var VisualEllipse = gf.VisualEllipse;
 var VisualErase = gf.VisualErase;
+var VisualFan = gf.VisualFan;
 var VisualGroup = gf.VisualGroup;
 var VisualImageFromLibrary = gf.VisualImageFromLibrary;
 var VisualImageImmediate = gf.VisualImageImmediate;

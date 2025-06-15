@@ -64,6 +64,7 @@ import VisualDirectional = gf.VisualDirectional;
 import VisualDynamic = gf.VisualDynamic;
 import VisualEllipse = gf.VisualEllipse;
 import VisualErase = gf.VisualErase;
+import VisualFan = gf.VisualFan;
 import VisualGroup = gf.VisualGroup;
 import VisualImage = gf.VisualImage;
 import VisualImageFromLibrary = gf.VisualImageFromLibrary;

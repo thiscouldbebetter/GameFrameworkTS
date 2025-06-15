@@ -15,8 +15,11 @@ export class VisualFan implements Visual<VisualFan>
 
 	constructor
 	(
-		radius: number, angleStartInTurns: number,
-		angleSpannedInTurns: number, colorFill: Color, colorBorder: Color
+		radius: number,
+		angleStartInTurns: number,
+		angleSpannedInTurns: number,
+		colorFill: Color,
+		colorBorder: Color
 	)
 	{
 		this.radius = radius;
@@ -28,6 +31,42 @@ export class VisualFan implements Visual<VisualFan>
 		// helper variables
 		this._drawPos = Coords.create();
 		this._polar = Polar.create();
+	}
+
+	static fromRadiusAndAnglesStartAndSpanned
+	(
+		radius: number,
+		angleStartInTurns: number,
+		angleSpannedInTurns: number,
+	): VisualFan
+	{
+		return VisualFan.fromRadiusAnglesStartAndSpannedAndColorsFillAndBorder
+		(
+			radius,
+			angleStartInTurns,
+			angleSpannedInTurns,
+			null, // colorFill
+			Color.Instances().Cyan
+		);
+	}
+
+	static fromRadiusAnglesStartAndSpannedAndColorsFillAndBorder
+	(
+		radius: number,
+		angleStartInTurns: number,
+		angleSpannedInTurns: number,
+		colorFill: Color,
+		colorBorder: Color
+	): VisualFan
+	{
+		return new VisualFan
+		(
+			radius,
+			angleStartInTurns,
+			angleSpannedInTurns,
+			colorFill,
+			colorBorder
+		);
 	}
 
 	// Visual.

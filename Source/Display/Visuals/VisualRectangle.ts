@@ -48,6 +48,11 @@ export class VisualRectangle implements Visual<VisualRectangle>
 		return VisualRectangle.fromSizeAndColorFill(size, colorFill);
 	}
 
+	static fromSize(size: Coords): VisualRectangle
+	{
+		return VisualRectangle.fromSizeAndColorBorder(size, Color.Instances().Cyan);
+	}
+
 	static fromSizeAndColorBorder(size: Coords, colorBorder: Color): VisualRectangle
 	{
 		return new VisualRectangle(size, null, colorBorder, null);

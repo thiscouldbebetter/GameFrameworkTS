@@ -23,6 +23,9 @@ var ThisCouldBeBetter;
             static fromColorFillAndSize(colorFill, size) {
                 return VisualRectangle.fromSizeAndColorFill(size, colorFill);
             }
+            static fromSize(size) {
+                return VisualRectangle.fromSizeAndColorBorder(size, GameFramework.Color.Instances().Cyan);
+            }
             static fromSizeAndColorBorder(size, colorBorder) {
                 return new VisualRectangle(size, null, colorBorder, null);
             }

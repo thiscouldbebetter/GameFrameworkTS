@@ -26,9 +26,36 @@ export class VisualEllipse implements Visual<VisualEllipse>
 		this.shouldUseEntityOrientation = shouldUseEntityOrientation || false;
 	}
 
-	static fromSemiaxesAndColorFill
+	static fromSemiaxesHorizontalAndVertical
 	(
-		semiaxisHorizontal: number, semiaxisVertical: number, colorFill: Color
+		semiaxisHorizontal: number,
+		semiaxisVertical: number
+	): VisualEllipse
+	{
+		return VisualEllipse.fromSemiaxesHorizontalAndVerticalAndColorBorder
+		(
+			semiaxisHorizontal, semiaxisVertical, Color.Instances().Cyan
+		)
+	}
+
+	static fromSemiaxesHorizontalAndVerticalAndColorBorder
+	(
+		semiaxisHorizontal: number,
+		semiaxisVertical: number,
+		colorBorder: Color
+	): VisualEllipse
+	{
+		return new VisualEllipse
+		(
+			semiaxisHorizontal, semiaxisVertical, null, null, colorBorder, null
+		)
+	}
+
+	static fromSemiaxesHorizontalAndVerticalAndColorFill
+	(
+		semiaxisHorizontal: number,
+		semiaxisVertical: number,
+		colorFill: Color
 	): VisualEllipse
 	{
 		return new VisualEllipse
