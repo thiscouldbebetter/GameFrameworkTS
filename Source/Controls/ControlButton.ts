@@ -261,7 +261,7 @@ export class ControlButton<TContext> extends ControlBase
 
 		var textAsString = this.text();
 
-		display.drawText
+		display.drawTextWithFontAtPosWithColorsFillAndOutline
 		(
 			textAsString,
 			this.fontNameAndHeight,

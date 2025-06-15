@@ -47,7 +47,9 @@ var ThisCouldBeBetter;
             isVisible() { return this._isVisible; }
             scalePosAndSize(scaleFactors) {
                 this.pos.multiply(scaleFactors);
-                this.size.multiply(scaleFactors);
+                if (this.size != null) {
+                    this.size.multiply(scaleFactors);
+                }
                 if (this.fontNameAndHeight != null) {
                     this.fontNameAndHeight.heightInPixels *= scaleFactors.y;
                 }

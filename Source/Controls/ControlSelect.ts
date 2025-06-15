@@ -169,7 +169,7 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 			: this.bindingForOptionText.contextSet(optionSelected).get()
 		);
 
-		display.drawText
+		display.drawTextWithFontAtPosWithColorsFillAndOutline
 		(
 			text,
 			this.fontNameAndHeight,

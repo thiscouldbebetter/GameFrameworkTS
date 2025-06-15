@@ -68,7 +68,7 @@ var ThisCouldBeBetter;
                     else {
                         text = this.text.get();
                     }
-                    display.drawText(text, GameFramework.FontNameAndHeight.fromHeightInPixels(this.size.y), // fontHeightInPixels
+                    display.drawTextWithFontAtPosWithColorsFillAndOutline(text, GameFramework.FontNameAndHeight.fromHeightInPixels(this.size.y), // fontHeightInPixels
                     pos, colorForBorder, GameFramework.Color.Instances().Black, // colorOutline
                     true, // isCenteredHorizontally
                     true, // isCenteredVertically

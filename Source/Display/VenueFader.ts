@@ -68,7 +68,9 @@ export class VenueFader implements Venue
 	{
 		var venueCurrent = this.venueCurrent();
 		var venueCurrentIsInitialized =
-			venueCurrent.initializeIsComplete(universe);
+			venueCurrent == null
+			? true
+			: venueCurrent.initializeIsComplete(universe);
 		return venueCurrentIsInitialized;
 	}
 

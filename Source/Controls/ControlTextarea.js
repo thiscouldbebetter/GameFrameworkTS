@@ -220,7 +220,7 @@ var ThisCouldBeBetter;
                 var drawPos2 = GameFramework.Coords.fromXY(drawPos.x + textMarginLeft, itemPosY);
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var line = lines[i];
-                    display.drawText(line, this.fontNameAndHeight, drawPos2, colorFore, colorBack, false, // isCenteredHorizontally
+                    display.drawTextWithFontAtPosWithColorsFillAndOutline(line, this.fontNameAndHeight, drawPos2, colorFore, colorBack, false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     this.size);
                     drawPos2.y += itemSizeY;

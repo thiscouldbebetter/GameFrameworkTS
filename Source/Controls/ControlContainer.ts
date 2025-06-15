@@ -235,7 +235,8 @@ export class ControlContainer extends ControlBase
 		{
 			var child = this.children[i];
 			var childPos = child.pos;
-			var childMax = this._childMax.overwriteWith(childPos).add(child.size);
+			var childSize = child.size || Coords.zeroes();
+			var childMax = this._childMax.overwriteWith(childPos).add(childSize);
 
 			var doesChildContainPos = posToCheck.isInRangeMinMax
 			(

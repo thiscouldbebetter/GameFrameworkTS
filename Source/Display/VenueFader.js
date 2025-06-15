@@ -37,7 +37,9 @@ var ThisCouldBeBetter;
             }
             initializeIsComplete(universe) {
                 var venueCurrent = this.venueCurrent();
-                var venueCurrentIsInitialized = venueCurrent.initializeIsComplete(universe);
+                var venueCurrentIsInitialized = venueCurrent == null
+                    ? true
+                    : venueCurrent.initializeIsComplete(universe);
                 return venueCurrentIsInitialized;
             }
             updateForTimerTick(universe) {

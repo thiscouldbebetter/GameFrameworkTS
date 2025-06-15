@@ -137,14 +137,19 @@ export class PlaceBase implements Place, Loadable
 		return returnValues;
 	}
 
-	entitiesRemove(): void
+	entitiesRemove(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var uwpeEntityToRestore = uwpe.entity;
+
 		for (var i = 0; i < this.entitiesToRemove.length; i++)
 		{
 			var entity = this.entitiesToRemove[i];
-			this.entityRemove(entity);
+			uwpe.entitySet(entity);
+			this.entityRemove(uwpe);
 		}
 		this.entitiesToRemove.length = 0;
+
+		uwpe.entity = uwpeEntityToRestore;
 	}
 
 	entitiesToRemoveAdd(entitiesToRemove: Entity[]): void
@@ -185,8 +190,10 @@ export class PlaceBase implements Place, Loadable
 		return (this._entities.indexOf(entity) >= 0);
 	}
 
-	entityRemove(entity: Entity): void
+	entityRemove(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entity = uwpe.entity;
+
 		var entityProperties = entity.properties;
 		for (var p = 0; p < entityProperties.length; p++)
 		{
@@ -198,6 +205,9 @@ export class PlaceBase implements Place, Loadable
 		}
 		ArrayHelper.remove(this._entities, entity);
 		this.entitiesById.delete(entity.id);
+
+		var collisionTracker = CollisionTrackerBase.fromPlace(uwpe);
+		collisionTracker.entityReset(entity);
 	}
 
 	entitySpawn(uwpe: UniverseWorldPlaceEntities): void
@@ -279,7 +289,7 @@ export class PlaceBase implements Place, Loadable
 	{
 		uwpe.placeSet(this);
 		var universe = uwpe.universe;
-		this.entitiesRemove();
+		this.entitiesRemove(uwpe);
 		universe.inputHelper.inputsRemoveAll();
 		var entities = this._entities;
 		for (var i = 0; i < entities.length; i++)
@@ -330,7 +340,7 @@ export class PlaceBase implements Place, Loadable
 	{
 		var world = uwpe.world;
 
-		this.entitiesRemove();
+		this.entitiesRemove(uwpe);
 
 		this.entitiesSpawn(uwpe);
 

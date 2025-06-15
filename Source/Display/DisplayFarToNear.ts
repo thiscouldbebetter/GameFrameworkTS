@@ -419,7 +419,7 @@ export class DisplayFarToNear implements Display
 		);
 	}
 
-	drawText
+	drawTextWithFontAtPosWithColorsFillAndOutline
 	(
 		text: string,
 		fontNameAndHeight: FontNameAndHeight,
@@ -436,7 +436,7 @@ export class DisplayFarToNear implements Display
 		(
 			pos.z,
 			() =>
-				this.displayInner.drawText
+				this.displayInner.drawTextWithFontAtPosWithColorsFillAndOutline
 				(
 					text, fontNameAndHeight, pos,
 					colorFill, colorOutline,

@@ -326,8 +326,9 @@ export class ControlTabbed<TContext> extends ControlBase
 			if (child != null)
 			{
 				var childPos = child.pos;
+				var childSize = child.size || Coords.zeroes();
 				var childMax =
-					this._childMax.overwriteWith(childPos).add(child.size);
+					this._childMax.overwriteWith(childPos).add(childSize);
 				var doesChildContainPos =
 					posToCheck.isInRangeMinMax(childPos, childMax);
 

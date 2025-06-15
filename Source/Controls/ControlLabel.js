@@ -50,6 +50,13 @@ var ThisCouldBeBetter;
                 false, // isTextCenteredVertically
                 text, fontNameAndHeight);
             }
+            static fromPosTextFontCenteredHorizontally(pos, text, fontNameAndHeight) {
+                var textFromBindingInitial = text.get() || "";
+                return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, null, // size
+                true, // isTextCenteredHorizontally
+                false, // isTextCenteredVertically
+                text, fontNameAndHeight);
+            }
             static fromPosSizeTextFontUncentered(pos, size, text, fontNameAndHeight) {
                 var textFromBindingInitial = text.get() || "";
                 return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, size, false, // isTextCenteredHorizontally
@@ -87,8 +94,10 @@ var ThisCouldBeBetter;
                 var style = style || this.style(universe);
                 var text = this.text();
                 if (text != null) {
-                    display.drawText(text, this.fontNameAndHeight, drawPos, style.colorBorder(), style.colorFill(), // colorOutline
-                    this.isTextCenteredHorizontally, this.isTextCenteredVertically, this.size);
+                    // Fill and border colors are inverted for text.
+                    var colorBorder = style.colorBorder();
+                    var colorFill = style.colorFill();
+                    display.drawTextWithFontAtPosWithColorsFillAndOutline(text, this.fontNameAndHeight, drawPos, colorBorder, colorFill, this.isTextCenteredHorizontally, this.isTextCenteredVertically, this.size);
                 }
             }
         }

@@ -607,7 +607,7 @@ export class ControlList<TContext, TItem, TValue> extends ControlBase
 				this.itemSize().x, this.fontNameAndHeight.heightInPixels
 			);
 
-			display.drawText
+			display.drawTextWithFontAtPosWithColorsFillAndOutline
 			(
 				text,
 				this.fontNameAndHeight,

@@ -126,7 +126,8 @@ var ThisCouldBeBetter;
                 for (var i = this.children.length - 1; i >= 0; i--) {
                     var child = this.children[i];
                     var childPos = child.pos;
-                    var childMax = this._childMax.overwriteWith(childPos).add(child.size);
+                    var childSize = child.size || GameFramework.Coords.zeroes();
+                    var childMax = this._childMax.overwriteWith(childPos).add(childSize);
                     var doesChildContainPos = posToCheck.isInRangeMinMax(childPos, childMax);
                     if (doesChildContainPos) {
                         listToAddTo.push(child);

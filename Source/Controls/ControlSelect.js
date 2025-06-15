@@ -87,7 +87,7 @@ var ThisCouldBeBetter;
                 var text = (optionSelected == null
                     ? "-"
                     : this.bindingForOptionText.contextSet(optionSelected).get());
-                display.drawText(text, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
+                display.drawTextWithFontAtPosWithColorsFillAndOutline(text, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
                 true, // isCenteredVertically
                 this.size // sizeMaxInPixels
                 );

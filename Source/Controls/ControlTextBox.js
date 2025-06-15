@@ -120,12 +120,12 @@ var ThisCouldBeBetter;
                 var drawPosText = this._drawPosText.overwriteWith(drawPos).add(textMargin);
                 style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, style.colorFill(), style.colorBorder(), this.isHighlighted, display);
                 if (this.isHighlighted == false) {
-                    display.drawText(text, this.fontNameAndHeight, drawPosText, style.colorBorder(), style.colorFill(), false, // isCenteredHorizontally
+                    display.drawTextWithFontAtPosWithColorsFillAndOutline(text, this.fontNameAndHeight, drawPosText, style.colorBorder(), style.colorFill(), false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     this.size);
                 }
                 else {
-                    display.drawText(text, this.fontNameAndHeight, drawPosText, style.colorFill(), style.colorBorder(), false, // isCenteredHorizontally
+                    display.drawTextWithFontAtPosWithColorsFillAndOutline(text, this.fontNameAndHeight, drawPosText, style.colorFill(), style.colorBorder(), false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     this.size);
                     var textBeforeCursor = text.substr(0, this.cursorPos);
@@ -136,7 +136,7 @@ var ThisCouldBeBetter;
                     style.drawBoxOfSizeAtPosWithColorsToDisplay(GameFramework.Coords.fromXY(cursorWidth, fontHeightInPixels), // size
                     drawPosText, style.colorFill(), style.colorFill(), // ?
                     this.isHighlighted, display);
-                    display.drawText(textAtCursor, this.fontNameAndHeight, drawPosText, style.colorBorder(), null, // colorBack
+                    display.drawTextWithFontAtPosWithColorsFillAndOutline(textAtCursor, this.fontNameAndHeight, drawPosText, style.colorBorder(), null, // colorBack
                     false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     this.size);

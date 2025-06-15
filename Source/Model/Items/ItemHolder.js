@@ -402,11 +402,9 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(85, 75), // pos
                     GameFramework.Coords.fromXY(15, 10), // size
                     "Sort", fontSmall, sort).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemEntities.length > 1))),
-                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 10), // pos
-                    GameFramework.Coords.fromXY(100, 15), // size
+                    GameFramework.ControlLabel.fromPosTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 10), // pos
                     GameFramework.DataBinding.fromContext("Item Selected:"), fontSmall),
-                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 20), // pos
-                    GameFramework.Coords.fromXY(200, 15), // size
+                    GameFramework.ControlLabel.fromPosTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 15), // pos
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var i = c.itemSelected;
                         return (i == null ? "-" : i.toString(world));

@@ -87,7 +87,7 @@ export interface Display
 		colorFill: Color, colorBorder: Color,
 		cornerRadius: number
 	): void;
-	drawText
+	drawTextWithFontAtPosWithColorsFillAndOutline
 	(
 		text: string,
 		fontNameAndHeight: FontNameAndHeight,

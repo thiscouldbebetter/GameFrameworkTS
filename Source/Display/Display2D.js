@@ -83,27 +83,28 @@ var ThisCouldBeBetter;
                 var drawPos = this._drawPos.overwriteWith(center);
                 var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
                 var angleStopInRadians = angleStopInTurns * Display2D.RadiansPerTurn;
+                var g = this.graphics;
                 if (colorFill != null) {
-                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
-                    this.graphics.beginPath();
-                    this.graphics.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
+                    g.fillStyle = GameFramework.Color.systemColorGet(colorFill);
+                    g.beginPath();
+                    g.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
                     drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.create()));
-                    this.graphics.lineTo(drawPos.x, drawPos.y);
-                    this.graphics.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
+                    g.lineTo(drawPos.x, drawPos.y);
+                    g.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
-                    this.graphics.closePath();
-                    this.graphics.fill();
+                    g.closePath();
+                    g.fill();
                 }
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
-                    this.graphics.beginPath();
-                    this.graphics.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
+                    g.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
+                    g.beginPath();
+                    g.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
                     drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.create()));
-                    this.graphics.lineTo(drawPos.x, drawPos.y);
-                    this.graphics.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
+                    g.lineTo(drawPos.x, drawPos.y);
+                    g.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
-                    this.graphics.closePath();
-                    this.graphics.stroke();
+                    g.closePath();
+                    g.stroke();
                 }
             }
             drawBackground() {
@@ -353,7 +354,7 @@ var ThisCouldBeBetter;
                     this.graphics.stroke();
                 }
             }
-            drawText(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
+            drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
                 var fontToRestore = this.graphics.font;
                 if (fontNameAndHeight != null) {
                     this.fontSet(fontNameAndHeight);
@@ -375,7 +376,7 @@ var ThisCouldBeBetter;
                     else {
                         while (lineToWrap.length > 0
                             && heightOfLinesSoFar < sizeMaxInPixels.y) {
-                            var lineTrimmedToWidth = this.drawText_StringTrimToAllowedWidth(lineToWrap, fontHeightInPixels, sizeMaxInPixels);
+                            var lineTrimmedToWidth = this.drawText_StringTrimToAllowedWidth(lineToWrap, fontHeightInPixels, sizeMaxInPixels.x);
                             textAsLines.push(lineTrimmedToWidth);
                             heightOfLinesSoFar += fontHeightInPixels;
                             lineToWrap = lineToWrap.substr(lineTrimmedToWidth.length);
@@ -396,7 +397,9 @@ var ThisCouldBeBetter;
                 }
                 for (var i = 0; i < textAsLines.length; i++) {
                     var textLine = textAsLines[i];
-                    var textLineTrimmed = this.drawText_StringTrimToAllowedWidth(textLine, fontHeightInPixels, sizeMaxInPixels);
+                    var textLineTrimmed = sizeMaxInPixels == null
+                        ? textLine
+                        : this.drawText_StringTrimToAllowedWidth(textLine, fontHeightInPixels, sizeMaxInPixels.x);
                     var textWidthInPixels = this.textWidthForFontHeight(textLineTrimmed, fontHeightInPixels);
                     var horizontalCenteringOffset = (isCenteredHorizontally
                         ? 0 - textWidthInPixels / 2
@@ -410,15 +413,13 @@ var ThisCouldBeBetter;
                 }
                 this.graphics.font = fontToRestore;
             }
-            drawText_StringTrimToAllowedWidth(stringToTrim, fontHeightInPixels, sizeMaxInPixels) {
+            drawText_StringTrimToAllowedWidth(stringToTrim, fontHeightInPixels, widthMaxInPixels) {
                 var stringTrimmed = stringToTrim;
-                if (sizeMaxInPixels != null) {
-                    var textLineWidth = this.textWidthForFontHeight(stringTrimmed, fontHeightInPixels);
-                    while (textLineWidth > sizeMaxInPixels.x) {
-                        stringTrimmed =
-                            stringTrimmed.substr(0, stringTrimmed.length - 1);
-                        textLineWidth = this.textWidthForFontHeight(stringTrimmed, fontHeightInPixels);
-                    }
+                var textLineWidth = this.textWidthForFontHeight(stringTrimmed, fontHeightInPixels);
+                while (textLineWidth > widthMaxInPixels) {
+                    stringTrimmed =
+                        stringTrimmed.substr(0, stringTrimmed.length - 1);
+                    textLineWidth = this.textWidthForFontHeight(stringTrimmed, fontHeightInPixels);
                 }
                 return stringTrimmed;
             }

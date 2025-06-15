@@ -108,7 +108,7 @@ export class ControlCheckbox<TContext> extends ControlBase
 		var valueAsText = (value ? "X" : " ");
 		textAsString = "[" + valueAsText + "] " + textAsString; 
 
-		display.drawText
+		display.drawTextWithFontAtPosWithColorsFillAndOutline
 		(
 			textAsString,
 			this.fontNameAndHeight,

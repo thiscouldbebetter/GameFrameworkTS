@@ -11,6 +11,8 @@ Running
 
 To run, open the file GameFramework.html in a web browser that runs JavaScript.  Because the latest compiled .js files are included as part of the repository, it should not be necessary to build the game first before it can be run.
 
+If running the .html from the filesystem using the "file://" scheme rather than through a web server, it may be necessary to disable some security features of the browser in order to allow content files to be loaded.  For example, the Google Chrome or Chromium browsers can be run with the --allow-file-access-from-files command-line switch.
+
 
 Building
 --------
@@ -25,7 +27,7 @@ Features
 
 * Display - System-level graphics concepts are abstracted behind interfaces.
 * Controls - Buttons, lists, text boxes, scrollbars, tabs, and so on.
-* Persistence - Player profiles and saving and loading games to and from browser local storage or files.
+* Storage - Player profiles and saving and loading games to and from browser local storage or files.
 * Media - Loading and presenting images, sounds, music, videos, fonts, text, and data files.
 * Physics - Position, orientation, movement, and collision detection and response.
 * Model - Common game concepts like inventory, equipment, crafting, conversations, skills, containers, and trade.

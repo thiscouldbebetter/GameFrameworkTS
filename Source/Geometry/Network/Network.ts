@@ -236,7 +236,7 @@ export class VisualNetwork implements Visual<VisualNetwork>
 		for (var i = 0; i < nodes.length; i++)
 		{
 			var node = nodes[i];
-			display.drawText
+			display.drawTextWithFontAtPosWithColorsFillAndOutline
 			(
 				"" + node.id,
 				font,

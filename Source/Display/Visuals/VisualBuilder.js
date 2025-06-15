@@ -218,7 +218,7 @@ var ThisCouldBeBetter;
                 var visualNone = new GameFramework.VisualNone();
                 var orientationToAnchorTo = GameFramework.Orientation.Instances().ForwardXDownZ;
                 if (visualWieldable != null) {
-                    visualWieldable = new GameFramework.VisualAnchor(visualWieldable, null, orientationToAnchorTo);
+                    visualWieldable = GameFramework.VisualAnchor.fromChildAndOrientationToAnchorAt(visualWieldable, orientationToAnchorTo);
                 }
                 var offsetsToHandWhenFacingRightDownLeftUp = [
                     GameFramework.Coords.fromXY(2, 1),

@@ -79,11 +79,17 @@ export class ControlBase
 	scalePosAndSize(scaleFactors: Coords): ControlBase
 	{
 		this.pos.multiply(scaleFactors);
-		this.size.multiply(scaleFactors);
+
+		if (this.size != null)
+		{
+			this.size.multiply(scaleFactors);
+		}
+
 		if (this.fontNameAndHeight != null)
 		{
 			this.fontNameAndHeight.heightInPixels *= scaleFactors.y;
 		}
+
 		return this;
 	}
 	style(universe: Universe)

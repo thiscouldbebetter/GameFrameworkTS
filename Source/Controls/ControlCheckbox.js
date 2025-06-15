@@ -55,7 +55,7 @@ var ThisCouldBeBetter;
                 var value = this.value();
                 var valueAsText = (value ? "X" : " ");
                 textAsString = "[" + valueAsText + "] " + textAsString;
-                display.drawText(textAsString, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
+                display.drawTextWithFontAtPosWithColorsFillAndOutline(textAsString, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
                 true, // isCenteredVertically
                 this.size // sizeMaxInPixels
                 );

@@ -353,7 +353,7 @@ export class ControlTextarea<TContext> extends ControlBase
 		{
 			var line = lines[i];
 
-			display.drawText
+			display.drawTextWithFontAtPosWithColorsFillAndOutline
 			(
 				line,
 				this.fontNameAndHeight,

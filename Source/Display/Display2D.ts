@@ -164,12 +164,14 @@ export class Display2D implements Display
 		var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
 		var angleStopInRadians = angleStopInTurns * Display2D.RadiansPerTurn;
 
+		var g = this.graphics;
+
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = Color.systemColorGet(colorFill);
+			g.fillStyle = Color.systemColorGet(colorFill);
 
-			this.graphics.beginPath();
-			this.graphics.arc
+			g.beginPath();
+			g.arc
 			(
 				center.x, center.y,
 				radiusInner,
@@ -179,23 +181,23 @@ export class Display2D implements Display
 			(
 				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( Coords.create() )
 			);
-			this.graphics.lineTo(drawPos.x, drawPos.y);
-			this.graphics.arc
+			g.lineTo(drawPos.x, drawPos.y);
+			g.arc
 			(
 				center.x, center.y,
 				radiusOuter,
 				angleStopInRadians, angleStartInRadians,
 				true // counterclockwise
 			);
-			this.graphics.closePath();
-			this.graphics.fill();
+			g.closePath();
+			g.fill();
 		}
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
-			this.graphics.beginPath();
-			this.graphics.arc
+			g.strokeStyle = Color.systemColorGet(colorBorder);
+			g.beginPath();
+			g.arc
 			(
 				center.x, center.y,
 				radiusInner,
@@ -205,16 +207,16 @@ export class Display2D implements Display
 			(
 				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( Coords.create() )
 			);
-			this.graphics.lineTo(drawPos.x, drawPos.y);
-			this.graphics.arc
+			g.lineTo(drawPos.x, drawPos.y);
+			g.arc
 			(
 				center.x, center.y,
 				radiusOuter,
 				angleStopInRadians, angleStartInRadians,
 				true // counterclockwise
 			);
-			this.graphics.closePath();
-			this.graphics.stroke();
+			g.closePath();
+			g.stroke();
 		}
 	}
 
@@ -705,7 +707,7 @@ export class Display2D implements Display
 		}
 	}
 
-	drawText
+	drawTextWithFontAtPosWithColorsFillAndOutline
 	(
 		text: string,
 		fontNameAndHeight: FontNameAndHeight,
@@ -760,7 +762,7 @@ export class Display2D implements Display
 					var lineTrimmedToWidth =
 						this.drawText_StringTrimToAllowedWidth
 						(
-							lineToWrap, fontHeightInPixels, sizeMaxInPixels
+							lineToWrap, fontHeightInPixels, sizeMaxInPixels.x
 						);
 
 					textAsLines.push(lineTrimmedToWidth);
@@ -795,9 +797,11 @@ export class Display2D implements Display
 			var textLine = textAsLines[i];
 
 			var textLineTrimmed =
-				this.drawText_StringTrimToAllowedWidth
+				sizeMaxInPixels == null
+				? textLine
+				: this.drawText_StringTrimToAllowedWidth
 				(
-					textLine, fontHeightInPixels, sizeMaxInPixels
+					textLine, fontHeightInPixels, sizeMaxInPixels.x
 				);
 
 			var textWidthInPixels = this.textWidthForFontHeight
@@ -840,27 +844,25 @@ export class Display2D implements Display
 	(
 		stringToTrim: string,
 		fontHeightInPixels: number,
-		sizeMaxInPixels: Coords
+		widthMaxInPixels: number
 	): string
 	{
 		var stringTrimmed = stringToTrim;
-		if (sizeMaxInPixels != null)
+
+		var textLineWidth = this.textWidthForFontHeight
+		(
+			stringTrimmed, fontHeightInPixels
+		);
+
+		while (textLineWidth > widthMaxInPixels)
 		{
-			var textLineWidth = this.textWidthForFontHeight
+			stringTrimmed =
+				stringTrimmed.substr(0, stringTrimmed.length - 1);
+
+			textLineWidth = this.textWidthForFontHeight
 			(
 				stringTrimmed, fontHeightInPixels
 			);
-
-			while (textLineWidth > sizeMaxInPixels.x)
-			{
-				stringTrimmed =
-					stringTrimmed.substr(0, stringTrimmed.length - 1);
-
-				textLineWidth = this.textWidthForFontHeight
-				(
-					stringTrimmed, fontHeightInPixels
-				);
-			}
 		}
 
 		return stringTrimmed;

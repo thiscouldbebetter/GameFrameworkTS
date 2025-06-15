@@ -96,7 +96,7 @@ var ThisCouldBeBetter;
                 }
                 var colorText = (isEnabled ? colorBorder : style.colorDisabled());
                 var textAsString = this.text();
-                display.drawText(textAsString, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
+                display.drawTextWithFontAtPosWithColorsFillAndOutline(textAsString, this.fontNameAndHeight, drawPos, (isHighlighted ? colorFill : colorText), (isHighlighted ? colorText : colorFill), true, // isCenteredHorizontally
                 true, // isCenteredVertically
                 this.size // sizeMaxInPixels
                 );

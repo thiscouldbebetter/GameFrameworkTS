@@ -58,7 +58,7 @@ var ThisCouldBeBetter;
             drawRectangleCentered(pos, size, colorFill, colorBorder) { }
             drawRectangleWithBeveledCorners(pos, size, colorFill, colorBorder, cornerRadius) { }
             drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) { }
-            drawText(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) { }
+            drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) { }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }
             eraseModeSet(value) { }
             fontSet(fontNameAndHeight) { }

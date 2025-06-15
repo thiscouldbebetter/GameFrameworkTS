@@ -75,12 +75,15 @@ var ThisCouldBeBetter;
                 }
                 return returnValues;
             }
-            entitiesRemove() {
+            entitiesRemove(uwpe) {
+                var uwpeEntityToRestore = uwpe.entity;
                 for (var i = 0; i < this.entitiesToRemove.length; i++) {
                     var entity = this.entitiesToRemove[i];
-                    this.entityRemove(entity);
+                    uwpe.entitySet(entity);
+                    this.entityRemove(uwpe);
                 }
                 this.entitiesToRemove.length = 0;
+                uwpe.entity = uwpeEntityToRestore;
             }
             entitiesToRemoveAdd(entitiesToRemove) {
                 this.entitiesToRemove.push(...entitiesToRemove);
@@ -106,7 +109,8 @@ var ThisCouldBeBetter;
             entityIsPresent(entity) {
                 return (this._entities.indexOf(entity) >= 0);
             }
-            entityRemove(entity) {
+            entityRemove(uwpe) {
+                var entity = uwpe.entity;
                 var entityProperties = entity.properties;
                 for (var p = 0; p < entityProperties.length; p++) {
                     var property = entityProperties[p];
@@ -116,6 +120,8 @@ var ThisCouldBeBetter;
                 }
                 GameFramework.ArrayHelper.remove(this._entities, entity);
                 this.entitiesById.delete(entity.id);
+                var collisionTracker = GameFramework.CollisionTrackerBase.fromPlace(uwpe);
+                collisionTracker.entityReset(entity);
             }
             entitySpawn(uwpe) {
                 uwpe.placeSet(this);
@@ -168,7 +174,7 @@ var ThisCouldBeBetter;
             finalize(uwpe) {
                 uwpe.placeSet(this);
                 var universe = uwpe.universe;
-                this.entitiesRemove();
+                this.entitiesRemove(uwpe);
                 universe.inputHelper.inputsRemoveAll();
                 var entities = this._entities;
                 for (var i = 0; i < entities.length; i++) {
@@ -204,7 +210,7 @@ var ThisCouldBeBetter;
             }
             updateForTimerTick(uwpe) {
                 var world = uwpe.world;
-                this.entitiesRemove();
+                this.entitiesRemove(uwpe);
                 this.entitiesSpawn(uwpe);
                 uwpe.placeSet(this);
                 var placeDefn = this.defn(world);

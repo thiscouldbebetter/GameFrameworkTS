@@ -183,7 +183,8 @@ var ThisCouldBeBetter;
                     var child = childrenActive[i];
                     if (child != null) {
                         var childPos = child.pos;
-                        var childMax = this._childMax.overwriteWith(childPos).add(child.size);
+                        var childSize = child.size || GameFramework.Coords.zeroes();
+                        var childMax = this._childMax.overwriteWith(childPos).add(childSize);
                         var doesChildContainPos = posToCheck.isInRangeMinMax(childPos, childMax);
                         if (doesChildContainPos) {
                             listToAddTo.push(child);

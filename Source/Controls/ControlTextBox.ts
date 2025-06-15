@@ -245,7 +245,7 @@ export class ControlTextBox<TContext> extends ControlBase
 
 		if (this.isHighlighted == false)
 		{
-			display.drawText
+			display.drawTextWithFontAtPosWithColorsFillAndOutline
 			(
 				text,
 				this.fontNameAndHeight,
@@ -259,7 +259,7 @@ export class ControlTextBox<TContext> extends ControlBase
 		}
 		else
 		{
-			display.drawText
+			display.drawTextWithFontAtPosWithColorsFillAndOutline
 			(
 				text,
 				this.fontNameAndHeight,
@@ -293,7 +293,7 @@ export class ControlTextBox<TContext> extends ControlBase
 				display
 			);
 
-			display.drawText
+			display.drawTextWithFontAtPosWithColorsFillAndOutline
 			(
 				textAtCursor,
 				this.fontNameAndHeight,

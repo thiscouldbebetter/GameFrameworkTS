@@ -136,7 +136,7 @@ export class VisualBar implements Visual<VisualBar>
 				text = this.text.get();
 			}
 
-			display.drawText
+			display.drawTextWithFontAtPosWithColorsFillAndOutline
 			(
 				text,
 				FontNameAndHeight.fromHeightInPixels(this.size.y), // fontHeightInPixels

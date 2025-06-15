@@ -798,18 +798,16 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				)
 			),
 
-			ControlLabel.fromPosSizeTextFontCenteredHorizontally
+			ControlLabel.fromPosTextFontCenteredHorizontally
 			(
 				Coords.fromXY(150, 10), // pos
-				Coords.fromXY(100, 15), // size
 				DataBinding.fromContext("Item Selected:"),
 				fontSmall
 			),
 
-			ControlLabel.fromPosSizeTextFontCenteredHorizontally
+			ControlLabel.fromPosTextFontCenteredHorizontally
 			(
-				Coords.fromXY(150, 20), // pos
-				Coords.fromXY(200, 15), // size
+				Coords.fromXY(150, 15), // pos
 				DataBinding.fromContextAndGet
 				(
 					this,

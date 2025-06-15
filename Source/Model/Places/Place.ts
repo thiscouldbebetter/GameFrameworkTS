@@ -10,13 +10,13 @@ export interface Place extends Namable, Equatable<Place>
 	//drawables(): Entity[];
 	entitiesAll(): Entity[];
 	entitiesByPropertyName(propertyName: string): Entity[];
-	entitiesRemove(): void;
+	entitiesRemove(uwpe: UniverseWorldPlaceEntities): void;
 	entitiesToRemoveAdd(entitiesToRemove: Entity[]): void;
 	entitiesToSpawnAdd(entitiesToSpawn: Entity[]): void;
 	entitiesSpawn(uwpe: UniverseWorldPlaceEntities): void;
 	entityById(entityId: number): Entity;
 	entityByName(entityName: string): Entity;
-	entityRemove(entity: Entity): void;
+	entityRemove(uwpe: UniverseWorldPlaceEntities): void;
 	entitySpawn(uwpe: UniverseWorldPlaceEntities): void;
 	entitySpawn2(universe: Universe, world: World, entity: Entity): void;
 	entityToRemoveAdd(entityToRemove: Entity): void;

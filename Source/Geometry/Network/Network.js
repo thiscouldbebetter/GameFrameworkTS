@@ -138,7 +138,7 @@ var ThisCouldBeBetter;
                 var nodes = networkTransformed.nodes;
                 for (var i = 0; i < nodes.length; i++) {
                     var node = nodes[i];
-                    display.drawText("" + node.id, font, node.pos, colorCyan, null, // colorOutline
+                    display.drawTextWithFontAtPosWithColorsFillAndOutline("" + node.id, font, node.pos, colorCyan, null, // colorOutline
                     false, // isCenteredHorizontally
                     false, // isCenteredVertically
                     null // sizeMaxInPixels

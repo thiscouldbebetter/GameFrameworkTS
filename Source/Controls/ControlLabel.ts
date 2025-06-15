@@ -138,9 +138,29 @@ export class ControlLabel<TContext> extends ControlBase
 			false, // isTextCenteredVertically
 			text,
 			fontNameAndHeight
-		)
+		);
 	}
 
+	static fromPosTextFontCenteredHorizontally<TContext>
+	(
+		pos: Coords,
+		text: DataBinding<TContext, string>,
+		fontNameAndHeight: FontNameAndHeight
+	): ControlLabel<TContext>
+	{
+		var textFromBindingInitial = text.get() || "";
+
+		return new ControlLabel
+		(
+			"label" + textFromBindingInitial.split(" ").join(""),
+			pos,
+			null, // size
+			true, // isTextCenteredHorizontally
+			false, // isTextCenteredVertically
+			text,
+			fontNameAndHeight
+		);
+	}
 	static fromPosSizeTextFontUncentered<TContext> 
 	(
 		pos: Coords,
@@ -218,13 +238,17 @@ export class ControlLabel<TContext> extends ControlBase
 
 		if (text != null)
 		{
-			display.drawText
+			// Fill and border colors are inverted for text.
+			var colorBorder = style.colorBorder();
+			var colorFill = style.colorFill();
+
+			display.drawTextWithFontAtPosWithColorsFillAndOutline
 			(
 				text,
 				this.fontNameAndHeight,
 				drawPos,
-				style.colorBorder(),
-				style.colorFill(), // colorOutline
+				colorBorder,
+				colorFill,
 				this.isTextCenteredHorizontally,
 				this.isTextCenteredVertically,
 				this.size

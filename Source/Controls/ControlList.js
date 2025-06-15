@@ -273,7 +273,7 @@ var ThisCouldBeBetter;
                         ||
                             (isItemSelected && !this.isHighlighted));
                     var textSizeMax = GameFramework.Coords.fromXY(this.itemSize().x, this.fontNameAndHeight.heightInPixels);
-                    display.drawText(text, this.fontNameAndHeight, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCenteredHorizontally
+                    display.drawTextWithFontAtPosWithColorsFillAndOutline(text, this.fontNameAndHeight, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCenteredHorizontally
                     false, // isTextCenteredVertically
                     textSizeMax);
                 }

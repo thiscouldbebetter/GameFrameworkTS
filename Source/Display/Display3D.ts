@@ -611,7 +611,7 @@ export class Display3D implements Display
 		);
 	}
 
-	drawText
+	drawTextWithFontAtPosWithColorsFillAndOutline
 	(
 		text: string,
 		fontNameAndHeight: FontNameAndHeight,
@@ -623,7 +623,7 @@ export class Display3D implements Display
 		sizeMaxInPixels: Coords
 	): void
 	{
-		this._display2DOverlay.drawText
+		this._display2DOverlay.drawTextWithFontAtPosWithColorsFillAndOutline
 		(
 			text,
 			fontNameAndHeight,

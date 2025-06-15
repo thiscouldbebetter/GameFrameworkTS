@@ -129,9 +129,9 @@ var ThisCouldBeBetter;
                 pos = pos.clone();
                 this.drawMethodAddAtDistance(pos.z, () => this.displayInner.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius));
             }
-            drawText(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
+            drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
                 pos = pos.clone();
-                this.drawMethodAddAtDistance(pos.z, () => this.displayInner.drawText(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels));
+                this.drawMethodAddAtDistance(pos.z, () => this.displayInner.drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels));
             }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
                 center = center.clone();

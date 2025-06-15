@@ -55,7 +55,6 @@ export class Camera implements EntityProperty<Camera>
 		return place.entitiesByPropertyName(Camera.name)[0];
 	}
 
-
 	static fromEntitiesInViewSort
 	(
 		entitiesInViewSort: (e: Entity[]) => Entity[]

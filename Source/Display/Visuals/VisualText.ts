@@ -149,7 +149,7 @@ export class VisualText implements Visual<VisualText>
 
 		var text = this.text();
 
-		display.drawText
+		display.drawTextWithFontAtPosWithColorsFillAndOutline
 		(
 			text,
 			this.fontNameAndHeight,

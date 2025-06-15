@@ -190,7 +190,7 @@ export class DisplayTest implements Display
 	): void
 	{}
 
-	drawText
+	drawTextWithFontAtPosWithColorsFillAndOutline
 	(
 		text: string,
 		fontNameAndHeight: FontNameAndHeight,
