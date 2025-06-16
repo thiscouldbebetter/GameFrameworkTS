@@ -18,6 +18,11 @@ export class VisualImageFromLibrary implements VisualImage
 
 	// static methods
 
+	static fromImageName(imageName: string): VisualImageFromLibrary
+	{
+		return new VisualImageFromLibrary(imageName);
+	}
+
 	static manyFromImages
 	(
 		images: Image2[], imageSizeScaled: Coords

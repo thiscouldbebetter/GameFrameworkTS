@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this._drawPos = GameFramework.Coords.create();
             }
             // static methods
+            static fromImageName(imageName) {
+                return new VisualImageFromLibrary(imageName);
+            }
             static manyFromImages(images, imageSizeScaled) {
                 var returnValues = [];
                 for (var i = 0; i < images.length; i++) {

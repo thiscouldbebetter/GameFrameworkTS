@@ -62,38 +62,36 @@ class PlaceBuilderDemo // Main.
 		this.build_Interior("Base", size, placeNameToReturnTo);
 
 		var entityPosRange = new Box(size.clone().half(), size.clone().subtract(this.marginSize));
-		var epr = entityPosRange;
 		var randomizer = this.randomizer;
-		var r = randomizer;
 
 		var entityDefns = this.entityDefnsByName;
 		var e = this.entities;
 
-		var ebfdac = (a: Entity, b: number, c: number, d: Box, e: Randomizer) =>
-			this.entitiesBuildFromDefnAndCount(a, b, c, d, e);
+		var epebfdac = (a: string, b: number, c: number) =>
+			e.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get(a), b, c, entityPosRange, randomizer) );
 
 		e.push(this.entityBuildFromDefn(entityDefns.get("Player"), entityPosRange, randomizer) );
-		e.push(...ebfdac(entityDefns.get("Anvil"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Arrow"), 			1, 20, 		epr, r));
-		e.push(...ebfdac(entityDefns.get("Bar"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Bomb"), 			3, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Book"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Bow"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Bread"), 			1, 5, 		epr, r));
-		e.push(...ebfdac(entityDefns.get("Campfire"), 		1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Car"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Doughnut"), 		1, 12, 		epr, r));
-		e.push(...ebfdac(entityDefns.get("Friendly"), 		1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Heart"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Meat"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Pillow"), 		1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Sword"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("SwordCold"), 		1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("SwordHeat"), 		1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Toolset"), 		1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Torch"), 			1, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("TrafficCone"), 	10, null, 	epr, r));
-		e.push(...ebfdac(entityDefns.get("Weight"), 		1, null, 	epr, r));
+		epebfdac("Anvil", 		1, null);
+		epebfdac("Arrow", 		1, 20 );
+		epebfdac("Bar", 		1, null);
+		epebfdac("Bomb", 		3, null);
+		epebfdac("Book", 		1, null);
+		epebfdac("Bow", 		1, null);
+		epebfdac("Bread", 		1, 5,  );
+		epebfdac("Campfire", 	1, null);
+		epebfdac("Car", 		1, null);
+		epebfdac("Doughnut", 	1, 12, );
+		epebfdac("Friendly", 	1, null);
+		epebfdac("Heart", 		1, null);
+		epebfdac("Meat", 		1, null);
+		epebfdac("Pillow", 		1, null);
+		epebfdac("Sword", 		1, null);
+		epebfdac("SwordCold", 	1, null);
+		epebfdac("SwordHeat", 	1, null);
+		epebfdac("Toolset", 	1, null);
+		epebfdac("Torch", 		1, null);
+		epebfdac("TrafficCone", 10, null);
+		epebfdac("Weight", 		1, null);
 
 		var ring = this.entitiesBuildFromDefnAndCount
 		(
@@ -488,179 +486,177 @@ class PlaceBuilderDemo // Main.
 				Coords.fromXY(.5, borderWidthAsFraction)
 			).ceiling();
 
-			var isCenteredFalse = false;
-
 			var visualsByName = new Map<string,VisualBase>
 			([
-				[ "Center", new VisualRectangle(mapCellSize, color, null, isCenteredFalse) ],
+				[ "Center", VisualRectangle.fromSizeAndColorFill(mapCellSize, color) ],
 
 				[
 					"InsideSE",
-					new VisualGroup
+					VisualGroup.fromChildren
 					([
 						// s
-						new VisualOffset
+						VisualOffset.fromOffsetAndChild
 						(
 							Coords.fromXY(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y),
-							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
+							VisualRectangle.fromSizeAndColorFill(borderSizeHorizontalHalf, color)
 						),
 						// e
-						new VisualOffset
+						VisualOffset.fromOffsetAndChild
 						(
 							Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2),
-							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
+							VisualRectangle.fromSizeAndColorFill(borderSizeVerticalHalf, color)
 						)
 					])
 				],
 				[
 					"InsideSW",
-					new VisualGroup
+					VisualGroup.fromChildren
 					([
 						// s
-						new VisualOffset
+						VisualOffset.fromOffsetAndChild
 						(
 							Coords.fromXY(0, mapCellSize.y - borderSizeCorner.y),
-							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
+							VisualRectangle.fromSizeAndColorFill(borderSizeHorizontalHalf, color)
 						),
 						// w
-						new VisualOffset
+						VisualOffset.fromOffsetAndChild
 						(
 							Coords.fromXY(0, mapCellSize.y / 2),
-							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
+							VisualRectangle.fromSizeAndColorFill(borderSizeVerticalHalf, color)
 						)
 					])
 				],
 				[
 					"InsideNW",
-					new VisualGroup
+					VisualGroup.fromChildren
 					([
 						// n
-						new VisualOffset
+						VisualOffset.fromOffsetAndChild
 						(
 							Coords.zeroes(),
-							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
+							VisualRectangle.fromSizeAndColorFill(borderSizeHorizontalHalf, color)
 						),
 						// w
-						new VisualOffset
+						VisualOffset.fromOffsetAndChild
 						(
 							Coords.zeroes(),
-							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
+							VisualRectangle.fromSizeAndColorFill(borderSizeVerticalHalf, color)
 						)
 					])
 				],
 				[
 					"InsideNE",
-					new VisualGroup
+					VisualGroup.fromChildren
 					([
 						// n
-						new VisualOffset
+						VisualOffset.fromOffsetAndChild
 						(
 							Coords.fromXY(mapCellSize.x / 2, 0),
-							new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
+							VisualRectangle.fromSizeAndColorFill(borderSizeHorizontalHalf, color)
 						),
 						// e
-						new VisualOffset
+						VisualOffset.fromOffsetAndChild
 						(
 							Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0),
-							new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
+							VisualRectangle.fromSizeAndColorFill(borderSizeVerticalHalf, color)
 						),
 					])
 				],
 				[
 					"OutsideSE",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.zeroes(),
-						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeCorner, color)
 					)
 				],
 				[
 					"OutsideSW",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0),
-						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeCorner, color)
 					)
 				],
 				[
 					"OutsideNW",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y - borderSizeCorner.y),
-						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeCorner, color)
 					)
 				],
 				[
 					"OutsideNE",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(0, mapCellSize.y - borderSizeCorner.y),
-						new VisualRectangle(borderSizeCorner, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeCorner, color)
 					)
 				],
 
 				[
 					"ETop",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, 0),
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeVerticalHalf, color)
 					)
 				],
 				[
 					"EBottom",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(mapCellSize.x - borderSizeCorner.x, mapCellSize.y / 2),
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeVerticalHalf, color)
 					)
 				],
 				[
 					"SRight",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(mapCellSize.x / 2, mapCellSize.y - borderSizeCorner.y),
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeHorizontalHalf, color)
 					)
 				],
 				[
 					"SLeft",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
-						new Coords(0, mapCellSize.y - borderSizeCorner.y, 0),
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
+						Coords.fromXY(0, mapCellSize.y - borderSizeCorner.y),
+						VisualRectangle.fromSizeAndColorFill(borderSizeHorizontalHalf, color)
 					)
 				],
 				[
 					"WBottom",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(0, mapCellSize.y / 2),
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeVerticalHalf, color)
 					)
 				],
 				[
 					"WTop",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.zeroes(),
-						new VisualRectangle(borderSizeVerticalHalf, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeVerticalHalf, color)
 					)
 				],
 				[
 					"NLeft",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.zeroes(),
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeHorizontalHalf, color)
 					)
 				],
 				[
 					"NRight",
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(mapCellSize.x / 2, 0),
-						new VisualRectangle(borderSizeHorizontalHalf, color, null, isCenteredFalse)
+						VisualRectangle.fromSizeAndColorFill(borderSizeHorizontalHalf, color)
 					)
 				]
 			]);
@@ -1042,13 +1038,15 @@ class PlaceBuilderDemo // Main.
 		var entityPosRange = new Box(size.clone().half(), size.clone().subtract(this.marginSize));
 		var randomizer = this.randomizer;
 
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Carnivore"), 1, null, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Doughnut"), 1, 12, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Flower"), 1, null, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grass"), 12, null, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Grazer"), 3, null, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("MushroomGenerator"), 2, null, entityPosRange, randomizer));
-		this.entities.push(...this.entitiesBuildFromDefnAndCount(this.entityDefnsByName.get("Tree"), 6, null, entityPosRange, randomizer));
+		var ebfdac = (a: Entity, b: number, c: number, d: Box, e: Randomizer) =>
+			this.entitiesBuildFromDefnAndCount(a, b, c, d, e)
+		this.entities.push(...ebfdac(this.entityDefnsByName.get("Carnivore"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...ebfdac(this.entityDefnsByName.get("Doughnut"), 1, 12, entityPosRange, randomizer));
+		this.entities.push(...ebfdac(this.entityDefnsByName.get("Flower"), 1, null, entityPosRange, randomizer));
+		this.entities.push(...ebfdac(this.entityDefnsByName.get("Grass"), 12, null, entityPosRange, randomizer));
+		this.entities.push(...ebfdac(this.entityDefnsByName.get("Grazer"), 3, null, entityPosRange, randomizer));
+		this.entities.push(...ebfdac(this.entityDefnsByName.get("MushroomGenerator"), 2, null, entityPosRange, randomizer));
+		this.entities.push(...ebfdac(this.entityDefnsByName.get("Tree"), 6, null, entityPosRange, randomizer));
 
 		var randomizerSeed = this.randomizer.fraction();
 		var place = new PlaceRoom(this.name, "Demo", size, this.entities, randomizerSeed);
@@ -1075,38 +1073,49 @@ class PlaceBuilderDemo // Main.
 		var entityPosRange = new Box(size.clone().half(), size.clone().subtract(this.marginSize));
 		var randomizer = this.randomizer;
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserNormal"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserCold"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorChaserHeat"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorRunnerNormal"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorShooterNormal"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("EnemyGeneratorTankNormal"), 1, null, entityPosRange, randomizer));
+		var es = entities;
+		var epebfdac = (a: string, b: number) =>
+			es.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get(a), b, null, entityPosRange, randomizer) );
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Bar"), 1, null, entityPosRange, randomizer));
+		epebfdac("EnemyGeneratorChaserNormal", 	1);
+		epebfdac("EnemyGeneratorChaserCold", 		1);
+		epebfdac("EnemyGeneratorChaserHeat", 		1);
+		epebfdac("EnemyGeneratorRunnerNormal", 	1);
+		epebfdac("EnemyGeneratorShooterNormal", 	1);
+		epebfdac("EnemyGeneratorTankNormal", 		1);
+
+		epebfdac("Bar", 1);
 		//entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Mine"), 48, null, entityPosRange, randomizer));
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Tree"), 10, null, entityPosRange, randomizer));
+		epebfdac("Tree", 10);
 
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Armor"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Boulder"), 3, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Carnivore"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Crystal"), 2, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Flower"), 6, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Fruit"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("GrassGenerator"), 3, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Grazer"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Iron Ore"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Medicine"), 2, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("MushroomGenerator"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Pick"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Shovel"), 1, null, entityPosRange, randomizer));
-		entities.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get("Speed Boots"), 1, null, entityPosRange, randomizer));
+		epebfdac("Armor", 				1);
+		epebfdac("Boulder", 			3);
+		epebfdac("Carnivore", 			1);
+		epebfdac("Crystal", 			2);
+		epebfdac("Flower", 				6);
+		epebfdac("Fruit", 				1);
+		epebfdac("GrassGenerator", 		3);
+		epebfdac("Grazer", 				1);
+		epebfdac("Iron Ore", 			1);
+		epebfdac("Medicine", 			2);
+		epebfdac("MushroomGenerator", 	1);
+		epebfdac("Pick", 				1);
+		epebfdac("Shovel", 				1);
+		epebfdac("Speed Boots", 		1);
 
 		var entityMineLoader = this.entityBuildLoader(entityDefns.get("Mine"), 48, entityPosRange, randomizer);
 		entities.push(entityMineLoader);
 
 		var entityRadioMessage =
-			this.entityBuildRadioMessage(Drawable.of(entityDefns.get("Friendly") ).visual, "This is " + this.name + ".");
+			this.entityBuildRadioMessage
+			(
+				Drawable.of
+				(
+					entityDefns.get("Friendly")
+				).visual,
+				"This is " + this.name + "."
+			);
 		entities.push(entityRadioMessage);
 
 		placeNamesToIncludePortalsTo.forEach(placeName =>
@@ -1279,7 +1288,8 @@ class PlaceBuilderDemo // Main.
 
 	entityBuildExit(placeNameToReturnTo: string): Entity
 	{
-		var entityPosRange = new Box(this.size.clone().half(), this.size.clone().subtract(this.marginSize) );
+		var entityPosRange =
+			new Box(this.size.clone().half(), this.size.clone().subtract(this.marginSize) );
 		var exit = this.entityBuildFromDefn(this.entityDefnsByName.get("Exit"), entityPosRange, this.randomizer);
 		var exitPortal = Portal.of(exit);
 		exitPortal.destinationPlaceName = placeNameToReturnTo;
@@ -1835,10 +1845,10 @@ class PlaceBuilderDemo // Main.
 				ItemHolder.fromItems
 				(
 					[
-						new Item("Coin", 100),
-						new Item("Bow", 1),
-						new Item("Key", 10),
-						new Item("Medicine", 100)
+						Item.fromDefnNameAndQuantity("Coin", 100),
+						Item.fromDefnNameAndQuantity("Bow", 1),
+						Item.fromDefnNameAndQuantity("Key", 10),
+						Item.fromDefnNameAndQuantity("Medicine", 100)
 					]
 				),
 				Locatable.create(),
@@ -1965,124 +1975,7 @@ class PlaceBuilderDemo // Main.
 		(
 			"Bomb",
 			10, // ticksToCharge
-			(uwpe: UniverseWorldPlaceEntities) => // use
-			{
-				var entityUser = uwpe.entity;
-				var entityDevice = uwpe.entity2;
-
-				var userAsItemHolder = ItemHolder.of(entityUser);
-				var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Bomb", 1);
-				if (hasAmmo == false)
-				{
-					return;
-				}
-
-				userAsItemHolder.itemSubtractDefnNameAndQuantity("Bomb", 1);
-				EquipmentUser.of(entityUser).unequipItemsNoLongerHeld
-				(
-					uwpe
-				);
-
-				var userLoc = Locatable.of(entityUser).loc;
-				var userPos = userLoc.pos;
-				var userVel = userLoc.vel;
-				var userSpeed = userVel.magnitude();
-				if (userSpeed == 0) { return; }
-
-				var projectileDimension = 1.5;
-				var projectileVisual = new VisualGroup
-				([
-					Drawable.of(entityDevice).visual
-					// todo - Add sparks?
-				]);
-
-				var userDirection = userVel.clone().normalize();
-				var userRadius = (Collidable.of(entityUser).collider as Sphere).radius;
-				var projectilePos = userPos.clone().add
-				(
-					userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
-				);
-				var projectileOri = new Orientation
-				(
-					userVel.clone().normalize(), null
-				);
-				var projectileLoc = new Disposition(projectilePos, projectileOri, null);
-				projectileLoc.vel.overwriteWith(userVel).clearZ().double();
-
-				var projectileCollider =
-					new Sphere(Coords.create(), projectileDimension);
-
-				// todo
-				var projectileCollide = null;
-				var projectileDie = (uwpe: UniverseWorldPlaceEntities) =>
-				{
-					var explosionRadius = 32;
-					var explosionVisual = VisualCircle.fromRadiusAndColorFill
-					(
-						explosionRadius, Color.Instances().Yellow
-					);
-
-					var explosionCollider = new Sphere(Coords.create(), explosionRadius);
-
-					var explosionCollide = (uwpe: UniverseWorldPlaceEntities) =>
-					{
-						var entityProjectile = uwpe.entity;
-						var entityOther = uwpe.entity2;
-						var killable = Killable.of(entityOther);
-						if (killable != null)
-						{
-							killable.damageApply
-							(
-								uwpe, Damager.of(entityProjectile).damagePerHit
-							);
-						}
-					};
-
-					var entityDying = uwpe.entity;
-
-					var explosionEntity = new Entity
-					(
-						"BombExplosion",
-						[
-							new Collidable
-							(
-								false, // canCollideAgainWithoutSeparating
-								0, // ticks
-								explosionCollider,
-								[ Killable.name ],
-								explosionCollide
-							),
-							Damager.fromDamagePerHit(Damage.fromAmount(20)),
-							Drawable.fromVisual(explosionVisual),
-							new Ephemeral(8, null),
-							Locatable.of(entityDying)
-						]
-					);
-					uwpe.place.entityToSpawnAdd(explosionEntity);
-				}
-
-				var projectileEntity = new Entity
-				(
-					"ProjectileBomb",
-					[
-						new Ephemeral(64, projectileDie),
-						new Locatable( projectileLoc ),
-						new Collidable
-						(
-							false, // canCollideAgainWithoutSeparating
-							0, // ticks
-							projectileCollider,
-							[ Collidable.name ],
-							projectileCollide
-						),
-						new Constrainable([new Constraint_FrictionXY(.03, .5)]),
-						Drawable.fromVisual(projectileVisual),
-						Equippable.default()
-					]
-				);
-
-				uwpe.place.entityToSpawnAdd(projectileEntity);
-			}
+			(uwpe: UniverseWorldPlaceEntities) => this.entityDefnBuildBomb_Use(uwpe)
 		);
 
 		var collidable = Collidable.fromCollider(itemBombCollider);
@@ -2108,6 +2001,130 @@ class PlaceBuilderDemo // Main.
 		);
 
 		return itemBombEntityDefn;
+	}
+
+	entityDefnBuildBomb_Use(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var entityUser = uwpe.entity;
+		var entityDevice = uwpe.entity2;
+
+		var userAsItemHolder = ItemHolder.of(entityUser);
+		var hasAmmo = userAsItemHolder.hasItemWithDefnNameAndQuantity("Bomb", 1);
+		if (hasAmmo == false)
+		{
+			return;
+		}
+
+		userAsItemHolder.itemSubtractDefnNameAndQuantity("Bomb", 1);
+		EquipmentUser.of(entityUser).unequipItemsNoLongerHeld
+		(
+			uwpe
+		);
+
+		var userLoc = Locatable.of(entityUser).loc;
+		var userPos = userLoc.pos;
+		var userVel = userLoc.vel;
+		var userSpeed = userVel.magnitude();
+		if (userSpeed == 0) { return; }
+
+		var projectileDimension = 1.5;
+		var projectileVisual = new VisualGroup
+		([
+			Drawable.of(entityDevice).visual
+			// todo - Add sparks?
+		]);
+
+		var userDirection = userVel.clone().normalize();
+		var userRadius = (Collidable.of(entityUser).collider as Sphere).radius;
+		var projectilePos = userPos.clone().add
+		(
+			userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
+		);
+		var projectileOri = new Orientation
+		(
+			userVel.clone().normalize(), null
+		);
+		var projectileLoc = new Disposition(projectilePos, projectileOri, null);
+		projectileLoc.vel.overwriteWith(userVel).clearZ().double();
+
+		var projectileCollider =
+			new Sphere(Coords.create(), projectileDimension);
+
+		// todo
+		var projectileCollide = null;
+
+		var collidable = new Collidable
+		(
+			false, // canCollideAgainWithoutSeparating
+			0, // ticks
+			projectileCollider,
+			[ Collidable.name ],
+			projectileCollide
+		);
+
+		var projectileEntity = new Entity
+		(
+			"ProjectileBomb",
+			[
+				Ephemeral.fromTicksToLiveAndExpire(64, this.entityDefnBuildBomb_Use_ProjectileDie),
+				Locatable.fromLoc(projectileLoc),
+				collidable,
+				Constrainable.fromConstraint(new Constraint_FrictionXY(.03, .5)),
+				Drawable.fromVisual(projectileVisual),
+				Equippable.default()
+			]
+		);
+
+		uwpe.place.entityToSpawnAdd(projectileEntity);
+	}
+
+	entityDefnBuildBomb_Use_ProjectileDie(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var explosionRadius = 32;
+		var explosionVisual = VisualCircle.fromRadiusAndColorFill
+		(
+			explosionRadius, Color.Instances().Yellow
+		);
+
+		var explosionCollider = new Sphere(Coords.create(), explosionRadius);
+
+		var explosionCollide = (uwpe: UniverseWorldPlaceEntities) =>
+		{
+			var entityProjectile = uwpe.entity;
+			var entityOther = uwpe.entity2;
+			var killable = Killable.of(entityOther);
+			if (killable != null)
+			{
+				killable.damageApply
+				(
+					uwpe, Damager.of(entityProjectile).damagePerHit
+				);
+			}
+		};
+
+		var entityDying = uwpe.entity;
+
+		var collidable = new Collidable
+		(
+			false, // canCollideAgainWithoutSeparating
+			0, // ticks
+			explosionCollider,
+			[ Killable.name ],
+			explosionCollide
+		);
+
+		var explosionEntity = new Entity
+		(
+			"BombExplosion",
+			[
+				collidable,
+				Damager.fromDamagePerHit(Damage.fromAmount(20)),
+				Drawable.fromVisual(explosionVisual),
+				Ephemeral.fromTicksToLive(8),
+				Locatable.of(entityDying)
+			]
+		);
+		uwpe.place.entityToSpawnAdd(explosionEntity);
 	}
 
 	entityDefnBuildBook(): Entity

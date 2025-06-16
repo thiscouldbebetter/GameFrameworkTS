@@ -28,6 +28,9 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(0, 1).multiplyScalar(dimension),
                 ]);
             }
+            static fromPoints(points) {
+                return new Path(points);
+            }
             // Clonable.
             clone() {
                 return new Path(GameFramework.ArrayHelper.clone(this.points));

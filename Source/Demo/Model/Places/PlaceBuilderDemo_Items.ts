@@ -71,7 +71,7 @@ class PlaceBuilderDemo_Items
 	{
 		var itemArmorName = "Armor";
 		var itemArmorColor = Color.Instances().GreenDark;
-		var path = new Path
+		var path = Path.fromPoints
 		([
 			Coords.fromXY(0, 0.5),
 			Coords.fromXY(-.5, 0),
@@ -82,7 +82,7 @@ class PlaceBuilderDemo_Items
 		(
 			Transform_Scale.fromScalar(this.entityDimension)
 		);
-		var itemArmorVisual = new VisualGroup
+		var itemArmorVisual = VisualGroup.fromChildren
 		([
 			VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
 		]);
@@ -92,11 +92,14 @@ class PlaceBuilderDemo_Items
 			itemArmorName, itemArmorColor, itemArmorVisual
 		);
 
-		var itemArmor = new ItemDefn
+		var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
+			itemArmorName,
+			50,
+			30,
+			[ "Armor" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemArmorVisual, null
+			itemArmorVisual
 		);
 
 		return itemArmor;
@@ -106,7 +109,7 @@ class PlaceBuilderDemo_Items
 	{
 		var itemArmorName = "Enhanced Armor";
 		var itemArmorColor = Color.Instances().GreenDark;
-		var path = new Path
+		var path = Path.fromPoints
 		([
 			Coords.fromXY(0, 0.5),
 			Coords.fromXY(-.5, 0),
@@ -117,7 +120,7 @@ class PlaceBuilderDemo_Items
 		(
 			Transform_Scale.fromScalar(this.entityDimension)
 		);
-		var itemArmorVisual = new VisualGroup
+		var itemArmorVisual = VisualGroup.fromChildren
 		([
 			VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
 		]);
@@ -126,7 +129,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemArmorVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor
@@ -137,11 +140,14 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemArmor = new ItemDefn
+		var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemArmorName, null, null, 50, 30, null, [ "Armor" ],
+			itemArmorName,
+			50,
+			30,
+			[ "Armor" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemArmorVisual, null
+			itemArmorVisual
 		);
 
 		return itemArmor;
@@ -157,7 +163,7 @@ class PlaceBuilderDemo_Items
 			Coords.fromXY(-5, 0), Coords.fromXY(5, 0), Color.Instances().Brown, 1 // lineThickness
 		);
 
-		var pathHead = new Path
+		var pathHead = Path.fromPoints
 		([
 			Coords.fromXY(1, 0),
 			Coords.fromXY(0.5, .25),
@@ -171,7 +177,7 @@ class PlaceBuilderDemo_Items
 			pathHead, itemArrowColor
 		);
 
-		var pathTail = new Path
+		var pathTail = Path.fromPoints
 		([
 			Coords.create(),
 			Coords.fromXY(-.5, .25),
@@ -188,7 +194,7 @@ class PlaceBuilderDemo_Items
 			pathTail, Color.Instances().White
 		);
 
-		var itemArrowVisual = new VisualGroup
+		var itemArrowVisual = VisualGroup.fromChildren
 		([
 			itemArrowVisualTail,
 			itemArrowVisualShaft,
@@ -199,7 +205,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemArrowVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextImmediateFontAndColor
@@ -223,10 +229,10 @@ class PlaceBuilderDemo_Items
 		var itemBombName = "Bomb";
 		var colors = Color.Instances();
 		var itemBombColor = colors.BlueDark;
-		var itemBombVisual = new VisualGroup
+		var itemBombVisual = VisualGroup.fromChildren
 		([
 			// fuse
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf),
 				VisualRectangle.fromSizeAndColorFill
@@ -241,7 +247,7 @@ class PlaceBuilderDemo_Items
 				this.entityDimensionHalf, itemBombColor
 			),
 			// highlight
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(-this.entityDimensionHalf / 3, -this.entityDimensionHalf / 3),
 				VisualCircle.fromRadiusAndColorFill
@@ -266,11 +272,14 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemBomb = new ItemDefn
+		var itemBomb = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemBombName, null, null, 5, 10, null, [ "Wieldable" ],
+			itemBombName,
+			5,
+			10,
+			[ "Wieldable" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemBombVisual, null
+			itemBombVisual
 		);
 
 		return itemBomb;
@@ -281,14 +290,14 @@ class PlaceBuilderDemo_Items
 		var itemBookName = "Book";
 		var colors = Color.Instances();
 		var itemBookColor = colors.Blue;
-		var itemBookVisual = new VisualGroup
+		var itemBookVisual = VisualGroup.fromChildren
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
 				Coords.fromXY(1, 1.25).multiplyScalar(this.entityDimension),
 				itemBookColor
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(.4, 0).multiplyScalar(this.entityDimension),
 				VisualRectangle.fromSizeAndColorFill
@@ -303,7 +312,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemBookVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextImmediateFontAndColor
@@ -314,71 +323,70 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemBookUse = (uwpe: UniverseWorldPlaceEntities) => // use
-		{
-			var universe = uwpe.universe;
-
-			var venuePrev = universe.venueCurrent();
-			var back = () => universe.venueTransitionTo(venuePrev);
-
-			var text =
-				"Fourscore and seven years ago, our fathers brought forth upon this continent "
-				+ "a new nation, conceived in liberty, and dedicated to the proposition that "
-				+ " all men are created equal. ";
-			var size = universe.display.sizeInPixels.clone();
-			var fontHeight = 10;
-			var fontNameAndHeight = FontNameAndHeight.fromHeightInPixels(fontHeight);
-			var textarea = new ControlTextarea
-			(
-				"textareaContents",
-				size.clone().half().half(),
-				size.clone().half(),
-				DataBinding.fromContext(text),
-				fontNameAndHeight,
-				DataBinding.fromFalseWithContext(text) // isEnabled
-			);
-			var button = new ControlButton
-			(
-				"buttonDone",
-				Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight),
-				Coords.fromXY(size.x / 2, fontHeight * 2),
-				DataBinding.fromContext("Done"),
-				fontNameAndHeight,
-				true, // hasBorder
-				DataBinding.fromTrue(), // isEnabled
-				back, // click
-				false // canBeHeldDown
-			);
-			var container = new ControlContainer
-			(
-				"containerBook",
-				Coords.create(),
-				size.clone(),
-				[ textarea, button ], // children
-				[
-					new Action( ControlActionNames.Instances().ControlCancel, back ),
-					new Action( ControlActionNames.Instances().ControlConfirm, back )
-				],
-				null
-			);
-
-			var venueNext = container.toVenue();
-			universe.venueTransitionTo(venueNext);
-
-			return "";
-		};
-
-		var itemBook = new ItemDefn
+		var itemBook = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemBookName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+			itemBookName,
+			1,
+			10,
 			null, // categoryNames
-			itemBookUse,
-			itemBookVisual,
-			null
+			this.book_ItemBookUse,
+			itemBookVisual
 		);
 
 		return itemBook;
 	}
+
+	book_ItemBookUse(uwpe: UniverseWorldPlaceEntities): string
+	{
+		var universe = uwpe.universe;
+
+		var venuePrev = universe.venueCurrent();
+		var back = () => universe.venueTransitionTo(venuePrev);
+
+		var text =
+			"Fourscore and seven years ago, our fathers brought forth upon this continent "
+			+ "a new nation, conceived in liberty, and dedicated to the proposition that "
+			+ " all men are created equal. ";
+		var size = universe.display.sizeInPixels.clone();
+		var fontHeight = 10;
+		var fontNameAndHeight = FontNameAndHeight.fromHeightInPixels(fontHeight);
+		var textarea = new ControlTextarea
+		(
+			"textareaContents",
+			size.clone().half().half(),
+			size.clone().half(),
+			DataBinding.fromContext(text),
+			fontNameAndHeight,
+			DataBinding.fromFalseWithContext(text) // isEnabled
+		);
+		var button = ControlButton.from5
+		(
+			Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight),
+			Coords.fromXY(size.x / 2, fontHeight * 2),
+			"Done",
+			fontNameAndHeight,
+			back // click
+		);
+		var controlActionNames = ControlActionNames.Instances();
+		var container = new ControlContainer
+		(
+			"containerBook",
+			Coords.create(),
+			size.clone(),
+			[ textarea, button ], // children
+			[
+				new Action( controlActionNames.ControlCancel, back ),
+				new Action( controlActionNames.ControlConfirm, back )
+			],
+			null
+		);
+
+		var venueNext = container.toVenue();
+		universe.venueTransitionTo(venueNext);
+
+		return "";
+	}
+
 
 	bow(): ItemDefn
 	{
@@ -387,7 +395,7 @@ class PlaceBuilderDemo_Items
 
 		var itemBowVisualString = VisualPolygon.fromPathAndColorFill
 		(
-			new Path
+			Path.fromPoints
 			([
 				Coords.fromXY(0, -this.entityDimension),
 				Coords.fromXY(1, -this.entityDimension),
@@ -407,7 +415,7 @@ class PlaceBuilderDemo_Items
 			null
 		);
 
-		var itemBowVisual = new VisualGroup
+		var itemBowVisual = VisualGroup.fromChildren
 		([
 			itemBowVisualString,
 			itemBowVisualBody
@@ -417,7 +425,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemBowVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -428,11 +436,14 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemBow = new ItemDefn
+		var itemBow = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemBowName, null, null, 5, 100, null, [ "Wieldable" ],
+			itemBowName,
+			5,
+			100,
+			[ "Wieldable" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemBowVisual, null
+			itemBowVisual
 		);
 
 		return itemBow;
@@ -454,7 +465,7 @@ class PlaceBuilderDemo_Items
 			false // shouldUseEntityOrientation
 		);
 
-		var itemBreadVisual = new VisualGroup
+		var itemBreadVisual = VisualGroup.fromChildren
 		([
 			new VisualEllipse
 			(
@@ -468,13 +479,13 @@ class PlaceBuilderDemo_Items
 
 			itemBreadVisualCut,
 
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(-this.entityDimensionHalf * 0.75, 0),
 				itemBreadVisualCut
 			),
 
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(this.entityDimensionHalf * 0.75, 0),
 				itemBreadVisualCut
@@ -485,7 +496,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemBreadVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextImmediateFontAndColor
@@ -496,9 +507,11 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemBread = new ItemDefn
+		var itemBread = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemBreadName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
+			itemBreadName,
+			1,
+			4,
 			[ "Consumable" ], // categoryNames
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
@@ -510,8 +523,7 @@ class PlaceBuilderDemo_Items
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
 				itemHolder.statusMessageSet("You eat the bread.");
 			},
-			itemBreadVisual,
-			null // toEntity
+			itemBreadVisual
 		);
 
 		return itemBread;
@@ -522,15 +534,15 @@ class PlaceBuilderDemo_Items
 		var itemCoinName = "Coin";
 		var colors = Color.Instances();
 		var itemCoinColor = colors.Yellow;
-		var itemCoinVisual = new VisualGroup
+		var itemCoinVisual = VisualGroup.fromChildren
 		([
 			VisualCircle.fromRadiusAndColorFill
 			(
 				this.entityDimensionHalf, itemCoinColor
 			),
-			new VisualCircle
+			VisualCircle.fromRadiusAndColorBorder
 			(
-				this.entityDimensionHalf * .75, null, colors.Gray, null
+				this.entityDimensionHalf * .75, colors.Gray
 			)
 		]);
 
@@ -538,7 +550,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemCoinVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor
@@ -562,11 +574,11 @@ class PlaceBuilderDemo_Items
 		var itemCrystalName = "Crystal";
 		var colors = Color.Instances();
 		var itemCrystalColor = colors.Cyan;
-		var itemCrystalVisual = new VisualGroup
+		var itemCrystalVisual = VisualGroup.fromChildren
 		([
 			VisualPolygon.fromPathAndColors
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(1, 0),
 					Coords.fromXY(0, 1),
@@ -584,7 +596,7 @@ class PlaceBuilderDemo_Items
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(1, 0),
 					Coords.fromXY(0, 1),
@@ -605,7 +617,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemCrystalVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor
@@ -629,7 +641,7 @@ class PlaceBuilderDemo_Items
 		var itemDoughnutName = "Doughnut";
 		var itemDoughnutColor = Color.Instances().Orange;
 
-		var itemDoughnutVisualBody = new VisualGroup
+		var itemDoughnutVisualBody = VisualGroup.fromChildren
 		([
 			// body
 			VisualCircle.fromRadiusAndColorFill
@@ -660,7 +672,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemDoughnutVisualBody.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -671,9 +683,11 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemDoughnut = new ItemDefn
+		var itemDoughnut = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemDoughnutName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
+			itemDoughnutName,
+			1,
+			4,
 			[ "Consumable" ], // categoryNames
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
@@ -685,7 +699,7 @@ class PlaceBuilderDemo_Items
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
 				itemHolder.statusMessageSet("You eat the doughnut.");
 			},
-			itemDoughnutVisual, null // toEntity
+			itemDoughnutVisual
 		);
 
 		return itemDoughnut;
@@ -696,9 +710,9 @@ class PlaceBuilderDemo_Items
 		var itemFlowerName = "Flower";
 		var colors = Color.Instances();
 		var colorFlower = colors.Pink;
-		var itemFlowerVisual = new VisualGroup
+		var itemFlowerVisual = VisualGroup.fromChildren
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(.5, 1.75).multiplyScalar(this.entityDimensionHalf),
 				new VisualArc
@@ -713,7 +727,7 @@ class PlaceBuilderDemo_Items
 			),
 			VisualPolygon.fromPathAndColors
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(1, 0),
 					Coords.fromXY(.3, .3),
@@ -739,7 +753,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemFlowerVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -763,13 +777,13 @@ class PlaceBuilderDemo_Items
 		var itemFruitName = "Fruit";
 		var colors = Color.Instances();
 		var itemFruitColor = colors.Orange;
-		var itemFruitVisual = new VisualGroup
+		var itemFruitVisual = VisualGroup.fromChildren
 		([
 			VisualCircle.fromRadiusAndColorFill
 			(
 				this.entityDimensionHalf, itemFruitColor
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(-this.entityDimensionHalf / 2, -this.entityDimensionHalf / 2),
 				VisualCircle.fromRadiusAndColorFill
@@ -783,7 +797,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemFruitVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor
@@ -818,7 +832,7 @@ class PlaceBuilderDemo_Items
 	grass(): ItemDefn
 	{
 		var itemGrassName = "Grass";
-		var itemGrassVisual = new VisualGroup
+		var itemGrassVisual = VisualGroup.fromChildren
 		([
 			/*
 			new VisualOffset
@@ -834,7 +848,7 @@ class PlaceBuilderDemo_Items
 			new VisualImageScaled
 			(
 				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
-				new VisualImageFromLibrary("Grass")
+				VisualImageFromLibrary.fromImageName("Grass")
 			),
 		]);
 
@@ -842,7 +856,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemGrassVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimensionHalf * 3),
 					VisualText.fromTextImmediateFontAndColor
@@ -868,7 +882,7 @@ class PlaceBuilderDemo_Items
 		var itemHeartColor = Color.Instances().Red;
 		var itemHeartVisual = new VisualGroup
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(-entityDimensionQuarter, 0),
 				new VisualArc
@@ -882,7 +896,7 @@ class PlaceBuilderDemo_Items
 				)
 			),
 
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(entityDimensionQuarter, 0),
 				new VisualArc
@@ -898,7 +912,7 @@ class PlaceBuilderDemo_Items
 
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(-1.1, 0),
 					Coords.fromXY(1.1, 0),
@@ -915,7 +929,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemHeartVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextImmediateFontAndColor
@@ -948,7 +962,7 @@ class PlaceBuilderDemo_Items
 		([
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(-0.5, 0.4),
 					Coords.fromXY(0.5, 0.4),
@@ -966,7 +980,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemIronVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor
@@ -991,7 +1005,7 @@ class PlaceBuilderDemo_Items
 	{
 		var itemIronOreName = "Iron Ore";
 		var itemIronOreColor = Color.Instances().Gray;
-		var itemIronOreVisual = new VisualGroup
+		var itemIronOreVisual = VisualGroup.fromChildren
 		([
 			new VisualArc
 			(
@@ -1008,7 +1022,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemIronOreVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextImmediateFontAndColor
@@ -1033,7 +1047,7 @@ class PlaceBuilderDemo_Items
 	{
 		var itemKeyName = "Key";
 		var itemKeyColor = Color.Instances().Yellow;
-		var itemKeyVisual = new VisualGroup
+		var itemKeyVisual = VisualGroup.fromChildren
 		([
 			new VisualArc
 			(
@@ -1044,7 +1058,7 @@ class PlaceBuilderDemo_Items
 				itemKeyColor,
 				null
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(this.entityDimensionHalf, 0),
 				new VisualPolars
@@ -1063,7 +1077,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemKeyVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -1086,9 +1100,9 @@ class PlaceBuilderDemo_Items
 	{
 		var itemLogName = "Log";
 		var itemLogColor = Color.Instances().Brown;
-		var itemLogVisual = new VisualGroup
+		var itemLogVisual = VisualGroup.fromChildren
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(this.entityDimension, 0),
 				VisualCircle.fromRadiusAndColorFill
@@ -1101,7 +1115,7 @@ class PlaceBuilderDemo_Items
 				Coords.fromXY(this.entityDimension * 2, this.entityDimension),
 				itemLogColor
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(-this.entityDimension, 0),
 				VisualCircle.fromRadiusAndColorFill
@@ -1115,7 +1129,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemLogVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor
@@ -1149,7 +1163,7 @@ class PlaceBuilderDemo_Items
 			(
 				this.entityDimensionHalf * .9, null, colors.White, null
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(this.entityDimensionHalf * .2, 0),
 				new VisualCircle
@@ -1165,7 +1179,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemMeatVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 1.5),
 					VisualText.fromTextImmediateFontAndColor
@@ -1176,9 +1190,11 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemMeat = new ItemDefn
+		var itemMeat = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemMeatName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+			itemMeatName,
+			1,
+			10,
 			[ "Consumable" ], // categoryNames
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
@@ -1190,8 +1206,7 @@ class PlaceBuilderDemo_Items
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
 				itemHolder.statusMessageSet("You eat the meat.");
 			},
-			itemMeatVisual,
-			null
+			itemMeatVisual
 		);
 
 		return itemMeat;
@@ -1211,7 +1226,7 @@ class PlaceBuilderDemo_Items
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(-0.5, -0.2),
 					Coords.fromXY(-0.2, -0.2),
@@ -1238,9 +1253,11 @@ class PlaceBuilderDemo_Items
 			itemMedicineName, itemMedicineColor, itemMedicineVisual
 		);
 
-		var itemMedicine = new ItemDefn
+		var itemMedicine = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemMedicineName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+			itemMedicineName,
+			1,
+			10,
 			[ "Consumable" ], // categoryNames
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
@@ -1253,8 +1270,7 @@ class PlaceBuilderDemo_Items
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
 				itemHolder.statusMessageSet("You use the medicine.");
 			},
-			itemMedicineVisual,
-			null
+			itemMedicineVisual
 		);
 
 		return itemMedicine;
@@ -1268,7 +1284,7 @@ class PlaceBuilderDemo_Items
 		var colorCap = colors.Violet;
 		var itemMushroomVisual = new VisualGroup
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, -this.entityDimensionHalf / 2),
 				new VisualArc
@@ -1281,7 +1297,7 @@ class PlaceBuilderDemo_Items
 					null
 				)
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.zeroes(),
 				VisualRectangle.fromSizeAndColorFill
@@ -1310,9 +1326,9 @@ class PlaceBuilderDemo_Items
 		var itemPickName = "Pick";
 		var colors = Color.Instances();
 		var itemPickColor = colors.Gray;
-		var itemPickVisual = new VisualGroup
+		var itemPickVisual = VisualGroup.fromChildren
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, 0 - this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
@@ -1323,7 +1339,7 @@ class PlaceBuilderDemo_Items
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(0.75, -1),
 					Coords.fromXY(-0.75, -1),
@@ -1352,11 +1368,14 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemPick = new ItemDefn
+		var itemPick = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemPickName, null, null, 1, 30, null, [ "Wieldable" ],
+			itemPickName,
+			1,
+			30,
+			[ "Wieldable" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemPickVisual, null
+			itemPickVisual
 		);
 
 		return itemPick;
@@ -1378,7 +1397,7 @@ class PlaceBuilderDemo_Items
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(-0.5, -0.2),
 					Coords.fromXY(-0.2, -0.2),
@@ -1415,9 +1434,11 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemPotion = new ItemDefn
+		var itemPotion = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemPotionName, null, null, 1, 10, null, // name, appearance, descripton, mass, value, stackSize
+			itemPotionName,
+			1,
+			10,
 			[ "Consumable" ], // categoryNames
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
@@ -1430,8 +1451,7 @@ class PlaceBuilderDemo_Items
 				var message = "You use the medicine.";
 				return message;
 			},
-			itemPotionVisual,
-			null
+			itemPotionVisual
 		);
 
 		return itemPotion;
@@ -1444,7 +1464,7 @@ class PlaceBuilderDemo_Items
 		var itemShovelColor = colors.Gray;
 		var itemShovelVisual = new VisualGroup
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, 0 + this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
@@ -1455,7 +1475,7 @@ class PlaceBuilderDemo_Items
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(0.5, 1.5),
 					Coords.fromXY(0, 1.75),
@@ -1489,11 +1509,11 @@ class PlaceBuilderDemo_Items
 	{
 		var itemSpeedBootsName = "Speed Boots";
 		var itemAccessoryColor = Color.Instances().Orange;
-		var itemSpeedBootsVisual = new VisualGroup
+		var itemSpeedBootsVisual = VisualGroup.fromChildren
 		([
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(0, .5),
 					Coords.fromXY(1, .5),
@@ -1509,7 +1529,7 @@ class PlaceBuilderDemo_Items
 
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(-.1, .5),
 					Coords.fromXY(-1.1, .5),
@@ -1539,11 +1559,14 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemSpeedBoots = new ItemDefn
+		var itemSpeedBoots = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemSpeedBootsName, null, null, 10, 30, null, [ "Accessory" ],
+			itemSpeedBootsName,
+			10,
+			30,
+			[ "Accessory" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemSpeedBootsVisual, null
+			itemSpeedBootsVisual
 		);
 
 		return itemSpeedBoots;
@@ -1552,11 +1575,14 @@ class PlaceBuilderDemo_Items
 	sword(): ItemDefn
 	{
 		var itemSwordVisual = this.sword_Visual(Color.Instances().GrayLight);
-		var itemSword = new ItemDefn
+		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			"Sword", null, null, 10, 100, null, [ "Wieldable" ],
+			"Sword",
+			10,
+			100,
+			[ "Wieldable" ],
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemSwordVisual, null
+			itemSwordVisual
 		);
 		return itemSword;
 	}
@@ -1565,7 +1591,7 @@ class PlaceBuilderDemo_Items
 	{
 		var hiltColor = Color.fromRGB(0, .5, .5);
 
-		var itemSwordVisualBladePath = new Path
+		var itemSwordVisualBladePath = Path.fromPoints
 		([
 			// blade
 			Coords.fromXY(-0.4, 0.2),
@@ -1575,7 +1601,7 @@ class PlaceBuilderDemo_Items
 			Coords.fromXY(-0.4, -0.2),
 		]);
 
-		var itemSwordVisualHiltPath = new Path
+		var itemSwordVisualHiltPath = Path.fromPoints
 		([
 			// hilt
 			Coords.fromXY(-0.4, -0.5),
@@ -1677,9 +1703,9 @@ class PlaceBuilderDemo_Items
 		var itemToolsetName = "Toolset";
 		var colors = Color.Instances();
 		var itemToolsetColor = colors.Gray;
-		var itemToolsetVisual = new VisualGroup
+		var itemToolsetVisual = VisualGroup.fromChildren
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, this.entityDimension / 2),
 				VisualRectangle.fromSizeAndColorFill
@@ -1737,21 +1763,21 @@ class PlaceBuilderDemo_Items
 		var itemTorchVisualFlame =
 			VisualBuilder.Instance().flame(this.entityDimensionHalf * .6);
 
-		var itemTorchVisual = new VisualGroup
+		var itemTorchVisual = VisualGroup.fromChildren
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.create(),
 				itemTorchVisualBody
 			),
 
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, 0 - this.entityDimension * .75),
 				itemTorchVisualHead
 			),
 
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, 0 - this.entityDimension * .7),
 				itemTorchVisualFlame
@@ -1763,12 +1789,14 @@ class PlaceBuilderDemo_Items
 			itemTorchName, itemTorchColor, itemTorchVisual
 		);
 
-		var itemTorch = new ItemDefn
+		var itemTorch = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
 		(
-			itemTorchName, null, null, 1, 4, null, // name, appearance, descripton, mass, value, stackSize
+			itemTorchName,
+			1,
+			4,
 			[ "Wieldable", "Consumable" ], // categoryNames
 			null, // use
-			itemTorchVisual, null
+			itemTorchVisual
 		);
 
 		return itemTorch;
@@ -1795,9 +1823,9 @@ class PlaceBuilderDemo_Items
 	{
 		var itemWeightName = "Weight";
 		var itemWeightColor = Color.Instances().Blue;
-		var itemWeightVisual = new VisualGroup
+		var itemWeightVisual = VisualGroup.fromChildren
 		([
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, -1).multiplyScalar(this.entityDimensionHalf),
 				new VisualArc
@@ -1812,7 +1840,7 @@ class PlaceBuilderDemo_Items
 			),
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(-.75, .5),
 					Coords.fromXY(-.5, -.5),

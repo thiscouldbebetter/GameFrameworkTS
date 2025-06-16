@@ -44,6 +44,11 @@ export class Path
 		]);
 	}
 
+	static fromPoints(points: Coords[]): Path
+	{
+		return new Path(points);
+	}
+
 	// Clonable.
 
 	clone(): Path

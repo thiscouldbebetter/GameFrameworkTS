@@ -27,6 +27,15 @@ export class Ephemeral implements EntityProperty<Ephemeral>
 		return new Ephemeral(ticksToLive, null);
 	}
 
+	static fromTicksToLiveAndExpire
+	(
+		ticksToLive: number,
+		expire: (uwpe: UniverseWorldPlaceEntities) => void
+	)
+	{
+		return new Ephemeral(ticksToLive, expire);
+	}
+
 	static of(entity: Entity): Ephemeral
 	{
 		return entity.propertyByName(Ephemeral.name) as Ephemeral;
