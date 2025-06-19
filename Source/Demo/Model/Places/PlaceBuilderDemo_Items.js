@@ -384,7 +384,7 @@ class PlaceBuilderDemo_Items {
         var entityDimensionQuarter = this.entityDimensionHalf / 2;
         var itemHeartName = "Heart";
         var itemHeartColor = Color.Instances().Red;
-        var itemHeartVisual = new VisualGroup([
+        var itemHeartVisual = VisualGroup.fromChildren([
             VisualOffset.fromOffsetAndChild(Coords.fromXY(-entityDimensionQuarter, 0), new VisualArc(entityDimensionQuarter, // radiusOuter
             0, // radiusInner
             Coords.fromXY(-1, 0), // directionMin
@@ -411,7 +411,7 @@ class PlaceBuilderDemo_Items {
     iron() {
         var itemIronName = "Iron";
         var itemIronColor = Color.Instances().Gray;
-        var itemIronVisual = new VisualGroup([
+        var itemIronVisual = VisualGroup.fromChildren([
             VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(-0.5, 0.4),
                 Coords.fromXY(0.5, 0.4),
@@ -480,7 +480,7 @@ class PlaceBuilderDemo_Items {
         var itemMeatName = "Meat";
         var colors = Color.Instances();
         var itemMeatColor = colors.Red;
-        var itemMeatVisual = new VisualGroup([
+        var itemMeatVisual = VisualGroup.fromChildren([
             VisualCircle.fromRadiusAndColorFill(this.entityDimensionHalf, itemMeatColor),
             new VisualCircle(this.entityDimensionHalf * .9, null, colors.White, null),
             VisualOffset.fromOffsetAndChild(Coords.fromXY(this.entityDimensionHalf * .2, 0), new VisualCircle(this.entityDimensionHalf * .2, colors.Pink, colors.White, null // ?
@@ -506,7 +506,7 @@ class PlaceBuilderDemo_Items {
         var itemMedicineName = "Medicine";
         var colors = Color.Instances();
         var itemMedicineColor = colors.Red;
-        var itemMedicineVisual = new VisualGroup([
+        var itemMedicineVisual = VisualGroup.fromChildren([
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension), colors.White),
             VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(-0.5, -0.2),
@@ -543,7 +543,7 @@ class PlaceBuilderDemo_Items {
         var colors = Color.Instances();
         var colorStem = colors.Gray;
         var colorCap = colors.Violet;
-        var itemMushroomVisual = new VisualGroup([
+        var itemMushroomVisual = VisualGroup.fromChildren([
             VisualOffset.fromOffsetAndChild(Coords.fromXY(0, -this.entityDimensionHalf / 2), new VisualArc(this.entityDimensionHalf, // radiusOuter
             0, // radiusInner
             Coords.fromXY(-1, 0), // directionMin
@@ -579,7 +579,7 @@ class PlaceBuilderDemo_Items {
         var itemPotionName = "Potion";
         var colors = Color.Instances();
         var itemPotionColor = colors.Red;
-        var itemPotionVisual = new VisualGroup([
+        var itemPotionVisual = VisualGroup.fromChildren([
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension), colors.White),
             VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(-0.5, -0.2),
@@ -617,7 +617,7 @@ class PlaceBuilderDemo_Items {
         var itemShovelName = "Shovel";
         var colors = Color.Instances();
         var itemShovelColor = colors.Gray;
-        var itemShovelVisual = new VisualGroup([
+        var itemShovelVisual = VisualGroup.fromChildren([
             VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 + this.entityDimension / 2), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(this.entityDimension / 4, this.entityDimension), colors.Brown)),
             VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(0.5, 1.5),
@@ -692,10 +692,10 @@ class PlaceBuilderDemo_Items {
         );
         var itemSwordVisualHilt = new VisualPolygon(itemSwordVisualHiltPath.transform(transform), hiltColor, null, true // shouldUseEntityOrientation
         );
-        var itemSwordVisualBody = new VisualGroup([
+        var itemSwordVisualBody = VisualGroup.fromChildren([
             itemSwordVisualBlade, itemSwordVisualHilt
         ]);
-        var itemSwordVisual = new VisualGroup([
+        var itemSwordVisual = VisualGroup.fromChildren([
             itemSwordVisualBody
         ]);
         if (this.parent.visualsHaveText) {

@@ -880,7 +880,7 @@ class PlaceBuilderDemo_Items
 		var entityDimensionQuarter = this.entityDimensionHalf / 2;
 		var itemHeartName = "Heart";
 		var itemHeartColor = Color.Instances().Red;
-		var itemHeartVisual = new VisualGroup
+		var itemHeartVisual = VisualGroup.fromChildren
 		([
 			VisualOffset.fromOffsetAndChild
 			(
@@ -958,7 +958,7 @@ class PlaceBuilderDemo_Items
 	{
 		var itemIronName = "Iron";
 		var itemIronColor = Color.Instances().Gray;
-		var itemIronVisual = new VisualGroup
+		var itemIronVisual = VisualGroup.fromChildren
 		([
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -1153,7 +1153,7 @@ class PlaceBuilderDemo_Items
 		var itemMeatName = "Meat";
 		var colors = Color.Instances();
 		var itemMeatColor = colors.Red;
-		var itemMeatVisual = new VisualGroup
+		var itemMeatVisual = VisualGroup.fromChildren
 		([
 			VisualCircle.fromRadiusAndColorFill
 			(
@@ -1217,7 +1217,7 @@ class PlaceBuilderDemo_Items
 		var itemMedicineName = "Medicine";
 		var colors = Color.Instances();
 		var itemMedicineColor = colors.Red;
-		var itemMedicineVisual = new VisualGroup
+		var itemMedicineVisual = VisualGroup.fromChildren
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
@@ -1282,7 +1282,7 @@ class PlaceBuilderDemo_Items
 		var colors = Color.Instances();
 		var colorStem = colors.Gray;
 		var colorCap = colors.Violet;
-		var itemMushroomVisual = new VisualGroup
+		var itemMushroomVisual = VisualGroup.fromChildren
 		([
 			VisualOffset.fromOffsetAndChild
 			(
@@ -1388,7 +1388,7 @@ class PlaceBuilderDemo_Items
 		var itemPotionName = "Potion";
 		var colors = Color.Instances();
 		var itemPotionColor = colors.Red;
-		var itemPotionVisual = new VisualGroup
+		var itemPotionVisual = VisualGroup.fromChildren
 		([
 			VisualRectangle.fromSizeAndColorFill
 			(
@@ -1462,7 +1462,7 @@ class PlaceBuilderDemo_Items
 		var itemShovelName = "Shovel";
 		var colors = Color.Instances();
 		var itemShovelColor = colors.Gray;
-		var itemShovelVisual = new VisualGroup
+		var itemShovelVisual = VisualGroup.fromChildren
 		([
 			VisualOffset.fromOffsetAndChild
 			(
@@ -1636,12 +1636,12 @@ class PlaceBuilderDemo_Items
 			true // shouldUseEntityOrientation
 		);
 
-		var itemSwordVisualBody = new VisualGroup
+		var itemSwordVisualBody = VisualGroup.fromChildren
 		([
 			itemSwordVisualBlade, itemSwordVisualHilt
 		]);
 
-		var itemSwordVisual = new VisualGroup
+		var itemSwordVisual = VisualGroup.fromChildren
 		([
 			itemSwordVisualBody
 		]);

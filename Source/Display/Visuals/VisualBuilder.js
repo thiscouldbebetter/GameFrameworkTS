@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                     GameFramework.VisualOffset.fromChildAndOffset(visualEyes, GameFramework.Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)),
                     GameFramework.VisualOffset.fromChildAndOffset(visualEyes, GameFramework.Coords.fromXY(0, -1).multiplyScalar(eyeRadius))
                 ], null);
-                var circleWithEyes = new GameFramework.VisualGroup([
+                var circleWithEyes = GameFramework.VisualGroup.fromNameAndChildren("CircleWithEyes", [
                     GameFramework.VisualCircle.fromRadiusAndColorFill(circleRadius, circleColor),
                     visualEyesDirectional
                 ]);
@@ -38,52 +38,52 @@ var ThisCouldBeBetter;
                 var offsetLegRight = GameFramework.Coords.fromXY(spaceBetweenLegsHalf, 0);
                 var ticksPerStep = 2;
                 var isRepeating = true;
-                var visualLegDownLeft = new GameFramework.VisualPath(new GameFramework.Path([
+                var visualLegDownLeft = new GameFramework.VisualPath(GameFramework.Path.fromPoints([
                     GameFramework.Coords.fromXY(0, -legLength),
                     GameFramework.Coords.fromXY(0, legLength),
                     GameFramework.Coords.fromXY(-footLengthHalf, legLength + footLengthHalf)
                 ]), circleColor, lineThickness, false // isClosed
                 );
-                var visualLegDownRight = new GameFramework.VisualPath(new GameFramework.Path([
+                var visualLegDownRight = new GameFramework.VisualPath(GameFramework.Path.fromPoints([
                     GameFramework.Coords.fromXY(0, -legLength),
                     GameFramework.Coords.fromXY(0, legLength),
                     GameFramework.Coords.fromXY(footLengthHalf, legLength + footLengthHalf)
                 ]), circleColor, lineThickness, false // isClosed
                 );
-                var visualLegsFacingDownStanding = new GameFramework.VisualGroup([
+                var visualLegsFacingDownStanding = GameFramework.VisualGroup.fromNameAndChildren("LegsFacingDownStanding", [
                     GameFramework.VisualOffset.fromChildAndOffset(visualLegDownLeft, offsetLegLeft),
                     GameFramework.VisualOffset.fromChildAndOffset(visualLegDownRight, offsetLegRight)
                 ]);
                 var ticksPerStepAsArray = [ticksPerStep, ticksPerStep];
-                var visualLegsFacingDownWalking = new GameFramework.VisualGroup([
+                var visualLegsFacingDownWalking = GameFramework.VisualGroup.fromChildren([
                     GameFramework.VisualOffset.fromChildAndOffset(new GameFramework.VisualAnimation(null, // name
                     ticksPerStepAsArray, [
                         visualLegDownLeft,
-                        GameFramework.VisualOffset.fromChildAndOffset(visualLegDownLeft, new GameFramework.Coords(0, -legLengthHalf, 0))
+                        GameFramework.VisualOffset.fromChildAndOffset(visualLegDownLeft, GameFramework.Coords.fromXY(0, -legLengthHalf))
                     ], isRepeating), offsetLegLeft),
                     GameFramework.VisualOffset.fromChildAndOffset(new GameFramework.VisualAnimation(null, // name
                     ticksPerStepAsArray, [
-                        GameFramework.VisualOffset.fromChildAndOffset(visualLegDownRight, new GameFramework.Coords(0, -legLengthHalf, 0)),
+                        GameFramework.VisualOffset.fromChildAndOffset(visualLegDownRight, GameFramework.Coords.fromXY(0, -legLengthHalf)),
                         visualLegDownRight
                     ], isRepeating), offsetLegRight),
                 ]);
-                var visualLegUpLeft = new GameFramework.VisualPath(new GameFramework.Path([
+                var visualLegUpLeft = new GameFramework.VisualPath(GameFramework.Path.fromPoints([
                     GameFramework.Coords.fromXY(0, -legLength),
                     GameFramework.Coords.fromXY(0, legLength),
                     GameFramework.Coords.fromXY(-footLengthHalf, legLength - footLengthHalf)
                 ]), circleColor, lineThickness, false // isClosed
                 );
-                var visualLegUpRight = new GameFramework.VisualPath(new GameFramework.Path([
+                var visualLegUpRight = new GameFramework.VisualPath(GameFramework.Path.fromPoints([
                     GameFramework.Coords.fromXY(0, -legLength),
                     GameFramework.Coords.fromXY(0, legLength),
                     GameFramework.Coords.fromXY(footLengthHalf, legLength - footLengthHalf)
                 ]), circleColor, lineThickness, false // isClosed
                 );
-                var visualLegsFacingUpStanding = new GameFramework.VisualGroup([
+                var visualLegsFacingUpStanding = GameFramework.VisualGroup.fromNameAndChildren("LegsFacingUpStanding", [
                     GameFramework.VisualOffset.fromChildAndOffset(visualLegUpLeft, offsetLegLeft),
                     GameFramework.VisualOffset.fromChildAndOffset(visualLegUpRight, offsetLegRight)
                 ]);
-                var visualLegsFacingUpWalking = new GameFramework.VisualGroup([
+                var visualLegsFacingUpWalking = GameFramework.VisualGroup.fromNameAndChildren("LegsFacingUpWalking", [
                     GameFramework.VisualOffset.fromChildAndOffset(new GameFramework.VisualAnimation(null, // name
                     ticksPerStepAsArray, [
                         visualLegUpLeft,
@@ -95,39 +95,39 @@ var ThisCouldBeBetter;
                         visualLegUpRight
                     ], isRepeating), offsetLegRight),
                 ]);
-                var visualLegFacingLeft = new GameFramework.VisualPath(new GameFramework.Path([
+                var visualLegFacingLeft = new GameFramework.VisualPath(GameFramework.Path.fromPoints([
                     GameFramework.Coords.fromXY(0, -legLength),
                     GameFramework.Coords.fromXY(0, legLength),
                     GameFramework.Coords.fromXY(-footLength, legLength)
                 ]), circleColor, lineThickness, false // isClosed
                 );
-                var visualLegsFacingLeftStanding = new GameFramework.VisualGroup([
+                var visualLegsFacingLeftStanding = GameFramework.VisualGroup.fromNameAndChildren("LegsFacingLeftStanding", [
                     GameFramework.VisualOffset.fromChildAndOffset(visualLegFacingLeft, offsetLegLeft),
                     GameFramework.VisualOffset.fromChildAndOffset(visualLegFacingLeft, offsetLegRight)
                 ]);
-                var visualLegsFacingLeftWalking = new GameFramework.VisualGroup([
+                var visualLegsFacingLeftWalking = GameFramework.VisualGroup.fromNameAndChildren("LegsFacingLeftWalking", [
                     GameFramework.VisualOffset.fromChildAndOffset(new GameFramework.VisualAnimation(null, // name
                     ticksPerStepAsArray, [
                         visualLegFacingLeft,
-                        GameFramework.VisualOffset.fromChildAndOffset(visualLegFacingLeft, new GameFramework.Coords(0, -legLengthHalf, 0))
+                        GameFramework.VisualOffset.fromChildAndOffset(visualLegFacingLeft, GameFramework.Coords.fromXY(0, -legLengthHalf))
                     ], isRepeating), offsetLegLeft),
                     GameFramework.VisualOffset.fromChildAndOffset(new GameFramework.VisualAnimation(null, // name
                     ticksPerStepAsArray, [
-                        GameFramework.VisualOffset.fromChildAndOffset(visualLegFacingLeft, new GameFramework.Coords(0, -legLengthHalf, 0)),
+                        GameFramework.VisualOffset.fromChildAndOffset(visualLegFacingLeft, GameFramework.Coords.fromXY(0, -legLengthHalf)),
                         visualLegFacingLeft
-                    ], isRepeating), offsetLegRight),
+                    ], isRepeating), offsetLegRight)
                 ]);
-                var visualLegFacingRight = new GameFramework.VisualPath(new GameFramework.Path([
-                    new GameFramework.Coords(0, -legLength, 0),
-                    new GameFramework.Coords(0, legLength, 0),
-                    new GameFramework.Coords(footLength, legLength, 0)
+                var visualLegFacingRight = new GameFramework.VisualPath(GameFramework.Path.fromPoints([
+                    GameFramework.Coords.fromXY(0, -legLength),
+                    GameFramework.Coords.fromXY(0, legLength),
+                    GameFramework.Coords.fromXY(footLength, legLength)
                 ]), circleColor, lineThickness, false // isClosed
                 );
-                var visualLegsFacingRightStanding = new GameFramework.VisualGroup([
+                var visualLegsFacingRightStanding = GameFramework.VisualGroup.fromNameAndChildren("LegsFacingRightStanding", [
                     GameFramework.VisualOffset.fromChildAndOffset(visualLegFacingRight, offsetLegLeft),
                     GameFramework.VisualOffset.fromChildAndOffset(visualLegFacingRight, offsetLegRight)
                 ]);
-                var visualLegsFacingRightWalking = new GameFramework.VisualGroup([
+                var visualLegsFacingRightWalking = GameFramework.VisualGroup.fromNameAndChildren("LegsFacingRightWalking", [
                     GameFramework.VisualOffset.fromChildAndOffset(new GameFramework.VisualAnimation(null, // name
                     ticksPerStepAsArray, [
                         visualLegFacingRight,
@@ -188,7 +188,7 @@ var ThisCouldBeBetter;
                     ["FacingLeftWalking", visualLegsFacingLeftWalking],
                     ["FacingUpWalking", visualLegsFacingUpWalking]
                 ]), selectChildNames);
-                var returnValue = new GameFramework.VisualGroup([
+                var returnValue = GameFramework.VisualGroup.fromNameAndChildren("CircleWithEyesAndLegs", [
                     visualLegsDirectional,
                     circleWithEyes
                 ]);
@@ -251,7 +251,7 @@ var ThisCouldBeBetter;
                         var returnValue = (itemEntityWielded == null ? "Hidden" : "Visible");
                         return [returnValue];
                     });
-                    returnValue = new GameFramework.VisualGroup([
+                    returnValue = GameFramework.VisualGroup.fromNameAndChildren("CircleWithEyesAndLegsAndArmsAndWieldable", [
                         visualWielding,
                         returnValue
                     ]);
@@ -285,11 +285,11 @@ var ThisCouldBeBetter;
             eyesBlinking(visualEyeRadius) {
                 var visualPupilRadius = visualEyeRadius / 2;
                 var colors = GameFramework.Color.Instances();
-                var visualEye = new GameFramework.VisualGroup([
+                var visualEye = GameFramework.VisualGroup.fromNameAndChildren("Eye", [
                     GameFramework.VisualCircle.fromRadiusAndColorFill(visualEyeRadius, colors.White),
                     GameFramework.VisualCircle.fromRadiusAndColorFill(visualPupilRadius, colors.Black)
                 ]);
-                var visualEyes = new GameFramework.VisualGroup([
+                var visualEyes = GameFramework.VisualGroup.fromNameAndChildren("EyesBlinking", [
                     GameFramework.VisualOffset.fromChildAndOffset(visualEye, GameFramework.Coords.fromXY(-visualEyeRadius, 0)),
                     GameFramework.VisualOffset.fromChildAndOffset(visualEye, GameFramework.Coords.fromXY(visualEyeRadius, 0))
                 ]);
@@ -300,20 +300,22 @@ var ThisCouldBeBetter;
             flame(dimension) {
                 var dimensionHalf = dimension / 2;
                 var colors = GameFramework.Color.Instances();
-                var flameVisualStatic = new GameFramework.VisualGroup([
-                    GameFramework.VisualPolygon.fromPathAndColorFill(new GameFramework.Path([
+                var flameVisualStatic = GameFramework.VisualGroup.fromChildren([
+                    GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
                         GameFramework.Coords.fromXY(0, -dimension * 2),
                         GameFramework.Coords.fromXY(dimension, 0),
                         GameFramework.Coords.fromXY(-dimension, 0),
                     ]), colors.Orange),
-                    GameFramework.VisualPolygon.fromPathAndColorFill(new GameFramework.Path([
+                    GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
                         GameFramework.Coords.fromXY(0, -dimension),
                         GameFramework.Coords.fromXY(dimensionHalf, 0),
                         GameFramework.Coords.fromXY(-dimensionHalf, 0),
                     ]), colors.Yellow)
                 ]);
-                var flameVisualStaticSmall = flameVisualStatic.clone().transform(new GameFramework.Transform_Scale(new GameFramework.Coords(1, .8, 1)));
-                var flameVisualStaticLarge = flameVisualStatic.clone().transform(new GameFramework.Transform_Scale(new GameFramework.Coords(1, 1.2, 1)));
+                var flameVisualStaticSmall = flameVisualStatic
+                    .clone()
+                    .transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, .8, 1)));
+                var flameVisualStaticLarge = flameVisualStatic.clone().transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, 1.2, 1)));
                 var ticksPerFrame = 3;
                 var flameVisual = new GameFramework.VisualAnimation("Flame", // name
                 [ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame], [
@@ -328,13 +330,13 @@ var ThisCouldBeBetter;
             ice(dimension) {
                 var dimensionHalf = dimension / 2;
                 var color = GameFramework.Color.Instances().Cyan;
-                var visual = new GameFramework.VisualGroup([
-                    GameFramework.VisualPolygon.fromPathAndColors(new GameFramework.Path([
+                var visual = GameFramework.VisualGroup.fromChildren([
+                    GameFramework.VisualPolygon.fromPathAndColors(GameFramework.Path.fromPoints([
                         GameFramework.Coords.fromXY(-1, -1),
                         GameFramework.Coords.fromXY(1, -1),
                         GameFramework.Coords.fromXY(1, 1),
                         GameFramework.Coords.fromXY(-1, 1),
-                    ]).transform(new GameFramework.Transform_Scale(GameFramework.Coords.ones().multiplyScalar(dimensionHalf))), null, // colorFill
+                    ]).transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.ones().multiplyScalar(dimensionHalf))), null, // colorFill
                     color // border
                     ),
                 ]);
@@ -344,11 +346,11 @@ var ThisCouldBeBetter;
                 var color = GameFramework.Color.Instances().Yellow;
                 var rayThickness = 1;
                 var dimensionOblique = dimension * Math.sin(Math.PI / 4);
-                var sunVisual = new GameFramework.VisualGroup([
+                var sunVisual = GameFramework.VisualGroup.fromChildren([
                     new GameFramework.VisualLine(GameFramework.Coords.fromXY(-dimension, 0), GameFramework.Coords.fromXY(dimension, 0), color, rayThickness),
                     new GameFramework.VisualLine(GameFramework.Coords.fromXY(0, -dimension), GameFramework.Coords.fromXY(0, dimension), color, rayThickness),
-                    new GameFramework.VisualLine(GameFramework.Coords.fromXY(-dimensionOblique, -dimensionOblique), GameFramework.Coords.fromXY(dimensionOblique, dimensionOblique), color, rayThickness),
-                    new GameFramework.VisualLine(GameFramework.Coords.fromXY(-dimensionOblique, dimensionOblique), GameFramework.Coords.fromXY(dimensionOblique, -dimensionOblique), color, rayThickness),
+                    new GameFramework.VisualLine(GameFramework.Coords.fromXY(-1, -1).multiplyScalar(dimensionOblique), GameFramework.Coords.fromXY(1, 1).multiplyScalar(dimensionOblique), color, rayThickness),
+                    new GameFramework.VisualLine(GameFramework.Coords.fromXY(-1, 1).multiplyScalar(dimensionOblique), GameFramework.Coords.fromXY(1, -1).multiplyScalar(dimensionOblique), color, rayThickness),
                     GameFramework.VisualCircle.fromRadiusAndColorFill(dimension / 2, color),
                 ]);
                 return sunVisual;

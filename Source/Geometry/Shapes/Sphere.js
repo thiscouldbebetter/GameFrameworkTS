@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
             static default() {
                 return new Sphere(GameFramework.Coords.create(), 1);
             }
+            static fromCenterAndRadius(center, radius) {
+                return new Sphere(center, radius);
+            }
             static fromRadius(radius) {
                 return new Sphere(GameFramework.Coords.create(), radius);
             }

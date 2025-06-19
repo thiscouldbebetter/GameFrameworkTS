@@ -101,7 +101,7 @@ class PlaceBuilderDemo // Main.
         var network = Network.random(networkNodeCount, this.randomizer);
         network = network.transform(new Transform_Scale(size));
         //var tunnelsVisual = new VisualNetwork(network);
-        var tunnelsVisual = new VisualGroup([]);
+        var tunnelsVisual = VisualGroup.fromChildren([]);
         var wallThickness = 4; // todo
         var tunnelWidth = wallThickness * 8;
         var color = Color.Instances().Red;
@@ -400,7 +400,7 @@ class PlaceBuilderDemo // Main.
                 "ETop"
             ];
             var visualsInOrder = visualNamesInOrder.map((x) => visualsByName.get(x));
-            var visualsAsGroup = new VisualGroup(visualsInOrder);
+            var visualsAsGroup = VisualGroup.fromChildren(visualsInOrder);
             return visualsAsGroup;
         };
         var universe = this.universe;
@@ -468,7 +468,7 @@ class PlaceBuilderDemo // Main.
                 terrainVisualOutsideSW,
                 terrainVisualETop
             ];
-            var terrainVisualsAsGroup = new VisualGroup(terrainVisuals);
+            var terrainVisualsAsGroup = VisualGroup.fromChildren(terrainVisuals);
             return terrainVisualsAsGroup;
         };
         var terrains = [
@@ -554,13 +554,13 @@ class PlaceBuilderDemo // Main.
                     cellVisuals.push(visualForBorder);
                 }
             }
-            var cellVisual = new VisualGroup(cellVisuals);
-            var cellAsEntity = new Entity(this.name + cellPosInCells.toString(), [
+            var cellVisual = VisualGroup.fromChildren(cellVisuals);
+            var cellAsEntity = Entity.fromNameAndProperties(this.name + cellPosInCells.toString(), [
                 new Boundable(new Box(Coords.create(), //cellPosInPixels,
                 mapCellSize)),
                 cellCollidable.clone(),
                 Drawable.fromVisual(cellVisual),
-                new Locatable(Disposition.fromPos(cellPosInPixels)),
+                Locatable.fromPos(cellPosInPixels),
                 cellTerrain.traversable
             ]);
             return cellAsEntity;
@@ -740,7 +740,7 @@ class PlaceBuilderDemo // Main.
         var goalPos = Coords.create().randomize(this.randomizer).multiplyScalar(.5).addDimensions(.25, .25, 0).multiply(this.size);
         var goalLoc = Disposition.fromPos(goalPos);
         var goalColor = Color.Instances().GreenDark;
-        var goalVisual = new VisualGroup([
+        var goalVisual = VisualGroup.fromChildren([
             VisualRectangle.fromSizeAndColorFill(entitySize, goalColor),
             VisualText.fromTextImmediateFontAndColor("" + numberOfKeysToUnlockGoal, this.font, itemKeyColor)
         ]);
@@ -967,9 +967,9 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildStore() {
         var storeColor = Color.Instances().Brown;
         var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
-        var visual = new VisualGroup([
+        var visual = VisualGroup.fromChildren([
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 1.5).multiplyScalar(this.entityDimension), storeColor),
-            new VisualOffset(Coords.fromXY(0, -.75).multiplyScalar(this.entityDimension), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1.1, .2).multiplyScalar(this.entityDimension), Color.Instances().Gray)),
+            VisualOffset.fromOffsetAndChild(Coords.fromXY(0, -.75).multiplyScalar(this.entityDimension), VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1.1, .2).multiplyScalar(this.entityDimension), Color.Instances().Gray)),
         ]);
         if (this.visualsHaveText) {
             visual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor("Store", this.font, storeColor)));
@@ -1090,7 +1090,7 @@ class PlaceBuilderDemo // Main.
             return;
         }
         var projectileDimension = 1.5;
-        var projectileVisual = new VisualGroup([
+        var projectileVisual = VisualGroup.fromChildren([
             Drawable.of(entityDevice).visual
             // todo - Add sparks?
         ]);
@@ -1294,7 +1294,7 @@ class PlaceBuilderDemo // Main.
         frames, // visualsForDirections
         null // headingInTurnsGetForEntity
         );
-        var carVisual = new VisualGroup([
+        var carVisual = VisualGroup.fromChildren([
             carVisualBody
         ]);
         if (this.visualsHaveText) {
@@ -1580,8 +1580,8 @@ class PlaceBuilderDemo // Main.
         var itemDefnPotionName = "Potion";
         var colors = Color.Instances();
         var itemPotionColor = colors.Blue;
-        var itemPotionVisual = new VisualGroup([
-            VisualPolygon.fromPathAndColors(new Path([
+        var itemPotionVisual = VisualGroup.fromChildren([
+            VisualPolygon.fromPathAndColors(Path.fromPoints([
                 Coords.fromXY(1, 1),
                 Coords.fromXY(-1, 1),
                 Coords.fromXY(-.2, 0),

@@ -4,11 +4,15 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualGroup {
-            constructor(children) {
+            constructor(name, children) {
+                this.name = name;
                 this.children = children;
             }
             static fromChildren(children) {
-                return new VisualGroup(children);
+                return new VisualGroup(null, children);
+            }
+            static fromNameAndChildren(name, children) {
+                return new VisualGroup(name, children);
             }
             childAdd(childToAdd) {
                 this.children.push(childToAdd);
@@ -30,7 +34,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new VisualGroup(GameFramework.ArrayHelper.clone(this.children));
+                return new VisualGroup(this.name, GameFramework.ArrayHelper.clone(this.children));
             }
             overwriteWith(other) {
                 GameFramework.ArrayHelper.overwriteWith(this.children, other.children);

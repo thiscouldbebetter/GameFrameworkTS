@@ -54,6 +54,11 @@ export class Coords
 		return new Coords(x, y, 0);
 	}
 
+	static fromXYZ(x: number, y: number, z: number): Coords
+	{
+		return new Coords(x, y, z);
+	}
+
 	static oneOneZero(): Coords
 	{
 		return new Coords(1, 1, 0);

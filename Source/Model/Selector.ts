@@ -28,15 +28,13 @@ export class Selector implements EntityProperty<Selector>
 		this.entitiesSelected = new Array<Entity>();
 
 		var cursorRadius = this.cursorDimension / 2;
-		var visualCursor = new VisualGroup
+		var visualCursor = VisualGroup.fromChildren
 		(
 			[
-				new VisualCircle
+				VisualCircle.fromRadiusAndColorBorder
 				(
-					cursorRadius, // radius
-					null, // colorFill
-					Color.Instances().White, // colorBorder
-					1 // borderWidth
+					cursorRadius,
+					Color.Instances().White
 				),
 				VisualCrosshairs.fromRadiiOuterAndInner
 				(
@@ -45,7 +43,7 @@ export class Selector implements EntityProperty<Selector>
 			]
 		);
 
-		this.entityForCursor = new Entity
+		this.entityForCursor = Entity.fromNameAndProperties
 		(
 			"Cursor",
 			[
@@ -55,7 +53,7 @@ export class Selector implements EntityProperty<Selector>
 		);
 
 		var visualHalo = visualCursor;
-		this.entityForHalo = new Entity
+		this.entityForHalo = Entity.fromNameAndProperties
 		(
 			"Halo",
 			[

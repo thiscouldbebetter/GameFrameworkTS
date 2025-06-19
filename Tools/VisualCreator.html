@@ -41,6 +41,8 @@
 <script type="text/javascript" src="../Source/Display/VenueFader.js"></script>
 <script type="text/javascript" src="../Source/Display/VenueLayered.js"></script>
 
+<script type="text/javascript" src="../Source/Display/Animation/Animatable2.js"></script>
+
 <script type="text/javascript" src="../Source/Display/Visuals/VisualAnchor.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualArc.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualBar.js"></script>
@@ -293,7 +295,7 @@ function visualDemoCreateCircleWithEyesAndLimbs()
 		"	var visualBuilder = new VisualBuilder();",
 		"	var colors = Color.Instances();",
 		"	var eyeRadius = 5;",
-		"	var visualEyesBlinking = visualBuilder.eyesBlinking()",
+		"	var visualEyesBlinking = visualBuilder.eyesBlinking(eyeRadius);",
 		"	var headRadius = 10;",
 		"	var headColor = colors.Gray;",
 		"	var visual = visualBuilder.circleWithEyesAndLegsAndArms",
@@ -383,11 +385,11 @@ function buttonRender_Clicked()
 	(
 		"Drawable",
 		[
+			Animatable2.default(),
 			Locatable.fromLoc(entityLoc)
 		]
 	);
 	display.colorBackSet(Color.Instances().Black);
-	display.drawBackground();
 	var universe = new Universe();
 	var world = new World();
 	var place = new PlaceBase();
@@ -403,7 +405,17 @@ function buttonRender_Clicked()
 		d.getElementById("textareaVisualAsJavaScript");
 	var visualAsJavaScript = textareaVisualAsJavaScript.value;
 	var visual = eval(visualAsJavaScript);
-	visual.draw(uwpe, display);
+
+	var updateForTimerTick = () =>
+	{
+		uwpe.world.timerTicksSoFar++;
+		display.drawBackground();
+		visual.draw(uwpe, display);
+	}
+
+	var ticksPerSecond = 25;
+	var millisecondsPerTick = 1000 / ticksPerSecond;
+	setInterval(updateForTimerTick, millisecondsPerTick);
 }
 
 </script>

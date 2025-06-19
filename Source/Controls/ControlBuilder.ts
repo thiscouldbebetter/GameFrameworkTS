@@ -983,7 +983,7 @@ export class ControlBuilder
 			universe.venueTransitionTo(venueNext);
 		};
 
-		var visual: VisualBase = new VisualGroup
+		var visual: VisualBase = VisualGroup.fromChildren
 		([
 			new VisualImageScaled
 			(
@@ -1055,7 +1055,7 @@ export class ControlBuilder
 			universe.venueTransitionTo(venueTitle);
 		};
 
-		var visual: VisualBase = new VisualGroup
+		var visual: VisualBase = VisualGroup.fromChildren
 		([
 			new VisualImageScaled
 			(
@@ -1465,7 +1465,7 @@ export class ControlBuilder
 			universe.venueTransitionTo(venueTask);
 		};
 
-		var visual: VisualBase = new VisualGroup
+		var visual: VisualBase = VisualGroup.fromChildren
 		([
 			new VisualImageScaled
 			(

@@ -223,10 +223,10 @@ export class Playable implements EntityProperty<Playable>
 
 		var playerVisualHealthIcon = worldDefn.itemDefnByName("Heart").visual;
 
-		var playerVisualHealthBarPlusIcon = new VisualGroup
+		var playerVisualHealthBarPlusIcon = VisualGroup.fromChildren
 		([
 			playerVisualHealthBar,
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0),
 				playerVisualHealthIcon
@@ -247,9 +247,10 @@ export class Playable implements EntityProperty<Playable>
 			null // text
 		);
 
-		var playerVisualSatietyIcon = worldDefn.itemDefnByName("Bread").visual;
+		var playerVisualSatietyIcon =
+			worldDefn.itemDefnByName("Bread").visual;
 
-		var playerVisualSatietyBarPlusIcon = new VisualGroup
+		var playerVisualSatietyBarPlusIcon = VisualGroup.fromChildren
 		([
 			playerVisualSatietyBar,
 			new VisualOffset
@@ -288,7 +289,7 @@ export class Playable implements EntityProperty<Playable>
 			new VisualImageFromLibrary("Zap")
 		);
 
-		var playerVisualStaminaBarPlusIcon = new VisualGroup
+		var playerVisualStaminaBarPlusIcon = VisualGroup.fromChildren
 		([
 			playerVisualStaminaBar,
 			new VisualOffset
@@ -346,7 +347,7 @@ export class Playable implements EntityProperty<Playable>
 
 		var playerVisualTimeIcon = VisualBuilder.Instance().sun(playerVisualBarSize.y * .5);
 
-		var playerVisualTimeBarPlusIcon = new VisualGroup
+		var playerVisualTimeBarPlusIcon = VisualGroup.fromChildren
 		([
 			playerVisualTimeBar,
 			new VisualOffset
@@ -358,7 +359,7 @@ export class Playable implements EntityProperty<Playable>
 
 		var childSpacing = Coords.fromXY(0, playerVisualBarSize.y * 2);
 
-		var playerVisualStatusInfo: VisualBase = new VisualGroup
+		var playerVisualStatusInfo: VisualBase = VisualGroup.fromChildren
 		([
 			playerVisualHealthBarPlusIcon,
 			new VisualOffset

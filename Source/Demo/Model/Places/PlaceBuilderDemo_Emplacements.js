@@ -9,7 +9,7 @@ class PlaceBuilderDemo_Emplacements {
         var anvilName = "Anvil";
         var anvilVisual = new VisualImageScaled(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
         new VisualImageFromLibrary(anvilName));
-        anvilVisual = new VisualGroup([anvilVisual]);
+        anvilVisual = VisualGroup.fromChildren([anvilVisual]);
         this.parent.textWithColorAddToVisual(anvilName, Color.Instances().Blue, anvilVisual);
         var anvilUse = (uwpe) => {
             var universe = uwpe.universe;
@@ -48,7 +48,7 @@ class PlaceBuilderDemo_Emplacements {
         var entityDimension = this.entityDimension / 2;
         var itemDefnName = "Boulder";
         var colorBoulder = Color.Instances().Gray;
-        var itemBoulderVisual = new VisualGroup([
+        var itemBoulderVisual = VisualGroup.fromChildren([
             new VisualArc(entityDimension * 2, // radiusOuter
             0, // radiusInner
             Coords.fromXY(-1, 0), // directionMin
@@ -109,13 +109,13 @@ class PlaceBuilderDemo_Emplacements {
         if (this.parent.visualsHaveText) {
             itemLogVisualMinusText.children.length--;
         }
-        var campfireVisual = new VisualGroup([
+        var campfireVisual = VisualGroup.fromChildren([
             smokeVisual,
             itemLogVisualMinusText,
-            flameVisual,
+            flameVisual
         ]);
         this.parent.textWithColorAddToVisual(campfireName, campfireColor, campfireVisual);
-        var campfireCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var campfireCollider = Sphere.fromCenterAndRadius(Coords.create(), entityDimensionHalf);
         var campfireCollide = (uwpe) => {
             var entityOther = uwpe.entity2;
             var entityOtherEffectable = Effectable.of(entityOther);
@@ -140,7 +140,7 @@ class PlaceBuilderDemo_Emplacements {
         var colors = Color.Instances();
         var containerColor = colors.Orange;
         var entitySize = Coords.fromXY(1.5, 1).multiplyScalar(this.entityDimension);
-        var visual = new VisualGroup([
+        var visual = VisualGroup.fromChildren([
             VisualRectangle.fromSizeAndColorFill(entitySize, containerColor),
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1.5 * this.entityDimension, 1), colors.Gray),
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(.5, .5).multiplyScalar(this.entityDimension), colors.Gray)
@@ -172,14 +172,14 @@ class PlaceBuilderDemo_Emplacements {
         var colors = Color.Instances();
         var exitColor = colors.Brown;
         var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
-        var visual = new VisualGroup([
-            VisualPolygon.fromPathAndColorFill(new Path([
+        var visual = VisualGroup.fromChildren([
+            VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(0.5, 0),
                 Coords.fromXY(-0.5, 0),
                 Coords.fromXY(-0.5, -1.5),
                 Coords.fromXY(0.5, -1.5)
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), exitColor),
-            new VisualOffset(Coords.fromXY(this.entityDimension / 4, 0 - this.entityDimension * .6), VisualCircle.fromRadiusAndColorFill(this.entityDimension / 8, colors.Yellow))
+            VisualOffset.fromOffsetAndChild(Coords.fromXY(this.entityDimension / 4, 0 - this.entityDimension * .6), VisualCircle.fromRadiusAndColorFill(this.entityDimension / 8, colors.Yellow))
         ]);
         this.parent.textWithColorAddToVisual("Exit", exitColor, visual);
         var collidable = Collidable.fromCollider(new Box(Coords.create(), entitySize));
@@ -202,8 +202,8 @@ class PlaceBuilderDemo_Emplacements {
         var entityName = "Hole";
         var entityDimension = this.entityDimension * 1.5;
         var itemHoleColor = Color.Instances().Brown;
-        var itemHoleVisual = new VisualGroup([
-            VisualPolygon.fromPathAndColorFill(new Path([
+        var itemHoleVisual = VisualGroup.fromChildren([
+            VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(-0.5, 0.0),
                 Coords.fromXY(0.5, 0.0),
                 Coords.fromXY(0.4, -0.2),
@@ -238,8 +238,8 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleBounds = obstacleCollidable.collider.sphereSwept().toBox(Box.create());
         var obstacleBoundable = new Boundable(obstacleBounds);
         var obstacleLoc = new Disposition(Coords.create(), new Orientation(Coords.create().fromHeadingInTurns(obstacleRotationInTurns), new Coords(0, 0, 1)), null);
-        var visualBody = new VisualGroup([
-            new VisualRectangle(obstacleCollider.box.size, obstacleColor, obstacleColor, null)
+        var visualBody = VisualGroup.fromChildren([
+            VisualRectangle.fromSizeAndColorsFillAndBorder(obstacleCollider.box.size, obstacleColor, obstacleColor)
         ]);
         this.parent.textWithColorAddToVisual("Bar", obstacleColor, visualBody);
         var visual = VisualRotate.fromChild(visualBody);
@@ -278,7 +278,7 @@ class PlaceBuilderDemo_Emplacements {
             ["Blocking", new VisualRectangle(obstacleMappedCellSize, obstacleColor, null, false)], // isCentered
             ["Open", new VisualNone()]
         ]);
-        var obstacleMappedVisual = new VisualGroup([
+        var obstacleMappedVisual = VisualGroup.fromChildren([
             new VisualMap(obstacleMappedMap, obstacleMappedVisualLookup, null, null)
         ]);
         this.parent.textWithColorAddToVisual(entityDefnName, obstacleColor, obstacleMappedVisual);
@@ -326,7 +326,7 @@ class PlaceBuilderDemo_Emplacements {
         var pillowName = "Pillow";
         var pillowVisual = new VisualImageScaled(Coords.fromXY(1, .75).multiplyScalar(this.entityDimension * 2), // sizeScaled
         new VisualImageFromLibrary(pillowName));
-        pillowVisual = new VisualGroup([pillowVisual]);
+        pillowVisual = VisualGroup.fromChildren([pillowVisual]);
         this.parent.textWithColorAddToVisual(pillowName, Color.Instances().Blue, pillowVisual);
         var pillowUse = (uwpe) => {
             var universe = uwpe.universe;
@@ -347,8 +347,8 @@ class PlaceBuilderDemo_Emplacements {
     entityDefnBuildPortal() {
         var baseColor = Color.Instances().Brown;
         var entitySize = Coords.ones().multiplyScalar(this.entityDimension);
-        var visual = new VisualGroup([
-            VisualPolygon.fromPathAndColorFill(new Path([
+        var visual = VisualGroup.fromChildren([
+            VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(0.5, 0.5),
                 Coords.fromXY(-0.5, 0.5),
                 Coords.fromXY(-0.5, -0.5),
@@ -377,8 +377,8 @@ class PlaceBuilderDemo_Emplacements {
         var entityName = "TrafficCone";
         var entityDimension = this.entityDimension * 1.5;
         var color = Color.Instances().Orange;
-        var visual = new VisualGroup([
-            VisualPolygon.fromPathAndColorFill(new Path([
+        var visual = VisualGroup.fromChildren([
+            VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(-1, 0),
                 Coords.fromXY(-1, -0.1),
                 Coords.fromXY(-0.5, -0.1),
@@ -417,9 +417,9 @@ class PlaceBuilderDemo_Emplacements {
         var colors = Color.Instances();
         var color = colors.GreenDark;
         var colorBorder = colors.Black;
-        var visualTree = new VisualGroup([
+        var visualTree = VisualGroup.fromChildren([
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 2).multiplyScalar(this.entityDimension * 0.5), colors.Brown),
-            new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), new VisualEllipse(this.entityDimension, // semimajorAxis
+            VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension), new VisualEllipse(this.entityDimension, // semimajorAxis
             this.entityDimension * .8, 0, // rotationInTurns
             color, colorBorder, false // shouldUseEntityOrientation
             )),

@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
             effectsAsVisual() {
                 var returnValue = (this.effects.length == 0
                     ? GameFramework.VisualNone.Instance
-                    : new GameFramework.VisualGroup(this.effects.map(x => x.visual)));
+                    : GameFramework.VisualGroup.fromChildren(this.effects.map(x => x.visual)));
                 return returnValue;
             }
             // Clonable.

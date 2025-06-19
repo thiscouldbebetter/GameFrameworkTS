@@ -27,6 +27,11 @@ export class Sphere implements ShapeBase
 		return new Sphere(Coords.create(), 1);
 	}
 
+	static fromCenterAndRadius(center: Coords, radius: number): Sphere
+	{
+		return new Sphere(center, radius);
+	}
+
 	static fromRadius(radius: number): Sphere
 	{
 		return new Sphere(Coords.create(), radius);

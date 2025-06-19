@@ -10,20 +10,16 @@ var ThisCouldBeBetter;
                 this._entityDeselect = entityDeselect;
                 this.entitiesSelected = new Array();
                 var cursorRadius = this.cursorDimension / 2;
-                var visualCursor = new GameFramework.VisualGroup([
-                    new GameFramework.VisualCircle(cursorRadius, // radius
-                    null, // colorFill
-                    GameFramework.Color.Instances().White, // colorBorder
-                    1 // borderWidth
-                    ),
+                var visualCursor = GameFramework.VisualGroup.fromChildren([
+                    GameFramework.VisualCircle.fromRadiusAndColorBorder(cursorRadius, GameFramework.Color.Instances().White),
                     GameFramework.VisualCrosshairs.fromRadiiOuterAndInner(cursorRadius, cursorRadius / 2)
                 ]);
-                this.entityForCursor = new GameFramework.Entity("Cursor", [
+                this.entityForCursor = GameFramework.Entity.fromNameAndProperties("Cursor", [
                     GameFramework.Drawable.fromVisualAndIsVisible(visualCursor, false),
                     GameFramework.Locatable.create()
                 ]);
                 var visualHalo = visualCursor;
-                this.entityForHalo = new GameFramework.Entity("Halo", [
+                this.entityForHalo = GameFramework.Entity.fromNameAndProperties("Halo", [
                     GameFramework.Drawable.fromVisualAndIsVisible(visualHalo, false),
                     GameFramework.Locatable.create()
                 ]);

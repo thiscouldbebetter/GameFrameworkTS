@@ -39,7 +39,7 @@ class PlaceBuilderDemo_Movers
 			null
 		);
 
-		var carnivoreVisualBody = new VisualGroup
+		var carnivoreVisualBody = VisualGroup.fromChildren
 		([
 			VisualPolygon.fromPathAndColorFill
 			(
@@ -77,7 +77,7 @@ class PlaceBuilderDemo_Movers
 			Orientation.Instances().ForwardXDownZ
 		);
 
-		var carnivoreVisual = new VisualGroup
+		var carnivoreVisual = VisualGroup.fromChildren
 		([
 			new VisualAnimation
 			(
@@ -515,7 +515,7 @@ class PlaceBuilderDemo_Movers
 			2 // lineThickness
 		);
 
-		var visualEyesBlinkingWithBrows = new VisualGroup
+		var visualEyesBlinkingWithBrows = VisualGroup.fromChildren
 		([
 			visualEyesBlinking,
 			new VisualPath
@@ -591,13 +591,13 @@ class PlaceBuilderDemo_Movers
 		(
 			new VisualNone(),
 			[
-				new VisualGroup
+				VisualGroup.fromChildren
 				([
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(-enemyDimension / 4, 0), enemyVisualArm
 					),
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(enemyDimension / 4, 0), enemyVisualArm
 					)
@@ -606,7 +606,7 @@ class PlaceBuilderDemo_Movers
 			null
 		);
 
-		var enemyVisual = new VisualGroup
+		var enemyVisual = VisualGroup.fromChildren
 		([
 			visualArms,
 			visualBody,
@@ -757,7 +757,7 @@ class PlaceBuilderDemo_Movers
 		var visualBuilder = new VisualBuilder();
 		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
 
-		var friendlyVisualNormal = new VisualGroup
+		var friendlyVisualNormal = VisualGroup.fromChildren
 		([
 			new VisualEllipse
 			(
@@ -769,15 +769,15 @@ class PlaceBuilderDemo_Movers
 				false // shouldUseEntityOrientation
 			),
 
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
-				new Coords(0, -friendlyDimension / 3, 0),
+				Coords.fromXY(0, -friendlyDimension / 3),
 				visualEyesBlinking
 			),
 
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
-				new Coords(0, friendlyDimension / 3, 0), // offset
+				Coords.fromXY(0, friendlyDimension / 3), // offset
 				new VisualArc
 				(
 					friendlyDimension / 2, // radiusOuter
@@ -790,7 +790,7 @@ class PlaceBuilderDemo_Movers
 			)
 		]);
 
-		var friendlyVisualGroup = new VisualGroup
+		var friendlyVisualGroup = VisualGroup.fromChildren
 		([
 			new VisualAnimation
 			(
@@ -966,7 +966,7 @@ class PlaceBuilderDemo_Movers
 				null, // colorBorder
 				true // shouldUseEntityOrientation
 			);
-		var grazerVisualJuvenile = new VisualGroup
+		var grazerVisualJuvenile = VisualGroup.fromChildren
 		([
 			grazerVisualBodyJuvenile, visualEyesDirectional
 		]);
@@ -981,7 +981,7 @@ class PlaceBuilderDemo_Movers
 				null, // colorBorder
 				true // shouldUseEntityOrientation
 			);
-		var grazerVisualAdult = new VisualGroup
+		var grazerVisualAdult = VisualGroup.fromChildren
 		([
 			grazerVisualBodyAdult, visualEyesDirectional
 		]);
@@ -996,7 +996,7 @@ class PlaceBuilderDemo_Movers
 				null, // colorBorder
 				true, // shouldUseEntityOrientation
 			);
-		var grazerVisualElder = new VisualGroup
+		var grazerVisualElder = VisualGroup.fromChildren
 		([
 			grazerVisualBodyElder, visualEyesDirectional
 		]);
@@ -1029,7 +1029,7 @@ class PlaceBuilderDemo_Movers
 			}
 		);
 
-		var grazerVisual = new VisualGroup
+		var grazerVisual = VisualGroup.fromChildren
 		([
 			grazerVisualSelect
 		]);
@@ -1310,10 +1310,10 @@ class PlaceBuilderDemo_Movers
 			var targetEntity = activity.targetEntity();
 			if (targetEntity == null)
 			{
-				drawable.visual = new VisualGroup
+				drawable.visual = VisualGroup.fromChildren
 				([
 					drawable.visual,
-					new VisualOffset
+					VisualOffset.fromOffsetAndChild
 					(
 						Coords.fromXY(0, 0 - this.entityDimension * 3),
 						VisualText.fromTextImmediateFontAndColor
@@ -1821,7 +1821,7 @@ class PlaceBuilderDemo_Movers
 			);
 		}
 
-		var playerVisualStatusInfo = new VisualOffset
+		var playerVisualStatusInfo = VisualOffset.fromOffsetAndChild
 		(
 			Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
 			new VisualStack
@@ -1831,7 +1831,7 @@ class PlaceBuilderDemo_Movers
 			)
 		);
 
-		var playerVisual = new VisualGroup
+		var playerVisual = VisualGroup.fromChildren
 		([
 			playerVisualBodyJumpable, playerVisualStatusInfo
 		]);

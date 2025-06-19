@@ -32,7 +32,7 @@ export class Effectable implements EntityProperty<Effectable>
 		(
 			this.effects.length == 0
 			? VisualNone.Instance
-			: new VisualGroup(this.effects.map(x => x.visual))
+			: VisualGroup.fromChildren(this.effects.map(x => x.visual))
 		);
 		return returnValue;
 	}

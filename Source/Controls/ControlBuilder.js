@@ -422,7 +422,7 @@ var ThisCouldBeBetter;
                     var venueNext = this.producer(universe, size).toVenue();
                     universe.venueTransitionTo(venueNext);
                 };
-                var visual = new GameFramework.VisualGroup([
+                var visual = GameFramework.VisualGroup.fromChildren([
                     new GameFramework.VisualImageScaled(size, new GameFramework.VisualImageFromLibrary("Titles_Opening"))
                     // Note: Sound won't work on the opening screen,
                     // because the user has to interact somehow
@@ -458,7 +458,7 @@ var ThisCouldBeBetter;
                     var venueTitle = this.title(universe, size).toVenue();
                     universe.venueTransitionTo(venueTitle);
                 };
-                var visual = new GameFramework.VisualGroup([
+                var visual = GameFramework.VisualGroup.fromChildren([
                     new GameFramework.VisualImageScaled(size, new GameFramework.VisualImageFromLibrary("Titles_Producer")),
                     new GameFramework.VisualSound("Music_Producer", false) // repeat
                 ]);
@@ -649,7 +649,7 @@ var ThisCouldBeBetter;
                     });
                     universe.venueTransitionTo(venueTask);
                 };
-                var visual = new GameFramework.VisualGroup([
+                var visual = GameFramework.VisualGroup.fromChildren([
                     new GameFramework.VisualImageScaled(size, new GameFramework.VisualImageFromLibrary("Titles_Title")),
                     new GameFramework.VisualSound("Music_Title", true) // isMusic
                 ]);
