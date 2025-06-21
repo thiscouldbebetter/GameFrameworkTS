@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
             static fromScalar(scalar) {
                 return new Transform_Scale(GameFramework.Coords.ones().multiplyScalar(scalar));
             }
+            static fromScaleFactor(scaleFactor) {
+                return new Transform_Scale(GameFramework.Coords.ones().multiplyScalar(scaleFactor));
+            }
             static fromScaleFactors(scaleFactors) {
                 return new Transform_Scale(scaleFactors);
             }

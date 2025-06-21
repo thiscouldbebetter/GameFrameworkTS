@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(displacement) {
                 this.displacement = displacement;
             }
+            static fromDisplacement(displacement) {
+                return new Transform_Translate(displacement);
+            }
             displacementSet(value) {
                 this.displacement.overwriteWith(value);
                 return this;

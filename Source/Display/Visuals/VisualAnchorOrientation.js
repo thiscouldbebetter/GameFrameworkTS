@@ -3,22 +3,15 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualOffset {
-            constructor(name, offset, child) {
-                this.name = name;
-                this.offset = offset;
+        class VisualAnchorOrientation {
+            constructor(orientationToAnchorAt, child) {
                 this.child = child;
+                this.orientationToAnchorAt = orientationToAnchorAt;
                 // Helper variables.
-                this._posSaved = GameFramework.Coords.create();
+                this._orientationSaved = new GameFramework.Orientation(null, null);
             }
-            static fromChildAndOffset(child, offset) {
-                return new VisualOffset(null, offset, child);
-            }
-            static fromNameOffsetAndChild(name, offset, child) {
-                return new VisualOffset(name, offset, child);
-            }
-            static fromOffsetAndChild(offset, child) {
-                return new VisualOffset(null, offset, child);
+            static fromChild(child) {
+                return new VisualAnchorOrientation(GameFramework.Orientation.default(), child);
             }
             // Visual.
             initialize(uwpe) {
@@ -29,11 +22,12 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawablePos = GameFramework.Locatable.of(entity).loc.pos;
-                this._posSaved.overwriteWith(drawablePos);
-                drawablePos.add(this.offset);
+                var drawableLoc = GameFramework.Locatable.of(entity).loc;
+                var drawableOrientation = drawableLoc.orientation;
+                this._orientationSaved.overwriteWith(drawableOrientation);
+                drawableOrientation.overwriteWith(this.orientationToAnchorAt);
                 this.child.draw(uwpe, display);
-                drawablePos.overwriteWith(this._posSaved);
+                drawableOrientation.overwriteWith(this._orientationSaved);
             }
             // Clonable.
             clone() {
@@ -47,6 +41,6 @@ var ThisCouldBeBetter;
                 return this; // todo
             }
         }
-        GameFramework.VisualOffset = VisualOffset;
+        GameFramework.VisualAnchorOrientation = VisualAnchorOrientation;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

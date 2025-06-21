@@ -109,7 +109,7 @@ var ThisCouldBeBetter;
                 var playerVisualSatietyIcon = worldDefn.itemDefnByName("Bread").visual;
                 var playerVisualSatietyBarPlusIcon = GameFramework.VisualGroup.fromChildren([
                     playerVisualSatietyBar,
-                    new GameFramework.VisualOffset(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualSatietyIcon)
+                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualSatietyIcon)
                 ]);
                 var tirable = GameFramework.Tirable.of(entity);
                 var playerVisualStaminaBar = new GameFramework.VisualBar(null, // "S", // abbreviation
@@ -120,7 +120,7 @@ var ThisCouldBeBetter;
                 var playerVisualStaminaIcon = new GameFramework.VisualImageScaled(GameFramework.Coords.fromXY(1, 1).multiplyScalar(playerVisualBarSize.y * 1.5), new GameFramework.VisualImageFromLibrary("Zap"));
                 var playerVisualStaminaBarPlusIcon = GameFramework.VisualGroup.fromChildren([
                     playerVisualStaminaBar,
-                    new GameFramework.VisualOffset(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualStaminaIcon)
+                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualStaminaIcon)
                 ]);
                 var hoursPerDay = 24;
                 var minutesPerHour = 60;
@@ -147,14 +147,14 @@ var ThisCouldBeBetter;
                 var playerVisualTimeIcon = GameFramework.VisualBuilder.Instance().sun(playerVisualBarSize.y * .5);
                 var playerVisualTimeBarPlusIcon = GameFramework.VisualGroup.fromChildren([
                     playerVisualTimeBar,
-                    new GameFramework.VisualOffset(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualTimeIcon)
+                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualTimeIcon)
                 ]);
                 var childSpacing = GameFramework.Coords.fromXY(0, playerVisualBarSize.y * 2);
                 var playerVisualStatusInfo = GameFramework.VisualGroup.fromChildren([
                     playerVisualHealthBarPlusIcon,
-                    new GameFramework.VisualOffset(childSpacing, playerVisualSatietyBarPlusIcon),
-                    new GameFramework.VisualOffset(childSpacing.clone().double(), playerVisualStaminaBarPlusIcon),
-                    new GameFramework.VisualOffset(childSpacing.clone().multiplyScalar(3), playerVisualTimeBarPlusIcon)
+                    GameFramework.VisualOffset.fromOffsetAndChild(childSpacing, playerVisualSatietyBarPlusIcon),
+                    GameFramework.VisualOffset.fromOffsetAndChild(childSpacing.clone().double(), playerVisualStaminaBarPlusIcon),
+                    GameFramework.VisualOffset.fromOffsetAndChild(childSpacing.clone().multiplyScalar(3), playerVisualTimeBarPlusIcon)
                 ]);
                 var controlPlayerStatusInfo = GameFramework.ControlVisual.fromNamePosSizeVisual("visualPlayerStatusInfo", GameFramework.Coords.fromXY(5, 2).multiplyScalar(playerVisualBarSize.y), // pos
                 GameFramework.Coords.create(), // size

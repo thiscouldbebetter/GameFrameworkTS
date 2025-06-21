@@ -56,7 +56,7 @@ class PlaceBuilderDemo_Emplacements {
             colorBoulder, null)
         ]);
         if (this.parent.visualsHaveText) {
-            itemBoulderVisual.children.push(new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateFontAndColor(itemDefnName, this.font, colorBoulder)));
+            itemBoulderVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateFontAndColor(itemDefnName, this.font, colorBoulder)));
         }
         var collider = new Box(Coords.create(), new Coords(1, .1, 1).multiplyScalar(this.entityDimension));
         var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
@@ -355,7 +355,7 @@ class PlaceBuilderDemo_Emplacements {
                 Coords.fromXY(0, -1),
                 Coords.fromXY(0.5, -0.5)
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), baseColor),
-            new VisualOffset(Coords.fromXY(0, this.entityDimension), new VisualDynamic((uwpe) => {
+            VisualOffset.fromOffsetAndChild(Coords.fromXY(0, this.entityDimension), new VisualDynamic((uwpe) => {
                 var e = uwpe.entity;
                 return VisualText.fromTextImmediateFontAndColor(Portal.of(e).destinationPlaceName, this.font, baseColor);
             }))
@@ -382,8 +382,8 @@ class PlaceBuilderDemo_Emplacements {
                 Coords.fromXY(-1, 0),
                 Coords.fromXY(-1, -0.1),
                 Coords.fromXY(-0.5, -0.1),
-                Coords.fromXY(-0.1, -1.5),
-                Coords.fromXY(0.1, -1.5),
+                Coords.fromXY(-0.1, -1.5), // tip left
+                Coords.fromXY(0.1, -1.5), // tip right
                 Coords.fromXY(0.5, -0.1),
                 Coords.fromXY(1, -0.1),
                 Coords.fromXY(1, 0)
@@ -403,7 +403,7 @@ class PlaceBuilderDemo_Emplacements {
             universe.collisionHelper.collideEntitiesBounce(e, e2);
         });
         var boundable = new Boundable(Box.fromSize(Coords.fromXY(1, 1).multiplyScalar(colliderRadius)));
-        var entityDefn = new Entity(entityName, [
+        var entityDefn = Entity.fromNameAndProperties(entityName, [
             boundable,
             collidable,
             Drawable.fromVisual(visual),
@@ -425,7 +425,7 @@ class PlaceBuilderDemo_Emplacements {
             )),
         ]);
         this.parent.textWithColorAddToVisual(entityName, color, visualTree);
-        var visual = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension), visualTree);
+        var visual = VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension), visualTree);
         var collider = new Box(Coords.create(), new Coords(1, .1, 1).multiplyScalar(this.entityDimension * .25));
         var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
         0, // ticksToWaitBetweenCollisions

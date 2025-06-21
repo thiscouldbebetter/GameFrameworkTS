@@ -102,7 +102,7 @@ class PlaceBuilderDemo_Emplacements
 		{
 			itemBoulderVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 3),
 					VisualText.fromTextImmediateFontAndColor
@@ -723,7 +723,7 @@ class PlaceBuilderDemo_Emplacements
 				),
 				baseColor
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, this.entityDimension),
 				new VisualDynamic
@@ -777,8 +777,8 @@ class PlaceBuilderDemo_Emplacements
 					Coords.fromXY(-1, 0),
 					Coords.fromXY(-1, -0.1),
 					Coords.fromXY(-0.5, -0.1),
-					Coords.fromXY(-0.1, -1.5),
-					Coords.fromXY(0.1, -1.5),
+					Coords.fromXY(-0.1, -1.5), // tip left
+					Coords.fromXY(0.1, -1.5), // tip right
 					Coords.fromXY(0.5, -0.1),
 					Coords.fromXY(1, -0.1),
 					Coords.fromXY(1, 0)
@@ -821,7 +821,7 @@ class PlaceBuilderDemo_Emplacements
 			)
 		);
 
-		var entityDefn = new Entity
+		var entityDefn = Entity.fromNameAndProperties
 		(
 			entityName,
 			[
@@ -869,7 +869,7 @@ class PlaceBuilderDemo_Emplacements
 			entityName, color, visualTree
 		);
 
-		var visual = new VisualOffset
+		var visual = VisualOffset.fromOffsetAndChild
 		(
 			Coords.fromXY(0, 0 - this.entityDimension), visualTree
 		);

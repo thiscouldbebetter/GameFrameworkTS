@@ -115,6 +115,14 @@ var ThisCouldBeBetter;
                 }
                 this.statusMessage = message;
             }
+            entityIsInSocketWithName(name) {
+                var entityEquipped = this.itemEntityInSocketWithName(name);
+                var entityIsEquipped = (entityEquipped != null);
+                return entityIsEquipped;
+            }
+            entityIsInSocketWithNameWielding() {
+                return this.entityIsInSocketWithName("Wielding");
+            }
             itemEntityInSocketWithName(socketName) {
                 var socket = this.socketByName(socketName);
                 return socket.itemEntityEquipped;

@@ -9,8 +9,13 @@ var ThisCouldBeBetter;
                 this.color = color;
                 this.lineThickness = lineThickness;
                 this.isClosed = isClosed;
-                this.verticesAsPathTransformed = this.verticesAsPath.clone();
-                this.transformTranslate = new GameFramework.Transform_Translate(GameFramework.Coords.create());
+                this.verticesAsPathTransformed =
+                    this.verticesAsPath.clone();
+                this.transformTranslate =
+                    GameFramework.Transform_Translate.fromDisplacement(GameFramework.Coords.create());
+            }
+            static fromPathColorAndThicknessOpen(verticesAsPath, color, lineThickness) {
+                return new VisualPath(verticesAsPath, color, lineThickness, false);
             }
             // Visual.
             initialize(uwpe) {
@@ -21,8 +26,8 @@ var ThisCouldBeBetter;
             }
             draw(uwpe, display) {
                 var entity = uwpe.entity;
-                var drawablePos = GameFramework.Locatable.of(entity).loc.pos;
-                this.transformTranslate.displacement.overwriteWith(drawablePos);
+                var entityPos = GameFramework.Locatable.of(entity).loc.pos;
+                this.transformTranslate.displacement.overwriteWith(entityPos);
                 this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
                 GameFramework.Transforms.applyTransformToCoordsMany(this.transformTranslate, this.verticesAsPathTransformed.points);
                 display.drawPath(this.verticesAsPathTransformed.points, this.color, this.lineThickness, this.isClosed);

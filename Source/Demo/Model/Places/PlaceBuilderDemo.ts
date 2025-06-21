@@ -181,7 +181,7 @@ class PlaceBuilderDemo // Main.
 		for (var i = 0; i < nodes.length; i++)
 		{
 			var node = nodes[i];
-			var visualWallNode = new VisualOffset
+			var visualWallNode = VisualOffset.fromOffsetAndChild
 			(
 				node.pos.clone(),
 				new VisualCircle(tunnelWidth, null, color, wallThickness)
@@ -721,7 +721,7 @@ class PlaceBuilderDemo // Main.
 				terrainVisualImageCombined
 			);
 			// hack - Correct for centering.
-			terrainVisualCenter = new VisualOffset
+			terrainVisualCenter = VisualOffset.fromOffsetAndChild
 			(
 				mapCellSizeHalf, terrainVisualCenter
 			);
@@ -747,7 +747,7 @@ class PlaceBuilderDemo // Main.
 					terrainVisualImageCombined
 				);
 				// hack - Correct for centering.
-				terrainVisual = new VisualOffset
+				terrainVisual = VisualOffset.fromOffsetAndChild
 				(
 					visualOffsetInMapCellsHalf.clone().multiply(mapCellSizeHalf),
 					terrainVisual
@@ -1392,7 +1392,7 @@ class PlaceBuilderDemo // Main.
 		{
 			goalVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -1825,7 +1825,7 @@ class PlaceBuilderDemo // Main.
 		{
 			visual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -2393,7 +2393,7 @@ class PlaceBuilderDemo // Main.
 		{
 			carVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - entityDimension * 2.5),
 					VisualText.fromTextImmediateFontAndColor
@@ -2903,7 +2903,7 @@ class PlaceBuilderDemo // Main.
 		{
 			itemPotionVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor
@@ -3366,7 +3366,7 @@ class PlaceBuilderDemo // Main.
 		{
 			visual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor

@@ -13,7 +13,7 @@ class PlaceBuilderDemo_Movers {
         var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
-        var voe = (x, y) => new VisualOffset(Coords.fromXY(x, y).multiplyScalar(visualEyeRadius), visualEyes);
+        var voe = (x, y) => VisualOffset.fromOffsetAndChild(Coords.fromXY(x, y).multiplyScalar(visualEyeRadius), visualEyes);
         var visualEyesDirectional = new VisualDirectional(visualEyes, // visualForNoDirection
         [
             voe(1, 0),
@@ -32,7 +32,7 @@ class PlaceBuilderDemo_Movers {
                 new Transform_Translate(Coords.fromXY(0, -0.5)),
                 new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension))
             ])), carnivoreColor),
-            new VisualOffset(Coords.zeroes(), visualEyesDirectional),
+            VisualOffset.fromOffsetAndChild(Coords.zeroes(), visualEyesDirectional),
         ]);
         var carnivoreVisualNormal = new VisualAnchor(carnivoreVisualBody, null, // posToAnchorAt
         Orientation.Instances().ForwardXDownZ);
@@ -277,9 +277,9 @@ class PlaceBuilderDemo_Movers {
             Coords.fromXY(0, -1)
         ];
         var visualEyesWithBrowsDirectional = new VisualDirectional(visualEyesBlinking, // visualForNoDirection
-        offsets.map(offset => new VisualOffset(offset.multiplyScalar(visualEyeRadius), visualEyesBlinkingWithBrows)), null);
+        offsets.map(offset => VisualOffset.fromOffsetAndChild(offset.multiplyScalar(visualEyeRadius), visualEyesBlinkingWithBrows)), null);
         var visualEffect = new VisualAnchor(new VisualDynamic((uwpe) => Effectable.of(uwpe.entity).effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
-        var visualStatusInfo = new VisualOffset(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
+        var visualStatusInfo = VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
         new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
         [
             visualEffect
@@ -469,7 +469,7 @@ class PlaceBuilderDemo_Movers {
         var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
-        var voe = (x, y) => new VisualOffset(Coords.fromXY(x, y).multiplyScalar(visualEyeRadius), visualEyes);
+        var voe = (x, y) => VisualOffset.fromOffsetAndChild(Coords.fromXY(x, y).multiplyScalar(visualEyeRadius), visualEyes);
         var visualEyesDirectional = new VisualDirectional(visualEyes, // visualForNoDirection
         [
             voe(1, 0),
@@ -896,54 +896,55 @@ class PlaceBuilderDemo_Movers {
         }
     }
     entityDefnBuildPlayer_Visual(entityDefnNamePlayer, playerHeadRadius) {
-        var visualEyeRadius = this.entityDimension * .75 / 2;
+        var headLength = 15; // todo
         var visualBuilder = new VisualBuilder();
-        var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
         var colors = Color.Instances();
-        var playerColor = colors.Gray;
-        var playerVisualBodyNormal = visualBuilder.circleWithEyesAndLegsAndArmsWithWieldable(playerHeadRadius, playerColor, visualEyeRadius, visualEyesBlinking);
-        var playerVisualBodyHidden = visualBuilder.circleWithEyesAndLegs(playerHeadRadius, colors.Black, visualEyeRadius, visualEyesBlinking);
-        var playerVisualBodyHidable = new VisualSelect(
+        var bodyColor = colors.Gray;
+        var bodyNormal = visualBuilder.figureWithNameColorAndDefaultProportions("BodyNormal", bodyColor, headLength);
+        var bodyColorHidden = Color.Instances().Black;
+        var bodyHidden = visualBuilder.figureWithNameColorAndDefaultProportions("BodyHidden", bodyColorHidden, headLength);
+        var bodyHidable = new VisualSelect(
         // childrenByName
         new Map([
-            ["Normal", playerVisualBodyNormal],
-            ["Hidden", playerVisualBodyHidden]
+            ["Normal", bodyNormal],
+            ["Hidden", bodyHidden]
         ]), (uwpe, d) => // selectChildNames
          {
             var e = uwpe.entity;
             return [(Perceptible.of(e).isHiding ? "Hidden" : "Normal")];
         });
-        var playerVisualBodyJumpable = new VisualJump2D(playerVisualBodyHidable, 
+        var shadowWidth = headLength;
+        var bodyJumpable = new VisualJump2D(bodyHidable, 
         // visualShadow
-        new VisualEllipse(playerHeadRadius, playerHeadRadius / 2, 0, colors.GrayDark, colors.Black, false // shouldUseEntityOrientation
+        new VisualEllipse(shadowWidth, shadowWidth / 2, 0, colors.GrayDark, colors.Black, false // shouldUseEntityOrientation
         ), null);
-        var playerVisualBarSize = Coords.fromXY(this.entityDimension * 3, this.entityDimension * 0.8);
-        var playerVisualHealthBar = new VisualBar("H", // abbreviation
-        playerVisualBarSize, colors.Red, DataBinding.fromGet((c) => Killable.of(c).integrity), null, // amountThreshold
+        var statusBarSize = Coords.fromXY(this.entityDimension * 3, this.entityDimension * 0.8);
+        var healthBar = new VisualBar("H", // abbreviation
+        statusBarSize, colors.Red, DataBinding.fromGet((c) => Killable.of(c).integrity), null, // amountThreshold
         DataBinding.fromGet((c) => Killable.of(c).integrityMax), 1, // fractionBelowWhichToShow
         null, // colorForBorderAsValueBreakGroup
         null // text
         );
-        var playerVisualSatietyBar = new VisualBar("F", // abbreviation
-        playerVisualBarSize, colors.Brown, DataBinding.fromGet((c) => { return Starvable.of(c).satiety; }), null, // amountThreshold
+        var satietyBar = new VisualBar("F", // abbreviation
+        statusBarSize, colors.Brown, DataBinding.fromGet((c) => { return Starvable.of(c).satiety; }), null, // amountThreshold
         DataBinding.fromGet((c) => { return Starvable.of(c).satietyMax; }), .5, // fractionBelowWhichToShow
         null, // colorForBorderAsValueBreakGroup
         null // text
         );
-        var playerVisualEffect = new VisualAnchor(new VisualDynamic((uwpe) => Effectable.of(uwpe.entity).effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
-        var playerVisualsForStatusInfo = [
-            playerVisualHealthBar,
-            playerVisualSatietyBar,
-            playerVisualEffect
+        var visualEffect = new VisualAnchor(new VisualDynamic((uwpe) => Effectable.of(uwpe.entity).effectsAsVisual()), null, Orientation.Instances().ForwardXDownZ);
+        var visualsForStatusInfo = [
+            healthBar,
+            satietyBar,
+            visualEffect
         ];
         if (this.parent.visualsHaveText) {
-            playerVisualsForStatusInfo.splice(0, 0, VisualText.fromTextImmediateFontAndColor(entityDefnNamePlayer, this.font, playerColor));
+            visualsForStatusInfo.splice(0, 0, VisualText.fromTextImmediateFontAndColor(entityDefnNamePlayer, this.font, bodyColor));
         }
-        var playerVisualStatusInfo = VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
+        var visualStatusInfo = VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
         new VisualStack(Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
-        playerVisualsForStatusInfo));
+        visualsForStatusInfo));
         var playerVisual = VisualGroup.fromChildren([
-            playerVisualBodyJumpable, playerVisualStatusInfo
+            bodyJumpable, visualStatusInfo
         ]);
         return playerVisual;
     }

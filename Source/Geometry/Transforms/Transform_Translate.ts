@@ -11,6 +11,11 @@ export class Transform_Translate implements Transform<Transform_Translate>
 		this.displacement = displacement;
 	}
 
+	static fromDisplacement(displacement: Coords): Transform_Translate
+	{
+		return new Transform_Translate(displacement);
+	}
+
 	displacementSet(value: Coords): Transform_Translate
 	{
 		this.displacement.overwriteWith(value);

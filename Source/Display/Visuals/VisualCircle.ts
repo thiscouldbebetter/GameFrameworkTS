@@ -67,9 +67,11 @@ export class VisualCircle implements Visual<VisualCircle>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
+		var entityPos = Locatable.of(entity).loc.pos;
+		var drawPos = entityPos;
 		display.drawCircle
 		(
-			Locatable.of(entity).loc.pos,
+			drawPos,
 			this.radius,
 			this.colorFill,
 			this.colorBorder,

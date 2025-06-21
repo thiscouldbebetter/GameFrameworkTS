@@ -261,7 +261,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemBombVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -835,7 +835,7 @@ class PlaceBuilderDemo_Items
 		var itemGrassVisual = VisualGroup.fromChildren
 		([
 			/*
-			new VisualOffset
+			VisualOffset.fromChildAndOffset
 			(
 				new VisualImageScaled
 				(
@@ -940,7 +940,7 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemHeartVisualShifted = new VisualOffset
+		var itemHeartVisualShifted = VisualOffset.fromOffsetAndChild
 		(
 			Coords.fromXY(0, -entityDimensionQuarter),
 			itemHeartVisual
@@ -1357,7 +1357,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemPickVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -1423,7 +1423,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemPotionVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension),
 					VisualText.fromTextImmediateFontAndColor
@@ -1548,7 +1548,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemSpeedBootsVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor
@@ -1650,7 +1650,7 @@ class PlaceBuilderDemo_Items
 		{
 			itemSwordVisual.children.push
 			(
-				new VisualOffset
+				VisualOffset.fromOffsetAndChild
 				(
 					Coords.fromXY(0, 0 - this.entityDimension * 2),
 					VisualText.fromTextImmediateFontAndColor

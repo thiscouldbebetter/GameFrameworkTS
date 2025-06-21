@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this._isVisible = isVisible;
                 this.child = child;
             }
+            static fromIsVisibleAndChild(isVisible, child) {
+                return new VisualHidable(isVisible, child);
+            }
             isVisible(uwpe) {
                 return this._isVisible(uwpe);
             }

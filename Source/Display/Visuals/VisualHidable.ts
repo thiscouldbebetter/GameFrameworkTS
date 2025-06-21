@@ -17,6 +17,15 @@ export class VisualHidable implements Visual<VisualHidable>
 		this.child = child;
 	}
 
+	static fromIsVisibleAndChild
+	(
+		isVisible: (uwpe: UniverseWorldPlaceEntities) => boolean,
+		child: VisualBase
+	): VisualHidable
+	{
+		return new VisualHidable(isVisible, child);
+	}
+
 	isVisible(uwpe: UniverseWorldPlaceEntities): boolean
 	{
 		return this._isVisible(uwpe);

@@ -32,6 +32,7 @@ import VisualImageScaled = gf.VisualImageScaled;
 import VisualImageScaledPartial = gf.VisualImageScaledPartial;
 import VisualJump2D = gf.VisualJump2D;
 import VisualLine = gf.VisualLine;
+import VisualLineStatic = gf.VisualLineStatic;
 import VisualMap = gf.VisualMap;
 import VisualNone = gf.VisualNone;
 import VisualOffset = gf.VisualOffset;

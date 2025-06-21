@@ -4,13 +4,15 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class VisualOffset implements Visual<VisualOffset>
 {
+	name: string;
 	offset: Coords;
 	child: VisualBase;
 
 	_posSaved: Coords;
 
-	constructor(offset: Coords, child: VisualBase)
+	constructor(name: string, offset: Coords, child: VisualBase)
 	{
+		this.name = name;
 		this.offset = offset;
 		this.child = child;
 
@@ -18,14 +20,30 @@ export class VisualOffset implements Visual<VisualOffset>
 		this._posSaved = Coords.create();
 	}
 
-	static fromChildAndOffset(child: VisualBase, offset: Coords): VisualOffset
+	static fromChildAndOffset
+	(
+		child: VisualBase, offset: Coords
+	): VisualOffset
 	{
-		return new VisualOffset(offset, child);
+		return new VisualOffset(null, offset, child);
 	}
 
-	static fromOffsetAndChild(offset: Coords, child: VisualBase): VisualOffset
+	static fromNameOffsetAndChild
+	(
+		name: string,
+		offset: Coords,
+		child: VisualBase
+	): VisualOffset
 	{
-		return new VisualOffset(offset, child);
+		return new VisualOffset(name, offset, child);
+	}
+
+	static fromOffsetAndChild
+	(
+		offset: Coords, child: VisualBase
+	): VisualOffset
+	{
+		return new VisualOffset(null, offset, child);
 	}
 
 	// Visual.

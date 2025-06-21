@@ -253,9 +253,13 @@ export class Playable implements EntityProperty<Playable>
 		var playerVisualSatietyBarPlusIcon = VisualGroup.fromChildren
 		([
 			playerVisualSatietyBar,
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
-				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0),
+				Coords.fromXY
+				(
+					-playerVisualBarSize.x / 2 - playerVisualBarSize.y,
+					0
+				),
 				playerVisualSatietyIcon
 			)
 		]);
@@ -292,9 +296,13 @@ export class Playable implements EntityProperty<Playable>
 		var playerVisualStaminaBarPlusIcon = VisualGroup.fromChildren
 		([
 			playerVisualStaminaBar,
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
-				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0),
+				Coords.fromXY
+				(
+					-playerVisualBarSize.x / 2 - playerVisualBarSize.y,
+					0
+				),
 				playerVisualStaminaIcon
 			)
 		]);
@@ -345,12 +353,13 @@ export class Playable implements EntityProperty<Playable>
 			)
 		);
 
-		var playerVisualTimeIcon = VisualBuilder.Instance().sun(playerVisualBarSize.y * .5);
+		var playerVisualTimeIcon =
+			VisualBuilder.Instance().sun(playerVisualBarSize.y * .5);
 
 		var playerVisualTimeBarPlusIcon = VisualGroup.fromChildren
 		([
 			playerVisualTimeBar,
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0),
 				playerVisualTimeIcon
@@ -362,17 +371,17 @@ export class Playable implements EntityProperty<Playable>
 		var playerVisualStatusInfo: VisualBase = VisualGroup.fromChildren
 		([
 			playerVisualHealthBarPlusIcon,
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				childSpacing,
 				playerVisualSatietyBarPlusIcon
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				childSpacing.clone().double(),
 				playerVisualStaminaBarPlusIcon
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				childSpacing.clone().multiplyScalar(3),
 				playerVisualTimeBarPlusIcon

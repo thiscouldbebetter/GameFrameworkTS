@@ -44,6 +44,7 @@
 <script type="text/javascript" src="../Source/Display/Animation/Animatable2.js"></script>
 
 <script type="text/javascript" src="../Source/Display/Visuals/VisualAnchor.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualAnchorOrientation.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualArc.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualBar.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualBuffered.js"></script>
@@ -69,6 +70,7 @@
 <script type="text/javascript" src="../Source/Display/Visuals/VisualInvisible.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualJump2D.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualLine.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualLineStatic.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualMap.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualMesh.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualNone.js"></script>
@@ -261,15 +263,17 @@
 		<select id="selectDemo" onchange="selectDemo_Changed(this)";>
 			<option>[none]</option>
 			<option>Circle</option>
-			<option>CircleWithEyesAndLimbs</option>
 			<option>Ellipse</option>
 			<option>Fan</option>
+			<option>HeadAndLimbs</option>
+			<option>Path</option>
 			<option>Rectangle</option>
 		</select>
 		<br />
 		<textarea
 			id="textareaVisualAsJavaScript"
 			cols="80" rows="20"
+			spellcheck="false"
 		></textarea>
 	</div>
 
@@ -283,49 +287,58 @@
 
 function visualDemoCreateCircle()
 {
-	return "VisualCircle.fromRadius(20)";
-}
-
-function visualDemoCreateCircleWithEyesAndLimbs()
-{
-	var codeLines = 
-	[
-		"var create = () =>",
-		"{",
-		"	var visualBuilder = new VisualBuilder();",
-		"	var colors = Color.Instances();",
-		"	var eyeRadius = 5;",
-		"	var visualEyesBlinking = visualBuilder.eyesBlinking(eyeRadius);",
-		"	var headRadius = 10;",
-		"	var headColor = colors.Gray;",
-		"	var visual = visualBuilder.circleWithEyesAndLegsAndArms",
-		"	(",
-		"		headRadius, headColor, eyeRadius, visualEyesBlinking",
-		"	)",
-		"	return visual;",
-		"};",
-		"",
-		"create();"
-	];
-
-	var newline = "\n";
-	var code = codeLines.join(newline);
-	return code;
+	return VisualCircle.fromRadius(20);
 }
 
 function visualDemoCreateEllipse()
 {
-	return "VisualEllipse.fromSemiaxesHorizontalAndVertical(20, 15)";
+	return VisualEllipse.fromSemiaxesHorizontalAndVertical(20, 15);
 }
 
 function visualDemoCreateFan()
 {
-	return "VisualFan.fromRadiusAndAnglesStartAndSpanned(20, 0, .25)";
+	return VisualFan.fromRadiusAndAnglesStartAndSpanned(20, 0, .25);
+}
+
+function visualDemoCreateHeadAndLimbs()
+{
+	var visualBuilder = new VisualBuilder();
+	var colors = Color.Instances();
+	var headLength = 10;
+	var figure = visualBuilder.figureWithNameColorAndDefaultProportions
+	(
+		"Figure", colors.Gray, headLength
+	);
+	return visualHeadLegsAndArms;
+}
+
+function visualDemoCreatePath()
+{
+	var scaleFactor = 20;
+	var points =
+	[
+		Coords.fromXY(-1, 0),
+		Coords.fromXY(-2, 1)
+	].map(x => x.multiplyScalar(scaleFactor) );
+	var path = Path.fromPoints(points);
+	var color = Color.Instances().Cyan;
+	var thickness = 2;
+	var visualCircle = VisualCircle.fromRadius(scaleFactor);
+	var visualPath = VisualPath.fromPathColorAndThicknessOpen
+	(
+		path, color, thickness
+	);
+	var visualGroup = VisualGroup.fromChildren
+	([
+		visualCircle,
+		visualPath
+	]);
+	return visualGroup;
 }
 
 function visualDemoCreateRectangle()
 {
-	return "VisualRectangle.fromSize(Coords.fromXY(40, 30) )";
+	return VisualRectangle.fromSize(Coords.fromXY(40, 30) );
 }
 
 // UI events.
@@ -337,35 +350,54 @@ function selectDemo_Changed(selectDemo)
 	var textareaVisualAsJavaScript =
 		d.getElementById("textareaVisualAsJavaScript");
 
-	var visualAsJavaScript;
+	var visualAsFunction;
 	if (demoName == "[none]")
 	{
-		visualAsJavaScript = "";
+		visualAsFunction =
+			function() { return ""; }
 	}
 	else if (demoName == "Circle")
 	{
-		visualAsJavaScript = visualDemoCreateCircle();
+		visualAsFunction = visualDemoCreateCircle;
 	}
-	else if (demoName == "CircleWithEyesAndLimbs")
+	else if (demoName == "HeadAndLimbs")
 	{
-		visualAsJavaScript = visualDemoCreateCircleWithEyesAndLimbs();
+		visualAsFunction = visualDemoCreateHeadAndLimbs;
 	}
 	else if (demoName == "Ellipse")
 	{
-		visualAsJavaScript = visualDemoCreateEllipse();
+		visualAsFunction = visualDemoCreateEllipse;
 	}
 	else if (demoName == "Fan")
 	{
-		visualAsJavaScript = visualDemoCreateFan();
+		visualAsFunction = visualDemoCreateFan;
+	}
+	else if (demoName == "Path")
+	{
+		visualAsFunction = visualDemoCreatePath;
 	}
 	else if (demoName == "Rectangle")
 	{
-		visualAsJavaScript = visualDemoCreateRectangle();
+		visualAsFunction = visualDemoCreateRectangle;
 	}
 	else
 	{
-		visualAsJavaScript = "[ERROR: Demo name not recognized.]";
+		visualAsFunction =
+			function() { return "[ERROR: Demo name not recognized.]" };
 	}
+
+	var visualAsJavaScript =
+		visualAsFunction.toString();
+	var functionName =
+		visualAsJavaScript
+			.split("function ")[1]
+			.split("(")[0];
+
+	var newline = "\n"
+	var suffix =
+		newline
+		+ functionName + "();";
+	visualAsJavaScript += suffix;
 
 	textareaVisualAsJavaScript.value =
 		visualAsJavaScript;

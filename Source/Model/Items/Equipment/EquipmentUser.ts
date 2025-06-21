@@ -199,6 +199,19 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		this.statusMessage = message;
 	}
 
+	entityIsInSocketWithName(name: string): boolean
+	{
+		var entityEquipped =
+			this.itemEntityInSocketWithName(name);
+		var entityIsEquipped = (entityEquipped != null);
+		return entityIsEquipped;
+	}
+
+	entityIsInSocketWithNameWielding(): boolean
+	{
+		return this.entityIsInSocketWithName("Wielding");
+	}
+
 	itemEntityInSocketWithName(socketName: string): Entity
 	{
 		var socket = this.socketByName(socketName);

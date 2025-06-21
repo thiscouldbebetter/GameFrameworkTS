@@ -25,7 +25,12 @@ class PlaceBuilderDemo_Movers
 		var visualBuilder = new VisualBuilder();
 		var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
 
-		var voe = (x: number, y: number) => new VisualOffset(Coords.fromXY(x, y).multiplyScalar(visualEyeRadius), visualEyes);
+		var voe = (x: number, y: number) =>
+			VisualOffset.fromOffsetAndChild
+			(
+				Coords.fromXY(x, y).multiplyScalar(visualEyeRadius),
+				visualEyes
+			);
 
 		var visualEyesDirectional = new VisualDirectional
 		(
@@ -63,7 +68,7 @@ class PlaceBuilderDemo_Movers
 				),
 				carnivoreColor
 			),
-			new VisualOffset
+			VisualOffset.fromOffsetAndChild
 			(
 				Coords.zeroes(),
 				visualEyesDirectional
@@ -544,7 +549,7 @@ class PlaceBuilderDemo_Movers
 			visualEyesBlinking, // visualForNoDirection
 			offsets.map
 			(
-				offset => new VisualOffset
+				offset => VisualOffset.fromOffsetAndChild
 				(
 					offset.multiplyScalar(visualEyeRadius),
 					visualEyesBlinkingWithBrows
@@ -563,7 +568,7 @@ class PlaceBuilderDemo_Movers
 			null, Orientation.Instances().ForwardXDownZ
 		);
 
-		var visualStatusInfo = new VisualOffset
+		var visualStatusInfo = VisualOffset.fromOffsetAndChild
 		(
 			Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
 			new VisualStack
@@ -942,7 +947,12 @@ class PlaceBuilderDemo_Movers
 		var visualBuilder = new VisualBuilder();
 		var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
 
-		var voe = (x:number, y: number) => new VisualOffset(Coords.fromXY(x, y).multiplyScalar(visualEyeRadius), visualEyes);
+		var voe = (x:number, y: number) =>
+			VisualOffset.fromOffsetAndChild
+			(
+				Coords.fromXY(x, y).multiplyScalar(visualEyeRadius),
+				visualEyes
+			);
 
 		var visualEyesDirectional = new VisualDirectional
 		(
@@ -1710,32 +1720,37 @@ class PlaceBuilderDemo_Movers
 		playerHeadRadius: number
 	): VisualBase
 	{
-		var visualEyeRadius = this.entityDimension * .75 / 2;
+		var headLength = 15; // todo
+
 		var visualBuilder = new VisualBuilder();
-		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
-
 		var colors = Color.Instances();
-		var playerColor = colors.Gray;
+		var bodyColor = colors.Gray;
 
-		var playerVisualBodyNormal: VisualBase =
-			visualBuilder.circleWithEyesAndLegsAndArmsWithWieldable
+		var bodyNormal =
+			visualBuilder.figureWithNameColorAndDefaultProportions
 			(
-				playerHeadRadius, playerColor,
-				visualEyeRadius, visualEyesBlinking
+				"BodyNormal",
+				bodyColor,
+				headLength
 			);
-		var playerVisualBodyHidden =
-			visualBuilder.circleWithEyesAndLegs
+
+		var bodyColorHidden = Color.Instances().Black;
+
+		var bodyHidden =
+			visualBuilder.figureWithNameColorAndDefaultProportions
 			(
-				playerHeadRadius, colors.Black,
-				visualEyeRadius, visualEyesBlinking
+				"BodyHidden",
+				bodyColorHidden,
+				headLength
 			);
-		var playerVisualBodyHidable = new VisualSelect
+
+		var bodyHidable = new VisualSelect
 		(
 			// childrenByName
 			new Map<string, VisualBase>
 			([
-				[ "Normal", playerVisualBodyNormal ],
-				[ "Hidden", playerVisualBodyHidden ]
+				[ "Normal", bodyNormal ],
+				[ "Hidden", bodyHidden ]
 			]),
 			(uwpe: UniverseWorldPlaceEntities, d: Display) => // selectChildNames
 			{
@@ -1743,27 +1758,32 @@ class PlaceBuilderDemo_Movers
 				return [ (Perceptible.of(e).isHiding ? "Hidden" : "Normal") ];
 			}
 		);
-		var playerVisualBodyJumpable = new VisualJump2D
+
+		var shadowWidth = headLength;
+
+		var bodyJumpable = new VisualJump2D
 		(
-			playerVisualBodyHidable,
+			bodyHidable,
 			// visualShadow
 			new VisualEllipse
 			(
-				playerHeadRadius, playerHeadRadius / 2, 0,
-				colors.GrayDark, colors.Black,
+				shadowWidth,
+				shadowWidth / 2, 0,
+				colors.GrayDark,
+				colors.Black,
 				false // shouldUseEntityOrientation
 			),
 			null
 		);
 
-		var playerVisualBarSize = Coords.fromXY
+		var statusBarSize = Coords.fromXY
 		(
 			this.entityDimension * 3, this.entityDimension * 0.8
 		);
-		var playerVisualHealthBar = new VisualBar
+		var healthBar = new VisualBar
 		(
 			"H", // abbreviation
-			playerVisualBarSize,
+			statusBarSize,
 			colors.Red,
 			DataBinding.fromGet( (c: Entity) => Killable.of(c).integrity ),
 			null, // amountThreshold
@@ -1773,10 +1793,10 @@ class PlaceBuilderDemo_Movers
 			null // text
 		);
 
-		var playerVisualSatietyBar = new VisualBar
+		var satietyBar = new VisualBar
 		(
 			"F", // abbreviation
-			playerVisualBarSize,
+			statusBarSize,
 			colors.Brown,
 			DataBinding.fromGet
 			(
@@ -1792,7 +1812,7 @@ class PlaceBuilderDemo_Movers
 			null // text
 		);
 
-		var playerVisualEffect = new VisualAnchor
+		var visualEffect = new VisualAnchor
 		(
 			new VisualDynamic
 			(
@@ -1802,38 +1822,38 @@ class PlaceBuilderDemo_Movers
 			null, Orientation.Instances().ForwardXDownZ
 		);
 
-		var playerVisualsForStatusInfo: VisualBase[] =
+		var visualsForStatusInfo: VisualBase[] =
 		[
-			playerVisualHealthBar,
-			playerVisualSatietyBar,
-			playerVisualEffect
+			healthBar,
+			satietyBar,
+			visualEffect
 		];
 
 		if (this.parent.visualsHaveText)
 		{
-			playerVisualsForStatusInfo.splice
+			visualsForStatusInfo.splice
 			(
 				0, 0,
 				VisualText.fromTextImmediateFontAndColor
 				(
-					entityDefnNamePlayer, this.font, playerColor
+					entityDefnNamePlayer, this.font, bodyColor
 				)
 			);
 		}
 
-		var playerVisualStatusInfo = VisualOffset.fromOffsetAndChild
+		var visualStatusInfo = VisualOffset.fromOffsetAndChild
 		(
 			Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
 			new VisualStack
 			(
 				Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
-				playerVisualsForStatusInfo
+				visualsForStatusInfo
 			)
 		);
 
 		var playerVisual = VisualGroup.fromChildren
 		([
-			playerVisualBodyJumpable, playerVisualStatusInfo
+			bodyJumpable, visualStatusInfo
 		]);
 
 		return playerVisual;

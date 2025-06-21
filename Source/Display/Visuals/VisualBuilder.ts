@@ -14,612 +14,127 @@ export class VisualBuilder
 		return VisualBuilder._instance;
 	}
 
-	circleWithEyes
+	arms
 	(
-		circleRadius: number, circleColor: Color, eyeRadius: number,
-		visualEyes: VisualBase
+		skinColor: Color,
+		shoulderWidth: number,
+		shoulderHeight: number,
+		armThickness: number,
+		armLength: number
 	): VisualBase
 	{
-		visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
+		var wieldable = this.wieldable();
 
-		var visualEyesDirectional = new VisualDirectional
-		(
-			visualEyes, // visualForNoDirection
-			[
-				VisualOffset.fromChildAndOffset
-				(
-					visualEyes,
-					Coords.fromXY(1, 0).multiplyScalar(eyeRadius)
-				),
-				VisualOffset.fromChildAndOffset
-				(
-					visualEyes,
-					Coords.fromXY(0, 1).multiplyScalar(eyeRadius)
-				),
-				VisualOffset.fromChildAndOffset
-				(
-					visualEyes,
-					Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)
-				),
-				VisualOffset.fromChildAndOffset
-				(
-					visualEyes,
-					Coords.fromXY(0, -1).multiplyScalar(eyeRadius)
-				)
-			],
-			null
-		);
-
-		var circleWithEyes: VisualBase = VisualGroup.fromNameAndChildren
-		(
-			"CircleWithEyes",
-			[
-				VisualCircle.fromRadiusAndColorFill(circleRadius, circleColor),
-				visualEyesDirectional
-			]
-		);
-
-		circleWithEyes = VisualOffset.fromChildAndOffset
-		(
-			circleWithEyes,
-			Coords.fromXY(0, -circleRadius)
-		);
-
-		return circleWithEyes
-	}
-
-	circleWithEyesAndLegs
-	(
-		circleRadius: number, circleColor: Color, eyeRadius: number,
-		visualEyes: VisualBase
-	): VisualBase
-	{
-		var circleWithEyes =
-			this.circleWithEyes(circleRadius, circleColor, eyeRadius, visualEyes);
-
-		var lineThickness = 2;
-		var spaceBetweenLegsHalf = eyeRadius * .75;
-		var legLength = eyeRadius * 1.5;
-		var legLengthHalf = legLength / 2;
-		var footLength = eyeRadius;
-		var footLengthHalf = footLength / 2;
-		var offsetLegLeft = Coords.fromXY(-spaceBetweenLegsHalf, 0);
-		var offsetLegRight = Coords.fromXY(spaceBetweenLegsHalf, 0);
-		var ticksPerStep = 2;
-		var isRepeating = true;
-
-		var visualLegDownLeft = new VisualPath
-		(
-			Path.fromPoints
-			([
-				Coords.fromXY(0, -legLength),
-				Coords.fromXY(0, legLength),
-				Coords.fromXY(-footLengthHalf, legLength + footLengthHalf)
-			]),
-			circleColor,
-			lineThickness,
-			false // isClosed
-		);
-
-		var visualLegDownRight = new VisualPath
-		(
-			Path.fromPoints
-			([
-				Coords.fromXY(0, -legLength),
-				Coords.fromXY(0, legLength),
-				Coords.fromXY(footLengthHalf, legLength + footLengthHalf)
-			]),
-			circleColor,
-			lineThickness,
-			false // isClosed
-		);
-
-		var visualLegsFacingDownStanding = VisualGroup.fromNameAndChildren
-		(
-			"LegsFacingDownStanding",
-			[
-				VisualOffset.fromChildAndOffset(visualLegDownLeft, offsetLegLeft),
-				VisualOffset.fromChildAndOffset(visualLegDownRight, offsetLegRight)
-			]
-		);
-
-		var ticksPerStepAsArray = [ ticksPerStep, ticksPerStep ];
-
-		var visualLegsFacingDownWalking = VisualGroup.fromChildren
-		([
-			VisualOffset.fromChildAndOffset
-			(
-				new VisualAnimation
-				(
-					null, // name
-					ticksPerStepAsArray,
-					[
-						visualLegDownLeft,
-						VisualOffset.fromChildAndOffset
-						(
-							visualLegDownLeft,
-							Coords.fromXY(0, -legLengthHalf)
-						)
-					],
-					isRepeating
-				),
-				offsetLegLeft
-			),
-			VisualOffset.fromChildAndOffset
-			(
-				new VisualAnimation
-				(
-					null, // name
-					ticksPerStepAsArray,
-					[
-						VisualOffset.fromChildAndOffset
-						(
-							visualLegDownRight,
-							Coords.fromXY(0, -legLengthHalf)
-						),
-						visualLegDownRight
-					],
-					isRepeating
-				),
-				offsetLegRight
-			),
-		]);
-
-		var visualLegUpLeft = new VisualPath
-		(
-			Path.fromPoints
-			([
-				Coords.fromXY(0, -legLength),
-				Coords.fromXY(0, legLength),
-				Coords.fromXY(-footLengthHalf, legLength - footLengthHalf)
-			]),
-			circleColor,
-			lineThickness,
-			false // isClosed
-		);
-
-		var visualLegUpRight = new VisualPath
-		(
-			Path.fromPoints
-			([
-				Coords.fromXY(0, -legLength),
-				Coords.fromXY(0, legLength),
-				Coords.fromXY(footLengthHalf, legLength - footLengthHalf)
-			]),
-			circleColor,
-			lineThickness,
-			false // isClosed
-		);
-
-		var visualLegsFacingUpStanding = VisualGroup.fromNameAndChildren
-		(
-			"LegsFacingUpStanding",
-			[
-				VisualOffset.fromChildAndOffset(visualLegUpLeft, offsetLegLeft),
-				VisualOffset.fromChildAndOffset(visualLegUpRight, offsetLegRight)
-			]
-		);
-
-		var visualLegsFacingUpWalking = VisualGroup.fromNameAndChildren
-		(
-			"LegsFacingUpWalking",
-			[
-				VisualOffset.fromChildAndOffset
-				(
-					new VisualAnimation
-					(
-						null, // name
-						ticksPerStepAsArray,
-						[
-							visualLegUpLeft,
-							VisualOffset.fromChildAndOffset
-							(
-								visualLegUpLeft,
-								Coords.fromXY(0, -legLengthHalf)
-							)
-						],
-						isRepeating
-					),
-					offsetLegLeft
-				),
-				VisualOffset.fromChildAndOffset
-				(
-					new VisualAnimation
-					(
-						null, // name
-						ticksPerStepAsArray,
-						[
-							VisualOffset.fromChildAndOffset
-							(
-								visualLegUpRight,
-								Coords.fromXY(0, -legLengthHalf)
-							),
-							visualLegUpRight
-						],
-						isRepeating
-					),
-					offsetLegRight
-				),
-			]
-		);
-
-		var visualLegFacingLeft = new VisualPath
-		(
-			Path.fromPoints
-			([
-				Coords.fromXY(0, -legLength),
-				Coords.fromXY(0, legLength),
-				Coords.fromXY(-footLength, legLength)
-			]),
-			circleColor,
-			lineThickness,
-			false // isClosed
-		);
-
-		var visualLegsFacingLeftStanding = VisualGroup.fromNameAndChildren
-		(
-			"LegsFacingLeftStanding",
-			[
-				VisualOffset.fromChildAndOffset(visualLegFacingLeft, offsetLegLeft),
-				VisualOffset.fromChildAndOffset(visualLegFacingLeft, offsetLegRight)
-			]
-		);
-
-		var visualLegsFacingLeftWalking = VisualGroup.fromNameAndChildren
-		(
-			"LegsFacingLeftWalking",
-			[
-				VisualOffset.fromChildAndOffset
-				(
-					new VisualAnimation
-					(
-						null, // name
-						ticksPerStepAsArray,
-						[
-							visualLegFacingLeft,
-							VisualOffset.fromChildAndOffset
-							(
-								visualLegFacingLeft,
-								Coords.fromXY(0, -legLengthHalf)
-							)
-						],
-						isRepeating
-					),
-					offsetLegLeft
-				),
-				VisualOffset.fromChildAndOffset
-				(
-					new VisualAnimation
-					(
-						null, // name
-						ticksPerStepAsArray,
-						[
-							VisualOffset.fromChildAndOffset
-							(
-								visualLegFacingLeft,
-								Coords.fromXY(0, -legLengthHalf)
-							),
-							visualLegFacingLeft
-						],
-						isRepeating
-					),
-					offsetLegRight
-				)
-			]
-		);
-
-		var visualLegFacingRight = new VisualPath
-		(
-			Path.fromPoints
-			([
-				Coords.fromXY(0, -legLength),
-				Coords.fromXY(0, legLength),
-				Coords.fromXY(footLength, legLength)
-			]),
-			circleColor,
-			lineThickness,
-			false // isClosed
-		);
-
-		var visualLegsFacingRightStanding = VisualGroup.fromNameAndChildren
-		(
-			"LegsFacingRightStanding",
-			[
-				VisualOffset.fromChildAndOffset(visualLegFacingRight, offsetLegLeft),
-				VisualOffset.fromChildAndOffset(visualLegFacingRight, offsetLegRight)
-			]
-		);
-
-		var visualLegsFacingRightWalking = VisualGroup.fromNameAndChildren
-		(
-			"LegsFacingRightWalking",
-			[
-				VisualOffset.fromChildAndOffset
-				(
-					new VisualAnimation
-					(
-						null, // name
-						ticksPerStepAsArray,
-						[
-							visualLegFacingRight,
-							VisualOffset.fromChildAndOffset
-							(
-								visualLegFacingRight,
-								new Coords(0, -legLengthHalf, 0)
-							)
-						],
-						isRepeating
-					),
-					offsetLegLeft
-				),
-				VisualOffset.fromChildAndOffset
-				(
-					new VisualAnimation
-					(
-						null, // name
-						ticksPerStepAsArray,
-						[
-							VisualOffset.fromChildAndOffset
-							(
-								visualLegFacingRight,
-								new Coords(0, -legLengthHalf, 0)
-							),
-							visualLegFacingRight
-						],
-						isRepeating
-					),
-					offsetLegRight
-				),
-			]
-		);
-
-		var selectChildNames = (uwpe: UniverseWorldPlaceEntities, d: Display) =>
-		{
-			var e = uwpe.entity;
-			var entityLoc = Locatable.of(e).loc;
-			var entityForward = entityLoc.orientation.forward;
-			var entityForwardInTurns = entityForward.headingInTurns();
-			var childNameToSelect;
-			if (entityForwardInTurns == null)
-			{
-				childNameToSelect = "FacingDownStanding";
-			}
-			else
-			{
-				var headingCount = 4;
-				var headingIndex =
-					Math.floor(entityForwardInTurns * headingCount); // todo
-				var entitySpeed = entityLoc.vel.magnitude();
-				var namesByHeading;
-				var speedMin = 0.2;
-				if (entitySpeed > speedMin)
-				{
-					var visualLegsWalkingNamesByHeading =
-					[
-						"FacingRightWalking",
-						"FacingDownWalking",
-						"FacingLeftWalking",
-						"FacingUpWalking"
-					];
-
-					namesByHeading = visualLegsWalkingNamesByHeading;
-				}
-				else
-				{
-					var visualLegsStandingNamesByHeading =
-					[
-						"FacingRightStanding",
-						"FacingDownStanding",
-						"FacingLeftStanding",
-						"FacingUpStanding"
-					];
-
-					namesByHeading = visualLegsStandingNamesByHeading;
-				}
-				childNameToSelect = namesByHeading[headingIndex];
-			}
-			return [ childNameToSelect ];
-		};
-
-		var visualLegsDirectional = new VisualSelect
-		(
-			// childrenByName
-			new Map<string, VisualBase>
-			([
-				[ "FacingRightStanding", visualLegsFacingRightStanding ],
-				[ "FacingDownStanding", visualLegsFacingDownStanding ],
-				[ "FacingLeftStanding", visualLegsFacingLeftStanding ],
-				[ "FacingUpStanding", visualLegsFacingUpStanding ],
-
-				[ "FacingRightWalking", visualLegsFacingRightWalking ],
-				[ "FacingDownWalking", visualLegsFacingDownWalking ],
-				[ "FacingLeftWalking", visualLegsFacingLeftWalking ],
-				[ "FacingUpWalking", visualLegsFacingUpWalking ]
-			]),
-			selectChildNames
-		);
-
-		var returnValue = VisualGroup.fromNameAndChildren
-		(
-			"CircleWithEyesAndLegs",
-			[
-				visualLegsDirectional,
-				circleWithEyes
-			]
-		);
-
-		return returnValue;
-	}
-
-	circleWithEyesAndLegsAndArms
-	(
-		circleRadius: number,
-		circleColor: Color,
-		eyeRadius: number,
-		visualEyes: VisualBase
-	): VisualBase
-	{
-		return this.circleWithEyesAndLegsAndArmsAndWieldable
-		(
-			circleRadius, circleColor, eyeRadius, visualEyes,
-			null // wieldable
-		);
-	}
-
-	circleWithEyesAndLegsAndArmsWithWieldable
-	(
-		circleRadius: number,
-		circleColor: Color,
-		eyeRadius: number,
-		visualEyes: VisualBase
-	): VisualBase
-	{
-		var visualWieldable: VisualBase = new VisualDynamic
-		(
-			(uwpe: UniverseWorldPlaceEntities) =>
-			{
-				var w = uwpe.world;
-				var e = uwpe.entity;
-
-				var equipmentUser = EquipmentUser.of(e);
-				var entityWieldableEquipped =
-					equipmentUser.itemEntityInSocketWithName("Wielding");
-				var itemDrawable = Drawable.of(entityWieldableEquipped);
-				var itemVisual =
-					(
-						itemDrawable == null
-						? Item.of(entityWieldableEquipped).defn(w).visual
-						: itemDrawable.visual
-					);
-				return itemVisual;
-			}
-		);
-
-		return this.circleWithEyesAndLegsAndArmsAndWieldable
-		(
-			circleRadius, circleColor, eyeRadius, visualEyes,
-			visualWieldable
-		);
-	}
-
-	circleWithEyesAndLegsAndArmsAndWieldable
-	(
-		circleRadius: number,
-		circleColor: Color,
-		eyeRadius: number,
-		visualEyes: VisualBase,
-		visualWieldable: VisualBase
-	): VisualBase
-	{
-		var lineThickness = 2;
-
-		var circleWithEyesAndLegs = this.circleWithEyesAndLegs
-		(
-			circleRadius, circleColor, eyeRadius, visualEyes
-		);
-
-		var visualNone = new VisualNone();
-
-		var orientationToAnchorTo = Orientation.Instances().ForwardXDownZ;
-
-		if (visualWieldable != null)
-		{
-			visualWieldable = VisualAnchor.fromChildAndOrientationToAnchorAt
-			(
-				visualWieldable, orientationToAnchorTo
-			);
-		}
-
-		var offsetsToHandWhenFacingRightDownLeftUp =
+		// "RDLU" = "Right, Down, Left, Up".
+		var directionsFromNeckToShoulderRDLU =
 		[
-			Coords.fromXY(2, 1),
-			Coords.fromXY(-2, 0),
-			Coords.fromXY(-2, 1),
-			Coords.fromXY(2, 0)
-		];
+			Coords.fromXY(1, 0),
+			Coords.fromXY(-1, 0),
+			Coords.fromXY(-1, 0),
+			Coords.fromXY(1, 0)
+		].map(x => x.normalize() );
 
-		var visualsForArmAndWieldableWhenFacingRightDownLeftUp =
-			offsetsToHandWhenFacingRightDownLeftUp.map
-			(
-				offsetToHand =>
-				{
-					var visualForArm : VisualBase = VisualAnchor.fromChildAndOrientationToAnchorAt
-					(
-						VisualLine.fromFromAndToPosColorAndThickness
-						(
-							Coords.create(),
-							offsetToHand.clone().multiplyScalar(circleRadius),
-							circleColor,
-							lineThickness
-						),
-						orientationToAnchorTo
-					);
+		var directionsFromShoulderToHandRDLU =
+		[
+			Coords.fromXY(1, 1),
+			Coords.fromXY(-1, 1),
+			Coords.fromXY(-1, 1),
+			Coords.fromXY(1, 1)
+		].map(x => x.normalize() );
 
-					if (visualWieldable != null)
-					{
-						var visualWieldableOffsetToHand = VisualOffset.fromChildAndOffset
-						(
-							visualWieldable,
-							offsetToHand.clone().multiplyScalar(circleRadius)
-						);
+		var visualsForArmRDLU = [];
 
-						visualForArm = VisualGroup.fromChildren
-						([
-							visualForArm,
-							visualWieldableOffsetToHand
-						]);
-					}
+		var shoulderWidthHalf = shoulderWidth / 2;
 
-					return visualForArm;
-				}
-			);
-
-		var visualArmAndWieldableDirectional =
-			VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections
-			(
-				visualsForArmAndWieldableWhenFacingRightDownLeftUp[1],
-				visualsForArmAndWieldableWhenFacingRightDownLeftUp
-			);
-
-		var visualArmAndWieldableDirectionalOffset = VisualOffset.fromChildAndOffset
-		(
-			visualArmAndWieldableDirectional,
-			Coords.fromXY(0, 0 - circleRadius)
-		);
-
-		var returnValue = circleWithEyesAndLegs;
-
-		if (visualWieldable != null)
+		for (var i = 0; i < directionsFromNeckToShoulderRDLU.length; i++)
 		{
-			var visualWielding = new VisualSelect
+			var directionFromNeckToShoulder =
+				directionsFromNeckToShoulderRDLU[i];
+
+			var directionFromShoulderToHand =
+				directionsFromShoulderToHandRDLU[i];
+
+			var displacementFromShoulderToHand =
+				directionFromShoulderToHand
+					.multiplyScalar(armLength);
+
+			var pathArm = Path.fromPoints
+			([
+				Coords.zeroes(),
+				displacementFromShoulderToHand
+			]);
+
+			var arm = VisualPath.fromPathColorAndThicknessOpen
 			(
-				new Map<string, VisualBase>
-				([
-					[ "Visible", visualArmAndWieldableDirectionalOffset ],
-					[ "Hidden", visualNone ]
-				]),
-				(uwpe: UniverseWorldPlaceEntities, d: Display) => // selectChildNames
-				{
-					var e = uwpe.entity;
-					var itemEntityWielded =
-						EquipmentUser.of(e).itemEntityInSocketWithName("Wielding");
-					var returnValue =
-						(itemEntityWielded == null ? "Hidden" : "Visible");
-					return [ returnValue ];
-				}
+				pathArm,
+				skinColor,
+				armThickness
 			);
 
-			returnValue = VisualGroup.fromNameAndChildren
+			var wieldableInHand: VisualBase = VisualOffset.fromNameOffsetAndChild
 			(
-				"CircleWithEyesAndLegsAndArmsAndWieldable",
+				"WieldableInHand",
+				displacementFromShoulderToHand.clone(),
+				wieldable
+			);
+
+			var armHoldingWieldable = VisualGroup.fromNameAndChildren
+			(
+				"ArmHoldingWieldable",
 				[
-					visualWielding,
-					returnValue
+					arm,
+					wieldableInHand
 				]
 			);
+
+			var displacementFromNeckToShoulder =
+				directionFromNeckToShoulder
+					.multiplyScalar(shoulderWidthHalf);
+
+			var armFromShoulder =
+				VisualOffset.fromNameOffsetAndChild
+				(
+					"ArmFromShoulder",
+					displacementFromNeckToShoulder,
+					armHoldingWieldable
+				);
+
+			visualsForArmRDLU
+				.push(armFromShoulder);
 		}
 
-		return returnValue;
+		var armDirectional =
+			VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections
+			(
+				visualsForArmRDLU[1],
+				visualsForArmRDLU
+			);
+
+		var offsetFromGroundToShoulderLevel =
+			Coords.fromXY(0, 0 - shoulderHeight);
+
+		var armAtShoulderLevel =
+			VisualOffset.fromNameOffsetAndChild
+			(
+				"ArmAtShoulderLevel",
+				offsetFromGroundToShoulderLevel,
+				armDirectional
+			);
+
+		var armAndWieldableHidable = VisualHidable.fromIsVisibleAndChild
+		(
+			(uwpe : UniverseWorldPlaceEntities) =>
+			{
+				var e = uwpe.entity;
+				var equipmentUser = EquipmentUser.of(e);
+				var wieldableIsEquipped =
+					equipmentUser.entityIsInSocketWithNameWielding();
+				return wieldableIsEquipped;
+			},
+			armAtShoulderLevel
+		);
+
+		return armAndWieldableHidable;
 	}
 
 	directionalAnimationsFromTiledImage
@@ -726,6 +241,111 @@ export class VisualBuilder
 		return visualEyesBlinking;
 	}
 
+	figure
+	(
+		name: string,
+		bodyColor: Color,
+		headRadius: number,
+		eyeRadius: number,
+		limbThickness: number,
+		hipsWidth: number,
+		legLength: number,
+		shouldersWidth: number,
+		shouldersHeight: number,
+		armLength: number
+	): VisualBase
+	{
+		var eyesBlinking =
+			this.eyesBlinking(eyeRadius);
+		var head =
+			this.head
+			(
+				headRadius,
+				bodyColor,
+				eyeRadius,
+				eyesBlinking
+			);
+		var legs =
+			this.legs
+			(
+				bodyColor,
+				hipsWidth,
+				limbThickness,
+				legLength
+			);
+		var arms = this.arms
+		(
+			bodyColor,
+			shouldersWidth,
+			shouldersHeight,
+			limbThickness,
+			armLength
+		);
+
+		var shoulderHeightAsOffset =
+			Coords.fromXY(0, 0 - shouldersHeight);
+
+		var headRaisedAboveShoulders =
+			VisualOffset.fromNameOffsetAndChild
+			(
+				"HeadRaisedAboveShoulders",
+				shoulderHeightAsOffset,
+				head
+			);
+
+		var armsRaisedToShoulderHeight =
+			VisualOffset.fromNameOffsetAndChild
+			(
+				"armsRaisedToShoulderHeight",
+				shoulderHeightAsOffset,
+				arms
+			);
+
+		var body = VisualGroup.fromNameAndChildren
+		(
+			name,
+			[
+				legs,
+				armsRaisedToShoulderHeight,
+				headRaisedAboveShoulders
+			]
+		);
+
+		return body;
+	}
+
+	figureWithNameColorAndDefaultProportions
+	(
+		name: string,
+		bodyColor: Color,
+		headLength: number
+	)
+	{
+		var headRadius = headLength / 2;
+		var eyeRadius = headRadius / 2;
+		var shouldersWidth = headRadius * 2;
+		var torsoLength = 0;
+		var hipsWidth = shouldersWidth / 2;
+		var legLength = headRadius * 3 / 4;
+		var shouldersHeight = legLength + torsoLength;
+		var limbThickness = 2;
+		var armLength = headRadius * 1.25;
+
+		return this.figure
+		(
+			name,
+			bodyColor,
+			headRadius,
+			eyeRadius,
+			limbThickness,
+			hipsWidth,
+			legLength,
+			shouldersWidth,
+			shouldersHeight,
+			armLength
+		)
+	}
+
 	flame(dimension: number): VisualBase
 	{
 		var dimensionHalf = dimension / 2;
@@ -774,7 +394,7 @@ export class VisualBuilder
 		) as VisualGroup;
 
 		var ticksPerFrame = 3;
-		var flameVisual = new VisualAnimation
+		var flameVisual = VisualAnimation.fromNameTicksToHoldFrameAndFramesRepeating
 		(
 			"Flame", // name
 			[ ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame ],
@@ -783,11 +403,67 @@ export class VisualBuilder
 				flameVisualStatic,
 				flameVisualStaticLarge,
 				flameVisualStatic
-			],
-			true // isRepeating
+			]
 		);
 
 		return flameVisual;
+	}
+
+	head
+	(
+		headRadius: number,
+		skinColor: Color,
+		eyeRadius: number,
+		visualEyes: VisualBase
+	): VisualBase
+	{
+		visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
+
+		var visualEyesDirectional = new VisualDirectional
+		(
+			visualEyes, // visualForNoDirection
+			[
+				VisualOffset.fromChildAndOffset
+				(
+					visualEyes,
+					Coords.fromXY(1, 0).multiplyScalar(eyeRadius)
+				),
+				VisualOffset.fromChildAndOffset
+				(
+					visualEyes,
+					Coords.fromXY(0, 1).multiplyScalar(eyeRadius)
+				),
+				VisualOffset.fromChildAndOffset
+				(
+					visualEyes,
+					Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)
+				),
+				VisualOffset.fromChildAndOffset
+				(
+					visualEyes,
+					Coords.fromXY(0, -1).multiplyScalar(eyeRadius)
+				)
+			],
+			null
+		);
+
+		var head: VisualBase = VisualGroup.fromNameAndChildren
+		(
+			"Head",
+			[
+				VisualCircle.fromRadiusAndColorFill(headRadius, skinColor),
+				visualEyesDirectional
+			]
+		);
+
+		head = VisualOffset.fromNameOffsetAndChild
+		(
+			"HeadRaisedToChin",
+			Coords.fromXY(0, -headRadius),
+			head
+		);
+
+		return head
 	}
 
 	ice(dimension: number): VisualBase
@@ -806,9 +482,9 @@ export class VisualBuilder
 					Coords.fromXY(-1, 1),
 				]).transform
 				(
-					Transform_Scale.fromScaleFactors
+					Transform_Scale.fromScaleFactor
 					(
-						Coords.ones().multiplyScalar(dimensionHalf)
+						dimensionHalf
 					)
 				),
 				null, // colorFill
@@ -819,6 +495,408 @@ export class VisualBuilder
 		return visual;
 	}
 
+	legs
+	(
+		legColor: Color,
+		hipsWidth: number,
+		legThickness: number,
+		legLength: number
+	): VisualBase
+	{
+		var legs =
+			this.legsDirectional
+			(
+				legColor,
+				hipsWidth,
+				legThickness,
+				legLength
+			);
+
+		var legsRaisedAboveGround =
+			VisualOffset.fromNameOffsetAndChild
+			(
+				"LegsRaisedAboveGround",
+				Coords.fromXY(0, 0 - legLength),
+				legs
+			);
+
+		return legsRaisedAboveGround;
+	}
+
+	legsDirectional
+	(
+		legColor: Color,
+		hipsWidth: number,
+		legThickness: number,
+		legLength: number
+	): VisualBase
+	{
+		var footLength = legLength * 2 / 3;
+		var hipsWidthHalf = hipsWidth / 2;
+		var footLengthHalf = footLength / 2;
+		var offsetHipLeft = Coords.fromXY(-hipsWidthHalf, 0);
+		var offsetHipRight = Coords.fromXY(hipsWidthHalf, 0);
+		var offsetsForHipsLeftAndRight =
+			[offsetHipLeft, offsetHipRight];
+
+		var ticksPerStep = 2;
+		var ticksPerStepAsArray = [ ticksPerStep, ticksPerStep ];
+
+		var visualsLegsFacingDownStandingAndWalking =
+			this.legsDirectional_StandingAndWalking_Down
+			(
+				legColor,
+				legThickness,
+				legLength,
+				footLengthHalf,
+				offsetsForHipsLeftAndRight,
+				ticksPerStepAsArray
+			);
+		var visualLegsFacingDownStanding =
+			visualsLegsFacingDownStandingAndWalking[0];
+		var visualLegsFacingDownWalking =
+			visualsLegsFacingDownStandingAndWalking[1];
+
+		var visualsLegsFacingUpStandingAndWalking =
+			this.legsDirectional_StandingAndWalking_Up
+			(
+				legColor,
+				legThickness,
+				legLength,
+				footLengthHalf,
+				offsetsForHipsLeftAndRight,
+				ticksPerStepAsArray
+			);
+		var visualLegsFacingUpStanding =
+			visualsLegsFacingUpStandingAndWalking[0];
+		var visualLegsFacingUpWalking =
+			visualsLegsFacingUpStandingAndWalking[1];
+
+		var visualsLegsFacingLeftStandingAndWalking =
+			this.legsDirectional_StandingAndWalking_Left
+			(
+				legColor,
+				legThickness,
+				legLength,
+				footLengthHalf,
+				offsetsForHipsLeftAndRight,
+				ticksPerStepAsArray
+			);
+		var visualLegsFacingLeftStanding =
+			visualsLegsFacingLeftStandingAndWalking[0];
+		var visualLegsFacingLeftWalking =
+			visualsLegsFacingLeftStandingAndWalking[1];
+
+		var visualsLegsFacingRightStandingAndWalking =
+			this.legsDirectional_StandingAndWalking_Right
+			(
+				legColor,
+				legThickness,
+				legLength,
+				footLengthHalf,
+				offsetsForHipsLeftAndRight,
+				ticksPerStepAsArray
+			);
+		var visualLegsFacingRightStanding =
+			visualsLegsFacingRightStandingAndWalking[0];
+		var visualLegsFacingRightWalking =
+			visualsLegsFacingRightStandingAndWalking[1];
+
+		var selectChildNames =
+			(uwpe: UniverseWorldPlaceEntities, d: Display) =>
+				this.legsDirectional_SelectChildNames(uwpe, d);
+
+		var visualLegsDirectional = new VisualSelect
+		(
+			// childrenByName
+			new Map<string, VisualBase>
+			([
+				[ "FacingRightStanding", visualLegsFacingRightStanding ],
+				[ "FacingDownStanding", visualLegsFacingDownStanding ],
+				[ "FacingLeftStanding", visualLegsFacingLeftStanding ],
+				[ "FacingUpStanding", visualLegsFacingUpStanding ],
+
+				[ "FacingRightWalking", visualLegsFacingRightWalking ],
+				[ "FacingDownWalking", visualLegsFacingDownWalking ],
+				[ "FacingLeftWalking", visualLegsFacingLeftWalking ],
+				[ "FacingUpWalking", visualLegsFacingUpWalking ]
+			]),
+			selectChildNames
+		);
+
+		return visualLegsDirectional;
+	}
+
+	legsDirectional_SelectChildNames
+	(
+		uwpe: UniverseWorldPlaceEntities, d: Display
+	): string[]
+	{
+		var e = uwpe.entity;
+		var entityLoc = Locatable.of(e).loc;
+		var entityForward = entityLoc.orientation.forward;
+		var entityForwardInTurns = entityForward.headingInTurns();
+		var childNameToSelect;
+		if (entityForwardInTurns == null)
+		{
+			childNameToSelect = "FacingDownStanding";
+		}
+		else
+		{
+			var headingCount = 4;
+			var headingIndex =
+				Math.floor(entityForwardInTurns * headingCount); // todo
+			var entitySpeed = entityLoc.vel.magnitude();
+			var namesByHeading;
+			var speedMin = 0.2;
+			if (entitySpeed > speedMin)
+			{
+				var visualLegsWalkingNamesByHeading =
+				[
+					"FacingRightWalking",
+					"FacingDownWalking",
+					"FacingLeftWalking",
+					"FacingUpWalking"
+				];
+
+				namesByHeading = visualLegsWalkingNamesByHeading;
+			}
+			else
+			{
+				var visualLegsStandingNamesByHeading =
+				[
+					"FacingRightStanding",
+					"FacingDownStanding",
+					"FacingLeftStanding",
+					"FacingUpStanding"
+				];
+
+				namesByHeading = visualLegsStandingNamesByHeading;
+			}
+			childNameToSelect = namesByHeading[headingIndex];
+		}
+		return [ childNameToSelect ];
+	};
+
+	legsDirectional_StandingAndWalking
+	(
+		legColor: Color,
+		lineThickness: number,
+		legLength: number,
+		footLengthHalf: number,
+		offsetsForHipsLeftAndRight: Coords[],
+		ticksPerStepAsArray: number[],
+		toeOffsetsFromAnklesLeftRight: Coords[]
+	): VisualBase[]
+	{
+		var legLengthHalf = legLength / 2;
+
+		var legTop = Coords.fromXY(0, 0).multiplyScalar(legLength);
+		var legBottom = Coords.fromXY(0, 1).multiplyScalar(legLength);
+
+		toeOffsetsFromAnklesLeftRight.forEach
+		(
+			x =>
+				x.multiplyScalar(footLengthHalf)
+					.add(legBottom)
+		);
+
+		var visualsForLegsLeftAndRight =
+			toeOffsetsFromAnklesLeftRight.map
+			(
+				(x, i) =>
+					VisualPath.fromPathColorAndThicknessOpen
+					(
+						Path.fromPoints
+						([
+							legTop,
+							legBottom,
+							toeOffsetsFromAnklesLeftRight[i]
+						]),
+						legColor,
+						lineThickness
+					)
+			);
+
+		var visualsForLegsStanding = [];
+		for (var i = 0; i < 2; i++)
+		{
+			var visualForLeg = visualsForLegsLeftAndRight[i];
+			var offsetForLeg = offsetsForHipsLeftAndRight[i];
+			var visualForLegStanding =
+				VisualOffset.fromChildAndOffset(visualForLeg, offsetForLeg);
+			visualsForLegsStanding.push(visualForLegStanding);
+		}
+
+		var visualLegsStanding = VisualGroup.fromChildren
+		(
+			visualsForLegsStanding
+		);
+
+		var legRaiseForStepDisplacement =
+			Coords.fromXY(0, -1).multiplyScalar(legLengthHalf);
+
+		var visualsForLegsWalking =
+			visualsForLegsLeftAndRight.map
+			(
+				(visualForLegAtRest, i) =>
+				{
+					var visualForLegRaised =
+						VisualOffset.fromChildAndOffset
+						(
+							visualForLegAtRest,
+							legRaiseForStepDisplacement
+						);
+
+					var frames =
+						new Array<VisualBase>(visualForLegAtRest);
+
+					frames.splice
+					(
+						i, // indexToInsertAt
+						0, // elementsToRemoveCount
+						visualForLegRaised
+					);
+
+					var visualForLegWalking =
+						VisualAnimation.fromTicksToHoldFramesAndFramesRepeating
+						(
+							ticksPerStepAsArray,
+							frames
+						);
+
+					return VisualOffset.fromChildAndOffset
+					(
+						visualForLegWalking,
+						offsetsForHipsLeftAndRight[i]
+					);
+				}
+			);
+
+		var visualLegsWalking =
+			VisualGroup.fromChildren(visualsForLegsWalking);
+
+		var visualsLegsStandingAndWalking = new Array<VisualBase>
+		(
+			visualLegsStanding,
+			visualLegsWalking
+		);
+
+		return visualsLegsStandingAndWalking;
+	}
+
+	legsDirectional_StandingAndWalking_Down
+	(
+		legColor: Color,
+		lineThickness: number,
+		legLength: number,
+		footLengthHalf: number,
+		offsetsForLegsLeftAndRight: Coords[],
+		ticksPerStepAsArray: number[]
+	): VisualBase[]
+	{
+		var toeOffsetsFromAnklesLeftRight =
+		[
+			Coords.fromXY(-1, 1),
+			Coords.fromXY(1, 1)
+		];
+
+		return this.legsDirectional_StandingAndWalking
+		(
+			legColor,
+			lineThickness,
+			legLength,
+			footLengthHalf,
+			offsetsForLegsLeftAndRight,
+			ticksPerStepAsArray,
+			toeOffsetsFromAnklesLeftRight
+		);
+	}
+
+	legsDirectional_StandingAndWalking_Left
+	(
+		legColor: Color,
+		lineThickness: number,
+		legLength: number,
+		footLengthHalf: number,
+		offsetsForLegsLeftAndRight: Coords[],
+		ticksPerStepAsArray: number[]
+	): VisualBase[]
+	{
+		var toeOffsetsFromAnklesLeftRight =
+		[
+			Coords.fromXY(-2, 0),
+			Coords.fromXY(-2, 0)
+		];
+
+		return this.legsDirectional_StandingAndWalking
+		(
+			legColor,
+			lineThickness,
+			legLength,
+			footLengthHalf,
+			offsetsForLegsLeftAndRight,
+			ticksPerStepAsArray,
+			toeOffsetsFromAnklesLeftRight
+		);
+	}
+
+	legsDirectional_StandingAndWalking_Right
+	(
+		legColor: Color,
+		lineThickness: number,
+		legLength: number,
+		footLengthHalf: number,
+		offsetsForLegsLeftAndRight: Coords[],
+		ticksPerStepAsArray: number[]
+	): VisualBase[]
+	{
+		var toeOffsetsFromAnklesLeftRight =
+		[
+			Coords.fromXY(2, 0),
+			Coords.fromXY(2, 0)
+		];
+
+		return this.legsDirectional_StandingAndWalking
+		(
+			legColor,
+			lineThickness,
+			legLength,
+			footLengthHalf,
+			offsetsForLegsLeftAndRight,
+			ticksPerStepAsArray,
+			toeOffsetsFromAnklesLeftRight
+		);
+	}
+
+	legsDirectional_StandingAndWalking_Up
+	(
+		legColor: Color,
+		lineThickness: number,
+		legLength: number,
+		footLengthHalf: number,
+		offsetsForLegsLeftAndRight: Coords[],
+		ticksPerStepAsArray: number[]
+	): VisualBase[]
+	{
+		var toeOffsetsFromAnklesLeftRight =
+		[
+			Coords.fromXY(-1, -1),
+			Coords.fromXY(1, -1)
+		];
+
+		return this.legsDirectional_StandingAndWalking
+		(
+			legColor,
+			lineThickness,
+			legLength,
+			footLengthHalf,
+			offsetsForLegsLeftAndRight,
+			ticksPerStepAsArray,
+			toeOffsetsFromAnklesLeftRight
+		);
+	}
+
 	sun(dimension: number): VisualBase
 	{
 		var color = Color.Instances().Yellow;
@@ -826,25 +904,25 @@ export class VisualBuilder
 		var dimensionOblique = dimension * Math.sin(Math.PI / 4);
 		var sunVisual = VisualGroup.fromChildren
 		([
-			new VisualLine
+			VisualLine.fromFromAndToPosColorAndThickness
 			(
 				Coords.fromXY(-dimension, 0),
 				Coords.fromXY(dimension, 0),
 				color, rayThickness
 			),
-			new VisualLine
+			VisualLine.fromFromAndToPosColorAndThickness
 			(
 				Coords.fromXY(0, -dimension),
 				Coords.fromXY(0, dimension),
 				color, rayThickness
 			),
-			new VisualLine
+			VisualLine.fromFromAndToPosColorAndThickness
 			(
 				Coords.fromXY(-1, -1).multiplyScalar(dimensionOblique),
 				Coords.fromXY(1, 1).multiplyScalar(dimensionOblique),
 				color, rayThickness
 			),
-			new VisualLine
+			VisualLine.fromFromAndToPosColorAndThickness
 			(
 				Coords.fromXY(-1, 1).multiplyScalar(dimensionOblique),
 				Coords.fromXY(1, -1).multiplyScalar(dimensionOblique),
@@ -855,6 +933,44 @@ export class VisualBuilder
 		]);
 
 		return sunVisual;
+	}
+
+	wieldable(): VisualBase
+	{
+		var wieldable = new VisualDynamic
+		(
+			(uwpe: UniverseWorldPlaceEntities) =>
+			{
+				var returnVisual = VisualNone.Instance;
+
+				var w = uwpe.world;
+				var e = uwpe.entity;
+
+				var equipmentUser = EquipmentUser.of(e);
+				var entityWieldableEquipped =
+					equipmentUser.itemEntityInSocketWithName("Wielding");
+				if (entityWieldableEquipped != null)
+				{
+					var itemDrawable = Drawable.of(entityWieldableEquipped);
+					var itemVisual =
+						(
+							itemDrawable == null
+							? Item.of(entityWieldableEquipped).defn(w).visual
+							: itemDrawable.visual
+						);
+					returnVisual = itemVisual;
+				};
+
+				return returnVisual;
+			}
+		);
+
+		var wieldableAnchored = VisualAnchorOrientation.fromChild
+		(
+			wieldable
+		);
+
+		return wieldableAnchored;
 	}
 }
 

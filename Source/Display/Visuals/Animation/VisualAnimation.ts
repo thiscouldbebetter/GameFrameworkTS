@@ -53,6 +53,37 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		}
 	}
 
+	static fromNameTicksToHoldFrameAndFramesRepeating
+	(
+		name: string,
+		ticksToHoldFrames: number[],
+		frames: VisualBase[]
+	): VisualAnimation
+	{
+		return new VisualAnimation
+		(
+			name,
+			ticksToHoldFrames,
+			frames,
+			true
+		);
+	}
+
+	static fromTicksToHoldFramesAndFramesRepeating
+	(
+		ticksToHoldFrames: number[],
+		frames: VisualBase[]
+	): VisualAnimation
+	{
+		return new VisualAnimation
+		(
+			null, // name
+			ticksToHoldFrames,
+			frames,
+			true // isRepeating
+		);
+	}
+
 	static fromFrames
 	(
 		frames: VisualBase[]

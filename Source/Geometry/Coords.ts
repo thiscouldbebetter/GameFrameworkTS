@@ -633,6 +633,16 @@ export class Coords
 		return this;
 	}
 
+	valid(): boolean
+	{
+		var isValid =
+			(isNaN(this.x) == false)
+			&& (isNaN(this.y) == false)
+			&& (isNaN(this.z) == false);
+
+		return isValid;
+	}
+
 	wrapToRangeMax(max: Coords): Coords
 	{
 		while (this.x < 0)

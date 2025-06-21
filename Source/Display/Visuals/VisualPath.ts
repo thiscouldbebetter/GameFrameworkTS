@@ -14,7 +14,10 @@ export class VisualPath implements Visual<VisualPath>
 
 	constructor
 	(
-		verticesAsPath: Path, color: Color, lineThickness: number, isClosed: boolean
+		verticesAsPath: Path,
+		color: Color,
+		lineThickness: number,
+		isClosed: boolean
 	)
 	{
 		this.verticesAsPath = verticesAsPath;
@@ -22,8 +25,20 @@ export class VisualPath implements Visual<VisualPath>
 		this.lineThickness = lineThickness;
 		this.isClosed = isClosed;
 
-		this.verticesAsPathTransformed = this.verticesAsPath.clone();
-		this.transformTranslate = new Transform_Translate(Coords.create());
+		this.verticesAsPathTransformed =
+			this.verticesAsPath.clone();
+		this.transformTranslate =
+			Transform_Translate.fromDisplacement(Coords.create());
+	}
+
+	static fromPathColorAndThicknessOpen
+	(
+		verticesAsPath: Path,
+		color: Color,
+		lineThickness: number
+	): VisualPath
+	{
+		return new VisualPath(verticesAsPath, color, lineThickness, false);
 	}
 
 	// Visual.
@@ -41,8 +56,8 @@ export class VisualPath implements Visual<VisualPath>
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
 		var entity = uwpe.entity;
-		var drawablePos = Locatable.of(entity).loc.pos;
-		this.transformTranslate.displacement.overwriteWith(drawablePos);
+		var entityPos = Locatable.of(entity).loc.pos;
+		this.transformTranslate.displacement.overwriteWith(entityPos);
 
 		this.verticesAsPathTransformed.overwriteWith
 		(

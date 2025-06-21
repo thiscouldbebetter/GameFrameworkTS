@@ -16,6 +16,11 @@ export class Transform_Scale implements Transform<Transform_Scale>
 		return new Transform_Scale(Coords.ones().multiplyScalar(scalar));
 	}
 
+	static fromScaleFactor(scaleFactor: number): Transform_Scale
+	{
+		return new Transform_Scale(Coords.ones().multiplyScalar(scaleFactor) );
+	}
+
 	static fromScaleFactors(scaleFactors: Coords): Transform_Scale
 	{
 		return new Transform_Scale(scaleFactors);

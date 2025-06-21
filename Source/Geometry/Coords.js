@@ -410,6 +410,12 @@ var ThisCouldBeBetter;
                 }
                 return this;
             }
+            valid() {
+                var isValid = (isNaN(this.x) == false)
+                    && (isNaN(this.y) == false)
+                    && (isNaN(this.z) == false);
+                return isValid;
+            }
             wrapToRangeMax(max) {
                 while (this.x < 0) {
                     this.x += max.x;
