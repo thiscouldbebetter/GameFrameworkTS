@@ -576,7 +576,7 @@ class PlaceBuilderDemo_Items
 		var itemCrystalColor = colors.Cyan;
 		var itemCrystalVisual = VisualGroup.fromChildren
 		([
-			VisualPolygon.fromPathAndColors
+			VisualPolygon.fromPathAndColorsFillAndBorder
 			(
 				Path.fromPoints
 				([
@@ -725,7 +725,7 @@ class PlaceBuilderDemo_Items
 					null
 				)
 			),
-			VisualPolygon.fromPathAndColors
+			VisualPolygon.fromPathAndColorsFillAndBorder
 			(
 				Path.fromPoints
 				([

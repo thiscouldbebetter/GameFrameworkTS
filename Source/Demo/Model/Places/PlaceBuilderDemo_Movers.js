@@ -284,7 +284,7 @@ class PlaceBuilderDemo_Movers {
         [
             visualEffect
         ]));
-        var visualBody = new VisualAnchor(VisualPolygon.fromPathAndColors(new Path(enemyVertices), enemyColor, colors.Red // colorBorder
+        var visualBody = new VisualAnchor(VisualPolygon.fromPathAndColorsFillAndBorder(Path.fromPoints(enemyVertices), enemyColor, colors.Red // colorBorder
         ), null, // posToAnchorAt
         Orientation.Instances().ForwardXDownZ.clone());
         var visualArms = new VisualDirectional(new VisualNone(), [
@@ -896,7 +896,7 @@ class PlaceBuilderDemo_Movers {
         }
     }
     entityDefnBuildPlayer_Visual(entityDefnNamePlayer, playerHeadRadius) {
-        var headLength = 15; // todo
+        var headLength = 12; // todo
         var visualBuilder = new VisualBuilder();
         var colors = Color.Instances();
         var bodyColor = colors.Gray;

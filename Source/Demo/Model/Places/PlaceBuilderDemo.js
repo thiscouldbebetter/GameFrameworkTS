@@ -1581,7 +1581,7 @@ class PlaceBuilderDemo // Main.
         var colors = Color.Instances();
         var itemPotionColor = colors.Blue;
         var itemPotionVisual = VisualGroup.fromChildren([
-            VisualPolygon.fromPathAndColors(Path.fromPoints([
+            VisualPolygon.fromPathAndColorsFillAndBorder(Path.fromPoints([
                 Coords.fromXY(1, 1),
                 Coords.fromXY(-1, 1),
                 Coords.fromXY(-.2, 0),

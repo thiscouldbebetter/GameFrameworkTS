@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                 return VisualPolygon.fromDimensionAndColorBorder(10, colorBorder);
             }
             static fromDimensionAndColorBorder(dimension, colorBorder) {
-                return VisualPolygon.fromPathAndColors(GameFramework.Path.fromDimension(dimension), null, // colorFill
+                return VisualPolygon.fromPathAndColorsFillAndBorder(GameFramework.Path.fromDimension(dimension), null, // colorFill
                 colorBorder);
             }
             static fromPathAndColorFill(path, colorFill) {
@@ -35,7 +35,7 @@ var ThisCouldBeBetter;
                 );
                 return returnValue;
             }
-            static fromPathAndColors(verticesAsPath, colorFill, colorBorder) {
+            static fromPathAndColorsFillAndBorder(verticesAsPath, colorFill, colorBorder) {
                 return new VisualPolygon(verticesAsPath, colorFill, colorBorder, null);
             }
             static fromVerticesAndColorFill(vertices, colorFill) {

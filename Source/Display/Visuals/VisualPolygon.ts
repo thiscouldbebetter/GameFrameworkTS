@@ -67,7 +67,7 @@ export class VisualPolygon implements Visual<VisualPolygon>
 		dimension: number, colorBorder: Color
 	): VisualPolygon
 	{
-		return VisualPolygon.fromPathAndColors
+		return VisualPolygon.fromPathAndColorsFillAndBorder
 		(
 			Path.fromDimension(dimension),
 			null, // colorFill
@@ -88,7 +88,7 @@ export class VisualPolygon implements Visual<VisualPolygon>
 		return returnValue;
 	}
 
-	static fromPathAndColors
+	static fromPathAndColorsFillAndBorder
 	(
 		verticesAsPath: Path, colorFill: Color, colorBorder: Color
 	): VisualPolygon

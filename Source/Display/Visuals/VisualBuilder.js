@@ -10,55 +10,6 @@ var ThisCouldBeBetter;
                 }
                 return VisualBuilder._instance;
             }
-            arms(skinColor, shoulderWidth, shoulderHeight, armThickness, armLength) {
-                var wieldable = this.wieldable();
-                // "RDLU" = "Right, Down, Left, Up".
-                var directionsFromNeckToShoulderRDLU = [
-                    GameFramework.Coords.fromXY(1, 0),
-                    GameFramework.Coords.fromXY(-1, 0),
-                    GameFramework.Coords.fromXY(-1, 0),
-                    GameFramework.Coords.fromXY(1, 0)
-                ].map(x => x.normalize());
-                var directionsFromShoulderToHandRDLU = [
-                    GameFramework.Coords.fromXY(1, 1),
-                    GameFramework.Coords.fromXY(-1, 1),
-                    GameFramework.Coords.fromXY(-1, 1),
-                    GameFramework.Coords.fromXY(1, 1)
-                ].map(x => x.normalize());
-                var visualsForArmRDLU = [];
-                var shoulderWidthHalf = shoulderWidth / 2;
-                for (var i = 0; i < directionsFromNeckToShoulderRDLU.length; i++) {
-                    var directionFromNeckToShoulder = directionsFromNeckToShoulderRDLU[i];
-                    var directionFromShoulderToHand = directionsFromShoulderToHandRDLU[i];
-                    var displacementFromShoulderToHand = directionFromShoulderToHand
-                        .multiplyScalar(armLength);
-                    var pathArm = GameFramework.Path.fromPoints([
-                        GameFramework.Coords.zeroes(),
-                        displacementFromShoulderToHand
-                    ]);
-                    var arm = GameFramework.VisualPath.fromPathColorAndThicknessOpen(pathArm, skinColor, armThickness);
-                    var wieldableInHand = GameFramework.VisualOffset.fromNameOffsetAndChild("WieldableInHand", displacementFromShoulderToHand.clone(), wieldable);
-                    var armHoldingWieldable = GameFramework.VisualGroup.fromNameAndChildren("ArmHoldingWieldable", [
-                        arm,
-                        wieldableInHand
-                    ]);
-                    var displacementFromNeckToShoulder = directionFromNeckToShoulder
-                        .multiplyScalar(shoulderWidthHalf);
-                    var armFromShoulder = GameFramework.VisualOffset.fromNameOffsetAndChild("ArmFromShoulder", displacementFromNeckToShoulder, armHoldingWieldable);
-                    visualsForArmRDLU
-                        .push(armFromShoulder);
-                }
-                var armDirectional = GameFramework.VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections(visualsForArmRDLU[1], visualsForArmRDLU);
-                var offsetFromGroundToShoulderLevel = GameFramework.Coords.fromXY(0, 0 - shoulderHeight);
-                var armAtShoulderLevel = GameFramework.VisualOffset.fromNameOffsetAndChild("ArmAtShoulderLevel", offsetFromGroundToShoulderLevel, armDirectional);
-                var armAndWieldableHidable = GameFramework.VisualHidable.fromIsVisibleAndChild((uwpe) => {
-                    var e = uwpe.entity;
-                    var equipmentUser = GameFramework.EquipmentUser.of(e);
-                    var wieldableIsEquipped = equipmentUser.entityIsInSocketWithNameWielding();
-                    return wieldableIsEquipped;
-                }, armAtShoulderLevel);
-                return armAndWieldableHidable;
-            }
             directionalAnimationsFromTiledImage(visualImageSource, imageSource, imageSourceSizeInTiles, tileSizeToDraw) {
                 var imageSourceSizeInPixels = imageSource.sizeInPixels;
                 var tileSizeInPixels = imageSourceSizeInPixels.clone().divide(imageSourceSizeInTiles);
@@ -98,99 +49,81 @@ var ThisCouldBeBetter;
                 [visualEyes, new GameFramework.VisualNone()], null);
                 return visualEyesBlinking;
             }
-            figure(name, bodyColor, headRadius, eyeRadius, limbThickness, hipsWidth, legLength, shouldersWidth, shouldersHeight, armLength) {
+            figure(name, bodyColor, headRadius, eyeRadius, limbThickness, hipsWidth, legLength, shouldersWidth, torsoLength, armLength) {
+                // Create body parts.
                 var eyesBlinking = this.eyesBlinking(eyeRadius);
-                var head = this.head(headRadius, bodyColor, eyeRadius, eyesBlinking);
-                var legs = this.legs(bodyColor, hipsWidth, limbThickness, legLength);
-                var arms = this.arms(bodyColor, shouldersWidth, shouldersHeight, limbThickness, armLength);
+                var head = this.figure_Head(headRadius, bodyColor, eyeRadius, eyesBlinking);
+                var legs = this.figure_Legs(bodyColor, hipsWidth, limbThickness, legLength);
+                var torso = this.figure_Torso(bodyColor, torsoLength, shouldersWidth, null, // waistWidthAndHeightAboveHips
+                hipsWidth);
+                var shouldersHeight = legLength + torsoLength;
+                var arms = this.figure_Arms(bodyColor, shouldersWidth, shouldersHeight, limbThickness, armLength);
+                // Compose the body parts.
+                var torsoRaisedAboveLegs = GameFramework.VisualOffset.fromNameOffsetAndChild("TorsoRaisedAboveLegs", GameFramework.Coords.fromXY(0, 0 - legLength), torso);
                 var shoulderHeightAsOffset = GameFramework.Coords.fromXY(0, 0 - shouldersHeight);
                 var headRaisedAboveShoulders = GameFramework.VisualOffset.fromNameOffsetAndChild("HeadRaisedAboveShoulders", shoulderHeightAsOffset, head);
                 var armsRaisedToShoulderHeight = GameFramework.VisualOffset.fromNameOffsetAndChild("armsRaisedToShoulderHeight", shoulderHeightAsOffset, arms);
                 var body = GameFramework.VisualGroup.fromNameAndChildren(name, [
                     legs,
+                    torsoRaisedAboveLegs,
                     armsRaisedToShoulderHeight,
                     headRaisedAboveShoulders
                 ]);
                 return body;
             }
-            figureWithNameColorAndDefaultProportions(name, bodyColor, headLength) {
-                var headRadius = headLength / 2;
-                var eyeRadius = headRadius / 2;
-                var shouldersWidth = headRadius * 2;
-                var torsoLength = 0;
-                var hipsWidth = shouldersWidth / 2;
-                var legLength = headRadius * 3 / 4;
-                var shouldersHeight = legLength + torsoLength;
-                var limbThickness = 2;
-                var armLength = headRadius * 1.25;
-                return this.figure(name, bodyColor, headRadius, eyeRadius, limbThickness, hipsWidth, legLength, shouldersWidth, shouldersHeight, armLength);
+            figure_Arms(skinColor, shoulderWidth, shoulderHeight, armThickness, armLength) {
+                var wieldable = this.figure_Wieldable();
+                // "RDLU" = "Right, Down, Left, Up".
+                var directionsFromNeckToShoulderRDLU = [
+                    GameFramework.Coords.fromXY(1, 0),
+                    GameFramework.Coords.fromXY(-1, 0),
+                    GameFramework.Coords.fromXY(-1, 0),
+                    GameFramework.Coords.fromXY(1, 0)
+                ].map(x => x.normalize());
+                var directionsFromShoulderToHandRDLU = [
+                    GameFramework.Coords.fromXY(1, 1),
+                    GameFramework.Coords.fromXY(-1, 1),
+                    GameFramework.Coords.fromXY(-1, 1),
+                    GameFramework.Coords.fromXY(1, 1)
+                ].map(x => x.normalize());
+                var visualsForArmRDLU = [];
+                var shoulderWidthHalf = shoulderWidth / 2;
+                for (var i = 0; i < directionsFromNeckToShoulderRDLU.length; i++) {
+                    var directionFromNeckToShoulder = directionsFromNeckToShoulderRDLU[i];
+                    var directionFromShoulderToHand = directionsFromShoulderToHandRDLU[i];
+                    var displacementFromShoulderToHand = directionFromShoulderToHand
+                        .multiplyScalar(armLength);
+                    var pathArm = GameFramework.Path.fromPoints([
+                        GameFramework.Coords.zeroes(),
+                        displacementFromShoulderToHand
+                    ]);
+                    var arm = GameFramework.VisualPath.fromPathColorAndThicknessOpen(pathArm, skinColor, armThickness);
+                    var wieldableInHand = GameFramework.VisualOffset.fromNameOffsetAndChild("WieldableInHand", displacementFromShoulderToHand.clone(), wieldable);
+                    var armHoldingWieldable = GameFramework.VisualGroup.fromNameAndChildren("ArmHoldingWieldable", [
+                        arm,
+                        wieldableInHand
+                    ]);
+                    var displacementFromNeckToShoulder = directionFromNeckToShoulder
+                        .multiplyScalar(shoulderWidthHalf);
+                    var armFromShoulder = GameFramework.VisualOffset.fromNameOffsetAndChild("ArmFromShoulder", displacementFromNeckToShoulder, armHoldingWieldable);
+                    visualsForArmRDLU
+                        .push(armFromShoulder);
+                }
+                var armDirectional = GameFramework.VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections(visualsForArmRDLU[1], visualsForArmRDLU);
+                var armAndWieldableHidable = GameFramework.VisualHidable.fromIsVisibleAndChild((uwpe) => {
+                    var e = uwpe.entity;
+                    var equipmentUser = GameFramework.EquipmentUser.of(e);
+                    var wieldableIsEquipped = equipmentUser.entityIsInSocketWithNameWielding();
+                    return wieldableIsEquipped;
+                }, armDirectional);
+                return armAndWieldableHidable;
             }
-            flame(dimension) {
-                var dimensionHalf = dimension / 2;
-                var colors = GameFramework.Color.Instances();
-                var flameVisualStatic = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
-                        GameFramework.Coords.fromXY(0, -dimension * 2),
-                        GameFramework.Coords.fromXY(dimension, 0),
-                        GameFramework.Coords.fromXY(-dimension, 0),
-                    ]), colors.Orange),
-                    GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
-                        GameFramework.Coords.fromXY(0, -dimension),
-                        GameFramework.Coords.fromXY(dimensionHalf, 0),
-                        GameFramework.Coords.fromXY(-dimensionHalf, 0),
-                    ]), colors.Yellow)
-                ]);
-                var flameVisualStaticSmall = flameVisualStatic
-                    .clone()
-                    .transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, .8, 1)));
-                var flameVisualStaticLarge = flameVisualStatic.clone().transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, 1.2, 1)));
-                var ticksPerFrame = 3;
-                var flameVisual = GameFramework.VisualAnimation.fromNameTicksToHoldFrameAndFramesRepeating("Flame", // name
-                [ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame], [
-                    flameVisualStaticSmall,
-                    flameVisualStatic,
-                    flameVisualStaticLarge,
-                    flameVisualStatic
-                ]);
-                return flameVisual;
-            }
-            head(headRadius, skinColor, eyeRadius, visualEyes) {
-                visualEyes = visualEyes || this.eyesBlinking(eyeRadius);
-                var visualEyesDirectional = new GameFramework.VisualDirectional(visualEyes, // visualForNoDirection
-                [
-                    GameFramework.VisualOffset.fromChildAndOffset(visualEyes, GameFramework.Coords.fromXY(1, 0).multiplyScalar(eyeRadius)),
-                    GameFramework.VisualOffset.fromChildAndOffset(visualEyes, GameFramework.Coords.fromXY(0, 1).multiplyScalar(eyeRadius)),
-                    GameFramework.VisualOffset.fromChildAndOffset(visualEyes, GameFramework.Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)),
-                    GameFramework.VisualOffset.fromChildAndOffset(visualEyes, GameFramework.Coords.fromXY(0, -1).multiplyScalar(eyeRadius))
-                ], null);
-                var head = GameFramework.VisualGroup.fromNameAndChildren("Head", [
-                    GameFramework.VisualCircle.fromRadiusAndColorFill(headRadius, skinColor),
-                    visualEyesDirectional
-                ]);
-                head = GameFramework.VisualOffset.fromNameOffsetAndChild("HeadRaisedToChin", GameFramework.Coords.fromXY(0, -headRadius), head);
-                return head;
-            }
-            ice(dimension) {
-                var dimensionHalf = dimension / 2;
-                var color = GameFramework.Color.Instances().Cyan;
-                var visual = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualPolygon.fromPathAndColors(GameFramework.Path.fromPoints([
-                        GameFramework.Coords.fromXY(-1, -1),
-                        GameFramework.Coords.fromXY(1, -1),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(-1, 1),
-                    ]).transform(GameFramework.Transform_Scale.fromScaleFactor(dimensionHalf)), null, // colorFill
-                    color // border
-                    ),
-                ]);
-                return visual;
-            }
-            legs(legColor, hipsWidth, legThickness, legLength) {
-                var legs = this.legsDirectional(legColor, hipsWidth, legThickness, legLength);
+            figure_Legs(legColor, hipsWidth, legThickness, legLength) {
+                var legs = this.figure_LegsDirectional(legColor, hipsWidth, legThickness, legLength);
                 var legsRaisedAboveGround = GameFramework.VisualOffset.fromNameOffsetAndChild("LegsRaisedAboveGround", GameFramework.Coords.fromXY(0, 0 - legLength), legs);
                 return legsRaisedAboveGround;
             }
-            legsDirectional(legColor, hipsWidth, legThickness, legLength) {
+            figure_LegsDirectional(legColor, hipsWidth, legThickness, legLength) {
                 var footLength = legLength * 2 / 3;
                 var hipsWidthHalf = hipsWidth / 2;
                 var footLengthHalf = footLength / 2;
@@ -199,19 +132,19 @@ var ThisCouldBeBetter;
                 var offsetsForHipsLeftAndRight = [offsetHipLeft, offsetHipRight];
                 var ticksPerStep = 2;
                 var ticksPerStepAsArray = [ticksPerStep, ticksPerStep];
-                var visualsLegsFacingDownStandingAndWalking = this.legsDirectional_StandingAndWalking_Down(legColor, legThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray);
+                var visualsLegsFacingDownStandingAndWalking = this.figure_LegsDirectional_StandingAndWalking_Down(legColor, legThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray);
                 var visualLegsFacingDownStanding = visualsLegsFacingDownStandingAndWalking[0];
                 var visualLegsFacingDownWalking = visualsLegsFacingDownStandingAndWalking[1];
-                var visualsLegsFacingUpStandingAndWalking = this.legsDirectional_StandingAndWalking_Up(legColor, legThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray);
+                var visualsLegsFacingUpStandingAndWalking = this.figure_LegsDirectional_StandingAndWalking_Up(legColor, legThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray);
                 var visualLegsFacingUpStanding = visualsLegsFacingUpStandingAndWalking[0];
                 var visualLegsFacingUpWalking = visualsLegsFacingUpStandingAndWalking[1];
-                var visualsLegsFacingLeftStandingAndWalking = this.legsDirectional_StandingAndWalking_Left(legColor, legThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray);
+                var visualsLegsFacingLeftStandingAndWalking = this.figure_LegsDirectional_StandingAndWalking_Left(legColor, legThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray);
                 var visualLegsFacingLeftStanding = visualsLegsFacingLeftStandingAndWalking[0];
                 var visualLegsFacingLeftWalking = visualsLegsFacingLeftStandingAndWalking[1];
-                var visualsLegsFacingRightStandingAndWalking = this.legsDirectional_StandingAndWalking_Right(legColor, legThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray);
+                var visualsLegsFacingRightStandingAndWalking = this.figure_LegsDirectional_StandingAndWalking_Right(legColor, legThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray);
                 var visualLegsFacingRightStanding = visualsLegsFacingRightStandingAndWalking[0];
                 var visualLegsFacingRightWalking = visualsLegsFacingRightStandingAndWalking[1];
-                var selectChildNames = (uwpe, d) => this.legsDirectional_SelectChildNames(uwpe, d);
+                var selectChildNames = (uwpe, d) => this.figure_LegsDirectional_SelectChildNames(uwpe, d);
                 var visualLegsDirectional = new GameFramework.VisualSelect(
                 // childrenByName
                 new Map([
@@ -226,7 +159,7 @@ var ThisCouldBeBetter;
                 ]), selectChildNames);
                 return visualLegsDirectional;
             }
-            legsDirectional_SelectChildNames(uwpe, d) {
+            figure_LegsDirectional_SelectChildNames(uwpe, d) {
                 var e = uwpe.entity;
                 var entityLoc = GameFramework.Locatable.of(e).loc;
                 var entityForward = entityLoc.orientation.forward;
@@ -264,7 +197,7 @@ var ThisCouldBeBetter;
                 return [childNameToSelect];
             }
             ;
-            legsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight) {
+            figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight) {
                 var legLengthHalf = legLength / 2;
                 var legTop = GameFramework.Coords.fromXY(0, 0).multiplyScalar(legLength);
                 var legBottom = GameFramework.Coords.fromXY(0, 1).multiplyScalar(legLength);
@@ -297,48 +230,81 @@ var ThisCouldBeBetter;
                 var visualsLegsStandingAndWalking = new Array(visualLegsStanding, visualLegsWalking);
                 return visualsLegsStandingAndWalking;
             }
-            legsDirectional_StandingAndWalking_Down(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray) {
+            figure_LegsDirectional_StandingAndWalking_Down(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray) {
                 var toeOffsetsFromAnklesLeftRight = [
                     GameFramework.Coords.fromXY(-1, 1),
                     GameFramework.Coords.fromXY(1, 1)
                 ];
-                return this.legsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight);
+                return this.figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight);
             }
-            legsDirectional_StandingAndWalking_Left(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray) {
+            figure_LegsDirectional_StandingAndWalking_Left(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray) {
                 var toeOffsetsFromAnklesLeftRight = [
                     GameFramework.Coords.fromXY(-2, 0),
                     GameFramework.Coords.fromXY(-2, 0)
                 ];
-                return this.legsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight);
+                return this.figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight);
             }
-            legsDirectional_StandingAndWalking_Right(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray) {
+            figure_LegsDirectional_StandingAndWalking_Right(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray) {
                 var toeOffsetsFromAnklesLeftRight = [
                     GameFramework.Coords.fromXY(2, 0),
                     GameFramework.Coords.fromXY(2, 0)
                 ];
-                return this.legsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight);
+                return this.figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight);
             }
-            legsDirectional_StandingAndWalking_Up(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray) {
+            figure_LegsDirectional_StandingAndWalking_Up(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray) {
                 var toeOffsetsFromAnklesLeftRight = [
                     GameFramework.Coords.fromXY(-1, -1),
                     GameFramework.Coords.fromXY(1, -1)
                 ];
-                return this.legsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight);
+                return this.figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStepAsArray, toeOffsetsFromAnklesLeftRight);
             }
-            sun(dimension) {
-                var color = GameFramework.Color.Instances().Yellow;
-                var rayThickness = 1;
-                var dimensionOblique = dimension * Math.sin(Math.PI / 4);
-                var sunVisual = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-dimension, 0), GameFramework.Coords.fromXY(dimension, 0), color, rayThickness),
-                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(0, -dimension), GameFramework.Coords.fromXY(0, dimension), color, rayThickness),
-                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-1, -1).multiplyScalar(dimensionOblique), GameFramework.Coords.fromXY(1, 1).multiplyScalar(dimensionOblique), color, rayThickness),
-                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-1, 1).multiplyScalar(dimensionOblique), GameFramework.Coords.fromXY(1, -1).multiplyScalar(dimensionOblique), color, rayThickness),
-                    GameFramework.VisualCircle.fromRadiusAndColorFill(dimension / 2, color),
+            figure_Head(headRadius, skinColor, eyeRadius, eyes) {
+                eyes = eyes || this.eyesBlinking(eyeRadius);
+                var eyesDirectional = new GameFramework.VisualDirectional(eyes, // visualForNoDirection
+                [
+                    GameFramework.VisualOffset.fromChildAndOffset(eyes, GameFramework.Coords.fromXY(1, 0).multiplyScalar(eyeRadius)),
+                    GameFramework.VisualOffset.fromChildAndOffset(eyes, GameFramework.Coords.fromXY(0, 1).multiplyScalar(eyeRadius)),
+                    GameFramework.VisualOffset.fromChildAndOffset(eyes, GameFramework.Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)),
+                    GameFramework.VisualOffset.fromChildAndOffset(eyes, GameFramework.Coords.fromXY(0, -1).multiplyScalar(eyeRadius))
+                ], null);
+                var headWithoutFeatures = GameFramework.VisualCircle.fromRadiusAndColorFill(headRadius, skinColor);
+                var head = GameFramework.VisualGroup.fromNameAndChildren("Head", [
+                    headWithoutFeatures,
+                    eyesDirectional
                 ]);
-                return sunVisual;
+                head = GameFramework.VisualOffset.fromNameOffsetAndChild("HeadRaisedToChin", GameFramework.Coords.fromXY(0, -headRadius), head);
+                return head;
             }
-            wieldable() {
+            figure_Torso(torsoColor, torsoLength, shouldersWidth, waistWidthAndHeightAboveHipsIfAny, hipsWidth) {
+                var torso;
+                if (torsoLength <= 0) {
+                    torso = GameFramework.VisualNone.Instance;
+                }
+                else {
+                    var shouldersWidthHalf = shouldersWidth / 2;
+                    var hipsWidthHalf = hipsWidth / 2;
+                    var torsoPathPoints = [
+                        GameFramework.Coords.fromXY(-shouldersWidthHalf, -torsoLength),
+                        GameFramework.Coords.fromXY(shouldersWidthHalf, -torsoLength),
+                        GameFramework.Coords.fromXY(hipsWidthHalf, 0),
+                        GameFramework.Coords.fromXY(-hipsWidthHalf, 0)
+                    ];
+                    if (waistWidthAndHeightAboveHipsIfAny != null) {
+                        var waistWidth = waistWidthAndHeightAboveHipsIfAny.x;
+                        var waistHeightAboveHips = waistWidthAndHeightAboveHipsIfAny.y;
+                        var waistWidthHalf = waistWidth / 2;
+                        var waistPointRight = GameFramework.Coords.fromXY(waistWidthHalf, -waistHeightAboveHips);
+                        torsoPathPoints.splice(2, 0, waistPointRight);
+                        var waistPointLeft = GameFramework.Coords.fromXY(-waistWidthHalf, -waistHeightAboveHips);
+                        torsoPathPoints.push(waistPointLeft);
+                    }
+                    var torsoPath = GameFramework.Path.fromPoints(torsoPathPoints);
+                    torso = GameFramework.VisualPolygonPreoriented.fromPathAndColorsFillAndBorder(torsoPath, torsoColor, null // border
+                    );
+                }
+                return torso;
+            }
+            figure_Wieldable() {
                 var wieldable = new GameFramework.VisualDynamic((uwpe) => {
                     var returnVisual = GameFramework.VisualNone.Instance;
                     var w = uwpe.world;
@@ -357,6 +323,75 @@ var ThisCouldBeBetter;
                 });
                 var wieldableAnchored = GameFramework.VisualAnchorOrientation.fromChild(wieldable);
                 return wieldableAnchored;
+            }
+            figureWithNameColorAndDefaultProportions(name, bodyColor, headLength) {
+                var headRadius = headLength / 2;
+                var eyeRadius = headRadius / 2;
+                var shouldersWidth = headRadius * 2;
+                var torsoLength = headLength * 3 / 4;
+                var hipsWidth = shouldersWidth * 5 / 8;
+                var legLength = headRadius * 3 / 4;
+                var limbThickness = 2;
+                var armLength = headRadius * 1.25;
+                var figure = this.figure(name, bodyColor, headRadius, eyeRadius, limbThickness, hipsWidth, legLength, shouldersWidth, torsoLength, armLength);
+                return figure;
+            }
+            flame(dimension) {
+                var dimensionHalf = dimension / 2;
+                var colors = GameFramework.Color.Instances();
+                var flameVisualStatic = GameFramework.VisualGroup.fromChildren([
+                    GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
+                        GameFramework.Coords.fromXY(0, -dimension * 2),
+                        GameFramework.Coords.fromXY(dimension, 0),
+                        GameFramework.Coords.fromXY(-dimension, 0),
+                    ]), colors.Orange),
+                    GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
+                        GameFramework.Coords.fromXY(0, -dimension),
+                        GameFramework.Coords.fromXY(dimensionHalf, 0),
+                        GameFramework.Coords.fromXY(-dimensionHalf, 0),
+                    ]), colors.Yellow)
+                ]);
+                var flameVisualStaticSmall = flameVisualStatic
+                    .clone()
+                    .transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, .8, 1)));
+                var flameVisualStaticLarge = flameVisualStatic.clone().transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, 1.2, 1)));
+                var ticksPerFrame = 3;
+                var flameVisual = GameFramework.VisualAnimation.fromNameTicksToHoldFrameAndFramesRepeating("Flame", // name
+                [ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame], [
+                    flameVisualStaticSmall,
+                    flameVisualStatic,
+                    flameVisualStaticLarge,
+                    flameVisualStatic
+                ]);
+                return flameVisual;
+            }
+            ice(dimension) {
+                var dimensionHalf = dimension / 2;
+                var color = GameFramework.Color.Instances().Cyan;
+                var visual = GameFramework.VisualGroup.fromChildren([
+                    GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(GameFramework.Path.fromPoints([
+                        GameFramework.Coords.fromXY(-1, -1),
+                        GameFramework.Coords.fromXY(1, -1),
+                        GameFramework.Coords.fromXY(1, 1),
+                        GameFramework.Coords.fromXY(-1, 1),
+                    ]).transform(GameFramework.Transform_Scale.fromScaleFactor(dimensionHalf)), null, // colorFill
+                    color // border
+                    ),
+                ]);
+                return visual;
+            }
+            sun(dimension) {
+                var color = GameFramework.Color.Instances().Yellow;
+                var rayThickness = 1;
+                var dimensionOblique = dimension * Math.sin(Math.PI / 4);
+                var sunVisual = GameFramework.VisualGroup.fromChildren([
+                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-dimension, 0), GameFramework.Coords.fromXY(dimension, 0), color, rayThickness),
+                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(0, -dimension), GameFramework.Coords.fromXY(0, dimension), color, rayThickness),
+                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-1, -1).multiplyScalar(dimensionOblique), GameFramework.Coords.fromXY(1, 1).multiplyScalar(dimensionOblique), color, rayThickness),
+                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-1, 1).multiplyScalar(dimensionOblique), GameFramework.Coords.fromXY(1, -1).multiplyScalar(dimensionOblique), color, rayThickness),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(dimension / 2, color),
+                ]);
+                return sunVisual;
             }
         }
         GameFramework.VisualBuilder = VisualBuilder;

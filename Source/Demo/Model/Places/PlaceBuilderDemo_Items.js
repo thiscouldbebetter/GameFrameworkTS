@@ -251,7 +251,7 @@ class PlaceBuilderDemo_Items {
         var colors = Color.Instances();
         var itemCrystalColor = colors.Cyan;
         var itemCrystalVisual = VisualGroup.fromChildren([
-            VisualPolygon.fromPathAndColors(Path.fromPoints([
+            VisualPolygon.fromPathAndColorsFillAndBorder(Path.fromPoints([
                 Coords.fromXY(1, 0),
                 Coords.fromXY(0, 1),
                 Coords.fromXY(-1, 0),
@@ -314,7 +314,7 @@ class PlaceBuilderDemo_Items {
             Coords.fromXY(-1, 1).normalize(), // directionMin
             .25, // angleSpannedInTurns
             colors.GreenDark, null)),
-            VisualPolygon.fromPathAndColors(Path.fromPoints([
+            VisualPolygon.fromPathAndColorsFillAndBorder(Path.fromPoints([
                 Coords.fromXY(1, 0),
                 Coords.fromXY(.3, .3),
                 Coords.fromXY(0, 1),

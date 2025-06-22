@@ -582,9 +582,9 @@ class PlaceBuilderDemo_Movers
 
 		var visualBody = new VisualAnchor
 		(
-			VisualPolygon.fromPathAndColors
+			VisualPolygon.fromPathAndColorsFillAndBorder
 			(
-				new Path(enemyVertices),
+				Path.fromPoints(enemyVertices),
 				enemyColor,
 				colors.Red // colorBorder
 			),
@@ -1720,7 +1720,7 @@ class PlaceBuilderDemo_Movers
 		playerHeadRadius: number
 	): VisualBase
 	{
-		var headLength = 15; // todo
+		var headLength = 12; // todo
 
 		var visualBuilder = new VisualBuilder();
 		var colors = Color.Instances();
