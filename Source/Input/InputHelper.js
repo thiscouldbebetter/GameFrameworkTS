@@ -166,28 +166,38 @@ var ThisCouldBeBetter;
                 if (this.keysToPreventDefaultsFor.indexOf(inputPressed) >= 0) {
                     event.preventDefault();
                 }
-                if (inputPressed == " ") {
+                /*
+                if (inputPressed == " ")
+                {
                     inputPressed = "_";
                 }
-                else if (inputPressed == "_") {
+                else if (inputPressed == "_")
+                {
                     inputPressed = "__";
                 }
-                else if (parseFloat(inputPressed) == null) {
+                else if (isNaN(inputPressed) == false)
+                {
                     inputPressed = "_" + inputPressed;
                 }
+                */
                 this.inputAdd(inputPressed);
             }
             handleEventKeyUp(event) {
                 var inputReleased = event.key;
-                if (inputReleased == " ") {
+                /*
+                if (inputReleased == " ")
+                {
                     inputReleased = "_";
                 }
-                else if (inputReleased == "_") {
+                else if (inputReleased == "_")
+                {
                     inputReleased = "__";
                 }
-                else if (parseFloat(inputReleased) == null) {
+                else if (isNaN(inputPressed) == false)
+                {
                     inputReleased = "_" + inputReleased;
                 }
+                */
                 this.inputRemove(inputReleased);
             }
             // events - mouse

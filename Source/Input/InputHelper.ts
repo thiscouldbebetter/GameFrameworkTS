@@ -260,6 +260,7 @@ export class InputHelper implements Platformable
 			event.preventDefault();
 		}
 
+		/*
 		if (inputPressed == " ")
 		{
 			inputPressed = "_";
@@ -268,10 +269,11 @@ export class InputHelper implements Platformable
 		{
 			inputPressed = "__";
 		}
-		else if (parseFloat(inputPressed) == null)
+		else if (isNaN(inputPressed) == false)
 		{
 			inputPressed = "_" + inputPressed;
 		}
+		*/
 
 		this.inputAdd(inputPressed);
 	}
@@ -279,6 +281,7 @@ export class InputHelper implements Platformable
 	handleEventKeyUp(event: KeyboardEvent): void
 	{
 		var inputReleased = event.key;
+		/*
 		if (inputReleased == " ")
 		{
 			inputReleased = "_";
@@ -287,10 +290,11 @@ export class InputHelper implements Platformable
 		{
 			inputReleased = "__";
 		}
-		else if (parseFloat(inputReleased) == null)
+		else if (isNaN(inputPressed) == false)
 		{
 			inputReleased = "_" + inputReleased;
 		}
+		*/
 
 		this.inputRemove(inputReleased);
 	}

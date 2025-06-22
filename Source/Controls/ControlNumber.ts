@@ -134,15 +134,9 @@ export class ControlNumber<TContext> extends ControlBase
 		else if 
 		(
 			actionNameToHandle.length == 1
-			|| actionNameToHandle.startsWith("_")
 		)
 		{
 			// Printable character.
-
-			if (actionNameToHandle.startsWith("_"))
-			{
-				actionNameToHandle = actionNameToHandle.substr(1);
-			}
 
 			if
 			(

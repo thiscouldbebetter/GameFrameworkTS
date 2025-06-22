@@ -39,7 +39,7 @@ var ThisCouldBeBetter;
                 this.MouseWheelDown = "MouseWheelDown";
                 this.MouseWheelUp = "MouseWheelUp";
                 this.Shift = "Shift";
-                this.Space = "_";
+                this.Space = "Space";
                 this.Tab = "Tab";
                 this._All =
                     [

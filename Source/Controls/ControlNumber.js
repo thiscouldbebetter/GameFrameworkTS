@@ -64,12 +64,8 @@ var ThisCouldBeBetter;
                     }
                     this.valueSet(valueNew);
                 }
-                else if (actionNameToHandle.length == 1
-                    || actionNameToHandle.startsWith("_")) {
+                else if (actionNameToHandle.length == 1) {
                     // Printable character.
-                    if (actionNameToHandle.startsWith("_")) {
-                        actionNameToHandle = actionNameToHandle.substr(1);
-                    }
                     if (this.numberOfDigitsMax() == null
                         || this.value.toString().length < this.numberOfDigitsMax()) {
                         var valueAsStringEdited = valueAsString.substr(0, this.cursorPos)

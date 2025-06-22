@@ -62,17 +62,8 @@ var ThisCouldBeBetter;
                         + text.substr(this.cursorPos + 1);
                     this.text(textEdited);
                 }
-                else if (actionNameToHandle.length == 1
-                    || actionNameToHandle.startsWith("_")) {
+                else if (actionNameToHandle.length == 1) {
                     // Printable character.
-                    if (actionNameToHandle.startsWith("_")) {
-                        if (actionNameToHandle == "_") {
-                            actionNameToHandle = " ";
-                        }
-                        else {
-                            actionNameToHandle = actionNameToHandle.substr(1);
-                        }
-                    }
                     if (this.numberOfCharsMax == null
                         || text.length < this.numberOfCharsMax) {
                         var textEdited = text.substr(0, this.cursorPos)

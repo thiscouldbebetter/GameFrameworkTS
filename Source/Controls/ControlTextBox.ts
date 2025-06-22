@@ -136,25 +136,9 @@ export class ControlTextBox<TContext> extends ControlBase
 
 			this.text(textEdited);
 		}
-		else if 
-		(
-			actionNameToHandle.length == 1
-			|| actionNameToHandle.startsWith("_")
-		)
+		else if (actionNameToHandle.length == 1)
 		{
 			// Printable character.
-
-			if (actionNameToHandle.startsWith("_"))
-			{
-				if (actionNameToHandle == "_")
-				{
-					actionNameToHandle = " ";
-				}
-				else
-				{
-					actionNameToHandle = actionNameToHandle.substr(1);
-				}
-			}
 
 			if
 			(
