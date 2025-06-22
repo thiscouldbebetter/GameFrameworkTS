@@ -814,11 +814,61 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		];
 
 		var a = (a: string, b: any) => new Action(a, b);
-		var atim = (a: string, b: string[]) =>
-			new ActionToInputsMapping(a, b, true);
+		var atim = (a: string, b: string) =>
+			new ActionToInputsMapping(a, [b], true);
 
 		var itemNPerform = (quickSlotNumber: number) =>
 			itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, quickSlotNumber);
+
+		var actions = 
+		[
+			a("Back", () => this.back(universe, venuePrev) ),
+
+			a("Up", () => this.up() ),
+			a("Down", () => this.down() ),
+			a("Split", () => this.split() ),
+			a("Join", () => this.join() ),
+			a("Sort", () => this.sort() ),
+			a("Drop", () => this.drop(uwpe) ),
+			a("Use", () => this.use(uwpe) ),
+
+			a("Item0", () => itemNPerform(null) ),
+			a("Item1", () => itemNPerform(1) ),
+			a("Item2", () => itemNPerform(2) ),
+			a("Item3", () => itemNPerform(3) ),
+			a("Item4", () => itemNPerform(4) ),
+			a("Item5", () => itemNPerform(5) ),
+			a("Item6", () => itemNPerform(6) ),
+			a("Item7", () => itemNPerform(7) ),
+			a("Item8", () => itemNPerform(8) ),
+			a("Item9", () => itemNPerform(9) ),
+		];
+
+		var inputNames = Input.Names();
+
+		var mappings =
+		[
+			atim("Back", inputNames.Escape),
+
+			atim("Up",		"["),
+			atim("Down",	"]"),
+			atim("Sort",	"\\"),
+			atim("Split",	"/"),
+			atim("Join",	"="),
+			atim("Drop",	inputNames.d),
+			atim("Use",		inputNames.e),
+
+			atim("Item0", inputNames._0),
+			atim("Item1", inputNames._1),
+			atim("Item2", inputNames._2),
+			atim("Item3", inputNames._3),
+			atim("Item4", inputNames._4),
+			atim("Item5", inputNames._5),
+			atim("Item6", inputNames._6),
+			atim("Item7", inputNames._7),
+			atim("Item8", inputNames._8),
+			atim("Item9", inputNames._9),
+		]
 
 		var returnValue = new ControlContainer
 		(
@@ -826,52 +876,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 			Coords.create(), // pos
 			sizeBase.clone(), // size
 			childControls,
-			[
-				a("Back", () => this.back(universe, venuePrev) ),
-
-				a("Up", () => this.up() ),
-				a("Down", () => this.down() ),
-				a("Split", () => this.split() ),
-				a("Join", () => this.join() ),
-				a("Sort", () => this.sort() ),
-				a("Drop", () => this.drop(uwpe) ),
-				a("Use", () => this.use(uwpe) ),
-
-				a("Item0", () => itemNPerform(null) ),
-				a("Item1", () => itemNPerform(1) ),
-				a("Item2", () => itemNPerform(2) ),
-				a("Item3", () => itemNPerform(3) ),
-				a("Item4", () => itemNPerform(4) ),
-				a("Item5", () => itemNPerform(5) ),
-				a("Item6", () => itemNPerform(6) ),
-				a("Item7", () => itemNPerform(7) ),
-				a("Item8", () => itemNPerform(8) ),
-				a("Item9", () => itemNPerform(9) ),
-			],
-
-			[
-				atim("Back", [ Input.Names().Escape ] ),
-
-				atim("Up", [ "[" ] ),
-				atim("Down", [ "]" ]),
-				atim("Sort", [ "\\" ]),
-				atim("Split", [ "/" ]),
-				atim("Join", [ "=" ]),
-				atim("Drop", [ "d" ]),
-				atim("Use", [ "e" ]),
-
-				atim("Item0", [ "_0" ] ),
-				atim("Item1", [ "_1" ] ),
-				atim("Item2", [ "_2" ] ),
-				atim("Item3", [ "_3" ] ),
-				atim("Item4", [ "_4" ] ),
-				atim("Item5", [ "_5" ] ),
-				atim("Item6", [ "_6" ] ),
-				atim("Item7", [ "_7" ] ),
-				atim("Item8", [ "_8" ] ),
-				atim("Item9", [ "_9" ] ),
-
-			]
+			actions,
+			mappings
 		);
 
 		if (includeTitleAndDoneButton)

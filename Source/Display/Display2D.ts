@@ -128,7 +128,7 @@ export class Display2D implements Display
 		var colorAsComponentsRGBA =
 			this.graphics.getImageData(pos.x, pos.y, 1, 1).data;
 
-		colorOut.overwriteWithComponentsRGBA255
+		colorOut.overwriteWithFractionsRgba255
 		(
 			colorAsComponentsRGBA
 		);

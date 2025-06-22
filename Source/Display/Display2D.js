@@ -65,7 +65,7 @@ var ThisCouldBeBetter;
                 // and, due to browser security features,
                 // doesn't work when running from file.
                 var colorAsComponentsRGBA = this.graphics.getImageData(pos.x, pos.y, 1, 1).data;
-                colorOut.overwriteWithComponentsRGBA255(colorAsComponentsRGBA);
+                colorOut.overwriteWithFractionsRgba255(colorAsComponentsRGBA);
                 return colorOut;
             }
             colorBackSet(value) {

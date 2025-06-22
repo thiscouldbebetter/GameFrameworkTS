@@ -412,7 +412,7 @@ export class MapOfCellsCellSourceDisplay<TCell extends Clonable<TCell>>
 				pixelIndexStart, pixelIndexStart + this._componentsPerPixel
 			);
 
-		colorOut.overwriteWithComponentsRGBA255(pixelAsComponents);
+		colorOut.overwriteWithFractionsRgba255(pixelAsComponents);
 
 		return colorOut;
 	}

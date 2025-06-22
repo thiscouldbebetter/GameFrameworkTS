@@ -7,7 +7,8 @@ class PlaceBuilderDemo_Actions
 	constructor(parent: PlaceBuilderDemo)
 	{
 		this.parent = parent;
-		this.font = FontNameAndHeight.fromHeightInPixels(this.parent.entityDimension);
+		this.font =
+			FontNameAndHeight.fromHeightInPixels(this.parent.entityDimension);
 	}
 
 	// actions
@@ -17,6 +18,9 @@ class PlaceBuilderDemo_Actions
 		var actionsAll = Action.Instances();
 
 		var a = (n: string, p: any) => new Action(n, p);
+
+		var uiisn = (uwpe: UniverseWorldPlaceEntities, n: number) =>
+			this.actionPerform_UseItemInSocketNumbered(uwpe, n);
 
 		var actions =
 		[
@@ -39,17 +43,17 @@ class PlaceBuilderDemo_Actions
 			a("Sneak", this.actionPerform_Sneak),
 			a("Use", this.actionPerform_Use),
 			a("Wait", this.actionPerform_Wait),
-			
-			a("Item0", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 0)),
-			a("Item1", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 1)),
-			a("Item2", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 2)),
-			a("Item3", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 3)),
-			a("Item4", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 4)),
-			a("Item5", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 5)),
-			a("Item6", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 6)),
-			a("Item7", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 7)),
-			a("Item8", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 8)),
-			a("Item9", (uwpe: UniverseWorldPlaceEntities) => EquipmentUser.of(uwpe.entity).useItemInSocketNumbered(uwpe, 9)),
+
+			a("Item0", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 0) ),
+			a("Item1", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 1) ),
+			a("Item2", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 2) ),
+			a("Item3", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 3) ),
+			a("Item4", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 4) ),
+			a("Item5", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 5) ),
+			a("Item6", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 6) ),
+			a("Item7", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 7) ),
+			a("Item8", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 8) ),
+			a("Item9", (uwpe: UniverseWorldPlaceEntities) => uiisn(uwpe, 9) ),
 		];
 
 		return actions;
@@ -76,7 +80,7 @@ class PlaceBuilderDemo_Actions
 				Movable.actionAccelerateDown().name,
 				[
 					inputNames.ArrowDown,
-					"s",
+					inputNames.s,
 					inputNames.GamepadMoveDown + "0"
 				],
 				inactivateFalse
@@ -86,7 +90,7 @@ class PlaceBuilderDemo_Actions
 				Movable.actionAccelerateLeft().name,
 				[
 					inputNames.ArrowLeft,
-					"a",
+					inputNames.a,
 					inputNames.GamepadMoveLeft + "0"
 				],
 				inactivateFalse
@@ -96,7 +100,7 @@ class PlaceBuilderDemo_Actions
 				Movable.actionAccelerateRight().name,
 				[
 					inputNames.ArrowRight,
-					"d",
+					inputNames.d,
 					inputNames.GamepadMoveRight + "0"
 				],
 				inactivateFalse
@@ -106,31 +110,31 @@ class PlaceBuilderDemo_Actions
 				Movable.actionAccelerateUp().name,
 				[
 					inputNames.ArrowUp,
-					"w",
+					inputNames.w,
 					inputNames.GamepadMoveUp + "0"
 				],
 				inactivateFalse
 			),
 
-			atim("Fire", 		[ "f", inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateTrue),
-			atim("Hide", 		[ "h", inputNames.GamepadButton0 + "3" ], inactivateFalse),
+			atim("Fire", 		[ inputNames.f, inputNames.Enter, inputNames.GamepadButton0 + "0" ], inactivateTrue),
+			atim("Hide", 		[ inputNames.h, inputNames.GamepadButton0 + "3" ], inactivateFalse),
 			atim("Jump", 		[ inputNames.Space, inputNames.GamepadButton0 + "1" ], inactivateTrue),
-			atim("Pick Up", 	[ "g", inputNames.GamepadButton0 + "4" ], inactivateTrue),
+			atim("Pick Up", 	[ inputNames.g, inputNames.GamepadButton0 + "4" ], inactivateTrue),
 			atim("Run", 		[ inputNames.Shift, inputNames.GamepadButton0 + "2" ], inactivateFalse),
 			atim("Sneak", 		[ inputNames.Control, inputNames.GamepadButton0 + "6" ], inactivateFalse),
-			atim("Use", 		[ "e", inputNames.GamepadButton0 + "5" ], inactivateTrue),
-			atim("Wait", 		[ "p" ], inactivateTrue),
+			atim("Use", 		[ inputNames.e, inputNames.GamepadButton0 + "5" ], inactivateTrue),
+			atim("Wait", 		[ inputNames.p ], inactivateTrue),
 
-			atim("Item0", 	[ "_0" ], inactivateTrue),
-			atim("Item1", 	[ "_1" ], inactivateTrue),
-			atim("Item2", 	[ "_2" ], inactivateTrue),
-			atim("Item3", 	[ "_3" ], inactivateTrue),
-			atim("Item4", 	[ "_4" ], inactivateTrue),
-			atim("Item5", 	[ "_5" ], inactivateTrue),
-			atim("Item6", 	[ "_6" ], inactivateTrue),
-			atim("Item7", 	[ "_7" ], inactivateTrue),
-			atim("Item8", 	[ "_8" ], inactivateTrue),
-			atim("Item9", 	[ "_9" ], inactivateTrue),
+			atim("Item0", 	[ inputNames._0 ], inactivateTrue),
+			atim("Item1", 	[ inputNames._1 ], inactivateTrue),
+			atim("Item2", 	[ inputNames._2 ], inactivateTrue),
+			atim("Item3", 	[ inputNames._3 ], inactivateTrue),
+			atim("Item4", 	[ inputNames._4 ], inactivateTrue),
+			atim("Item5", 	[ inputNames._5 ], inactivateTrue),
+			atim("Item6", 	[ inputNames._6 ], inactivateTrue),
+			atim("Item7", 	[ inputNames._7 ], inactivateTrue),
+			atim("Item8", 	[ inputNames._8 ], inactivateTrue),
+			atim("Item9", 	[ inputNames._9 ], inactivateTrue),
 
 			atim("Recording Start/Stop", [ "`" ], inactivateTrue),
 		];
@@ -310,6 +314,15 @@ class PlaceBuilderDemo_Actions
 			uwpe.entity2Set(entityToUse);
 			Usable.of(entityToUse).use(uwpe);
 		}
+	}
+
+	actionPerform_UseItemInSocketNumbered
+	(
+		uwpe: UniverseWorldPlaceEntities, socketIndex: number
+	): void
+	{
+		var equipmentUser = EquipmentUser.of(uwpe.entity);
+		equipmentUser.useItemInSocketNumbered(uwpe, socketIndex);
 	}
 
 	actionPerform_Wait(uwpe: UniverseWorldPlaceEntities): void

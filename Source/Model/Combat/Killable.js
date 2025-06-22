@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this.deathIsIgnored = false;
                 this.integritySetToMax();
             }
+            static fromDie(die) {
+                return new Killable(1, null, die);
+            }
             static fromIntegrityMaxDamageApplyAndDie(integrityMax, damageApply, die) {
                 return new Killable(integrityMax, damageApply, die);
             }

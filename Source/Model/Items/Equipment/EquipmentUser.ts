@@ -306,12 +306,13 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		var actor = uwpe.entity;
 		var equipmentUser = EquipmentUser.of(actor);
 		var socketName = "Item" + socketNumber;
-		var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
-		if (entityItemEquipped != null)
+		var itemEntityToUse =
+			equipmentUser.itemEntityInSocketWithName(socketName);
+		if (itemEntityToUse != null)
 		{
-			var itemEquipped = Item.of(entityItemEquipped);
-			uwpe.entity2Set(entityItemEquipped);
-			itemEquipped.use(uwpe);
+			var itemToUse = Item.of(itemEntityToUse);
+			uwpe.entity2Set(itemEntityToUse);
+			itemToUse.use(uwpe);
 		}
 		this.unequipItemsNoLongerHeld(uwpe);
 	}
@@ -477,82 +478,120 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 
 		var textEquipItemSelectedInQuickSlot = "EquipItemSelectedInQuickSlot";
 
+		var containerChildControls =
+		[
+			ControlLabel.fromPosSizeTextFontUncentered
+			(
+				Coords.fromXY(10, 5), // pos
+				Coords.fromXY(70, 25), // size
+				DataBinding.fromContext("Equippable:"),
+				fontSmall
+			),
+
+			listEquippables,
+
+			buttonEquip,
+
+			buttonUnequip,
+
+			ControlLabel.fromPosSizeTextFontUncentered
+			(
+				Coords.fromXY(100, 5), // pos
+				Coords.fromXY(100, 25), // size
+				DataBinding.fromContext("Equipped:"),
+				fontSmall
+			),
+
+			listEquipped,
+
+			ControlLabel.fromPosSizeTextFontCenteredHorizontally
+			(
+				Coords.fromXY(sizeBase.x / 2, 125), // pos
+				Coords.fromXY(sizeBase.x, 15), // size
+				DataBinding.fromContextAndGet
+				(
+					this,
+					(c: EquipmentUser) => c.statusMessage
+				), // text
+				fontSmall
+			)
+		];
+
 		var a = (a: string, b: any) => new Action(a, b);
+
+		var containerActions = 
+		[
+			a("Back", back),
+			a(
+				textEquipItemSelectedInQuickSlot + "0",
+				() => equipItemSelectedInQuickSlot(0)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "1",
+				() => equipItemSelectedInQuickSlot(1)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "2",
+				() => equipItemSelectedInQuickSlot(2)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "3",
+				() => equipItemSelectedInQuickSlot(3)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "4",
+				() => equipItemSelectedInQuickSlot(4)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "5",
+				() => equipItemSelectedInQuickSlot(5)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "6",
+				() => equipItemSelectedInQuickSlot(6)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "7",
+				() => equipItemSelectedInQuickSlot(7)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "8",
+				() => equipItemSelectedInQuickSlot(8)
+			),
+			a(
+				textEquipItemSelectedInQuickSlot + "9",
+				() => equipItemSelectedInQuickSlot(9)
+			)
+		];
+
 		var atim = (a: string, b: string[]) =>
 			new ActionToInputsMapping(a, b, true);
+
+		var inputNames = Input.Names();
+
+		var mappings =
+		[
+			atim("Back", [ Input.Names().Escape ] ),
+			atim(textEquipItemSelectedInQuickSlot + "0", [ inputNames._0 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "1", [ inputNames._1 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "2", [ inputNames._2 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "3", [ inputNames._3 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "4", [ inputNames._4 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "5", [ inputNames._5 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "6", [ inputNames._6 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "7", [ inputNames._7 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "8", [ inputNames._8 ] ),
+			atim(textEquipItemSelectedInQuickSlot + "9", [ inputNames._9 ] )
+		];
 
 		var returnValue = new ControlContainer
 		(
 			"Equip",
 			Coords.create(), // pos
 			sizeBase.clone(), // size
-			// children
-			[
-				ControlLabel.fromPosSizeTextFontUncentered
-				(
-					Coords.fromXY(10, 5), // pos
-					Coords.fromXY(70, 25), // size
-					DataBinding.fromContext("Equippable:"),
-					fontSmall
-				),
-
-				listEquippables,
-
-				buttonEquip,
-
-				buttonUnequip,
-
-				ControlLabel.fromPosSizeTextFontUncentered
-				(
-					Coords.fromXY(100, 5), // pos
-					Coords.fromXY(100, 25), // size
-					DataBinding.fromContext("Equipped:"),
-					fontSmall
-				),
-
-				listEquipped,
-
-				ControlLabel.fromPosSizeTextFontCenteredHorizontally
-				(
-					Coords.fromXY(sizeBase.x / 2, 125), // pos
-					Coords.fromXY(sizeBase.x, 15), // size
-					DataBinding.fromContextAndGet
-					(
-						this,
-						(c: EquipmentUser) => c.statusMessage
-					), // text
-					fontSmall
-				)
-			],
-
-			[
-				a("Back", back),
-				a(textEquipItemSelectedInQuickSlot + "0", () => equipItemSelectedInQuickSlot(0)),
-				a(textEquipItemSelectedInQuickSlot + "1", () => equipItemSelectedInQuickSlot(1)),
-				a(textEquipItemSelectedInQuickSlot + "2", () => equipItemSelectedInQuickSlot(2)),
-				a(textEquipItemSelectedInQuickSlot + "3", () => equipItemSelectedInQuickSlot(3)),
-				a(textEquipItemSelectedInQuickSlot + "4", () => equipItemSelectedInQuickSlot(4)),
-				a(textEquipItemSelectedInQuickSlot + "5", () => equipItemSelectedInQuickSlot(5)),
-				a(textEquipItemSelectedInQuickSlot + "6", () => equipItemSelectedInQuickSlot(6)),
-				a(textEquipItemSelectedInQuickSlot + "7", () => equipItemSelectedInQuickSlot(7)),
-				a(textEquipItemSelectedInQuickSlot + "8", () => equipItemSelectedInQuickSlot(8)),
-				a(textEquipItemSelectedInQuickSlot + "9", () => equipItemSelectedInQuickSlot(9))
-			],
-
-			[
-				atim("Back", [ Input.Names().Escape ] ),
-				atim(textEquipItemSelectedInQuickSlot + "0", [ "_0" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "1", [ "_1" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "2", [ "_2" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "3", [ "_3" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "4", [ "_4" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "5", [ "_5" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "6", [ "_6" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "7", [ "_7" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "8", [ "_8" ] ),
-				atim(textEquipItemSelectedInQuickSlot + "9", [ "_9" ] )
-			]
-
+			containerChildControls,
+			containerActions,
+			mappings
 		);
 
 		if (includeTitleAndDoneButton)

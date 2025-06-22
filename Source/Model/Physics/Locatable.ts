@@ -21,6 +21,12 @@ export class Locatable implements EntityProperty<Locatable>
 		return new Locatable(Disposition.default() );
 	}
 
+	static fromDisp(disp: Disposition): Locatable
+	{
+		// "Disposition" used to be named "Location".
+		return new Locatable(disp);
+	}
+
 	static fromLoc(loc: Disposition): Locatable
 	{
 		return new Locatable(loc);

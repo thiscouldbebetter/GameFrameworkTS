@@ -36,6 +36,9 @@ var ThisCouldBeBetter;
             static fromNameEncumbranceValueAndVisual(name, encumbrance, tradeValue, visual) {
                 return new ItemDefn(name, null, null, encumbrance, tradeValue, null, null, null, visual, null);
             }
+            static fromNameEncumbranceValueCategoryNameUseAndVisual(name, encumbrance, tradeValue, categoryName, use, visual) {
+                return new ItemDefn(name, null, null, encumbrance, tradeValue, null, [categoryName], use, visual, null);
+            }
             static fromNameEncumbranceValueCategoryNamesUseAndVisual(name, encumbrance, tradeValue, categoryNames, use, visual) {
                 return new ItemDefn(name, null, null, encumbrance, tradeValue, null, categoryNames, null, visual, null);
             }

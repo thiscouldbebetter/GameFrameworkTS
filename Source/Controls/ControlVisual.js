@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
-                this._entity = new GameFramework.Entity(this.name, [
+                this._entity = GameFramework.Entity.fromNameAndProperties(this.name, [
                     new GameFramework.Audible(),
                     GameFramework.Locatable.fromPos(this._drawPos),
                     GameFramework.Drawable.fromVisual(new GameFramework.VisualNone())

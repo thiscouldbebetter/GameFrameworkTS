@@ -4,30 +4,33 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Color {
-            constructor(name, code, componentsRGBA) {
+            constructor(name, code, fractionsRgba) {
                 this.name = name;
                 this.code = code;
-                this.componentsRGBA = componentsRGBA;
+                this.fractionsRgba = fractionsRgba;
             }
             static byName(colorName) {
                 return Color.Instances()._AllByName.get(colorName);
             }
             static create() {
-                return Color.fromRGB(0, 0, 0); // Black.
+                return Color.fromFractionsRgb(0, 0, 0); // Black.
             }
             static default() {
                 return Color.create();
             }
-            static fromRGB(red, green, blue) {
+            static fromFractionsRgb(red, green, blue) {
                 return new Color(null, null, [red, green, blue, 1]);
+            }
+            static fromFractionsRgba(red, green, blue, alpha) {
+                return new Color(null, null, [red, green, blue, alpha]);
             }
             static fromSystemColor(systemColor) {
                 var returnValue = new Color(systemColor, null, null);
                 returnValue._systemColor = systemColor;
                 return returnValue;
             }
-            static grayWithValue(value) {
-                return Color.fromRGB(value, value, value);
+            static grayWithValue(valueAsFraction) {
+                return Color.fromFractionsRgb(valueAsFraction, valueAsFraction, valueAsFraction);
             }
             static systemColorGet(color) {
                 return (color == null ? null : color.systemColor());
@@ -43,36 +46,37 @@ var ThisCouldBeBetter;
                 return this.interpolateWith(other, .5);
             }
             alpha() {
-                return this.componentsRGBA[3];
+                // Alpha is the opacity.
+                return this.fractionsRgba[3];
             }
             alphaSet(valueToSet) {
-                this.componentsRGBA[3] = valueToSet;
+                this.fractionsRgba[3] = valueToSet;
                 this._systemColor = null;
                 return this;
             }
-            componentsRGB() {
-                return this.componentsRGBA.slice(0, 3);
+            fractionsRgb() {
+                return this.fractionsRgba.slice(0, 3);
             }
             darken() {
                 return this.multiplyRGBScalar(.5);
             }
             isBlack() {
-                return (this.componentsRGB().some(x => x > 0) == false);
+                return (this.fractionsRgb().some(x => x > 0) == false);
             }
             isTransparent() {
                 return (this.alpha() < 1);
             }
             isWhite() {
-                return (this.componentsRGB().some(x => x < 1) == false);
+                return (this.fractionsRgb().some(x => x < 1) == false);
             }
             lighten() {
                 return this.multiplyRGBScalar(2);
             }
             multiplyRGBScalar(scalar) {
                 for (var i = 0; i < 3; i++) {
-                    this.componentsRGBA[i] *= scalar;
-                    if (this.componentsRGBA[i] > 1) {
-                        this.componentsRGBA[i] = 1;
+                    this.fractionsRgba[i] *= scalar;
+                    if (this.fractionsRgba[i] > 1) {
+                        this.fractionsRgba[i] = 1;
                     }
                 }
                 return this;
@@ -80,71 +84,71 @@ var ThisCouldBeBetter;
             systemColor() {
                 if (this._systemColor == null) {
                     this._systemColor =
-                        "rgba("
-                            + Math.floor(255 * this.componentsRGBA[0]) + ", "
-                            + Math.floor(255 * this.componentsRGBA[1]) + ", "
-                            + Math.floor(255 * this.componentsRGBA[2]) + ", "
-                            + this.componentsRGBA[3]
+                        "Rgba("
+                            + Math.floor(255 * this.fractionsRgba[0]) + ", "
+                            + Math.floor(255 * this.fractionsRgba[1]) + ", "
+                            + Math.floor(255 * this.fractionsRgba[2]) + ", "
+                            + this.fractionsRgba[3]
                             + ")";
                 }
                 return this._systemColor;
             }
             value() {
                 // This is "value" as in how dark or light the color is.
-                var returnValue = (this.componentsRGBA[0]
-                    + this.componentsRGBA[1]
-                    + this.componentsRGBA[2]) / 3;
+                var returnValue = (this.fractionsRgba[0]
+                    + this.fractionsRgba[1]
+                    + this.fractionsRgba[2]) / 3;
                 return returnValue;
             }
             valueMultiplyByScalar(scalar) {
                 // This is "value" as in how dark or light the color is.
                 for (var i = 0; i < 3; i++) {
-                    var component = this.componentsRGBA[i];
-                    component = Math.round(component * scalar);
-                    if (component > 1) {
-                        component = 1;
+                    var fraction = this.fractionsRgba[i];
+                    fraction = Math.round(fraction * scalar);
+                    if (fraction > 1) {
+                        fraction = 1;
                     }
-                    this.componentsRGBA[i] = component;
+                    this.fractionsRgba[i] = fraction;
                 }
                 return this;
             }
             // Clonable.
             clone() {
-                return new Color(this.name, this.code, this.componentsRGBA.slice());
+                return new Color(this.name, this.code, this.fractionsRgba.slice());
             }
             overwriteWith(other) {
                 this.name = other.name;
                 this.code = other.code;
-                GameFramework.ArrayHelper.overwriteWithNonClonables(this.componentsRGBA, other.componentsRGBA);
+                GameFramework.ArrayHelper.overwriteWithNonClonables(this.fractionsRgba, other.fractionsRgba);
                 this._systemColor = null;
                 return this;
             }
-            overwriteWithComponentsRGBA255(otherAsComponentsRGBA255) {
-                this.componentsRGBA[0] = otherAsComponentsRGBA255[0] / 255;
-                this.componentsRGBA[1] = otherAsComponentsRGBA255[1] / 255;
-                this.componentsRGBA[2] = otherAsComponentsRGBA255[2] / 255;
-                this.componentsRGBA[3] = otherAsComponentsRGBA255[3] / 255; // Alpha is integer <= 255 in this case.
+            overwriteWithFractionsRgba255(otherAsFractionsRgba255) {
+                this.fractionsRgba[0] = otherAsFractionsRgba255[0] / 255;
+                this.fractionsRgba[1] = otherAsFractionsRgba255[1] / 255;
+                this.fractionsRgba[2] = otherAsFractionsRgba255[2] / 255;
+                this.fractionsRgba[3] = otherAsFractionsRgba255[3] / 255; // Alpha is integer <= 255 in this case.
                 return this;
             }
             // Interpolatable.
             interpolateWith(other, fractionOfProgressTowardOther) {
                 var fractionOfProgressTowardOtherReversed = 1 - fractionOfProgressTowardOther;
-                var componentsRGBAThis = this.componentsRGBA;
-                var componentsRGBAOther = other.componentsRGBA;
-                var componentsRGBAInterpolated = new Array();
-                for (var i = 0; i < componentsRGBAThis.length; i++) {
-                    var componentThis = componentsRGBAThis[i];
-                    var componentOther = componentsRGBAOther[i];
-                    var componentInterpolated = componentThis * fractionOfProgressTowardOtherReversed
-                        + componentOther * fractionOfProgressTowardOther;
-                    componentsRGBAInterpolated[i] = componentInterpolated;
-                    componentsRGBAThis[i] = componentInterpolated;
+                var fractionsRgbaThis = this.fractionsRgba;
+                var fractionsRgbaOther = other.fractionsRgba;
+                var fractionsRgbaInterpolated = new Array();
+                for (var i = 0; i < fractionsRgbaThis.length; i++) {
+                    var fractionThis = fractionsRgbaThis[i];
+                    var fractionOther = fractionsRgbaOther[i];
+                    var fractionInterpolated = fractionThis * fractionOfProgressTowardOtherReversed
+                        + fractionOther * fractionOfProgressTowardOther;
+                    fractionsRgbaInterpolated[i] = fractionInterpolated;
+                    fractionsRgbaThis[i] = fractionInterpolated;
                 }
                 return this;
             }
         }
         // constants
-        Color.NumberOfComponentsRGBA = 4;
+        Color.NumberOfComponentsRgba = 4;
         GameFramework.Color = Color;
         class Color_Instances {
             constructor() {

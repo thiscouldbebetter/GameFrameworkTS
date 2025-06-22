@@ -36,7 +36,8 @@ export class WebGLContext
 		gl.viewport(0, 0, canvas.width, canvas.height);
 
 		var colorBackground = Color.Instances().Black;
-		var colorBackgroundComponentsRGBA = colorBackground.componentsRGBA;
+		var colorBackgroundComponentsRGBA =
+			colorBackground.fractionsRgba; // todo
 		gl.clearColor
 		(
 			colorBackgroundComponentsRGBA[0],

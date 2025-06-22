@@ -23,7 +23,7 @@ var ThisCouldBeBetter;
                 */
                 gl.viewport(0, 0, canvas.width, canvas.height);
                 var colorBackground = GameFramework.Color.Instances().Black;
-                var colorBackgroundComponentsRGBA = colorBackground.componentsRGBA;
+                var colorBackgroundComponentsRGBA = colorBackground.fractionsRgba; // todo
                 gl.clearColor(colorBackgroundComponentsRGBA[0], colorBackgroundComponentsRGBA[1], colorBackgroundComponentsRGBA[2], colorBackgroundComponentsRGBA[3]);
                 gl.enable(gl.CULL_FACE);
                 gl.enable(gl.DEPTH_TEST);

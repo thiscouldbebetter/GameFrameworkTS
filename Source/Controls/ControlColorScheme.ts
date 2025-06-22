@@ -69,7 +69,7 @@ export class ControlColorScheme_Instances
 		this.Default = new ControlColorScheme
 		(
 			"Default", // name
-			Color.fromRGB(240/255, 240/255, 240/255), // colorBackground
+			Color.fromFractionsRgb(240/255, 240/255, 240/255), // colorBackground
 			colors.White, // colorFill
 			colors.Gray, // colorBorder
 			colors.GrayLight // colorDisabled

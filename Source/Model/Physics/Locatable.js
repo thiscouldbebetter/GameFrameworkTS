@@ -13,6 +13,10 @@ var ThisCouldBeBetter;
             static default() {
                 return new Locatable(GameFramework.Disposition.default());
             }
+            static fromDisp(disp) {
+                // "Disposition" used to be named "Location".
+                return new Locatable(disp);
+            }
             static fromLoc(loc) {
                 return new Locatable(loc);
             }

@@ -97,6 +97,26 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 		);
 	}
 
+	static fromNameEncumbranceValueCategoryNameUseAndVisual
+	(
+		name: string,
+		encumbrance: number,
+		tradeValue: number,
+		categoryName: string,
+		use: (uwpe: UniverseWorldPlaceEntities) => void,
+		visual: VisualBase
+	): ItemDefn
+	{
+		return new ItemDefn
+		(
+			name, null, null,
+			encumbrance, tradeValue, null,
+			[ categoryName ],
+			use,
+			visual, null
+		);
+	}
+
 	static fromNameEncumbranceValueCategoryNamesUseAndVisual
 	(
 		name: string,
@@ -109,7 +129,10 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 	{
 		return new ItemDefn
 		(
-			name, null, null, encumbrance, tradeValue, null, categoryNames, null, visual, null
+			name, null, null,
+			encumbrance, tradeValue, null,
+			categoryNames, null,
+			visual, null
 		);
 	}
 

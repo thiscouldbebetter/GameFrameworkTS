@@ -7,6 +7,9 @@ class PlaceBuilderDemo_Items
 
 	entityDimensionHalf: number;
 
+	itemDefnCategoryNameConsumable: string;
+	itemDefnCategoryNameWieldable: string
+
 	constructor(parent: PlaceBuilderDemo)
 	{
 		this.parent = parent;
@@ -14,6 +17,9 @@ class PlaceBuilderDemo_Items
 		this.font = FontNameAndHeight.fromHeightInPixels(this.entityDimension);
 
 		this.entityDimensionHalf = this.entityDimension / 2;
+
+		this.itemDefnCategoryNameConsumable = "Consumable";
+		this.itemDefnCategoryNameWieldable = "Wieldable";
 	}
 
 	itemDefnsBuild()
@@ -92,12 +98,12 @@ class PlaceBuilderDemo_Items
 			itemArmorName, itemArmorColor, itemArmorVisual
 		);
 
-		var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemArmorName,
 			50,
 			30,
-			[ "Armor" ],
+			"Armor",
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemArmorVisual
 		);
@@ -140,12 +146,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemArmorName,
 			50,
 			30,
-			[ "Armor" ],
+			"Armor",
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemArmorVisual
 		);
@@ -272,12 +278,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemBomb = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemBomb = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemBombName,
 			5,
 			10,
-			[ "Wieldable" ],
+			this.itemDefnCategoryNameWieldable,
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemBombVisual
 		);
@@ -436,12 +442,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemBow = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemBow = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemBowName,
 			5,
 			100,
-			[ "Wieldable" ],
+			this.itemDefnCategoryNameWieldable,
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemBowVisual
 		);
@@ -507,12 +513,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemBread = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemBread = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemBreadName,
 			1,
 			4,
-			[ "Consumable" ], // categoryNames
+			this.itemDefnCategoryNameConsumable,
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var entityUser = uwpe.entity;
@@ -683,12 +689,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemDoughnut = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemDoughnut = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemDoughnutName,
 			1,
 			4,
-			[ "Consumable" ], // categoryNames
+			this.itemDefnCategoryNameConsumable,
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var entityUser = uwpe.entity;
@@ -808,10 +814,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemFruit = new ItemDefn
+		var itemFruit = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
-			itemFruitName, null, null, .25, 6, null, // name, appearance, descripton, mass, value, stackSize
-			[ "Consumable" ], // categoryNames
+			itemFruitName,
+			.25,
+			6,
+			this.itemDefnCategoryNameConsumable,
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var entityUser = uwpe.entity;
@@ -822,8 +830,7 @@ class PlaceBuilderDemo_Items
 				itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
 				itemHolder.statusMessageSet("You eat the fruit.");
 			},
-			itemFruitVisual,
-			null // toEntity
+			itemFruitVisual
 		);
 
 		return itemFruit;
@@ -834,17 +841,6 @@ class PlaceBuilderDemo_Items
 		var itemGrassName = "Grass";
 		var itemGrassVisual = VisualGroup.fromChildren
 		([
-			/*
-			VisualOffset.fromChildAndOffset
-			(
-				new VisualImageScaled
-				(
-					new VisualImageFromLibrary("Grain"),
-					Coords.fromXY(.3, 1).multiplyScalar(this.entityDimension * 2) // sizeScaled
-				),
-				Coords.fromXY(-.075, -1.2).multiplyScalar(this.entityDimension)
-			),
-			*/
 			new VisualImageScaled
 			(
 				Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
@@ -1190,12 +1186,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemMeat = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemMeat = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemMeatName,
 			1,
 			10,
-			[ "Consumable" ], // categoryNames
+			this.itemDefnCategoryNameConsumable,
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var entityUser = uwpe.entity;
@@ -1253,12 +1249,12 @@ class PlaceBuilderDemo_Items
 			itemMedicineName, itemMedicineColor, itemMedicineVisual
 		);
 
-		var itemMedicine = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemMedicine = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemMedicineName,
 			1,
 			10,
-			[ "Consumable" ], // categoryNames
+			this.itemDefnCategoryNameConsumable,
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var entityUser = uwpe.entity;
@@ -1368,12 +1364,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemPick = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemPick = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemPickName,
 			1,
 			30,
-			[ "Wieldable" ],
+			this.itemDefnCategoryNameWieldable,
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemPickVisual
 		);
@@ -1434,12 +1430,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemPotion = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemPotion = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemPotionName,
 			1,
 			10,
-			[ "Consumable" ], // categoryNames
+			this.itemDefnCategoryNameConsumable,
 			(uwpe: UniverseWorldPlaceEntities) => // use
 			{
 				var entityUser = uwpe.entity;
@@ -1495,11 +1491,13 @@ class PlaceBuilderDemo_Items
 			itemShovelName, itemShovelColor, itemShovelVisual
 		);
 
-		var itemShovel = new ItemDefn
+		var itemShovel = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
-			itemShovelName, null, null, 1, 30, null, [ "Wieldable" ],
+			itemShovelName,
+			1, 30,
+			this.itemDefnCategoryNameWieldable,
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
-			itemShovelVisual, null
+			itemShovelVisual
 		);
 
 		return itemShovel;
@@ -1559,12 +1557,12 @@ class PlaceBuilderDemo_Items
 			);
 		}
 
-		var itemSpeedBoots = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemSpeedBoots = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			itemSpeedBootsName,
 			10,
 			30,
-			[ "Accessory" ],
+			"Accessory",
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemSpeedBootsVisual
 		);
@@ -1575,12 +1573,12 @@ class PlaceBuilderDemo_Items
 	sword(): ItemDefn
 	{
 		var itemSwordVisual = this.sword_Visual(Color.Instances().GrayLight);
-		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			"Sword",
 			10,
 			100,
-			[ "Wieldable" ],
+			this.itemDefnCategoryNameWieldable,
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemSwordVisual
 		);
@@ -1589,7 +1587,7 @@ class PlaceBuilderDemo_Items
 
 	sword_Visual(bladeColor: Color): VisualBase
 	{
-		var hiltColor = Color.fromRGB(0, .5, .5);
+		var hiltColor = Color.fromFractionsRgb(0, .5, .5);
 
 		var itemSwordVisualBladePath = Path.fromPoints
 		([
@@ -1669,12 +1667,12 @@ class PlaceBuilderDemo_Items
 		var bladeColor = Color.Instances().Cyan;
 		var damageTypeName = "Cold";
 		var itemSwordVisual = this.sword_Visual(bladeColor);
-		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			"Sword" + damageTypeName,
 			10,
 			100,
-			[ "Wieldable" ],
+			this.itemDefnCategoryNameWieldable,
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemSwordVisual
 		);
@@ -1686,12 +1684,12 @@ class PlaceBuilderDemo_Items
 		var bladeColor = Color.Instances().Yellow;
 		var damageTypeName = "Heat";
 		var itemSwordVisual = this.sword_Visual(bladeColor);
-		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual
+		var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual
 		(
 			"Sword" + damageTypeName,
 			10,
 			100,
-			[ "Wieldable" ],
+			this.itemDefnCategoryNameWieldable,
 			(uwpe: UniverseWorldPlaceEntities) => this.itemUseEquip(uwpe),
 			itemSwordVisual
 		);
@@ -1794,7 +1792,10 @@ class PlaceBuilderDemo_Items
 			itemTorchName,
 			1,
 			4,
-			[ "Wieldable", "Consumable" ], // categoryNames
+			[
+				this.itemDefnCategoryNameWieldable,
+				this.itemDefnCategoryNameConsumable
+			], // categoryNames
 			null, // use
 			itemTorchVisual
 		);

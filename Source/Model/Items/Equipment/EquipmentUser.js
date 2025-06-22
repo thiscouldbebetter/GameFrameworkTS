@@ -183,11 +183,11 @@ var ThisCouldBeBetter;
                 var actor = uwpe.entity;
                 var equipmentUser = EquipmentUser.of(actor);
                 var socketName = "Item" + socketNumber;
-                var entityItemEquipped = equipmentUser.itemEntityInSocketWithName(socketName);
-                if (entityItemEquipped != null) {
-                    var itemEquipped = GameFramework.Item.of(entityItemEquipped);
-                    uwpe.entity2Set(entityItemEquipped);
-                    itemEquipped.use(uwpe);
+                var itemEntityToUse = equipmentUser.itemEntityInSocketWithName(socketName);
+                if (itemEntityToUse != null) {
+                    var itemToUse = GameFramework.Item.of(itemEntityToUse);
+                    uwpe.entity2Set(itemEntityToUse);
+                    itemToUse.use(uwpe);
                 }
                 this.unequipItemsNoLongerHeld(uwpe);
             }
@@ -263,12 +263,7 @@ var ThisCouldBeBetter;
                 var back = () => universe.venueTransitionTo(venuePrev);
                 var equipItemSelectedInQuickSlot = (quickSlotNumber) => this.equipItemSelectedInQuickSlot(uwpe, quickSlotNumber);
                 var textEquipItemSelectedInQuickSlot = "EquipItemSelectedInQuickSlot";
-                var a = (a, b) => new GameFramework.Action(a, b);
-                var atim = (a, b) => new GameFramework.ActionToInputsMapping(a, b, true);
-                var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.create(), // pos
-                sizeBase.clone(), // size
-                // children
-                [
+                var containerChildControls = [
                     GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(10, 5), // pos
                     GameFramework.Coords.fromXY(70, 25), // size
                     GameFramework.DataBinding.fromContext("Equippable:"), fontSmall),
@@ -283,7 +278,9 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(sizeBase.x, 15), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontSmall)
-                ], [
+                ];
+                var a = (a, b) => new GameFramework.Action(a, b);
+                var containerActions = [
                     a("Back", back),
                     a(textEquipItemSelectedInQuickSlot + "0", () => equipItemSelectedInQuickSlot(0)),
                     a(textEquipItemSelectedInQuickSlot + "1", () => equipItemSelectedInQuickSlot(1)),
@@ -295,19 +292,25 @@ var ThisCouldBeBetter;
                     a(textEquipItemSelectedInQuickSlot + "7", () => equipItemSelectedInQuickSlot(7)),
                     a(textEquipItemSelectedInQuickSlot + "8", () => equipItemSelectedInQuickSlot(8)),
                     a(textEquipItemSelectedInQuickSlot + "9", () => equipItemSelectedInQuickSlot(9))
-                ], [
+                ];
+                var atim = (a, b) => new GameFramework.ActionToInputsMapping(a, b, true);
+                var inputNames = GameFramework.Input.Names();
+                var mappings = [
                     atim("Back", [GameFramework.Input.Names().Escape]),
-                    atim(textEquipItemSelectedInQuickSlot + "0", ["_0"]),
-                    atim(textEquipItemSelectedInQuickSlot + "1", ["_1"]),
-                    atim(textEquipItemSelectedInQuickSlot + "2", ["_2"]),
-                    atim(textEquipItemSelectedInQuickSlot + "3", ["_3"]),
-                    atim(textEquipItemSelectedInQuickSlot + "4", ["_4"]),
-                    atim(textEquipItemSelectedInQuickSlot + "5", ["_5"]),
-                    atim(textEquipItemSelectedInQuickSlot + "6", ["_6"]),
-                    atim(textEquipItemSelectedInQuickSlot + "7", ["_7"]),
-                    atim(textEquipItemSelectedInQuickSlot + "8", ["_8"]),
-                    atim(textEquipItemSelectedInQuickSlot + "9", ["_9"])
-                ]);
+                    atim(textEquipItemSelectedInQuickSlot + "0", [inputNames._0]),
+                    atim(textEquipItemSelectedInQuickSlot + "1", [inputNames._1]),
+                    atim(textEquipItemSelectedInQuickSlot + "2", [inputNames._2]),
+                    atim(textEquipItemSelectedInQuickSlot + "3", [inputNames._3]),
+                    atim(textEquipItemSelectedInQuickSlot + "4", [inputNames._4]),
+                    atim(textEquipItemSelectedInQuickSlot + "5", [inputNames._5]),
+                    atim(textEquipItemSelectedInQuickSlot + "6", [inputNames._6]),
+                    atim(textEquipItemSelectedInQuickSlot + "7", [inputNames._7]),
+                    atim(textEquipItemSelectedInQuickSlot + "8", [inputNames._8]),
+                    atim(textEquipItemSelectedInQuickSlot + "9", [inputNames._9])
+                ];
+                var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.create(), // pos
+                sizeBase.clone(), // size
+                containerChildControls, containerActions, mappings);
                 if (includeTitleAndDoneButton) {
                     var childControls = returnValue.children;
                     childControls.splice(0, 0, GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(100, -5), // pos

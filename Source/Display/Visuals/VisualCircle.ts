@@ -52,6 +52,16 @@ export class VisualCircle implements Visual<VisualCircle>
 		return new VisualCircle(radius, colorFill, colorBorder, null);
 	}
 
+	static fromRadiusColorBorderAndThickness
+	(
+		radius: number,
+		colorBorder: Color,
+		borderThickness: number
+	): VisualCircle
+	{
+		return new VisualCircle(radius, null, colorBorder, borderThickness);
+	}
+
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void

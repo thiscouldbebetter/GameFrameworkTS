@@ -62,11 +62,11 @@ export class Camera implements EntityProperty<Camera>
 	{
 		return new Camera
 		(
-			new Coords(400, 300, 1000), // viewSize
+			Coords.fromXYZ(400, 300, 1000), // viewSize
 			150, // focalLength
-			Disposition.fromPosAndOrientation
+			Disposition.fromPosAndOri
 			(
-				new Coords(0, 0, -150),
+				Coords.fromXYZ(0, 0, -150),
 				Orientation.Instances().ForwardZDownY.clone()
 			),
 			entitiesInViewSort

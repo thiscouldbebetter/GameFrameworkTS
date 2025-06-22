@@ -189,7 +189,7 @@ var ThisCouldBeBetter;
                 var pixelIndexStart = (pos.y * this.displaySizeInPixels.x + pos.x)
                     * this._componentsPerPixel;
                 var pixelAsComponents = this.displayPixelsAsComponentArrayRGBA.slice(pixelIndexStart, pixelIndexStart + this._componentsPerPixel);
-                colorOut.overwriteWithComponentsRGBA255(pixelAsComponents);
+                colorOut.overwriteWithFractionsRgba255(pixelAsComponents);
                 return colorOut;
             }
             overwriteWith(other) {

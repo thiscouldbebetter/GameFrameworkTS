@@ -222,7 +222,7 @@ export class Display3D implements Display
 
 						vertexColorsAsFloatArray = vertexColorsAsFloatArray.concat
 						(
-							vertexColor.componentsRGBA
+							vertexColor.fractionsRgba
 						);
 
 						var vertexNormal = faceNormal;
@@ -273,7 +273,7 @@ export class Display3D implements Display
 			gl.vertexAttribPointer
 			(
 				shaderProgram.vertexColorAttribute,
-				Color.NumberOfComponentsRGBA,
+				Color.NumberOfComponentsRgba,
 				gl.FLOAT,
 				false,
 				0,

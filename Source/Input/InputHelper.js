@@ -166,38 +166,10 @@ var ThisCouldBeBetter;
                 if (this.keysToPreventDefaultsFor.indexOf(inputPressed) >= 0) {
                     event.preventDefault();
                 }
-                /*
-                if (inputPressed == " ")
-                {
-                    inputPressed = "_";
-                }
-                else if (inputPressed == "_")
-                {
-                    inputPressed = "__";
-                }
-                else if (isNaN(inputPressed) == false)
-                {
-                    inputPressed = "_" + inputPressed;
-                }
-                */
                 this.inputAdd(inputPressed);
             }
             handleEventKeyUp(event) {
                 var inputReleased = event.key;
-                /*
-                if (inputReleased == " ")
-                {
-                    inputReleased = "_";
-                }
-                else if (inputReleased == "_")
-                {
-                    inputReleased = "__";
-                }
-                else if (isNaN(inputPressed) == false)
-                {
-                    inputReleased = "_" + inputReleased;
-                }
-                */
                 this.inputRemove(inputReleased);
             }
             // events - mouse

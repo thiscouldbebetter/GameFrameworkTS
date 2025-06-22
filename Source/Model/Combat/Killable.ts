@@ -32,6 +32,14 @@ export class Killable implements EntityProperty<Killable>
 		this.integritySetToMax();
 	}
 
+	static fromDie
+	(
+		die: (uwpe: UniverseWorldPlaceEntities) => void
+	): Killable
+	{
+		return new Killable(1, null, die);
+	}
+
 	static fromIntegrityMaxDamageApplyAndDie
 	(
 		integrityMax: number,

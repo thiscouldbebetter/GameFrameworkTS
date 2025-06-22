@@ -28,7 +28,7 @@ export class ControlVisual extends ControlBase
 
 		// Helper variables.
 		this._drawPos = Coords.create();
-		this._entity = new Entity
+		this._entity = Entity.fromNameAndProperties
 		(
 			this.name,
 			[

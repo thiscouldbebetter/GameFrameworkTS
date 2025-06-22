@@ -26,6 +26,9 @@ var ThisCouldBeBetter;
             static fromRadiusAndColors(radius, colorFill, colorBorder) {
                 return new VisualCircle(radius, colorFill, colorBorder, null);
             }
+            static fromRadiusColorBorderAndThickness(radius, colorBorder, borderThickness) {
+                return new VisualCircle(radius, null, colorBorder, borderThickness);
+            }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.

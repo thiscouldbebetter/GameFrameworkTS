@@ -23,9 +23,9 @@ var ThisCouldBeBetter;
                 return place.entitiesByPropertyName(Camera.name)[0];
             }
             static fromEntitiesInViewSort(entitiesInViewSort) {
-                return new Camera(new GameFramework.Coords(400, 300, 1000), // viewSize
+                return new Camera(GameFramework.Coords.fromXYZ(400, 300, 1000), // viewSize
                 150, // focalLength
-                GameFramework.Disposition.fromPosAndOrientation(new GameFramework.Coords(0, 0, -150), GameFramework.Orientation.Instances().ForwardZDownY.clone()), entitiesInViewSort);
+                GameFramework.Disposition.fromPosAndOri(GameFramework.Coords.fromXYZ(0, 0, -150), GameFramework.Orientation.Instances().ForwardZDownY.clone()), entitiesInViewSort);
             }
             static of(entity) {
                 return entity.propertyByName(Camera.name);

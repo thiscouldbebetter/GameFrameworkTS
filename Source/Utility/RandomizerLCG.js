@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
                 Math.pow(2.0, 31) // modulus
                 );
             }
+            static fromSeed(seed) {
+                return new RandomizerLCG(seed, null, null, null);
+            }
             // Randomizer implementation.
             fraction() {
                 this.currentRandom =

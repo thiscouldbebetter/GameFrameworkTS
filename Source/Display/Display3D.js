@@ -94,7 +94,7 @@ var ThisCouldBeBetter;
                                 var vertex = faceVertices[vertexIndex];
                                 vertexPositionsAsFloatArray = vertexPositionsAsFloatArray.concat(vertex.dimensions());
                                 var vertexColor = faceMaterial.colorFill;
-                                vertexColorsAsFloatArray = vertexColorsAsFloatArray.concat(vertexColor.componentsRGBA);
+                                vertexColorsAsFloatArray = vertexColorsAsFloatArray.concat(vertexColor.fractionsRgba);
                                 var vertexNormal = faceNormal;
                                 /*
                                 // todo
@@ -121,7 +121,7 @@ var ThisCouldBeBetter;
                     var colorBuffer = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexColorsAsFloatArray), gl.STATIC_DRAW);
-                    gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, GameFramework.Color.NumberOfComponentsRGBA, gl.FLOAT, false, 0, 0);
+                    gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, GameFramework.Color.NumberOfComponentsRgba, gl.FLOAT, false, 0, 0);
                     var normalBuffer = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormalsAsFloatArray), gl.STATIC_DRAW);

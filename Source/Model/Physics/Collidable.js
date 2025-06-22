@@ -43,7 +43,13 @@ var ThisCouldBeBetter;
                 colliderAtRest, null, // entityPropertyNamesToCollideWith
                 collideEntities);
             }
-            static from3(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
+            static fromColliderPropertyNameAndCollide(colliderAtRest, entityPropertyToCollideWithName, collideEntities) {
+                return Collidable.fromColliderPropertyNameToCollideWithAndCollide(colliderAtRest, entityPropertyToCollideWithName, collideEntities);
+            }
+            static fromColliderPropertyNameToCollideWithAndCollide(colliderAtRest, entityPropertyNameToCollideWith, collideEntities) {
+                return new Collidable(false, null, colliderAtRest, [entityPropertyNameToCollideWith], collideEntities);
+            }
+            static fromColliderPropertyNamesToCollideWithAndCollide(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
                 return new Collidable(false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
             }
             static fromShape(shapeAtRest) {

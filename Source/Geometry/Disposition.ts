@@ -68,12 +68,12 @@ export class Disposition
 		return new Disposition(pos, Orientation.default(), null);
 	}
 
-	static fromPosAndOrientation
+	static fromPosAndOri
 	(
-		pos: Coords, orientation: Orientation
+		pos: Coords, ori: Orientation
 	): Disposition
 	{
-		return new Disposition(pos, orientation, null);
+		return new Disposition(pos, ori, null);
 	}
 
 	static fromPosAndVel(pos: Coords, vel: Coords): Disposition

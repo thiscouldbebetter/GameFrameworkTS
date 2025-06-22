@@ -20,6 +20,11 @@ export class Usable implements EntityProperty<Usable>
 		return place.entitiesByPropertyName(Usable.name);
 	}
 
+	static fromUse(use: (uwpe: UniverseWorldPlaceEntities) => void): Usable
+	{
+		return new Usable(use);
+	}
+
 	static of(entity: Entity): Usable
 	{
 		return entity.propertyByName(Usable.name) as Usable;

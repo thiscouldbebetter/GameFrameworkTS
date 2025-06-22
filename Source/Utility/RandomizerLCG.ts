@@ -38,6 +38,11 @@ export class RandomizerLCG extends Randomizer
 		);
 	}
 
+	static fromSeed(seed: number): RandomizerLCG
+	{
+		return new RandomizerLCG(seed, null, null, null);
+	}
+
 	// Randomizer implementation.
 
 	fraction(): number

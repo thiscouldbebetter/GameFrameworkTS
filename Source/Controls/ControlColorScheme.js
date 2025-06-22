@@ -29,7 +29,7 @@ var ThisCouldBeBetter;
             constructor() {
                 var colors = GameFramework.Color.Instances();
                 this.Default = new ControlColorScheme("Default", // name
-                GameFramework.Color.fromRGB(240 / 255, 240 / 255, 240 / 255), // colorBackground
+                GameFramework.Color.fromFractionsRgb(240 / 255, 240 / 255, 240 / 255), // colorBackground
                 colors.White, // colorFill
                 colors.Gray, // colorBorder
                 colors.GrayLight // colorDisabled

@@ -5,6 +5,8 @@ class PlaceBuilderDemo_Items {
         this.entityDimension = this.parent.entityDimension;
         this.font = FontNameAndHeight.fromHeightInPixels(this.entityDimension);
         this.entityDimensionHalf = this.entityDimension / 2;
+        this.itemDefnCategoryNameConsumable = "Consumable";
+        this.itemDefnCategoryNameWieldable = "Wieldable";
     }
     itemDefnsBuild() {
         var itemDefns = [
@@ -63,7 +65,7 @@ class PlaceBuilderDemo_Items {
             VisualPolygon.fromPathAndColorFill(path, itemArmorColor)
         ]);
         this.parent.textWithColorAddToVisual(itemArmorName, itemArmorColor, itemArmorVisual);
-        var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemArmorName, 50, 30, ["Armor"], (uwpe) => this.itemUseEquip(uwpe), itemArmorVisual);
+        var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemArmorName, 50, 30, "Armor", (uwpe) => this.itemUseEquip(uwpe), itemArmorVisual);
         return itemArmor;
     }
     armorEnhanced() {
@@ -82,7 +84,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemArmorVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemArmorName, this.font, itemArmorColor)));
         }
-        var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemArmorName, 50, 30, ["Armor"], (uwpe) => this.itemUseEquip(uwpe), itemArmorVisual);
+        var itemArmor = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemArmorName, 50, 30, "Armor", (uwpe) => this.itemUseEquip(uwpe), itemArmorVisual);
         return itemArmor;
     }
     arrow() {
@@ -131,7 +133,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemBombVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor(itemBombName, this.font, itemBombColor)));
         }
-        var itemBomb = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemBombName, 5, 10, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemBombVisual);
+        var itemBomb = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemBombName, 5, 10, this.itemDefnCategoryNameWieldable, (uwpe) => this.itemUseEquip(uwpe), itemBombVisual);
         return itemBomb;
     }
     book() {
@@ -194,7 +196,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemBowVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor(itemBowName, this.font, itemBowColor)));
         }
-        var itemBow = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemBowName, 5, 100, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemBowVisual);
+        var itemBow = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemBowName, 5, 100, this.itemDefnCategoryNameWieldable, (uwpe) => this.itemUseEquip(uwpe), itemBowVisual);
         return itemBow;
     }
     bread() {
@@ -219,8 +221,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemBreadVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextImmediateFontAndColor(itemBreadName, this.font, itemBreadColor)));
         }
-        var itemBread = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemBreadName, 1, 4, ["Consumable"], // categoryNames
-        (uwpe) => // use
+        var itemBread = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemBreadName, 1, 4, this.itemDefnCategoryNameConsumable, (uwpe) => // use
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
@@ -291,8 +292,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemDoughnutVisualBody.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor(itemDoughnutName, this.font, itemDoughnutColor)));
         }
-        var itemDoughnut = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemDoughnutName, 1, 4, ["Consumable"], // categoryNames
-        (uwpe) => // use
+        var itemDoughnut = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemDoughnutName, 1, 4, this.itemDefnCategoryNameConsumable, (uwpe) => // use
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
@@ -342,9 +342,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemFruitVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemFruitName, this.font, itemFruitColor)));
         }
-        var itemFruit = new ItemDefn(itemFruitName, null, null, .25, 6, null, // name, appearance, descripton, mass, value, stackSize
-        ["Consumable"], // categoryNames
-        (uwpe) => // use
+        var itemFruit = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemFruitName, .25, 6, this.itemDefnCategoryNameConsumable, (uwpe) => // use
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
@@ -353,24 +351,12 @@ class PlaceBuilderDemo_Items {
             var itemHolder = ItemHolder.of(entityUser);
             itemHolder.itemSubtractDefnNameAndQuantity(item.defnName, 1);
             itemHolder.statusMessageSet("You eat the fruit.");
-        }, itemFruitVisual, null // toEntity
-        );
+        }, itemFruitVisual);
         return itemFruit;
     }
     grass() {
         var itemGrassName = "Grass";
         var itemGrassVisual = VisualGroup.fromChildren([
-            /*
-            VisualOffset.fromChildAndOffset
-            (
-                new VisualImageScaled
-                (
-                    new VisualImageFromLibrary("Grain"),
-                    Coords.fromXY(.3, 1).multiplyScalar(this.entityDimension * 2) // sizeScaled
-                ),
-                Coords.fromXY(-.075, -1.2).multiplyScalar(this.entityDimension)
-            ),
-            */
             new VisualImageScaled(Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
             VisualImageFromLibrary.fromImageName("Grass")),
         ]);
@@ -489,8 +475,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemMeatVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 1.5), VisualText.fromTextImmediateFontAndColor(itemMeatName, this.font, itemMeatColor)));
         }
-        var itemMeat = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemMeatName, 1, 10, ["Consumable"], // categoryNames
-        (uwpe) => // use
+        var itemMeat = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemMeatName, 1, 10, this.itemDefnCategoryNameConsumable, (uwpe) => // use
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
@@ -524,8 +509,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemMedicineColor)
         ]);
         this.parent.textWithColorAddToVisual(itemMedicineName, itemMedicineColor, itemMedicineVisual);
-        var itemMedicine = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemMedicineName, 1, 10, ["Consumable"], // categoryNames
-        (uwpe) => // use
+        var itemMedicine = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemMedicineName, 1, 10, this.itemDefnCategoryNameConsumable, (uwpe) => // use
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
@@ -571,7 +555,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemPickVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor(itemPickName, this.font, itemPickColor)));
         }
-        var itemPick = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemPickName, 1, 30, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemPickVisual);
+        var itemPick = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemPickName, 1, 30, this.itemDefnCategoryNameWieldable, (uwpe) => this.itemUseEquip(uwpe), itemPickVisual);
         return itemPick;
     }
     potion() {
@@ -599,8 +583,7 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemPotionVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemPotionName, this.font, itemPotionColor)));
         }
-        var itemPotion = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemPotionName, 1, 10, ["Consumable"], // categoryNames
-        (uwpe) => // use
+        var itemPotion = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemPotionName, 1, 10, this.itemDefnCategoryNameConsumable, (uwpe) => // use
          {
             var entityUser = uwpe.entity;
             var entityItem = uwpe.entity2;
@@ -628,7 +611,7 @@ class PlaceBuilderDemo_Items {
             ]).transform(Transform_Scale.fromScalar(this.entityDimension)), itemShovelColor)
         ]);
         this.parent.textWithColorAddToVisual(itemShovelName, itemShovelColor, itemShovelVisual);
-        var itemShovel = new ItemDefn(itemShovelName, null, null, 1, 30, null, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemShovelVisual, null);
+        var itemShovel = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemShovelName, 1, 30, this.itemDefnCategoryNameWieldable, (uwpe) => this.itemUseEquip(uwpe), itemShovelVisual);
         return itemShovel;
     }
     speedBoots() {
@@ -653,16 +636,16 @@ class PlaceBuilderDemo_Items {
         if (this.parent.visualsHaveText) {
             itemSpeedBootsVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor(itemSpeedBootsName, this.font, itemAccessoryColor)));
         }
-        var itemSpeedBoots = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemSpeedBootsName, 10, 30, ["Accessory"], (uwpe) => this.itemUseEquip(uwpe), itemSpeedBootsVisual);
+        var itemSpeedBoots = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual(itemSpeedBootsName, 10, 30, "Accessory", (uwpe) => this.itemUseEquip(uwpe), itemSpeedBootsVisual);
         return itemSpeedBoots;
     }
     sword() {
         var itemSwordVisual = this.sword_Visual(Color.Instances().GrayLight);
-        var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual("Sword", 10, 100, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual);
+        var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual("Sword", 10, 100, this.itemDefnCategoryNameWieldable, (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual);
         return itemSword;
     }
     sword_Visual(bladeColor) {
-        var hiltColor = Color.fromRGB(0, .5, .5);
+        var hiltColor = Color.fromFractionsRgb(0, .5, .5);
         var itemSwordVisualBladePath = Path.fromPoints([
             // blade
             Coords.fromXY(-0.4, 0.2),
@@ -707,14 +690,14 @@ class PlaceBuilderDemo_Items {
         var bladeColor = Color.Instances().Cyan;
         var damageTypeName = "Cold";
         var itemSwordVisual = this.sword_Visual(bladeColor);
-        var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual("Sword" + damageTypeName, 10, 100, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual);
+        var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual("Sword" + damageTypeName, 10, 100, this.itemDefnCategoryNameWieldable, (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual);
         return itemSword;
     }
     swordHeat() {
         var bladeColor = Color.Instances().Yellow;
         var damageTypeName = "Heat";
         var itemSwordVisual = this.sword_Visual(bladeColor);
-        var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual("Sword" + damageTypeName, 10, 100, ["Wieldable"], (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual);
+        var itemSword = ItemDefn.fromNameEncumbranceValueCategoryNameUseAndVisual("Sword" + damageTypeName, 10, 100, this.itemDefnCategoryNameWieldable, (uwpe) => this.itemUseEquip(uwpe), itemSwordVisual);
         return itemSword;
     }
     toolset() {
@@ -746,7 +729,10 @@ class PlaceBuilderDemo_Items {
             VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * .7), itemTorchVisualFlame)
         ]);
         this.parent.textWithColorAddToVisual(itemTorchName, itemTorchColor, itemTorchVisual);
-        var itemTorch = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemTorchName, 1, 4, ["Wieldable", "Consumable"], // categoryNames
+        var itemTorch = ItemDefn.fromNameEncumbranceValueCategoryNamesUseAndVisual(itemTorchName, 1, 4, [
+            this.itemDefnCategoryNameWieldable,
+            this.itemDefnCategoryNameConsumable
+        ], // categoryNames
         null, // use
         itemTorchVisual);
         return itemTorch;

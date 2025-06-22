@@ -22,7 +22,7 @@ class PlaceBuilderDemo // Main.
     }
     buildBase(size, placeNameToReturnTo) {
         this.build_Interior("Base", size, placeNameToReturnTo);
-        var entityPosRange = new Box(size.clone().half(), size.clone().subtract(this.marginSize));
+        var entityPosRange = Box.fromCenterAndSize(size.clone().half(), size.clone().subtract(this.marginSize));
         var randomizer = this.randomizer;
         var entityDefns = this.entityDefnsByName;
         var e = this.entities;
@@ -99,7 +99,7 @@ class PlaceBuilderDemo // Main.
         var randomizerSeed = this.randomizer.fraction();
         var networkNodeCount = 24;
         var network = Network.random(networkNodeCount, this.randomizer);
-        network = network.transform(new Transform_Scale(size));
+        network = network.transform(Transform_Scale.fromScaleFactors(size));
         //var tunnelsVisual = new VisualNetwork(network);
         var tunnelsVisual = VisualGroup.fromChildren([]);
         var wallThickness = 4; // todo
@@ -108,7 +108,7 @@ class PlaceBuilderDemo // Main.
         var nodes = network.nodes;
         for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
-            var visualWallNode = VisualOffset.fromOffsetAndChild(node.pos.clone(), new VisualCircle(tunnelWidth, null, color, wallThickness));
+            var visualWallNode = VisualOffset.fromOffsetAndChild(node.pos.clone(), VisualCircle.fromRadiusColorBorderAndThickness(tunnelWidth, color, wallThickness));
             tunnelsVisual.children.push(visualWallNode);
         }
         var links = network.links;
@@ -128,7 +128,7 @@ class PlaceBuilderDemo // Main.
             var visualWallLeft = new VisualLine(tunnelMidlineToWallLeft.clone().add(node0Pos).add(nodeCenterToTunnel), tunnelMidlineToWallLeft.clone().add(node1Pos).subtract(nodeCenterToTunnel), color, wallThickness);
             tunnelsVisual.children.push(visualWallLeft);
         }
-        var tunnelsEntity = new Entity("Tunnels", [
+        var tunnelsEntity = Entity.fromNameAndProperties("Tunnels", [
             Drawable.fromVisual(tunnelsVisual),
             Locatable.create()
         ]);
@@ -254,16 +254,17 @@ class PlaceBuilderDemo // Main.
             "~~~~~~~~~~~~........::::::::::::",
             "~~~~~~~~~~~~.......:::::::::::::",
         ];
-        var mapSizeInCells = new Coords(mapCellSourceAsStrings[0].length, mapCellSourceAsStrings.length, 1);
+        var mapSizeInCells = Coords.fromXYZ(mapCellSourceAsStrings[0].length, mapCellSourceAsStrings.length, 1);
         var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
         var mapCellSizeHalf = mapCellSize.clone().half();
-        var entityExitPosRange = new Box(mapCellSize.clone().half(), null);
+        var entityExitPosRange = Box.fromCenterAndSize(mapCellSize.clone().half(), Coords.create() // ?
+        );
         var exit = this.entityBuildFromDefn(this.entityDefnsByName.get("Exit"), entityExitPosRange, this.randomizer);
         var exitPortal = Portal.of(exit);
         exitPortal.destinationPlaceName = placeNameToReturnTo;
         exitPortal.destinationEntityName = this.name;
         this.entities.push(exit);
-        var cellCollider = new Box(mapCellSizeHalf.clone(), mapCellSize);
+        var cellCollider = Box.fromCenterAndSize(mapCellSizeHalf.clone(), mapCellSize);
         var cellCollide = (uwpe) => {
             var e0 = uwpe.entity;
             var traversable = Traversable.of(e0);
@@ -275,8 +276,7 @@ class PlaceBuilderDemo // Main.
                 }
             }
         };
-        var cellCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
-        0, cellCollider, [Playable.name], cellCollide);
+        var cellCollidable = Collidable.fromColliderPropertyNameAndCollide(cellCollider, Playable.name, cellCollide);
         var neighborOffsets = [
             // e, se, s, sw, w, nw, n, ne
             Coords.fromXY(1, 0), Coords.fromXY(1, 1), Coords.fromXY(0, 1),
@@ -681,20 +681,20 @@ class PlaceBuilderDemo // Main.
         var visualBackgroundDimension = 100;
         var visualBackgroundCellSize = new Coords(.5, .5, .01).multiplyScalar(visualBackgroundDimension);
         var visualBackgroundBottom = new VisualRepeating(visualBackgroundCellSize, camera.viewSize.clone(), // viewSize
-        new VisualRectangle(visualBackgroundCellSize, null, new Color(null, null, [1, 1, 1, 0.02]), null), true // expandViewStartAndEndByCell
+        VisualRectangle.fromSizeAndColorBorder(visualBackgroundCellSize, Color.fromFractionsRgba(1, 1, 1, 0.02)), true // expandViewStartAndEndByCell
         );
-        var entityBackgroundBottom = new Entity("BackgroundBottom", [
+        var entityBackgroundBottom = Entity.fromNameAndProperties("BackgroundBottom", [
             new Locatable(Disposition.fromPos(new Coords(0, 0, camera.focalLength))),
             Drawable.fromVisual(visualBackgroundBottom),
         ]);
         returnValues.push(entityBackgroundBottom);
         visualBackgroundCellSize =
-            new Coords(1, 1, .01).multiplyScalar(visualBackgroundDimension);
+            Coords.fromXYZ(1, 1, .01).multiplyScalar(visualBackgroundDimension);
         var visualBackgroundTop = new VisualRepeating(visualBackgroundCellSize, // cellSize
         camera.viewSize.clone(), // viewSize
         new VisualRectangle(visualBackgroundCellSize, null, new Color(null, null, [1, 1, 1, 0.06]), null), true // expandViewStartAndEndByCell
         );
-        var entityBackgroundTop = new Entity("BackgroundTop", [
+        var entityBackgroundTop = Entity.fromNameAndProperties("BackgroundTop", [
             Locatable.create(),
             Drawable.fromVisual(visualBackgroundTop),
         ]);
@@ -747,9 +747,9 @@ class PlaceBuilderDemo // Main.
         if (this.visualsHaveText) {
             goalVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor("Exit", this.font, goalColor)));
         }
-        var goalEntity = new Entity("Goal", [
-            new Locatable(goalLoc),
-            Collidable.fromCollider(new Box(Coords.create(), entitySize)),
+        var goalEntity = Entity.fromNameAndProperties("Goal", [
+            Locatable.fromDisp(goalLoc),
+            Collidable.fromCollider(Box.fromSize(entitySize)),
             Drawable.fromVisual(goalVisual),
             new Goal(numberOfKeysToUnlockGoal),
         ]);
@@ -763,10 +763,10 @@ class PlaceBuilderDemo // Main.
         var itemKeyVisual = this.itemDefnsByName.get(itemDefnKeyName).visual;
         for (var i = 0; i < numberOfKeysToUnlockGoal; i++) {
             var itemKeyPos = Coords.create().randomize(this.randomizer).multiply(sizeMinusMargins).add(marginSize);
-            var itemKeyCollider = new Sphere(Coords.create(), entityDimensionHalf);
-            var itemKeyEntity = new Entity(itemDefnKeyName + i, [
-                new Item(itemDefnKeyName, 1),
-                new Locatable(Disposition.fromPos(itemKeyPos)),
+            var itemKeyCollider = Sphere.fromRadius(entityDimensionHalf);
+            var itemKeyEntity = Entity.fromNameAndProperties(itemDefnKeyName + i, [
+                Item.fromDefnName(itemDefnKeyName),
+                Locatable.fromPos(itemKeyPos),
                 Collidable.fromCollider(itemKeyCollider),
                 Drawable.fromVisual(itemKeyVisual),
             ]);
@@ -780,9 +780,9 @@ class PlaceBuilderDemo // Main.
          {
             var place = uwpe.place;
             var placeAsPlaceRoom = place;
-            var randomizer = new RandomizerLCG(placeAsPlaceRoom.randomizerSeed, null, null, null);
+            var randomizer = RandomizerLCG.fromSeed(placeAsPlaceRoom.randomizerSeed);
             var placeSize = place.size();
-            var entityPosRange = new Box(placeSize.clone().half(), placeSize.clone());
+            var entityPosRange = Box.fromCenterAndSize(placeSize.clone().half(), placeSize.clone());
             var entitiesCreated = placeBuilder.entitiesBuildFromDefnAndCount(entityDefn, entityCount, null, entityPosRange, randomizer);
             place.entitiesToSpawnAdd(entitiesCreated);
         }, (uwpe) => // unload
@@ -791,7 +791,7 @@ class PlaceBuilderDemo // Main.
             var entitiesToRemove = p.entitiesAll().filter((x) => x.name.startsWith("Mine"));
             p.entitiesToRemoveAdd(entitiesToRemove);
         });
-        var returnValue = new Entity("Loader" + entityDefn.name, [
+        var returnValue = Entity.fromNameAndProperties("Loader" + entityDefn.name, [
             loadable
         ]);
         return returnValue;
@@ -837,10 +837,10 @@ class PlaceBuilderDemo // Main.
             var wallSize;
             var isNorthOrSouthWall = (i % 2 == 1);
             if (isNorthOrSouthWall) {
-                wallSize = new Coords(this.size.x, wallThickness, 1);
+                wallSize = Coords.fromXYZ(this.size.x, wallThickness, 1);
             }
             else {
-                wallSize = new Coords(wallThickness, this.size.y, 1);
+                wallSize = Coords.fromXYZ(wallThickness, this.size.y, 1);
             }
             var wallPos = wallSize.clone().half().clearZ();
             var isEastOrSouthWall = (i < 2);
@@ -856,12 +856,9 @@ class PlaceBuilderDemo // Main.
                     wallSize.y = wallSize.y / 2 - doorwayWidthHalf;
                 }
             }
-            var wallCollider = new Box(Coords.create(), wallSize);
+            var wallCollider = Box.fromSize(wallSize);
             var wallObstacle = new Obstacle();
-            var wallCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
-            0, wallCollider, [
-                Movable.name
-            ], (uwpe) => wallObstacle.collide(uwpe));
+            var wallCollidable = Collidable.fromColliderPropertyNameAndCollide(wallCollider, Movable.name, (uwpe) => wallObstacle.collide(uwpe));
             var wallBoundable = Boundable.fromCollidable(wallCollidable);
             var wallVisual = VisualRectangle.fromSizeAndColorFill(wallSize, wallColor);
             var numberOfWallPartsOnSide = (isNeighborConnected ? 2 : 1);
@@ -883,8 +880,8 @@ class PlaceBuilderDemo // Main.
                         }
                     }
                 }
-                var wallPartLoc = new Disposition(wallPartPos, null, null);
-                var wallEntity = new Entity("ObstacleWall" + i + "_" + d, [
+                var wallPartLoc = Disposition.fromPos(wallPartPos);
+                var wallEntity = Entity.fromNameAndProperties("ObstacleWall" + i + "_" + d, [
                     wallBoundable,
                     wallCollidable,
                     Drawable.fromVisual(wallVisual),
@@ -905,12 +902,10 @@ class PlaceBuilderDemo // Main.
                 var neighborPos = placePos.clone().add(neighborOffset);
                 var neighborName = placeNamePrefix + neighborPos.toStringXY();
                 var portal = new Portal(neighborName, "PortalToNeighbor" + ((i + 2) % 4), neighborOffset.clone().double());
-                var portalBox = new Box(Coords.create(), portalSize);
-                var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
-                0, // ticks
-                portalBox, [Playable.name], portalCollide);
-                var locatable = new Locatable(new Disposition(portalPos, null, null));
-                var portalEntity = new Entity("PortalToNeighbor" + i, [
+                var portalBox = Box.fromSize(portalSize);
+                var collidable = Collidable.fromColliderPropertyNameAndCollide(portalBox, Playable.name, portalCollide);
+                var locatable = Locatable.fromPos(portalPos);
+                var portalEntity = Entity.fromNameAndProperties("PortalToNeighbor" + i, [
                     Boundable.fromCollidable(collidable),
                     collidable,
                     locatable,
@@ -919,10 +914,8 @@ class PlaceBuilderDemo // Main.
                 ]);
                 entities.push(portalEntity);
                 var forceField = new ForceField(null, neighborOffset.clone().invert());
-                var forceFieldCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
-                0, // ticks
-                portalBox, [Playable.name], forceFieldCollide);
-                var forceFieldEntity = new Entity("PortalToNeighbor" + i + "_ForceField", [
+                var forceFieldCollidable = Collidable.fromColliderPropertyNameAndCollide(portalBox, Playable.name, forceFieldCollide);
+                var forceFieldEntity = Entity.fromNameAndProperties("PortalToNeighbor" + i + "_ForceField", [
                     Boundable.fromCollidable(forceFieldCollidable),
                     forceFieldCollidable,
                     forceField,
@@ -935,7 +928,7 @@ class PlaceBuilderDemo // Main.
         return wallThickness;
     }
     entityBuildRadioMessage(visualForPortrait, message) {
-        return new Entity("RadioMessage", [
+        return Entity.fromNameAndProperties("RadioMessage", [
             new Recurrent(20, // ticksPerRecurrence
             1, // timesToRecur
             // recur
@@ -945,7 +938,7 @@ class PlaceBuilderDemo // Main.
                 var e = uwpe.entity;
                 var player = Playable.entityFromPlace(p);
                 var playerItemHolder = ItemHolder.of(player);
-                var itemRadio = new Item("Walkie-Talkie", 1);
+                var itemRadio = Item.fromDefnName("Walkie-Talkie");
                 var doesPlayerHaveRadio = playerItemHolder.hasItem(itemRadio);
                 if (doesPlayerHaveRadio == false) {
                     Recurrent.of(e).timesRecurredSoFar = 0;
@@ -974,8 +967,8 @@ class PlaceBuilderDemo // Main.
         if (this.visualsHaveText) {
             visual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 2), VisualText.fromTextImmediateFontAndColor("Store", this.font, storeColor)));
         }
-        var storeEntityDefn = new Entity("Store", [
-            Collidable.fromCollider(new Box(Coords.create(), entitySize)),
+        var storeEntityDefn = Entity.fromNameAndProperties("Store", [
+            Collidable.fromCollider(Box.fromSize(entitySize)),
             Drawable.fromVisual(visual),
             new ItemStore("Coin"),
             ItemHolder.fromItems([
@@ -985,10 +978,9 @@ class PlaceBuilderDemo // Main.
                 Item.fromDefnNameAndQuantity("Medicine", 100)
             ]),
             Locatable.create(),
-            new Usable((uwpe) => {
+            Usable.fromUse((uwpe) => {
                 var eUsed = uwpe.entity2;
                 ItemStore.of(eUsed).use(uwpe);
-                return null;
             })
         ]);
         return storeEntityDefn;
@@ -998,9 +990,9 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnAccessoryName = "Speed Boots";
         var itemAccessoryVisual = this.itemDefnsByName.get(itemDefnAccessoryName).visual;
-        var itemAccessoryCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemAccessoryEntityDefn = new Entity(itemDefnAccessoryName, [
-            new Item(itemDefnAccessoryName, 1),
+        var itemAccessoryCollider = Sphere.fromRadius(entityDimensionHalf);
+        var itemAccessoryEntityDefn = Entity.fromNameAndProperties(itemDefnAccessoryName, [
+            Item.fromDefnName(itemDefnAccessoryName),
             Locatable.create(),
             Collidable.fromCollider(itemAccessoryCollider),
             Drawable.fromVisual(itemAccessoryVisual),
@@ -1013,17 +1005,19 @@ class PlaceBuilderDemo // Main.
         var itemDefn = this.itemDefnsByName.get(itemDefnArmorName);
         var itemArmorVisual = itemDefn.visual;
         var path = itemArmorVisual.children[0].verticesAsPath;
-        var itemArmorCollider = new Sphere(Coords.create(), this.entityDimension / 2);
+        var itemArmorCollider = Sphere.fromRadius(this.entityDimension / 2);
         var collidable = Collidable.fromCollider(itemArmorCollider);
-        var box = new Box(Coords.create(), Coords.create()).containPoints(path.points);
+        var box = Box
+            .create()
+            .containPoints(path.points);
         box.center = itemArmorCollider.center;
         var boundable = new Boundable(box);
-        var itemArmorEntityDefn = new Entity(itemDefnArmorName, [
+        var itemArmorEntityDefn = Entity.fromNameAndProperties(itemDefnArmorName, [
             new Armor(.5),
             boundable,
             collidable,
             Equippable.default(),
-            new Item(itemDefnArmorName, 1),
+            Item.fromDefnName(itemDefnArmorName),
             Locatable.create(),
             Drawable.fromVisual(itemArmorVisual),
         ]);
@@ -1034,16 +1028,16 @@ class PlaceBuilderDemo // Main.
         var itemDefnArrowName = "Arrow";
         var itemArrowVisual = this.itemDefnsByName.get(itemDefnArrowName).visual;
         var arrowSize = Coords.ones();
-        var itemArrowCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var itemArrowCollider = Sphere.fromRadius(entityDimensionHalf);
         var collidable = Collidable.fromCollider(itemArrowCollider);
         var bounds = new Box(itemArrowCollider.center, arrowSize);
         var boundable = new Boundable(bounds);
         var roundsPerPile = 5;
-        var itemArrowEntityDefn = new Entity(itemDefnArrowName, [
+        var itemArrowEntityDefn = Entity.fromNameAndProperties(itemDefnArrowName, [
             boundable,
             collidable,
             Drawable.fromVisual(itemArrowVisual),
-            new Item(itemDefnArrowName, roundsPerPile),
+            Item.fromDefnNameAndQuantity(itemDefnArrowName, roundsPerPile),
             Locatable.create(),
         ]);
         return itemArrowEntityDefn;
@@ -1052,16 +1046,16 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnBombName = "Bomb";
         var itemBombVisual = this.itemDefnsByName.get(itemDefnBombName).visual;
-        var itemBombCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var itemBombCollider = Sphere.fromRadius(entityDimensionHalf);
         var itemBombDevice = Device.fromNameTicksToChargeAndUse("Bomb", 10, // ticksToCharge
         (uwpe) => this.entityDefnBuildBomb_Use(uwpe));
         var collidable = Collidable.fromCollider(itemBombCollider);
         var drawable = Drawable.fromVisual(itemBombVisual);
-        var item = new Item(itemDefnBombName, 1);
+        var item = Item.fromDefnName(itemDefnBombName);
         var locatable = Locatable.create();
         var equippable = Equippable.default();
         var boundable = Boundable.fromCollidable(collidable);
-        var itemBombEntityDefn = new Entity(itemDefnBombName, [
+        var itemBombEntityDefn = Entity.fromNameAndProperties(itemDefnBombName, [
             boundable,
             collidable,
             drawable,
@@ -1097,16 +1091,14 @@ class PlaceBuilderDemo // Main.
         var userDirection = userVel.clone().normalize();
         var userRadius = Collidable.of(entityUser).collider.radius;
         var projectilePos = userPos.clone().add(userDirection.clone().multiplyScalar(userRadius + projectileDimension).double());
-        var projectileOri = new Orientation(userVel.clone().normalize(), null);
-        var projectileLoc = new Disposition(projectilePos, projectileOri, null);
+        var projectileOri = Orientation.fromForward(userVel.clone().normalize());
+        var projectileLoc = Disposition.fromPosAndOri(projectilePos, projectileOri);
         projectileLoc.vel.overwriteWith(userVel).clearZ().double();
-        var projectileCollider = new Sphere(Coords.create(), projectileDimension);
+        var projectileCollider = Sphere.fromRadius(projectileDimension);
         // todo
         var projectileCollide = null;
-        var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
-        0, // ticks
-        projectileCollider, [Collidable.name], projectileCollide);
-        var projectileEntity = new Entity("ProjectileBomb", [
+        var collidable = Collidable.fromColliderPropertyNameAndCollide(projectileCollider, Collidable.name, projectileCollide);
+        var projectileEntity = Entity.fromNameAndProperties("ProjectileBomb", [
             Ephemeral.fromTicksToLiveAndExpire(64, this.entityDefnBuildBomb_Use_ProjectileDie),
             Locatable.fromLoc(projectileLoc),
             collidable,
@@ -1119,7 +1111,7 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildBomb_Use_ProjectileDie(uwpe) {
         var explosionRadius = 32;
         var explosionVisual = VisualCircle.fromRadiusAndColorFill(explosionRadius, Color.Instances().Yellow);
-        var explosionCollider = new Sphere(Coords.create(), explosionRadius);
+        var explosionCollider = Sphere.fromRadius(explosionRadius);
         var explosionCollide = (uwpe) => {
             var entityProjectile = uwpe.entity;
             var entityOther = uwpe.entity2;
@@ -1129,10 +1121,8 @@ class PlaceBuilderDemo // Main.
             }
         };
         var entityDying = uwpe.entity;
-        var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
-        0, // ticks
-        explosionCollider, [Killable.name], explosionCollide);
-        var explosionEntity = new Entity("BombExplosion", [
+        var collidable = Collidable.fromColliderPropertyNameAndCollide(explosionCollider, Killable.name, explosionCollide);
+        var explosionEntity = Entity.fromNameAndProperties("BombExplosion", [
             collidable,
             Damager.fromDamagePerHit(Damage.fromAmount(20)),
             Drawable.fromVisual(explosionVisual),
@@ -1145,13 +1135,13 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnBookName = "Book";
         var itemBookVisual = this.itemDefnsByName.get(itemDefnBookName).visual;
-        var itemBookCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var itemBookCollider = Sphere.fromRadius(entityDimensionHalf);
         var collidable = Collidable.fromCollider(itemBookCollider);
         var drawable = Drawable.fromVisual(itemBookVisual);
-        var item = new Item(itemDefnBookName, 1);
+        var item = Item.fromDefnName(itemDefnBookName);
         var locatable = Locatable.create();
         var boundable = Boundable.fromCollidable(collidable);
-        var itemBookEntityDefn = new Entity(itemDefnBookName, [
+        var itemBookEntityDefn = Entity.fromNameAndProperties(itemDefnBookName, [
             boundable,
             collidable,
             drawable,
@@ -1163,7 +1153,7 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildBow() {
         var itemDefnName = "Bow";
         var itemBowVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemBowCollider = new Sphere(Coords.create(), this.entityDimension);
+        var itemBowCollider = Sphere.fromRadius(this.entityDimension);
         var itemBowUse = (uwpe) => // use
          {
             var w = uwpe.world;
@@ -1198,10 +1188,10 @@ class PlaceBuilderDemo // Main.
             var userDirection = userVel.clone().normalize();
             var userRadius = Collidable.of(entityUser).collider.radius;
             var projectilePos = userPos.clone().add(userDirection.clone().multiplyScalar(userRadius + projectileDimension).double());
-            var projectileOri = new Orientation(userVel.clone().normalize(), null);
-            var projectileLoc = new Disposition(projectilePos, projectileOri, null);
+            var projectileOri = Orientation.fromForward(userVel.clone().normalize());
+            var projectileLoc = Disposition.fromPosAndOri(projectilePos, projectileOri);
             projectileLoc.vel.overwriteWith(userVel).clearZ().double();
-            var projectileCollider = new Sphere(Coords.create(), projectileDimension);
+            var projectileCollider = Sphere.fromRadius(projectileDimension);
             var projectileCollide = (uwpe) => {
                 var entityProjectile = uwpe.entity;
                 var entityOther = uwpe.entity2;
@@ -1212,26 +1202,22 @@ class PlaceBuilderDemo // Main.
                 }
             };
             var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
-            var killable = new Killable(1, // integrityMax
-            null, // damageApply
-            (uwpe) => // die
+            var killable = Killable.fromDie((uwpe) => // die
              {
                 var entityKillable = uwpe.entity;
-                var entityStrike = new Entity("ArrowStrike", [
+                var entityStrike = Entity.fromNameAndProperties("ArrowStrike", [
                     new Ephemeral(8, null),
                     Drawable.fromVisual(visualStrike),
                     Locatable.of(entityKillable)
                 ]);
                 uwpe.place.entityToSpawnAdd(entityStrike);
             });
-            var projectileEntity = new Entity("ProjectileArrow", [
+            var projectileEntity = Entity.fromNameAndProperties("ProjectileArrow", [
                 Damager.fromDamagePerHit(Damage.fromAmount(10)),
-                new Ephemeral(32, null),
+                Ephemeral.fromTicksToLive(32),
                 killable,
-                new Locatable(projectileLoc),
-                new Collidable(false, // canCollideAgainWithoutSeparating
-                0, // ticksToWaitBetweenCollisions
-                projectileCollider, [Killable.name], projectileCollide),
+                Locatable.fromDisp(projectileLoc),
+                Collidable.fromColliderPropertyNameAndCollide(projectileCollider, Killable.name, projectileCollide),
                 Drawable.fromVisual(projectileVisual),
             ]);
             p.entityToSpawnAdd(projectileEntity);
@@ -1241,10 +1227,10 @@ class PlaceBuilderDemo // Main.
         var collidable = Collidable.fromCollider(itemBowCollider);
         var drawable = Drawable.fromVisual(itemBowVisual);
         var equippable = Equippable.default();
-        var item = new Item(itemDefnName, 1);
+        var item = Item.fromDefnName(itemDefnName);
         var locatable = Locatable.create();
         var boundable = Boundable.fromCollidable(collidable);
-        var itemBowEntityDefn = new Entity(itemDefnName, [
+        var itemBowEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
             boundable,
             collidable,
             drawable,
@@ -1259,14 +1245,14 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnBreadName = "Bread";
         var itemBreadVisual = this.itemDefnsByName.get(itemDefnBreadName).visual;
-        var itemBreadCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var itemBreadCollider = Sphere.fromRadius(entityDimensionHalf);
         var collidable = Collidable.fromCollider(itemBreadCollider);
         var boundable = Boundable.fromCollidable(collidable);
-        var itemBreadEntityDefn = new Entity(itemDefnBreadName, [
+        var itemBreadEntityDefn = Entity.fromNameAndProperties(itemDefnBreadName, [
             boundable,
             collidable,
             Drawable.fromVisual(itemBreadVisual),
-            new Item(itemDefnBreadName, 1),
+            Item.fromDefnName(itemDefnBreadName),
             Locatable.create(),
         ]);
         return itemBreadEntityDefn;
@@ -1300,7 +1286,7 @@ class PlaceBuilderDemo // Main.
         if (this.visualsHaveText) {
             carVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - entityDimension * 2.5), VisualText.fromTextImmediateFontAndColor(defnName, this.font, Color.Instances().Blue)));
         }
-        var carCollider = new Sphere(Coords.create(), entityDimension / 2);
+        var carCollider = Sphere.fromRadius(entityDimension / 2);
         var carCollide = (uwpe) => {
             var entityVehicle = uwpe.entity;
             var entityOther = uwpe.entity2;
@@ -1316,30 +1302,28 @@ class PlaceBuilderDemo // Main.
                 universe.collisionHelper.collideEntitiesBlock(entityVehicle, entityOther);
             }
         };
-        var carCollidable = new Collidable(false, // canCollideAgainWithoutSeparating
-        0, carCollider, [Collidable.name], carCollide);
+        var carCollidable = Collidable.fromColliderPropertyNameAndCollide(carCollider, Collidable.name, carCollide);
         var carConstrainable = new Constrainable([
             new Constraint_FrictionXY(.03, .2)
         ]);
         var carLoc = Disposition.create();
         //carLoc.spin = new Rotation(Coords.Instances().ZeroZeroOne, new Reference(.01));
-        var carUsable = new Usable((uwpe) => {
+        var carUsable = Usable.fromUse((uwpe) => {
             var p = uwpe.place;
             var eUsing = uwpe.entity;
             var eUsed = uwpe.entity2;
             var vehicle = eUsed.propertiesByName.get(Vehicle.name);
             vehicle.entityOccupant = eUsing;
             p.entityToRemoveAdd(eUsing);
-            return null;
         });
         var vehicle = new Vehicle(.2, // accelerationPerTick
         5, // speedMax
         .01 // steeringAngleInTurns
         );
         var drawable = Drawable.fromVisual(carVisual);
-        var locatable = new Locatable(carLoc);
+        var locatable = Locatable.fromDisp(carLoc);
         var boundable = Boundable.fromCollidable(carCollidable);
-        var carEntityDefn = new Entity(defnName, [
+        var carEntityDefn = Entity.fromNameAndProperties(defnName, [
             boundable,
             carCollidable,
             carConstrainable,
@@ -1354,18 +1338,18 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnCoinName = "Coin";
         var itemCoinVisual = this.itemDefnsByName.get(itemDefnCoinName).visual;
-        var itemCoinCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var itemCoinCollider = Sphere.fromRadius(entityDimensionHalf);
         var collidable = Collidable.fromCollider(itemCoinCollider);
         var drawable = Drawable.fromVisual(itemCoinVisual);
-        var item = new Item(itemDefnCoinName, 1);
+        var item = Item.fromDefnName(itemDefnCoinName);
         var locatable = Locatable.create();
         var boundable = Boundable.fromCollidable(collidable);
-        var itemCoinEntityDefn = new Entity(itemDefnCoinName, [
+        var itemCoinEntityDefn = Entity.fromNameAndProperties(itemDefnCoinName, [
             boundable,
             collidable,
             drawable,
             item,
-            locatable,
+            locatable
         ]);
         return itemCoinEntityDefn;
     }
@@ -1373,11 +1357,11 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnCrystalName = "Crystal";
         var itemCrystalVisual = this.itemDefnsByName.get(itemDefnCrystalName).visual;
-        var itemCrystalCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemCrystalEntityDefn = new Entity(itemDefnCrystalName, [
+        var itemCrystalCollider = Sphere.fromRadius(entityDimensionHalf);
+        var itemCrystalEntityDefn = Entity.fromNameAndProperties(itemDefnCrystalName, [
             Collidable.fromCollider(itemCrystalCollider),
             Drawable.fromVisual(itemCrystalVisual),
-            new Item(itemDefnCrystalName, 1),
+            Item.fromDefnName(itemDefnCrystalName),
             Locatable.create()
         ]);
         return itemCrystalEntityDefn;
@@ -1386,14 +1370,14 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnDoughnutName = "Doughnut";
         var itemDoughnutVisual = this.itemDefnsByName.get(itemDefnDoughnutName).visual;
-        var itemDoughnutCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var itemDoughnutCollider = Sphere.fromRadius(entityDimensionHalf);
         var collidable = Collidable.fromCollider(itemDoughnutCollider);
         var boundable = Boundable.fromCollidable(collidable);
-        var itemDoughnutEntityDefn = new Entity(itemDefnDoughnutName, [
+        var itemDoughnutEntityDefn = Entity.fromNameAndProperties(itemDefnDoughnutName, [
             boundable,
             collidable,
             Drawable.fromVisual(itemDoughnutVisual),
-            new Item(itemDefnDoughnutName, 1),
+            Item.fromDefnName(itemDefnDoughnutName),
             Locatable.create()
         ]);
         return itemDoughnutEntityDefn;
@@ -1402,9 +1386,9 @@ class PlaceBuilderDemo // Main.
         var entityDimension = this.entityDimension * .5;
         var itemDefnName = "Flower";
         var visual = this.itemDefnsByName.get(itemDefnName).visual;
-        var collider = new Sphere(Coords.create(), entityDimension);
-        var entityDefn = new Entity(itemDefnName, [
-            new Item(itemDefnName, 1),
+        var collider = Sphere.fromRadius(entityDimension);
+        var entityDefn = Entity.fromNameAndProperties(itemDefnName, [
+            Item.fromDefnName(itemDefnName),
             Locatable.create(),
             Collidable.fromCollider(collider),
             Drawable.fromVisual(visual)
@@ -1415,9 +1399,9 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnFruitName = "Fruit";
         var itemFruitVisual = this.itemDefnsByName.get(itemDefnFruitName).visual;
-        var itemFruitCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemFruitEntityDefn = new Entity(itemDefnFruitName, [
-            new Item(itemDefnFruitName, 1),
+        var itemFruitCollider = Sphere.fromRadius(entityDimensionHalf);
+        var itemFruitEntityDefn = Entity.fromNameAndProperties(itemDefnFruitName, [
+            Item.fromDefnName(itemDefnFruitName),
             Locatable.create(),
             Collidable.fromCollider(itemFruitCollider),
             Drawable.fromVisual(itemFruitVisual)
@@ -1430,7 +1414,7 @@ class PlaceBuilderDemo // Main.
         1, // entitiesGeneratedMax
         null // entitySpeedAsRange
         );
-        var entityDefnGenerator = new Entity(entityDefnToGenerate.name + "Generator", [
+        var entityDefnGenerator = Entity.fromNameAndProperties(entityDefnToGenerate.name + "Generator", [
             generator,
             Locatable.create()
         ]);
@@ -1440,9 +1424,9 @@ class PlaceBuilderDemo // Main.
         var entityDimension = this.entityDimension / 2;
         var itemDefnName = "Grass";
         var itemGrassVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemGrassCollider = new Sphere(Coords.create(), entityDimension / 2);
-        var itemGrassEntityDefn = new Entity(itemDefnName, [
-            new Item(itemDefnName, 1),
+        var itemGrassCollider = Sphere.fromRadius(entityDimension / 2);
+        var itemGrassEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
+            Item.fromDefnName(itemDefnName),
             Locatable.create(),
             Collidable.fromCollider(itemGrassCollider),
             Drawable.fromVisual(itemGrassVisual)
@@ -1453,14 +1437,14 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnHeartName = "Heart";
         var itemHeartVisual = this.itemDefnsByName.get(itemDefnHeartName).visual;
-        var itemHeartCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var itemHeartCollider = Sphere.fromRadius(entityDimensionHalf);
         var collidable = Collidable.fromCollider(itemHeartCollider);
         var boundable = Boundable.fromCollidable(collidable);
-        var itemHeartEntityDefn = new Entity(itemDefnHeartName, [
+        var itemHeartEntityDefn = Entity.fromNameAndProperties(itemDefnHeartName, [
             boundable,
             collidable,
             Drawable.fromVisual(itemHeartVisual),
-            new Item(itemDefnHeartName, 1),
+            Item.fromDefnName(itemDefnHeartName),
             Locatable.create(),
         ]);
         return itemHeartEntityDefn;
@@ -1469,9 +1453,9 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnIronName = "Iron";
         var itemIronVisual = this.itemDefnsByName.get(itemDefnIronName).visual;
-        var itemIronCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemIronEntityDefn = new Entity(itemDefnIronName, [
-            new Item(itemDefnIronName, 1),
+        var itemIronCollider = Sphere.fromRadius(entityDimensionHalf);
+        var itemIronEntityDefn = Entity.fromNameAndProperties(itemDefnIronName, [
+            Item.fromDefnName(itemDefnIronName),
             Locatable.create(),
             Collidable.fromCollider(itemIronCollider),
             Drawable.fromVisual(itemIronVisual)
@@ -1482,9 +1466,9 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnOreName = "Iron Ore";
         var itemOreVisual = this.itemDefnsByName.get(itemDefnOreName).visual;
-        var itemOreCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemOreEntityDefn = new Entity(itemDefnOreName, [
-            new Item(itemDefnOreName, 1),
+        var itemOreCollider = Sphere.fromRadius(entityDimensionHalf);
+        var itemOreEntityDefn = Entity.fromNameAndProperties(itemDefnOreName, [
+            Item.fromDefnName(itemDefnOreName),
             Locatable.create(),
             Collidable.fromCollider(itemOreCollider),
             Drawable.fromVisual(itemOreVisual)
@@ -1495,9 +1479,9 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnLogName = "Log";
         var itemLogVisual = this.itemDefnsByName.get(itemDefnLogName).visual;
-        var itemLogCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemLogEntityDefn = new Entity(itemDefnLogName, [
-            new Item(itemDefnLogName, 1),
+        var itemLogCollider = Sphere.fromRadius(entityDimensionHalf);
+        var itemLogEntityDefn = Entity.fromNameAndProperties(itemDefnLogName, [
+            Item.fromDefnName(itemDefnLogName),
             Locatable.create(),
             Collidable.fromCollider(itemLogCollider),
             Drawable.fromVisual(itemLogVisual)
@@ -1509,16 +1493,16 @@ class PlaceBuilderDemo // Main.
         var itemDefnMeatName = "Meat";
         var itemMeatDefn = this.itemDefnsByName.get(itemDefnMeatName);
         var itemMeatVisual = itemMeatDefn.visual;
-        var itemMeatCollider = new Sphere(Coords.create(), entityDimensionHalf);
+        var itemMeatCollider = Sphere.fromRadius(entityDimensionHalf);
         var collidable = Collidable.fromCollider(itemMeatCollider);
         var boundable = Boundable.fromCollidable(collidable);
-        var itemMeatEntityDefn = new Entity(itemDefnMeatName, [
+        var itemMeatEntityDefn = Entity.fromNameAndProperties(itemDefnMeatName, [
             boundable,
             collidable,
             Drawable.fromVisual(itemMeatVisual),
-            new Item(itemDefnMeatName, 1),
+            Item.fromDefnName(itemDefnMeatName),
             Locatable.create(),
-            new Usable((uwpe) => itemMeatDefn.use(uwpe))
+            Usable.fromUse((uwpe) => itemMeatDefn.use(uwpe))
         ]);
         return itemMeatEntityDefn;
     }
@@ -1526,12 +1510,12 @@ class PlaceBuilderDemo // Main.
         var entityDimensionHalf = this.entityDimension / 2;
         var itemDefnMedicineName = "Medicine";
         var itemMedicineVisual = this.itemDefnsByName.get(itemDefnMedicineName).visual;
-        var itemMedicineCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemMedicineEntityDefn = new Entity(itemDefnMedicineName, [
+        var itemMedicineCollider = Sphere.fromRadius(entityDimensionHalf);
+        var itemMedicineEntityDefn = Entity.fromNameAndProperties(itemDefnMedicineName, [
             Collidable.fromCollider(itemMedicineCollider),
             Drawable.fromVisual(itemMedicineVisual),
             Equippable.default(),
-            new Item(itemDefnMedicineName, 1),
+            Item.fromDefnName(itemDefnMedicineName),
             Locatable.create()
         ]);
         return itemMedicineEntityDefn;
@@ -1540,9 +1524,9 @@ class PlaceBuilderDemo // Main.
         var entityDimension = this.entityDimension / 2;
         var itemDefnName = "Mushroom";
         var itemMushroomVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemMushroomCollider = new Sphere(Coords.create(), entityDimension / 2);
-        var itemMushroomEntityDefn = new Entity(itemDefnName, [
-            new Item(itemDefnName, 1),
+        var itemMushroomCollider = Sphere.fromRadius(entityDimension / 2);
+        var itemMushroomEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
+            Item.fromDefnName(itemDefnName),
             Locatable.create(),
             Collidable.fromCollider(itemMushroomCollider),
             Drawable.fromVisual(itemMushroomVisual)
@@ -1552,7 +1536,7 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildPick() {
         var itemDefnName = "Pick";
         var itemPickVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemPickCollider = new Sphere(Coords.create(), this.entityDimension / 2);
+        var itemPickCollider = Sphere.fromRadius(this.entityDimension / 2);
         var itemPickDevice = Device.fromNameTicksToChargeAndUse("Pick", 10, // ticksToCharge
         (uwpe) => // use
          {
@@ -1565,8 +1549,8 @@ class PlaceBuilderDemo // Main.
                 Killable.of(boulderInRange).kill();
             }
         });
-        var itemPickEntityDefn = new Entity(itemDefnName, [
-            new Item(itemDefnName, 1),
+        var itemPickEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
+            Item.fromDefnName(itemDefnName),
             Locatable.create(),
             Collidable.fromCollider(itemPickCollider),
             itemPickDevice,
@@ -1593,9 +1577,9 @@ class PlaceBuilderDemo // Main.
         if (this.visualsHaveText) {
             itemPotionVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemDefnPotionName, this.font, itemPotionColor)));
         }
-        var itemPotionCollider = new Sphere(Coords.create(), entityDimensionHalf);
-        var itemPotionEntityDefn = new Entity(itemDefnPotionName, [
-            new Item(itemDefnPotionName, 1),
+        var itemPotionCollider = Sphere.fromRadius(entityDimensionHalf);
+        var itemPotionEntityDefn = Entity.fromNameAndProperties(itemDefnPotionName, [
+            Item.fromDefnName(itemDefnPotionName),
             Locatable.create(),
             Collidable.fromCollider(itemPotionCollider),
             Drawable.fromVisual(itemPotionVisual)
@@ -1605,7 +1589,7 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildShovel() {
         var itemDefnName = "Shovel";
         var itemShovelVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemShovelCollider = new Sphere(Coords.create(), this.entityDimension / 2);
+        var itemShovelCollider = Sphere.fromRadius(this.entityDimension / 2);
         var itemShovelDevice = Device.fromNameTicksToChargeAndUse("Shovel", 10, // ticksToCharge
         (uwpe) => // use
          {
@@ -1629,8 +1613,8 @@ class PlaceBuilderDemo // Main.
                 Locatable.of(eUser).entitySpawnWithDefnName(uwpe, "Hole");
             }
         });
-        var itemShovelEntityDefn = new Entity(itemDefnName, [
-            new Item(itemDefnName, 1),
+        var itemShovelEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
+            Item.fromDefnName(itemDefnName),
             Locatable.create(),
             Collidable.fromCollider(itemShovelCollider),
             itemShovelDevice,
@@ -1639,7 +1623,16 @@ class PlaceBuilderDemo // Main.
         ]);
         return itemShovelEntityDefn;
     }
-    entityDefnBuildSword(damageTypeName) {
+    entityDefnBuildSword() {
+        return this.entityDefnBuildSword_WithDamageTypeName(null);
+    }
+    entityDefnBuildSwordCold() {
+        return this.entityDefnBuildSword_WithDamageTypeName("Cold");
+    }
+    entityDefnBuildSwordHeat() {
+        return this.entityDefnBuildSword_WithDamageTypeName("Heat");
+    }
+    entityDefnBuildSword_WithDamageTypeName(damageTypeName) {
         var itemDefnName = "Sword";
         if (damageTypeName == null) {
             // todo
@@ -1650,117 +1643,118 @@ class PlaceBuilderDemo // Main.
         else if (damageTypeName == "Heat") {
             itemDefnName += damageTypeName;
         }
-        var itemSwordCollider = new Sphere(Coords.create(), this.entityDimension / 2);
-        var itemSwordDeviceUse = (uwpe) => // use
-         {
-            var universe = uwpe.universe;
-            var world = uwpe.world;
-            var place = uwpe.place;
-            var entityUser = uwpe.entity;
-            var entityDevice = uwpe.entity2;
-            var userLoc = Locatable.of(entityUser).loc;
-            var userPos = userLoc.pos;
-            var userVel = userLoc.vel;
-            var userSpeed = userVel.magnitude();
-            if (userSpeed == 0) {
-                return;
-            }
-            var userTirable = Tirable.of(entityUser);
-            var staminaToFire = 10;
-            if (userTirable.stamina < staminaToFire) {
-                var message = "Too tired!";
-                place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.font, userPos.clone(), Color.Instances().Red));
-                return;
-            }
-            userTirable.staminaSubtract(staminaToFire);
-            var userDirection = userVel.clone().normalize();
-            var userRadius = Collidable.of(entityUser).collider.radius;
-            var projectileDimension = 1.5;
-            var projectilePos = userPos.clone().add(userDirection.clone().multiplyScalar(userRadius + projectileDimension).double());
-            var projectileOri = new Orientation(userVel.clone().normalize(), null);
-            var projectileVisual = Drawable.of(entityDevice).visual;
-            projectileVisual = projectileVisual.children[0].clone();
-            projectileVisual.transform(new Transform_RotateRight(1));
-            var projectileLoc = new Disposition(projectilePos, projectileOri, null);
-            projectileLoc.vel.overwriteWith(userVel).clearZ().double();
-            var projectileCollider = new Sphere(Coords.create(), projectileDimension);
-            var projectileCollide = (uwpe) => {
-                var entityProjectile = uwpe.entity;
-                var entityOther = uwpe.entity2;
-                var killable = Killable.of(entityOther);
-                if (killable != null) {
-                    var damageToApply = Damager.of(entityProjectile).damagePerHit;
-                    killable.damageApply(uwpe, damageToApply);
-                    Killable.of(entityProjectile).kill();
-                }
-            };
-            var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
-            var killable = new Killable(1, // integrityMax
-            null, // damageApply
-            (uwpe) => // die
-             {
-                var entityKillable = uwpe.entity;
-                var entityStrike = new Entity("SwordStrike", [
-                    new Ephemeral(8, null),
-                    Drawable.fromVisual(visualStrike),
-                    Locatable.of(entityKillable)
-                ]);
-                place.entityToSpawnAdd(entityStrike);
-            });
-            var effectsAndChances = new Array();
-            if (damageTypeName != null) {
-                var effect;
-                if (damageTypeName == "Cold") {
-                    effect = Effect.Instances().Frozen;
-                }
-                else if (damageTypeName == "Heat") {
-                    effect = Effect.Instances().Burning;
-                }
-                else {
-                    throw ("Unrecognized damage type: " + damageTypeName);
-                }
-                var effectAndChance = [effect, 1];
-                effectsAndChances = [effectAndChance];
-            }
-            var projectileDamager = Damager.fromDamagePerHit(new Damage(DiceRoll.fromOffset(10), damageTypeName, effectsAndChances));
-            var projectileEntity = new Entity("ProjectileSword", [
-                projectileDamager,
-                Ephemeral.fromTicksToLive(8),
-                killable,
-                new Locatable(projectileLoc),
-                new Collidable(false, // canCollideAgainWithoutSeparating
-                0, projectileCollider, [Killable.name], projectileCollide),
-                Drawable.fromVisual(projectileVisual)
-            ]);
-            place.entityToSpawnAdd(projectileEntity);
-        };
+        var itemSwordCollider = Sphere.fromRadius(this.entityDimension / 2);
+        var itemSwordDeviceUse = (uwpe) => this.entityDefnBuildSword_DeviceUse(damageTypeName, uwpe);
         var itemSwordDevice = Device.fromNameTicksToChargeAndUse(itemDefnName, 10, itemSwordDeviceUse);
         var itemSwordVisual = this.itemDefnsByName.get(itemDefnName).visual.clone();
-        itemSwordVisual.transform(new Transform_Translate(Coords.fromXY(0, -1.1 * this.entityDimension)));
+        itemSwordVisual.transform(Transform_Translate.fromDisplacement(Coords.fromXY(0, -1.1 * this.entityDimension)));
         var collidable = Collidable.fromCollider(itemSwordCollider);
         var boundable = Boundable.fromCollidable(collidable);
-        var itemSwordEntityDefn = new Entity(itemDefnName, [
+        var drawable = Drawable.fromVisual(itemSwordVisual);
+        var equippable = Equippable.default();
+        var item = Item.fromDefnName(itemDefnName);
+        var locatable = Locatable.create();
+        var itemSwordEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
             boundable,
             collidable,
-            Drawable.fromVisual(itemSwordVisual),
-            Equippable.default(),
-            new Item(itemDefnName, 1),
+            drawable,
+            equippable,
+            item,
             itemSwordDevice,
-            Locatable.create(),
+            locatable,
         ]);
         return itemSwordEntityDefn;
+    }
+    entityDefnBuildSword_DeviceUse(damageTypeName, uwpe) {
+        var universe = uwpe.universe;
+        var world = uwpe.world;
+        var place = uwpe.place;
+        var entityUser = uwpe.entity;
+        var entityDevice = uwpe.entity2;
+        var userLoc = Locatable.of(entityUser).loc;
+        var userPos = userLoc.pos;
+        var userVel = userLoc.vel;
+        var userSpeed = userVel.magnitude();
+        if (userSpeed == 0) {
+            return;
+        }
+        var userTirable = Tirable.of(entityUser);
+        var staminaToFire = 10;
+        if (userTirable.stamina < staminaToFire) {
+            var message = "Too tired!";
+            place.entitySpawn2(universe, world, universe.entityBuilder.messageFloater(message, this.font, userPos.clone(), Color.Instances().Red));
+            return;
+        }
+        userTirable.staminaSubtract(staminaToFire);
+        var userDirection = userVel.clone().normalize();
+        var userRadius = Collidable.of(entityUser).collider.radius;
+        var projectileDimension = 1.5;
+        var projectilePos = userPos.clone().add(userDirection.clone().multiplyScalar(userRadius + projectileDimension).double());
+        var projectileOri = Orientation.fromForward(userVel.clone().normalize());
+        var projectileVisual = Drawable.of(entityDevice).visual;
+        projectileVisual = projectileVisual.children[0].clone();
+        projectileVisual.transform(new Transform_RotateRight(1));
+        var projectileLoc = Disposition.fromPosAndOri(projectilePos, projectileOri);
+        projectileLoc.vel.overwriteWith(userVel).clearZ().double();
+        var projectileCollider = Sphere.fromRadius(projectileDimension);
+        var projectileCollide = (uwpe) => {
+            var entityProjectile = uwpe.entity;
+            var entityOther = uwpe.entity2;
+            var killable = Killable.of(entityOther);
+            if (killable != null) {
+                var damageToApply = Damager.of(entityProjectile).damagePerHit;
+                killable.damageApply(uwpe, damageToApply);
+                Killable.of(entityProjectile).kill();
+            }
+        };
+        var visualStrike = VisualCircle.fromRadiusAndColorFill(8, Color.Instances().Red);
+        var killable = Killable.fromDie((uwpe) => // die
+         {
+            var entityKillable = uwpe.entity;
+            var entityStrike = Entity.fromNameAndProperties("SwordStrike", [
+                Ephemeral.fromTicksToLive(8),
+                Drawable.fromVisual(visualStrike),
+                Locatable.of(entityKillable)
+            ]);
+            place.entityToSpawnAdd(entityStrike);
+        });
+        var effectsAndChances = new Array();
+        if (damageTypeName != null) {
+            var effect;
+            if (damageTypeName == "Cold") {
+                effect = Effect.Instances().Frozen;
+            }
+            else if (damageTypeName == "Heat") {
+                effect = Effect.Instances().Burning;
+            }
+            else {
+                throw ("Unrecognized damage type: " + damageTypeName);
+            }
+            var effectAndChance = [effect, 1];
+            effectsAndChances = [effectAndChance];
+        }
+        var projectileDamager = Damager.fromDamagePerHit(new Damage(DiceRoll.fromOffset(10), damageTypeName, effectsAndChances));
+        var projectileEntity = Entity.fromNameAndProperties("ProjectileSword", [
+            projectileDamager,
+            Ephemeral.fromTicksToLive(8),
+            killable,
+            Locatable.fromDisp(projectileLoc),
+            Collidable.fromColliderPropertyNamesToCollideWithAndCollide(projectileCollider, [Killable.name], projectileCollide),
+            Drawable.fromVisual(projectileVisual)
+        ]);
+        place.entityToSpawnAdd(projectileEntity);
     }
     entityDefnBuildToolset() {
         var itemDefnName = "Toolset";
         var itemToolsetVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemToolsetCollider = new Sphere(Coords.create(), this.entityDimension / 2);
+        var itemToolsetCollider = Sphere.fromRadius(this.entityDimension / 2);
         var collidable = Collidable.fromCollider(itemToolsetCollider);
         var boundable = Boundable.fromCollidable(collidable);
-        var itemToolsetEntityDefn = new Entity(itemDefnName, [
+        var itemToolsetEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
             boundable,
             collidable,
             Drawable.fromVisual(itemToolsetVisual),
-            new Item(itemDefnName, 1),
+            Item.fromDefnName(itemDefnName),
             Locatable.create()
         ]);
         return itemToolsetEntityDefn;
@@ -1768,15 +1762,15 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildTorch() {
         var itemDefnName = "Torch";
         var itemTorchVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemTorchCollider = new Sphere(Coords.create(), this.entityDimension / 2);
+        var itemTorchCollider = Sphere.fromRadius(this.entityDimension / 2);
         var collidable = Collidable.fromCollider(itemTorchCollider);
         var boundable = Boundable.fromCollidable(collidable);
-        var itemTorchEntityDefn = new Entity(itemDefnName, [
+        var itemTorchEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
             Animatable2.create(),
             boundable,
             collidable,
             Drawable.fromVisual(itemTorchVisual),
-            new Item(itemDefnName, 1),
+            Item.fromDefnName(itemDefnName),
             Locatable.create()
         ]);
         return itemTorchEntityDefn;
@@ -1784,14 +1778,14 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildWeight() {
         var itemDefnName = "Weight";
         var itemWeightVisual = this.itemDefnsByName.get(itemDefnName).visual;
-        var itemWeightCollider = new Sphere(Coords.create(), this.entityDimension / 2);
+        var itemWeightCollider = Sphere.fromRadius(this.entityDimension / 2);
         var collidable = Collidable.fromCollider(itemWeightCollider);
         var boundable = Boundable.fromCollidable(collidable);
-        var itemWeightEntityDefn = new Entity(itemDefnName, [
+        var itemWeightEntityDefn = Entity.fromNameAndProperties(itemDefnName, [
             boundable,
             collidable,
             Drawable.fromVisual(itemWeightVisual),
-            new Item(itemDefnName, 1),
+            Item.fromDefnName(itemDefnName),
             Locatable.create()
         ]);
         return itemWeightEntityDefn;
@@ -1854,9 +1848,9 @@ class PlaceBuilderDemo // Main.
             this.entityDefnBuildPotion(),
             this.entityDefnBuildShovel(),
             this.entityDefnBuildStore(),
-            this.entityDefnBuildSword(null),
-            this.entityDefnBuildSword("Cold"),
-            this.entityDefnBuildSword("Heat"),
+            this.entityDefnBuildSword(),
+            this.entityDefnBuildSwordCold(),
+            this.entityDefnBuildSwordHeat(),
             this.entityDefnBuildToolset(),
             this.entityDefnBuildTorch(),
             this.entityDefnBuildWeight(),

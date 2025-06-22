@@ -391,11 +391,9 @@ var ThisCouldBeBetter;
                     ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.itemSelected != null)))
                 ];
                 var a = (a, b) => new GameFramework.Action(a, b);
-                var atim = (a, b) => new GameFramework.ActionToInputsMapping(a, b, true);
+                var atim = (a, b) => new GameFramework.ActionToInputsMapping(a, [b], true);
                 var itemNPerform = (quickSlotNumber) => itemHolder.equipItemInNumberedSlot(universe, entityItemHolder, quickSlotNumber);
-                var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.create(), // pos
-                sizeBase.clone(), // size
-                childControls, [
+                var actions = [
                     a("Back", () => this.back(universe, venuePrev)),
                     a("Up", () => this.up()),
                     a("Down", () => this.down()),
@@ -414,26 +412,31 @@ var ThisCouldBeBetter;
                     a("Item7", () => itemNPerform(7)),
                     a("Item8", () => itemNPerform(8)),
                     a("Item9", () => itemNPerform(9)),
-                ], [
-                    atim("Back", [GameFramework.Input.Names().Escape]),
-                    atim("Up", ["["]),
-                    atim("Down", ["]"]),
-                    atim("Sort", ["\\"]),
-                    atim("Split", ["/"]),
-                    atim("Join", ["="]),
-                    atim("Drop", ["d"]),
-                    atim("Use", ["e"]),
-                    atim("Item0", ["_0"]),
-                    atim("Item1", ["_1"]),
-                    atim("Item2", ["_2"]),
-                    atim("Item3", ["_3"]),
-                    atim("Item4", ["_4"]),
-                    atim("Item5", ["_5"]),
-                    atim("Item6", ["_6"]),
-                    atim("Item7", ["_7"]),
-                    atim("Item8", ["_8"]),
-                    atim("Item9", ["_9"]),
-                ]);
+                ];
+                var inputNames = GameFramework.Input.Names();
+                var mappings = [
+                    atim("Back", inputNames.Escape),
+                    atim("Up", "["),
+                    atim("Down", "]"),
+                    atim("Sort", "\\"),
+                    atim("Split", "/"),
+                    atim("Join", "="),
+                    atim("Drop", inputNames.d),
+                    atim("Use", inputNames.e),
+                    atim("Item0", inputNames._0),
+                    atim("Item1", inputNames._1),
+                    atim("Item2", inputNames._2),
+                    atim("Item3", inputNames._3),
+                    atim("Item4", inputNames._4),
+                    atim("Item5", inputNames._5),
+                    atim("Item6", inputNames._6),
+                    atim("Item7", inputNames._7),
+                    atim("Item8", inputNames._8),
+                    atim("Item9", inputNames._9),
+                ];
+                var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.create(), // pos
+                sizeBase.clone(), // size
+                childControls, actions, mappings);
                 if (includeTitleAndDoneButton) {
                     childControls.splice(0, // indexToInsertAt
                     0, GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(100, -5), // pos

@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
             static entitiesFromPlace(place) {
                 return place.entitiesByPropertyName(Usable.name);
             }
+            static fromUse(use) {
+                return new Usable(use);
+            }
             static of(entity) {
                 return entity.propertyByName(Usable.name);
             }

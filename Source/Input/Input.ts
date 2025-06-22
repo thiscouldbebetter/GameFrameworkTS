@@ -31,6 +31,42 @@ export class Input
 
 class Input_Names
 {
+	_0: string;
+	_1: string;
+	_2: string;
+	_3: string;
+	_4: string;
+	_5: string;
+	_6: string;
+	_7: string;
+	_8: string;
+	_9: string;
+	a: string;
+	b: string;
+	c: string;
+	d: string;
+	e: string;
+	f: string;
+	g: string;
+	h: string;
+	i: string;
+	j: string;
+	k: string;
+	l: string;
+	m: string;
+	n: string;
+	o: string;
+	p: string;
+	q: string;
+	r: string;
+	s: string;
+	t: string;
+	u: string;
+	v: string;
+	w: string;
+	x: string;
+	y: string;
+	z: string;
 	ArrowDown: string;
 	ArrowLeft: string;
 	ArrowRight: string;
@@ -59,6 +95,42 @@ class Input_Names
 
 	constructor()
 	{
+		this._0 = "0";
+		this._1 = "1";
+		this._2 = "2";
+		this._3 = "3";
+		this._4 = "4";
+		this._5 = "5";
+		this._6 = "6";
+		this._7 = "7";
+		this._8 = "8";
+		this._9 = "9";
+		this.a = "a";
+		this.b = "b";
+		this.c = "c";
+		this.d = "d";
+		this.e = "e";
+		this.f = "f";
+		this.g = "g";
+		this.h = "h";
+		this.i = "i";
+		this.j = "j";
+		this.k = "k";
+		this.l = "l";
+		this.m = "m";
+		this.n = "n";
+		this.o = "o";
+		this.p = "p";
+		this.q = "q";
+		this.r = "r";
+		this.s = "s";
+		this.t = "t";
+		this.u = "u";
+		this.v = "v";
+		this.w = "w";
+		this.x = "x";
+		this.y = "y";
+		this.z = "z";
 		this.ArrowDown = "ArrowDown";
 		this.ArrowLeft = "ArrowLeft";
 		this.ArrowRight = "ArrowRight";
@@ -84,6 +156,42 @@ class Input_Names
 
 		this._All =
 		[
+			this._0,
+			this._1,
+			this._2,
+			this._3,
+			this._4,
+			this._5,
+			this._6,
+			this._7,
+			this._8,
+			this._9,
+			this.a,
+			this.b,
+			this.c,
+			this.d,
+			this.e,
+			this.f,
+			this.g,
+			this.h,
+			this.i,
+			this.j,
+			this.k,
+			this.l,
+			this.m,
+			this.n,
+			this.o,
+			this.p,
+			this.q,
+			this.r,
+			this.s,
+			this.t,
+			this.u,
+			this.v,
+			this.w,
+			this.x,
+			this.y,
+			this.z,
 			this.ArrowDown,
 			this.ArrowLeft,
 			this.ArrowRight,
