@@ -40,6 +40,7 @@ import VisualParticles = gf.VisualParticles;
 import VisualPath = gf.VisualPath;
 import VisualPolars = gf.VisualPolars;
 import VisualPolygon = gf.VisualPolygon;
+import VisualPolygonPreoriented = gf.VisualPolygonPreoriented;
 import VisualRectangle = gf.VisualRectangle;
 import VisualRepeating = gf.VisualRepeating;
 import VisualRotate = gf.VisualRotate;

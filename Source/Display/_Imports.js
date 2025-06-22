@@ -35,6 +35,7 @@ var VisualParticles = gf.VisualParticles;
 var VisualPath = gf.VisualPath;
 var VisualPolars = gf.VisualPolars;
 var VisualPolygon = gf.VisualPolygon;
+var VisualPolygonPreoriented = gf.VisualPolygonPreoriented;
 var VisualRectangle = gf.VisualRectangle;
 var VisualRepeating = gf.VisualRepeating;
 var VisualRotate = gf.VisualRotate;
