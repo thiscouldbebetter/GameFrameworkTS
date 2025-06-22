@@ -7,7 +7,12 @@ var ThisCouldBeBetter;
             constructor(name, socketDefns) {
                 this.name = name;
                 this.socketDefns = socketDefns;
-                this.socketDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.socketDefns);
+                this.socketDefnsByName =
+                    GameFramework.ArrayHelper.addLookupsByName(this.socketDefns);
+            }
+            static default() {
+                return new EquipmentSocketDefnGroup("DefaultSocketDefnGroup", [] // socketDefns
+                );
             }
         }
         GameFramework.EquipmentSocketDefnGroup = EquipmentSocketDefnGroup;

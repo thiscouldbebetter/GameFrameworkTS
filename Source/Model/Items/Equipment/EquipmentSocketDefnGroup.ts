@@ -12,7 +12,17 @@ export class EquipmentSocketDefnGroup
 	{
 		this.name = name;
 		this.socketDefns = socketDefns;
-		this.socketDefnsByName = ArrayHelper.addLookupsByName(this.socketDefns);
+		this.socketDefnsByName =
+			ArrayHelper.addLookupsByName(this.socketDefns);
+	}
+
+	static default(): EquipmentSocketDefnGroup
+	{
+		return new EquipmentSocketDefnGroup
+		(
+			"DefaultSocketDefnGroup",
+			[] // socketDefns
+		);
 	}
 }
 

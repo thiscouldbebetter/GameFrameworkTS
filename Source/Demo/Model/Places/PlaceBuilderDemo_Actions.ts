@@ -155,8 +155,10 @@ class PlaceBuilderDemo_Actions
 	{
 		var actor = uwpe.entity;
 		var equipmentUser = EquipmentUser.of(actor);
-		var entityWieldableEquipped = equipmentUser.itemEntityInSocketWithName("Wielding");
-		var actorHasWieldableEquipped = (entityWieldableEquipped != null);
+		var entityWieldableEquipped =
+			equipmentUser.itemEntityInSocketWithName("Wielding");
+		var actorHasWieldableEquipped =
+			(entityWieldableEquipped != null);
 
 		if (actorHasWieldableEquipped)
 		{

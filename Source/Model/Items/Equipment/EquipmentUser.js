@@ -7,6 +7,13 @@ var ThisCouldBeBetter;
             constructor(socketDefnGroup) {
                 this.socketGroup = new GameFramework.EquipmentSocketGroup(socketDefnGroup);
             }
+            static default() {
+                var socketDefnGroup = GameFramework.EquipmentSocketDefnGroup.default();
+                return new EquipmentUser(socketDefnGroup);
+            }
+            static fromSocketDefnGroup(socketDefnGroup) {
+                return new EquipmentUser(socketDefnGroup);
+            }
             static of(entity) {
                 return entity.propertyByName(EquipmentUser.name);
             }
@@ -125,7 +132,10 @@ var ThisCouldBeBetter;
             }
             itemEntityInSocketWithName(socketName) {
                 var socket = this.socketByName(socketName);
-                return socket.itemEntityEquipped;
+                var itemEntity = socket == null
+                    ? null
+                    : socket.itemEntityEquipped;
+                return itemEntity;
             }
             socketByName(socketName) {
                 return this.socketGroup.socketsByDefnName.get(socketName);

@@ -16,6 +16,20 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
 	}
 
+	static default(): EquipmentUser
+	{
+		var socketDefnGroup = EquipmentSocketDefnGroup.default();
+		return new EquipmentUser(socketDefnGroup);
+	}
+
+	static fromSocketDefnGroup
+	(
+		socketDefnGroup: EquipmentSocketDefnGroup
+	): EquipmentUser
+	{
+		return new EquipmentUser(socketDefnGroup);
+	}
+
 	static of(entity: Entity): EquipmentUser
 	{
 		return entity.propertyByName(EquipmentUser.name) as EquipmentUser;
@@ -215,7 +229,11 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 	itemEntityInSocketWithName(socketName: string): Entity
 	{
 		var socket = this.socketByName(socketName);
-		return socket.itemEntityEquipped;
+		var itemEntity =
+			socket == null
+			? null
+			: socket.itemEntityEquipped;
+		return itemEntity;
 	}
 
 	socketByName(socketName: string): EquipmentSocket

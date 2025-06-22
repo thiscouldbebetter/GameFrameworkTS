@@ -79,6 +79,7 @@
 <script type="text/javascript" src="../Source/Display/Visuals/VisualPath.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualPolars.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualPolygon.js"></script>
+<script type="text/javascript" src="../Source/Display/Visuals/VisualPolygonPreoriented.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualRectangle.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualRepeating.js"></script>
 <script type="text/javascript" src="../Source/Display/Visuals/VisualRotate.js"></script>
@@ -197,6 +198,14 @@
 <script type="text/javascript" src="../Source/Model/Items/Item.js"></script>
 <script type="text/javascript" src="../Source/Model/Items/ItemDefn.js"></script>
 
+<script type="text/javascript" src="../Source/Model/Items/Equipment/EquipmentSocket.js"></script>
+<script type="text/javascript" src="../Source/Model/Items/Equipment/EquipmentSocketDefn.js"></script>
+<script type="text/javascript" src="../Source/Model/Items/Equipment/EquipmentSocketDefnGroup.js"></script>
+<script type="text/javascript" src="../Source/Model/Items/Equipment/EquipmentSocketGroup.js"></script>
+<script type="text/javascript" src="../Source/Model/Items/Equipment/EquipmentUser.js"></script>
+<script type="text/javascript" src="../Source/Model/Items/Equipment/Equippable.js"></script>
+<script type="text/javascript" src="../Source/Model/Items/Equipment/ItemCategory.js"></script>
+
 <script type="text/javascript" src="../Source/Model/Physics/Boundable.js"></script>
 <script type="text/javascript" src="../Source/Model/Physics/Collidable.js"></script>
 <script type="text/javascript" src="../Source/Model/Physics/Constrainable.js"></script>
@@ -265,7 +274,7 @@
 			<option>Circle</option>
 			<option>Ellipse</option>
 			<option>Fan</option>
-			<option>HeadAndLimbs</option>
+			<option>Figure</option>
 			<option>Path</option>
 			<option>Rectangle</option>
 		</select>
@@ -300,16 +309,16 @@ function visualDemoCreateFan()
 	return VisualFan.fromRadiusAndAnglesStartAndSpanned(20, 0, .25);
 }
 
-function visualDemoCreateHeadAndLimbs()
+function visualDemoCreateFigure()
 {
 	var visualBuilder = new VisualBuilder();
 	var colors = Color.Instances();
-	var headLength = 10;
+	var headLength = 12;
 	var figure = visualBuilder.figureWithNameColorAndDefaultProportions
 	(
 		"Figure", colors.Gray, headLength
 	);
-	return visualHeadLegsAndArms;
+	return figure;
 }
 
 function visualDemoCreatePath()
@@ -360,10 +369,6 @@ function selectDemo_Changed(selectDemo)
 	{
 		visualAsFunction = visualDemoCreateCircle;
 	}
-	else if (demoName == "HeadAndLimbs")
-	{
-		visualAsFunction = visualDemoCreateHeadAndLimbs;
-	}
 	else if (demoName == "Ellipse")
 	{
 		visualAsFunction = visualDemoCreateEllipse;
@@ -371,6 +376,10 @@ function selectDemo_Changed(selectDemo)
 	else if (demoName == "Fan")
 	{
 		visualAsFunction = visualDemoCreateFan;
+	}
+	else if (demoName == "Figure")
+	{
+		visualAsFunction = visualDemoCreateFigure;
 	}
 	else if (demoName == "Path")
 	{
@@ -418,6 +427,7 @@ function buttonRender_Clicked()
 		"Drawable",
 		[
 			Animatable2.default(),
+			EquipmentUser.default(),
 			Locatable.fromLoc(entityLoc)
 		]
 	);
