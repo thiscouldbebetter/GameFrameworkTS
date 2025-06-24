@@ -177,7 +177,10 @@ class CollidableTests extends TestFixture
 		// Now move entity1 on top of entity0's position,
 		// so that they now touch.
 
-		entity1.locatable().loc.overwriteWith(entity0.locatable().loc);
+		var entity0Loc = Locatable.of(entity0).loc;
+		var entity1Loc = Locatable.of(entity1).loc;
+
+		entity1Loc.overwriteWith(entity0Loc);
 
 		// After the first tick of touching,
 		// there should have been exactly one collision response 
@@ -205,7 +208,7 @@ class CollidableTests extends TestFixture
 
 		// Now move entity1 away from entity0, so they no longer touch.
 
-		entity1.locatable().loc.pos.addXY(100, 100);
+		entity1Loc.pos.addXY(100, 100);
 
 		// After a tick of separation, they should no longer be registered as colliding,
 		// and there still shouldn't be any additional collision responses.
@@ -222,7 +225,7 @@ class CollidableTests extends TestFixture
 		// Now move entity1 BACK on top of entity0's position,
 		// so that they now touch again.
 
-		entity1.locatable().loc.overwriteWith(entity0.locatable().loc);
+		entity1Loc.overwriteWith(entity0Loc);
 
 		// After another tick of touching,
 		// There should have been one additional collision response,

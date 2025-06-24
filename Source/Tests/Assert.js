@@ -16,7 +16,7 @@ var ThisCouldBeBetter;
                 var areExpectedAndActualEqual = this.areObjectsEqual(objectExpected, objectActual);
                 if (areExpectedAndActualEqual) {
                     var errorMessage = "The objects were equal, which was not expected.";
-                    throw (errorMessage);
+                    throw new Error(errorMessage);
                 }
             }
             static areNumbersEqual(numberExpected, numberActual) {

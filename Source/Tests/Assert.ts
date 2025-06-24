@@ -34,7 +34,7 @@ export class Assert
 		{
 			var errorMessage = 
 				"The objects were equal, which was not expected.";
-			throw(errorMessage);
+			throw new Error(errorMessage);
 		}
 	}
 

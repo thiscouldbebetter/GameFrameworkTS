@@ -16,6 +16,7 @@ var CollisionTrackerMapped = gf.CollisionTrackerMapped;
 var CollisionTrackerMappedMap = gf.CollisionTrackerMappedMap;
 var CollisionTrackerMappedMapCell = gf.CollisionTrackerMappedMapCell;
 // Geometry - Constraints.
+var Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
 var Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
 var Constraint_Conditional = gf.Constraint_Conditional;
 var Constraint_ContainInBox = gf.Constraint_ContainInBox;
@@ -23,9 +24,14 @@ var Constraint_ContainInHemispace = gf.Constraint_ContainInHemispace;
 var Constraint_FrictionDry = gf.Constraint_FrictionDry;
 var Constraint_FrictionXY = gf.Constraint_FrictionXY;
 var Constraint_Gravity = gf.Constraint_Gravity;
+var Constraint_Multiple = gf.Constraint_Multiple;
+var Constraint_OrientToward = gf.Constraint_OrientToward;
 var Constraint_SpeedMaxXY = gf.Constraint_SpeedMaxXY;
+var Constraint_StopBelowSpeedMin = gf.Constraint_StopBelowSpeedMin;
+var Constraint_Transform = gf.Constraint_Transform;
 var Constraint_TrimToPlaceSize = gf.Constraint_TrimToPlaceSize;
 var Constraint_WrapToPlaceSize = gf.Constraint_WrapToPlaceSize;
+var Constraint_WrapToPlaceSizeX = gf.Constraint_WrapToPlaceSizeX;
 var Constraint_WrapToPlaceSizeXTrimY = gf.Constraint_WrapToPlaceSizeXTrimY;
 // Geometry - Network.
 var Network = gf.Network;

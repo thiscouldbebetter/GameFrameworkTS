@@ -78,20 +78,19 @@ class ConstraintTests extends TestFixture
 			"EntityToAttachTo",
 			[ Locatable.fromPos(entityToAttachToPos) ]
 		);
-		this._place.entitySpawn
+		this._uwpe = new UniverseWorldPlaceEntities
 		(
-			new UniverseWorldPlaceEntities
-			(
-				this._universe, this._world, this._place, entityToAttachTo, null
-			)
+			this._universe, this._world, this._place, entityToAttachTo, null
 		);
+
+		this._place.entitySpawn(this._uwpe);
 
 		var constraint =
 			new Constraint_AttachToEntityWithId(entityToAttachTo.id);
 		this._constrainable.clear().constraintAdd(constraint);
 
+		this._uwpe.entitySet(this._entityToConstrain);;
 		constraint.constrain(this._uwpe);
-		this._place.entityRemove(entityToAttachTo);
 
 		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
 
@@ -112,22 +111,20 @@ class ConstraintTests extends TestFixture
 			"EntityToAttachTo",
 			[ Locatable.fromPos(entityToAttachToPos) ]
 		);
-		this._place.entitySpawn
+		this._uwpe = new UniverseWorldPlaceEntities
 		(
-			new UniverseWorldPlaceEntities
-			(
-				this._universe, this._world, this._place, entityToAttachTo, null
-			)
+			this._universe, this._world, this._place, entityToAttachTo, null
 		);
+		this._place.entitySpawn(this._uwpe);
 
 		var constraint =
 			new Constraint_AttachToEntityWithName(entityToAttachTo.name);
 		this._constrainable.clear().constraintAdd(constraint);
 
 		constraint.constrain(this._uwpe);
-		this._place.entityRemove(entityToAttachTo);
 
-		var posAfterConstraint = this._entityToConstrainLoc.pos.clone();
+		var posAfterConstraint =
+			this._entityToConstrainLoc.pos.clone();
 
 		Assert.areNotEqual(posBeforeConstraint, posAfterConstraint);
 
@@ -332,7 +329,7 @@ class ConstraintTests extends TestFixture
 		this._constrainable.clear().constraintAdd(constraint);
 
 		constraint.constrain(this._uwpe);
-		this._place.entityRemove(entityToOrientToward);
+		this._place.entityRemove(this._uwpe);
 
 		var forwardAfterConstraint = entityOrientation.forward;
 

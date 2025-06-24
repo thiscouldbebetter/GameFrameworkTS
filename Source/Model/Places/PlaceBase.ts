@@ -214,27 +214,30 @@ export class PlaceBase implements Place, Loadable
 	{
 		uwpe.placeSet(this);
 
-		var entity = uwpe.entity;
+		var entityToSpawn = uwpe.entity;
 
-		if (this._entities.indexOf(entity) == -1) // hack
+		var entityIsNotAlreadyPresent =
+			(this._entities.indexOf(entityToSpawn) == -1);
+		if (entityIsNotAlreadyPresent) // hack
 		{
-			if (entity.name == null)
+			if (entityToSpawn.name == null)
 			{
-				entity.name = Entity.name;
+				entityToSpawn.name = Entity.name;
 			}
 
-			this._entities.push(entity);
-			this.entitiesById.set(entity.id, entity);
+			this._entities.push(entityToSpawn);
+			this.entitiesById.set(entityToSpawn.id, entityToSpawn);
 
 			var placeDefn = this.defn(uwpe.world);
 
-			var entityProperties = entity.properties;
+			var entityProperties = entityToSpawn.properties;
 			for (var i = 0; i < entityProperties.length; i++)
 			{
 				var property = entityProperties[i];
 				var propertyName = property.propertyName();
-				var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
-				entitiesWithProperty.push(entity);
+				var entitiesWithProperty =
+					this.entitiesByPropertyName(propertyName);
+				entitiesWithProperty.push(entityToSpawn);
 			}
 
 			var propertyNamesToProcess =
@@ -242,22 +245,25 @@ export class PlaceBase implements Place, Loadable
 
 			if (propertyNamesToProcess == null)
 			{
-				entity.initialize(uwpe);
+				entityToSpawn.initialize(uwpe);
 			}
 			else
 			{
 				for (var p = 0; p < propertyNamesToProcess.length; p++)
 				{
 					var propertyName = propertyNamesToProcess[p];
-					var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
+					var entitiesWithProperty =
+						this.entitiesByPropertyName(propertyName);
 					if (entitiesWithProperty != null)
 					{
 						for (var i = 0; i < entitiesWithProperty.length; i++)
 						{
-							var entity = entitiesWithProperty[i];
-							var entityProperty = entity.propertyByName(propertyName);
-							uwpe.entitySet(entity);
+							var entityWithProperty = entitiesWithProperty[i];
+							var entityProperty =
+								entityWithProperty.propertyByName(propertyName);
+							uwpe.entitySet(entityWithProperty);
 							entityProperty.initialize(uwpe);
+							uwpe.entitySet(entityToSpawn);
 						}
 					}
 				}

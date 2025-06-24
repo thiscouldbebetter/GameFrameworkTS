@@ -1,10 +1,22 @@
 <html>
 <body>
 
+<!-- One class from the namespace must come before importing the namespace. -->
 <script type="text/javascript" src="../Source/Helpers/ArrayHelper.js"></script>
+
+<script type="text/javascript" src="../Source/_ImportGameFrameworkNamespace.js"></script>
+
 <script type="text/javascript" src="../Source/Helpers/ByteHelper.js"></script>
 <script type="text/javascript" src="../Source/Helpers/NumberHelper.js"></script>
 <script type="text/javascript" src="../Source/Helpers/StringHelper.js"></script>
+
+<script type="text/javascript" src="../Source/Helpers/_Imports.js"></script>
+
+<script type="text/javascript" src="../Source/Tests/Assert.js"></script>
+<script type="text/javascript" src="../Source/Tests/TestFixture.js"></script>
+<script type="text/javascript" src="../Source/Tests/TestSuite.js"></script>
+
+<script type="text/javascript" src="../Source/Tests/_Imports.js"></script>
 
 <!-- hack - Must declare EntityProperty before any subclasses. -->
 <script type="text/javascript" src="../Source/Model/Entity.js"></script>
@@ -33,6 +45,8 @@
 <script type="text/javascript" src="../Source/Controls/DataBinding.js"></script>
 <script type="text/javascript" src="../Source/Controls/VenueControls.js"></script>
 <script type="text/javascript" src="../Source/Controls/VenueMessage.js"></script>
+
+<script type="text/javascript" src="../Source/Controls/_Imports.js"></script>
 
 <script type="text/javascript" src="../Source/Display/Color.js"></script>
 <script type="text/javascript" src="../Source/Display/Display2D.js"></script>
@@ -79,6 +93,8 @@
 <script type="text/javascript" src="../Source/Display/Visuals/VisualTransform.js"></script>
 
 <script type="text/javascript" src="../Source/Display/Visuals/Animation/VisualAnimation.js"></script>
+
+<script type="text/javascript" src="../Source/Display/_Imports.js"></script>
 
 <script type="text/javascript" src="../Source/Geometry/Camera.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Coords.js"></script>
@@ -154,11 +170,15 @@
 <script type="text/javascript" src="../Source/Geometry/Transforms/Transform_Translate.js"></script>
 <script type="text/javascript" src="../Source/Geometry/Transforms/Transforms.js"></script>
 
+<script type="text/javascript" src="../Source/Geometry/_Imports.js"></script>
+
 <script type="text/javascript" src="../Source/Input/ActionToInputsMapping.js"></script>
 <script type="text/javascript" src="../Source/Input/Input.js"></script>
 <script type="text/javascript" src="../Source/Input/InputHelper.js"></script>
 <script type="text/javascript" src="../Source/Input/UserInputListener.js"></script>
 <script type="text/javascript" src="../Source/Input/VenueInputCapture.js"></script>
+
+<script type="text/javascript" src="../Source/Input/_Imports.js"></script>
 
 <script type="text/javascript" src="../Source/Media/Font.js"></script>
 <script type="text/javascript" src="../Source/Media/FontNameAndHeight.js"></script>
@@ -175,6 +195,8 @@
 <script type="text/javascript" src="../Source/Media/Audio/VisualSound.js"></script>
 
 <script type="text/javascript" src="../Source/Media/Text/TextString.js"></script>
+
+<script type="text/javascript" src="../Source/Media/_Imports.js"></script>
 
 <script type="text/javascript" src="../Source/Model/EntityBuilder.js"></script>
 <script type="text/javascript" src="../Source/Model/EntityGenerator.js"></script>
@@ -270,8 +292,12 @@
 <script type="text/javascript" src="../Source/Model/Usables/Device.js"></script>
 <script type="text/javascript" src="../Source/Model/Usables/Usable.js"></script>
 
+<script type="text/javascript" src="../Source/Model/_Imports.js"></script>
+
 <script type="text/javascript" src="../Source/Profiles/Profile.js"></script>
 <script type="text/javascript" src="../Source/Profiles/SaveState.js"></script>
+
+<script type="text/javascript" src="../Source/Profiles/_Imports.js"></script>
 
 <script type="text/javascript" src="../Source/Storage/FileHelper.js"></script>
 <script type="text/javascript" src="../Source/Storage/Serializer.js"></script>
@@ -288,9 +314,7 @@
 <script type="text/javascript" src="../Source/Storage/Compressor/ByteStreamFromString.js"></script>
 <script type="text/javascript" src="../Source/Storage/Compressor/CompressorLZW.js"></script>
 
-<script type="text/javascript" src="../Source/Tests/Assert.js"></script>
-<script type="text/javascript" src="../Source/Tests/TestFixture.js"></script>
-<script type="text/javascript" src="../Source/Tests/TestSuite.js"></script>
+<script type="text/javascript" src="../Source/Storage/_Imports.js"></script>
 
 <script type="text/javascript" src="../Source/Utility/Base64Encoder.js"></script>
 <script type="text/javascript" src="../Source/Utility/ClonableHelper.js"></script>
@@ -311,6 +335,8 @@
 <script type="text/javascript" src="../Source/Utility/ValueBreakGroup.js"></script>
 <script type="text/javascript" src="../Source/Utility/VenueTask.js"></script>
 
+<script type="text/javascript" src="../Source/Utility/_Imports.js"></script>
+
 <script type="text/javascript" src="../Source/Demo/Model/EntityProperties/Goal.js"></script>
 
 <script type="text/javascript" src="../Source/Demo/Model/Places/PlaceBuilderDemo.js"></script>
@@ -320,10 +346,6 @@
 <script type="text/javascript" src="../Source/Demo/Model/Places/PlaceBuilderDemo_Movers.js"></script>
 
 <script type="text/javascript" src="../Source/Demo/GameDemo.js"></script>
-
-<script type="text/javascript" src="_BuildRecord.js"></script>
-
-<script type="text/javascript" src="Imports.js"></script>
 
 <script type="text/javascript" src="Mocks/MockEnvironment.js"></script>
 

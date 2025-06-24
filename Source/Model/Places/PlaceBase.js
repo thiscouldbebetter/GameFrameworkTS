@@ -125,25 +125,26 @@ var ThisCouldBeBetter;
             }
             entitySpawn(uwpe) {
                 uwpe.placeSet(this);
-                var entity = uwpe.entity;
-                if (this._entities.indexOf(entity) == -1) // hack
+                var entityToSpawn = uwpe.entity;
+                var entityIsNotAlreadyPresent = (this._entities.indexOf(entityToSpawn) == -1);
+                if (entityIsNotAlreadyPresent) // hack
                  {
-                    if (entity.name == null) {
-                        entity.name = GameFramework.Entity.name;
+                    if (entityToSpawn.name == null) {
+                        entityToSpawn.name = GameFramework.Entity.name;
                     }
-                    this._entities.push(entity);
-                    this.entitiesById.set(entity.id, entity);
+                    this._entities.push(entityToSpawn);
+                    this.entitiesById.set(entityToSpawn.id, entityToSpawn);
                     var placeDefn = this.defn(uwpe.world);
-                    var entityProperties = entity.properties;
+                    var entityProperties = entityToSpawn.properties;
                     for (var i = 0; i < entityProperties.length; i++) {
                         var property = entityProperties[i];
                         var propertyName = property.propertyName();
                         var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
-                        entitiesWithProperty.push(entity);
+                        entitiesWithProperty.push(entityToSpawn);
                     }
                     var propertyNamesToProcess = placeDefn == null ? null : placeDefn.propertyNamesToProcess;
                     if (propertyNamesToProcess == null) {
-                        entity.initialize(uwpe);
+                        entityToSpawn.initialize(uwpe);
                     }
                     else {
                         for (var p = 0; p < propertyNamesToProcess.length; p++) {
@@ -151,10 +152,11 @@ var ThisCouldBeBetter;
                             var entitiesWithProperty = this.entitiesByPropertyName(propertyName);
                             if (entitiesWithProperty != null) {
                                 for (var i = 0; i < entitiesWithProperty.length; i++) {
-                                    var entity = entitiesWithProperty[i];
-                                    var entityProperty = entity.propertyByName(propertyName);
-                                    uwpe.entitySet(entity);
+                                    var entityWithProperty = entitiesWithProperty[i];
+                                    var entityProperty = entityWithProperty.propertyByName(propertyName);
+                                    uwpe.entitySet(entityWithProperty);
                                     entityProperty.initialize(uwpe);
+                                    uwpe.entitySet(entityToSpawn);
                                 }
                             }
                         }
