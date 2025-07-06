@@ -1,3 +1,11 @@
+git clone https://github.com/thiscouldbebetter/GameFrameworkTS
+mkdir Stub
+cd Stub
+xcopy /S /Q ..\GameFrameworkTS\Stub\
+cd ..
+rmdir /S /Q GameFrameworkTS
+
+cd Stub
 git init
 cd Source
 git submodule add https://github.com/thiscouldbebetter/GameFrameworkTS Framework
