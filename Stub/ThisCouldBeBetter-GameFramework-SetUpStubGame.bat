@@ -1,3 +1,4 @@
+rem Clone the main repo, copy the Stub directory out of it, and delete it.
 git clone https://github.com/thiscouldbebetter/GameFrameworkTS
 mkdir Stub
 cd Stub
@@ -17,3 +18,6 @@ git submodule init
 cd ../../..
 git pull --recurse-submodules
 cd ../..
+
+rem Delete the scripts we no longer need.
+del *.sh *.bat
