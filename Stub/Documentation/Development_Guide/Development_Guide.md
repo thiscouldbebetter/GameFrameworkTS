@@ -7,141 +7,32 @@ This guide illustrates the creation of a new game from scratch using the This Co
 1. Setting Up a New Game from Stubs
 -----------------------------------
 
-1.1. First, we need to create a new game based on the stub game.  Download a copy of the GameFrameworkTS repository by running this command:
+1.1. Make sure that TypeScript and the Google Chrome or Chromum browser are installed on the computer.  Opening a command prompt and run the commands "tsc" and "chrome" from within it, verifying that the commands are recognized.
+
+1.2. In any convenient location, download a copy of the GameFrameworkTS repository by opening a command prompt and running this command:
 
 	git clone https://github.com/thiscouldbebetter/GameFrameworkTS
 
-1.2. Then, within the repository, locate the "Source/Stub" directory.
+1.3. Then, within the directory for the newly downloaded repository, locate the "Stub" directory.
 
-1.3. Copy the Stub directory to any convenient locatation outside of the original GameFrameworkTS repository.
+1.4. Copy the Stub directory to any convenient location outside of the original GameFrameworkTS repository's directory.
 
-1.4. Now we need to decide what to call our new game.  Let's make a clone of the classic arcade game Defender, in which the player controls a spaceship tasked with protecting the population of a planet from alien abduction.  Rename the Stub directory to "DefenderClone".
-
-1.5. From within the newly renamed DefenderClone directory, run the following command to run a script that converts the directory into Git repository and add the framework as a submodule (or, if running on a Windows machine, run the .bat equivalent):
+1.5. From within the newly copied Stub directory, run the following command to run a script that converts the directory into Git repository and add the framework as a submodule (if running on a Windows machine, run the ".bat" script instead):
 
 	./Setup-Git-Init\_Repo\_and\_Add\_Framework\_Submodule.sh
 
-1.6. Delete the file "./Setup-Git-Init\_Repo\_and\_Add\_Framework\_Submodule.sh" and its .bat equivalent, as they will no longer be needed.  
+1.6. Delete the file "./Setup-Git-Init_Repo_and_Add_Framework_Submodule.sh" and its .bat equivalent, as they will no longer be needed.
 
-1.7. In the DefenderClone directory, open the Source directory.
+1.7. In the Stub directory, open the Source directory.
 
-1.8. Delete the files "GameStub-RunsInPlace.html", as it will no longer be needed.  Also, carefully delete all the existing ".js" files in the directory, since we'll be renaming one of the corresponding ".ts" files and if we don't delete it, the .js file with the old name will just hang around forever.
+1.8. From the Source directory, open a command prompt, then run the command "_Build.sh" (or "_Build.bat" for Windows) to compile the program.  Wait for the command to complete, then verify that no errors are displayed and that a .js file is generated for each of the .ts files in the Source directory.  If there are errors, make sure that TypeScript is installed, and that the output of the "date" command has the format expected by the script.
 
-1.9. In the Source directory, rename the file "GameStub.html" to "DefenderClone.html".  
+1.9. Close any open instances of the Chrome or Chromium browser.
 
-1.10. Most of the gameplay in classic arcade games take place on "levels", so let's rename the PlaceStub class accordingly.  Still in the Source directory, rename the file "PlaceStub.ts" to "PlaceLevel.ts".
+1.10. In the Source directory, locate the script named "RunChromeWithFileAccess.sh" (or the .bat equivalent if running Windows) and run it.  This will start the web browser with the necessary permissions for running the game locally without a dedicated web server.
 
-1.11. Open the newly renamed file PlaceLevel.ts in a text editor, replace all instances of the text "Stub" with "Level" (there are four of them), and save.  When you're done, it should look like this:
+1.11. Open Game.html in the web browser.  Press the Enter key to progress past the default opening screens showing the game's framework, producer, and title.  Verify that a blank screen is displayed.
 
-	class PlaceLevel extends Place
-	{
-		constructor()
-		{
-			super
-			(
-				PlaceLevel.name,
-				PlaceLevel.defnBuild().name,
-				Coords.fromXY(400, 300), // size
-				 // entities
-				[
-					new UserInputListener()
-				]
-			);
-		}
-
-		static defnBuild(): PlaceDefn
-		{
-			var actionDisplayRecorderStartStop = DisplayRecorder.actionStartStop();
-			var actionShowMenu = Action.Instances().ShowMenuSettings;
-
-			var actions =
-			[
-				actionDisplayRecorderStartStop,
-				actionShowMenu
-			];
-
-			var inputNames = Input.Names();
-
-			var actionToInputsMappings =
-			[
-				new ActionToInputsMapping
-				(
-					actionDisplayRecorderStartStop.name, [ "~" ], true // inactivate
-				),
-
-				ActionToInputsMapping.fromActionNameAndInputName
-				(
-					actionShowMenu.name, inputNames.Escape
-				)
-			];
-
-			var entityPropertyNamesToProcess: string[] =
-			[
-				Actor.name,
-				Collidable.name,
-				Constrainable.name,
-				Locatable.name
-			];
-
-			return PlaceDefn.from4
-			(
-				PlaceLevel.name,
-				actions,
-				actionToInputsMappings,
-				entityPropertyNamesToProcess
-			);
-		}
-	}
-
-1.12. Still in the Source directory, open the file "WorldGame.ts" in a text editor.  Locate the constructor, and change the assignment of the string "WorldGame" to "DefenderClone".  Replace both instances of the text "PlaceStub" with "PlaceLevel".  Save the file.  When you're done, it should look like the following:
-
-class WorldGame extends World
-{
-	constructor()
-	{
-		var name = "DefenderClone";
-		var timeCreated = DateTime.now();
-		var defn = WorldGame.defnBuild();
-		var place = new PlaceLevel();
-		var places = [ place ];
-		var placesByName = new Map(places.map(x => [x.name, x]) );
-		var placeGetByName = (placeName: string) => placesByName.get(placeName);
-		var placeInitialName = places[0].name;
-
-		super
-		(
-			name, timeCreated, defn, placeGetByName, placeInitialName
-		);
-	}
-
-	static defnBuild(): WorldDefn
-	{
-		return new WorldDefn
-		([
-			[
-				UserInputListener.activityDefn()
-			],
-			[
-				PlaceLevel.defnBuild()
-			]
-		]);
-	}
-
-	toControl(): ControlBase
-	{
-		return new ControlNone();
-	}
-}
-
-1.13. From the Source directory, run one of the scripts "_Build.bat" or "_Build.sh", depending on the computer's operating system, to compile the program.  These scripts will generate a _BuildRecord.ts file, then run the "tsc" command to "transpile" the TypeScript files into JavaScript.  Wait for the command to complete.  Verify that the file _BuildErrors.txt is empty, and that a .js file is generated for each of the .ts files in the Source directory.  (Note that these scripts are prone to errors, especially the .bat, due to inconsistencies in date format due to user settings and different versions of Windows.  If the script fails to produce working code, and it is not desired to spend the time and effort to adjust it, as an alternative one may revert the changes to _BuildRecord.ts, then simply open a command prompt within the directory and run "tsc" directly instead.)
-
-1.14. Open the file "DefenderClone.html" in a text editor.  This is the file that hosts your program, and it contains references to every class file you use in your program.  Change the reference to "PlaceStub.js" to instead reference "PlaceLevel.js".  You'll need to add a corresponding entry to this file every time you start using a new class.  The edited line for the reference to PlaceLevel will look like this.
-
-	<script type="text/javascript" src="PlaceLevel.js"></script>
-
-1.15. Open the file DefenderClone.html in a web browser, and, if necessary, enable JavaScript.  Click the "Start" buttons on the opening, producer, and title screens to dismiss 
- them, then click the "Skip" button to skip creation of a player profile.  A black screen will displayed.  If you'd like, you can press the Escape key to see some game and settings menus.
- 
 <img src="Screenshot-1-Blank.png" />
 
 

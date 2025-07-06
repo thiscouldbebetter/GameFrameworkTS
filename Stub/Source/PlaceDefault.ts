@@ -1,12 +1,12 @@
 
-class PlaceStub extends PlaceBase
+class PlaceDefault extends PlaceBase
 {
 	constructor()
 	{
 		super
 		(
-			PlaceStub.name,
-			PlaceStub.defnBuild().name,
+			PlaceDefault.name,
+			PlaceDefault.defnBuild().name,
 			null, // parentName
 			Coords.fromXY(400, 300), // size
 			 // entities
@@ -18,8 +18,10 @@ class PlaceStub extends PlaceBase
 
 	static defnBuild(): PlaceDefn
 	{
-		var actionDisplayRecorderStartStop = DisplayRecorder.actionStartStop();
-		var actionShowMenu = Action.Instances().ShowMenuSettings;
+		var actionDisplayRecorderStartStop =
+			DisplayRecorder.actionStartStop();
+		var actionShowMenu =
+			Action.Instances().ShowMenuSettings;
 
 		var actions =
 		[
@@ -31,9 +33,10 @@ class PlaceStub extends PlaceBase
 
 		var actionToInputsMappings =
 		[
-			new ActionToInputsMapping
+			ActionToInputsMapping.fromActionNameAndInputName
 			(
-				actionDisplayRecorderStartStop.name, [ "~" ], true // inactivate
+				actionDisplayRecorderStartStop.name,
+				inputNames.Tilde
 			),
 
 			ActionToInputsMapping.fromActionNameAndInputName
@@ -50,7 +53,7 @@ class PlaceStub extends PlaceBase
 			Locatable.name
 		];
 
-		return PlaceDefn.from5
+		return PlaceDefn.fromNameMusicActionsMappingsAndPropertyNames
 		(
 			PlaceStub.name,
 			"Music_Music", // soundForMusicName

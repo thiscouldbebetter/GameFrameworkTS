@@ -35,12 +35,12 @@ var ThisCouldBeBetter;
                 null // placeFinalize
                 );
             }
-            static fromPropertyNamesToProcess(propertyNamesToProcess) {
-                return PlaceDefn.fromNameAndPropertyNamesToProcess(PlaceDefn.name, propertyNamesToProcess);
-            }
-            static from5(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess) {
+            static fromNameMusicActionsMappingsAndPropertyNames(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess) {
                 return new PlaceDefn(name, soundForMusicName, actions, actionToInputsMappings, propertyNamesToProcess, null, null // placeInitialize, placeFinalize
                 );
+            }
+            static fromPropertyNamesToProcess(propertyNamesToProcess) {
+                return PlaceDefn.fromNameAndPropertyNamesToProcess(PlaceDefn.name, propertyNamesToProcess);
             }
             actionToInputsMappingsEdit() {
                 GameFramework.ArrayHelper.overwriteWith(this.actionToInputsMappingsEdited, this.actionToInputsMappings);

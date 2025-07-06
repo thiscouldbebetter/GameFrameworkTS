@@ -1,15 +1,16 @@
 
 class WorldGame extends World
 {
-	constructor()
+	constructor(name: string)
 	{
-		var name = "WorldGame";
+		var name = name;
 		var timeCreated = DateTime.now();
 		var defn = WorldGame.defnBuild();
 		var place = new PlaceStub();
 		var places = [ place ];
 		var placesByName = new Map(places.map(x => [x.name, x]) );
-		var placeGetByName = (placeName: string) => placesByName.get(placeName);
+		var placeGetByName =
+			(placeName: string) => placesByName.get(placeName);
 		var placeInitialName = places[0].name;
 
 		super

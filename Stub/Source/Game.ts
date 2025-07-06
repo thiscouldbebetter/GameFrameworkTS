@@ -1,14 +1,16 @@
 
 class Game
 {
+	name: string,
 	contentDirectoryPath: string;
 
-	constructor(contentDirectoryPath: string)
+	constructor(name: string, contentDirectoryPath: string)
 	{
+		this.name = name;
 		this.contentDirectoryPath = contentDirectoryPath;
 	}
 
-	main(): void
+	start(): void
 	{
 		// It may be necessary to clear local storage to prevent errors on
 		// deserialization of existing saved items after the schema changes.
@@ -19,12 +21,12 @@ class Game
 		var mediaLibrary =
 			MediaLibrary.fromContentDirectoryPathAndMediaFilePaths
 			(
-				"../Content/", mediaFilePaths
+				this.contentDirectoryPath, mediaFilePaths
 			);
 
 		var worldCreator = WorldCreator.fromWorldCreate
 		(
-			() => new WorldGame()
+			() => new WorldGame(this.name)
 		);
 
 		var universe = Universe.fromMediaLibraryAndWorldCreator

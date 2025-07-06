@@ -80,15 +80,7 @@ export class PlaceDefn
 		);
 	}
 
-	static fromPropertyNamesToProcess
-	(
-		propertyNamesToProcess: string[]
-	)
-	{
-		return PlaceDefn.fromNameAndPropertyNamesToProcess(PlaceDefn.name, propertyNamesToProcess);
-	}
-
-	static from5
+	static fromNameMusicActionsMappingsAndPropertyNames
 	(
 		name: string,
 		soundForMusicName: string,
@@ -106,6 +98,14 @@ export class PlaceDefn
 			propertyNamesToProcess,
 			null, null // placeInitialize, placeFinalize
 		);
+	}
+
+	static fromPropertyNamesToProcess
+	(
+		propertyNamesToProcess: string[]
+	)
+	{
+		return PlaceDefn.fromNameAndPropertyNamesToProcess(PlaceDefn.name, propertyNamesToProcess);
 	}
 
 	actionToInputsMappingsEdit(): void
