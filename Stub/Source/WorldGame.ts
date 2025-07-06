@@ -6,7 +6,7 @@ class WorldGame extends World
 		var name = name;
 		var timeCreated = DateTime.now();
 		var defn = WorldGame.defnBuild();
-		var place = new PlaceStub();
+		var place = new PlaceDefault();
 		var places = [ place ];
 		var placesByName = new Map(places.map(x => [x.name, x]) );
 		var placeGetByName =
@@ -27,7 +27,7 @@ class WorldGame extends World
 				UserInputListener.activityDefn()
 			],
 			[
-				PlaceStub.defnBuild()
+				PlaceDefault.defnBuild()
 			]
 		]);
 	}

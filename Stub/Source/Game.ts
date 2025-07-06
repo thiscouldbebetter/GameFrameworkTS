@@ -1,7 +1,7 @@
 
 class Game
 {
-	name: string,
+	name: string;
 	contentDirectoryPath: string;
 
 	constructor(name: string, contentDirectoryPath: string)

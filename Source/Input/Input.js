@@ -77,6 +77,7 @@ var ThisCouldBeBetter;
                 this.Shift = "Shift";
                 this.Space = "Space";
                 this.Tab = "Tab";
+                this.Tilde = "~";
                 this._All =
                     [
                         this._0,
@@ -134,7 +135,8 @@ var ThisCouldBeBetter;
                         this.MouseMove,
                         this.Shift,
                         this.Space,
-                        this.Tab
+                        this.Tab,
+                        this.Tilde
                     ];
                 this._AllByName = GameFramework.ArrayHelper.addLookups(this._All, (x) => x);
             }
