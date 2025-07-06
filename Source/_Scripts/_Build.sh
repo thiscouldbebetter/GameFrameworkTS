@@ -2,6 +2,9 @@
 
 echo Script begins.
 
+echo Returning to parent directory.
+cd ..
+
 echo Deleting any existing _BuildErrors.txt.
 rm _BuildErrors.txt
 

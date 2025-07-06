@@ -19,5 +19,12 @@ cd ../../..
 git pull --recurse-submodules
 cd ../..
 
+rem Copy build and run scripts from Framework.
+mkdir _Scripts
+cd _Scripts
+xcopy /S /Q ..\Framework\Source\_Scripts\
+cd ..
+
 rem Delete the scripts we no longer need.
 del *.sh *.bat
+

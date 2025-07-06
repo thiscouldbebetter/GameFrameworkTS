@@ -10,6 +10,8 @@ echo which may require changing this script accordingly.)
 
 echo:
 
+cd ..
+
 del _BuildErrors.txt
 
 echo Building _BuildRecord.ts...

@@ -5,7 +5,7 @@ git clone https://github.com/thiscouldbebetter/GameFrameworkTS
 mkdir Stub
 cd Stub
 # todo - Copied some commands from Windows script and never tested.
-cp ..\GameFrameworkTS\Stub\ .
+cp ../GameFrameworkTS/Stub/ .
 cd ..
 rm -rf GameFrameworkTS
 cd Stub
@@ -23,3 +23,9 @@ cd ../..
 
 # Delete the scripts we no longer need.
 rm *.sh *.bat
+
+# Copy build and run scripts from Framework.
+mkdir _Scripts
+cd _Scripts
+cp ../Framework/Source/_Scripts/ .
+cd ..
