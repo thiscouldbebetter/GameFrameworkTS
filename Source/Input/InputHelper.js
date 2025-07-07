@@ -10,16 +10,15 @@ var ThisCouldBeBetter;
                 this.mouseMovePos = GameFramework.Coords.create();
                 this.mouseMovePosPrev = GameFramework.Coords.create();
                 this.mouseMovePosNext = GameFramework.Coords.create();
-                var inputNames = GameFramework.Input.Names();
-                this.inputNamesLookup = inputNames._AllByName;
+                var inputs = GameFramework.Input.Instances();
                 this.keysToPreventDefaultsFor =
                     [
-                        inputNames.ArrowDown,
-                        inputNames.ArrowLeft,
-                        inputNames.ArrowRight,
-                        inputNames.ArrowUp,
-                        inputNames.F5,
-                        inputNames.Tab
+                        inputs.ArrowDown.symbol,
+                        inputs.ArrowLeft.symbol,
+                        inputs.ArrowRight.symbol,
+                        inputs.ArrowUp.symbol,
+                        inputs.F5.symbol,
+                        inputs.Tab.symbol
                     ];
                 this.inputsPressed = [];
                 this.inputsPressedByName = new Map();
@@ -64,16 +63,17 @@ var ThisCouldBeBetter;
                 }
                 this.gamepadsCheck();
             }
-            inputAdd(inputPressedName) {
+            inputAdd(inputPressed) {
+                var inputPressedName = inputPressed.name;
                 if (this.inputsPressedByName.has(inputPressedName) == false) {
-                    var inputPressed = new GameFramework.Input(inputPressedName);
+                    inputPressed.isActive = true;
                     this.inputsPressedByName.set(inputPressedName, inputPressed);
                     this.inputsPressed.push(inputPressed);
                 }
             }
-            inputRemove(inputReleasedName) {
+            inputRemove(inputReleased) {
+                var inputReleasedName = inputReleased.name;
                 if (this.inputsPressedByName.has(inputReleasedName)) {
-                    var inputReleased = this.inputsPressedByName.get(inputReleasedName);
                     this.inputsPressedByName.delete(inputReleasedName);
                     GameFramework.ArrayHelper.remove(this.inputsPressed, inputReleased);
                 }
@@ -85,23 +85,24 @@ var ThisCouldBeBetter;
             inputsRemoveAll() {
                 for (var i = 0; i < this.inputsPressed.length; i++) {
                     var input = this.inputsPressed[i];
-                    this.inputRemove(input.name);
+                    this.inputRemove(input);
                 }
             }
             isMouseClicked() {
                 var returnValue = false;
-                var inputNameMouseClick = GameFramework.Input.Names().MouseClick;
+                var inputNameMouseClick = GameFramework.Input.Instances().MouseClick.name;
                 var inputPressed = this.inputsPressedByName.get(inputNameMouseClick);
-                returnValue = (inputPressed != null && inputPressed.isActive);
+                returnValue =
+                    (inputPressed != null && inputPressed.isActive);
                 return returnValue;
             }
             mouseClickedSet(value) {
-                var inputNameMouseClick = GameFramework.Input.Names().MouseClick;
+                var inputMouseClick = GameFramework.Input.Instances().MouseClick;
                 if (value == true) {
-                    this.inputAdd(inputNameMouseClick);
+                    this.inputAdd(inputMouseClick);
                 }
                 else {
-                    this.inputRemove(inputNameMouseClick);
+                    this.inputRemove(inputMouseClick);
                 }
             }
             pause() {
@@ -115,7 +116,7 @@ var ThisCouldBeBetter;
             }
             updateForTimerTick_Gamepads(universe) {
                 var systemGamepads = this.systemGamepads();
-                var inputNames = GameFramework.Input.Names();
+                var inputs = GameFramework.Input.Instances();
                 for (var i = 0; i < this.gamepadsConnected.length; i++) {
                     var gamepad = this.gamepadsConnected[i];
                     var systemGamepad = systemGamepads[gamepad.index];
@@ -126,12 +127,20 @@ var ThisCouldBeBetter;
                         var axisDisplacement = axisDisplacements[a];
                         if (axisDisplacement == 0) {
                             if (a == 0) {
-                                this.inputRemove(inputNames.GamepadMoveLeft + i);
-                                this.inputRemove(inputNames.GamepadMoveRight + i);
+                                var inputLeftName = inputs.GamepadMoveLeft.name + i;
+                                var inputLeft = inputs.byName(inputLeftName);
+                                this.inputRemove(inputLeft);
+                                var inputRightName = inputs.GamepadMoveRight.name + i;
+                                var inputRight = inputs.byName(inputRightName);
+                                this.inputRemove(inputRight);
                             }
                             else {
-                                this.inputRemove(inputNames.GamepadMoveUp + i);
-                                this.inputRemove(inputNames.GamepadMoveDown + i);
+                                var inputUpName = inputs.GamepadMoveUp.name + i;
+                                var inputUp = inputs.byName(inputUpName);
+                                this.inputRemove(inputUp);
+                                var inputDownName = inputs.GamepadMoveDown.name + i;
+                                var inputDown = inputs.byName(inputDownName);
+                                this.inputRemove(inputDown);
                             }
                         }
                         else {
@@ -143,18 +152,21 @@ var ThisCouldBeBetter;
                             else {
                                 directionName = (axisDisplacement < 0 ? "Up" : "Down");
                             }
-                            this.inputAdd(gamepadIDMove + directionName);
+                            var inputToAdd = inputs.byName(gamepadIDMove + directionName);
+                            this.inputAdd(inputToAdd);
                         }
                     } // end for
                     var gamepadIDButton = gamepadID + "Button";
                     var areButtonsPressed = gamepad.buttonsPressed;
                     for (var b = 0; b < areButtonsPressed.length; b++) {
                         var isButtonPressed = areButtonsPressed[b];
+                        var inputName = gamepadIDButton + b;
+                        var input = inputs.byName(inputName);
                         if (isButtonPressed) {
-                            this.inputAdd(gamepadIDButton + b);
+                            this.inputAdd(input);
                         }
                         else {
-                            this.inputRemove(gamepadIDButton + b);
+                            this.inputRemove(input);
                         }
                     }
                 }
@@ -162,22 +174,27 @@ var ThisCouldBeBetter;
             // events
             // events - keyboard
             handleEventKeyDown(event) {
-                var inputPressed = event.key;
-                if (this.keysToPreventDefaultsFor.indexOf(inputPressed) >= 0) {
+                var inputSymbol = event.key;
+                if (this.keysToPreventDefaultsFor.indexOf(inputSymbol) >= 0) {
                     event.preventDefault();
                 }
-                this.inputAdd(inputPressed);
+                var inputPressed = GameFramework.Input.bySymbol(inputSymbol);
+                if (inputPressed != null) {
+                    this.inputAdd(inputPressed);
+                }
             }
             handleEventKeyUp(event) {
-                var inputReleased = event.key;
-                this.inputRemove(inputReleased);
+                var inputReleased = GameFramework.Input.bySymbol(event.key);
+                if (inputReleased != null) {
+                    this.inputRemove(inputReleased);
+                }
             }
             // events - mouse
             handleEventMouseDown(event) {
                 var canvas = event.target;
                 var canvasBox = canvas.getBoundingClientRect();
                 this.mouseClickPos.overwriteWithDimensions(event.clientX - canvasBox.left, event.clientY - canvasBox.top, 0);
-                this.inputAdd(GameFramework.Input.Names().MouseClick);
+                this.inputAdd(GameFramework.Input.Instances().MouseClick);
             }
             handleEventMouseMove(event) {
                 var canvas = event.target;
@@ -186,20 +203,20 @@ var ThisCouldBeBetter;
                 if (this.mouseMovePosNext.equals(this.mouseMovePos) == false) {
                     this.mouseMovePosPrev.overwriteWith(this.mouseMovePos);
                     this.mouseMovePos.overwriteWith(this.mouseMovePosNext);
-                    this.inputAdd(GameFramework.Input.Names().MouseMove);
+                    this.inputAdd(GameFramework.Input.Instances().MouseMove);
                 }
             }
             handleEventMouseUp(event) {
-                this.inputRemove(GameFramework.Input.Names().MouseClick);
+                this.inputRemove(GameFramework.Input.Instances().MouseClick);
             }
             handleEventMouseWheel(event) {
                 if (this.isMouseWheelTracked) {
                     var wheelMovementAmountInPixels = event.deltaY; // Seems a strange unit.
-                    var inputNames = GameFramework.Input.Names();
-                    var inputName = wheelMovementAmountInPixels > 0
-                        ? inputNames.MouseWheelDown
-                        : inputNames.MouseWheelUp;
-                    this.inputAdd(inputName);
+                    var inputs = GameFramework.Input.Instances();
+                    var inputToAdd = wheelMovementAmountInPixels > 0
+                        ? inputs.MouseWheelDown
+                        : inputs.MouseWheelUp;
+                    this.inputAdd(inputToAdd);
                 }
             }
             // Events - Touch.
@@ -211,11 +228,11 @@ var ThisCouldBeBetter;
                     var canvas = event.target;
                     var canvasBox = canvas.getBoundingClientRect();
                     this.mouseClickPos.overwriteWithDimensions(touch.clientX - canvasBox.left, touch.clientY - canvasBox.top, 0);
-                    this.inputAdd(GameFramework.Input.Names().MouseClick);
+                    this.inputAdd(GameFramework.Input.Instances().MouseClick);
                 }
             }
             handleEventTouchEnd(event) {
-                this.inputRemove(GameFramework.Input.Names().MouseClick);
+                this.inputRemove(GameFramework.Input.Instances().MouseClick);
             }
             // gamepads
             gamepadsCheck() {

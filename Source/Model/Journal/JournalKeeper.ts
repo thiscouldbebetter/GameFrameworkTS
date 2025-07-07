@@ -348,7 +348,7 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 			],
 
 			[
-				new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ),
+				new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true ),
 			]
 		);
 

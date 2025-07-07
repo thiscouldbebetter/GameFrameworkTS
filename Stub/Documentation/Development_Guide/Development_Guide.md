@@ -327,7 +327,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 								Coords.fromXY(0, -8),
 								Coords.fromXY(4, -4)
 							],
-							Color.byName("Brown")
+							Color.Instances().Brown
 						)
 					),
 
@@ -363,23 +363,23 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 					Drawable.fromVisual
 					(
-						new VisualGroup
-						([
+						VisualGroup.fromChildren
+						(
 							VisualEllipse.fromSemiaxesAndColorFill
 							(
-								6, 4, Color.byName("Green")
+								6, 4, Color.Instances().Green
 							),
 							VisualEllipse.fromSemiaxesAndColorFill
 							(
-								4, 3, Color.byName("Red")
+								4, 3, Color.Instances().Red
 							),
-							new VisualFan
+							VisualFan.fromRadiusAnglesStartAndSpannedAndColorsFillAndBorder
 							(
 								4, // radius
 								.5, .5, // angleStart-, angleSpannedInTurns
-								Color.byName("Red"), null // colorFill, colorBorder
+								Color.Instances().Red, null // colorFill, colorBorder
 							)
-						])
+						)
 					),
 
 					Locatable.fromPos(pos),
@@ -415,8 +415,8 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 			if (targetEntity == null)
 			{
-				var PlaceDefault = place as PlaceDefault;
-				var habitats = PlaceDefault.habitats();
+				var placeDefault = place as PlaceDefault;
+				var habitats = placeDefault.habitats();
 				if (habitats.length == 0)
 				{
 					return; // todo
@@ -501,17 +501,27 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	Raider.activityDefnBuild()
 
-8.5. We also need to add references to the newly declared Habitat and Raider classes in Game.html.  These should be added near the ones previously added for Planet and Ship:
+8.5. The Raider's activity makes use of the method PlaceDefault.habitats() to get a convenient array of all the Habitats on the level.  However, the sharp-eyed observer will note that that method doesn't exist yet.  So open PlaceDefault.ts and add the following lines just before the final close brace of the class:</p>
+
+	habitats(): Habitat[]
+	{
+		return this._entities.filter
+		(
+			x => x.constructor.name == Habitat.name
+		) as Habitat[];
+	}
+
+8.6. We also need to add references to the newly declared Habitat and Raider classes in Game.html.  These should be added near the ones previously added for Planet and Ship:
 
 	<script type="text/javascript" src="Model/Habitat.js"></script>
 	<script type="text/javascript" src="Model/Raider.js"></script>
 
-8.6. Now we'll add one habitat and one raider to the level.  Open PlaceDefault.ts, and, in the constructor, add these two lines to bottom of the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
+8.7. Now we'll add one habitat and one raider to the level.  Open PlaceDefault.ts, and, in the constructor, add these two lines to bottom of the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
 
 	new Habitat(Coords.fromXY(150, 250) ),
 	new Raider(Coords.fromXY(200, -50) )
 
-8.7. Finally, run the build script and refresh the web browser.  Now a civilian habitat appears on the ground.  An alien raider will descend from the top of the screen, pick up the habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
+8.8. Finally, run the build script and refresh the web browser.  Now a civilian habitat appears on the ground.  An alien raider will descend from the top of the screen, pick up the habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
 
 <img src="Screenshot-8-Raider_Takes_Habitat.gif" />
 
@@ -523,28 +533,28 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 So let's give this kitten some claws.  (The kitten is your spaceship.  The claws are, like, plasma blasters.)
 
-9.2. To give your spaceship the ability to fire bullets, open Ship.ts and add these lines to the list of entity properties in the constructor, remembering to add a comma to separate array elements:
+9.2. To give your spaceship the ability to fire bullets, open Ship.ts and add these lines to the list of entity properties in the constructor, remembering to adjust commas to separate array elements:
 
-	new ProjectileGenerator
+	ProjectileGenerator.fromNameAndGenerations
 	(
 		"Bullet",
 		[
-			ProjectileGeneration.fromVisual
-			(
-				VisualSound.default()
-			),
-
-			new ProjectileGeneration
+			ProjectileGeneration.fromRadiusDistanceSpeedTicksDamageAndVisual
 			(
 				2, // radius
 				5, // distanceInitial
 				4, // speed
 				128, // ticksToLive
 				Damage.fromAmount(1),
-				VisualCircle.fromRadiusAndColorFill
-				(
-					2, Color.byName("Yellow")
-				)
+				VisualGroup.fromChildren
+				([
+					VisualSound.default(),
+
+					VisualCircle.fromRadiusAndColorFill
+					(
+						2, Color.Instances().Yellow
+					)
+				])
 			)
 		]
 	)
@@ -555,35 +565,15 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 
 9.4. And these lines to the end of "actionsToInputMappings" array:
 
-	new ActionToInputsMapping
+	ActionToInputsMapping.fromActionNameAndInputName
 	(
 		ProjectileGenerator.actionFire().name,
-		[ inputNames.Space ],
-		true // inactivateInputWhenActionPerformed
+		inputNames.Space
 	)
 
 (As always, remember to delimit these new array elements from the existing ones with commas.)
 
-9.5. You'll also need to add the ProjectileGenerator class and some supporting classes to Imports.ts, like this:
-
-	import ProjectileGenerator = gf.ProjectileGenerator;
-	import ProjectileGeneration = gf.ProjectileGeneration;
-	import VisualCircle = gf.VisualCircle;
-	import Ephemeral = gf.Ephemeral;
-	import DiceRoll = gf.DiceRoll;
-
-9.6. And also add it to Game.html, as shown below.  Actually, you may want to add references to several related classes while you're at it:
-
-	<script type="text/javascript" src="Framework/Source/Model/Combat/Damage.js"></script>
-	<script type="text/javascript" src="Framework/Source/Model/Combat/Damager.js"></script>
-	<script type="text/javascript" src="Framework/Source/Model/Combat/Killable.js"></script>
-	<script type="text/javascript" src="Framework/Source/Model/Combat/ProjectileGenerator.js"></script>
-
-	<script type="text/javascript" src="Framework/Source/Model/Mortality/Ephemeral.js"></script>
-
-	<script type="text/javascript" src="Framework/Source/Utility/DiceRoll.js"></script>
-
-9.7. Re-compile the game and refresh the web browser.  The good news is, your spaceship will now shoot bullets when you press the spacebar!
+9.7. Re-run the build script and refresh the web browser.  The good news is, your spaceship will now shoot bullets when you press the spacebar!
 
 <img src="Screenshot-9-Spaceship_Fires_Bullet.gif" />
 

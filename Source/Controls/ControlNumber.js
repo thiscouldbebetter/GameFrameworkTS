@@ -39,7 +39,7 @@ var ThisCouldBeBetter;
                 var valueAsString = value.toString();
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 if (actionNameToHandle == controlActionNames.ControlCancel
-                    || actionNameToHandle == GameFramework.Input.Names().Backspace) {
+                    || actionNameToHandle == GameFramework.Input.Instances().Backspace.name) {
                     valueAsString = valueAsString.substr(0, valueAsString.length - 1);
                     value = parseFloat(valueAsString);
                     this.valueSet(value);

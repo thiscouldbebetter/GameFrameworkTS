@@ -195,7 +195,9 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Done", font, back // click
                     )
-                ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true)]);
+                ], [new GameFramework.Action("Back", back)], [
+                    new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true)
+                ]);
                 return returnValue;
             }
             // Clonable.

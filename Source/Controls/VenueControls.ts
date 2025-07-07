@@ -69,7 +69,7 @@ export class VenueControls implements Venue
 		};
 
 		var controlActionNames = ControlActionNames.Instances();
-		var inputNames = Input.Names();
+		var inputs = Input.Instances();
 
 		var inactivate = true;
 
@@ -79,8 +79,8 @@ export class VenueControls implements Venue
 			(
 				controlActionNames.ControlIncrement,
 				ArrayHelper.addMany(
-					[inputNames.ArrowDown],
-					buildGamepadInputs(inputNames.GamepadMoveDown)
+					[inputs.ArrowDown.name],
+					buildGamepadInputs(inputs.GamepadMoveDown.name)
 				),
 				inactivate
 			),
@@ -89,8 +89,8 @@ export class VenueControls implements Venue
 				controlActionNames.ControlPrev,
 				ArrayHelper.addMany
 				(
-					[inputNames.ArrowLeft],
-					buildGamepadInputs(inputNames.GamepadMoveLeft)
+					[inputs.ArrowLeft.name],
+					buildGamepadInputs(inputs.GamepadMoveLeft.name)
 				),
 				inactivate
 			),
@@ -99,11 +99,11 @@ export class VenueControls implements Venue
 				controlActionNames.ControlNext,
 				ArrayHelper.addMany
 				(
-					[inputNames.ArrowRight],
+					[inputs.ArrowRight.name],
 					ArrayHelper.addMany
 					(
-						[inputNames.ArrowRight, inputNames.Tab],
-						buildGamepadInputs(inputNames.GamepadMoveRight)
+						[inputs.ArrowRight.name, inputs.Tab.name],
+						buildGamepadInputs(inputs.GamepadMoveRight.name)
 					)
 				),
 				inactivate
@@ -113,8 +113,8 @@ export class VenueControls implements Venue
 				controlActionNames.ControlDecrement,
 				ArrayHelper.addMany
 				(
-					[inputNames.ArrowUp],
-					buildGamepadInputs(inputNames.GamepadMoveUp)
+					[inputs.ArrowUp.name],
+					buildGamepadInputs(inputs.GamepadMoveUp.name)
 				),
 				inactivate
 			),
@@ -123,8 +123,8 @@ export class VenueControls implements Venue
 				controlActionNames.ControlConfirm,
 				ArrayHelper.addMany
 				(
-					[inputNames.Enter],
-					buildGamepadInputs(inputNames.GamepadButton1)
+					[inputs.Enter.name],
+					buildGamepadInputs(inputs.GamepadButton1.name)
 				),
 				inactivate
 			),
@@ -133,8 +133,8 @@ export class VenueControls implements Venue
 				controlActionNames.ControlCancel,
 				ArrayHelper.addMany
 				(
-					[inputNames.Escape],
-					buildGamepadInputs(inputNames.GamepadButton0)
+					[inputs.Escape.name],
+					buildGamepadInputs(inputs.GamepadButton0.name)
 				),
 				inactivate
 			)
@@ -198,11 +198,12 @@ export class VenueControls implements Venue
 	updateForTimerTick_InputPressedIsActive(universe: Universe, inputPressed: Input): void
 	{
 		var inputHelper = universe.inputHelper;
-		var inputNames = Input.Names();
+		var inputs = Input.Instances();
 
 		var inputPressedName = inputPressed.name;
 
-		var mapping = this.actionToInputsMappingsByInputName.get(inputPressedName);
+		var mapping =
+			this.actionToInputsMappingsByInputName.get(inputPressedName);
 
 		if (inputPressedName.startsWith("Mouse") == false)
 		{
@@ -226,7 +227,7 @@ export class VenueControls implements Venue
 				}
 			}
 		}
-		else if (inputPressedName == inputNames.MouseClick)
+		else if (inputPressedName == inputs.MouseClick.name)
 		{
 			this._mouseClickPos.overwriteWith
 			(
@@ -243,7 +244,7 @@ export class VenueControls implements Venue
 				inputPressed.isActive = false;
 			}
 		}
-		else if (inputPressedName == inputNames.MouseMove)
+		else if (inputPressedName == inputs.MouseMove.name)
 		{
 			this._mouseMovePos.overwriteWith
 			(

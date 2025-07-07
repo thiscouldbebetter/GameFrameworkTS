@@ -144,7 +144,7 @@ var ThisCouldBeBetter;
                 childControls, [
                     new GameFramework.Action("Back", back),
                 ], [
-                    new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true),
+                    new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true),
                 ]);
                 if (includeTitleAndDoneButton) {
                     childControls.splice(0, // indexToInsertAt

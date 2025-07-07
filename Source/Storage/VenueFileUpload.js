@@ -7,13 +7,17 @@ var ThisCouldBeBetter;
             constructor(venueNextIfFileSpecified, venueNextIfCancelled) {
                 this.venueNextIfFileSpecified = venueNextIfFileSpecified;
                 this.venueNextIfCancelled = venueNextIfCancelled;
-                var inputNames = GameFramework.Input.Names();
+                var inputs = GameFramework.Input.Instances();
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 this.actionToInputsMappings =
                     [
-                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlCancel, [inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
+                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlCancel, [
+                            inputs.Escape.name,
+                            inputs.GamepadButton0.name + "0"
+                        ], true),
                     ];
-                this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
+                this.actionToInputsMappingsByInputName =
+                    GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
             }
             // venue
             draw(universe) { }

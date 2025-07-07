@@ -413,26 +413,26 @@ var ThisCouldBeBetter;
                     a("Item8", () => itemNPerform(8)),
                     a("Item9", () => itemNPerform(9)),
                 ];
-                var inputNames = GameFramework.Input.Names();
+                var inputs = GameFramework.Input.Instances();
                 var mappings = [
-                    atim("Back", inputNames.Escape),
+                    atim("Back", inputs.Escape.name),
                     atim("Up", "["),
                     atim("Down", "]"),
                     atim("Sort", "\\"),
                     atim("Split", "/"),
                     atim("Join", "="),
-                    atim("Drop", inputNames.d),
-                    atim("Use", inputNames.e),
-                    atim("Item0", inputNames._0),
-                    atim("Item1", inputNames._1),
-                    atim("Item2", inputNames._2),
-                    atim("Item3", inputNames._3),
-                    atim("Item4", inputNames._4),
-                    atim("Item5", inputNames._5),
-                    atim("Item6", inputNames._6),
-                    atim("Item7", inputNames._7),
-                    atim("Item8", inputNames._8),
-                    atim("Item9", inputNames._9),
+                    atim("Drop", inputs.d.name),
+                    atim("Use", inputs.e.name),
+                    atim("Item0", inputs._0.name),
+                    atim("Item1", inputs._1.name),
+                    atim("Item2", inputs._2.name),
+                    atim("Item3", inputs._3.name),
+                    atim("Item4", inputs._4.name),
+                    atim("Item5", inputs._5.name),
+                    atim("Item6", inputs._6.name),
+                    atim("Item7", inputs._7.name),
+                    atim("Item8", inputs._8.name),
+                    atim("Item9", inputs._9.name),
                 ];
                 var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size

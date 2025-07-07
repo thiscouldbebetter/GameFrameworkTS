@@ -782,7 +782,7 @@ export class ConversationRun
 
 			var actionToInputsMappings =
 			[
-				new ActionToInputsMapping( "ViewLog", [ Input.Names().Space ], true )
+				new ActionToInputsMapping( "ViewLog", [ Input.Instances().Space.name ], true )
 			];
 
 			if (this._quit != null)
@@ -790,7 +790,7 @@ export class ConversationRun
 				actions.push(new Action("Back", back));
 				actionToInputsMappings.push
 				(
-					new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true )
+					new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true )
 				);
 
 				var buttonLeave = ControlButton.fromPosSizeTextFontClick

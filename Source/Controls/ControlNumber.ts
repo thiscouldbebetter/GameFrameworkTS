@@ -84,7 +84,7 @@ export class ControlNumber<TContext> extends ControlBase
 		if
 		(
 			actionNameToHandle == controlActionNames.ControlCancel
-			|| actionNameToHandle == Input.Names().Backspace
+			|| actionNameToHandle == Input.Instances().Backspace.name
 		)
 		{
 			valueAsString = valueAsString.substr(0, valueAsString.length - 1);

@@ -29,6 +29,14 @@ export class ActionToInputsMapping
 		return new ActionToInputsMapping(actionName, [ inputName ], false);
 	}
 
+	static fromActionNameAndInputNames
+	(
+		actionName: string, inputNames: string[]
+	): ActionToInputsMapping
+	{
+		return new ActionToInputsMapping(actionName, inputNames, false);
+	}
+
 	action(universe: Universe): Action
 	{
 		return universe.world.defn.actionByName(this.actionName);

@@ -184,7 +184,7 @@ var ThisCouldBeBetter;
                 [
                     new GameFramework.Action("Back", back),
                 ], [
-                    new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true),
+                    new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true),
                 ]);
                 if (includeTitleAndDoneButton) {
                     returnValue.children.splice(0, 0, GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(100, -5), // pos

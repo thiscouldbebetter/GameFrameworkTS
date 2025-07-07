@@ -62,7 +62,7 @@ export class ControlTextBox<TContext> extends ControlBase
 		if
 		(
 			actionNameToHandle == controlActionNames.ControlCancel
-			|| actionNameToHandle == Input.Names().Backspace
+			|| actionNameToHandle == Input.Instances().Backspace.name
 		)
 		{
 			this.text(text.substr(0, text.length - 1));

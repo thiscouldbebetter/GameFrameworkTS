@@ -8,11 +8,14 @@ var ThisCouldBeBetter;
                 this.videoName = videoName;
                 this.venueNext = venueNext;
                 this.hasVideoBeenStarted = false;
-                var inputNames = GameFramework.Input.Names();
+                var inputs = GameFramework.Input.Instances();
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 this.actionToInputsMappings =
                     [
-                        new GameFramework.ActionToInputsMapping(controlActionNames.ControlCancel, [inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
+                        GameFramework.ActionToInputsMapping.fromActionNameAndInputNames(controlActionNames.ControlCancel, [
+                            inputs.Escape.name,
+                            inputs.GamepadButton0.name + "0"
+                        ]),
                     ];
                 this.actionToInputsMappingsByInputName =
                     GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);

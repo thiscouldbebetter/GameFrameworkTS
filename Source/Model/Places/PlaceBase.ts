@@ -218,6 +218,7 @@ export class PlaceBase implements Place, Loadable
 
 		var entityIsNotAlreadyPresent =
 			(this._entities.indexOf(entityToSpawn) == -1);
+
 		if (entityIsNotAlreadyPresent) // hack
 		{
 			if (entityToSpawn.name == null)

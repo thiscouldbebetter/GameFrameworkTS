@@ -67,7 +67,7 @@ export class ControlTextarea<TContext> extends ControlBase
 		if
 		(
 			actionNameToHandle == controlActionNames.ControlCancel
-			|| actionNameToHandle == Input.Names().Backspace
+			|| actionNameToHandle == Input.Instances().Backspace.name
 		)
 		{
 			this.text(text.substr(0, text.length - 1));
@@ -79,7 +79,10 @@ export class ControlTextarea<TContext> extends ControlBase
 		}
 		else if (actionNameToHandle == controlActionNames.ControlConfirm)
 		{
-			this.cursorPos = NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
+			this.cursorPos = NumberHelper.wrapToRangeMinMax
+			(
+				this.cursorPos + 1, 0, text.length + 1
+			);
 		}
 		else if (actionNameToHandle.length == 1)
 		{

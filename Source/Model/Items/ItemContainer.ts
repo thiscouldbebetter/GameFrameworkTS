@@ -240,7 +240,7 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 
 			[ new Action("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ) ],
+			[ new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true ) ],
 
 		);
 

@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                 var text = this.text(null);
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 if (actionNameToHandle == controlActionNames.ControlCancel
-                    || actionNameToHandle == GameFramework.Input.Names().Backspace) {
+                    || actionNameToHandle == GameFramework.Input.Instances().Backspace.name) {
                     this.text(text.substr(0, text.length - 1));
                     this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
                 }

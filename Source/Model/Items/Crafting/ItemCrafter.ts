@@ -392,7 +392,10 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 			],
 
 			[
-				new ActionToInputsMapping("Back", [ Input.Names().Escape ], true ),
+				new ActionToInputsMapping
+				(
+					"Back", [ Input.Instances().Escape.name ], true
+				),
 			]
 		);
 

@@ -553,7 +553,12 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 
 			[ new Action("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ Input.Names().Escape ], true ) ],
+			[
+				new ActionToInputsMapping
+				(
+					"Back", [ Input.Instances().Escape.name ], true 
+				)
+			],
 
 		);
 

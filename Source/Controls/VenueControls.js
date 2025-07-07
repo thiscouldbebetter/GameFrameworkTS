@@ -35,9 +35,9 @@ var ThisCouldBeBetter;
                     return returnValues;
                 };
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
-                var inputNames = GameFramework.Input.Names();
+                var inputs = GameFramework.Input.Instances();
                 var inactivate = true;
-                return new Array(new GameFramework.ActionToInputsMapping(controlActionNames.ControlIncrement, GameFramework.ArrayHelper.addMany([inputNames.ArrowDown], buildGamepadInputs(inputNames.GamepadMoveDown)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlPrev, GameFramework.ArrayHelper.addMany([inputNames.ArrowLeft], buildGamepadInputs(inputNames.GamepadMoveLeft)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlNext, GameFramework.ArrayHelper.addMany([inputNames.ArrowRight], GameFramework.ArrayHelper.addMany([inputNames.ArrowRight, inputNames.Tab], buildGamepadInputs(inputNames.GamepadMoveRight))), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlDecrement, GameFramework.ArrayHelper.addMany([inputNames.ArrowUp], buildGamepadInputs(inputNames.GamepadMoveUp)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlConfirm, GameFramework.ArrayHelper.addMany([inputNames.Enter], buildGamepadInputs(inputNames.GamepadButton1)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlCancel, GameFramework.ArrayHelper.addMany([inputNames.Escape], buildGamepadInputs(inputNames.GamepadButton0)), inactivate));
+                return new Array(new GameFramework.ActionToInputsMapping(controlActionNames.ControlIncrement, GameFramework.ArrayHelper.addMany([inputs.ArrowDown.name], buildGamepadInputs(inputs.GamepadMoveDown.name)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlPrev, GameFramework.ArrayHelper.addMany([inputs.ArrowLeft.name], buildGamepadInputs(inputs.GamepadMoveLeft.name)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlNext, GameFramework.ArrayHelper.addMany([inputs.ArrowRight.name], GameFramework.ArrayHelper.addMany([inputs.ArrowRight.name, inputs.Tab.name], buildGamepadInputs(inputs.GamepadMoveRight.name))), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlDecrement, GameFramework.ArrayHelper.addMany([inputs.ArrowUp.name], buildGamepadInputs(inputs.GamepadMoveUp.name)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlConfirm, GameFramework.ArrayHelper.addMany([inputs.Enter.name], buildGamepadInputs(inputs.GamepadButton1.name)), inactivate), new GameFramework.ActionToInputsMapping(controlActionNames.ControlCancel, GameFramework.ArrayHelper.addMany([inputs.Escape.name], buildGamepadInputs(inputs.GamepadButton0.name)), inactivate));
             }
             static fromControl(controlRoot) {
                 return new VenueControls(controlRoot, false);
@@ -74,7 +74,7 @@ var ThisCouldBeBetter;
             }
             updateForTimerTick_InputPressedIsActive(universe, inputPressed) {
                 var inputHelper = universe.inputHelper;
-                var inputNames = GameFramework.Input.Names();
+                var inputs = GameFramework.Input.Instances();
                 var inputPressedName = inputPressed.name;
                 var mapping = this.actionToInputsMappingsByInputName.get(inputPressedName);
                 if (inputPressedName.startsWith("Mouse") == false) {
@@ -93,7 +93,7 @@ var ThisCouldBeBetter;
                         }
                     }
                 }
-                else if (inputPressedName == inputNames.MouseClick) {
+                else if (inputPressedName == inputs.MouseClick.name) {
                     this._mouseClickPos.overwriteWith(inputHelper.mouseClickPos).divide(universe.display.scaleFactor());
                     var wasClickHandled = this.controlRoot.mouseClick(this._mouseClickPos);
                     if (wasClickHandled) {
@@ -101,7 +101,7 @@ var ThisCouldBeBetter;
                         inputPressed.isActive = false;
                     }
                 }
-                else if (inputPressedName == inputNames.MouseMove) {
+                else if (inputPressedName == inputs.MouseMove.name) {
                     this._mouseMovePos.overwriteWith(inputHelper.mouseMovePos).divide(universe.display.scaleFactor());
                     this._mouseMovePosPrev.overwriteWith(inputHelper.mouseMovePosPrev).divide(universe.display.scaleFactor());
                     this.controlRoot.mouseMove(this._mouseMovePos //, this._mouseMovePosPrev

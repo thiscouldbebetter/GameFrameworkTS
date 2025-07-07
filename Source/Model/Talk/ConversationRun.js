@@ -365,11 +365,11 @@ var ThisCouldBeBetter;
                         new GameFramework.Action("ViewLog", viewLog)
                     ];
                     var actionToInputsMappings = [
-                        new GameFramework.ActionToInputsMapping("ViewLog", [GameFramework.Input.Names().Space], true)
+                        new GameFramework.ActionToInputsMapping("ViewLog", [GameFramework.Input.Instances().Space.name], true)
                     ];
                     if (this._quit != null) {
                         actions.push(new GameFramework.Action("Back", back));
-                        actionToInputsMappings.push(new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true));
+                        actionToInputsMappings.push(new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true));
                         var buttonLeave = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 3 + buttonSize.y * 2), buttonSize.clone(), "Leave", fontNameAndHeight, back // click
                         );
                         buttons.push(buttonLeave);

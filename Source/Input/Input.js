@@ -4,80 +4,92 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Input {
-            constructor(name) {
+            constructor(name, symbol) {
                 this.name = name;
+                this.symbol = symbol;
                 this.isActive = true;
                 this.ticksActive = 0;
             }
-            static Names() {
-                if (Input._names == null) {
-                    Input._names = new Input_Names();
+            static fromNameAndSymbol(name, symbol) {
+                return new Input(name, symbol);
+            }
+            static Instances() {
+                if (this._instances == null) {
+                    this._instances = new Input_Instances();
                 }
-                return Input._names;
+                return this._instances;
+            }
+            static byName(name) {
+                return this.Instances().byName(name);
+            }
+            static bySymbol(symbol) {
+                return this.Instances().bySymbol(symbol);
             }
         }
         GameFramework.Input = Input;
-        class Input_Names {
+        class Input_Instances {
             constructor() {
-                this._0 = "0";
-                this._1 = "1";
-                this._2 = "2";
-                this._3 = "3";
-                this._4 = "4";
-                this._5 = "5";
-                this._6 = "6";
-                this._7 = "7";
-                this._8 = "8";
-                this._9 = "9";
-                this.a = "a";
-                this.b = "b";
-                this.c = "c";
-                this.d = "d";
-                this.e = "e";
-                this.f = "f";
-                this.g = "g";
-                this.h = "h";
-                this.i = "i";
-                this.j = "j";
-                this.k = "k";
-                this.l = "l";
-                this.m = "m";
-                this.n = "n";
-                this.o = "o";
-                this.p = "p";
-                this.q = "q";
-                this.r = "r";
-                this.s = "s";
-                this.t = "t";
-                this.u = "u";
-                this.v = "v";
-                this.w = "w";
-                this.x = "x";
-                this.y = "y";
-                this.z = "z";
-                this.ArrowDown = "ArrowDown";
-                this.ArrowLeft = "ArrowLeft";
-                this.ArrowRight = "ArrowRight";
-                this.ArrowUp = "ArrowUp";
-                this.Backspace = "Backspace";
-                this.Control = "Control";
-                this.Enter = "Enter";
-                this.Escape = "Escape";
-                this.F5 = "F5";
-                this.GamepadButton0 = "GamepadButton0_";
-                this.GamepadButton1 = "GamepadButton1_";
-                this.GamepadMoveDown = "GamepadMoveDown_";
-                this.GamepadMoveLeft = "GamepadMoveLeft_";
-                this.GamepadMoveRight = "GamepadMoveRight_";
-                this.GamepadMoveUp = "GamepadMoveUp_";
-                this.MouseClick = "MouseClick";
-                this.MouseMove = "MouseMove";
-                this.MouseWheelDown = "MouseWheelDown";
-                this.MouseWheelUp = "MouseWheelUp";
-                this.Shift = "Shift";
-                this.Space = "Space";
-                this.Tab = "Tab";
-                this.Tilde = "~";
+                var i = (n) => Input.fromNameAndSymbol(n, n);
+                var i2 = (n, s) => Input.fromNameAndSymbol(n, s);
+                this._0 = i("0");
+                this._1 = i("1");
+                this._2 = i("2");
+                this._3 = i("3");
+                this._4 = i("4");
+                this._5 = i("5");
+                this._6 = i("6");
+                this._7 = i("7");
+                this._8 = i("8");
+                this._9 = i("9");
+                this.a = i("a");
+                this.b = i("b");
+                this.c = i("c");
+                this.d = i("d");
+                this.e = i("e");
+                this.f = i("f");
+                this.g = i("g");
+                this.h = i("h");
+                this.i = i("i");
+                this.j = i("j");
+                this.k = i("k");
+                this.l = i("l");
+                this.m = i("m");
+                this.n = i("n");
+                this.o = i("o");
+                this.p = i("p");
+                this.q = i("q");
+                this.r = i("r");
+                this.s = i("s");
+                this.t = i("t");
+                this.u = i("u");
+                this.v = i("v");
+                this.w = i("w");
+                this.x = i("x");
+                this.y = i("y");
+                this.z = i("z");
+                this.ArrowDown = i("ArrowDown");
+                this.ArrowLeft = i("ArrowLeft");
+                this.ArrowRight = i("ArrowRight");
+                this.ArrowUp = i("ArrowUp");
+                this.Backspace = i("Backspace");
+                this.Control = i("Control");
+                this.Enter = i("Enter");
+                this.Escape = i("Escape");
+                this.F5 = i("F5");
+                this.GamepadButton0 = i("GamepadButton0_");
+                this.GamepadButton1 = i("GamepadButton1_");
+                this.GamepadMoveDown = i("GamepadMoveDown_");
+                this.GamepadMoveLeft = i("GamepadMoveLeft_");
+                this.GamepadMoveRight = i("GamepadMoveRight_");
+                this.GamepadMoveUp = i("GamepadMoveUp_");
+                this.MouseClick = i("MouseClick");
+                this.MouseMove = i("MouseMove");
+                this.MouseWheelDown = i("MouseWheelDown");
+                this.MouseWheelUp = i("MouseWheelUp");
+                this.Shift = i("Shift");
+                this.Space = i2("Space", " ");
+                this.Tab = i("Tab");
+                this.Tilde = i2("Tilde", "~");
                 this._All =
                     [
                         this._0,
@@ -138,7 +150,16 @@ var ThisCouldBeBetter;
                         this.Tab,
                         this.Tilde
                     ];
-                this._AllByName = GameFramework.ArrayHelper.addLookups(this._All, (x) => x);
+                this._AllByName =
+                    new Map(this._All.map(x => [x.name, x]));
+                this._AllBySymbol =
+                    new Map(this._All.map(x => [x.symbol, x]));
+            }
+            byName(name) {
+                return this._AllByName.get(name);
+            }
+            bySymbol(symbol) {
+                return this._AllBySymbol.get(symbol);
             }
         }
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

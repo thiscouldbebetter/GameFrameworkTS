@@ -16,19 +16,28 @@ export class VenueFileUpload implements Venue
 		this.venueNextIfFileSpecified = venueNextIfFileSpecified;
 		this.venueNextIfCancelled = venueNextIfCancelled;
 
-		var inputNames = Input.Names();
+		var inputs = Input.Instances();
 		var controlActionNames = ControlActionNames.Instances();
 
 		this.actionToInputsMappings =
 		[
-			new ActionToInputsMapping(controlActionNames.ControlCancel, [ inputNames.Escape, inputNames.GamepadButton0 + "0"], true),
+			new ActionToInputsMapping
+			(
+				controlActionNames.ControlCancel,
+				[
+					inputs.Escape.name,
+					inputs.GamepadButton0.name + "0"
+				],
+				true
+			),
 		];
 
-		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
-		(
-			this.actionToInputsMappings,
-			(x: ActionToInputsMapping) => x.inputNames
-		);
+		this.actionToInputsMappingsByInputName =
+			ArrayHelper.addLookupsMultiple
+			(
+				this.actionToInputsMappings,
+				(x: ActionToInputsMapping) => x.inputNames
+			);
 	}
 
 	// venue

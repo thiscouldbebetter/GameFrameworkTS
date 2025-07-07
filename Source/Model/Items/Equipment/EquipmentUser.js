@@ -303,20 +303,20 @@ var ThisCouldBeBetter;
                     a(textEquipItemSelectedInQuickSlot + "8", () => equipItemSelectedInQuickSlot(8)),
                     a(textEquipItemSelectedInQuickSlot + "9", () => equipItemSelectedInQuickSlot(9))
                 ];
-                var atim = (a, b) => new GameFramework.ActionToInputsMapping(a, b, true);
-                var inputNames = GameFramework.Input.Names();
+                var atim = (a, b) => new GameFramework.ActionToInputsMapping(a, [b], true);
+                var inputs = GameFramework.Input.Instances();
                 var mappings = [
-                    atim("Back", [GameFramework.Input.Names().Escape]),
-                    atim(textEquipItemSelectedInQuickSlot + "0", [inputNames._0]),
-                    atim(textEquipItemSelectedInQuickSlot + "1", [inputNames._1]),
-                    atim(textEquipItemSelectedInQuickSlot + "2", [inputNames._2]),
-                    atim(textEquipItemSelectedInQuickSlot + "3", [inputNames._3]),
-                    atim(textEquipItemSelectedInQuickSlot + "4", [inputNames._4]),
-                    atim(textEquipItemSelectedInQuickSlot + "5", [inputNames._5]),
-                    atim(textEquipItemSelectedInQuickSlot + "6", [inputNames._6]),
-                    atim(textEquipItemSelectedInQuickSlot + "7", [inputNames._7]),
-                    atim(textEquipItemSelectedInQuickSlot + "8", [inputNames._8]),
-                    atim(textEquipItemSelectedInQuickSlot + "9", [inputNames._9])
+                    atim("Back", inputs.Escape.name),
+                    atim(textEquipItemSelectedInQuickSlot + "0", inputs._0.name),
+                    atim(textEquipItemSelectedInQuickSlot + "1", inputs._1.name),
+                    atim(textEquipItemSelectedInQuickSlot + "2", inputs._2.name),
+                    atim(textEquipItemSelectedInQuickSlot + "3", inputs._3.name),
+                    atim(textEquipItemSelectedInQuickSlot + "4", inputs._4.name),
+                    atim(textEquipItemSelectedInQuickSlot + "5", inputs._5.name),
+                    atim(textEquipItemSelectedInQuickSlot + "6", inputs._6.name),
+                    atim(textEquipItemSelectedInQuickSlot + "7", inputs._7.name),
+                    atim(textEquipItemSelectedInQuickSlot + "8", inputs._8.name),
+                    atim(textEquipItemSelectedInQuickSlot + "9", inputs._9.name)
                 ];
                 var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size

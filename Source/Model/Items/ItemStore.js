@@ -120,7 +120,7 @@ var ThisCouldBeBetter;
                     buttonSell,
                     infoStatus,
                     buttonDone
-                ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Names().Escape], true)]);
+                ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true)]);
                 return returnValue;
             }
         }

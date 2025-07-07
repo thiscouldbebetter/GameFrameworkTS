@@ -40,52 +40,74 @@ class PlaceBuilderDemo_Actions {
         return actions;
     }
     actionToInputsMappingsBuild() {
-        var inputNames = Input.Names();
+        var inputs = Input.Instances();
         var inactivateFalse = false;
         var inactivateTrue = true;
         var actions = Action.Instances();
         var atim = (a, b, c) => new ActionToInputsMapping(a, b, c);
         var actionToInputsMappings = [
-            atim(actions.ShowMenuPlayer.name, [inputNames.Escape, inputNames.Tab], inactivateFalse),
+            atim(actions.ShowMenuPlayer.name, [inputs.Escape.name, inputs.Tab.name], inactivateFalse),
             atim(Movable.actionAccelerateDown().name, [
-                inputNames.ArrowDown,
-                inputNames.s,
-                inputNames.GamepadMoveDown + "0"
+                inputs.ArrowDown.name,
+                inputs.s.name,
+                inputs.GamepadMoveDown.name + "0"
             ], inactivateFalse),
             atim(Movable.actionAccelerateLeft().name, [
-                inputNames.ArrowLeft,
-                inputNames.a,
-                inputNames.GamepadMoveLeft + "0"
+                inputs.ArrowLeft.name,
+                inputs.a.name,
+                inputs.GamepadMoveLeft.name + "0"
             ], inactivateFalse),
             atim(Movable.actionAccelerateRight().name, [
-                inputNames.ArrowRight,
-                inputNames.d,
-                inputNames.GamepadMoveRight + "0"
+                inputs.ArrowRight.name,
+                inputs.d.name,
+                inputs.GamepadMoveRight.name + "0"
             ], inactivateFalse),
             atim(Movable.actionAccelerateUp().name, [
-                inputNames.ArrowUp,
-                inputNames.w,
-                inputNames.GamepadMoveUp + "0"
+                inputs.ArrowUp.name,
+                inputs.w.name,
+                inputs.GamepadMoveUp.name + "0"
             ], inactivateFalse),
-            atim("Fire", [inputNames.f, inputNames.Enter, inputNames.GamepadButton0 + "0"], inactivateTrue),
-            atim("Hide", [inputNames.h, inputNames.GamepadButton0 + "3"], inactivateFalse),
-            atim("Jump", [inputNames.Space, inputNames.GamepadButton0 + "1"], inactivateTrue),
-            atim("Pick Up", [inputNames.g, inputNames.GamepadButton0 + "4"], inactivateTrue),
-            atim("Run", [inputNames.Shift, inputNames.GamepadButton0 + "2"], inactivateFalse),
-            atim("Sneak", [inputNames.Control, inputNames.GamepadButton0 + "6"], inactivateFalse),
-            atim("Use", [inputNames.e, inputNames.GamepadButton0 + "5"], inactivateTrue),
-            atim("Wait", [inputNames.p], inactivateTrue),
-            atim("Item0", [inputNames._0], inactivateTrue),
-            atim("Item1", [inputNames._1], inactivateTrue),
-            atim("Item2", [inputNames._2], inactivateTrue),
-            atim("Item3", [inputNames._3], inactivateTrue),
-            atim("Item4", [inputNames._4], inactivateTrue),
-            atim("Item5", [inputNames._5], inactivateTrue),
-            atim("Item6", [inputNames._6], inactivateTrue),
-            atim("Item7", [inputNames._7], inactivateTrue),
-            atim("Item8", [inputNames._8], inactivateTrue),
-            atim("Item9", [inputNames._9], inactivateTrue),
-            atim("Recording Start/Stop", ["`"], inactivateTrue),
+            atim("Fire", [
+                inputs.f.name,
+                inputs.Enter.name,
+                inputs.GamepadButton0.name + "0"
+            ], inactivateTrue),
+            atim("Hide", [
+                inputs.h.name,
+                inputs.GamepadButton0.name + "3"
+            ], inactivateFalse),
+            atim("Jump", [
+                inputs.Space.name,
+                inputs.GamepadButton0.name + "1"
+            ], inactivateTrue),
+            atim("Pick Up", [
+                inputs.g.name,
+                inputs.GamepadButton0.name + "4"
+            ], inactivateTrue),
+            atim("Run", [
+                inputs.Shift.name,
+                inputs.GamepadButton0.name + "2"
+            ], inactivateFalse),
+            atim("Sneak", [
+                inputs.Control.name,
+                inputs.GamepadButton0.name + "6"
+            ], inactivateFalse),
+            atim("Use", [
+                inputs.e.name,
+                inputs.GamepadButton0.name + "5"
+            ], inactivateTrue),
+            atim("Wait", [inputs.p.name], inactivateTrue),
+            atim("Item0", [inputs._0.name], inactivateTrue),
+            atim("Item1", [inputs._1.name], inactivateTrue),
+            atim("Item2", [inputs._2.name], inactivateTrue),
+            atim("Item3", [inputs._3.name], inactivateTrue),
+            atim("Item4", [inputs._4.name], inactivateTrue),
+            atim("Item5", [inputs._5.name], inactivateTrue),
+            atim("Item6", [inputs._6.name], inactivateTrue),
+            atim("Item7", [inputs._7.name], inactivateTrue),
+            atim("Item8", [inputs._8.name], inactivateTrue),
+            atim("Item9", [inputs._9.name], inactivateTrue),
+            atim("Recording Start/Stop", [inputs.Tilde.name], inactivateTrue),
         ];
         return actionToInputsMappings;
     }

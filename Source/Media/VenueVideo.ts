@@ -19,15 +19,17 @@ export class VenueVideo implements Venue
 
 		this.hasVideoBeenStarted = false;
 
-		var inputNames = Input.Names();
+		var inputs = Input.Instances();
 		var controlActionNames = ControlActionNames.Instances();
 		this.actionToInputsMappings =
 		[
-			new ActionToInputsMapping
+			ActionToInputsMapping.fromActionNameAndInputNames
 			(
 				controlActionNames.ControlCancel,
-				[ inputNames.Escape, inputNames.GamepadButton0 + "0"],
-				true
+				[
+					inputs.Escape.name,
+					inputs.GamepadButton0.name + "0"
+				]
 			),
 		];
 
