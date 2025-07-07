@@ -17,6 +17,10 @@ var ThisCouldBeBetter;
                 // "Disposition" used to be named "Location".
                 return new Locatable(disp);
             }
+            static fromDisposition(disposition) {
+                // "Disposition" used to be named "Location".
+                return new Locatable(disposition);
+            }
             static fromLoc(loc) {
                 return new Locatable(loc);
             }

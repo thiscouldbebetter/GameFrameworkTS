@@ -31,7 +31,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 1.10. In the Source directory, locate the script named "RunChromeWithFileAccess.sh" (or the .bat equivalent if running Windows) and run it.  This will start the web browser with the necessary permissions for running the game locally without a dedicated web server.
 
-1.11. Open Game.html in the web browser.  Press the Enter key to progress past the default opening screens showing the game's framework, producer, and title.  Verify that a blank screen is displayed.
+1.11. Open Game.html in the web browser.  Press the Enter key a few times to progress past the default opening screens showing placeholder screens for the game's framework, producer, and title.  Then, when prompted to create or choose a profile, click the Skip button.  After that, a blank screen is displayed.  You can press Escape to see the menu, but there's nothing more to the game yet.
 
 <img src="Screenshot-1-Blank.png" />
 
@@ -73,43 +73,19 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 2.4. The new Planet class is a subclass of Entity, and it has two properties, namely, Drawable and Locatable.  An instance of Drawable represents something that can be drawn to the screen, while an instance of Locatable represents something that has a specific position and orientation (and, incidentally, velocity and acceleration, among other things, as will be discussed later).
 
-2.5. Note the occurrence of the "VisualRectangle" class in the constructor of the newly declared Planet class.  The VisualRectangle class is already defined as part of the framework.
-
-2.6. Because we just added a reference to a class from the framework, we need to update Imports.ts accordingly.  This file "imports" classes from the framework so that you don't have to put "ThisCouldBeBetter.GameFramework." in front of every single class name every time you use it, which would get tedious pretty quickly.
-
-2.7. Back in the Source directory, open Imports.ts in a text editor and locate the existing line:
-
-	import VisualNone = gf.VisualNone;
-
-2.8. Then add the following line right below it, and save:
-
-	import VisualRectangle = gf.VisualRectangle;
-
-2.9. Remember that you'll need to add entries to Imports.ts almost every time you create a new class, or when you use a new class from the framework.  I say "almost every time" rather than just "every time" because some classes, like Entity, Drawable, Locatable, and VisualGroup, are already referenced as part of the stub game.
-
-2.10. We'll also need to add a reference to the newly created and added classes to DefenderClone.html.  But be careful:  If you add references in the wrong place, it might break your game.
-
-2.11. Let's start by adding a reference to the VisualRectangle class file.  Open DefenderClone.html and locate this existing line within it:
-
-	<script type="text/javascript" src="Framework/Source/Display/Visuals/VisualNone.js"></script>
-
-2.12. Add this line beneath it:
-
-	<script type="text/javascript" src="Framework/Source/Display/Visuals/VisualRectangle.js"></script>
-
-2.13. Next, locate the existing reference to "WorldGame.js", add this line just below it, and save:
+2.5. We'll need to add a reference to the newly created Planet class to Game.html.  But be careful: If you add references in the wrong place, it might break your game.  Open Game.html and locate the existing reference to "_Main.js" and add this line above it, with a blank line in between:
 
 	<script type="text/javascript" src="Model/Planet.js"></script>
 
-2.14. Now that we've declared the Planet class and added references to it and to the VisualRectangle class that we need to draw it, we'll add an instance of Planet to PlaceLevel.
+2.6. Now that we've declared the Planet class and added references to it and to the VisualRectangle class that we need to draw it, we'll add an instance of Planet to PlaceDefault.
 
-2.15. Back in the Source directory, open the file PlaceLevel.ts in a text editor.  Locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, locate the existing "new UserInputListener()" element, add a comma after it, add the following text on the line below, then save the file.
+2.7. Back in the Source directory, open the file PlaceDefault.ts in a text editor.  Locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, locate the existing "new UserInputListener()" element, add a comma after it, add the following text on the line below, then save the file.
 
 	new Planet("Planet0", Coords.fromXY(400, 300), 50)
 
-2.16. From the Source directory, run the command "tsc" to compile the program again.  Wait for the command to complete, and verify that no errors are displayed.
+2.8. From the _Scripts directory, run the command "_Build.sh" or "_Build.bat" to compile the program again.  Wait for the command to complete, and verify that no errors are displayed.
 
-2.17. In the web browser, refresh DefenderClone.html and advance through the startup screens to start the game again.  Verify that a green field, representing the ground, appears at the bottom of the screen.
+2.9. In the web browser, refresh Game.html and advance through the startup screens to start the game again.  Verify that a green field, representing the ground, appears at the bottom of the screen.
 
 <img src="Screenshot-2-Ground.png" />
 
@@ -150,39 +126,29 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 3.3. Like the Planet class, the new Ship class is a subclass of Entity, and it has its own instances of the same two property types, namely, Drawable and Locatable.
 
-3.4. Since we've added a new class, we'll need to add a reference to it in DefenderClone.html.  Add the following line right below the one recently added for Planet.js, and save:
+3.4. Since we've added a new class, we'll need to add a reference to it in Game.html.  Add the following line right below the one recently added for Planet.js, and save:
 
 	<script type="text/javascript" src="Model/Ship.js"></script>
 
-3.5. The Ship class also uses a new class from the framework, namely "VisualPolygon".  And the VisualPolygon class itself uses yet another class from the framework, namely "Path" (pretty sneaky!).  So we'll need to add references to both those classes in Imports.ts.  Add the following lines right below the one recently added for VisualRectangle and save:
+3.5. Now that the Ship class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceDefault instance.  Back in the Source directory, open the file PlaceDefault.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, make sure that there are commas between all the array elements, and save the file.
 
-	import VisualPolygon = gf.VisualPolygon;
-	import Path = gf.Path;
+	new Ship("Ship0", Coords.fromXY(100, 100) )
 
-3.6. And in DefenderClone.html, again right below the line for VisualRectangle, add these line and save:
-
-	<script type="text/javascript" src="Framework/Source/Display/Visuals/VisualPolygon.js"></script>
-	<script type="text/javascript" src="Framework/Source/Geometry/Shapes/Path.js"></script>
-
-3.7. (For extra credit, you could move those references to the Path class somewhere else in the Import.ts and DefenderClone.html files, like maybe where all the other things in the "Geometry/Shapes" directory are referenced.  And for extra extra credit, maybe put it in alphabetical order in there!  But putting it next to VisualPolygon is good enough for now.)
-
-3.8. Now that the Ship class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceLevel instance.  Back in the Source directory, open the file PlaceLevel.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, then make sure that there are commas between all the array elements and save the file.
-
-	new Ship("Ship0", Coords.fromXY(100, 100))
-
-3.9. Compile the program again by running "tsc", then refresh DefenderClone.html, start the game, and progress past the startup screens.  A gray triangle pointing right, representing a spaceship, now appears above the ground.
+3.6. Compile the program again by running the script named "_Build", then refresh Game.html, start the game, and progress past the startup screens as before.  A gray triangle pointing right, representing a spaceship, now appears above the ground.
 
 <img src="Screenshot-3-Ship-Stationary.png" />
+
+3.7. In the browser's address bar, append the text "?debug=SkipOpening" to the end of the URL for Game.html and press the Enter key to reload.  This will skip the opening scenes to the main part of the game, saving the time and trouble needed to skip past them every time.
 
 
 4. Making the Ship Move
 -----------------------
 
-4.1. Now there's a spaceship, which should be exciting.  But it doesn't move.  So it's still pretty boring for a spaceship.  More of a spaceblimp.  Except even blimps move a little bit.  Let's make it move.
+4.1. Now there's a spaceship, which should be exciting.  But it doesn't move.  So it's still pretty boring for a spaceship.  More of a spaceblimp.  Except even blimps move faster than this.  So let's make it move.
 
 4.2. To make it move, we'll assign it a velocity to go along with its position.  Open Ship.ts in a text editor, replace the line "Locatable.fromPos(pos)" with the following text, and save:
 
-	new Locatable
+	Locatable.fromDisposition
 	(
 		Disposition.fromPosAndVel
 		(
@@ -191,7 +157,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		)
 	)
 
-4.3. Compile the program again, then refresh DefenderClone.html and start the game.  The same gray, triangular spaceship still appears, but now it moves.  It moves all the way to the right side of the screen, then disappears, never to return.
+4.3. Run the _Build script again, then refresh Game.html to see the updates.  The same gray, triangular spaceship still appears, but now it moves.  It moves all the way to the right side of the screen, then disappears, never to return.  Bye, little spaceship.  We hardly knew ye.
 
 <img src="Screenshot-4-Ship-Moving.gif" />
 
@@ -201,22 +167,14 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 5.1. The spaceship is briefly somewhat more interesting than when it was stationary, but once it moves off the right side of the screen, the view is even more boring that it was before.  To fix that, that, we can make the screen "wrap", so that when the spaceship moves off the right side of the screen, it reappears on the left side.  That, in turn, can be accomplished by giving the Ship entity the Constrainable property and putting a Constraint on it.
 
-5.2. Open Ship.ts and, in the list of properties being passed to the super() constructor, add the following text, making sure to add commas between elements as appropriate:
+5.2. Open Ship.ts and, somewhere in the list of properties being passed to the super() constructor, add the following text, making sure to add commas between elements as appropriate:
 
 	Constrainable.fromConstraint
 	(
 		new Constraint_WrapToPlaceSizeXTrimY()
 	)
 
-5.3. Since Constraint_WrapToPlaceSizeXTrimY is a previously unused class from the framework, we'll need to add references to it in DefenderClone.html and Imports.ts.  The line to be added to Imports.ts looks like this, and it can be added just after the recently added reference to the Path class (or someplace better if desired):
-
-	import Constraint_WrapToPlaceSizeXTrimY = gf.Constraint_WrapToPlaceSizeXTrimY;
-
-5.4. The line to be added to DefenderClone.html looks like this, and likewise can be added just after the recently added reference to the Path class.
-
-	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_WrapToPlaceSizeXTrimY.js"></script>
-
-5.5. Recompile the game by running "tsc", refresh the web browser, and advance past the starting screens.  When the ship leaves the right side of the screen, it reappears on the left, in a repeating cycle.
+5.3. Recompile the game by running the _Build script, then refresh the web browser.  Now when the ship leaves the right side of the screen, it reappears on the left, in a repeating cycle.
 
 <img src="Screenshot-5-Ship-Wrapping.gif" />
 
@@ -265,27 +223,15 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		return activityDefnDoSpaceshipStuff;
 	}
 
-6.3. Now that the ActivityDefn for the Ship is defined, we want to make sure that the WorldDefn knows about it, so that it's there when the Ship entity's Actor property tries to look it up.  Open WorldGame.ts and replace the existing .defnBuild() method with the following text:
+6.3. Now that the ActivityDefn for the Ship is defined, we want to make sure that the WorldDefn knows about it, so that it's there when the Ship entity's Actor property tries to look it up.  Open WorldGame.ts, locate the existing line that starts with "UserInputListener", and add the following line within that same array, making sure that there are commas between all the array elements:
 
-	static defnBuild(): WorldDefn
-	{
-		return new WorldDefn
-		([
-			[
-				UserInputListener.activityDefnHandleUserInputBuild(),
-				Ship.activityDefnDoSpaceshipStuffBuild()
-			],
-			[
-				PlaceLevel.defnBuild()
-			]
-		]);
-	}
+	Ship.activityDefnDoSpaceshipStuffBuild()
 
-6.4. Finally, give the Actor property to the Ship.  In Ship.ts, add a new entry to the array of entity properties, right below the Locatable instance, again making sure to include a comma between each element in the array:
+6.4. Finally, give the Actor property to the Ship.  In Ship.ts, add a new entry to the array of entity properties, right below the Locatable instance, making sure as always to include a comma between each element in the array:
 
 	Actor.fromActivityDefnName("DoSpaceshipStuff")
 
-6.5. Compile the program again, then refresh DefenderClone.html and start the game.  The spaceship now accelerates toward the right side of the screen if it's on the left half of the screen, and accelerates toward the left side of the screen if it's on the right side of the screen.
+6.5. Run the _Build script again, then refresh Game.html in the browser.  The spaceship now accelerates toward the right side of the screen if it's on the left half of the screen, and accelerates toward the left side of the screen if it's on the right side of the screen.
 
 <img src="Screenshot-6-Ship-Accelerating.gif" />
 
@@ -299,69 +245,56 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 7.2. To do that, we need to add some Actions that the ship can perform in order to accelerate up, down, left, or right, and then we need to associate, or "map", those Actions to keyboard inputs using some ActionToInputsMapping instances.
 
-7.3. The Actions we need happen to already be defined as part of the Movable class, so they and their corresponding mappings just need to be registered in the PlaceLevel class.  Open PlaceLevel.ts, replace the existing declarations of the actions and actionToInputMappings arrays with the text below, and save.
+7.3. The Actions we need happen to already be defined as part of the Movable class, so they and their corresponding mappings just need to be registered in the PlaceDefault class.  Open PlaceDefault.ts, locate the existing declaration of the "actions" variable, and add the following elements to the array, adding commas as necessary:
 
-	var actions =
-	[
-		actionDisplayRecorderStartStop,
-		actionShowMenu,
+	Movable.actionAccelerateDown(),
+	Movable.actionAccelerateLeft(),
+	Movable.actionAccelerateRight(),
+	Movable.actionAccelerateUp()
 
-		Movable.actionAccelerateDown(),
-		Movable.actionAccelerateLeft(),
-		Movable.actionAccelerateRight(),
-		Movable.actionAccelerateUp()
-	];
+7.4. Still in PlaceDefault.ts, locate the existing declaration of the "actionToInputsMappings" array, and add these items, adjusting commas as necessary:
 
-	var inputNames = Input.Names();
-
-	var actionToInputsMappings =
-	[
-		new ActionToInputsMapping
-		(
-			actionDisplayRecorderStartStop.name, [ "~" ], true // inactivate
-		),
-
-		ActionToInputsMapping.fromActionNameAndInputName
-		(
-			actionShowMenu.name, inputNames.Escape
-		),
-
-		ActionToInputsMapping.fromActionNameAndInputName
-		(
-			Movable.actionAccelerateDown().name, inputNames.ArrowDown
-		),
-		ActionToInputsMapping.fromActionNameAndInputName
-		(
-			Movable.actionAccelerateLeft().name, inputNames.ArrowLeft
-		),
-		ActionToInputsMapping.fromActionNameAndInputName
-		(
-			Movable.actionAccelerateRight().name, inputNames.ArrowRight
-		),
-		ActionToInputsMapping.fromActionNameAndInputName
-		(
-			Movable.actionAccelerateUp().name, inputNames.ArrowUp
-		)
-	];
+	ActionToInputsMapping.fromActionNameAndInputName
+	(
+		Movable.actionAccelerateDown().name,
+		inputNames.ArrowDown
+	),
+	ActionToInputsMapping.fromActionNameAndInputName
+	(
+		Movable.actionAccelerateLeft().name,
+		inputNames.ArrowLeft
+	),
+	ActionToInputsMapping.fromActionNameAndInputName
+	(
+		Movable.actionAccelerateRight().name,
+		inputNames.ArrowRight
+	),
+	ActionToInputsMapping.fromActionNameAndInputName
+	(
+		Movable.actionAccelerateUp().name,
+		inputNames.ArrowUp
+	)
 
 7.4. This code defines the Actions and the input mappings for them, but in order to actually use them, we'll need to give the Ship entity the Movable property.  We also need to change its Actor property's activity so that it listens to the user's input rather than mindlessly shuttling back and forth forever.
 
-7.5. Open Ship.ts and replace the existing declaration of the Actor property with the following text:
+7.5. Open Ship.ts and replace the existing declaration of the Actor property with the following text, adjusting commas as necessary:
 
 	Actor.fromActivityDefnName
 	(
-		UserInputListener.activityDefnHandleUserInputBuild().name
-	),
+		UserInputListener.activityDefn().name
+	)
+
+7.6. Still in Ship.ts, add the following to the list of properties just modified, adjusting commas as necessary:
 
 	Movable.fromAccelerationAndSpeedMax(0.2, 2)
 
-7.6. Also, now that we're not using the "DoSpaceshipStuff" ActivityDefn, we can remove the declaration of the static Ship.activityDefnDoSpaceshipStuffBuild() method entirely.  (I know we just added it, but less code is always better!  Technically, for quality's sake we should've quit before we started.)
+7.7. Also, now that we're not using the "DoSpaceshipStuff" ActivityDefn, we can remove the declaration of the static Ship.activityDefnDoSpaceshipStuffBuild() method entirely.  (I know we just added it, but less code is always better!  Technically, for quality's sake we should've quit before we started.)
 
-7.7. Because we removed the declaration of the "DoSpaceshipStuff" ActivityDefn, we'll also need to remove the reference to it.  Open WorldGame.ts and, in the static .defnBuild() method, remove the line "Ship.activityDefnDoSpaceshipStuffBuild()" from the ActivityDefns being passed to the WorldDefn constructor call.
+7.8. Because we removed the declaration of the "DoSpaceshipStuff" ActivityDefn, we'll also need to remove the reference to it.  Open WorldGame.ts and, in the static .defnBuild() method, remove the line "Ship.activityDefnDoSpaceshipStuffBuild()" from the ActivityDefns being passed to the WorldDefn constructor call.
 
-7.8. Now that the Ship entity is listening for user input, we no longer need that instance of UserInputListener() that came built-in to the stub code.  Two entities listening and reacting to the same input might get weird.  Open PlaceLevel.ts again and, in the constructor, remove the line "new UserInputListener()" from the list of entities being passed to the super() call.
+7.9. Now that the Ship entity is listening for user input, we no longer need that instance of UserInputListener() that came built-in to the stub code.  Two entities listening and reacting to the same input might get weird.  Open PlaceDefault.ts again and, in the constructor, remove the line "new UserInputListener()" from the list of entities being passed to the super() call.
 
-7.9. After compiling the program, refreshing the web browser, and starting the game, use the arrow keys to cause the spaceship to acelerate up, down, left, and right.  You're a driver, you're a winner.
+7.10. Run the _Build script and refresh the web browser.  Use the arrow keys to cause the spaceship to acelerate up, down, left, and right.  You're a driver, you're a winner.
 
 <img src="Screenshot-7-Ship-Maneuvering.gif" />
 
@@ -392,7 +325,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 								Coords.fromXY(-4, 0),
 								Coords.fromXY(-4, -4),
 								Coords.fromXY(0, -8),
-								Coords.fromXY(4, -4),
+								Coords.fromXY(4, -4)
 							],
 							Color.byName("Brown")
 						)
@@ -482,8 +415,8 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 			if (targetEntity == null)
 			{
-				var placeLevel = place as PlaceLevel;
-				var habitats = placeLevel.habitats();
+				var PlaceDefault = place as PlaceDefault;
+				var habitats = PlaceDefault.habitats();
 				if (habitats.length == 0)
 				{
 					return; // todo
@@ -564,59 +497,21 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	}
 
-8.4. The Raider class uses the previously unreferenced framework classes Constraint_AttachToEntityWithId, Constraint_Multiple, Constraint_Transform, Constraint_WrapToPlaceSizeX, VisualEllipse, and VisualFan, which are new to our program and so will need to be referenced in Imports.ts, like this:
+8.4. The Raider class uses the Actor property, and defines its very own ActivityDefn to use with it, so we need to register that ActivityDefn with the WorldDefn.  Open WorldGame.ts, locate the .defnBuild() method, and add the new activity definition in the proper place, adjusting commas as necessary:
 
-	import Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
-	import Constraint_Multiple = gf.Constraint_Multiple;
-	import Constraint_Transform = gf.Constraint_Transform;
-	import Constraint_WrapToPlaceSizeX = gf.Constraint_WrapToPlaceSizeX;
-	import VisualEllipse = gf.VisualEllipse;
-	import VisualFan = gf.VisualFan;
+	Raider.activityDefnBuild()
 
-8.5. And of course in DefenderClone.html, like this:
-
-	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_AttachToEntityWithId.js"></script>
-	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Multiple.js"></script>
-	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Transform.js"></script>
-	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_WrapToPlaceSizeX.js"></script>
-
-	<script type="text/javascript" src="Framework/Source/Display/Visuals/VisualEllipse.js"></script>
-	<script type="text/javascript" src="Framework/Source/Display/Visuals/VisualFan.js"></script>
-
-8.6. The Raider class also makes use of the method PlaceLevel.habitats() to get a convenient array of all the Habitats on the level.  However, the sharp-eyed observer will note that that method doesn't exist yet.  So open PlaceLevel.ts and add the following lines just before the final close brace of the class:
-
-	habitats(): Habitat[]
-	{
-		return this.entities.filter(x => x.constructor.name == Habitat.name) as Habitat[];
-	}
-
-8.7. Also, the Raider class uses the Actor property, and defines its very own ActivityDefn to use with it, so we need to register that ActivityDefn with the WorldDefn.  Open WorldGame.ts and replace the existing .defnBuild() method with the following:
-
-	static defnBuild(): WorldDefn
-	{
-		return new WorldDefn
-		([
-			[
-				UserInputListener.activityDefnHandleUserInputBuild(),
-				Raider.activityDefnBuild()
-			],
-			[
-				PlaceLevel.defnBuild()
-			]
-		]);
-	}
-
-8.8. Finally, we need to the reference the newly declared Habitat and Raider classes, but since they're not from the framework, and thus are not part of any namespace, and thus don't need to be imported, we can leave Imports.ts alone.  We only have to add references to them in DefenderClone.html.  Probably these should go right after the recently added ones for Planet and Ship:
+8.5. We also need to add references to the newly declared Habitat and Raider classes in Game.html.  These should be added near the ones previously added for Planet and Ship:
 
 	<script type="text/javascript" src="Model/Habitat.js"></script>
 	<script type="text/javascript" src="Model/Raider.js"></script>
 
-8.9. Now we'll add one habitat and one raider to the level.  Open PlaceLevel.ts, and, in the constructor, add these two lines to bottom of the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
+8.6. Now we'll add one habitat and one raider to the level.  Open PlaceDefault.ts, and, in the constructor, add these two lines to bottom of the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
 
 	new Habitat(Coords.fromXY(150, 250) ),
 	new Raider(Coords.fromXY(200, -50) )
 
-8.10. Finally, re-compile the game, refresh the web browser, and start the game.  Now a civilian habitat appears on the ground.  An alien raider will descend from the top of the screen, pick up the habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
+8.7. Finally, run the build script and refresh the web browser.  Now a civilian habitat appears on the ground.  An alien raider will descend from the top of the screen, pick up the habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
 
 <img src="Screenshot-8-Raider_Takes_Habitat.gif" />
 
@@ -654,7 +549,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 		]
 	)
 
-9.3. Now your ship has a gun, but no trigger.  That is to say, it could technically generate bullets, only there's no ActionToInputsMapping to detect when you want to fire them, and even if there were, there's no Action to map that mapping to.  To add the Action and its mapping, open PlaceLevel.ts and, in the .defnBuild() method, add this line to the end of the "actions" array:
+9.3. Now your ship has a gun, but no trigger.  That is to say, it could technically generate bullets, only there's no ActionToInputsMapping to detect when you want to fire them, and even if there were, there's no Action to map that mapping to.  To add the Action and its mapping, open PlaceDefault.ts and, in the .defnBuild() method, add this line to the end of the "actions" array:
 
 	ProjectileGenerator.actionFire()
 
@@ -677,7 +572,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 	import Ephemeral = gf.Ephemeral;
 	import DiceRoll = gf.DiceRoll;
 
-9.6. And also add it to DefenderClone.html, as shown below.  Actually, you may want to add references to several related classes while you're at it:
+9.6. And also add it to Game.html, as shown below.  Actually, you may want to add references to several related classes while you're at it:
 
 	<script type="text/javascript" src="Framework/Source/Model/Combat/Damage.js"></script>
 	<script type="text/javascript" src="Framework/Source/Model/Combat/Damager.js"></script>
@@ -706,7 +601,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 
 These lines make the raider collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.
 
-10.3. However, in order for Collidables and Killables to be processed correctly, they'll need to be added to the list of property types that PlaceLevel understands.  Open PlaceLevel.ts and replace the existing declaration of the entityPropertyNamesToProcess array with the following:
+10.3. However, in order for Collidables and Killables to be processed correctly, they'll need to be added to the list of property types that PlaceDefault understands.  Open PlaceDefault.ts and replace the existing declaration of the entityPropertyNamesToProcess array with the following:
 
 	var entityPropertyNamesToProcess =
 	[
@@ -798,7 +693,7 @@ The new constraint is exactly the same as the one for the habitat.
 	import Constraint_Gravity = gf.Constraint_Gravity;
 	import Hemispace = gf.Hemispace;
 
-And also to the DefenderClone.html file:
+And also to the Game.html file:
 
 	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_ContainInHemispace.js"></script>
 	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Gravity.js"></script>
@@ -823,7 +718,7 @@ Open Ship.ts, and, in the constructor, at the end of the list of properties, ins
 			"Lose",
 			(uwpe: UniverseWorldPlaceEntities) => // isTriggered
 			{
-				var level = uwpe.place as PlaceLevel;
+				var level = uwpe.place as PlaceDefault;
 				var areAllTheHabitatsGone = (level.habitats().length == 0);
 				return areAllTheHabitatsGone;
 			}, 
@@ -848,7 +743,7 @@ Open Ship.ts, and, in the constructor, at the end of the list of properties, ins
 			"Win",
 			(uwpe: UniverseWorldPlaceEntities) => // isTriggered
 			{
-				var level = uwpe.place as PlaceLevel;
+				var level = uwpe.place as PlaceDefault;
 				var areAllTheRaidersGone = (level.raiders().length == 0);
 				return areAllTheRaidersGone;
 			}, 
@@ -875,12 +770,12 @@ Open Ship.ts, and, in the constructor, at the end of the list of properties, ins
 	import Trigger = gf.Trigger;
 	import Triggerable = gf.Triggerable;
 
-And also to DefenderClone.html:
+And also to Game.html:
 
 	<script type="text/javascript" src="Framework/Source/Model/Trigger.js"></script>
 	<script type="text/javascript" src="Framework/Source/Model/Triggerable.js"></script>
 
-12.3. It will also be necessary to add Triggerable to the list of entity properties that the PlaceLevel class handles.  Open PlaceLevel.ts, locate the existing entityPropertyNamesToProcess declaration, and replace it with the following:
+12.3. It will also be necessary to add Triggerable to the list of entity properties that the PlaceDefault class handles.  Open PlaceDefault.ts, locate the existing entityPropertyNamesToProcess declaration, and replace it with the following:
 
 	var entityPropertyNamesToProcess =
 	[
@@ -893,7 +788,7 @@ And also to DefenderClone.html:
 		Triggerable.name
 	];
 
-Also, you'll need to add this method at the end of the PlaceLevel class, right below the existing .habitats() method, so that it can tell how many raiders are left:
+Also, you'll need to add this method at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell how many raiders are left:
 
 	raiders(): Raider[]
 	{
