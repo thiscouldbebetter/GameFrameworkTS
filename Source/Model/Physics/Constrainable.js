@@ -23,6 +23,7 @@ var ThisCouldBeBetter;
             }
             clear() {
                 this.constraints.length = 0;
+                this._constraintsByClassName.clear();
                 return this;
             }
             constrain(uwpe) {
@@ -41,6 +42,17 @@ var ThisCouldBeBetter;
             }
             constraintByClassName(constraintClassName) {
                 return this._constraintsByClassName.get(constraintClassName);
+            }
+            constraintRemove(constraintToRemove) {
+                var constraintIndex = this.constraints.indexOf(constraintToRemove);
+                this.constraints.splice(constraintIndex, 1);
+                var constraintClassName = constraintToRemove.constructor.name;
+                this._constraintsByClassName.delete(constraintClassName);
+                return this;
+            }
+            constraintRemoveFinal() {
+                var constraintToRemove = this.constraints[this.constraints.length - 1];
+                return this.constraintRemove(constraintToRemove);
             }
             // EntityProperty.
             finalize(uwpe) { }

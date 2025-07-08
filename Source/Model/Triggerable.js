@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(triggers) {
                 this.triggers = triggers;
             }
+            static fromTriggers(triggers) {
+                return new Triggerable(triggers);
+            }
             // Clonable.
             clone() {
                 return new Triggerable(this.triggers.map(x => x.clone()));

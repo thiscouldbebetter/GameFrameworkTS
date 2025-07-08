@@ -23,6 +23,16 @@ export class Trigger
 		this.hasBeenTriggered = false;
 	}
 
+	static fromNameIsTriggeredAndReactToBeingTriggered
+	(
+		name: string,
+		isTriggered: (uwpe: UniverseWorldPlaceEntities) => boolean,
+		reactToBeingTriggered: (uwpe: UniverseWorldPlaceEntities) => void
+	): Trigger
+	{
+		return new Trigger(name, isTriggered, reactToBeingTriggered);
+	}
+
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.hasBeenTriggered == false)

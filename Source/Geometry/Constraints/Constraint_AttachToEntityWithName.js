@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(targetEntityName) {
                 this.targetEntityName = targetEntityName;
             }
+            static fromTargetEntityName(targetEntityName) {
+                return new Constraint_AttachToEntityWithName(targetEntityName);
+            }
             constrain(uwpe) {
                 var place = uwpe.place;
                 var entity = uwpe.entity;

@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.hemispaceToContainWithin = hemispaceToContainWithin;
                 this._coordsTemp = GameFramework.Coords.create();
             }
+            static fromHemispace(hemispaceToContainWithin) {
+                return new Constraint_ContainInHemispace(hemispaceToContainWithin);
+            }
             constrain(uwpe) {
                 var entity = uwpe.entity;
                 var hemispace = this.hemispaceToContainWithin;

@@ -11,9 +11,19 @@ export class Constraint_AttachToEntityWithId implements Constraint
 		this.targetEntityId = targetEntityId;
 	}
 
+	static fromTargetEntityId
+	(
+		targetEntityId: number
+	): Constraint_AttachToEntityWithId
+	{
+		return new Constraint_AttachToEntityWithId(targetEntityId);
+	}
+
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var targetEntity = uwpe.place.entityById(this.targetEntityId);
+		var targetEntity =
+			uwpe.place.entityById(this.targetEntityId);
+
 		if (targetEntity != null)
 		{
 			var targetPos = Locatable.of(targetEntity).loc.pos;

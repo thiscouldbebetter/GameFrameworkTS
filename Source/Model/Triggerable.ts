@@ -11,6 +11,11 @@ export class Triggerable implements EntityProperty<Triggerable>
 		this.triggers = triggers;
 	}
 
+	static fromTriggers(triggers: Trigger[]): Triggerable
+	{
+		return new Triggerable(triggers);
+	}
+
 	// Clonable.
 
 	clone(): Triggerable

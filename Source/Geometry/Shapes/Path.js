@@ -31,6 +31,17 @@ var ThisCouldBeBetter;
             static fromPoints(points) {
                 return new Path(points);
             }
+            static fromPointsRelative(pointsRelative) {
+                var offsetSoFar = GameFramework.Coords.zeroes();
+                var pointsAbsolute = [];
+                for (var i = 1; i < pointsRelative.length; i++) {
+                    var pointRelative = pointsRelative[i];
+                    offsetSoFar.add(pointRelative);
+                    var pointAbsolute = offsetSoFar.clone();
+                    pointsAbsolute.push(pointAbsolute);
+                }
+                return new Path(pointsAbsolute);
+            }
             // Clonable.
             clone() {
                 return new Path(GameFramework.ArrayHelper.clone(this.points));

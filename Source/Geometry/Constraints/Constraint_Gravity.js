@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(accelerationPerTick) {
                 this.accelerationPerTick = accelerationPerTick;
             }
+            static fromAccelerationPerTick(accelerationPerTick) {
+                return new Constraint_Gravity(accelerationPerTick);
+            }
             constrain(uwpe) {
                 var entity = uwpe.entity;
                 var loc = GameFramework.Locatable.of(entity).loc;

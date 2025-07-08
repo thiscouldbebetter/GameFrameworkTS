@@ -50,6 +50,8 @@ class PlaceDefault extends PlaceBase
 			Actor.name,
 			Collidable.name,
 			Constrainable.name,
+			Ephemeral.name,
+			Killable.name,
 			Locatable.name
 		];
 

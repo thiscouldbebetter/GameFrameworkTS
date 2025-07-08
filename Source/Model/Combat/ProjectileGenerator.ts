@@ -45,7 +45,8 @@ export class ProjectileGenerator
 				var place = uwpe.place;
 				var entityActor = uwpe.entity;
 
-				var projectileGenerator = ProjectileGenerator.of(entityActor);
+				var projectileGenerator =
+					ProjectileGenerator.of(entityActor);
 				var projectileEntities =
 					projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
 				place.entitiesToSpawnAdd(projectileEntities);

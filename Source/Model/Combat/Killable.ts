@@ -129,10 +129,12 @@ export class Killable implements EntityProperty<Killable>
 
 	integrityAdd(amountToAdd: number): void
 	{
-		var integrityToSet = this.integrity + amountToAdd;
+		var integrityToSet =
+			this.integrity + amountToAdd;
+
 		integrityToSet = NumberHelper.trimToRangeMax
 		(
-			this.integrity,
+			integrityToSet,
 			this.integrityMax
 		);
 		this.integritySet(integrityToSet);

@@ -19,7 +19,11 @@ var ThisCouldBeBetter;
             action(universe) {
                 return universe.world.defn.actionByName(this.actionName);
             }
-            // Cloneable implementation.
+            inactivateInputWhenActionPerformedSet(value) {
+                this.inactivateInputWhenActionPerformed = value;
+                return this;
+            }
+            // Clonable.
             clone() {
                 return new ActionToInputsMapping(this.actionName, this.inputNames.slice(), this.inactivateInputWhenActionPerformed);
             }

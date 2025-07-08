@@ -672,7 +672,7 @@ class PlaceBuilderDemo // Main.
         var cameraLoc = new Disposition(cameraPos, Orientation.Instances().ForwardZDownY.clone(), null);
         var camera = new Camera(cameraViewSize, cameraHeightAbovePlayfield, // focalLength
         cameraLoc, (entities) => Camera.entitiesSortByRenderingOrderThenZThenY(entities));
-        var cameraEntity = camera.toEntity();
+        var cameraEntity = camera.toEntity("Player");
         Constrainable.of(cameraEntity).constraintAdd(new Constraint_ContainInBox(cameraPosBox));
         return cameraEntity;
     }

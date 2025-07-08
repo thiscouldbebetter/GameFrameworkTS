@@ -11,6 +11,11 @@ export class Constraint_Transform implements Constraint
 		this.transformToApply = transformToApply;
 	}
 
+	static fromTransform(transformToApply: TransformBase): Constraint_Transform
+	{
+		return new Constraint_Transform(transformToApply);
+	}
+
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var constrainablePos = Locatable.of(uwpe.entity).loc.pos;

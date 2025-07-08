@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this.reactToBeingTriggered = reactToBeingTriggered;
                 this.hasBeenTriggered = false;
             }
+            static fromNameIsTriggeredAndReactToBeingTriggered(name, isTriggered, reactToBeingTriggered) {
+                return new Trigger(name, isTriggered, reactToBeingTriggered);
+            }
             updateForTimerTick(uwpe) {
                 if (this.hasBeenTriggered == false) {
                     this.hasBeenTriggered = this.isTriggered(uwpe);

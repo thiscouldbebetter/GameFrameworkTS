@@ -42,7 +42,16 @@ export class ActionToInputsMapping
 		return universe.world.defn.actionByName(this.actionName);
 	}
 
-	// Cloneable implementation.
+	inactivateInputWhenActionPerformedSet
+	(
+		value: boolean
+	): ActionToInputsMapping
+	{
+		this.inactivateInputWhenActionPerformed = value;
+		return this;
+	}
+
+	// Clonable.
 
 	clone(): ActionToInputsMapping
 	{

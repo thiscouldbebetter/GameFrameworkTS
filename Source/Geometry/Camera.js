@@ -16,6 +16,9 @@ var ThisCouldBeBetter;
                 this.entitiesInView = new Array();
                 this._posSaved = GameFramework.Coords.create();
             }
+            static fromViewSize(viewSize) {
+                return new Camera(viewSize, null, GameFramework.Disposition.create(), null);
+            }
             static default() {
                 return Camera.fromEntitiesInViewSort(null);
             }
@@ -160,40 +163,27 @@ var ThisCouldBeBetter;
                 });
                 return entitiesToSort;
             }
-            toEntity() {
-                /*
-        
-                // todo -
-                // This isn't used to find entities in camera view,
-                // but if it was it would need to include a Collidable property.
-        
-                return new Entity
-                (
-                    Camera.name,
-                    [
-                        this,
-                        new Constrainable([]),
-                        new Locatable(this.loc),
-                    ]
-                );
-                */
-                var cameraBoundable = new GameFramework.Boundable(this.viewCollider);
-                var cameraCollidable = GameFramework.Collidable
+            toEntity(targetEntityName) {
+                var boundable = new GameFramework.Boundable(this.viewCollider);
+                var collidable = GameFramework.Collidable
                     .fromCollider(this.viewCollider)
                     .canCollideAgainWithoutSeparatingSet(true);
-                var cameraConstrainable = new GameFramework.Constrainable([
-                    new GameFramework.Constraint_AttachToEntityWithName("Player"),
+                var constrainable = GameFramework.Constrainable.fromConstraints([
+                    GameFramework.Constraint_AttachToEntityWithName
+                        .fromTargetEntityName(targetEntityName)
                     //new Constraint_ContainInBox(cameraPosBox)
                 ]);
-                var cameraEntity = new GameFramework.Entity(Camera.name, [
+                var locatable = GameFramework.Locatable.default();
+                var movable = GameFramework.Movable.default();
+                var entity = GameFramework.Entity.fromNameAndProperties(Camera.name, [
+                    boundable,
                     this,
-                    cameraBoundable,
-                    cameraCollidable,
-                    cameraConstrainable,
-                    new GameFramework.Locatable(this.loc),
-                    GameFramework.Movable.default()
+                    collidable,
+                    constrainable,
+                    locatable,
+                    movable
                 ]);
-                return cameraEntity;
+                return entity;
             }
             // Clonable.
             clone() { return this; }

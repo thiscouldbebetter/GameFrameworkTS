@@ -49,6 +49,23 @@ export class Path
 		return new Path(points);
 	}
 
+	static fromPointsRelative(pointsRelative: Coords[]): Path
+	{
+		var offsetSoFar = Coords.zeroes();
+
+		var pointsAbsolute: Coords[] = [];
+
+		for (var i = 1; i < pointsRelative.length; i++)
+		{
+			var pointRelative = pointsRelative[i];
+			offsetSoFar.add(pointRelative);
+			var pointAbsolute = offsetSoFar.clone();
+			pointsAbsolute.push(pointAbsolute);
+		}
+
+		return new Path(pointsAbsolute);
+	}
+
 	// Clonable.
 
 	clone(): Path

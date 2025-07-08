@@ -128,8 +128,11 @@ export class VenueMessage<TContext> implements Venue
 	acknowledge(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this._acknowledge(uwpe);
-		var universe = uwpe.universe;
-		universe.venuePrevJumpTo();
+
+		// If this happens, any .venueNextSet() call
+		// in the _acknowledge will be ignored.
+		// var universe = uwpe.universe;
+		// universe.venuePrevJumpTo();
 	}
 
 	draw(universe: Universe): void

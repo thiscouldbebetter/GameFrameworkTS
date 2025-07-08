@@ -11,6 +11,14 @@ export class Constraint_AttachToEntityWithName implements Constraint
 		this.targetEntityName = targetEntityName;
 	}
 
+	static fromTargetEntityName
+	(
+		targetEntityName: string
+	): Constraint_AttachToEntityWithName
+	{
+		return new Constraint_AttachToEntityWithName(targetEntityName);
+	}
+
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var place = uwpe.place;

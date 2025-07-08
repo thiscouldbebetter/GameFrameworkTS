@@ -10,6 +10,14 @@ export class Constraint_Gravity implements Constraint
 		this.accelerationPerTick = accelerationPerTick;
 	}
 
+	static fromAccelerationPerTick
+	(
+		accelerationPerTick: Coords
+	): Constraint_Gravity
+	{
+		return new Constraint_Gravity(accelerationPerTick);
+	}
+
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;

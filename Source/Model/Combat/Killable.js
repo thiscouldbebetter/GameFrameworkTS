@@ -62,7 +62,7 @@ var ThisCouldBeBetter;
             }
             integrityAdd(amountToAdd) {
                 var integrityToSet = this.integrity + amountToAdd;
-                integrityToSet = GameFramework.NumberHelper.trimToRangeMax(this.integrity, this.integrityMax);
+                integrityToSet = GameFramework.NumberHelper.trimToRangeMax(integrityToSet, this.integrityMax);
                 this.integritySet(integrityToSet);
             }
             integrityCurrentOverMax() {

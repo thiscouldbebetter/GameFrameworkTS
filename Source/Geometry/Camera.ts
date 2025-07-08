@@ -42,6 +42,14 @@ export class Camera implements EntityProperty<Camera>
 		this._posSaved = Coords.create();
 	}
 
+	static fromViewSize(viewSize: Coords): Camera
+	{
+		return new Camera
+		(
+			viewSize, null, Disposition.create(), null
+		);
+	}
+
 	static default(): Camera
 	{
 		return Camera.fromEntitiesInViewSort
@@ -361,50 +369,41 @@ export class Camera implements EntityProperty<Camera>
 		return entitiesToSort;
 	}
 
-	toEntity(): Entity
+	toEntity(targetEntityName: string): Entity
 	{
-		/*
+		var boundable =
+			new Boundable(this.viewCollider);
 
-		// todo -
-		// This isn't used to find entities in camera view,
-		// but if it was it would need to include a Collidable property.
-
-		return new Entity
-		(
-			Camera.name,
-			[
-				this,
-				new Constrainable([]),
-				new Locatable(this.loc),
-			]
-		);
-		*/
-		var cameraBoundable = new Boundable(this.viewCollider);
-		var cameraCollidable =
+		var collidable =
 			Collidable
 				.fromCollider(this.viewCollider)
 				.canCollideAgainWithoutSeparatingSet(true);
 
-		var cameraConstrainable = new Constrainable
+		var constrainable = Constrainable.fromConstraints
 		([
-			new Constraint_AttachToEntityWithName("Player"),
+			Constraint_AttachToEntityWithName
+				.fromTargetEntityName(targetEntityName)
 			//new Constraint_ContainInBox(cameraPosBox)
 		]);
 
-		var cameraEntity = new Entity
+		var locatable = Locatable.default();
+
+		var movable = Movable.default();
+
+		var entity = Entity.fromNameAndProperties
 		(
 			Camera.name,
 			[
+				boundable,
 				this,
-				cameraBoundable,
-				cameraCollidable,
-				cameraConstrainable,
-				new Locatable(this.loc),
-				Movable.default()
+				collidable,
+				constrainable,
+				locatable,
+				movable
 			]
 		);
 
-		return cameraEntity;
+		return entity;
 	}
 
 	// Clonable.

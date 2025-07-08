@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(transformToApply) {
                 this.transformToApply = transformToApply;
             }
+            static fromTransform(transformToApply) {
+                return new Constraint_Transform(transformToApply);
+            }
             constrain(uwpe) {
                 var constrainablePos = GameFramework.Locatable.of(uwpe.entity).loc.pos;
                 this.transformToApply.transformCoords(constrainablePos);

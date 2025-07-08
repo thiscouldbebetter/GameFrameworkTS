@@ -4,6 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Constraint_WrapToPlaceSize {
+            static create() {
+                return new Constraint_WrapToPlaceSize();
+            }
             constrain(uwpe) {
                 var place = uwpe.place;
                 var entity = uwpe.entity;

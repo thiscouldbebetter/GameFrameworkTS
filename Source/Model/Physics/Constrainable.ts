@@ -38,6 +38,7 @@ export class Constrainable implements EntityProperty<Constrainable>
 	clear(): Constrainable
 	{
 		this.constraints.length = 0;
+		this._constraintsByClassName.clear();
 		return this;
 	}
 
@@ -66,6 +67,27 @@ export class Constrainable implements EntityProperty<Constrainable>
 	constraintByClassName(constraintClassName: string): Constraint
 	{
 		return this._constraintsByClassName.get(constraintClassName);
+	}
+
+	constraintRemove
+	(
+		constraintToRemove: Constraint
+	): Constrainable
+	{
+		var constraintIndex =
+			this.constraints.indexOf(constraintToRemove);
+		this.constraints.splice(constraintIndex, 1);
+		var constraintClassName =
+			constraintToRemove.constructor.name;
+		this._constraintsByClassName.delete(constraintClassName);
+		return this;
+	}
+
+	constraintRemoveFinal(): Constrainable
+	{
+		var constraintToRemove =
+			this.constraints[this.constraints.length - 1];
+		return this.constraintRemove(constraintToRemove);
 	}
 
 	// EntityProperty.

@@ -65,7 +65,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 					Locatable.fromPos
 					(
 						Coords.fromXY(size.x / 2, size.y - horizonHeight / 2)
-					),
+					)
 				]
 			);
 		}
@@ -81,7 +81,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 2.7. Back in the Source directory, open the file PlaceDefault.ts in a text editor.  Locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, locate the existing "new UserInputListener()" element, add a comma after it, add the following text on the line below, then save the file.
 
-	new Planet("Planet0", Coords.fromXY(400, 300), 50)
+	new Planet(Planet.name, Coords.fromXY(400, 300), 50)
 
 2.8. From the _Scripts directory, run the command "_Build.sh" or "_Build.bat" to compile the program again.  Wait for the command to complete, and verify that no errors are displayed.
 
@@ -132,11 +132,11 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 3.5. Now that the Ship class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceDefault instance.  Back in the Source directory, open the file PlaceDefault.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, make sure that there are commas between all the array elements, and save the file.
 
-	new Ship("Ship0", Coords.fromXY(100, 100) )
+	new Ship(Ship.name, Coords.fromXY(100, 100) )
 
 3.6. Compile the program again by running the script named "_Build", then refresh Game.html, start the game, and progress past the startup screens as before.  A gray triangle pointing right, representing a spaceship, now appears above the ground.
 
-<img src="Screenshot-3-Ship-Stationary.png" />
+	<img src="Screenshot-3-Ship-Stationary.png" />
 
 3.7. In the browser's address bar, append the text "?debug=SkipOpening" to the end of the URL for Game.html and press the Enter key to reload.  This will skip the opening scenes to the main part of the game, saving the time and trouble needed to skip past them every time.
 
@@ -171,7 +171,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	Constrainable.fromConstraint
 	(
-		new Constraint_WrapToPlaceSizeXTrimY()
+		Constraint_WrapToPlaceSizeXTrimY.create()
 	)
 
 5.3. Recompile the game by running the _Build script, then refresh the web browser.  Now when the ship leaves the right side of the screen, it reappears on the left, in a repeating cycle.
@@ -358,7 +358,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 					Constrainable.fromConstraint
 					(
-						new Constraint_WrapToPlaceSizeX()
+						Constraint_WrapToPlaceSizeX.create()
 					),
 
 					Drawable.fromVisual
@@ -463,10 +463,10 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 					var constraintToAddToTarget = new Constraint_Multiple
 					([
-						new Constraint_AttachToEntityWithId(raider.id),
-						new Constraint_Transform
+						Constraint_AttachToEntityWithId.fromTargetEntityId(raider.id),
+						Constraint_Transform.fromTransform
 						(
-							new Transform_Translate(Coords.fromXY(0, 10) )
+							Transform_Translate.fromDisplacement(Coords.fromXY(0, 10) )
 						)
 					]);
 
@@ -563,15 +563,13 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 
 	ProjectileGenerator.actionFire()
 
-9.4. And these lines to the end of "actionsToInputMappings" array:
+9.4. And these lines to the end of "actionsToInputMappings" array, adjusting commas as necessary:
 
 	ActionToInputsMapping.fromActionNameAndInputName
 	(
 		ProjectileGenerator.actionFire().name,
-		inputNames.Space
-	)
-
-(As always, remember to delimit these new array elements from the existing ones with commas.)
+		inputs.Space.name
+	).inactivateInputWhenActionPerformedSet(true)
 
 9.7. Re-run the build script and refresh the web browser.  The good news is, your spaceship will now shoot bullets when you press the spacebar!
 
@@ -591,19 +589,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 
 These lines make the raider collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.
 
-10.3. However, in order for Collidables and Killables to be processed correctly, they'll need to be added to the list of property types that PlaceDefault understands.  Open PlaceDefault.ts and replace the existing declaration of the entityPropertyNamesToProcess array with the following:
-
-	var entityPropertyNamesToProcess =
-	[
-		Locatable.name,
-		Constrainable.name,
-		Collidable.name,
-		Actor.name,
-		Ephemeral.name,
-		Killable.name
-	];
-
-10.4 Re-compile the game and refresh the web browser.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
+10.3 Re-compile the game and refresh the web browser.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
 
 <img src="Screenshot-10-Bullet_Destroys_Raider.gif" />
 
@@ -617,24 +603,24 @@ First of all, when your ship flies into the ground, nothing happens.  When you f
 
 Second, when you destroy the raider after it picks up the Habitat and lifts it into the air, the habitat, being a massive object in a planetary gravity field, should fall back to the ground.  And actually, it does fall!  Just not on purpose, and not because of gravity.  And it then falls right through the ground and keeps falling forever, which really hurts the fidelity of the simulation.
 
-11.2. Before we fix the problem of the habitat not falling when it should, we have to fix the problem of the habitat falling when it shouldn't.  It's falling because of the constraint that the raider set on it when it picked it up isn't cleared when the raider is destroyed.  That constraint basically moves the habitat to wherever the raider is and then moves it a little bit down from there.  Now that the raider's been destroyed, the habitat can't copy the raider's position like before, and so it just keeps moving it down from wherever it currently is.
+11.2. Before we fix the problem of the habitat not falling when it should, we have to fix the problem of the habitat falling for the wrong reason.  It's falling because of the constraint that the raider set on it when it picked it up isn't cleared when the raider is destroyed.  That constraint basically moves the habitat to wherever the raider is and then moves it a little bit down from there.  Now that the raider's been destroyed, the habitat can't copy the raider's position like before, and so it just keeps moving it down from wherever it currently is.
 
 To fix it, we need to modify the Killable property on the Raider entity so that it clears the constraint it added on the habitat when it dies.
 
-Open Raider.ts, locate the place in the constructor where the existing Killable property is being built, replace it with the following, and save:
+Open Raider.ts, locate the place in the constructor where the existing Killable property is being built, replace it with the following, adjust commas, and save:
 
 	Killable.fromIntegrityMaxAndDie
 	(
 		1, // integrityMax
 		(uwpe: UniverseWorldPlaceEntities) => // die
 		{
-			var raider = uwpe.entity;
+			var raider = uwpe.entity as Raider;
 			var habitatCaptured = raider.habitatCaptured;
 			if (habitatCaptured != null)
 			{
-				var constraints =
-					habitatCaptured.constrainable().constraints;
-				constraints.length = constraints.length - 1;
+				var constrainable =
+					Constrainable.of(habitatCaptured);
+				constrainable.constraintRemoveFinal();
 			}
 		}
 	)
@@ -643,53 +629,50 @@ Now when you destroy the raider after it's picked up the habitat, the habitat wi
 
 11.3. Now let's make the habitat fall for the right reasons.  To do that, we'll add more constraints on it.  One constraint will make it subject to gravity, and another will keep it from passing through the planet surface like a ghost.
 
-Open Habitat.ts, then, in the constructor, locate where the existing Constrainable is being created, and replace it with the following:
+Open Habitat.ts, then, in the constructor, locate where the existing Constrainable is being created, and replace it with the following, adding commas as needed:
 
 	Constrainable.fromConstraints
 	([
-		new Constraint_Gravity(Coords.fromXY(0, .03)),
-		new Constraint_ContainInHemispace
+		Constraint_Gravity.fromAccelerationPerTick
 		(
-			new Hemispace
+			Coords.fromXY(0, .03)
+		),
+		Constraint_ContainInHemispace.fromHemispace
+		(
+			Hemispace.fromPlane
 			(
-				new Plane(new Coords(0, 1, 0), 250)
+				Plane.fromNormalAndDistanceFromOrigin
+				(
+					Coords.fromXY(0, 1), 250
+				)
 			)
 		)
-	]),
+	])
 
 (Now, "hemispace" is a fancy word, but it just means that half of all space that lies on one side of a given plane.  In this case, the plane in question is the ground, and we're constraining the habitat so that it can only occupy the half of space that lies above the plane of the ground, that is, the sky.  Actually, technically we're constraining it so that it can only occupy the half of space below a plane whose normal points downward into the ground, but that's semantics.)
 
-Every tick, the first new constraint will accelerate the habitat downward, and the second will prevent it from tunnelling into the surface of the planet.
+Every tick, the first new constraint will accelerate the habitat downward, and the second will prevent it from tunnelling into the surface of the planet.  Unless it's currently being carried off by a raider, in which case the constraint that the raider puts on the habitat undoes the other constraints.
 
-11.4. Your spaceship should also not tunnel into the surface of the planet, at least not without consequences.  For now, open Ship.ts, locate the existing Constrainable in its constructor, and replace it with the following:
+11.4. Just like the habitat, your spaceship should also not tunnel into the surface of the planet, at least not without consequences.  For now, open Ship.ts, locate the existing Constrainable in its constructor, and replace it with the following, adjusting commas as needed:
 
 	Constrainable.fromConstraints
 	([
-		new Constraint_WrapToPlaceSizeXTrimY(),
-		new Constraint_ContainInHemispace
+		Constraint_WrapToPlaceSizeXTrimY.create(),
+		Constraint_ContainInHemispace.fromHemispace
 		(
-			new Hemispace
+			Hemispace.fromPlane
 			(
-				new Plane(new Coords(0, 1, 0), 250)
+				Plane.fromNormalAndDistanceFromOrigin
+				(
+					Coords.fromXY(0, 1), 250
+				)
 			)
 		)
-	]),
+	])
 
-The new constraint is exactly the same as the one for the habitat.
+The new constraint is exactly the same as the one for the habitat, and will have exactly the same effect, that is, keeping your ship from moving below the level of the ground.
 
-11.5. Since the new code makes use of the previously unreferenced classes Constraint_ContainInHemispace, Constraint_Gravity, and Hemispace, we'll need to add those references to the Imports.ts file:
-
-	import Constraint_ContainInHemispace = gf.Constraint_ContainInHemispace;
-	import Constraint_Gravity = gf.Constraint_Gravity;
-	import Hemispace = gf.Hemispace;
-
-And also to the Game.html file:
-
-	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_ContainInHemispace.js"></script>
-	<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Gravity.js"></script>
-	<script type="text/javascript" src="Framework/Source/Geometry/Shapes/Hemispace.js"></script>
-
-11.6. Recompile and restart the game.  Let the raider grab the habitat and carry it up a short distance, then shoot the raider.  The habitat will slowly fall back to the planet surface.  Also, you shouldn't be able to fly your ship below the surface of the planet, although you can still smack into it as fast as you want with no consequences.  One thing at a time.
+11.5. Run the build script and refresh the browser.  Let the raider grab the habitat and carry it up a short distance, then shoot the raider.  The habitat will fall back to the planet surface.  Also, you will no longer be able to fly your ship below the surface of the planet, although you can still smack into it as fast as you want with no consequences.  And there's no such thing as friction, so you'll keep your velocity, too, meaning you'll just sort of slide along the ground indefinitely, and you'll have to actually accelerate upward for a second before you can rise again.  But we'll ignore those issues for now.  One problem at a time.
 
 
 12. Adding Win and Lose Conditions
@@ -699,99 +682,258 @@ And also to the Game.html file:
 
 So let's add some.  We'll add some code that checks each tick to see if there are no more raiders, in which case the player wins, or if there are no more habitats, in which case, the player loses.  In either case, a message will be displayed that explains what just happened, and the game will return to the title screen.
 
-Open Ship.ts, and, in the constructor, at the end of the list of properties, insert the text below (remembering to add a comma at the end of the preceding property declaration) and save:
+Since the planet is guaranteed not to be destroyed no matter what, we'll put the triggers that fire when the game is won or lost on the planet itself.  We could declare the entirety of the Triggerable property in the constructor of Planet, but it's quite long, so it might be better to break it out into its own method, or even several methods.  So first, open Planet.ts and insert the methods below:
 
-	new Triggerable
-	([
-		new Trigger
+	// Triggerable.
+
+	static triggerable(): Triggerable
+	{
+		var triggerLose =
+			Trigger.fromNameIsTriggeredAndReactToBeingTriggered
+			(
+				"Lose",
+				this.triggerLoseIsTriggered,
+				this.triggerLoseReactToBeingTriggered
+			);
+
+		var triggerWin =
+			Trigger.fromNameIsTriggeredAndReactToBeingTriggered
+			(
+				"Win",
+				this.triggerWinIsTriggered,
+				this.triggerWinReactToBeingTriggered
+			);
+
+		return Triggerable.fromTriggers
+		([
+			triggerLose,
+			triggerWin
+		]);
+	}
+
+	static triggerLoseIsTriggered
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): boolean
+	{
+		var level = uwpe.place as PlaceDefault;
+		var habitatsAreAllGone =
+			(level.habitats().length == 0);
+		return habitatsAreAllGone;
+	}
+
+	static triggerLoseReactToBeingTriggered
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): void
+	{
+		var universe = uwpe.universe;
+		universe.venueNextSet
 		(
-			"Lose",
-			(uwpe: UniverseWorldPlaceEntities) => // isTriggered
-			{
-				var level = uwpe.place as PlaceDefault;
-				var areAllTheHabitatsGone = (level.habitats().length == 0);
-				return areAllTheHabitatsGone;
-			}, 
-			(uwpe: UniverseWorldPlaceEntities) => // reactToBeingTriggered
-			{
-				uwpe.universe.venueNext = VenueMessage.fromMessageAndAcknowledge
-				(
-					DataBinding.fromContext("You lose!"),
-					() => // acknowledge
-					{
-						universe.venueNext = universe.controlBuilder.title
+			VenueMessage.fromTextAndAcknowledge
+			(
+				"You lose!",
+				() => // acknowledge
+				{
+					universe.venueNextSet
+					(
+						universe.controlBuilder.title
 						(
 							universe, universe.display.sizeInPixels,
-						).toVenue();
-					}
-				)
-			}
-		),
-
-		new Trigger
-		(
-			"Win",
-			(uwpe: UniverseWorldPlaceEntities) => // isTriggered
-			{
-				var level = uwpe.place as PlaceDefault;
-				var areAllTheRaidersGone = (level.raiders().length == 0);
-				return areAllTheRaidersGone;
-			}, 
-			(uwpe: UniverseWorldPlaceEntities) => // reactToBeingTriggered
-			{
-				var universe = uwpe.universe;
-				universe.venueNext = VenueMessage.fromMessageAndAcknowledge
-				(
-					DataBinding.fromContext("You win!"),
-					() => // acknowledge
-					{
-						universe.venueNext = universe.controlBuilder.title
-						(
-							universe, universe.display.sizeInPixels,
-						).toVenue();
-					}
-				)
-			}
+						).toVenue()
+					);
+				}
+			)
 		)
-	])
+	}
 
-12.2. Since the new code uses the previously unreferenced classes Trigger and Triggerable, it will be necessary to add them to Imports.ts:
+	static triggerWinIsTriggered
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): boolean
+	{
+		var level = uwpe.place as PlaceDefault;
+		var habitatIsStillThere =
+			(level.habitats().length > 0);
+		var raidersAreAllGone =
+			(level.raiders().length == 0);
+		return (raidersAreAllGone && habitatIsStillThere);
+	}
 
-	import Trigger = gf.Trigger;
-	import Triggerable = gf.Triggerable;
+	static triggerWinReactToBeingTriggered
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): void
+	{
+		var universe = uwpe.universe;
+		universe.venueNextSet
+		(
+			VenueMessage.fromTextAndAcknowledge
+			(
+				"You win!",
+				() => // acknowledge
+				{
+					universe.venueNextSet
+					(
+						universe.controlBuilder.title
+						(
+							universe, universe.display.sizeInPixels,
+						).toVenue()
+					);
+				}
+			)
+		)
+	}
 
-And also to Game.html:
+12.2. Now add a call to the newly added Planet.triggerable() method in the constructor's property array, adjusting commas as needed:
 
-	<script type="text/javascript" src="Framework/Source/Model/Trigger.js"></script>
-	<script type="text/javascript" src="Framework/Source/Model/Triggerable.js"></script>
+	Planet.triggerable()
 
-12.3. It will also be necessary to add Triggerable to the list of entity properties that the PlaceDefault class handles.  Open PlaceDefault.ts, locate the existing entityPropertyNamesToProcess declaration, and replace it with the following:
+12.3. It will be necessary to add Triggerable to the list of entity properties that the PlaceDefault class handles.  Open PlaceDefault.ts, locate the existing entityPropertyNamesToProcess declaration, and add the following line to the list, adjusting commas as needed:
 
-	var entityPropertyNamesToProcess =
-	[
-		Locatable.name,
-		Constrainable.name,
-		Collidable.name,
-		Actor.name,
-		Ephemeral.name,
-		Killable.name,
-		Triggerable.name
-	];
+	Triggerable.name
 
-Also, you'll need to add this method at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell how many raiders are left:
+12.4. Also, you'll need to add this method at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell how many raiders are left:
 
 	raiders(): Raider[]
 	{
-		return this.entities.filter(x => x.constructor.name == Raider.name) as Raider[];
+		return this._entities.filter
+		(
+			x => x.constructor.name == Raider.name
+		) as Raider[];
 	}
 
-12.4. Save the changes, recompile, and restart.  Now, when you blow up the raider, or when the raider takes the habitat off the top of the screen, you'll see either a win or lose message.  When you click the button to dismiss the message dialog, the game will end and return to the title screen.
+12.5. Save the changes, run the build script, and refresh the browser.  Now, when you blow up the raider, or when the raider takes the habitat off the top of the screen, you'll see either a win or lose message.  When you click the button to dismiss the message dialog, the game will end and return to the title screen.
 
 
-13. Conclusion
+13. Scenery
+-----------
+
+13.1. Let's add some scenery.  A nice mountain range would be appropriate.
+
+Open Planet.ts.  To add a mountain range to the ground that's already there, we'll have to make the Visual significantly more complex, so we'll move the building of that Visual to its own method.  Add the method declaration given below at the end of the existing class:
+
+	// Visual.
+
+	static visual
+	(
+		placeSize: Coords, horizonHeight: number
+	): VisualBase
+	{
+		var colors = Color.Instances();
+
+		var ground = VisualRectangle.fromSizeAndColorFill
+		(
+			Coords.fromXY(placeSize.x, horizonHeight),
+			colors.GreenDark
+		);
+
+		var groundOffset = VisualOffset.fromOffsetAndChild
+		(
+			Coords.fromXY
+			(
+				placeSize.x / 2,
+				placeSize.y - horizonHeight / 2
+			),
+			ground
+		);
+
+		var mountainSegmentCount = 8;
+		var mountainSegmentWidth = placeSize.x / mountainSegmentCount;
+		var mountainHeightAboveHorizonMax = horizonHeight;
+		var mountainPathPoints = new Array<Coords>();
+
+		for (var x = 0; x < mountainSegmentCount; x++)
+		{
+			var mountainHeightAboveHorizon =
+				Math.random() * mountainHeightAboveHorizonMax;
+			var mountainPathPoint = Coords.fromXY
+			(
+				x * mountainSegmentWidth,
+				0 - mountainHeightAboveHorizon
+			);
+			mountainPathPoints.push(mountainPathPoint);
+		}
+
+		mountainPathPoints.push
+		(
+			Coords.fromXY
+			(
+				placeSize.x,
+				mountainPathPoints[0].y
+			)
+		);
+
+		var mountainsAsPath =
+			Path.fromPoints(mountainPathPoints);
+
+		var mountains = VisualPath.fromPathColorAndThicknessOpen
+		(
+			mountainsAsPath,
+			colors.Brown,
+			1 // thickness
+		);
+
+		var mountainsOffset = VisualOffset.fromOffsetAndChild
+		(
+			Coords.fromXY(0, placeSize.y - horizonHeight),
+			mountains
+		);
+
+		var visual = VisualGroup.fromNameAndChildren
+		(
+			"Planet",
+			[
+				groundOffset,
+				mountainsOffset
+			]
+		);
+
+		return visual;
+	}
+
+13.2. Now, in the Planet constructor, replace the existing declaration of the Drawable with the following, which calls the .visual() method just added, and adjust commas as needed:
+
+	Drawable.fromVisual
+	(
+		Planet.visual(size, horizonHeight)
+	)
+
+13.3. Save the changes, run the build script, and refresh the browser.  Now a random mountain range appears above the ground.  Nice.
+
+
+14. Scrolling
+-------------
+
+14.1. The mountains look nice and all, but the real reason we added them was because we're going to expand the planet to be wider than just one screen, which will require scrolling.
+
+With a single screen, which we've had until now, you can always tell how the ship is moving because the position of the ship relative to the edges of the screen is always changing.  But after scrolling is added, the ship will stay horizontally centered in the view most of the time, and without some sort of scenery other than the perfectly flat ground, it would be impossible to tell how fast you were moving relative to the ground.
+
+14.2. First, we'll increase the size of the PlaceDefault, and double its width.  Since it was previously exactly the same width as the screen, this means the Place will now be two screens in width.
+
+Open PlaceDefault.ts and, in the constructor, replace the existing line that sets the size to double its width, like this:
+
+	Coords.fromXY(800, 300), // size
+
+If you ran the build script and refreshed the browser, then accelerated to the right, you would see the ship disappear off the right side of the screen.  After a while, it would appear again on the left side of the screen.  The Place is now twice as big, but the camera is only looking at the left side of it, and it doesn't move to follow the ship.
+
+14.3. Let's make the camera follow the ship around. 
+
+Or, more specifically, let's make a camera entity, and then constrain it to follow the ship around.  Because there previously hasn't been any entity with the Camera property, the framework is defaulting to its default rendering behavior, which is just to look at the upper-left corner of the Place at all times.
+
+To add a camera, open PlaceDefault.ts and add the following line in the list of entities in the constructor, adjusting commas as needed:
+
+	Camera.fromViewSize
+	(
+		Coords.fromXY(400, 300)
+	).toEntity(Ship.name)
+
+14.4. [To be continued.]
+
+n. Conclusion
 --------------
 
-13.1. Well, it's technically a game at this point, albeit not much of one.  Here's some future features that might make the game more fun:
+n.1. Well, it's certainly technically a game at this point.  Congratulations!  Here's some future features that might make the game even more fun:
 
 * Add appropriate visual and sound effects when things happen.
 * Destroy the player's ship when it runs into a raider.
@@ -807,7 +949,7 @@ Also, you'll need to add this method at the end of the PlaceDefault class, right
 * Make ammuntion limited and add reloading by picking up bullets.
 * Make the surface of the planet a little less boring to look at.
 
-The framework contains features to support all these features, though it might not be easy to figure out how.  To be continued!
+The framework contains features to support all these, though it might not be easy to figure out how.  To be continued!
 
 
 
