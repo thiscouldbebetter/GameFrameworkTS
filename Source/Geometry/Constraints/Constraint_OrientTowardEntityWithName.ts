@@ -2,13 +2,21 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_OrientToward implements Constraint
+export class Constraint_OrientTowardEntityWithName implements Constraint
 {
 	targetEntityName: string;
 
 	constructor(targetEntityName: string)
 	{
 		this.targetEntityName = targetEntityName;
+	}
+
+	static fromTargetEntityName
+	(
+		targetEntityName: string
+	): Constraint_OrientTowardEntityWithName
+	{
+		return new Constraint_OrientTowardEntityWithName(targetEntityName);
 	}
 
 	constrain(uwpe: UniverseWorldPlaceEntities): void
@@ -20,21 +28,21 @@ export class Constraint_OrientToward implements Constraint
 
 		var constrainableLoc = Locatable.of(entity).loc;
 		var constrainablePos = constrainableLoc.pos;
-		var constrainableOrientation = constrainableLoc.orientation;
-		var constrainableForward = constrainableOrientation.forward;
+		var constrainableOri = constrainableLoc.orientation;
+		var constrainableForward = constrainableOri.forward;
 
 		var target = place.entityByName(targetEntityName);
-		var targetPos = Locatable.of(target).loc.pos;
+		if (target != null)
+		{
+			var targetPos = Locatable.of(target).loc.pos;
 
-		constrainableForward.overwriteWith
-		(
-			targetPos
-		).subtract
-		(
-			constrainablePos
-		).normalize();
+			constrainableForward
+				.overwriteWith(targetPos)
+				.subtract(constrainablePos)
+				.normalize();
 
-		constrainableOrientation.forwardSet(constrainableForward);
+			constrainableOri.forwardSet(constrainableForward);
+		}
 	}
 
 	// Clonable.

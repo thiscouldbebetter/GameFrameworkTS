@@ -5,9 +5,9 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Orientation {
             constructor(forward, down) {
-                this.forward = forward || new GameFramework.Coords(1, 0, 0);
+                this.forward = forward || GameFramework.Coords.fromXYZ(1, 0, 0);
                 this.forward = this.forward.clone().normalize();
-                down = down || new GameFramework.Coords(0, 0, 1);
+                down = down || GameFramework.Coords.fromXYZ(0, 0, 1);
                 this.right = down.clone().crossProduct(this.forward).normalize();
                 this.down = this.forward.clone().crossProduct(this.right).normalize();
                 this.axes = [this.forward, this.right, this.down];
@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
             }
             static fromForward(forward) {
                 return new Orientation(forward, new GameFramework.Coords(0, 0, 1));
+            }
+            static fromForwardAndDown(forward, down) {
+                return new Orientation(forward, down);
             }
             default() {
                 var coordsInstances = GameFramework.Coords.Instances();

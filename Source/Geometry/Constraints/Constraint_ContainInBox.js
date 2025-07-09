@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(boxToContainWithin) {
                 this.boxToContainWithin = boxToContainWithin;
             }
+            static fromBox(boxToContainWithin) {
+                return new Constraint_ContainInBox(boxToContainWithin);
+            }
             constrain(uwpe) {
                 this.boxToContainWithin.trimCoords(GameFramework.Locatable.of(uwpe.entity).loc.pos);
             }

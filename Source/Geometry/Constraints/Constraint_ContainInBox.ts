@@ -11,6 +11,11 @@ export class Constraint_ContainInBox implements Constraint
 		this.boxToContainWithin = boxToContainWithin;
 	}
 
+	static fromBox(boxToContainWithin: Box): Constraint_ContainInBox
+	{
+		return new Constraint_ContainInBox(boxToContainWithin);
+	}
+
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.boxToContainWithin.trimCoords(Locatable.of(uwpe.entity).loc.pos);

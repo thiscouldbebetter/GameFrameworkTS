@@ -11,6 +11,11 @@ export class Constraint_Multiple implements Constraint
 		this.children = children;
 	}
 
+	static fromChildren(children: Constraint[] ): Constraint_Multiple
+	{
+		return new Constraint_Multiple(children);
+	}
+
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.children.forEach(x => x.constrain(uwpe));

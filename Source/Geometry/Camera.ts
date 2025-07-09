@@ -42,25 +42,12 @@ export class Camera implements EntityProperty<Camera>
 		this._posSaved = Coords.create();
 	}
 
-	static fromViewSize(viewSize: Coords): Camera
-	{
-		return new Camera
-		(
-			viewSize, null, Disposition.create(), null
-		);
-	}
-
 	static default(): Camera
 	{
 		return Camera.fromEntitiesInViewSort
 		(
 			null
 		);
-	}
-
-	static entityFromPlace(place: Place): Entity
-	{
-		return place.entitiesByPropertyName(Camera.name)[0];
 	}
 
 	static fromEntitiesInViewSort
@@ -81,6 +68,26 @@ export class Camera implements EntityProperty<Camera>
 		);
 	}
 
+	static fromViewSizeAndDisposition
+	(
+		viewSize: Coords,
+		disp: Disposition
+	): Camera
+	{
+		return new Camera
+		(
+			viewSize,
+			null, // focalLength
+			disp,
+			null // entitiesInViewSort
+		);
+	}
+
+	static entityFromPlace(place: Place): Entity
+	{
+		return place.entitiesByPropertyName(Camera.name)[0];
+	}
+
 	static of(entity: Entity): Camera
 	{
 		return entity.propertyByName(Camera.name) as Camera;
@@ -92,10 +99,10 @@ export class Camera implements EntityProperty<Camera>
 		{
 			this._clipPlanes =
 			[
-				new Plane(Coords.create(), 0),
-				new Plane(Coords.create(), 0),
-				new Plane(Coords.create(), 0),
-				new Plane(Coords.create(), 0),
+				Plane.create(),
+				Plane.create(),
+				Plane.create(),
+				Plane.create(),
 			];
 		}
 
@@ -104,57 +111,47 @@ export class Camera implements EntityProperty<Camera>
 
 		var cameraPos = cameraLoc.pos;
 
-		var centerOfViewPlane = cameraPos.clone().add
-		(
-			cameraOrientation.forward.clone().multiplyScalar
+		var centerOfViewPlane =
+			cameraPos
+			.clone()
+			.add
 			(
-				this.focalLength
-			)
-		);
+				cameraOrientation.forward
+					.clone()
+					.multiplyScalar(this.focalLength)
+			);
 
-		var cornerOffsetRight =	cameraOrientation.right.clone().multiplyScalar
-		(
-			this.viewSizeHalf.x
-		);
+		var cornerOffsetRight =
+			cameraOrientation.right
+				.clone()
+				.multiplyScalar(this.viewSizeHalf.x);
 
-		var cornerOffsetDown = cameraOrientation.down.clone().multiplyScalar
-		(
-			this.viewSizeHalf.y
-		);
+		var cornerOffsetDown =
+			cameraOrientation.down
+				.clone()
+				.multiplyScalar(this.viewSizeHalf.y);
 
 		var cameraViewCorners =
 		[
-			centerOfViewPlane.clone().add
-			(
-				cornerOffsetRight
-			).add
-			(
-				cornerOffsetDown
-			),
+			centerOfViewPlane
+				.clone()
+				.add(cornerOffsetRight)
+				.add(cornerOffsetDown),
 
-			centerOfViewPlane.clone().subtract
-			(
-				cornerOffsetRight
-			).add
-			(
-				cornerOffsetDown
-			),
+			centerOfViewPlane
+				.clone()
+				.subtract(cornerOffsetRight)
+				.add(cornerOffsetDown),
 
-			centerOfViewPlane.clone().subtract
-			(
-				cornerOffsetRight
-			).subtract
-			(
-				cornerOffsetDown
-			),
+			centerOfViewPlane
+				.clone()
+				.subtract(cornerOffsetRight)
+				.subtract(cornerOffsetDown),
 
-			centerOfViewPlane.clone().add
-			(
-				cornerOffsetRight
-			).subtract
-			(
-				cornerOffsetDown
-			),
+			centerOfViewPlane
+				.clone()
+				.add(cornerOffsetRight)
+				.subtract(cornerOffsetDown),
 
 		];
 
@@ -182,6 +179,47 @@ export class Camera implements EntityProperty<Camera>
 		}
 
 		return this._clipPlanes;
+	}
+
+	constraintContainInBoxForPlaceSizeAndWrapped
+	(
+		placeSize: Coords,
+		placeIsWrappedHorizontally: boolean
+	): Constraint_ContainInBox
+	{
+		var viewSizeHalf = this.viewSizeHalf;
+
+		var min =
+			placeIsWrappedHorizontally
+			? Coords.fromXY(0, viewSizeHalf.y) // todo
+			: viewSizeHalf.clone();
+		var max =
+			placeIsWrappedHorizontally
+			? Coords.fromXY(placeSize.x, viewSizeHalf.y)
+			: placeSize.clone().subtract(viewSizeHalf);
+
+		var box = Box.fromMinAndMax(min, max);
+
+		var constraintContainInBox =
+			Constraint_ContainInBox.fromBox(box);
+
+		return constraintContainInBox;
+	}
+
+	constraintContainInBoxForPlaceSizeNotWrapped
+	(
+		placeSize: Coords
+	): Constraint_ContainInBox
+	{
+		return this.constraintContainInBoxForPlaceSizeAndWrapped(placeSize, false);
+	}
+
+	constraintContainInBoxForPlaceSizeWrapped
+	(
+		placeSize: Coords
+	): Constraint_ContainInBox
+	{
+		return this.constraintContainInBoxForPlaceSizeAndWrapped(placeSize, true);
 	}
 
 	coordsTransformViewToWorld(viewCoords: Coords, ignoreZ: boolean): Coords
@@ -222,7 +260,9 @@ export class Camera implements EntityProperty<Camera>
 			var viewCoordsZ = viewCoords.z;
 			if (viewCoordsZ != 0)
 			{
-				viewCoords.multiplyScalar(this.focalLength).divideScalar(viewCoordsZ);
+				viewCoords
+					.multiplyScalar(this.focalLength)
+					.divideScalar(viewCoordsZ);
 				viewCoords.z = viewCoordsZ;
 			}
 		}
@@ -267,23 +307,31 @@ export class Camera implements EntityProperty<Camera>
 		collisionTracker.entityReset(cameraEntity);
 
 		var cameraCollidable = Collidable.of(cameraEntity);
-		//cameraCollidable.isDisabled = false;
 		cameraCollidable.entitiesAlreadyCollidedWithClear();
-		var collisions = collisionTracker.entityCollidableAddAndFindCollisions
-		(
-			uwpe, cameraEntity, collisionHelper, new Array<Collision>()
-		);
-		var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
-		var entitiesInView = entitiesCollidedWith.filter(x => Drawable.of(x) != null);
+		var collisions = new Array<Collision>();
+		var collisions =
+			collisionTracker.entityCollidableAddAndFindCollisions
+			(
+				uwpe,
+				cameraEntity,
+				collisionHelper,
+				collisions
+			);
+		var entitiesCollidedWith =
+			collisions.map(x => x.entitiesColliding[1]);
+		var entitiesInView =
+			entitiesCollidedWith
+				.filter(x => Drawable.of(x) != null);
 		entitiesInView =
-			entitiesInView.filter( (x, i) => entitiesInView.indexOf(x) == i); // Distinct.
-		//cameraCollidable.isDisabled = true;
+			entitiesInView
+				.filter( (x, i) => entitiesInView.indexOf(x) == i); // Distinct.
 
-		// Now draw the unboundables.
+		// Now draw the Drawables that aren't also Collidables.
 
 		var drawablesAll = Drawable.entitiesFromPlace(place);
-		var drawablesUnboundable = drawablesAll.filter(x => Boundable.of(x) == null);
-		entitiesInView.push(...drawablesUnboundable);
+		var drawablesUncollidable =
+			drawablesAll.filter(x => Collidable.of(x) == null);
+		entitiesInView.push(...drawablesUncollidable);
 
 		return entitiesInView;
 	}
@@ -369,7 +417,10 @@ export class Camera implements EntityProperty<Camera>
 		return entitiesToSort;
 	}
 
-	toEntity(targetEntityName: string): Entity
+	toEntity
+	(
+		targetEntityName: string
+	): Entity
 	{
 		var boundable =
 			new Boundable(this.viewCollider);
@@ -379,14 +430,10 @@ export class Camera implements EntityProperty<Camera>
 				.fromCollider(this.viewCollider)
 				.canCollideAgainWithoutSeparatingSet(true);
 
-		var constrainable = Constrainable.fromConstraints
-		([
-			Constraint_AttachToEntityWithName
-				.fromTargetEntityName(targetEntityName)
-			//new Constraint_ContainInBox(cameraPosBox)
-		]);
+		var constrainable =
+			this.toEntity_Constrainable(targetEntityName);
 
-		var locatable = Locatable.default();
+		var locatable = Locatable.fromDisp(this.loc);
 
 		var movable = Movable.default();
 
@@ -404,6 +451,37 @@ export class Camera implements EntityProperty<Camera>
 		);
 
 		return entity;
+	}
+
+	toEntity_Constrainable
+	(
+		targetEntityName: string
+	): Constrainable
+	{
+		var displacementToTargetEntity =
+			this.loc.orientation.forward.clone().invert();
+
+		var constraintMultiple = Constraint_Multiple.fromChildren
+		([
+			Constraint_AttachToEntityWithName.
+				fromTargetEntityName(targetEntityName),
+
+			Constraint_Transform.fromTransform
+			(
+				Transform_Translate.fromDisplacement
+				(
+					displacementToTargetEntity
+				)
+			),
+
+			Constraint_OrientTowardEntityWithName
+				.fromTargetEntityName(targetEntityName),
+		]);
+
+		var constrainable =
+			Constrainable.fromConstraint(constraintMultiple);
+
+		return constrainable;
 	}
 
 	// Clonable.

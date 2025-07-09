@@ -35,6 +35,9 @@ var ThisCouldBeBetter;
             static fromPosAndOri(pos, ori) {
                 return new Disposition(pos, ori, null);
             }
+            static fromPosAndOrientation(pos, ori) {
+                return new Disposition(pos, ori, null);
+            }
             static fromPosAndVel(pos, vel) {
                 var returnValue = Disposition.fromPos(pos);
                 returnValue.vel = vel;

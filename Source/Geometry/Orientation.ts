@@ -9,13 +9,13 @@ export class Orientation
 	right: Coords;
 
 	axes: Coords[];
-	axesRDF: Coords[];
+	axesRDF: Coords[]; // "RDF" = "Right, Down, Forward".
 
 	constructor(forward: Coords, down: Coords)
 	{
-		this.forward = forward || new Coords(1, 0, 0);
+		this.forward = forward || Coords.fromXYZ(1, 0, 0);
 		this.forward = this.forward.clone().normalize();
-		down = down || new Coords(0, 0, 1);
+		down = down || Coords.fromXYZ(0, 0, 1);
 		this.right = down.clone().crossProduct(this.forward).normalize();
 		this.down = this.forward.clone().crossProduct(this.right).normalize();
 
@@ -31,6 +31,11 @@ export class Orientation
 	static fromForward(forward: Coords): Orientation
 	{
 		return new Orientation(forward, new Coords(0, 0, 1) ); 
+	}
+
+	static fromForwardAndDown(forward: Coords, down: Coords): Orientation
+	{
+		return new Orientation(forward, down); 
 	}
 
 	default(): void

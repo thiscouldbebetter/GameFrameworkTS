@@ -16,19 +16,21 @@ var ThisCouldBeBetter;
                 this.entitiesInView = new Array();
                 this._posSaved = GameFramework.Coords.create();
             }
-            static fromViewSize(viewSize) {
-                return new Camera(viewSize, null, GameFramework.Disposition.create(), null);
-            }
             static default() {
                 return Camera.fromEntitiesInViewSort(null);
-            }
-            static entityFromPlace(place) {
-                return place.entitiesByPropertyName(Camera.name)[0];
             }
             static fromEntitiesInViewSort(entitiesInViewSort) {
                 return new Camera(GameFramework.Coords.fromXYZ(400, 300, 1000), // viewSize
                 150, // focalLength
                 GameFramework.Disposition.fromPosAndOri(GameFramework.Coords.fromXYZ(0, 0, -150), GameFramework.Orientation.Instances().ForwardZDownY.clone()), entitiesInViewSort);
+            }
+            static fromViewSizeAndDisposition(viewSize, disp) {
+                return new Camera(viewSize, null, // focalLength
+                disp, null // entitiesInViewSort
+                );
+            }
+            static entityFromPlace(place) {
+                return place.entitiesByPropertyName(Camera.name)[0];
             }
             static of(entity) {
                 return entity.propertyByName(Camera.name);
@@ -37,23 +39,43 @@ var ThisCouldBeBetter;
                 if (this._clipPlanes == null) {
                     this._clipPlanes =
                         [
-                            new GameFramework.Plane(GameFramework.Coords.create(), 0),
-                            new GameFramework.Plane(GameFramework.Coords.create(), 0),
-                            new GameFramework.Plane(GameFramework.Coords.create(), 0),
-                            new GameFramework.Plane(GameFramework.Coords.create(), 0),
+                            GameFramework.Plane.create(),
+                            GameFramework.Plane.create(),
+                            GameFramework.Plane.create(),
+                            GameFramework.Plane.create(),
                         ];
                 }
                 var cameraLoc = this.loc;
                 var cameraOrientation = cameraLoc.orientation;
                 var cameraPos = cameraLoc.pos;
-                var centerOfViewPlane = cameraPos.clone().add(cameraOrientation.forward.clone().multiplyScalar(this.focalLength));
-                var cornerOffsetRight = cameraOrientation.right.clone().multiplyScalar(this.viewSizeHalf.x);
-                var cornerOffsetDown = cameraOrientation.down.clone().multiplyScalar(this.viewSizeHalf.y);
+                var centerOfViewPlane = cameraPos
+                    .clone()
+                    .add(cameraOrientation.forward
+                    .clone()
+                    .multiplyScalar(this.focalLength));
+                var cornerOffsetRight = cameraOrientation.right
+                    .clone()
+                    .multiplyScalar(this.viewSizeHalf.x);
+                var cornerOffsetDown = cameraOrientation.down
+                    .clone()
+                    .multiplyScalar(this.viewSizeHalf.y);
                 var cameraViewCorners = [
-                    centerOfViewPlane.clone().add(cornerOffsetRight).add(cornerOffsetDown),
-                    centerOfViewPlane.clone().subtract(cornerOffsetRight).add(cornerOffsetDown),
-                    centerOfViewPlane.clone().subtract(cornerOffsetRight).subtract(cornerOffsetDown),
-                    centerOfViewPlane.clone().add(cornerOffsetRight).subtract(cornerOffsetDown),
+                    centerOfViewPlane
+                        .clone()
+                        .add(cornerOffsetRight)
+                        .add(cornerOffsetDown),
+                    centerOfViewPlane
+                        .clone()
+                        .subtract(cornerOffsetRight)
+                        .add(cornerOffsetDown),
+                    centerOfViewPlane
+                        .clone()
+                        .subtract(cornerOffsetRight)
+                        .subtract(cornerOffsetDown),
+                    centerOfViewPlane
+                        .clone()
+                        .add(cornerOffsetRight)
+                        .subtract(cornerOffsetDown),
                 ];
                 var numberOfCorners = cameraViewCorners.length;
                 for (var i = 0; i < numberOfCorners; i++) {
@@ -67,6 +89,24 @@ var ThisCouldBeBetter;
                     clipPlane.fromPoints(cameraPos, cameraViewCorner, cameraViewCornerNext);
                 }
                 return this._clipPlanes;
+            }
+            constraintContainInBoxForPlaceSizeAndWrapped(placeSize, placeIsWrappedHorizontally) {
+                var viewSizeHalf = this.viewSizeHalf;
+                var min = placeIsWrappedHorizontally
+                    ? GameFramework.Coords.fromXY(0, viewSizeHalf.y) // todo
+                    : viewSizeHalf.clone();
+                var max = placeIsWrappedHorizontally
+                    ? GameFramework.Coords.fromXY(placeSize.x, viewSizeHalf.y)
+                    : placeSize.clone().subtract(viewSizeHalf);
+                var box = GameFramework.Box.fromMinAndMax(min, max);
+                var constraintContainInBox = GameFramework.Constraint_ContainInBox.fromBox(box);
+                return constraintContainInBox;
+            }
+            constraintContainInBoxForPlaceSizeNotWrapped(placeSize) {
+                return this.constraintContainInBoxForPlaceSizeAndWrapped(placeSize, false);
+            }
+            constraintContainInBoxForPlaceSizeWrapped(placeSize) {
+                return this.constraintContainInBoxForPlaceSizeAndWrapped(placeSize, true);
             }
             coordsTransformViewToWorld(viewCoords, ignoreZ) {
                 var cameraLoc = this.loc;
@@ -86,7 +126,9 @@ var ThisCouldBeBetter;
                 if (this.focalLength != null) {
                     var viewCoordsZ = viewCoords.z;
                     if (viewCoordsZ != 0) {
-                        viewCoords.multiplyScalar(this.focalLength).divideScalar(viewCoordsZ);
+                        viewCoords
+                            .multiplyScalar(this.focalLength)
+                            .divideScalar(viewCoordsZ);
                         viewCoords.z = viewCoordsZ;
                     }
                 }
@@ -104,18 +146,19 @@ var ThisCouldBeBetter;
                 var collisionTracker = GameFramework.CollisionTrackerBase.fromPlace(uwpe);
                 collisionTracker.entityReset(cameraEntity);
                 var cameraCollidable = GameFramework.Collidable.of(cameraEntity);
-                //cameraCollidable.isDisabled = false;
                 cameraCollidable.entitiesAlreadyCollidedWithClear();
-                var collisions = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, cameraEntity, collisionHelper, new Array());
+                var collisions = new Array();
+                var collisions = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, cameraEntity, collisionHelper, collisions);
                 var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
-                var entitiesInView = entitiesCollidedWith.filter(x => GameFramework.Drawable.of(x) != null);
+                var entitiesInView = entitiesCollidedWith
+                    .filter(x => GameFramework.Drawable.of(x) != null);
                 entitiesInView =
-                    entitiesInView.filter((x, i) => entitiesInView.indexOf(x) == i); // Distinct.
-                //cameraCollidable.isDisabled = true;
-                // Now draw the unboundables.
+                    entitiesInView
+                        .filter((x, i) => entitiesInView.indexOf(x) == i); // Distinct.
+                // Now draw the Drawables that aren't also Collidables.
                 var drawablesAll = GameFramework.Drawable.entitiesFromPlace(place);
-                var drawablesUnboundable = drawablesAll.filter(x => GameFramework.Boundable.of(x) == null);
-                entitiesInView.push(...drawablesUnboundable);
+                var drawablesUncollidable = drawablesAll.filter(x => GameFramework.Collidable.of(x) == null);
+                entitiesInView.push(...drawablesUncollidable);
                 return entitiesInView;
             }
             drawEntitiesInView_2_Draw(uwpe, display, entitiesInView) {
@@ -168,12 +211,8 @@ var ThisCouldBeBetter;
                 var collidable = GameFramework.Collidable
                     .fromCollider(this.viewCollider)
                     .canCollideAgainWithoutSeparatingSet(true);
-                var constrainable = GameFramework.Constrainable.fromConstraints([
-                    GameFramework.Constraint_AttachToEntityWithName
-                        .fromTargetEntityName(targetEntityName)
-                    //new Constraint_ContainInBox(cameraPosBox)
-                ]);
-                var locatable = GameFramework.Locatable.default();
+                var constrainable = this.toEntity_Constrainable(targetEntityName);
+                var locatable = GameFramework.Locatable.fromDisp(this.loc);
                 var movable = GameFramework.Movable.default();
                 var entity = GameFramework.Entity.fromNameAndProperties(Camera.name, [
                     boundable,
@@ -184,6 +223,18 @@ var ThisCouldBeBetter;
                     movable
                 ]);
                 return entity;
+            }
+            toEntity_Constrainable(targetEntityName) {
+                var displacementToTargetEntity = this.loc.orientation.forward.clone().invert();
+                var constraintMultiple = GameFramework.Constraint_Multiple.fromChildren([
+                    GameFramework.Constraint_AttachToEntityWithName.
+                        fromTargetEntityName(targetEntityName),
+                    GameFramework.Constraint_Transform.fromTransform(GameFramework.Transform_Translate.fromDisplacement(displacementToTargetEntity)),
+                    GameFramework.Constraint_OrientTowardEntityWithName
+                        .fromTargetEntityName(targetEntityName),
+                ]);
+                var constrainable = GameFramework.Constrainable.fromConstraint(constraintMultiple);
+                return constrainable;
             }
             // Clonable.
             clone() { return this; }

@@ -1,6 +1,6 @@
 @echo off
 
-echo This script generates a _BulidRecord.ts file
+echo This script generates a _BuildRecord.ts file
 echo that records when the program was built,
 echo then runs the "tsc" command-line tool
 echo to transpile the game from TypeScript to JavaScript.

@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(children) {
                 this.children = children;
             }
+            static fromChildren(children) {
+                return new Constraint_Multiple(children);
+            }
             constrain(uwpe) {
                 this.children.forEach(x => x.constrain(uwpe));
             }

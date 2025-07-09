@@ -76,6 +76,14 @@ export class Disposition
 		return new Disposition(pos, ori, null);
 	}
 
+	static fromPosAndOrientation
+	(
+		pos: Coords, ori: Orientation
+	): Disposition
+	{
+		return new Disposition(pos, ori, null);
+	}
+
 	static fromPosAndVel(pos: Coords, vel: Coords): Disposition
 	{
 		var returnValue = Disposition.fromPos(pos);

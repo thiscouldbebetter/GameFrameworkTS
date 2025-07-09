@@ -921,21 +921,74 @@ If you ran the build script and refreshed the browser, then accelerated to the r
 
 Or, more specifically, let's make a camera entity, and then constrain it to follow the ship around.  Because there previously hasn't been any entity with the Camera property, the framework is defaulting to its default rendering behavior, which is just to look at the upper-left corner of the Place at all times.
 
-To add a camera, open PlaceDefault.ts and add the following line in the list of entities in the constructor, adjusting commas as needed:
+To add a camera, open PlaceDefault.ts and add this method:
 
-	Camera.fromViewSize
-	(
-		Coords.fromXY(400, 300)
-	).toEntity(Ship.name)
+	static cameraEntity(placeSize: Coords): Entity
+	{
+		var camera = Camera.fromViewSizeAndDisposition
+		(
+			Coords.fromXY(400, 300), // viewSize
+			Disposition.fromPosAndOrientation
+			(
+				Coords.zeroes(),
+				Orientation.fromForwardAndDown
+				(
+					Coords.fromXYZ(0, 0, 1), // forward
+					Coords.fromXYZ(0, 1, 0) // down
+				)
+			)
+		);
 
-14.4. [To be continued.]
+		var cameraEntity = camera.toEntity(Ship.name);
 
-n. Conclusion
+		var constraintContainInBox =
+			camera.constraintContainInBoxForPlaceSizeNotWrapped
+			(
+				placeSize
+			);
+
+		var constrainable = Constrainable.of(cameraEntity);
+		constrainable.constraintAdd(constraintContainInBox);
+
+		return cameraEntity;
+	}
+
+14.4. Then, in the constructor, add the following call in the list of entities, adjusting commas as needed:
+
+	PlaceDefault.cameraEntity(Coords.fromXY(800, 300) )
+
+14.5. Run the build script and refresh the browser, then accelerate to the right.  As soon as the ship moves past the middle of the screen, the camera will start to follow it.  The planet surface and mountain range will scroll off the screen to the left, to be replaced with a blank background.  As you continue moving to the right, eventually the camera will stop scrolling and the ship will pass off the right edge of the screen, then reappear at the left side of the screen.
+
+There are a couple of problems with this.
+
+14.5. The first problem is, the planet surface and mountain range shouldn't disappear when you move far enough to the right.  That's now how planets work.  To fix this, we need to make the planet surface twice as wide as it currently is.  Open PlaceDefault.ts, and, in the constructor, replace the existing line for the Planet entity with this:
+
+	new Planet(Planet.name, Coords.fromXY(800, 300), 50),
+
+Note that the Planet is now twice as wide as it was.  (Since the size of the PlaceDefault is now declared in three separate places, it would probably be better to store that value in a variable and reference the variable three times, but whatever.)
+
+14.5. Run the build script and refresh the browser, then accelerate to the right.  The planet surface will now stay visible the whole time.
+
+14.6. However, there is still a discontinuity at the left edge and right edge of the planet, where the view abruptly changes as ship passes off the edge and wraps around to the other end.
+
+To fix that will require some fancier modifications.  Open PlaceDefault.ts, and, within the .cameraEntity() method, replace the existing assignment of the constraintContainInBox variable with the following:
+
+	var constraintContainInBox =
+		camera.constraintContainInBoxForPlaceSizeWrapped
+		(
+			placeSize
+		);
+
+Note that we've removed the "Not" before "Wrapped".
+
+14.7. Run the build script and refresh the browser.  Now the camera follows the ship to keep it in th center of the view no matter what, so there's no way for the ship to ever reach the left or right side of the screen as before.  However, there's still a discontinuity.  When the ship approaches within half a screen of the left side of the planet, nothing to the left of that border can be seen.  When the ship passes where the leftmost edge of the planet used to be, the leftmost side of the planet disappears, and the rightmost side of the planet suddently pops into view.  The opposite happens when crossing the line in the other direction.
+
+15. Conclusion
 --------------
 
-n.1. Well, it's certainly technically a game at this point.  Congratulations!  Here's some future features that might make the game even more fun:
+15.1. Well, it's certainly technically a game at this point.  Congratulations!  Here's some future features that might make the game even more fun:
 
-* Add appropriate visual and sound effects when things happen.
+* Add more appropriate visual and sound effects when things happen, like explosions.
 * Destroy the player's ship when it runs into a raider.
 * Give the player multiple lives.
 * Let the raiders shoot bullets.
@@ -947,7 +1000,6 @@ n.1. Well, it's certainly technically a game at this point.  Congratulations!  H
 * Add some on-screen controls to show how many raiders, habitats, bullets, and lives are left.
 * Transition to a new and harder level when the player wins the current level.
 * Make ammuntion limited and add reloading by picking up bullets.
-* Make the surface of the planet a little less boring to look at.
 
 The framework contains features to support all these, though it might not be easy to figure out how.  To be continued!
 
