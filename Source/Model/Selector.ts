@@ -47,7 +47,7 @@ export class Selector implements EntityProperty<Selector>
 		(
 			"Cursor",
 			[
-				Drawable.fromVisualAndIsVisible(visualCursor, false),
+				Drawable.fromVisual(visualCursor).hide(),
 				Locatable.create()
 			]
 		);
@@ -57,7 +57,7 @@ export class Selector implements EntityProperty<Selector>
 		(
 			"Halo",
 			[
-				Drawable.fromVisualAndIsVisible(visualHalo, false),
+				Drawable.fromVisual(visualHalo).hide(),
 				Locatable.create()
 			]
 		);

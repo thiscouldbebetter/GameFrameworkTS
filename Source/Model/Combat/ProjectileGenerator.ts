@@ -5,27 +5,27 @@ export class ProjectileGenerator
 	implements EntityProperty<ProjectileGenerator>
 {
 	name: string;
-	projectileGenerations: ProjectileGeneration[];
+	generations: ProjectileGeneration[];
 
 	constructor
 	(
 		name: string,
-		projectileGenerations: ProjectileGeneration[]
+		generations: ProjectileGeneration[]
 	)
 	{
 		this.name = name;
-		this.projectileGenerations = projectileGenerations;
+		this.generations = generations;
 	}
 
 	static fromNameAndGenerations
 	(
 		name: string,
-		projectileGenerations: ProjectileGeneration[]
+		generations: ProjectileGeneration[]
 	)
 	{
 		return new ProjectileGenerator
 		(
-			name, projectileGenerations
+			name, generations
 		);
 	}
 
@@ -36,29 +36,29 @@ export class ProjectileGenerator
 
 	static actionFire(): Action
 	{
-		return new Action
+		return Action.fromNameAndPerform
 		(
 			"Fire",
 			// perform
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var place = uwpe.place;
-				var entityActor = uwpe.entity;
+				var entityShooter = uwpe.entity;
 
-				var projectileGenerator =
-					ProjectileGenerator.of(entityActor);
-				var projectileEntities =
-					projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
-				place.entitiesToSpawnAdd(projectileEntities);
+				var generator =
+					ProjectileGenerator.of(entityShooter);
+				var shotEntities =
+					generator.toEntitiesFromEntityFiring(entityShooter);
+				place.entitiesToSpawnAdd(shotEntities);
 			}
 		)
 	}
 
-	projectileEntitiesFromEntityFiring(entityFiring: Entity): Entity[]
+	toEntitiesFromEntityFiring(entityFiring: Entity): Entity[]
 	{
-		var returnValues = this.projectileGenerations.map
+		var returnValues = this.generations.map
 		(
-			x => x.projectileEntityFromEntityFiring(entityFiring)
+			x => x.toEntityFromEntityFiring(entityFiring)
 		);
 		return returnValues;
 	}

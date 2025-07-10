@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this._displacement = GameFramework.Coords.create();
                 this._surfacePointForChild = GameFramework.Coords.create();
             }
+            static fromShapes(shapes) {
+                return new ShapeGroupAny(shapes);
+            }
             // Clonable.
             clone() {
                 return new ShapeGroupAny(GameFramework.ArrayHelper.clone(this.shapes));
@@ -25,7 +28,8 @@ var ThisCouldBeBetter;
                 throw new Error("Not yet implemented!");
             }
             locate(loc) {
-                throw new Error("Not implemented!");
+                this.shapes.forEach(x => x.locate(loc));
+                return this;
             }
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not implemented!");

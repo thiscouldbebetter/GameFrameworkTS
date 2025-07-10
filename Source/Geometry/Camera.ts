@@ -14,6 +14,7 @@ export class Camera implements EntityProperty<Camera>
 	entitiesInView: Entity[];
 
 	_clipPlanes: Plane[];
+	_displayToRestore: Display;
 	_posSaved: Coords;
 
 	constructor
@@ -39,6 +40,7 @@ export class Camera implements EntityProperty<Camera>
 		);
 		this.entitiesInView = new Array<Entity>();
 
+		this._displayToRestore = null;
 		this._posSaved = Coords.create();
 	}
 
@@ -275,7 +277,8 @@ export class Camera implements EntityProperty<Camera>
 	drawEntitiesInView
 	(
 		uwpe: UniverseWorldPlaceEntities,
-		cameraEntity: Entity, display: Display
+		cameraEntity: Entity,
+		display: Display
 	): void
 	{
 		var universe = uwpe.universe;
@@ -287,10 +290,16 @@ export class Camera implements EntityProperty<Camera>
 			uwpe, cameraEntity, universe.collisionHelper, this.entitiesInView
 		);
 
+		this._displayToRestore = universe.display;
+
+		universe.display = display;
+
 		this.drawEntitiesInView_2_Draw
 		(
-			uwpe, display, this.entitiesInView
+			uwpe, this.entitiesInView
 		);
+
+		universe.display = this._displayToRestore;
 	}
 
 	drawEntitiesInView_1_FindEntitiesInView
@@ -308,14 +317,13 @@ export class Camera implements EntityProperty<Camera>
 
 		var cameraCollidable = Collidable.of(cameraEntity);
 		cameraCollidable.entitiesAlreadyCollidedWithClear();
-		var collisions = new Array<Collision>();
 		var collisions =
 			collisionTracker.entityCollidableAddAndFindCollisions
 			(
 				uwpe,
 				cameraEntity,
 				collisionHelper,
-				collisions
+				[] // collisions
 			);
 		var entitiesCollidedWith =
 			collisions.map(x => x.entitiesColliding[1]);
@@ -338,7 +346,7 @@ export class Camera implements EntityProperty<Camera>
 
 	drawEntitiesInView_2_Draw
 	(
-		uwpe: UniverseWorldPlaceEntities, display: Display,
+		uwpe: UniverseWorldPlaceEntities,
 		entitiesInView: Entity[]
 	): void
 	{
@@ -349,7 +357,7 @@ export class Camera implements EntityProperty<Camera>
 			var entity = entitiesInView[i];
 			uwpe.entitySet(entity);
 
-			var visual = Drawable.of(entity).visual;
+			var drawable = Drawable.of(entity);
 
 			var entityPos = Locatable.of(entity).loc.pos;
 
@@ -357,7 +365,7 @@ export class Camera implements EntityProperty<Camera>
 
 			this.coordsTransformWorldToView(entityPos);
 
-			visual.draw(uwpe, display);
+			drawable.draw(uwpe);
 
 			entityPos.overwriteWith(this._posSaved);
 		}
@@ -417,7 +425,7 @@ export class Camera implements EntityProperty<Camera>
 		return entitiesToSort;
 	}
 
-	toEntity
+	toEntityFollowingEntityWithName
 	(
 		targetEntityName: string
 	): Entity
@@ -431,7 +439,7 @@ export class Camera implements EntityProperty<Camera>
 				.canCollideAgainWithoutSeparatingSet(true);
 
 		var constrainable =
-			this.toEntity_Constrainable(targetEntityName);
+			this.toEntityFollowingEntityWithName_Constrainable(targetEntityName);
 
 		var locatable = Locatable.fromDisp(this.loc);
 
@@ -453,7 +461,7 @@ export class Camera implements EntityProperty<Camera>
 		return entity;
 	}
 
-	toEntity_Constrainable
+	toEntityFollowingEntityWithName_Constrainable
 	(
 		targetEntityName: string
 	): Constrainable

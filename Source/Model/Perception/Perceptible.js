@@ -59,7 +59,7 @@ var ThisCouldBeBetter;
                 if (this.isHiding != this._isHidingPrev) {
                     this._isHidingPrev = this.isHiding;
                     var entity = uwpe.entity;
-                    GameFramework.Drawable.of(entity).isVisible = (this.isHiding == false);
+                    GameFramework.Drawable.of(entity).hiddenSet(this.isHiding);
                     var usable = GameFramework.Usable.of(entity);
                     if (usable != null) {
                         usable.isDisabled = this.isHiding;

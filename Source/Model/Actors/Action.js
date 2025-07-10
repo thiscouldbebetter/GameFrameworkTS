@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this._perform = perform;
             }
+            static fromNameAndPerform(name, perform) {
+                return new Action(name, perform);
+            }
             perform(uwpe) {
                 this._perform(uwpe);
             }
@@ -25,10 +28,10 @@ var ThisCouldBeBetter;
         GameFramework.Action = Action;
         class Action_Instances {
             constructor() {
-                this.DoNothing = new Action("DoNothing", (uwpe) => {
+                this.DoNothing = Action.fromNameAndPerform("DoNothing", (uwpe) => {
                     // Do nothing.
                 });
-                this.ShowMenuPlayer = new Action("ShowMenuPlayer", 
+                this.ShowMenuPlayer = Action.fromNameAndPerform("ShowMenuPlayer", 
                 // perform
                 (uwpe) => {
                     var universe = uwpe.universe;
@@ -37,7 +40,7 @@ var ThisCouldBeBetter;
                     var venueNext = control.toVenue();
                     universe.venueTransitionTo(venueNext);
                 });
-                this.ShowMenuSettings = new Action("ShowMenuSettings", 
+                this.ShowMenuSettings = Action.fromNameAndPerform("ShowMenuSettings", 
                 // perform
                 (uwpe) => {
                     var universe = uwpe.universe;

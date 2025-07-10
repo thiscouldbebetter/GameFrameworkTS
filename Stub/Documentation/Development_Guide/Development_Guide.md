@@ -47,11 +47,11 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	class Planet extends Entity
 	{
-		constructor(name: string, size: Coords, horizonHeight: number)
+		constructor(size: Coords, horizonHeight: number)
 		{
 			super
 			(
-				name,
+				Planet.name,
 				[
 					Drawable.fromVisual
 					(
@@ -69,6 +69,14 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				]
 			);
 		}
+
+		static fromSizeAndHorizonHeight
+		(
+			size: Coords, horizonHeight: number
+		): Planet
+		{
+			return new Planet(size, horizonHeight);
+		}
 	}
 
 2.4. The new Planet class is a subclass of Entity, and it has two properties, namely, Drawable and Locatable.  An instance of Drawable represents something that can be drawn to the screen, while an instance of Locatable represents something that has a specific position and orientation (and, incidentally, velocity and acceleration, among other things, as will be discussed later).
@@ -81,7 +89,10 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 2.7. Back in the Source directory, open the file PlaceDefault.ts in a text editor.  Locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, locate the existing "new UserInputListener()" element, add a comma after it, add the following text on the line below, then save the file.
 
-	new Planet(Planet.name, Coords.fromXY(400, 300), 50)
+	Planet.fromSizeAndHorizonHeight
+	(
+		Coords.fromXY(800, 300), 50
+	)
 
 2.8. From the _Scripts directory, run the command "_Build.sh" or "_Build.bat" to compile the program again.  Wait for the command to complete, and verify that no errors are displayed.
 
@@ -93,17 +104,17 @@ This guide illustrates the creation of a new game from scratch using the This Co
 3. Adding a Ship for the Player
 -------------------------------
 
-3.1. Now there's some ground, but ground by itself is almost as boring as a void.  Let's add a spaceship.  For that, we'll need another class file.
+3.1. Now there's some ground, but there's a reason the Landscape Channel went out of business.  Ground by itself is almost as boring as a void.  Let's add a spaceship.  For that, we'll need another class file.
 
 3.2. Back in the Model directory, create a new file name "Ship.ts", containing the text below:
 
 	class Ship extends Entity
 	{
-		constructor(name: string, pos: Coords)
+		constructor(pos: Coords)
 		{
 			super
 			(
-				name,
+				Ship.name,
 				[
 					Drawable.fromVisual
 					(
@@ -122,6 +133,11 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				]
 			);
 		}
+
+		static fromPos(pos: Coords): Ship
+		{
+			return new Ship(pos);
+		}
 	}
 
 3.3. Like the Planet class, the new Ship class is a subclass of Entity, and it has its own instances of the same two property types, namely, Drawable and Locatable.
@@ -132,9 +148,9 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 3.5. Now that the Ship class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceDefault instance.  Back in the Source directory, open the file PlaceDefault.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, make sure that there are commas between all the array elements, and save the file.
 
-	new Ship(Ship.name, Coords.fromXY(100, 100) )
+	Ship.fromPos(Coords.fromXY(100, 100) )
 
-3.6. Compile the program again by running the script named "_Build", then refresh Game.html, start the game, and progress past the startup screens as before.  A gray triangle pointing right, representing a spaceship, now appears above the ground.
+3.6. Compile the program again by running the script named "_Build", then refresh Game.html in the web browser, start the game, and progress past the startup screens as before.  A gray triangle pointing right, representing a spaceship, now appears above the ground.
 
 	<img src="Screenshot-3-Ship-Stationary.png" />
 
@@ -335,6 +351,11 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				]
 			);
 		}
+
+		static fromPos(pos: Coords): Habitat
+		{
+			return new Habitat(pos);
+		}
 	}
 
 8.3. Next, we'll create the villain, which we'll call a "Raider".  Still in the Model directory, create a new file named Raider.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the raider has to actually move around and kidnap people and stuff, while all the Habitat has to do is sit there looking vulnerable.
@@ -389,6 +410,11 @@ This guide illustrates the creation of a new game from scratch using the This Co
 			);
 
 			this._displacement = Coords.create();
+		}
+
+		static fromPos(pos: Coords): Raider
+		{
+			return new Raider(pos);
 		}
 
 		static activityDefnBuild(): ActivityDefn
@@ -516,10 +542,10 @@ This guide illustrates the creation of a new game from scratch using the This Co
 	<script type="text/javascript" src="Model/Habitat.js"></script>
 	<script type="text/javascript" src="Model/Raider.js"></script>
 
-8.7. Now we'll add one habitat and one raider to the level.  Open PlaceDefault.ts, and, in the constructor, add these two lines to bottom of the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
+8.7. Now we'll add one habitat and one raider to the level.  Open PlaceDefault.ts, and, in the constructor, add these two lines to the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
 
-	new Habitat(Coords.fromXY(150, 250) ),
-	new Raider(Coords.fromXY(200, -50) )
+	Habitat.fromPos(Coords.fromXY(150, 250) ),
+	Raider.fromPos(Coords.fromXY(100, -50) )
 
 8.8. Finally, run the build script and refresh the web browser.  Now a civilian habitat appears on the ground.  An alien raider will descend from the top of the screen, pick up the habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
 
@@ -544,7 +570,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 				2, // radius
 				5, // distanceInitial
 				4, // speed
-				128, // ticksToLive
+				32, // ticksToLive
 				Damage.fromAmount(1),
 				VisualGroup.fromChildren
 				([
@@ -983,6 +1009,76 @@ Note that we've removed the "Not" before "Wrapped".
 
 14.7. Run the build script and refresh the browser.  Now the camera follows the ship to keep it in th center of the view no matter what, so there's no way for the ship to ever reach the left or right side of the screen as before.  However, there's still a discontinuity.  When the ship approaches within half a screen of the left side of the planet, nothing to the left of that border can be seen.  When the ship passes where the leftmost edge of the planet used to be, the leftmost side of the planet disappears, and the rightmost side of the planet suddently pops into view.  The opposite happens when crossing the line in the other direction.
 
+14.8. To fix the remaining discontinuity, we'll need to modify the Drawable properties of the planet, the raider, the habitat, and the bullets so that they are drawn even if they're on the wrong side of the discontinuity.  Basically, the system will draw three copies of the level, one to the left of the regular level, the regular level in the center, and one on the right of the regular level.  This may not be the most efficient way to do things, but it will work, at least until we end up adding more stuff to draw than the system can handle.  It's probably fine for now.
+
+Open each of the files Habitat.ts, Planet.ts, and Raider.ts, locate the place in each constructor where the Drawable property is being initialized, and add the following call right after the closing parenthesis:
+
+	.sizeInWrappedInstancesSet(Coords.fromXYZ(3, 1, 1) )
+
+14.9. Run the build script and refresh the browser.  You'll immediately see that the planet surface and mountains are rendering with no discontinuity.  If you then move a bit to the left, just past where the discontinuity line used to be, you'll also notice that the habitat remains visible instead of disappearing.  Great!
+
+14.10. But there remain several other problems.
+
+First, unfortunately, the raider will still not be visible, even though it should be, whenever the player's ship is just to the left of the discontinuity line.  In fact, if you stay just to the left of the line and keep the habitat in view, you'll eventually see the habitat rise into the air, apparently of its own accord!  It's being lifted by the invisible raider.  If you move back to the right of the discontinuity line, the raider will suddenly pop back into visibility.
+
+Why is this?  Well, the entities for the planet surface and the habitat don't have the Collidable property on them, at least not yet.  If a given entity has a Collidable property, then the camera uses it to determine whether that entity is in its field of view or not, and then only draws those entities that are in its field of view.  By contrast, entities with no Collidable property, like the planet and the habitat, have to always be drawn no matter what, because the camera has no way of telling if they're in its field of view or not.  Even if their current positions don't fit within the screen at the moment, they're still drawn, they're just drawn off the screen.
+
+But the Raider entity does have a Collidable property, and so, when the player's ship moves just to the left of the discontinuity line, and the camera follows it there, suddenly the camera's field of view no longer collides with the raider.  This is because, technically, the camera is about 700 pixels to the right of the raider.  In order for the raider to collide with the camera's field of view under these circumstances, either the collider for the camera or the collider for the raider must be made to wrap.
+
+Second, bullets act weird around the discontinuity line, in a way similar to but not exactly the same as the strange way the raiders act.  If you fire bullets across the line and then move the ship across the line to follow them, they will disappear.  The bullets have a Collidable property like the raider, but unlike the raider their Drawable property hasn't been set up to wrap yet.  And unlike the player's ship, they don't have a constraint to make their physical position wrap at the discontinuity line.  We'll need to set up that constraint and that wrapping of the Drawable, but even after that the bullets will pop in and out of visibility based on which sides of the discontinuity line they and the ship are, just like the raider.  To fix this problem, again, either the collider for the camera or the collider for each bullet will have to be made to wrap.
+
+Note that the player's ship doesn't exhibit these visibility problems.  This is because an attempt is always made to draw the Ship entity, as it too lacks a Collidable property right now.  But even if it had a Collidable property, it would still always be drawn, because the camera moves around to follow it.  And because the camera and the ship are always on the same side of the discontinuity line, the ship's Drawable doesn't need to be wrapped, either.
+
+We'll fix the wrapping of the bullets first, because it's easiest.  We'll add a constraint to wrap the bullets just like the player's ship is being wrapped, and then set up wrapping on the Drawable just like for the Drawables of the planet and habitat.  Open Ship.ts, and replace the existing declaration of the ProjectileGenerator property in the constructor with the following:
+
+	ProjectileGenerator.fromNameAndGenerations
+	(
+		"Bullet",
+		[
+			ProjectileGeneration.fromRadiusDistanceSpeedTicksDamageVisualAndInit
+			(
+				2, // radius
+				5, // distanceInitial
+				4, // speed
+				32, // ticksToLive
+				Damage.fromAmount(1),
+				VisualGroup.fromChildren
+				([
+					VisualSound.default(),
+
+					VisualCircle.fromRadiusAndColorFill
+					(
+						2, Color.Instances().Yellow
+					)
+				]),
+				(entity) =>
+				{
+					entity.propertyAdd
+					(
+						Constrainable.fromConstraint
+						(
+							Constraint_WrapToPlaceSizeXTrimY.create()
+						)
+					);
+
+					Drawable.of(entity).sizeInWrappedInstancesSet
+					(
+						Coords.fromXYZ(3, 1, 1)
+					)
+				}
+			)
+		]
+	)
+
+(The ProjectileGenerator declaration is probably long enough now that it should be moved into its own method, but we'll leave it where it is for now.)
+
+After making this latest change, the bullets will act more like how the raider does.  But they and the raider will still disappear inappropriately whenever they and the player's ship are on opposite sides of the discontinuity line.  As mentioned earlier, to fix that problem, either the colliders for the bullets and raider or the collider for the camera's field of view will need to be wrapped.
+
+Rather than wrapping the collider for every entity that's both drawable and collidable, instead let's try to just wrap the collider for the camera's field of view.  Open PlaceDefault.ts and locate the .cameraEntity() method.
+
+[To be continued...]
+
+
 15. Conclusion
 --------------
 
@@ -995,7 +1091,6 @@ Note that we've removed the "Not" before "Wrapped".
 * Add more habitats to protect.
 * Require the player to catch a habitat as it falls, or else it explodes on impact.
 * Generate more raiders, on a timer.
-* Make the planet bigger than a single screen and implement scrolling.
 * Add a minimap to show the parts of the planet that are not currently on screen.
 * Add some on-screen controls to show how many raiders, habitats, bullets, and lives are left.
 * Transition to a new and harder level when the player wins the current level.

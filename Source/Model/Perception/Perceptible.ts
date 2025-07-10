@@ -93,7 +93,7 @@ export class Perceptible implements EntityProperty<Perceptible>
 			this._isHidingPrev = this.isHiding;
 
 			var entity = uwpe.entity;
-			Drawable.of(entity).isVisible = (this.isHiding == false);
+			Drawable.of(entity).hiddenSet(this.isHiding);
 			var usable = Usable.of(entity);
 			if (usable != null)
 			{

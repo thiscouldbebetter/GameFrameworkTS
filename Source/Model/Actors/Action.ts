@@ -17,6 +17,15 @@ export class Action //
 		this._perform = perform;
 	}
 
+	static fromNameAndPerform
+	(
+		name: string,
+		perform: (uwpe: UniverseWorldPlaceEntities) => void
+	)
+	{
+		return new Action(name, perform);
+	}
+
 	perform(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this._perform(uwpe);
@@ -46,7 +55,7 @@ class Action_Instances
 
 	constructor()
 	{
-		this.DoNothing = new Action
+		this.DoNothing = Action.fromNameAndPerform
 		(
 			"DoNothing",
 			(uwpe: UniverseWorldPlaceEntities) =>
@@ -55,7 +64,7 @@ class Action_Instances
 			}
 		);
 
-		this.ShowMenuPlayer = new Action
+		this.ShowMenuPlayer = Action.fromNameAndPerform
 		(
 			"ShowMenuPlayer",
 			// perform
@@ -72,7 +81,7 @@ class Action_Instances
 			}
 		);
 
-		this.ShowMenuSettings = new Action
+		this.ShowMenuSettings = Action.fromNameAndPerform
 		(
 			"ShowMenuSettings",
 			// perform

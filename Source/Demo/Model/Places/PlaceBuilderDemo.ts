@@ -1236,7 +1236,7 @@ class PlaceBuilderDemo // Main.
 			(entities: Entity[]) =>
 				Camera.entitiesSortByRenderingOrderThenZThenY(entities)
 		);
-		var cameraEntity = camera.toEntity("Player", placeSize);
+		var cameraEntity = camera.toEntityForTargetEntityName("Player");
 		Constrainable.of(cameraEntity).constraintAdd
 		(
 			new Constraint_ContainInBox(cameraPosBox)

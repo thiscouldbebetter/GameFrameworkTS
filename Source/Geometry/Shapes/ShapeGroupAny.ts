@@ -17,6 +17,11 @@ export class ShapeGroupAny implements ShapeBase
 		this._surfacePointForChild = Coords.create();
 	}
 
+	static fromShapes(shapes: ShapeBase[]): ShapeGroupAny
+	{
+		return new ShapeGroupAny(shapes);
+	}
+
 	// Clonable.
 
 	clone(): ShapeGroupAny
@@ -45,7 +50,8 @@ export class ShapeGroupAny implements ShapeBase
 
 	locate(loc: Disposition): ShapeBase
 	{
-		throw new Error("Not implemented!");
+		this.shapes.forEach(x => x.locate(loc) );
+		return this;
 	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords

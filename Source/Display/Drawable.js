@@ -4,13 +4,15 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Drawable {
-            constructor(visual, renderingOrder, isVisible) {
+            constructor(visual, renderingOrder, hidden, sizeInWrappedInstances) {
                 this.visual = visual;
                 this.renderingOrder = renderingOrder || 0;
-                this.isVisible = isVisible;
-                if (this.isVisible == null) {
-                    this.isVisible = true;
-                }
+                this.hidden = hidden || false;
+                this.sizeInWrappedInstances = sizeInWrappedInstances;
+                this._entityPosToRestore = GameFramework.Coords.create();
+                this._sizeInWrappedInstancesHalfRoundedDown = GameFramework.Coords.create();
+                this._wrapOffsetInPixels = GameFramework.Coords.create();
+                this._wrapOffsetInWraps = GameFramework.Coords.create();
             }
             static default() {
                 // For rapid prototyping.
@@ -20,27 +22,80 @@ var ThisCouldBeBetter;
                 return place.entitiesByPropertyName(Drawable.name);
             }
             static fromVisual(visual) {
-                return new Drawable(visual, null, null);
+                return new Drawable(visual, null, null, null);
             }
-            static fromVisualAndIsVisible(visual, isVisible) {
-                return new Drawable(visual, null, isVisible);
+            static fromVisualAndHidden(visual, hidden) {
+                return new Drawable(visual, null, hidden, null);
             }
             static fromVisualAndRenderingOrder(visual, renderingOrder) {
-                return new Drawable(visual, renderingOrder, null);
+                return new Drawable(visual, renderingOrder, null, null);
             }
             static of(entity) {
                 return entity.propertyByName(Drawable.name);
             }
             draw(uwpe) {
-                if (this.isVisible) {
-                    this.visual.draw(uwpe, uwpe.universe.display);
+                if (this.visible()) {
+                    var sizeInWraps = this.sizeInWrappedInstances;
+                    if (sizeInWraps == null) {
+                        this.visual.draw(uwpe, uwpe.universe.display);
+                    }
+                    else {
+                        var sizeInWrapsHalfRoundedDown = this.sizeInWrappedInstancesHalfRoundedDown();
+                        var place = uwpe.place;
+                        var wrapSizeInPixels = place.size();
+                        var entity = uwpe.entity;
+                        var entityPos = GameFramework.Locatable.of(entity).loc.pos;
+                        var wrapOffsetInWraps = this._wrapOffsetInWraps;
+                        var wrapOffsetInPixels = this._wrapOffsetInPixels;
+                        for (var z = 0; z < sizeInWraps.z; z++) {
+                            wrapOffsetInWraps.z =
+                                z - sizeInWrapsHalfRoundedDown.z;
+                            for (var y = 0; y < sizeInWraps.y; y++) {
+                                wrapOffsetInWraps.y =
+                                    y - sizeInWrapsHalfRoundedDown.y;
+                                for (var x = 0; x < sizeInWraps.x; x++) {
+                                    wrapOffsetInWraps.x =
+                                        x - sizeInWrapsHalfRoundedDown.x;
+                                    this._entityPosToRestore.overwriteWith(entityPos);
+                                    wrapOffsetInPixels
+                                        .overwriteWith(wrapOffsetInWraps)
+                                        .multiply(wrapSizeInPixels);
+                                    entityPos.add(wrapOffsetInPixels);
+                                    this.visual.draw(uwpe, uwpe.universe.display);
+                                    entityPos.overwriteWith(this._entityPosToRestore);
+                                }
+                            }
+                        }
+                    }
                 }
             }
+            hiddenSet(value) {
+                this.hidden = value;
+                return this;
+            }
             hide() {
-                this.isVisible = false;
+                this.hidden = true;
+                return this;
             }
             show() {
-                this.isVisible = true;
+                this.hidden = false;
+                return this;
+            }
+            sizeInWrappedInstancesHalfRoundedDown() {
+                if (this.sizeInWrappedInstances != null) {
+                    this._sizeInWrappedInstancesHalfRoundedDown
+                        .overwriteWith(this.sizeInWrappedInstances)
+                        .half()
+                        .floor();
+                }
+                return this._sizeInWrappedInstancesHalfRoundedDown;
+            }
+            sizeInWrappedInstancesSet(value) {
+                this.sizeInWrappedInstances = value;
+                return this;
+            }
+            visible() {
+                return (this.hidden == false);
             }
             // EntityProperty.
             propertyName() { return Drawable.name; }
@@ -49,18 +104,21 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                return new Drawable(this.visual, this.renderingOrder, this.isVisible);
+                return new Drawable(this.visual, this.renderingOrder, this.hidden, this.sizeInWrappedInstances.clone());
             }
             overwriteWith(other) {
                 this.visual.overwriteWith(other.visual);
-                this.isVisible = other.isVisible;
+                this.renderingOrder = other.renderingOrder;
+                this.hidden = other.hidden;
+                this.sizeInWrappedInstances
+                    .overwriteWith(other.sizeInWrappedInstances);
                 return this;
             }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) { }
             // Equatable
-            equals(other) { return false; } // todo
+            equals(other) { throw new Error("todo"); }
         }
         GameFramework.Drawable = Drawable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

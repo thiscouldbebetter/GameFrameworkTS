@@ -36,6 +36,7 @@ var ThisCouldBeBetter;
                 var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
                 var pointName = (typeof GameFramework.Point == notDefined ? null : GameFramework.Point.name);
                 var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
+                var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
                 var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
                 var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
                 if (boxName != null) {
@@ -46,6 +47,7 @@ var ThisCouldBeBetter;
                         [mapLocated2Name, this.collisionOfBoxAndMapLocated],
                         [meshName, this.collisionOfBoxAndMesh],
                         [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
+                        [shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
                         [sphereName, this.collisionOfBoxAndSphere]
                     ]);
@@ -91,6 +93,14 @@ var ThisCouldBeBetter;
                     ]);
                     lookupOfLookups.set(shapeGroupAllName, lookup);
                 }
+                if (shapeGroupAnyName != null) {
+                    lookup = new Map([
+                        [boxName, this.collisionOfShapeGroupAnyAndShape],
+                        [meshName, this.collisionOfShapeGroupAnyAndShape],
+                        [sphereName, this.collisionOfShapeGroupAnyAndShape]
+                    ]);
+                    lookupOfLookups.set(shapeGroupAnyName, lookup);
+                }
                 if (shapeInverseName != null) {
                     lookup = new Map([
                         [boxName, this.collisionOfShapeInverseAndShape],
@@ -106,6 +116,7 @@ var ThisCouldBeBetter;
                         [mapLocatedName, this.collisionOfSphereAndMapLocated],
                         [meshName, this.collisionOfSphereAndMesh],
                         [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
+                        [shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
                         [sphereName, this.collisionOfSpheres]
                     ]);
@@ -185,7 +196,8 @@ var ThisCouldBeBetter;
                 var collider0TypeName = collider0.constructor.name;
                 var collider1TypeName = collider1.constructor.name;
                 var collideLookup = this.colliderTypeNamesToCollisionFindLookup.get(collider0TypeName);
-                var errorMessage = "Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
+                var errorMessage = "Error! Colliders of types cannot be collided: "
+                    + collider0TypeName + ", " + collider1TypeName;
                 if (collideLookup == null) {
                     if (this.throwErrorIfCollidersCannotBeCollided) {
                         throw (errorMessage);
@@ -722,13 +734,28 @@ var ThisCouldBeBetter;
                 return collisionOut;
             }
             collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut) {
-                return this.collisionOfColliders(shape, shapeGroupAll.shapes[0], collisionOut);
+                return this.collisionOfColliders(shape, shapeGroupAll.shapes[0], // Seems wrong.
+                collisionOut);
+            }
+            collisionOfShapeAndShapeGroupAny(shape, shapeGroupAny, collisionOut) {
+                var shapesAny = shapeGroupAny.shapes;
+                for (var i = 0; i < shapesAny.length; i++) {
+                    var shapeAny = shapesAny[i];
+                    collisionOut = this.collisionOfColliders(shape, shapeAny, collisionOut);
+                    if (collisionOut.isActive) {
+                        break;
+                    }
+                }
+                return collisionOut;
             }
             collisionOfShapeAndShapeInverse(shape, shapeInverse, collisionOut) {
                 return collisionOut; // todo
             }
             collisionOfShapeGroupAllAndShape(shapeGroupAll, shape, collisionOut) {
                 return this.collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut);
+            }
+            collisionOfShapeGroupAnyAndShape(shapeGroupAny, shape, collisionOut) {
+                return this.collisionOfShapeAndShapeGroupAny(shape, shapeGroupAny, collisionOut);
             }
             collisionOfShapeInverseAndShape(shapeInverse, shape, collisionOut) {
                 return this.collisionOfShapeAndShapeInverse(shape, shapeInverse, collisionOut);

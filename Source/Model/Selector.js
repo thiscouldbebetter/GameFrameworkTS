@@ -15,12 +15,12 @@ var ThisCouldBeBetter;
                     GameFramework.VisualCrosshairs.fromRadiiOuterAndInner(cursorRadius, cursorRadius / 2)
                 ]);
                 this.entityForCursor = GameFramework.Entity.fromNameAndProperties("Cursor", [
-                    GameFramework.Drawable.fromVisualAndIsVisible(visualCursor, false),
+                    GameFramework.Drawable.fromVisual(visualCursor).hide(),
                     GameFramework.Locatable.create()
                 ]);
                 var visualHalo = visualCursor;
                 this.entityForHalo = GameFramework.Entity.fromNameAndProperties("Halo", [
-                    GameFramework.Drawable.fromVisualAndIsVisible(visualHalo, false),
+                    GameFramework.Drawable.fromVisual(visualHalo).hide(),
                     GameFramework.Locatable.create()
                 ]);
             }

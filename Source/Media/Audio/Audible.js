@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor() {
                 this.hasBeenHeard = false;
             }
+            static create() {
+                return new Audible();
+            }
             static of(entity) {
                 return entity.propertyByName(Audible.name);
             }

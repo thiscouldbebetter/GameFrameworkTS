@@ -2,7 +2,8 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface EntityPropertyBase extends Equatable<EntityPropertyBase>
+export interface EntityPropertyBase
+	extends Equatable<EntityPropertyBase>, Clonable<EntityPropertyBase>
 {
 	finalize(uwpe: UniverseWorldPlaceEntities): void;
 	initialize(uwpe: UniverseWorldPlaceEntities): void;

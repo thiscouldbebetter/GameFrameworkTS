@@ -36,13 +36,12 @@ export class Collidable implements EntityProperty<Collidable>
 			canCollideAgainWithoutSeparating || false;
 		this.ticksToWaitBetweenCollisions =
 			ticksToWaitBetweenCollisions || 0;
-		this.colliderAtRest = colliderAtRest;
+		this.colliderAtRestSet(colliderAtRest);
 		this.entityPropertyNamesToCollideWith =
 			entityPropertyNamesToCollideWith || [ Collidable.name ];
 		this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision =
 			collideEntitiesForUniverseWorldPlaceEntitiesAndCollision;
 
-		this.collider = this.colliderAtRest.clone();
 		this.locPrev = Disposition.create();
 		this.ticksUntilCanCollide = 0;
 		this._entitiesAlreadyCollidedWith = new Array<Entity>();
@@ -122,12 +121,16 @@ export class Collidable implements EntityProperty<Collidable>
 	(
 		colliderAtRest: ShapeBase,
 		entityPropertyNameToCollideWith: string,
-		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	): Collidable
 	{
 		return new Collidable
 		(
-			false, null, colliderAtRest, [ entityPropertyNameToCollideWith ], collideEntities
+			false, // canCollideAgainWithoutSeparating
+			null, // ticksToWaitBetweenCollisions
+			colliderAtRest,
+			[ entityPropertyNameToCollideWith ],
+			collideEntities
 		);
 	}
 
@@ -140,7 +143,11 @@ export class Collidable implements EntityProperty<Collidable>
 	{
 		return new Collidable
 		(
-			false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities
+			false, // canCollideAgainWithoutSeparating
+			0, // ticksToWaitBetweenCollisions
+			colliderAtRest,
+			entityPropertyNamesToCollideWith,
+			collideEntities
 		);
 	}
 
@@ -263,6 +270,13 @@ export class Collidable implements EntityProperty<Collidable>
 		var collisionAsString = collision.toString();
 		var message = "Collision detected: " + collisionAsString;
 		console.log(message);
+	}
+
+	colliderAtRestSet(value: ShapeBase): Collidable
+	{
+		this.colliderAtRest = value;
+		this.collider = this.colliderAtRest.clone();
+		return this;
 	}
 
 	colliderLocateForEntity(entity: Entity): void

@@ -14,6 +14,7 @@ var ThisCouldBeBetter;
                 viewColliderSize.z = Number.POSITIVE_INFINITY;
                 this.viewCollider = new GameFramework.Box(this.loc.pos, viewColliderSize);
                 this.entitiesInView = new Array();
+                this._displayToRestore = null;
                 this._posSaved = GameFramework.Coords.create();
             }
             static default() {
@@ -139,7 +140,10 @@ var ThisCouldBeBetter;
                 var universe = uwpe.universe;
                 this.loc.pos.round(); // hack - To prevent lines between map tiles.
                 this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView(uwpe, cameraEntity, universe.collisionHelper, this.entitiesInView);
-                this.drawEntitiesInView_2_Draw(uwpe, display, this.entitiesInView);
+                this._displayToRestore = universe.display;
+                universe.display = display;
+                this.drawEntitiesInView_2_Draw(uwpe, this.entitiesInView);
+                universe.display = this._displayToRestore;
             }
             drawEntitiesInView_1_FindEntitiesInView(uwpe, cameraEntity, collisionHelper, entitiesInView) {
                 var place = uwpe.place;
@@ -147,8 +151,8 @@ var ThisCouldBeBetter;
                 collisionTracker.entityReset(cameraEntity);
                 var cameraCollidable = GameFramework.Collidable.of(cameraEntity);
                 cameraCollidable.entitiesAlreadyCollidedWithClear();
-                var collisions = new Array();
-                var collisions = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, cameraEntity, collisionHelper, collisions);
+                var collisions = collisionTracker.entityCollidableAddAndFindCollisions(uwpe, cameraEntity, collisionHelper, [] // collisions
+                );
                 var entitiesCollidedWith = collisions.map(x => x.entitiesColliding[1]);
                 var entitiesInView = entitiesCollidedWith
                     .filter(x => GameFramework.Drawable.of(x) != null);
@@ -161,16 +165,16 @@ var ThisCouldBeBetter;
                 entitiesInView.push(...drawablesUncollidable);
                 return entitiesInView;
             }
-            drawEntitiesInView_2_Draw(uwpe, display, entitiesInView) {
+            drawEntitiesInView_2_Draw(uwpe, entitiesInView) {
                 this.entitiesInViewSort(entitiesInView);
                 for (var i = 0; i < entitiesInView.length; i++) {
                     var entity = entitiesInView[i];
                     uwpe.entitySet(entity);
-                    var visual = GameFramework.Drawable.of(entity).visual;
+                    var drawable = GameFramework.Drawable.of(entity);
                     var entityPos = GameFramework.Locatable.of(entity).loc.pos;
                     this._posSaved.overwriteWith(entityPos);
                     this.coordsTransformWorldToView(entityPos);
-                    visual.draw(uwpe, display);
+                    drawable.draw(uwpe);
                     entityPos.overwriteWith(this._posSaved);
                 }
             }
@@ -206,12 +210,12 @@ var ThisCouldBeBetter;
                 });
                 return entitiesToSort;
             }
-            toEntity(targetEntityName) {
+            toEntityFollowingEntityWithName(targetEntityName) {
                 var boundable = new GameFramework.Boundable(this.viewCollider);
                 var collidable = GameFramework.Collidable
                     .fromCollider(this.viewCollider)
                     .canCollideAgainWithoutSeparatingSet(true);
-                var constrainable = this.toEntity_Constrainable(targetEntityName);
+                var constrainable = this.toEntityFollowingEntityWithName_Constrainable(targetEntityName);
                 var locatable = GameFramework.Locatable.fromDisp(this.loc);
                 var movable = GameFramework.Movable.default();
                 var entity = GameFramework.Entity.fromNameAndProperties(Camera.name, [
@@ -224,7 +228,7 @@ var ThisCouldBeBetter;
                 ]);
                 return entity;
             }
-            toEntity_Constrainable(targetEntityName) {
+            toEntityFollowingEntityWithName_Constrainable(targetEntityName) {
                 var displacementToTargetEntity = this.loc.orientation.forward.clone().invert();
                 var constraintMultiple = GameFramework.Constraint_Multiple.fromChildren([
                     GameFramework.Constraint_AttachToEntityWithName.

@@ -63,6 +63,7 @@ export class CollisionHelper
 		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
 		var pointName = (typeof Point == notDefined ? null : Point.name );
 		var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
+		var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
 		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
 		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
@@ -76,6 +77,7 @@ export class CollisionHelper
 				[ mapLocated2Name, this.collisionOfBoxAndMapLocated ],
 				[ meshName, this.collisionOfBoxAndMesh ],
 				[ shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll ],
+				[ shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny ],
 				[ shapeInverseName, this.collisionOfShapeAndShapeInverse ],
 				[ sphereName, this.collisionOfBoxAndSphere ]
 			]);
@@ -137,6 +139,17 @@ export class CollisionHelper
 			lookupOfLookups.set(shapeGroupAllName, lookup);
 		}
 
+		if (shapeGroupAnyName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.collisionOfShapeGroupAnyAndShape ],
+				[ meshName, this.collisionOfShapeGroupAnyAndShape ],
+				[ sphereName, this.collisionOfShapeGroupAnyAndShape ]
+			]);
+			lookupOfLookups.set(shapeGroupAnyName, lookup);
+		}
+
 		if (shapeInverseName != null)
 		{
 			lookup = new Map<string, any>
@@ -157,6 +170,7 @@ export class CollisionHelper
 				[ mapLocatedName, this.collisionOfSphereAndMapLocated ],
 				[ meshName, this.collisionOfSphereAndMesh ],
 				[ shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll ],
+				[ shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny ],
 				[ shapeInverseName, this.collisionOfShapeAndShapeInverse ],
 				[ sphereName, this.collisionOfSpheres ]
 			]);
@@ -304,7 +318,8 @@ export class CollisionHelper
 			this.colliderTypeNamesToCollisionFindLookup.get(collider0TypeName);
 
 		var errorMessage =
-			"Error!  Colliders of types cannot be collided: " + collider0TypeName + "," + collider1TypeName;
+			"Error! Colliders of types cannot be collided: "
+			+ collider0TypeName + ", " + collider1TypeName;
 
 		if (collideLookup == null)
 		{
@@ -1292,9 +1307,45 @@ export class CollisionHelper
 		return collisionOut;
 	}
 
-	collisionOfShapeAndShapeGroupAll(shape: ShapeBase, shapeGroupAll: ShapeGroupAll, collisionOut: Collision): Collision
+	collisionOfShapeAndShapeGroupAll
+	(
+		shape: ShapeBase,
+		shapeGroupAll: ShapeGroupAll,
+		collisionOut: Collision
+	): Collision
 	{
-		return this.collisionOfColliders(shape, shapeGroupAll.shapes[0], collisionOut);
+		return this.collisionOfColliders
+		(
+			shape,
+			shapeGroupAll.shapes[0], // Seems wrong.
+			collisionOut
+		);
+	}
+
+	collisionOfShapeAndShapeGroupAny
+	(
+		shape: ShapeBase,
+		shapeGroupAny: ShapeGroupAny,
+		collisionOut: Collision
+	): Collision
+	{
+		var shapesAny = shapeGroupAny.shapes;
+		for (var i = 0; i < shapesAny.length; i++)
+		{
+			var shapeAny = shapesAny[i];
+
+			collisionOut = this.collisionOfColliders
+			(
+				shape, shapeAny, collisionOut
+			);
+
+			if (collisionOut.isActive)
+			{
+				break;
+			}
+		}
+
+		return collisionOut;
 	}
 
 	collisionOfShapeAndShapeInverse(shape: ShapeBase, shapeInverse: ShapeInverse, collisionOut: Collision): Collision
@@ -1308,6 +1359,14 @@ export class CollisionHelper
 	): Collision
 	{
 		return this.collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut);
+	}
+
+	collisionOfShapeGroupAnyAndShape
+	(
+		shapeGroupAny: ShapeGroupAny, shape: ShapeBase, collisionOut: Collision
+	): Collision
+	{
+		return this.collisionOfShapeAndShapeGroupAny(shape, shapeGroupAny, collisionOut);
 	}
 
 	collisionOfShapeInverseAndShape

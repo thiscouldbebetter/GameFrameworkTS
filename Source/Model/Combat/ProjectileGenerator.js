@@ -4,29 +4,29 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ProjectileGenerator {
-            constructor(name, projectileGenerations) {
+            constructor(name, generations) {
                 this.name = name;
-                this.projectileGenerations = projectileGenerations;
+                this.generations = generations;
             }
-            static fromNameAndGenerations(name, projectileGenerations) {
-                return new ProjectileGenerator(name, projectileGenerations);
+            static fromNameAndGenerations(name, generations) {
+                return new ProjectileGenerator(name, generations);
             }
             static of(entity) {
                 return entity.propertyByName(ProjectileGenerator.name);
             }
             static actionFire() {
-                return new GameFramework.Action("Fire", 
+                return GameFramework.Action.fromNameAndPerform("Fire", 
                 // perform
                 (uwpe) => {
                     var place = uwpe.place;
-                    var entityActor = uwpe.entity;
-                    var projectileGenerator = ProjectileGenerator.of(entityActor);
-                    var projectileEntities = projectileGenerator.projectileEntitiesFromEntityFiring(entityActor);
-                    place.entitiesToSpawnAdd(projectileEntities);
+                    var entityShooter = uwpe.entity;
+                    var generator = ProjectileGenerator.of(entityShooter);
+                    var shotEntities = generator.toEntitiesFromEntityFiring(entityShooter);
+                    place.entitiesToSpawnAdd(shotEntities);
                 });
             }
-            projectileEntitiesFromEntityFiring(entityFiring) {
-                var returnValues = this.projectileGenerations.map(x => x.projectileEntityFromEntityFiring(entityFiring));
+            toEntitiesFromEntityFiring(entityFiring) {
+                var returnValues = this.generations.map(x => x.toEntityFromEntityFiring(entityFiring));
                 return returnValues;
             }
             // Clonable.

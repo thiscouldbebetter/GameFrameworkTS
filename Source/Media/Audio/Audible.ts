@@ -11,6 +11,11 @@ export class Audible implements EntityProperty<Audible>
 		this.hasBeenHeard = false;
 	}
 
+	static create(): Audible
+	{
+		return new Audible();
+	}
+
 	static of(entity: Entity): Audible
 	{
 		return entity.propertyByName(Audible.name) as Audible;

@@ -9,12 +9,11 @@ var ThisCouldBeBetter;
                     canCollideAgainWithoutSeparating || false;
                 this.ticksToWaitBetweenCollisions =
                     ticksToWaitBetweenCollisions || 0;
-                this.colliderAtRest = colliderAtRest;
+                this.colliderAtRestSet(colliderAtRest);
                 this.entityPropertyNamesToCollideWith =
                     entityPropertyNamesToCollideWith || [Collidable.name];
                 this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision =
                     collideEntitiesForUniverseWorldPlaceEntitiesAndCollision;
-                this.collider = this.colliderAtRest.clone();
                 this.locPrev = GameFramework.Disposition.create();
                 this.ticksUntilCanCollide = 0;
                 this._entitiesAlreadyCollidedWith = new Array();
@@ -47,10 +46,14 @@ var ThisCouldBeBetter;
                 return Collidable.fromColliderPropertyNameToCollideWithAndCollide(colliderAtRest, entityPropertyToCollideWithName, collideEntities);
             }
             static fromColliderPropertyNameToCollideWithAndCollide(colliderAtRest, entityPropertyNameToCollideWith, collideEntities) {
-                return new Collidable(false, null, colliderAtRest, [entityPropertyNameToCollideWith], collideEntities);
+                return new Collidable(false, // canCollideAgainWithoutSeparating
+                null, // ticksToWaitBetweenCollisions
+                colliderAtRest, [entityPropertyNameToCollideWith], collideEntities);
             }
             static fromColliderPropertyNamesToCollideWithAndCollide(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
-                return new Collidable(false, null, colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
+                return new Collidable(false, // canCollideAgainWithoutSeparating
+                0, // ticksToWaitBetweenCollisions
+                colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
             }
             static fromShape(shapeAtRest) {
                 return Collidable.fromColliderAndCollideEntities(shapeAtRest, null);
@@ -103,6 +106,11 @@ var ThisCouldBeBetter;
                 var collisionAsString = collision.toString();
                 var message = "Collision detected: " + collisionAsString;
                 console.log(message);
+            }
+            colliderAtRestSet(value) {
+                this.colliderAtRest = value;
+                this.collider = this.colliderAtRest.clone();
+                return this;
             }
             colliderLocateForEntity(entity) {
                 this.colliderResetToRestPosition();
