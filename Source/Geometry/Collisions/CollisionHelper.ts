@@ -5,9 +5,9 @@ namespace ThisCouldBeBetter.GameFramework
 export class CollisionHelper
 {
 	throwErrorIfCollidersCannotBeCollided: boolean;
-	colliderTypeNamesToDoCollideLookup: Map<string, Map<string, any> >;
-	colliderTypeNamesToDoesContainLookup: Map<string, Map<string, any> >;
-	colliderTypeNamesToCollisionFindLookup: Map<string, Map<string, any> >;
+	doCollideByColliderTypeNameByColliderTypeName: Map<string, Map<string, any> >;
+	doesContainByColliderTypeNameByColliderTypeName: Map<string, Map<string, any> >;
+	collisionFindByColliderTypeNameByColliderTypeName: Map<string, Map<string, any> >;
 
 	_box: Box;
 	_box2: Box;
@@ -27,9 +27,12 @@ export class CollisionHelper
 	{
 		this.throwErrorIfCollidersCannotBeCollided = false; // true;
 
-		this.colliderTypeNamesToDoCollideLookup = this.doCollideLookupBuild();
-		this.colliderTypeNamesToDoesContainLookup = this.doesContainLookupBuild();
-		this.colliderTypeNamesToCollisionFindLookup = this.collisionFindLookupBuild();
+		this.doCollideByColliderTypeNameByColliderTypeName =
+			this.doCollideLookupBuild();
+		this.doesContainByColliderTypeNameByColliderTypeName =
+			this.doesContainLookupBuild();
+		this.collisionFindByColliderTypeNameByColliderTypeName =
+			this.collisionFindLookupBuild();
 
 		// Helper variables.
 		this._box = Box.create();
@@ -328,27 +331,27 @@ export class CollisionHelper
 		var collider0TypeName = collider0.constructor.name;
 		var collider1TypeName = collider1.constructor.name;
 
-		var collideLookup =
-			this.colliderTypeNamesToCollisionFindLookup.get(collider0TypeName);
+		var lookup = this.collisionFindByColliderTypeNameByColliderTypeName;
 
-		if (collideLookup == null)
+		var collidersCanBeCollided =
+			lookup.has(collider0TypeName)
+			&& lookup.has(collider1TypeName);
+
+		if (collidersCanBeCollided == false)
 		{
 			this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
 		}
 		else
 		{
-			var collisionMethod = collideLookup.get(collider1TypeName);
-			if (collisionMethod == null)
-			{
-				this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
-			}
-			else
-			{
-				collisionMethod.call
-				(
-					this, collider0, collider1, collisionOut, true // shouldCalculatePos
-				);
-			}
+			var collisionMethod =
+				lookup
+					.get(collider0TypeName)
+					.get(collider1TypeName);
+
+			collisionMethod.call
+			(
+				this, collider0, collider1, collisionOut, true // shouldCalculatePos
+			);
 		}
 
 		return collisionOut;
@@ -416,27 +419,27 @@ export class CollisionHelper
 		var collider0TypeName = collider0.constructor.name;
 		var collider1TypeName = collider1.constructor.name;
 
-		var doCollideLookup =
-			this.colliderTypeNamesToDoCollideLookup.get(collider0TypeName);
+		var lookup = this.doCollideByColliderTypeNameByColliderTypeName;
 
-		if (doCollideLookup == null)
+		var collidersCanBeCollided =
+			lookup.has(collider0TypeName)
+			&& lookup.has(collider1TypeName);
+
+		if (collidersCanBeCollided == false)
 		{
 			this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
 		}
 		else
 		{
-			var collisionMethod = doCollideLookup.get(collider1TypeName);
-			if (collisionMethod == null)
-			{
-				this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
-			}
-			else
-			{
-				returnValue = collisionMethod.call
-				(
-					this, collider0, collider1
-				);
-			}
+			var collisionMethod =
+				lookup
+					.get(collider0TypeName)
+					.get(collider1TypeName);
+
+			returnValue = collisionMethod.call
+			(
+				this, collider0, collider1
+			);
 		}
 
 		return returnValue;
@@ -459,27 +462,27 @@ export class CollisionHelper
 		var collider0TypeName = collider0.constructor.name;
 		var collider1TypeName = collider1.constructor.name;
 
-		var doesContainLookup =
-			this.colliderTypeNamesToDoesContainLookup.get(collider0TypeName);
+		var lookup = this.doesContainByColliderTypeNameByColliderTypeName;
 
-		if (doesContainLookup == null)
+		var collidersCanBeCollided =
+			lookup.has(collider0TypeName)
+			&& lookup.has(collider1TypeName);
+
+		if (collidersCanBeCollided == false)
 		{
 			this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
 		}
 		else
 		{
-			var doesColliderContainOther = doesContainLookup.get(collider1TypeName);
-			if (doesColliderContainOther == null)
-			{
-				this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
-			}
-			else
-			{
-				returnValue = doesColliderContainOther.call
-				(
-					this, collider0, collider1
-				);
-			}
+			var doesColliderContainOther =
+				lookup
+					.get(collider0TypeName)
+					.get(collider1TypeName);
+
+			returnValue = doesColliderContainOther.call
+			(
+				this, collider0, collider1
+			);
 		}
 
 		return returnValue;
@@ -548,9 +551,18 @@ export class CollisionHelper
 		var vel1 = entity1Loc.vel;
 
 		var displacement0 =
-			this._vel.overwriteWith(vel0).invert().normalize().multiplyScalar(distanceToBackUp);
+			this._vel
+				.overwriteWith(vel0)
+				.invert()
+				.normalize()
+				.multiplyScalar(distanceToBackUp);
+
 		var displacement1 =
-			this._vel2.overwriteWith(vel1).invert().normalize().multiplyScalar(distanceToBackUp);
+			this._vel2
+				.overwriteWith(vel1)
+				.invert()
+				.normalize()
+				.multiplyScalar(distanceToBackUp);
 
 		pos0.add(displacement0);
 		pos1.add(displacement1);
