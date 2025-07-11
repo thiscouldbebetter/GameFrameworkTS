@@ -37,7 +37,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Transformable.
-            coordsGroupToTranslate() {
+            coordsGroupToTransform() {
                 return [this.shell.center(), this.wedge.vertex];
             }
             // ShapeBase.

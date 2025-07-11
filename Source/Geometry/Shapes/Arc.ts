@@ -65,7 +65,7 @@ export class Arc implements ShapeBase
 
 	// Transformable.
 
-	coordsGroupToTranslate(): Coords[]
+	coordsGroupToTransform(): Coords[]
 	{
 		return [ this.shell.center(), this.wedge.vertex ];
 	}

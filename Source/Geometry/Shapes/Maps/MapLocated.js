@@ -28,10 +28,10 @@ var ThisCouldBeBetter;
                 this.loc.overwriteWith(other.loc);
                 return this;
             }
-            // Equatable
+            // Equatable.
             equals(other) { return false; } // todo
-            // translatable
-            coordsGroupToTranslate() {
+            // Transformable.
+            coordsGroupToTransform() {
                 return [this.loc.pos];
             }
             // ShapeBase.

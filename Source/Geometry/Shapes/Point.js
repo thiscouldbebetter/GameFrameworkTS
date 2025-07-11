@@ -47,7 +47,7 @@ var ThisCouldBeBetter;
                 return boxOut;
             }
             // Transformable.
-            coordsGroupToTranslate() {
+            coordsGroupToTransform() {
                 return [this.pos];
             }
             transform(transformToApply) {

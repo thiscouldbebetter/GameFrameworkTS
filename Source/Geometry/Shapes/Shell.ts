@@ -16,7 +16,11 @@ export class Shell implements ShapeBase
 		this.sphereOuter = sphereOuter;
 		this.radiusInner = radiusInner;
 
-		this.sphereInner = new Sphere(this.sphereOuter.center, this.radiusInner);
+		this.sphereInner = Sphere.fromCenterAndRadius
+		(
+			this.sphereOuter.center, this.radiusInner
+		);
+
 		this._collider = new ShapeGroupAll
 		([
 			this.sphereOuter,
@@ -27,7 +31,7 @@ export class Shell implements ShapeBase
 	static default(): Shell
 	{
 		var sphereOuter = Sphere.default();
-		return new Shell(sphereOuter, sphereOuter.radius / 2);
+		return new Shell(sphereOuter, sphereOuter.radius() / 2);
 	}
 
 	center(): Coords
@@ -84,9 +88,9 @@ export class Shell implements ShapeBase
 			normalOut.overwriteWith(posToCheck).subtract(this.center());
 		var distanceFromCenter = displacementFromCenter.magnitude();
 		var distanceFromSphereOuter =
-			Math.abs(distanceFromCenter - this.sphereOuter.radius);
+			Math.abs(distanceFromCenter - this.sphereOuter.radius() );
 		var distanceFromSphereInner =
-			Math.abs(distanceFromCenter - this.sphereInner.radius);
+			Math.abs(distanceFromCenter - this.sphereInner.radius() );
 		// Note that normalOut == displacementFromCenter.
 		if (distanceFromSphereInner < distanceFromSphereOuter)
 		{

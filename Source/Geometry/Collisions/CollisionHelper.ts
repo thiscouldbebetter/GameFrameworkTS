@@ -781,19 +781,16 @@ export class CollisionHelper
 	{
 		var doCollide = false;
 
-		var displacementBetweenCenters = this._displacement.overwriteWith
-		(
-			sphere.center
-		).subtract
-		(
-			box.center
-		);
+		var displacementBetweenCenters =
+			this._displacement
+				.overwriteWith(sphere.center)
+				.subtract(box.center);
 
 		var displacementBetweenCentersAbsolute =
 			displacementBetweenCenters.absolute();
 
 		var boxSizeHalf = box.sizeHalf();
-		var sphereRadius = sphere.radius;
+		var sphereRadius = sphere.radius();
 
 		var doExtentsCollide =
 		(
@@ -840,10 +837,10 @@ export class CollisionHelper
 		if (doCollide && shouldCalculatePos)
 		{
 			// todo - Fix this.
-			var boxCircumscribedAroundSphere = new Box
+			var boxCircumscribedAroundSphere = Box.fromCenterAndSize
 			(
 				sphere.center,
-				Coords.ones().multiplyScalar(sphere.radius * 2)
+				Coords.ones().multiplyScalar(sphereRadius * 2)
 			);
 			collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
 		}
@@ -894,24 +891,20 @@ export class CollisionHelper
 		{
 			var collisionPos = collision.pos;
 			var rectangleCenter = boxRotated.box.center;
-			var displacementBetweenCenters = collisionPos.overwriteWith
-			(
-				sphere.center
-			).subtract
-			(
-				rectangleCenter
-			);
+			var displacementBetweenCenters =
+				collisionPos
+					.overwriteWith(sphere.center)
+					.subtract(rectangleCenter);
 
-			var distanceBetweenCenters = displacementBetweenCenters.magnitude();
+			var distanceBetweenCenters =
+				displacementBetweenCenters.magnitude();
+			var sphereRadius = sphere.radius();
 			var distanceFromRectangleCenterToSphere =
-				distanceBetweenCenters - sphere.radius;
-			var displacementToSphere = displacementBetweenCenters.divideScalar
-			(
-				distanceBetweenCenters
-			).multiplyScalar
-			(
-				distanceFromRectangleCenterToSphere
-			);
+				distanceBetweenCenters - sphereRadius;
+			var displacementToSphere =
+				displacementBetweenCenters
+					.divideScalar(distanceBetweenCenters)
+					.multiplyScalar(distanceFromRectangleCenterToSphere);
 
 			collisionPos = displacementToSphere.add(rectangleCenter);
 
@@ -1169,7 +1162,7 @@ export class CollisionHelper
 		var distanceOfSphereCenterAbovePlane =
 			distanceOfSphereCenterFromOriginAlongNormal
 			- plane.distanceFromOrigin;
-		if (distanceOfSphereCenterAbovePlane < sphere.radius)
+		if (distanceOfSphereCenterAbovePlane < sphere.radius() )
 		{
 			collision.isActive = true;
 			plane.pointClosestToOrigin(collision.pos);
@@ -1397,16 +1390,13 @@ export class CollisionHelper
 		var sphere0Center = sphere0.center;
 		var sphere1Center = sphere1.center;
 
-		var sphere0Radius = sphere0.radius;
-		var sphere1Radius = sphere1.radius;
+		var sphere0Radius = sphere0.radius();
+		var sphere1Radius = sphere1.radius();
 
-		var displacementFromSphere0CenterTo1 = this._displacement.overwriteWith
-		(
-			sphere1Center
-		).subtract
-		(
-			sphere0Center
-		);
+		var displacementFromSphere0CenterTo1 =
+			this._displacement
+				.overwriteWith(sphere1Center)
+				.subtract(sphere0Center);
 
 		var distanceBetweenCenters =
 			displacementFromSphere0CenterTo1.magnitude();
@@ -2058,7 +2048,7 @@ export class CollisionHelper
 			sphere0.center
 		);
 		var distance = displacement.magnitude();
-		var sumOfRadii = sphere0.radius + sphere1.radius;
+		var sumOfRadii = sphere0.radius() + sphere1.radius();
 		var returnValue = (distance < sumOfRadii);
 
 		return returnValue;
@@ -2195,7 +2185,8 @@ export class CollisionHelper
 	{
 		var boxForSphere = new Box
 		(
-			sphere.center, Coords.ones().multiplyScalar(sphere.radius * 2)
+			sphere.center,
+			Coords.ones().multiplyScalar(sphere.radius() * 2)
 		);
 
 		var returnValue = box.containsOther(boxForSphere);
@@ -2226,13 +2217,19 @@ export class CollisionHelper
 		var distanceOfSphereCenterAbovePlane =
 			sphere.center.dotProduct(plane.normal)
 			- plane.distanceFromOrigin;
-		var returnValue = (distanceOfSphereCenterAbovePlane >= sphere.radius);
+		var sphereRadius = sphere.radius();
+		var returnValue = (distanceOfSphereCenterAbovePlane >= sphereRadius);
 		return returnValue;
 	}
 
 	doesSphereContainBox(sphere: Sphere, box: Box): boolean
 	{
-		var sphereCircumscribingBox = new Sphere(box.center, box.max().magnitude());
+		var sphereCircumscribingBox =
+			Sphere.fromCenterAndRadius
+			(
+				box.center,
+				box.size.magnitude() / 2
+			);
 		var returnValue = sphere.containsOther(sphereCircumscribingBox);
 		return returnValue;
 	}

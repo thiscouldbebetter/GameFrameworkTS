@@ -49,13 +49,13 @@ export class MapLocated implements ShapeBase
 		return this;
 	}
 
-	// Equatable
+	// Equatable.
 
 	equals(other: ShapeBase): boolean { return false; } // todo
 
-	// translatable
+	// Transformable.
 
-	coordsGroupToTranslate(): Coords[]
+	coordsGroupToTransform(): Coords[]
 	{
 		return [ this.loc.pos ];
 	}

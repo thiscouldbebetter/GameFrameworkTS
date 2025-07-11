@@ -456,15 +456,15 @@ class BoxTests extends TestFixture
 
 	// transformable
 
-	coordsGroupToTranslate(): void
+	coordsGroupToTransform(): void
 	{
 		var box = Box.create().randomize(null);
 		var boxCenter = box.center;
 
-		var boxCoordsGroupToTranslate = box.coordsGroupToTranslate();
+		var coordsGroupToTransform = box.coordsGroupToTransform();
 
-		Assert.isTrue(boxCoordsGroupToTranslate.length == 1);
-		Assert.isTrue(boxCoordsGroupToTranslate[0] == boxCenter);
+		Assert.isTrue(coordsGroupToTransform.length == 1);
+		Assert.isTrue(coordsGroupToTransform[0] == boxCenter);
 	}
 
 	transform(): void // transformToApply: Transform): Transformable

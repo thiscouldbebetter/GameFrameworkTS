@@ -4,30 +4,38 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Sphere {
-            constructor(center, radius) {
+            constructor(center, pointOnSurface) {
                 this.center = center;
-                this.radius = radius;
+                this.pointOnSurface = pointOnSurface;
                 // Helper variables.
-                this._centerAsArray = [this.center];
                 this._displacement = GameFramework.Coords.create();
                 this._pointRandom = GameFramework.Coords.create();
             }
             static default() {
-                return new Sphere(GameFramework.Coords.create(), 1);
+                return new Sphere(GameFramework.Coords.create(), GameFramework.Coords.fromXYZ(1, 0, 0));
+            }
+            static fromCenterAndPointOnSurface(center, pointOnSurface) {
+                return new Sphere(center, pointOnSurface);
             }
             static fromCenterAndRadius(center, radius) {
-                return new Sphere(center, radius);
+                return new Sphere(center, GameFramework.Coords.fromXYZ(radius, 0, 0).add(center));
             }
             static fromRadius(radius) {
-                return new Sphere(GameFramework.Coords.create(), radius);
+                return new Sphere(GameFramework.Coords.zeroes(), GameFramework.Coords.fromXYZ(radius, 0, 0));
             }
             static fromRadiusAndCenter(radius, center) {
-                return new Sphere(center, radius);
+                return Sphere.fromCenterAndRadius(center, radius);
+            }
+            cachedValuesClear() {
+                this._radius = null;
+                return this;
             }
             containsOther(other) {
-                var displacementOfOther = this._displacement.overwriteWith(other.center).subtract(this.center);
+                var displacementOfOther = this._displacement
+                    .overwriteWith(other.center)
+                    .subtract(this.center);
                 var distanceOfOther = displacementOfOther.magnitude();
-                var returnValue = (distanceOfOther + other.radius <= this.radius);
+                var returnValue = (distanceOfOther + other.radius() <= this.radius());
                 return returnValue;
             }
             containsPoint(pointToCheck) {
@@ -35,22 +43,33 @@ var ThisCouldBeBetter;
                     .overwriteWith(pointToCheck)
                     .subtract(this.center);
                 var distanceFromCenter = displacement.magnitude();
-                var containsPoint = (distanceFromCenter < this.radius);
+                var radius = this.radius();
+                var containsPoint = (distanceFromCenter < radius);
                 return containsPoint;
             }
             pointRandom(randomizer) {
                 // todo
                 // This implementation favors points near the center.
-                var polar = GameFramework.Polar.fromRadius(this.radius);
+                var polar = GameFramework.Polar.fromRadius(this.radius());
                 var returnValue = polar
                     .random(null)
                     .toCoords(this._pointRandom)
                     .add(this.center);
                 return returnValue;
             }
-            // cloneable
+            radius() {
+                if (this._radius == null) {
+                    this._radius =
+                        this._displacement
+                            .overwriteWith(this.pointOnSurface)
+                            .subtract(this.center)
+                            .magnitude();
+                }
+                return this._radius;
+            }
+            // Clonable.
             clone() {
-                return new Sphere(this.center.clone(), this.radius);
+                return new Sphere(this.center.clone(), this.pointOnSurface.clone());
             }
             overwriteWith(other) {
                 this.center.overwriteWith(other.center);
@@ -73,16 +92,15 @@ var ThisCouldBeBetter;
                 if (boxOut == null) {
                     boxOut = GameFramework.Box.create();
                 }
-                var diameter = this.radius * 2;
+                var diameter = this.radius() * 2;
                 boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);
                 return boxOut;
             }
             // Transformable.
-            coordsGroupToTranslate() {
-                return this._centerAsArray;
-            }
             transform(transformToApply) {
                 transformToApply.transformCoords(this.center);
+                transformToApply.transformCoords(this.pointOnSurface);
+                this.cachedValuesClear();
                 return this;
             }
         }

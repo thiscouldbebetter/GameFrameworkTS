@@ -463,7 +463,7 @@ export class Box implements ShapeBase
 
 	// Transformable.
 
-	coordsGroupToTranslate(): Coords[]
+	coordsGroupToTransform(): Coords[]
 	{
 		return [ this.center ];
 	}

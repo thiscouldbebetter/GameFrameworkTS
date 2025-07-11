@@ -15,7 +15,7 @@ export class BoxRotated implements ShapeBase
 
 	sphereSwept(): Sphere
 	{
-		return new Sphere(this.box.center, this.box.sizeHalf().magnitude());
+		return Sphere.fromCenterAndRadius(this.box.center, this.box.sizeHalf().magnitude());
 	}
 
 	// ShapeBase.
@@ -107,7 +107,7 @@ export class BoxRotated implements ShapeBase
 
 	// Transformable.
 
-	coordsGroupToTranslate(): Coords[]
+	coordsGroupToTransform(): Coords[]
 	{
 		return [ this.box.center ];
 	}

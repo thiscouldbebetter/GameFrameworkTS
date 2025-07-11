@@ -242,7 +242,7 @@ export class Mesh implements ShapeBase
 
 	// Transformable.
 
-	coordsGroupToTranslate(): Coords[]
+	coordsGroupToTransform(): Coords[]
 	{
 		return [ this.center ];
 	}

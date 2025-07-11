@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(sphereOuter, radiusInner) {
                 this.sphereOuter = sphereOuter;
                 this.radiusInner = radiusInner;
-                this.sphereInner = new GameFramework.Sphere(this.sphereOuter.center, this.radiusInner);
+                this.sphereInner = GameFramework.Sphere.fromCenterAndRadius(this.sphereOuter.center, this.radiusInner);
                 this._collider = new GameFramework.ShapeGroupAll([
                     this.sphereOuter,
                     new GameFramework.ShapeInverse(new GameFramework.ShapeContainer(this.sphereInner))
@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
             }
             static default() {
                 var sphereOuter = GameFramework.Sphere.default();
-                return new Shell(sphereOuter, sphereOuter.radius / 2);
+                return new Shell(sphereOuter, sphereOuter.radius() / 2);
             }
             center() {
                 return this.sphereOuter.center;
@@ -47,8 +47,8 @@ var ThisCouldBeBetter;
             normalAtPos(posToCheck, normalOut) {
                 var displacementFromCenter = normalOut.overwriteWith(posToCheck).subtract(this.center());
                 var distanceFromCenter = displacementFromCenter.magnitude();
-                var distanceFromSphereOuter = Math.abs(distanceFromCenter - this.sphereOuter.radius);
-                var distanceFromSphereInner = Math.abs(distanceFromCenter - this.sphereInner.radius);
+                var distanceFromSphereOuter = Math.abs(distanceFromCenter - this.sphereOuter.radius());
+                var distanceFromSphereInner = Math.abs(distanceFromCenter - this.sphereInner.radius());
                 // Note that normalOut == displacementFromCenter.
                 if (distanceFromSphereInner < distanceFromSphereOuter) {
                     normalOut.invert();

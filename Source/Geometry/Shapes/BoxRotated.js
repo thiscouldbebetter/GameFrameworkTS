@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.angleInTurns = angleInTurns;
             }
             sphereSwept() {
-                return new GameFramework.Sphere(this.box.center, this.box.sizeHalf().magnitude());
+                return GameFramework.Sphere.fromCenterAndRadius(this.box.center, this.box.sizeHalf().magnitude());
             }
             // ShapeBase.
             collider() { return null; }
@@ -63,7 +63,7 @@ var ThisCouldBeBetter;
             // Equatable
             equals(other) { return false; } // todo
             // Transformable.
-            coordsGroupToTranslate() {
+            coordsGroupToTransform() {
                 return [this.box.center];
             }
             transform(transformToApply) {

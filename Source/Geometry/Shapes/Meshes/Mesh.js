@@ -135,7 +135,7 @@ var ThisCouldBeBetter;
             // Equatable
             equals(other) { return false; } // todo
             // Transformable.
-            coordsGroupToTranslate() {
+            coordsGroupToTransform() {
                 return [this.center];
             }
             transform(transformToApply) {

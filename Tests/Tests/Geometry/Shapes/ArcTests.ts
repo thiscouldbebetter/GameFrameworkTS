@@ -19,7 +19,7 @@ class ArcTests extends TestFixture
 			this.clone,
 			this.overwriteWith,
 
-			this.coordsGroupToTranslate,
+			this.coordsGroupToTransform,
 
 			this.normalAtPos,
 			this.surfacePointNearPos,
@@ -75,11 +75,11 @@ class ArcTests extends TestFixture
 
 	// transformable
 
-	coordsGroupToTranslate(): void
+	coordsGroupToTransform(): void
 	{
 		var arc = Arc.default();
 		var arcCenter = arc.center();
-		var coordsGroup = arc.coordsGroupToTranslate();
+		var coordsGroup = arc.coordsGroupToTransform();
 		Assert.isTrue(coordsGroup[0] ==  arcCenter)
 	}
 

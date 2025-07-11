@@ -78,7 +78,7 @@ export class Point implements ShapeBase
 
 	// Transformable.
 
-	coordsGroupToTranslate(): Coords[]
+	coordsGroupToTransform(): Coords[]
 	{
 		return [ this.pos ];
 	}

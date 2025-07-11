@@ -268,7 +268,7 @@ var ThisCouldBeBetter;
                 return boxOut.overwriteWith(this);
             }
             // Transformable.
-            coordsGroupToTranslate() {
+            coordsGroupToTransform() {
                 return [this.center];
             }
             transform(transformToApply) {

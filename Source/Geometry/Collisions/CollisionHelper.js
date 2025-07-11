@@ -464,10 +464,12 @@ var ThisCouldBeBetter;
             }
             collisionOfBoxAndSphere(box, sphere, collision, shouldCalculatePos) {
                 var doCollide = false;
-                var displacementBetweenCenters = this._displacement.overwriteWith(sphere.center).subtract(box.center);
+                var displacementBetweenCenters = this._displacement
+                    .overwriteWith(sphere.center)
+                    .subtract(box.center);
                 var displacementBetweenCentersAbsolute = displacementBetweenCenters.absolute();
                 var boxSizeHalf = box.sizeHalf();
-                var sphereRadius = sphere.radius;
+                var sphereRadius = sphere.radius();
                 var doExtentsCollide = (displacementBetweenCentersAbsolute.x <= boxSizeHalf.x + sphereRadius
                     && displacementBetweenCentersAbsolute.y <= boxSizeHalf.y + sphereRadius
                     && displacementBetweenCentersAbsolute.z <= boxSizeHalf.z + sphereRadius);
@@ -491,7 +493,7 @@ var ThisCouldBeBetter;
                 collision.isActive = doCollide;
                 if (doCollide && shouldCalculatePos) {
                     // todo - Fix this.
-                    var boxCircumscribedAroundSphere = new GameFramework.Box(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius * 2));
+                    var boxCircumscribedAroundSphere = GameFramework.Box.fromCenterAndSize(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphereRadius * 2));
                     collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
                 }
                 return collision;
@@ -513,10 +515,15 @@ var ThisCouldBeBetter;
                 if (doCollide) {
                     var collisionPos = collision.pos;
                     var rectangleCenter = boxRotated.box.center;
-                    var displacementBetweenCenters = collisionPos.overwriteWith(sphere.center).subtract(rectangleCenter);
+                    var displacementBetweenCenters = collisionPos
+                        .overwriteWith(sphere.center)
+                        .subtract(rectangleCenter);
                     var distanceBetweenCenters = displacementBetweenCenters.magnitude();
-                    var distanceFromRectangleCenterToSphere = distanceBetweenCenters - sphere.radius;
-                    var displacementToSphere = displacementBetweenCenters.divideScalar(distanceBetweenCenters).multiplyScalar(distanceFromRectangleCenterToSphere);
+                    var sphereRadius = sphere.radius();
+                    var distanceFromRectangleCenterToSphere = distanceBetweenCenters - sphereRadius;
+                    var displacementToSphere = displacementBetweenCenters
+                        .divideScalar(distanceBetweenCenters)
+                        .multiplyScalar(distanceFromRectangleCenterToSphere);
                     collisionPos = displacementToSphere.add(rectangleCenter);
                     var normals = collision.normals;
                     boxRotated.normalAtPos(collision.pos, normals[0]);
@@ -655,7 +662,7 @@ var ThisCouldBeBetter;
                 var distanceOfSphereCenterFromOriginAlongNormal = sphere.center.dotProduct(plane.normal);
                 var distanceOfSphereCenterAbovePlane = distanceOfSphereCenterFromOriginAlongNormal
                     - plane.distanceFromOrigin;
-                if (distanceOfSphereCenterAbovePlane < sphere.radius) {
+                if (distanceOfSphereCenterAbovePlane < sphere.radius()) {
                     collision.isActive = true;
                     plane.pointClosestToOrigin(collision.pos);
                     collision.colliders.length = 0;
@@ -769,9 +776,11 @@ var ThisCouldBeBetter;
             collisionOfSpheres(sphere0, sphere1, collision) {
                 var sphere0Center = sphere0.center;
                 var sphere1Center = sphere1.center;
-                var sphere0Radius = sphere0.radius;
-                var sphere1Radius = sphere1.radius;
-                var displacementFromSphere0CenterTo1 = this._displacement.overwriteWith(sphere1Center).subtract(sphere0Center);
+                var sphere0Radius = sphere0.radius();
+                var sphere1Radius = sphere1.radius();
+                var displacementFromSphere0CenterTo1 = this._displacement
+                    .overwriteWith(sphere1Center)
+                    .subtract(sphere0Center);
                 var distanceBetweenCenters = displacementFromSphere0CenterTo1.magnitude();
                 if (distanceBetweenCenters == 0) {
                     collision.pos.overwriteWith(sphere0Center);
@@ -1155,7 +1164,7 @@ var ThisCouldBeBetter;
             doSphereAndSphereCollide(sphere0, sphere1) {
                 var displacement = this._displacement.overwriteWith(sphere1.center).subtract(sphere0.center);
                 var distance = displacement.magnitude();
-                var sumOfRadii = sphere0.radius + sphere1.radius;
+                var sumOfRadii = sphere0.radius() + sphere1.radius();
                 var returnValue = (distance < sumOfRadii);
                 return returnValue;
             }
@@ -1239,7 +1248,7 @@ var ThisCouldBeBetter;
                 return false;
             }
             doesBoxContainSphere(box, sphere) {
-                var boxForSphere = new GameFramework.Box(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius * 2));
+                var boxForSphere = new GameFramework.Box(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius() * 2));
                 var returnValue = box.containsOther(boxForSphere);
                 return returnValue;
             }
@@ -1259,11 +1268,12 @@ var ThisCouldBeBetter;
                 var plane = hemispace.plane;
                 var distanceOfSphereCenterAbovePlane = sphere.center.dotProduct(plane.normal)
                     - plane.distanceFromOrigin;
-                var returnValue = (distanceOfSphereCenterAbovePlane >= sphere.radius);
+                var sphereRadius = sphere.radius();
+                var returnValue = (distanceOfSphereCenterAbovePlane >= sphereRadius);
                 return returnValue;
             }
             doesSphereContainBox(sphere, box) {
-                var sphereCircumscribingBox = new GameFramework.Sphere(box.center, box.max().magnitude());
+                var sphereCircumscribingBox = GameFramework.Sphere.fromCenterAndRadius(box.center, box.size.magnitude() / 2);
                 var returnValue = sphere.containsOther(sphereCircumscribingBox);
                 return returnValue;
             }

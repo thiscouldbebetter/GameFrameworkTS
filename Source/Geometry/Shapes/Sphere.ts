@@ -5,49 +5,66 @@ namespace ThisCouldBeBetter.GameFramework
 export class Sphere implements ShapeBase
 {
 	center: Coords;
-	radius: number;
+	pointOnSurface: Coords;
 
-	private _centerAsArray: Coords[];
+	private _radius: number;
+
 	private _displacement: Coords;
 	private _pointRandom: Coords;
 
-	constructor(center: Coords, radius: number)
+	constructor(center: Coords, pointOnSurface: Coords)
 	{
 		this.center = center;
-		this.radius = radius;
+		this.pointOnSurface = pointOnSurface;
 
 		// Helper variables.
-		this._centerAsArray = [ this.center ];
 		this._displacement = Coords.create();
 		this._pointRandom = Coords.create();
 	}
 
 	static default(): Sphere
 	{
-		return new Sphere(Coords.create(), 1);
+		return new Sphere(Coords.create(), Coords.fromXYZ(1, 0, 0) );
+	}
+
+	static fromCenterAndPointOnSurface
+	(
+		center: Coords, pointOnSurface: Coords
+	): Sphere
+	{
+		return new Sphere(center, pointOnSurface);
 	}
 
 	static fromCenterAndRadius(center: Coords, radius: number): Sphere
 	{
-		return new Sphere(center, radius);
+		return new Sphere(center, Coords.fromXYZ(radius, 0, 0).add(center) );
 	}
 
 	static fromRadius(radius: number): Sphere
 	{
-		return new Sphere(Coords.create(), radius);
+		return new Sphere(Coords.zeroes(), Coords.fromXYZ(radius, 0, 0) );
 	}
 
 	static fromRadiusAndCenter(radius: number, center: Coords): Sphere
 	{
-		return new Sphere(center, radius);
+		return Sphere.fromCenterAndRadius(center, radius);
+	}
+
+	cachedValuesClear(): Sphere
+	{
+		this._radius = null;
+		return this;
 	}
 
 	containsOther(other: Sphere): boolean
 	{
 		var displacementOfOther =
-			this._displacement.overwriteWith(other.center).subtract(this.center);
+			this._displacement
+				.overwriteWith(other.center)
+				.subtract(this.center);
 		var distanceOfOther = displacementOfOther.magnitude();
-		var returnValue = (distanceOfOther + other.radius <= this.radius);
+		var returnValue =
+			(distanceOfOther + other.radius() <= this.radius() );
 		return returnValue;
 	}
 
@@ -58,7 +75,8 @@ export class Sphere implements ShapeBase
 				.overwriteWith(pointToCheck)
 				.subtract(this.center);
 		var distanceFromCenter = displacement.magnitude();
-		var containsPoint = (distanceFromCenter < this.radius);
+		var radius = this.radius();
+		var containsPoint = (distanceFromCenter < radius);
 		return containsPoint;
 	}
 
@@ -67,7 +85,7 @@ export class Sphere implements ShapeBase
 		// todo
 		// This implementation favors points near the center.
 
-		var polar = Polar.fromRadius(this.radius);
+		var polar = Polar.fromRadius(this.radius() );
 
 		var returnValue =
 			polar
@@ -78,11 +96,25 @@ export class Sphere implements ShapeBase
 		return returnValue;
 	}
 
-	// cloneable
+	radius(): number
+	{
+		if (this._radius == null)
+		{
+			this._radius =
+				this._displacement
+					.overwriteWith(this.pointOnSurface)
+					.subtract(this.center)
+					.magnitude();
+		}
+
+		return this._radius;
+	}
+
+	// Clonable.
 
 	clone(): Sphere
 	{
-		return new Sphere(this.center.clone(), this.radius);
+		return new Sphere(this.center.clone(), this.pointOnSurface.clone() );
 	}
 
 	overwriteWith(other: Sphere): Sphere
@@ -125,21 +157,18 @@ export class Sphere implements ShapeBase
 		{
 			boxOut = Box.create();
 		}
-		var diameter = this.radius * 2;
+		var diameter = this.radius() * 2;
 		boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);
 		return boxOut;
 	}
 
 	// Transformable.
 
-	coordsGroupToTranslate(): Coords[]
-	{
-		return this._centerAsArray;
-	}
-
 	transform(transformToApply: TransformBase): Sphere
 	{
 		transformToApply.transformCoords(this.center);
+		transformToApply.transformCoords(this.pointOnSurface);
+		this.cachedValuesClear();
 		return this;
 	}
 }
