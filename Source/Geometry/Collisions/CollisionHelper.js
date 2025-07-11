@@ -38,6 +38,7 @@ var ThisCouldBeBetter;
                 var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
                 var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
                 var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
+                var shapeTransformedName = (typeof GameFramework.ShapeTransformed == notDefined ? null : GameFramework.ShapeTransformed.name);
                 var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
                 if (boxName != null) {
                     lookup = new Map([
@@ -49,6 +50,7 @@ var ThisCouldBeBetter;
                         [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
                         [shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
+                        [shapeTransformedName, this.collisionOfShapeAndShapeTransformed],
                         [sphereName, this.collisionOfBoxAndSphere]
                     ]);
                     lookupOfLookups.set(boxName, lookup);
@@ -109,6 +111,14 @@ var ThisCouldBeBetter;
                     ]);
                     lookupOfLookups.set(shapeInverseName, lookup);
                 }
+                if (shapeTransformedName != null) {
+                    lookup = new Map([
+                        [boxName, this.collisionOfShapeTransformedAndShape],
+                        [meshName, this.collisionOfShapeTransformedAndShape],
+                        [sphereName, this.collisionOfShapeTransformedAndShape]
+                    ]);
+                    lookupOfLookups.set(shapeTransformedName, lookup);
+                }
                 if (sphereName != null) {
                     lookup = new Map([
                         [boxName, this.collisionOfSphereAndBox],
@@ -118,6 +128,7 @@ var ThisCouldBeBetter;
                         [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
                         [shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
+                        [shapeTransformedName, this.collisionOfShapeAndShapeTransformed],
                         [sphereName, this.collisionOfSpheres]
                     ]);
                     lookupOfLookups.set(sphereName, lookup);
@@ -196,25 +207,13 @@ var ThisCouldBeBetter;
                 var collider0TypeName = collider0.constructor.name;
                 var collider1TypeName = collider1.constructor.name;
                 var collideLookup = this.colliderTypeNamesToCollisionFindLookup.get(collider0TypeName);
-                var errorMessage = "Error! Colliders of types cannot be collided: "
-                    + collider0TypeName + ", " + collider1TypeName;
                 if (collideLookup == null) {
-                    if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw (errorMessage);
-                    }
-                    else {
-                        console.log(errorMessage);
-                    }
+                    this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
                 }
                 else {
                     var collisionMethod = collideLookup.get(collider1TypeName);
                     if (collisionMethod == null) {
-                        if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw (errorMessage);
-                        }
-                        else {
-                            console.log(errorMessage);
-                        }
+                        this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
                     }
                     else {
                         collisionMethod.call(this, collider0, collider1, collisionOut, true // shouldCalculatePos
@@ -260,24 +259,13 @@ var ThisCouldBeBetter;
                 var collider0TypeName = collider0.constructor.name;
                 var collider1TypeName = collider1.constructor.name;
                 var doCollideLookup = this.colliderTypeNamesToDoCollideLookup.get(collider0TypeName);
-                var errorMessage = "Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName;
                 if (doCollideLookup == null) {
-                    if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw (errorMessage);
-                    }
-                    else {
-                        console.log(errorMessage);
-                    }
+                    this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
                 }
                 else {
                     var collisionMethod = doCollideLookup.get(collider1TypeName);
                     if (collisionMethod == null) {
-                        if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw (errorMessage);
-                        }
-                        else {
-                            console.log(errorMessage);
-                        }
+                        this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
                     }
                     else {
                         returnValue = collisionMethod.call(this, collider0, collider1);
@@ -296,24 +284,13 @@ var ThisCouldBeBetter;
                 var collider0TypeName = collider0.constructor.name;
                 var collider1TypeName = collider1.constructor.name;
                 var doesContainLookup = this.colliderTypeNamesToDoesContainLookup.get(collider0TypeName);
-                var errorMessage = "Error: Colliders of types cannot be collided: " + collider0TypeName + ", " + collider1TypeName;
                 if (doesContainLookup == null) {
-                    if (this.throwErrorIfCollidersCannotBeCollided) {
-                        throw (errorMessage);
-                    }
-                    else {
-                        console.log(errorMessage);
-                    }
+                    this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
                 }
                 else {
                     var doesColliderContainOther = doesContainLookup.get(collider1TypeName);
                     if (doesColliderContainOther == null) {
-                        if (this.throwErrorIfCollidersCannotBeCollided) {
-                            throw (errorMessage);
-                        }
-                        else {
-                            console.log(errorMessage);
-                        }
+                        this.throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName);
                     }
                     else {
                         returnValue = doesColliderContainOther.call(this, collider0, collider1);
@@ -751,6 +728,12 @@ var ThisCouldBeBetter;
             collisionOfShapeAndShapeInverse(shape, shapeInverse, collisionOut) {
                 return collisionOut; // todo
             }
+            collisionOfShapeAndShapeTransformed(shape, shapeTransformed, collisionOut) {
+                var shapeTransformedChild = shapeTransformed.child;
+                // todo - Apply transform here?
+                collisionOut = this.collisionOfColliders(shape, shapeTransformedChild, collisionOut);
+                return collisionOut;
+            }
             collisionOfShapeGroupAllAndShape(shapeGroupAll, shape, collisionOut) {
                 return this.collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut);
             }
@@ -759,6 +742,9 @@ var ThisCouldBeBetter;
             }
             collisionOfShapeInverseAndShape(shapeInverse, shape, collisionOut) {
                 return this.collisionOfShapeAndShapeInverse(shape, shapeInverse, collisionOut);
+            }
+            collisionOfShapeTransformedAndShape(shapeTransformed, shape, collisionOut) {
+                return this.collisionOfShapeAndShapeTransformed(shape, shapeTransformed, collisionOut);
             }
             collisionOfSphereAndBox(sphere, box, collision, shouldCalculatePos) {
                 return this.collisionOfBoxAndSphere(box, sphere, collision, shouldCalculatePos);
@@ -845,11 +831,14 @@ var ThisCouldBeBetter;
                 // todo
                 return this.doBoxAndBoxCollide(box, mesh.box());
             }
-            doBoxAndShapeInverseCollide(box, shapeInverse) {
-                return this.doShapeInverseAndShapeCollide(shapeInverse, box);
-            }
             doBoxAndShapeGroupAllCollide(box, shapeGroupAll) {
                 return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, box);
+            }
+            doBoxAndShapeGroupAnyCollide(box, group) {
+                return this.doShapeGroupAnyAndShapeCollide(group, box);
+            }
+            doBoxAndShapeInverseCollide(box, shapeInverse) {
+                return this.doShapeInverseAndShapeCollide(shapeInverse, box);
             }
             doBoxAndSphereCollide(box, sphere) {
                 return this.collisionOfBoxAndSphere(box, sphere, this._collision, false).isActive;
@@ -1152,6 +1141,9 @@ var ThisCouldBeBetter;
             doSphereAndShapeInverseCollide(sphere, shapeInverse) {
                 return this.doShapeInverseAndShapeCollide(shapeInverse, sphere);
             }
+            doSphereAndShapeTransformedCollide(sphere, shapeTransformed) {
+                return this.doShapeTransformedAndShapeCollide(shapeTransformed, sphere);
+            }
             doSphereAndSphereCollide(sphere0, sphere1) {
                 var displacement = this._displacement.overwriteWith(sphere1.center).subtract(sphere0.center);
                 var distance = displacement.magnitude();
@@ -1160,8 +1152,20 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // boolean combinations
+            doShapeContainerAndBoxCollide(container, box) {
+                return this.doShapeContainerAndShapeCollide(container, box);
+            }
+            doShapeContainerAndShapeCollide(container, shapeOther) {
+                return this.doesColliderContainOther(container.shape, shapeOther);
+            }
+            doShapeContainerAndSphereCollide(container, sphere) {
+                return this.doShapeContainerAndShapeCollide(container, sphere);
+            }
             doShapeGroupAllAndBoxCollide(groupAll, shapeOther) {
                 return this.doShapeGroupAllAndShapeCollide(groupAll, shapeOther);
+            }
+            doShapeGroupAllAndMeshCollide(groupAll, mesh) {
+                return this.doShapeGroupAllAndShapeCollide(groupAll, mesh);
             }
             doShapeGroupAllAndShapeCollide(groupAll, shapeOther) {
                 var returnValue = true;
@@ -1176,8 +1180,8 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            doShapeGroupAllAndMeshCollide(groupAll, mesh) {
-                return this.doShapeGroupAllAndShapeCollide(groupAll, mesh);
+            doShapeGroupAllAndSphereCollide(group, shape) {
+                return this.doShapeGroupAllAndShapeCollide(group, shape);
             }
             doShapeGroupAnyAndBoxCollide(groupAny, box) {
                 return this.doShapeGroupAnyAndShapeCollide(groupAny, box);
@@ -1195,35 +1199,29 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            doShapeContainerAndShapeCollide(container, shapeOther) {
-                return this.doesColliderContainOther(container.shape, shapeOther);
-            }
-            doShapeContainerAndBoxCollide(container, box) {
-                return this.doShapeContainerAndShapeCollide(container, box);
+            doShapeGroupAnyAndSphereCollide(group, sphere) {
+                return this.doShapeGroupAnyAndShapeCollide(group, sphere);
             }
             doShapeInverseAndMeshCollide(inverse, mesh) {
                 return this.doShapeInverseAndShapeCollide(inverse, mesh);
             }
-            doShapeInverseAndShapeCollide(inverse, shapeOther) {
-                return (this.doCollidersCollide(inverse.shape, shapeOther) == false);
-            }
-            doShapeGroupAllAndSphereCollide(group, shape) {
-                return this.doShapeGroupAllAndShapeCollide(group, shape);
-            }
-            doBoxAndShapeGroupAnyCollide(box, group) {
-                return this.doShapeGroupAnyAndShapeCollide(group, box);
-            }
-            doShapeContainerAndSphereCollide(container, sphere) {
-                return this.doShapeContainerAndShapeCollide(container, sphere);
-            }
-            doShapeGroupAnyAndSphereCollide(group, sphere) {
-                return this.doShapeGroupAnyAndShapeCollide(group, sphere);
-            }
             doShapeInverseAndBoxCollide(inverse, box) {
                 return this.doShapeInverseAndShapeCollide(inverse, box);
             }
+            doShapeInverseAndShapeCollide(inverse, shapeOther) {
+                return (this.doCollidersCollide(inverse.shape, shapeOther) == false);
+            }
             doShapeInverseAndSphereCollide(inverse, sphere) {
                 return this.doShapeInverseAndShapeCollide(inverse, sphere);
+            }
+            doShapeTransformedAndMeshCollide(shapeTransformed, mesh) {
+                return this.doShapeTransformedAndShapeCollide(shapeTransformed, mesh);
+            }
+            doShapeTransformedAndShapeCollide(shapeTransformed, shapeOther) {
+                return (this.doCollidersCollide(shapeTransformed.child, shapeOther));
+            }
+            doShapeTransformedAndSphereCollide(shapeTransformed, sphere) {
+                return this.doShapeTransformedAndShapeCollide(shapeTransformed, sphere);
             }
             // contains
             doesBoxContainBox(box0, box1) {
@@ -1266,6 +1264,20 @@ var ThisCouldBeBetter;
             }
             doesSphereContainSphere(sphere0, sphere1) {
                 return sphere0.containsOther(sphere1);
+            }
+            // Errors.
+            throwOrLogError(errorMessage) {
+                if (this.throwErrorIfCollidersCannotBeCollided) {
+                    throw new Error(errorMessage);
+                }
+                else {
+                    console.log(errorMessage);
+                }
+            }
+            throwOrLogErrorForColliderTypeNames(collider0TypeName, collider1TypeName) {
+                var errorMessage = "Error! Colliders of types cannot be collided: "
+                    + collider0TypeName + ", " + collider1TypeName;
+                this.throwOrLogError(errorMessage);
             }
         }
         GameFramework.CollisionHelper = CollisionHelper;

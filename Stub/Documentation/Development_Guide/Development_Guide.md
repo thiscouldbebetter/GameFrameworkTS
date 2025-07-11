@@ -1097,10 +1097,3 @@ Rather than wrapping the collider for every entity that's both drawable and coll
 * Make ammuntion limited and add reloading by picking up bullets.
 
 The framework contains features to support all these, though it might not be easy to figure out how.  To be continued!
-
-
-
-
-
-
-

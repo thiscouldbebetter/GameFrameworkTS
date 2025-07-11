@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface Transform_Interpolatable extends TransformBase, Clonable<Transform_Interpolatable>
+export interface Transform_Interpolatable extends TransformBase
 {
 	propertyName: string;
 	interpolateWith:

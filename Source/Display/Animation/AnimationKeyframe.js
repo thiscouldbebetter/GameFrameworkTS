@@ -11,12 +11,13 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                var returnValue = new AnimationKeyframe(this.frameIndex, GameFramework.ArrayHelper.clone(this.transforms));
+                var transformsCloned = this.transforms.map(x => x.clone());
+                var returnValue = new AnimationKeyframe(this.frameIndex, transformsCloned);
                 return returnValue;
             }
             overwriteWith(other) {
                 this.frameIndex = other.frameIndex;
-                GameFramework.ArrayHelper.overwriteWith(this.transforms, other.transforms);
+                this.transforms.forEach((x, i) => x.overwriteWith(other.transforms[i]));
                 return this;
             }
             // Interpolatable.
