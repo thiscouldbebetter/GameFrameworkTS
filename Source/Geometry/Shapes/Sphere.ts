@@ -103,12 +103,6 @@ export class Sphere implements ShapeBase
 
 	collider(): ShapeBase { return null; }
 
-	locate(loc: Disposition): ShapeBase
-	{
-		this.center.overwriteWith(loc.pos);
-		return this;
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return normalOut.overwriteWith
@@ -145,7 +139,8 @@ export class Sphere implements ShapeBase
 
 	transform(transformToApply: TransformBase): Sphere
 	{
-		throw new Error("Not implemented!");
+		transformToApply.transformCoords(this.center);
+		return this;
 	}
 }
 

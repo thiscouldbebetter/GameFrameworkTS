@@ -21,7 +21,6 @@ class ArcTests extends TestFixture
 
 			this.coordsGroupToTranslate,
 
-			this.locate,
 			this.normalAtPos,
 			this.surfacePointNearPos,
 			this.toBox,
@@ -85,22 +84,6 @@ class ArcTests extends TestFixture
 	}
 
 	// ShapeBase.
-
-	locate()
-	{
-		var arc = Arc.default();
-
-		var arcCenter = arc.center();
-
-		var posToLocateAt = Coords.create().randomize(null);
-
-		Assert.isFalse(arcCenter.equals(posToLocateAt) );
-
-		var locToApply = Disposition.fromPos(posToLocateAt);
-		arc.locate(locToApply);
-
-		Assert.isTrue(arcCenter.equals(posToLocateAt) );
-	}
 
 	normalAtPos(): void // posToCheck: Coords, normalOut: Coords): Coords
 	{

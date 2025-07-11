@@ -53,7 +53,6 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 throw new Error("Not yet implemented!");
             }
-            locate(loc) { throw new Error("Not implemented!"); }
             normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
             surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
             toBox(boxOut) { throw new Error("Not implemented!"); }

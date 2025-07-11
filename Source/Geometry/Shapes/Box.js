@@ -137,10 +137,6 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            locate(loc) {
-                this.center.overwriteWith(loc.pos);
-                return this;
-            }
             max() {
                 return this._max.overwriteWith(this.center).add(this.sizeHalf());
             }
@@ -271,12 +267,12 @@ var ThisCouldBeBetter;
             toBox(boxOut) {
                 return boxOut.overwriteWith(this);
             }
-            // transformable
+            // Transformable.
             coordsGroupToTranslate() {
                 return [this.center];
             }
             transform(transformToApply) {
-                GameFramework.Transforms.applyTransformToCoordsMany(transformToApply, this.coordsGroupToTranslate());
+                transformToApply.transformCoords(this.center);
                 return this;
             }
         }

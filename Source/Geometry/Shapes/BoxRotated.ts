@@ -27,11 +27,6 @@ export class BoxRotated implements ShapeBase
 		throw new Error("Not yet implemented!");
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		// todo - Adapt or call Box.normalAtPos() instead.
@@ -117,7 +112,11 @@ export class BoxRotated implements ShapeBase
 		return [ this.box.center ];
 	}
 
-	transform(transformToApply: TransformBase): BoxRotated { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): BoxRotated
+	{
+		transformToApply.transformCoords(this.box.center);
+		return this;
+	}
 }
 
 }

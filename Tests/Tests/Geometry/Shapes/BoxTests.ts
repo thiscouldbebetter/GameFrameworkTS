@@ -31,7 +31,6 @@ class BoxTests extends TestFixture
 			this.containsPoint,
 			this.fromMinAndMax,
 			this.intersectWith,
-			this.locate,
 			this.max,
 			this.min,
 			this.overlapsWith,
@@ -225,21 +224,6 @@ class BoxTests extends TestFixture
 
 		Assert.isNotNull(boxIntersection);
 
-	}
-
-	locate(): void
-	{
-		var boxToLocate = Box.create().randomize(null);
-		var boxCenter = boxToLocate.center;
-
-		var posToLocateTo = Coords.create().randomize(null);
-		var locToApply = Disposition.fromPos(posToLocateTo);
-
-		Assert.isFalse(posToLocateTo.equals(boxCenter) );
-
-		boxToLocate.locate(locToApply);
-
-		Assert.isTrue(posToLocateTo.equals(boxCenter) );
 	}
 
 	max(): void

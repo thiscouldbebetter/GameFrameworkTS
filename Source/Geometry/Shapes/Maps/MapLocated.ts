@@ -69,11 +69,6 @@ export class MapLocated implements ShapeBase
 		throw new Error("Not yet implemented!");
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
@@ -95,7 +90,8 @@ export class MapLocated implements ShapeBase
 
 	transform(transformToApply: TransformBase): MapLocated
 	{
-		throw new Error("Not implemented!");
+		transformToApply.transformCoords(this.loc.pos);
+		return this;
 	}
 }
 

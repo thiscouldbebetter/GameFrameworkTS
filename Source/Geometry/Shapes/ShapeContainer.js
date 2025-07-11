@@ -22,10 +22,6 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 throw new Error("Not yet implemented!");
             }
-            locate(loc) {
-                this.shape.locate(loc);
-                return this;
-            }
             normalAtPos(posToCheck, normalOut) {
                 return this.shape.normalAtPos(posToCheck, normalOut);
             }

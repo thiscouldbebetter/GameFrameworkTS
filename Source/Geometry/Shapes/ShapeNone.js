@@ -24,9 +24,6 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 return false;
             }
-            locate(loc) {
-                return this;
-            }
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not implemented!");
             }

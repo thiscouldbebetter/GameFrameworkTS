@@ -122,15 +122,6 @@ var ThisCouldBeBetter;
                 }
                 return this._vertices;
             }
-            // transformable
-            transform(transformToApply) {
-                for (var v = 0; v < this.vertexOffsets.length; v++) {
-                    var vertexOffset = this.vertexOffsets[v];
-                    transformToApply.transformCoords(vertexOffset);
-                }
-                this.vertices(); // hack - Recalculate.
-                return this;
-            }
             // clonable
             clone() {
                 return new Mesh(this.center.clone(), GameFramework.ArrayHelper.clone(this.vertexOffsets), GameFramework.ArrayHelper.clone(this.faceBuilders));
@@ -143,17 +134,22 @@ var ThisCouldBeBetter;
             }
             // Equatable
             equals(other) { return false; } // todo
-            // transformable
+            // Transformable.
             coordsGroupToTranslate() {
                 return [this.center];
+            }
+            transform(transformToApply) {
+                for (var v = 0; v < this.vertexOffsets.length; v++) {
+                    var vertexOffset = this.vertexOffsets[v];
+                    transformToApply.transformCoords(vertexOffset);
+                }
+                this.vertices(); // hack - Recalculate.
+                return this;
             }
             // ShapeBase.
             collider() { return null; }
             containsPoint(pointToCheck) {
                 throw new Error("Not yet implemented!");
-            }
-            locate(loc) {
-                return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
             }
             normalAtPos(posToCheck, normalOut) {
                 return this.box().normalAtPos(posToCheck, normalOut);

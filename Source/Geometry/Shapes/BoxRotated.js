@@ -16,9 +16,6 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 throw new Error("Not yet implemented!");
             }
-            locate(loc) {
-                return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
-            }
             normalAtPos(posToCheck, normalOut) {
                 // todo - Adapt or call Box.normalAtPos() instead.
                 var plane = new GameFramework.Plane(GameFramework.Coords.create(), 0);
@@ -69,7 +66,10 @@ var ThisCouldBeBetter;
             coordsGroupToTranslate() {
                 return [this.box.center];
             }
-            transform(transformToApply) { throw new Error("Not implemented!"); }
+            transform(transformToApply) {
+                transformToApply.transformCoords(this.box.center);
+                return this;
+            }
         }
         GameFramework.BoxRotated = BoxRotated;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

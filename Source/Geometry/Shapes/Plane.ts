@@ -114,8 +114,6 @@ export class Plane implements ShapeBase
 		throw new Error("Not yet implemented!");
 	}
 
-	locate(loc: Disposition): ShapeBase { throw new Error("Not implemented!"); }
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw new Error("Not implemented!"); }
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw new Error("Not implemented!"); }

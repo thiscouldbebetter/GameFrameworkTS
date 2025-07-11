@@ -27,10 +27,6 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 throw new Error("Not yet implemented!");
             }
-            locate(loc) {
-                this.shapes.forEach(x => x.locate(loc));
-                return this;
-            }
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not implemented!");
             }

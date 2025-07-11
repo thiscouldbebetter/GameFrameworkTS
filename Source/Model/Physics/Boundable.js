@@ -6,6 +6,7 @@ var ThisCouldBeBetter;
         class Boundable {
             constructor(bounds) {
                 this.bounds = bounds;
+                this._transformLocate = GameFramework.Transform_Locate.create();
             }
             static fromCollidable(collidable) {
                 var collider = collidable.collider;
@@ -24,7 +25,9 @@ var ThisCouldBeBetter;
             propertyName() { return Boundable.name; }
             updateForTimerTick(uwpe) {
                 var e = uwpe.entity;
-                this.bounds.locate(GameFramework.Locatable.of(e).loc);
+                var dispositionToApply = GameFramework.Locatable.of(e).loc;
+                this._transformLocate.loc.overwriteWith(dispositionToApply);
+                this.bounds.transform(this._transformLocate);
             }
             // Clonable.
             clone() {

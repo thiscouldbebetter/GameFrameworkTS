@@ -60,12 +60,6 @@ export class Point implements ShapeBase
 
 	collider(): ShapeBase { return null; }
 
-	locate(loc: Disposition): ShapeBase
-	{
-		this.pos.overwriteWith(loc.pos);
-		return this;
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		throw new Error("Not implemented!");

@@ -39,11 +39,6 @@ export class ShapeNone implements ShapeBase
 		return false;
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		return this;
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		throw new Error("Not implemented!");

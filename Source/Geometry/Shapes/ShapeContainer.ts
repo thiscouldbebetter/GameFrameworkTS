@@ -37,12 +37,6 @@ export class ShapeContainer implements ShapeBase
 		throw new Error("Not yet implemented!");
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		this.shape.locate(loc);
-		return this;
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return this.shape.normalAtPos(posToCheck, normalOut);

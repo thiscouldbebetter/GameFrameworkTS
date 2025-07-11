@@ -38,9 +38,6 @@ var ThisCouldBeBetter;
             equals(other) { return false; } // todo
             // ShapeBase.
             collider() { return null; }
-            locate(loc) {
-                throw new Error("Not implemented!");
-            }
             normalAtPos(posToCheck, normalOut) {
                 return this.plane.normal;
             }

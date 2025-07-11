@@ -44,9 +44,6 @@ var ThisCouldBeBetter;
             collider() {
                 return this._collider;
             }
-            locate(loc) {
-                return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
-            }
             normalAtPos(posToCheck, normalOut) {
                 var displacementFromCenter = normalOut.overwriteWith(posToCheck).subtract(this.center());
                 var distanceFromCenter = displacementFromCenter.magnitude();
@@ -69,7 +66,11 @@ var ThisCouldBeBetter;
                 return this.sphereOuter.toBox(boxOut);
             }
             // Transformable.
-            transform(transformToApply) { throw new Error("Not implemented!"); }
+            transform(transformToApply) {
+                this.sphereOuter.transform(transformToApply);
+                this.sphereInner.transform(transformToApply);
+                return this;
+            }
         }
         GameFramework.Shell = Shell;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

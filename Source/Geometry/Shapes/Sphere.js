@@ -63,10 +63,6 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             collider() { return null; }
-            locate(loc) {
-                this.center.overwriteWith(loc.pos);
-                return this;
-            }
             normalAtPos(posToCheck, normalOut) {
                 return normalOut.overwriteWith(posToCheck).subtract(this.center).normalize();
             }
@@ -86,7 +82,8 @@ var ThisCouldBeBetter;
                 return this._centerAsArray;
             }
             transform(transformToApply) {
-                throw new Error("Not implemented!");
+                transformToApply.transformCoords(this.center);
+                return this;
             }
         }
         GameFramework.Sphere = Sphere;

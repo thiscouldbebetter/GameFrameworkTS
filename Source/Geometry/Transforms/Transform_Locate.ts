@@ -17,6 +17,11 @@ export class Transform_Locate implements Transform<Transform_Locate>
 		this.transformTranslate = new Transform_Translate(null);
 	}
 
+	static create(): Transform_Locate
+	{
+		return new Transform_Locate(Disposition.create() );
+	}
+
 	clone(): Transform_Locate
 	{
 		return new Transform_Locate(this.loc.clone());

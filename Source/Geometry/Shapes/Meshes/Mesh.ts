@@ -216,21 +216,6 @@ export class Mesh implements ShapeBase
 		return this._vertices;
 	}
 
-	// transformable
-
-	transform(transformToApply: TransformBase): Mesh
-	{
-		for (var v = 0; v < this.vertexOffsets.length; v++)
-		{
-			var vertexOffset = this.vertexOffsets[v];
-			transformToApply.transformCoords(vertexOffset);
-		}
-
-		this.vertices(); // hack - Recalculate.
-
-		return this;
-	}
-
 	// clonable
 
 	clone(): Mesh
@@ -255,11 +240,24 @@ export class Mesh implements ShapeBase
 
 	equals(other: ShapeBase) { return false; } // todo
 
-	// transformable
+	// Transformable.
 
 	coordsGroupToTranslate(): Coords[]
 	{
 		return [ this.center ];
+	}
+
+	transform(transformToApply: TransformBase): Mesh
+	{
+		for (var v = 0; v < this.vertexOffsets.length; v++)
+		{
+			var vertexOffset = this.vertexOffsets[v];
+			transformToApply.transformCoords(vertexOffset);
+		}
+
+		this.vertices(); // hack - Recalculate.
+
+		return this;
 	}
 
 	// ShapeBase.
@@ -269,11 +267,6 @@ export class Mesh implements ShapeBase
 	containsPoint(pointToCheck: Coords): boolean
 	{
 		throw new Error("Not yet implemented!");
-	}
-
-	locate(loc: Disposition): ShapeBase
-	{
-		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
 	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords

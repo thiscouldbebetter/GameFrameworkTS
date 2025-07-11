@@ -21,7 +21,7 @@ export class ShapeHelper
 		return ShapeHelper._instance;
 	}
 
-	applyLocationToShapeDefault(loc: Disposition, shape: ShapeBase)
+	applyLocationToShapeDefault(loc: Disposition, shape: ShapeBase): ShapeBase
 	{
 		this._transformLocate.loc = loc;
 
@@ -33,6 +33,7 @@ export class ShapeHelper
 
 		return shape;
 	}
+
 }
 
 }

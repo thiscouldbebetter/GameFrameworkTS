@@ -24,9 +24,6 @@ var ThisCouldBeBetter;
                 var doAllChildShapesContainPoint = (doAnyChildShapesNotContainPoint == false);
                 return doAllChildShapesContainPoint;
             }
-            locate(loc) {
-                throw new Error("Not implemented!");
-            }
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not implemented!");
             }

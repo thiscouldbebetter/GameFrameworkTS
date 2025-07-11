@@ -23,15 +23,11 @@ var ThisCouldBeBetter;
             // Equatable
             equals(other) {
                 throw new Error("Not yet implemented!");
-            } // todo
+            }
             // ShapeBase.
             collider() { return null; }
             containsPoint(pointToCheck) {
                 throw new Error("Not yet implemented!");
-            }
-            locate(loc) {
-                this.child.locate(loc);
-                return this;
             }
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not yet implemented!");
@@ -45,7 +41,8 @@ var ThisCouldBeBetter;
             toBox(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
-                throw new Error("Not yet implemented!");
+                this.child.transform(transformToApply); // Is this correct?
+                return this;
             }
         }
         GameFramework.ShapeTransformed = ShapeTransformed;

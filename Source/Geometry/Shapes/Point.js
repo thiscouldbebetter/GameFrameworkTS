@@ -36,10 +36,6 @@ var ThisCouldBeBetter;
             }
             // ShapeBase.
             collider() { return null; }
-            locate(loc) {
-                this.pos.overwriteWith(loc.pos);
-                return this;
-            }
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not implemented!");
             }

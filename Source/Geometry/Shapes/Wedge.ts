@@ -191,12 +191,6 @@ export class Wedge implements ShapeBase
 
 	// ShapeBase.
 
-	locate(loc: Disposition): ShapeBase
-	{
-		this.vertex.overwriteWith(loc.pos);
-		return this;
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		throw new Error("Not implemented!");
@@ -216,7 +210,11 @@ export class Wedge implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: TransformBase): Wedge { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): Wedge
+	{
+		transformToApply.transformCoords(this.vertex);
+		return this;
+	}
 
 }
 

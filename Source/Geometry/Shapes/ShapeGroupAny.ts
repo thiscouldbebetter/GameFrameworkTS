@@ -48,12 +48,6 @@ export class ShapeGroupAny implements ShapeBase
 		throw new Error("Not yet implemented!");
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		this.shapes.forEach(x => x.locate(loc) );
-		return this;
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		throw new Error("Not implemented!");

@@ -47,11 +47,6 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 throw new Error("Not yet implemented!");
             }
-            locate(loc) {
-                var directionMin = this.wedge.directionMin;
-                directionMin.overwriteWith(loc.orientation.forward);
-                return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
-            }
             normalAtPos(posToCheck, normalOut) {
                 return this.shell.normalAtPos(posToCheck, normalOut);
             }

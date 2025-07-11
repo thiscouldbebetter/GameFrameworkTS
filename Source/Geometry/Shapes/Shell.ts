@@ -78,11 +78,6 @@ export class Shell implements ShapeBase
 		return this._collider;
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		var displacementFromCenter =
@@ -118,7 +113,12 @@ export class Shell implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: TransformBase): Shell { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): Shell
+	{
+		this.sphereOuter.transform(transformToApply);
+		this.sphereInner.transform(transformToApply);
+		return this;
+	}
 }
 
 }

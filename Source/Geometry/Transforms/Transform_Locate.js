@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.transformOrient = new GameFramework.Transform_Orient(null);
                 this.transformTranslate = new GameFramework.Transform_Translate(null);
             }
+            static create() {
+                return new Transform_Locate(GameFramework.Disposition.create());
+            }
             clone() {
                 return new Transform_Locate(this.loc.clone());
             }

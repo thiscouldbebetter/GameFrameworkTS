@@ -108,9 +108,10 @@ export class Edge implements ShapeBase
 		throw new Error("Not yet implemented!");
 	}
 
-	locate(loc: Disposition): ShapeBase { throw new Error("Not implemented!"); }
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw new Error("Not implemented!"); }
+	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
+	{
+		throw new Error("Not implemented!");
+	}
 
 	pointRandom(randomizer: Randomizer): Coords
 	{

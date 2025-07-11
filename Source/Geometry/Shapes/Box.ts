@@ -224,12 +224,6 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	locate(loc: Disposition): Box
-	{
-		this.center.overwriteWith(loc.pos);
-		return this;
-	}
-
 	max(): Coords
 	{
 		return this._max.overwriteWith(this.center).add(this.sizeHalf());
@@ -467,7 +461,7 @@ export class Box implements ShapeBase
 		return boxOut.overwriteWith(this);
 	}
 
-	// transformable
+	// Transformable.
 
 	coordsGroupToTranslate(): Coords[]
 	{
@@ -476,10 +470,7 @@ export class Box implements ShapeBase
 
 	transform(transformToApply: TransformBase): Box
 	{
-		Transforms.applyTransformToCoordsMany
-		(
-			transformToApply, this.coordsGroupToTranslate()
-		);
+		transformToApply.transformCoords(this.center);
 		return this;
 	}
 }

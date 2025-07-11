@@ -22,10 +22,6 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 return (this.shape.containsPoint(pointToCheck) == false);
             }
-            locate(loc) {
-                this.shape.locate(loc);
-                return this;
-            }
             normalAtPos(posToCheck, normalOut) {
                 return this.shape.normalAtPos(posToCheck, normalOut).invert();
             }

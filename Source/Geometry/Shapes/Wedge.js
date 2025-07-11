@@ -90,10 +90,6 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // ShapeBase.
-            locate(loc) {
-                this.vertex.overwriteWith(loc.pos);
-                return this;
-            }
             normalAtPos(posToCheck, normalOut) {
                 throw new Error("Not implemented!");
             }
@@ -105,7 +101,10 @@ var ThisCouldBeBetter;
             }
             toBox(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
-            transform(transformToApply) { throw new Error("Not implemented!"); }
+            transform(transformToApply) {
+                transformToApply.transformCoords(this.vertex);
+                return this;
+            }
         }
         GameFramework.Wedge = Wedge;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

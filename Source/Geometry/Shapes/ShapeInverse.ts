@@ -37,12 +37,6 @@ export class ShapeInverse implements ShapeBase
 		return (this.shape.containsPoint(pointToCheck) == false);
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		this.shape.locate(loc);
-		return this;
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return this.shape.normalAtPos(posToCheck, normalOut).invert();

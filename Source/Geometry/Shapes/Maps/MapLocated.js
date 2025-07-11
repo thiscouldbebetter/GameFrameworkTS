@@ -39,9 +39,6 @@ var ThisCouldBeBetter;
             containsPoint(pointToCheck) {
                 throw new Error("Not yet implemented!");
             }
-            locate(loc) {
-                return GameFramework.ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
-            }
             normalAtPos(posToCheck, normalOut) {
                 return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
             }
@@ -54,7 +51,8 @@ var ThisCouldBeBetter;
             toBox(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
-                throw new Error("Not implemented!");
+                transformToApply.transformCoords(this.loc.pos);
+                return this;
             }
         }
         GameFramework.MapLocated = MapLocated;

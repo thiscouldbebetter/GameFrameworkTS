@@ -21,6 +21,7 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._collision = GameFramework.Collision.create();
                 this._collisions = new Array();
+                this._transformLocate = GameFramework.Transform_Locate.create();
                 this._uwpe = GameFramework.UniverseWorldPlaceEntities.create();
             }
             static create() {
@@ -115,7 +116,9 @@ var ThisCouldBeBetter;
             colliderLocateForEntity(entity) {
                 this.colliderResetToRestPosition();
                 var entityLoc = GameFramework.Locatable.of(entity).loc;
-                this.collider.locate(entityLoc);
+                var transform = this._transformLocate;
+                transform.loc.overwriteWith(entityLoc);
+                this.collider.transform(transform);
             }
             colliderResetToRestPosition() {
                 this.collider.overwriteWith(this.colliderAtRest);

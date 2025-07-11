@@ -43,11 +43,6 @@ export class ShapeGroupAll implements ShapeBase
 		return doAllChildShapesContainPoint;
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		throw new Error("Not implemented!");
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		throw new Error("Not implemented!");

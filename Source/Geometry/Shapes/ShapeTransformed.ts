@@ -45,7 +45,7 @@ export class ShapeTransformed implements ShapeBase
 	equals(other: ShapeBase): boolean
 	{
 		throw new Error("Not yet implemented!");
-	} // todo
+	}
 
 	// ShapeBase.
 
@@ -54,12 +54,6 @@ export class ShapeTransformed implements ShapeBase
 	containsPoint(pointToCheck: Coords): boolean
 	{
 		throw new Error("Not yet implemented!");
-	}
-
-	locate(loc: Disposition): ShapeBase
-	{
-		this.child.locate(loc);
-		return this;
 	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
@@ -81,9 +75,10 @@ export class ShapeTransformed implements ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: TransformBase): ShapeGroupAny
+	transform(transformToApply: TransformBase): ShapeTransformed
 	{
-		throw new Error("Not yet implemented!");
+		this.child.transform(transformToApply); // Is this correct?
+		return this;
 	}
 }
 

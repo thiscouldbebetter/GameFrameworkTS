@@ -20,6 +20,7 @@ export class Collidable implements EntityProperty<Collidable>
 	_collisionTrackerCollidableData: CollisionTrackerCollidableData;
 	private _collision: Collision;
 	private _collisions: Collision[];
+	private _transformLocate: Transform_Locate;
 	private _uwpe: UniverseWorldPlaceEntities;
 
 	constructor
@@ -51,6 +52,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 		this._collision = Collision.create();
 		this._collisions = new Array<Collision>();
+		this._transformLocate = Transform_Locate.create();
 		this._uwpe = UniverseWorldPlaceEntities.create();
 	}
 
@@ -283,7 +285,9 @@ export class Collidable implements EntityProperty<Collidable>
 	{
 		this.colliderResetToRestPosition();
 		var entityLoc = Locatable.of(entity).loc;
-		this.collider.locate(entityLoc);
+		var transform = this._transformLocate;
+		transform.loc.overwriteWith(entityLoc);
+		this.collider.transform(transform);
 	}
 
 	colliderResetToRestPosition(): void

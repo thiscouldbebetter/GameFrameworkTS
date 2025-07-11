@@ -82,13 +82,6 @@ export class Arc implements ShapeBase
 		throw new Error("Not yet implemented!");
 	}
 
-	locate(loc: Disposition): ShapeBase
-	{
-		var directionMin = this.wedge.directionMin;
-		directionMin.overwriteWith(loc.orientation.forward);
-		return ShapeHelper.Instance().applyLocationToShapeDefault(loc, this);
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return this.shell.normalAtPos(posToCheck, normalOut);

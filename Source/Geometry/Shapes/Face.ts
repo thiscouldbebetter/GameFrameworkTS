@@ -132,11 +132,6 @@ export class Face implements ShapeBase
 
 	collider(): ShapeBase { return null; }
 
-	locate(loc: Disposition): ShapeBase
-	{
-		throw new Error("Not implemented!");
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		throw new Error("Not implemented!");
