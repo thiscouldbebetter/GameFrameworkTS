@@ -200,39 +200,143 @@ export class CollisionHelper
 	doCollideLookupBuild(): Map<string, Map<string, any> >
 	{
 		var lookupOfLookups = new Map<string, Map<string, any> >();
+		var lookup: Map<string, any>;
 
-		var andText = "And";
-		var collideText = "Collide";
-		var doText = "do";
+		var notDefined = "undefined"; // todo
 
-		var functionNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-		var functionNamesDoCollide = functionNames.filter(
-			x => x.startsWith(doText) && x.endsWith(collideText) && x.indexOf(andText) >= 0
-		);
+		var boxName = ( typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name );
+		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
+		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
+		var mapLocated2Name = ( typeof MapLocated2 == notDefined ? null : MapLocated2.name );
+		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
+		var pointName = (typeof Point == notDefined ? null : Point.name );
+		var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
+		var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
+		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
+		var shapeTransformedName = (typeof ShapeTransformed == notDefined ? null : ShapeTransformed.name);
+		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
-		for (var i = 0; i < functionNamesDoCollide.length; i++)
+		if (boxName != null)
 		{
-			var functionName = functionNamesDoCollide[i];
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doBoxAndBoxCollide ],
+				[ boxRotatedName, this.doBoxAndBoxRotatedCollide ],
+				[ mapLocatedName, this.doBoxAndMapLocatedCollide ],
+				[ mapLocated2Name, this.doBoxAndMapLocatedCollide ],
+				[ meshName, this.doBoxAndMeshCollide ],
+				[ shapeGroupAllName, this.doShapeAndShapeGroupAllCollide ],
+				[ shapeGroupAnyName, this.doShapeAndShapeGroupAnyCollide ],
+				[ shapeInverseName, this.doShapeAndShapeInverseCollide ],
+				[ shapeTransformedName, this.doShapeAndShapeTransformedCollide ],
+				[ sphereName, this.doBoxAndSphereCollide ]
+			]);
+			lookupOfLookups.set(boxName, lookup);
+		}
 
-			var colliderTypeNamesAsString = functionName.substr
-			(
-				doText.length,
-				functionName.length - doText.length - collideText.length
-			);
+		if (boxRotatedName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doBoxRotatedAndBoxCollide ],
+				[ boxRotatedName, this.doBoxRotatedAndBoxRotatedCollide ]
+			]);
+			lookupOfLookups.set(boxRotatedName, lookup);
+		}
 
-			var colliderTypeNames = colliderTypeNamesAsString.split(andText);
-			var colliderTypeName0 = colliderTypeNames[0];
-			var colliderTypeName1 = colliderTypeNames[1];
+		if (mapLocatedName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doMapLocatedAndBoxCollide ],
+				[ boxRotatedName, this.doMapLocatedAndBoxRotatedCollide ],
+				[ mapLocatedName, this.doMapLocatedAndMapLocatedCollide ],
+				[ shapeGroupAllName, this.doShapeAndShapeGroupAllCollide ],
+				[ sphereName, this.doMapLocatedAndSphereCollide ]
+			]);
+			lookupOfLookups.set(mapLocatedName, lookup);
+		}
 
-			var lookup = lookupOfLookups.get(colliderTypeName0);
-			if (lookup == null)
-			{
-				lookup = new Map<string,any>();
-				lookupOfLookups.set(colliderTypeName0, lookup);
-			}
-			var thisAsAny = this as any;
-			var doCollideFunction = thisAsAny[functionName];
-			lookup.set(colliderTypeName1, doCollideFunction);
+		if (meshName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doMeshAndBoxCollide ],
+				[ shapeGroupAllName, this.doShapeAndShapeGroupAllCollide ],
+				[ shapeInverseName, this.doShapeAndShapeInverseCollide ],
+				[ sphereName, this.doMeshAndSphereCollide ]
+			]);
+			lookupOfLookups.set(meshName, lookup);
+		}
+
+		if (pointName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ pointName, this.doPointAndPointCollide ],
+			]);
+			lookupOfLookups.set(pointName, lookup);
+		}
+
+		if (shapeGroupAllName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doShapeGroupAllAndShapeCollide ],
+				[ meshName, this.doShapeGroupAllAndShapeCollide ],
+				[ sphereName, this.doShapeGroupAllAndShapeCollide ]
+			]);
+			lookupOfLookups.set(shapeGroupAllName, lookup);
+		}
+
+		if (shapeGroupAnyName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doShapeGroupAnyAndShapeCollide ],
+				[ meshName, this.doShapeGroupAnyAndShapeCollide ],
+				[ sphereName, this.doShapeGroupAnyAndShapeCollide ]
+			]);
+			lookupOfLookups.set(shapeGroupAnyName, lookup);
+		}
+
+		if (shapeInverseName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doShapeInverseAndShapeCollide ],
+				[ meshName, this.doShapeInverseAndShapeCollide ],
+				[ sphereName, this.doShapeInverseAndShapeCollide ]
+			]);
+			lookupOfLookups.set(shapeInverseName, lookup);
+		}
+
+		if (shapeTransformedName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doShapeTransformedAndShapeCollide ],
+				[ meshName, this.doShapeTransformedAndShapeCollide ],
+				[ sphereName, this.doShapeTransformedAndShapeCollide ]
+			]);
+			lookupOfLookups.set(shapeTransformedName, lookup);
+		}
+
+		if (sphereName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doSphereAndBoxCollide ],
+				[ boxRotatedName, this.doSphereAndBoxRotatedCollide ],
+				[ mapLocatedName, this.doSphereAndMapLocatedCollide ],
+				[ meshName, this.doSphereAndMeshCollide ],
+				[ shapeGroupAllName, this.doShapeAndShapeGroupAllCollide ],
+				[ shapeGroupAnyName, this.doShapeAndShapeGroupAnyCollide ],
+				[ shapeInverseName, this.doShapeAndShapeInverseCollide ],
+				[ shapeTransformedName, this.doShapeAndShapeTransformedCollide ],
+				[ sphereName, this.doSphereAndSphereCollide ]
+			]);
+			lookupOfLookups.set(sphereName, lookup);
 		}
 
 		return lookupOfLookups;
@@ -241,37 +345,143 @@ export class CollisionHelper
 	doesContainLookupBuild(): Map<string, Map<string, any> >
 	{
 		var lookupOfLookups = new Map<string, Map<string, any> >();
+		var lookup: Map<string, any>;
 
-		var containText = "Contain";
-		var doesText = "does";
+		var notDefined = "undefined"; // todo
 
-		var functionNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-		var functionNamesDoesContain = functionNames.filter(
-			x => x.startsWith(doesText) && x.indexOf(containText) >= 0
-		);
+		var boxName = ( typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name );
+		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
+		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
+		var mapLocated2Name = ( typeof MapLocated2 == notDefined ? null : MapLocated2.name );
+		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
+		var pointName = (typeof Point == notDefined ? null : Point.name );
+		var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
+		var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
+		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
+		var shapeTransformedName = (typeof ShapeTransformed == notDefined ? null : ShapeTransformed.name);
+		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
-		for (var i = 0; i < functionNamesDoesContain.length; i++)
+		if (boxName != null)
 		{
-			var functionName = functionNamesDoesContain[i];
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesBoxContainBox ],
+				[ boxRotatedName, this.doesBoxContainBoxRotated ],
+				[ mapLocatedName, this.doesBoxContainMapLocated ],
+				[ mapLocated2Name, this.doesBoxContainMapLocated ],
+				[ meshName, this.doesBoxContainMesh ],
+				[ shapeGroupAllName, this.doesShapeContainShapeGroupAll ],
+				[ shapeGroupAnyName, this.doesShapeContainShapeGroupAny ],
+				[ shapeInverseName, this.doesShapeContainShapeInverse ],
+				[ shapeTransformedName, this.doesShapeContainShapeTransformed ],
+				[ sphereName, this.doesBoxContainSphere ]
+			]);
+			lookupOfLookups.set(boxName, lookup);
+		}
 
-			var colliderTypeNamesAsString = functionName.substr
-			(
-				doesText.length
-			);
+		if (boxRotatedName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesBoxRotatedContainBox ],
+				[ boxRotatedName, this.doesBoxRotatedContainBoxRotated ]
+			]);
+			lookupOfLookups.set(boxRotatedName, lookup);
+		}
 
-			var colliderTypeNames = colliderTypeNamesAsString.split(containText);
-			var colliderTypeName0 = colliderTypeNames[0];
-			var colliderTypeName1 = colliderTypeNames[1];
+		if (mapLocatedName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesMapLocatedContainBox ],
+				[ boxRotatedName, this.doesMapLocatedContainBoxRotated ],
+				[ mapLocatedName, this.doesMapLocatedContainMapLocated ],
+				[ shapeGroupAllName, this.doesShapeContainShapeGroupAll ],
+				[ sphereName, this.doesMapLocatedContainSphere ]
+			]);
+			lookupOfLookups.set(mapLocatedName, lookup);
+		}
 
-			var lookup = lookupOfLookups.get(colliderTypeName0);
-			if (lookup == null)
-			{
-				lookup = new Map<string, any>();
-				lookupOfLookups.set(colliderTypeName0, lookup);
-			}
-			var thisAsAny = this as any;
-			var doesContainFunction = thisAsAny[functionName];
-			lookup.set(colliderTypeName1, doesContainFunction);
+		if (meshName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesMeshContainBox ],
+				[ shapeGroupAllName, this.doesShapeContainShapeGroupAll ],
+				[ shapeInverseName, this.doesShapeContainShapeInverse ],
+				[ sphereName, this.doesMeshContainSphere ]
+			]);
+			lookupOfLookups.set(meshName, lookup);
+		}
+
+		if (pointName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ pointName, this.doesPointContainPoint ],
+			]);
+			lookupOfLookups.set(pointName, lookup);
+		}
+
+		if (shapeGroupAllName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesShapeGroupAllContainShape ],
+				[ meshName, this.doesShapeGroupAllContainShape ],
+				[ sphereName, this.doesShapeGroupAllContainShape ]
+			]);
+			lookupOfLookups.set(shapeGroupAllName, lookup);
+		}
+
+		if (shapeGroupAnyName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesShapeGroupAnyContainShape ],
+				[ meshName, this.doesShapeGroupAnyContainShape ],
+				[ sphereName, this.doesShapeGroupAnyContainShape ]
+			]);
+			lookupOfLookups.set(shapeGroupAnyName, lookup);
+		}
+
+		if (shapeInverseName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesShapeInverseContainShape ],
+				[ meshName, this.doesShapeInverseContainShape ],
+				[ sphereName, this.doesShapeInverseContainShape ]
+			]);
+			lookupOfLookups.set(shapeInverseName, lookup);
+		}
+
+		if (shapeTransformedName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesShapeTransformedContainShape ],
+				[ meshName, this.doesShapeTransformedContainShape ],
+				[ sphereName, this.doesShapeTransformedContainShape ]
+			]);
+			lookupOfLookups.set(shapeTransformedName, lookup);
+		}
+
+		if (sphereName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doesSphereContainBox ],
+				[ boxRotatedName, this.doesSphereContainBoxRotated ],
+				[ mapLocatedName, this.doesSphereContainMapLocated ],
+				[ meshName, this.doesSphereContainMesh ],
+				[ shapeGroupAllName, this.doesShapeContainShapeGroupAll ],
+				[ shapeGroupAnyName, this.doesShapeContainShapeGroupAny ],
+				[ shapeInverseName, this.doesShapeContainShapeInverse ],
+				[ shapeTransformedName, this.doesShapeContainShapeTransformed ],
+				[ sphereName, this.doesSphereContainSphere ]
+			]);
+			lookupOfLookups.set(sphereName, lookup);
 		}
 
 		return lookupOfLookups;
@@ -1997,6 +2207,26 @@ export class CollisionHelper
 		return point0.pos.equals(point1.pos);
 	}
 
+	doShapeAndShapeGroupAllCollide(shape: ShapeBase, shapeGroupAll: ShapeGroupAll): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doShapeAndShapeGroupAnyCollide(shape: ShapeBase, shapeGroupAll: ShapeGroupAny): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doShapeAndShapeInverseCollide(shape: ShapeBase, shapeInverse: ShapeInverse): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doShapeAndShapeTransformedCollide(shape: ShapeBase, shapeTransformed: ShapeTransformed): boolean
+	{
+		throw new Error("todo");
+	}
+
 	doSphereAndBoxCollide(sphere: Sphere, box: BoxAxisAligned): boolean
 	{
 		return this.doBoxAndSphereCollide(box, sphere);
@@ -2180,9 +2410,27 @@ export class CollisionHelper
 		return box0.containsOther(box1);
 	}
 
+	doesBoxContainBoxRotated(box: BoxAxisAligned, boxRotated: BoxRotated): boolean
+	{
+		throw new Error("todo");
+	}
+
 	doesBoxContainHemispace(box: BoxAxisAligned, hemispace: Hemispace): boolean
 	{
 		return false;
+	}
+
+	doesBoxContainMapLocated(box: BoxAxisAligned, mapLocated: MapLocated): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesBoxContainMesh(box: BoxAxisAligned, mesh: Mesh): boolean
+	{
+		var meshHasSomeVertexOutsideBox =
+			mesh.vertices().some(x => box.containsPoint(x) == false);
+		var meshVerticesAreAllInsideBox = (meshHasSomeVertexOutsideBox == false);
+		return meshVerticesAreAllInsideBox;
 	}
 
 	doesBoxContainSphere(box: BoxAxisAligned, sphere: Sphere): boolean
@@ -2196,6 +2444,16 @@ export class CollisionHelper
 		var returnValue = box.containsOther(boxForSphere);
 
 		return returnValue;
+	}
+
+	doesBoxRotatedContainBox(boxRotated: BoxRotated, box: BoxAxisAligned): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesBoxRotatedContainBoxRotated(box0: BoxRotated, box1: BoxRotated): boolean
+	{
+		throw new Error("todo");
 	}
 
 	doesHemispaceContainBox(hemispace: Hemispace, box: BoxAxisAligned): boolean
@@ -2226,6 +2484,81 @@ export class CollisionHelper
 		return returnValue;
 	}
 
+	doesMapLocatedContainBox(mapLocated: MapLocated, box: BoxAxisAligned): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesMapLocatedContainBoxRotated(mapLocated: MapLocated, boxRotated: BoxRotated): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesMapLocatedContainMapLocated(mapLocated0: MapLocated, mapLocated1: MapLocated): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesMapLocatedContainSphere(mapLocated: MapLocated, box: BoxAxisAligned): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesMeshContainBox(mesh: Mesh, box: BoxAxisAligned): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesMeshContainSphere(mesh: Mesh, sphere: Sphere): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesPointContainPoint(point0: Coords, point1: Coords): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesShapeContainShapeGroupAll(shape: ShapeBase, shapeGroupAll: ShapeGroupAll): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesShapeContainShapeGroupAny(shape: ShapeBase, shapeGroupAny: ShapeGroupAny): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesShapeContainShapeInverse(shape: ShapeBase, shapeInverse: ShapeInverse): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesShapeContainShapeTransformed(shape: ShapeBase, shapeTransformed: ShapeTransformed): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesShapeGroupAllContainShape(shapeGroupAll: ShapeGroupAll, shape: ShapeBase): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesShapeGroupAnyContainShape(shapeGroupAny: ShapeGroupAny, shape: ShapeBase): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesShapeInverseContainShape(shapeInverse: ShapeInverse, shape: ShapeBase): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesShapeTransformedContainShape(shapeTransformed: ShapeTransformed, shape: ShapeBase): boolean
+	{
+		throw new Error("todo");
+	}
+
 	doesSphereContainBox(sphere: Sphere, box: BoxAxisAligned): boolean
 	{
 		var sphereCircumscribingBox =
@@ -2238,9 +2571,24 @@ export class CollisionHelper
 		return returnValue;
 	}
 
+	doesSphereContainBoxRotated(sphere: Sphere, hemispace: Hemispace): boolean
+	{
+		throw new Error("todo");
+	}
+
 	doesSphereContainHemispace(sphere: Sphere, hemispace: Hemispace): boolean
 	{
 		return false;
+	}
+
+	doesSphereContainMapLocated(sphere: Sphere, mapLocated: MapLocated): boolean
+	{
+		throw new Error("todo");
+	}
+
+	doesSphereContainMesh(sphere: Sphere, mesh: Mesh): boolean
+	{
+		throw new Error("todo");
 	}
 
 	doesSphereContainSphere(sphere0: Sphere, sphere1: Sphere): boolean

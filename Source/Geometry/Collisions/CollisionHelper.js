@@ -140,48 +140,221 @@ var ThisCouldBeBetter;
             }
             doCollideLookupBuild() {
                 var lookupOfLookups = new Map();
-                var andText = "And";
-                var collideText = "Collide";
-                var doText = "do";
-                var functionNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-                var functionNamesDoCollide = functionNames.filter(x => x.startsWith(doText) && x.endsWith(collideText) && x.indexOf(andText) >= 0);
-                for (var i = 0; i < functionNamesDoCollide.length; i++) {
-                    var functionName = functionNamesDoCollide[i];
-                    var colliderTypeNamesAsString = functionName.substr(doText.length, functionName.length - doText.length - collideText.length);
-                    var colliderTypeNames = colliderTypeNamesAsString.split(andText);
-                    var colliderTypeName0 = colliderTypeNames[0];
-                    var colliderTypeName1 = colliderTypeNames[1];
-                    var lookup = lookupOfLookups.get(colliderTypeName0);
-                    if (lookup == null) {
-                        lookup = new Map();
-                        lookupOfLookups.set(colliderTypeName0, lookup);
-                    }
-                    var thisAsAny = this;
-                    var doCollideFunction = thisAsAny[functionName];
-                    lookup.set(colliderTypeName1, doCollideFunction);
+                var lookup;
+                var notDefined = "undefined"; // todo
+                var boxName = (typeof GameFramework.BoxAxisAligned == notDefined ? null : GameFramework.BoxAxisAligned.name);
+                var boxRotatedName = (typeof GameFramework.BoxRotated == notDefined ? null : GameFramework.BoxRotated.name);
+                var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
+                var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
+                var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
+                var pointName = (typeof GameFramework.Point == notDefined ? null : GameFramework.Point.name);
+                var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
+                var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
+                var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
+                var shapeTransformedName = (typeof GameFramework.ShapeTransformed == notDefined ? null : GameFramework.ShapeTransformed.name);
+                var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
+                if (boxName != null) {
+                    lookup = new Map([
+                        [boxName, this.doBoxAndBoxCollide],
+                        [boxRotatedName, this.doBoxAndBoxRotatedCollide],
+                        [mapLocatedName, this.doBoxAndMapLocatedCollide],
+                        [mapLocated2Name, this.doBoxAndMapLocatedCollide],
+                        [meshName, this.doBoxAndMeshCollide],
+                        [shapeGroupAllName, this.doShapeAndShapeGroupAllCollide],
+                        [shapeGroupAnyName, this.doShapeAndShapeGroupAnyCollide],
+                        [shapeInverseName, this.doShapeAndShapeInverseCollide],
+                        [shapeTransformedName, this.doShapeAndShapeTransformedCollide],
+                        [sphereName, this.doBoxAndSphereCollide]
+                    ]);
+                    lookupOfLookups.set(boxName, lookup);
+                }
+                if (boxRotatedName != null) {
+                    lookup = new Map([
+                        [boxName, this.doBoxRotatedAndBoxCollide],
+                        [boxRotatedName, this.doBoxRotatedAndBoxRotatedCollide]
+                    ]);
+                    lookupOfLookups.set(boxRotatedName, lookup);
+                }
+                if (mapLocatedName != null) {
+                    lookup = new Map([
+                        [boxName, this.doMapLocatedAndBoxCollide],
+                        [boxRotatedName, this.doMapLocatedAndBoxRotatedCollide],
+                        [mapLocatedName, this.doMapLocatedAndMapLocatedCollide],
+                        [shapeGroupAllName, this.doShapeAndShapeGroupAllCollide],
+                        [sphereName, this.doMapLocatedAndSphereCollide]
+                    ]);
+                    lookupOfLookups.set(mapLocatedName, lookup);
+                }
+                if (meshName != null) {
+                    lookup = new Map([
+                        [boxName, this.doMeshAndBoxCollide],
+                        [shapeGroupAllName, this.doShapeAndShapeGroupAllCollide],
+                        [shapeInverseName, this.doShapeAndShapeInverseCollide],
+                        [sphereName, this.doMeshAndSphereCollide]
+                    ]);
+                    lookupOfLookups.set(meshName, lookup);
+                }
+                if (pointName != null) {
+                    lookup = new Map([
+                        [pointName, this.doPointAndPointCollide],
+                    ]);
+                    lookupOfLookups.set(pointName, lookup);
+                }
+                if (shapeGroupAllName != null) {
+                    lookup = new Map([
+                        [boxName, this.doShapeGroupAllAndShapeCollide],
+                        [meshName, this.doShapeGroupAllAndShapeCollide],
+                        [sphereName, this.doShapeGroupAllAndShapeCollide]
+                    ]);
+                    lookupOfLookups.set(shapeGroupAllName, lookup);
+                }
+                if (shapeGroupAnyName != null) {
+                    lookup = new Map([
+                        [boxName, this.doShapeGroupAnyAndShapeCollide],
+                        [meshName, this.doShapeGroupAnyAndShapeCollide],
+                        [sphereName, this.doShapeGroupAnyAndShapeCollide]
+                    ]);
+                    lookupOfLookups.set(shapeGroupAnyName, lookup);
+                }
+                if (shapeInverseName != null) {
+                    lookup = new Map([
+                        [boxName, this.doShapeInverseAndShapeCollide],
+                        [meshName, this.doShapeInverseAndShapeCollide],
+                        [sphereName, this.doShapeInverseAndShapeCollide]
+                    ]);
+                    lookupOfLookups.set(shapeInverseName, lookup);
+                }
+                if (shapeTransformedName != null) {
+                    lookup = new Map([
+                        [boxName, this.doShapeTransformedAndShapeCollide],
+                        [meshName, this.doShapeTransformedAndShapeCollide],
+                        [sphereName, this.doShapeTransformedAndShapeCollide]
+                    ]);
+                    lookupOfLookups.set(shapeTransformedName, lookup);
+                }
+                if (sphereName != null) {
+                    lookup = new Map([
+                        [boxName, this.doSphereAndBoxCollide],
+                        [boxRotatedName, this.doSphereAndBoxRotatedCollide],
+                        [mapLocatedName, this.doSphereAndMapLocatedCollide],
+                        [meshName, this.doSphereAndMeshCollide],
+                        [shapeGroupAllName, this.doShapeAndShapeGroupAllCollide],
+                        [shapeGroupAnyName, this.doShapeAndShapeGroupAnyCollide],
+                        [shapeInverseName, this.doShapeAndShapeInverseCollide],
+                        [shapeTransformedName, this.doShapeAndShapeTransformedCollide],
+                        [sphereName, this.doSphereAndSphereCollide]
+                    ]);
+                    lookupOfLookups.set(sphereName, lookup);
                 }
                 return lookupOfLookups;
             }
             doesContainLookupBuild() {
                 var lookupOfLookups = new Map();
-                var containText = "Contain";
-                var doesText = "does";
-                var functionNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-                var functionNamesDoesContain = functionNames.filter(x => x.startsWith(doesText) && x.indexOf(containText) >= 0);
-                for (var i = 0; i < functionNamesDoesContain.length; i++) {
-                    var functionName = functionNamesDoesContain[i];
-                    var colliderTypeNamesAsString = functionName.substr(doesText.length);
-                    var colliderTypeNames = colliderTypeNamesAsString.split(containText);
-                    var colliderTypeName0 = colliderTypeNames[0];
-                    var colliderTypeName1 = colliderTypeNames[1];
-                    var lookup = lookupOfLookups.get(colliderTypeName0);
-                    if (lookup == null) {
-                        lookup = new Map();
-                        lookupOfLookups.set(colliderTypeName0, lookup);
-                    }
-                    var thisAsAny = this;
-                    var doesContainFunction = thisAsAny[functionName];
-                    lookup.set(colliderTypeName1, doesContainFunction);
+                var lookup;
+                var notDefined = "undefined"; // todo
+                var boxName = (typeof GameFramework.BoxAxisAligned == notDefined ? null : GameFramework.BoxAxisAligned.name);
+                var boxRotatedName = (typeof GameFramework.BoxRotated == notDefined ? null : GameFramework.BoxRotated.name);
+                var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
+                var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
+                var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
+                var pointName = (typeof GameFramework.Point == notDefined ? null : GameFramework.Point.name);
+                var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
+                var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
+                var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
+                var shapeTransformedName = (typeof GameFramework.ShapeTransformed == notDefined ? null : GameFramework.ShapeTransformed.name);
+                var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
+                if (boxName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesBoxContainBox],
+                        [boxRotatedName, this.doesBoxContainBoxRotated],
+                        [mapLocatedName, this.doesBoxContainMapLocated],
+                        [mapLocated2Name, this.doesBoxContainMapLocated],
+                        [meshName, this.doesBoxContainMesh],
+                        [shapeGroupAllName, this.doesShapeContainShapeGroupAll],
+                        [shapeGroupAnyName, this.doesShapeContainShapeGroupAny],
+                        [shapeInverseName, this.doesShapeContainShapeInverse],
+                        [shapeTransformedName, this.doesShapeContainShapeTransformed],
+                        [sphereName, this.doesBoxContainSphere]
+                    ]);
+                    lookupOfLookups.set(boxName, lookup);
+                }
+                if (boxRotatedName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesBoxRotatedContainBox],
+                        [boxRotatedName, this.doesBoxRotatedContainBoxRotated]
+                    ]);
+                    lookupOfLookups.set(boxRotatedName, lookup);
+                }
+                if (mapLocatedName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesMapLocatedContainBox],
+                        [boxRotatedName, this.doesMapLocatedContainBoxRotated],
+                        [mapLocatedName, this.doesMapLocatedContainMapLocated],
+                        [shapeGroupAllName, this.doesShapeContainShapeGroupAll],
+                        [sphereName, this.doesMapLocatedContainSphere]
+                    ]);
+                    lookupOfLookups.set(mapLocatedName, lookup);
+                }
+                if (meshName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesMeshContainBox],
+                        [shapeGroupAllName, this.doesShapeContainShapeGroupAll],
+                        [shapeInverseName, this.doesShapeContainShapeInverse],
+                        [sphereName, this.doesMeshContainSphere]
+                    ]);
+                    lookupOfLookups.set(meshName, lookup);
+                }
+                if (pointName != null) {
+                    lookup = new Map([
+                        [pointName, this.doesPointContainPoint],
+                    ]);
+                    lookupOfLookups.set(pointName, lookup);
+                }
+                if (shapeGroupAllName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesShapeGroupAllContainShape],
+                        [meshName, this.doesShapeGroupAllContainShape],
+                        [sphereName, this.doesShapeGroupAllContainShape]
+                    ]);
+                    lookupOfLookups.set(shapeGroupAllName, lookup);
+                }
+                if (shapeGroupAnyName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesShapeGroupAnyContainShape],
+                        [meshName, this.doesShapeGroupAnyContainShape],
+                        [sphereName, this.doesShapeGroupAnyContainShape]
+                    ]);
+                    lookupOfLookups.set(shapeGroupAnyName, lookup);
+                }
+                if (shapeInverseName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesShapeInverseContainShape],
+                        [meshName, this.doesShapeInverseContainShape],
+                        [sphereName, this.doesShapeInverseContainShape]
+                    ]);
+                    lookupOfLookups.set(shapeInverseName, lookup);
+                }
+                if (shapeTransformedName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesShapeTransformedContainShape],
+                        [meshName, this.doesShapeTransformedContainShape],
+                        [sphereName, this.doesShapeTransformedContainShape]
+                    ]);
+                    lookupOfLookups.set(shapeTransformedName, lookup);
+                }
+                if (sphereName != null) {
+                    lookup = new Map([
+                        [boxName, this.doesSphereContainBox],
+                        [boxRotatedName, this.doesSphereContainBoxRotated],
+                        [mapLocatedName, this.doesSphereContainMapLocated],
+                        [meshName, this.doesSphereContainMesh],
+                        [shapeGroupAllName, this.doesShapeContainShapeGroupAll],
+                        [shapeGroupAnyName, this.doesShapeContainShapeGroupAny],
+                        [shapeInverseName, this.doesShapeContainShapeInverse],
+                        [shapeTransformedName, this.doesShapeContainShapeTransformed],
+                        [sphereName, this.doesSphereContainSphere]
+                    ]);
+                    lookupOfLookups.set(sphereName, lookup);
                 }
                 return lookupOfLookups;
             }
@@ -1134,6 +1307,18 @@ var ThisCouldBeBetter;
             doPointAndPointCollide(point0, point1) {
                 return point0.pos.equals(point1.pos);
             }
+            doShapeAndShapeGroupAllCollide(shape, shapeGroupAll) {
+                throw new Error("todo");
+            }
+            doShapeAndShapeGroupAnyCollide(shape, shapeGroupAll) {
+                throw new Error("todo");
+            }
+            doShapeAndShapeInverseCollide(shape, shapeInverse) {
+                throw new Error("todo");
+            }
+            doShapeAndShapeTransformedCollide(shape, shapeTransformed) {
+                throw new Error("todo");
+            }
             doSphereAndBoxCollide(sphere, box) {
                 return this.doBoxAndSphereCollide(box, sphere);
             }
@@ -1244,13 +1429,30 @@ var ThisCouldBeBetter;
             doesBoxContainBox(box0, box1) {
                 return box0.containsOther(box1);
             }
+            doesBoxContainBoxRotated(box, boxRotated) {
+                throw new Error("todo");
+            }
             doesBoxContainHemispace(box, hemispace) {
                 return false;
+            }
+            doesBoxContainMapLocated(box, mapLocated) {
+                throw new Error("todo");
+            }
+            doesBoxContainMesh(box, mesh) {
+                var meshHasSomeVertexOutsideBox = mesh.vertices().some(x => box.containsPoint(x) == false);
+                var meshVerticesAreAllInsideBox = (meshHasSomeVertexOutsideBox == false);
+                return meshVerticesAreAllInsideBox;
             }
             doesBoxContainSphere(box, sphere) {
                 var boxForSphere = GameFramework.BoxAxisAligned.fromCenterAndSize(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius() * 2));
                 var returnValue = box.containsOther(boxForSphere);
                 return returnValue;
+            }
+            doesBoxRotatedContainBox(boxRotated, box) {
+                throw new Error("todo");
+            }
+            doesBoxRotatedContainBoxRotated(box0, box1) {
+                throw new Error("todo");
             }
             doesHemispaceContainBox(hemispace, box) {
                 var returnValue = true;
@@ -1272,13 +1474,67 @@ var ThisCouldBeBetter;
                 var returnValue = (distanceOfSphereCenterAbovePlane >= sphereRadius);
                 return returnValue;
             }
+            doesMapLocatedContainBox(mapLocated, box) {
+                throw new Error("todo");
+            }
+            doesMapLocatedContainBoxRotated(mapLocated, boxRotated) {
+                throw new Error("todo");
+            }
+            doesMapLocatedContainMapLocated(mapLocated0, mapLocated1) {
+                throw new Error("todo");
+            }
+            doesMapLocatedContainSphere(mapLocated, box) {
+                throw new Error("todo");
+            }
+            doesMeshContainBox(mesh, box) {
+                throw new Error("todo");
+            }
+            doesMeshContainSphere(mesh, sphere) {
+                throw new Error("todo");
+            }
+            doesPointContainPoint(point0, point1) {
+                throw new Error("todo");
+            }
+            doesShapeContainShapeGroupAll(shape, shapeGroupAll) {
+                throw new Error("todo");
+            }
+            doesShapeContainShapeGroupAny(shape, shapeGroupAny) {
+                throw new Error("todo");
+            }
+            doesShapeContainShapeInverse(shape, shapeInverse) {
+                throw new Error("todo");
+            }
+            doesShapeContainShapeTransformed(shape, shapeTransformed) {
+                throw new Error("todo");
+            }
+            doesShapeGroupAllContainShape(shapeGroupAll, shape) {
+                throw new Error("todo");
+            }
+            doesShapeGroupAnyContainShape(shapeGroupAny, shape) {
+                throw new Error("todo");
+            }
+            doesShapeInverseContainShape(shapeInverse, shape) {
+                throw new Error("todo");
+            }
+            doesShapeTransformedContainShape(shapeTransformed, shape) {
+                throw new Error("todo");
+            }
             doesSphereContainBox(sphere, box) {
                 var sphereCircumscribingBox = GameFramework.Sphere.fromCenterAndRadius(box.center, box.size.magnitude() / 2);
                 var returnValue = sphere.containsOther(sphereCircumscribingBox);
                 return returnValue;
             }
+            doesSphereContainBoxRotated(sphere, hemispace) {
+                throw new Error("todo");
+            }
             doesSphereContainHemispace(sphere, hemispace) {
                 return false;
+            }
+            doesSphereContainMapLocated(sphere, mapLocated) {
+                throw new Error("todo");
+            }
+            doesSphereContainMesh(sphere, mesh) {
+                throw new Error("todo");
             }
             doesSphereContainSphere(sphere0, sphere1) {
                 return sphere0.containsOther(sphere1);
