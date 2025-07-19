@@ -106,7 +106,8 @@ export class Arc implements ShapeBase
 
 	transform(transformToApply: TransformBase): Arc
 	{
-		throw new Error("Not implemented!");
+		this.coordsGroupToTransform().forEach(x => transformToApply.transformCoords(x) );
+		return this;
 	}
 }
 

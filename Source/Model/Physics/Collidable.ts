@@ -97,7 +97,7 @@ export class Collidable implements EntityProperty<Collidable>
 		return new Collidable
 		(
 			false, // canCollideAgainWithoutSeparating
-			null, // ticksToWaitBetweenCollisions
+			0, // ticksToWaitBetweenCollisions
 			colliderAtRest,
 			null, // entityPropertyNamesToCollideWith
 			collideEntities
@@ -276,7 +276,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	colliderAtRestSet(value: ShapeBase): Collidable
 	{
-		this.colliderAtRest = value;
+		this.colliderAtRest = value.clone();
 		this.collider = this.colliderAtRest.clone();
 		return this;
 	}
@@ -668,12 +668,13 @@ export class Collidable implements EntityProperty<Collidable>
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var entity = uwpe.entity;
+
 		// If this isn't done at initialization, then the colliders
 		// may be in the wrong positions on the first tick,
 		// which leads to false collisions or false misses.
-		this.colliderLocateForEntity(uwpe.entity);
+		this.colliderLocateForEntity(entity);
 
-		var entity = uwpe.entity;
 		var entityIsStationary = this.isEntityStationary(entity);
 		if (entityIsStationary)
 		{

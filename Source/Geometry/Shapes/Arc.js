@@ -61,7 +61,8 @@ var ThisCouldBeBetter;
             }
             // Transformable.
             transform(transformToApply) {
-                throw new Error("Not implemented!");
+                this.coordsGroupToTransform().forEach(x => transformToApply.transformCoords(x));
+                return this;
             }
         }
         GameFramework.Arc = Arc;

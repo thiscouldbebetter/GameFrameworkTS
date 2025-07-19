@@ -6,6 +6,11 @@ export class ItemContainer implements EntityProperty<ItemContainer>
 {
 	statusMessage: string;
 
+	static create(): ItemContainer
+	{
+		return new ItemContainer();
+	}
+
 	static of(entity: Entity): ItemContainer
 	{
 		return entity.propertyByName(ItemContainer.name) as ItemContainer;

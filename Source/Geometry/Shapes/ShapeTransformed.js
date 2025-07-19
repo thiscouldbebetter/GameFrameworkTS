@@ -7,9 +7,16 @@ var ThisCouldBeBetter;
             constructor(transformToApply, child) {
                 this.transformToApply = transformToApply;
                 this.child = child;
+                this._childAfterTransformation = this.child.clone();
             }
             static fromTransformAndChild(transformToApply, child) {
                 return new ShapeTransformed(transformToApply, child);
+            }
+            shapeAfterTransformation() {
+                var returnValue = this._childAfterTransformation
+                    .overwriteWith(this.child)
+                    .transform(this.transformToApply);
+                return returnValue;
             }
             // Clonable.
             clone() {

@@ -225,10 +225,10 @@ export class CollisionHelper
 				[ mapLocatedName, this.doBoxAndMapLocatedCollide ],
 				[ mapLocated2Name, this.doBoxAndMapLocatedCollide ],
 				[ meshName, this.doBoxAndMeshCollide ],
-				[ shapeGroupAllName, this.doShapeAndShapeGroupAllCollide ],
-				[ shapeGroupAnyName, this.doShapeAndShapeGroupAnyCollide ],
-				[ shapeInverseName, this.doShapeAndShapeInverseCollide ],
-				[ shapeTransformedName, this.doShapeAndShapeTransformedCollide ],
+				[ shapeGroupAllName, this.doBoxAndShapeGroupAllCollide ],
+				[ shapeGroupAnyName, this.doBoxAndShapeGroupAnyCollide ],
+				[ shapeInverseName, this.doBoxAndShapeInverseCollide ],
+				[ shapeTransformedName, this.doBoxAndShapeTransformedCollide ],
 				[ sphereName, this.doBoxAndSphereCollide ]
 			]);
 			lookupOfLookups.set(boxName, lookup);
@@ -1764,6 +1764,11 @@ export class CollisionHelper
 		return this.doShapeInverseAndShapeCollide(shapeInverse, box);
 	}
 
+	doBoxAndShapeTransformedCollide(box: BoxAxisAligned, shapeTransformed: ShapeTransformed): boolean
+	{
+		return this.doShapeTransformedAndShapeCollide(shapeTransformed, box);
+	}
+
 	doBoxAndSphereCollide(box: BoxAxisAligned, sphere: Sphere): boolean
 	{
 		return this.collisionOfBoxAndSphere(box, sphere, this._collision, false).isActive;
@@ -2395,7 +2400,9 @@ export class CollisionHelper
 
 	doShapeTransformedAndShapeCollide(shapeTransformed: ShapeTransformed, shapeOther: ShapeBase): boolean
 	{
-		return (this.doCollidersCollide(shapeTransformed.child, shapeOther) );
+		var shapeTransformedAfterTransformation =
+			shapeTransformed.shapeAfterTransformation();
+		return (this.doCollidersCollide(shapeTransformedAfterTransformation, shapeOther) );
 	}
 
 	doShapeTransformedAndSphereCollide(shapeTransformed: ShapeTransformed, sphere: Sphere): boolean

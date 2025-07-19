@@ -16,7 +16,12 @@ export class Portal implements EntityProperty<Portal>
 	{
 		this.destinationPlaceName = destinationPlaceName;
 		this.destinationEntityName = destinationEntityName;
-		this.velocityToApply = velocityToApply;
+		this.velocityToApply = velocityToApply || Coords.zeroes();
+	}
+
+	static create(): Portal
+	{
+		return new Portal(null, null, null);
 	}
 
 	static of(entity: Entity): Portal

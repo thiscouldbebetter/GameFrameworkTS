@@ -754,10 +754,9 @@ class PlaceBuilderDemo_Movers
 				var collisionHelper = u.collisionHelper;
 				collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
 			};
-		var collidable = new Collidable
+		var collidable = Collidable.fromColliderAndCollideEntities
 		(
-			false, // canCollideAgainWithoutSeparating
-			0, friendlyCollider, [ Collidable.name ], friendlyCollide
+			friendlyCollider, friendlyCollide
 		);
 
 		var visualEyeRadius = this.entityDimension * .75 / 2;
@@ -1472,12 +1471,9 @@ class PlaceBuilderDemo_Movers
 			}
 		};
 
-		var collidable = new Collidable
+		var collidable = Collidable.fromColliderAndCollideEntities
 		(
-			false, // canCollideAgainWithoutSeparating
-			0, // ticksToWaitBetweenCollisions
 			playerCollider,
-			[ Collidable.name ], // entityPropertyNamesToCollideWith
 			playerCollide
 		);
 

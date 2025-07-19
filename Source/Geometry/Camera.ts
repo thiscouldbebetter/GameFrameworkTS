@@ -34,10 +34,8 @@ export class Camera implements EntityProperty<Camera>
 
 		var viewColliderSize = this.viewSize.clone();
 		viewColliderSize.z = Number.POSITIVE_INFINITY;
-		this.viewCollider = BoxAxisAligned.fromCenterAndSize
-		(
-			this.loc.pos, viewColliderSize
-		);
+		this.viewCollider =
+			BoxAxisAligned.fromSize(viewColliderSize);
 		this.entitiesInView = new Array<Entity>();
 
 		this._displayToRestore = null;

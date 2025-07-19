@@ -26,6 +26,11 @@ export class Perceptible implements EntityProperty<Perceptible>
 		this._isHidingPrev = null;
 	}
 
+	static default(): Perceptible
+	{
+		return new Perceptible(false, () => 0, () => 0);
+	}
+
 	static of(entity: Entity): Perceptible
 	{
 		return entity.propertyByName(Perceptible.name) as Perceptible;

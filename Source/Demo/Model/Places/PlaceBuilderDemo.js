@@ -22,12 +22,13 @@ class PlaceBuilderDemo // Main.
     }
     buildBase(size, placeNameToReturnTo) {
         this.build_Interior("Base", size, placeNameToReturnTo);
+        //this.build_Interior_WithoutWallsOrExit("Base", size);
         var entityPosRange = BoxAxisAligned.fromCenterAndSize(size.clone().half(), size.clone().subtract(this.marginSize));
         var randomizer = this.randomizer;
         var entityDefns = this.entityDefnsByName;
         var e = this.entities;
-        var epebfdac = (a, b, c) => e.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get(a), b, c, entityPosRange, randomizer));
         e.push(this.entityBuildFromDefn(entityDefns.get("Player"), entityPosRange, randomizer));
+        var epebfdac = (a, b, c) => e.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get(a), b, c, entityPosRange, randomizer));
         epebfdac("Anvil", 1, null);
         epebfdac("Arrow", 1, 20);
         epebfdac("Bar", 1, null);
@@ -651,6 +652,14 @@ class PlaceBuilderDemo // Main.
         this.build_SizeWallsAndMargins(this.name, null, null);
         this.entityBuildExit(placeNameToReturnTo);
         this.entitiesAllGround();
+        this.build_Camera(this.cameraViewSize, this.size);
+    }
+    build_Interior_WithoutWallsOrExit(name, size) {
+        // This method is a debugging helper AND a Zen riddle.
+        // How can a place be "interior" without walls or an exit?
+        this.name = name;
+        this.size = size;
+        this.entities = [];
         this.build_Camera(this.cameraViewSize, this.size);
     }
     build_SizeWallsAndMargins(namePrefix, placePos, areNeighborsConnectedESWN) {

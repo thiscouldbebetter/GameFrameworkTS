@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.visual = visual;
                 this.renderingOrder = renderingOrder || 0;
                 this.hidden = hidden || false;
-                this.sizeInWrappedInstances = sizeInWrappedInstances;
+                this.sizeInWrappedInstances = sizeInWrappedInstances || GameFramework.Coords.ones();
                 this._entityPosToRestore = GameFramework.Coords.create();
                 this._sizeInWrappedInstancesHalfRoundedDown = GameFramework.Coords.create();
                 this._wrapOffsetInPixels = GameFramework.Coords.create();
@@ -82,12 +82,10 @@ var ThisCouldBeBetter;
                 return this;
             }
             sizeInWrappedInstancesHalfRoundedDown() {
-                if (this.sizeInWrappedInstances != null) {
-                    this._sizeInWrappedInstancesHalfRoundedDown
-                        .overwriteWith(this.sizeInWrappedInstances)
-                        .half()
-                        .floor();
-                }
+                this._sizeInWrappedInstancesHalfRoundedDown
+                    .overwriteWith(this.sizeInWrappedInstances)
+                    .half()
+                    .floor();
                 return this._sizeInWrappedInstancesHalfRoundedDown;
             }
             sizeInWrappedInstancesSet(value) {

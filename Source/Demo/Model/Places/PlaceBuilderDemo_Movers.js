@@ -364,8 +364,7 @@ class PlaceBuilderDemo_Movers {
             var collisionHelper = u.collisionHelper;
             collisionHelper.collideEntitiesBackUp(eFriendly, eOther);
         };
-        var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
-        0, friendlyCollider, [Collidable.name], friendlyCollide);
+        var collidable = Collidable.fromColliderAndCollideEntities(friendlyCollider, friendlyCollide);
         var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -758,10 +757,7 @@ class PlaceBuilderDemo_Movers {
                 Talker.of(entityOther).talk(uwpe.clone().entitiesSwap());
             }
         };
-        var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
-        0, // ticksToWaitBetweenCollisions
-        playerCollider, [Collidable.name], // entityPropertyNamesToCollideWith
-        playerCollide);
+        var collidable = Collidable.fromColliderAndCollideEntities(playerCollider, playerCollide);
         return collidable;
     }
     entityBuildDefnPlayer_Constrainable() {

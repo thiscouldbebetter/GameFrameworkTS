@@ -12,12 +12,14 @@ export class Boundable<TBounds extends ShapeBase>
 {
 	bounds: TBounds;
 
+	_boundsAtRest: ShapeBase;
 	_transformLocate: Transform_Locate;
 
 	constructor(bounds: TBounds)
 	{
-		this.bounds = bounds;
+		this.bounds = bounds.clone() as TBounds;
 
+		this._boundsAtRest = this.bounds.clone();
 		this._transformLocate = Transform_Locate.create();
 	}
 
@@ -49,8 +51,9 @@ export class Boundable<TBounds extends ShapeBase>
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var e = uwpe.entity;
+		this.bounds.overwriteWith(this._boundsAtRest);
 		var dispositionToApply = Locatable.of(e).loc;
-		this._transformLocate.loc.overwriteWith(dispositionToApply)
+		this._transformLocate.loc.overwriteWith(dispositionToApply);
 		this.bounds.transform(this._transformLocate);
 	}
 

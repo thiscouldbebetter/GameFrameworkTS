@@ -60,6 +60,7 @@ class PlaceBuilderDemo // Main.
 	buildBase(size: Coords, placeNameToReturnTo: string)
 	{
 		this.build_Interior("Base", size, placeNameToReturnTo);
+		//this.build_Interior_WithoutWallsOrExit("Base", size);
 
 		var entityPosRange = BoxAxisAligned.fromCenterAndSize
 		(
@@ -71,10 +72,11 @@ class PlaceBuilderDemo // Main.
 		var entityDefns = this.entityDefnsByName;
 		var e = this.entities;
 
+		e.push(this.entityBuildFromDefn(entityDefns.get("Player"), entityPosRange, randomizer) );
+
 		var epebfdac = (a: string, b: number, c: number) =>
 			e.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get(a), b, c, entityPosRange, randomizer) );
 
-		e.push(this.entityBuildFromDefn(entityDefns.get("Player"), entityPosRange, randomizer) );
 		epebfdac("Anvil", 		1, null);
 		epebfdac("Arrow", 		1, 20 );
 		epebfdac("Bar", 		1, null);
@@ -1182,6 +1184,22 @@ class PlaceBuilderDemo // Main.
 		this.entityBuildExit(placeNameToReturnTo);
 
 		this.entitiesAllGround();
+		this.build_Camera(this.cameraViewSize, this.size);
+	}
+
+	build_Interior_WithoutWallsOrExit
+	(
+		name: string, size: Coords
+	): void
+	{
+		// This method is a debugging helper AND a Zen riddle.
+		// How can a place be "interior" without walls or an exit?
+
+		this.name = name;
+		this.size = size;
+
+		this.entities = [];
+
 		this.build_Camera(this.cameraViewSize, this.size);
 	}
 

@@ -7,7 +7,10 @@ var ThisCouldBeBetter;
             constructor(destinationPlaceName, destinationEntityName, velocityToApply) {
                 this.destinationPlaceName = destinationPlaceName;
                 this.destinationEntityName = destinationEntityName;
-                this.velocityToApply = velocityToApply;
+                this.velocityToApply = velocityToApply || GameFramework.Coords.zeroes();
+            }
+            static create() {
+                return new Portal(null, null, null);
             }
             static of(entity) {
                 return entity.propertyByName(Portal.name);

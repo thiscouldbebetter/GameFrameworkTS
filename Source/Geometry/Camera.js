@@ -12,7 +12,8 @@ var ThisCouldBeBetter;
                 this.viewSizeHalf = this.viewSize.clone().clearZ().half();
                 var viewColliderSize = this.viewSize.clone();
                 viewColliderSize.z = Number.POSITIVE_INFINITY;
-                this.viewCollider = GameFramework.BoxAxisAligned.fromCenterAndSize(this.loc.pos, viewColliderSize);
+                this.viewCollider =
+                    GameFramework.BoxAxisAligned.fromSize(viewColliderSize);
                 this.entitiesInView = new Array();
                 this._displayToRestore = null;
                 this._posSaved = GameFramework.Coords.create();

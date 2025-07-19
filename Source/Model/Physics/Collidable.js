@@ -39,7 +39,7 @@ var ThisCouldBeBetter;
             }
             static fromColliderAndCollideEntities(colliderAtRest, collideEntities) {
                 return new Collidable(false, // canCollideAgainWithoutSeparating
-                null, // ticksToWaitBetweenCollisions
+                0, // ticksToWaitBetweenCollisions
                 colliderAtRest, null, // entityPropertyNamesToCollideWith
                 collideEntities);
             }
@@ -109,7 +109,7 @@ var ThisCouldBeBetter;
                 console.log(message);
             }
             colliderAtRestSet(value) {
-                this.colliderAtRest = value;
+                this.colliderAtRest = value.clone();
                 this.collider = this.colliderAtRest.clone();
                 return this;
             }
@@ -325,11 +325,11 @@ var ThisCouldBeBetter;
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {
+                var entity = uwpe.entity;
                 // If this isn't done at initialization, then the colliders
                 // may be in the wrong positions on the first tick,
                 // which leads to false collisions or false misses.
-                this.colliderLocateForEntity(uwpe.entity);
-                var entity = uwpe.entity;
+                this.colliderLocateForEntity(entity);
                 var entityIsStationary = this.isEntityStationary(entity);
                 if (entityIsStationary) {
                     this.collisionsFindAndHandle(uwpe);

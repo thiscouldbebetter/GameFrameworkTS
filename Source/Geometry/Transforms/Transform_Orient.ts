@@ -36,16 +36,25 @@ export class Transform_Orient implements Transform<Transform_Orient>
 		var components = this._components;
 		var ori = this.orientation;
 
-		coordsToTransform.overwriteWith
-		(
-			components[0].overwriteWith(ori.forward).multiplyScalar(coordsToTransform.x).add
-			(
-				components[1].overwriteWith(ori.right).multiplyScalar(coordsToTransform.y).add
-				(
-					components[2].overwriteWith(ori.down).multiplyScalar(coordsToTransform.z)
-				)
-			)
-		);
+		var componentXForward =
+			components[0]
+				.overwriteWith(ori.forward)
+				.multiplyScalar(coordsToTransform.x);
+
+		var componentYRight =
+			components[1]
+				.overwriteWith(ori.right)
+				.multiplyScalar(coordsToTransform.y);
+
+		var componentZDown =
+			components[2]
+				.overwriteWith(ori.down)
+				.multiplyScalar(coordsToTransform.z);
+
+		coordsToTransform
+			.overwriteWith(componentXForward)
+			.add(componentYRight)
+			.add(componentZDown);
 
 		return coordsToTransform;
 	}

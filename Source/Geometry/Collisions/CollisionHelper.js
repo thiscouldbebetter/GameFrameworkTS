@@ -160,10 +160,10 @@ var ThisCouldBeBetter;
                         [mapLocatedName, this.doBoxAndMapLocatedCollide],
                         [mapLocated2Name, this.doBoxAndMapLocatedCollide],
                         [meshName, this.doBoxAndMeshCollide],
-                        [shapeGroupAllName, this.doShapeAndShapeGroupAllCollide],
-                        [shapeGroupAnyName, this.doShapeAndShapeGroupAnyCollide],
-                        [shapeInverseName, this.doShapeAndShapeInverseCollide],
-                        [shapeTransformedName, this.doShapeAndShapeTransformedCollide],
+                        [shapeGroupAllName, this.doBoxAndShapeGroupAllCollide],
+                        [shapeGroupAnyName, this.doBoxAndShapeGroupAnyCollide],
+                        [shapeInverseName, this.doBoxAndShapeInverseCollide],
+                        [shapeTransformedName, this.doBoxAndShapeTransformedCollide],
                         [sphereName, this.doBoxAndSphereCollide]
                     ]);
                     lookupOfLookups.set(boxName, lookup);
@@ -1030,6 +1030,9 @@ var ThisCouldBeBetter;
             doBoxAndShapeInverseCollide(box, shapeInverse) {
                 return this.doShapeInverseAndShapeCollide(shapeInverse, box);
             }
+            doBoxAndShapeTransformedCollide(box, shapeTransformed) {
+                return this.doShapeTransformedAndShapeCollide(shapeTransformed, box);
+            }
             doBoxAndSphereCollide(box, sphere) {
                 return this.collisionOfBoxAndSphere(box, sphere, this._collision, false).isActive;
             }
@@ -1420,7 +1423,8 @@ var ThisCouldBeBetter;
                 return this.doShapeTransformedAndShapeCollide(shapeTransformed, mesh);
             }
             doShapeTransformedAndShapeCollide(shapeTransformed, shapeOther) {
-                return (this.doCollidersCollide(shapeTransformed.child, shapeOther));
+                var shapeTransformedAfterTransformation = shapeTransformed.shapeAfterTransformation();
+                return (this.doCollidersCollide(shapeTransformedAfterTransformation, shapeOther));
             }
             doShapeTransformedAndSphereCollide(shapeTransformed, sphere) {
                 return this.doShapeTransformedAndShapeCollide(shapeTransformed, sphere);

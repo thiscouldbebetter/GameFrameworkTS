@@ -120,7 +120,7 @@ export class Sphere implements ShapeBase
 	overwriteWith(other: Sphere): Sphere
 	{
 		this.center.overwriteWith(other.center);
-		this.radius = other.radius;
+		this.pointOnSurface.overwriteWith(other.pointOnSurface);
 		return this;
 	}
 

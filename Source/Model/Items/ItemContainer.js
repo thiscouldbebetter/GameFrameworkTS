@@ -4,6 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ItemContainer {
+            static create() {
+                return new ItemContainer();
+            }
             static of(entity) {
                 return entity.propertyByName(ItemContainer.name);
             }

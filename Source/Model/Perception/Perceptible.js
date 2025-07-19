@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this._displacement = GameFramework.Coords.create();
                 this._isHidingPrev = null;
             }
+            static default() {
+                return new Perceptible(false, () => 0, () => 0);
+            }
             static of(entity) {
                 return entity.propertyByName(Perceptible.name);
             }

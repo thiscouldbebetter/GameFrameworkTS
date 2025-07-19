@@ -65,15 +65,15 @@ class PlaceBuilderDemo_Emplacements
 			)
 		]);
 
-		var itemAnvilEntityDefn = new Entity
+		var itemAnvilEntityDefn = Entity.fromNameAndProperties
 		(
 			anvilName,
 			[
-				new Locatable(new Disposition(Coords.create(), null, null) ),
+				Locatable.create(),
 				Drawable.fromVisual(anvilVisual),
 				anvilItemCrafter,
 				ItemHolder.create(),
-				new Usable(anvilUse)
+				Usable.fromUse(anvilUse)
 			]
 		);
 
@@ -119,13 +119,9 @@ class PlaceBuilderDemo_Emplacements
 				.fromXYZ(1, .1, 1)
 				.multiplyScalar(this.entityDimension)
 		);
-		var collidable = new Collidable
+		var collidable = Collidable.fromColliderAndCollideEntities
 		(
-			false, // canCollideAgainWithoutSeparating
-			0, // ticksToWaitBetweenCollisions
 			collider,
-			[ Collidable.name ], // entityPropertyNamesToCollideWith,
-			// collideEntities
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var u = uwpe.universe;
@@ -135,10 +131,8 @@ class PlaceBuilderDemo_Emplacements
 			}
 		);
 
-		var killable = new Killable
+		var killable = Killable.fromDie
 		(
-			1, // integrityMax
-			null, // damageApply
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				var entityDying = uwpe.entity;
@@ -151,7 +145,7 @@ class PlaceBuilderDemo_Emplacements
 			}
 		);
 
-		var itemBoulderEntityDefn = new Entity
+		var itemBoulderEntityDefn = Entity.fromNameAndProperties
 		(
 			itemDefnName,
 			[
@@ -233,18 +227,15 @@ class PlaceBuilderDemo_Emplacements
 				entityOtherEffectable.effectAdd(Effect.Instances().Burning.clone());
 			}
 		};
-		var campfireCollidable = new Collidable
+		var campfireCollidable = Collidable.fromColliderAndCollideEntities
 		(
-			false, // canCollideAgainWithoutSeparating
-			0, // ticksToWaitBetweenCollisions
 			campfireCollider,
-			[ Collidable.name ],
 			campfireCollide
 		);
 
 		var boundable = Boundable.fromCollidable(campfireCollidable);
 
-		var campfireEntityDefn = new Entity
+		var campfireEntityDefn = Entity.fromNameAndProperties
 		(
 			campfireName,
 			[
@@ -293,7 +284,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var boundable = Boundable.fromCollidable(collidable);
 	
-		var containerEntityDefn = new Entity
+		var containerEntityDefn = Entity.fromNameAndProperties
 		(
 			"Container",
 			[
@@ -303,7 +294,7 @@ class PlaceBuilderDemo_Emplacements
 				new ItemContainer(),
 				ItemHolder.create(),
 				Locatable.create(),
-				new Usable
+				Usable.fromUse
 				(
 					(uwpe: UniverseWorldPlaceEntities) =>
 					{
@@ -376,7 +367,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var boundable = Boundable.fromCollidable(collidable);
 
-		var exitEntityDefn = new Entity
+		var exitEntityDefn = Entity.fromNameAndProperties
 		(
 			"Exit",
 			[
@@ -384,8 +375,8 @@ class PlaceBuilderDemo_Emplacements
 				collidable,
 				Drawable.fromVisual(visual),
 				Locatable.create(),
-				new Portal(null, null, Coords.create()), // Destination must be set ouside this method.
-				new Usable
+				Portal.create(), // Destination must be set ouside this method.
+				Usable.fromUse
 				(
 					(uwpe: UniverseWorldPlaceEntities) =>
 					{
@@ -441,16 +432,16 @@ class PlaceBuilderDemo_Emplacements
 			u.venueTransitionTo(venueNext);
 		}
 
-		var entityDefn = new Entity
+		var entityDefn = Entity.fromNameAndProperties
 		(
 			entityName,
 			[
-				new ItemContainer(),
+				ItemContainer.create(),
 				ItemHolder.create(),
 				Locatable.create(),
 				Drawable.fromVisual(itemHoleVisual),
-				new Perceptible(false, () => 0, () => 0),
-				new Usable(use)
+				Perceptible.default(),
+				Usable.fromUse(use)
 			]
 		);
 
@@ -461,7 +452,7 @@ class PlaceBuilderDemo_Emplacements
 	{
 		var obstacleColor = Color.Instances().Red;
 
-		var obstacleBarSize = new Coords(6, 2, 1).multiplyScalar(this.entityDimension);
+		var obstacleBarSize = Coords.fromXYZ(6, 2, 1).multiplyScalar(this.entityDimension);
 		var obstacleRotationInTurns = .0625;
 		var obstacleCollider = new BoxRotated
 		(
@@ -472,15 +463,14 @@ class PlaceBuilderDemo_Emplacements
 			(obstacleCollidable.collider as BoxRotated).sphereSwept().toBoxAxisAligned(BoxAxisAligned.create());
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
-		var obstacleLoc = new Disposition
+		var obstacleLoc = Disposition.fromPosAndOri
 		(
 			Coords.create(),
-			new Orientation
+			Orientation.fromForwardAndDown
 			(
 				Coords.create().fromHeadingInTurns(obstacleRotationInTurns),
-				new Coords(0, 0, 1)
-			),
-			null
+				Coords.fromXYZ(0, 0, 1)
+			)
 		);
 
 		var visualBody = VisualGroup.fromChildren
@@ -498,7 +488,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var visual = VisualRotate.fromChild(visualBody);
 
-		var obstacleBarEntityDefn = new Entity
+		var obstacleBarEntityDefn = Entity.fromNameAndProperties
 		(
 			"Bar",
 			[
@@ -506,7 +496,7 @@ class PlaceBuilderDemo_Emplacements
 				obstacleCollidable,
 				Damager.fromDamagePerHit(Damage.fromAmount(10)),
 				Drawable.fromVisual(visual),
-				new Locatable(obstacleLoc)
+				Locatable.fromLoc(obstacleLoc)
 			]
 		);
 
@@ -537,14 +527,14 @@ class PlaceBuilderDemo_Emplacements
 			obstacleMappedCellSourceAsStrings
 		);
 
-		var obstacleMappedSizeInCells = new Coords
+		var obstacleMappedSizeInCells = Coords.fromXYZ
 		(
 			obstacleMappedCellSourceAsStrings[0].length,
 			obstacleMappedCellSourceAsStrings.length,
 			1
 		);
 
-		var obstacleMappedCellSize = new Coords(2, 2, 1);
+		var obstacleMappedCellSize = Coords.fromXYZ(2, 2, 1);
 
 		var entityDefnName = "Mine";
 		var obstacleMappedMap = new MapOfCells
@@ -585,7 +575,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
-		var obstacleMappedEntityDefn = new Entity
+		var obstacleMappedEntityDefn = Entity.fromNameAndProperties
 		(
 			entityDefnName,
 			[
@@ -635,18 +625,16 @@ class PlaceBuilderDemo_Emplacements
 		);
 
 		var obstacleRingObstacle = new Obstacle();
-		var obstacleCollidable = new Collidable
+		var obstacleCollidable = Collidable.fromColliderPropertyNameAndCollide
 		(
-			false, // canCollideAgainWithoutSeparating
-			0,
 			obstacleCollider,
-			[Movable.name],
+			Movable.name,
 			(uwpe: UniverseWorldPlaceEntities) => obstacleRingObstacle.collide(uwpe)
 		);
 
 		var boundable = Boundable.fromCollidable(obstacleCollidable);
 
-		var obstacleRingEntityDefn = new Entity
+		var obstacleRingEntityDefn = Entity.fromNameAndProperties
 		(
 			"Ring",
 			[
@@ -654,7 +642,7 @@ class PlaceBuilderDemo_Emplacements
 				obstacleCollidable,
 				//Damager.fromDamagePerHit(Damage.fromAmount(10)),
 				Drawable.fromVisual(obstacleRingVisual),
-				new Locatable(obstacleLoc),
+				Locatable.fromLoc(obstacleLoc),
 			]
 		);
 
@@ -688,13 +676,13 @@ class PlaceBuilderDemo_Emplacements
 			return ""; // todo
 		};
 
-		var itemPillowEntityDefn = new Entity
+		var itemPillowEntityDefn = Entity.fromNameAndProperties
 		(
 			pillowName,
 			[
 				Locatable.create(),
 				Drawable.fromVisual(pillowVisual),
-				new Usable(pillowUse)
+				Usable.fromUse(pillowUse)
 			]
 		);
 
@@ -749,7 +737,7 @@ class PlaceBuilderDemo_Emplacements
 			Portal.of(eUsed).use(uwpe);
 		};
 
-		var portalEntity = new Entity
+		var portalEntity = Entity.fromNameAndProperties
 		(
 			"Portal",
 			[
@@ -757,7 +745,7 @@ class PlaceBuilderDemo_Emplacements
 				Drawable.fromVisual(visual),
 				Locatable.create(),
 				new Portal(null, "Exit", Coords.create()),
-				new Usable(portalUse)
+				Usable.fromUse(portalUse)
 			]
 		);
 
@@ -798,12 +786,10 @@ class PlaceBuilderDemo_Emplacements
 
 		var colliderRadius = entityDimension * .25;
 		var collider = Sphere.fromRadius(colliderRadius);
-		var collidable = new Collidable
+		var collidable = Collidable.fromColliderPropertyNameAndCollide
 		(
-			false, // canCollideAgainWithoutSeparating
-			0, // ticksToWaitBetweenCollisions
 			collider,
-			[ Movable.name ], // entityPropertyNamesToCollideWith,
+			Movable.name, // entityPropertyNamesToCollideWith,
 			// collideEntities
 			(uwpe: UniverseWorldPlaceEntities, c: Collision) =>
 			{
@@ -880,13 +866,9 @@ class PlaceBuilderDemo_Emplacements
 				.fromXYZ(1, .1, 1)
 				.multiplyScalar(this.entityDimension * .25)
 		);
-		var collidable = new Collidable
+		var collidable = Collidable.fromColliderAndCollideEntities
 		(
-			false, // canCollideAgainWithoutSeparating
-			0, // ticksToWaitBetweenCollisions
 			collider,
-			[ Collidable.name ], // entityPropertyNamesToCollideWith,
-			// collideEntities
 			(uwpe: UniverseWorldPlaceEntities, c: Collision) =>
 			{
 				var u = uwpe.universe;
@@ -896,7 +878,7 @@ class PlaceBuilderDemo_Emplacements
 			}
 		);
 
-		var entityDefn = new Entity
+		var entityDefn = Entity.fromNameAndProperties
 		(
 			entityName,
 			[

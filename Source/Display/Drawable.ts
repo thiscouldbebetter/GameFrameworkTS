@@ -25,7 +25,7 @@ export class Drawable implements EntityProperty<Drawable>
 		this.visual = visual;
 		this.renderingOrder = renderingOrder || 0;
 		this.hidden = hidden || false;
-		this.sizeInWrappedInstances = sizeInWrappedInstances;
+		this.sizeInWrappedInstances = sizeInWrappedInstances || Coords.ones();
 
 		this._entityPosToRestore = Coords.create();
 		this._sizeInWrappedInstancesHalfRoundedDown = Coords.create();
@@ -150,13 +150,10 @@ export class Drawable implements EntityProperty<Drawable>
 
 	sizeInWrappedInstancesHalfRoundedDown(): Coords
 	{
-		if (this.sizeInWrappedInstances != null)
-		{
-			this._sizeInWrappedInstancesHalfRoundedDown
-				.overwriteWith(this.sizeInWrappedInstances)
-				.half()
-				.floor();
-		}
+		this._sizeInWrappedInstancesHalfRoundedDown
+			.overwriteWith(this.sizeInWrappedInstances)
+			.half()
+			.floor();
 
 		return this._sizeInWrappedInstancesHalfRoundedDown;
 	}

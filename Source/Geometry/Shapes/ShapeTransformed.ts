@@ -7,10 +7,14 @@ export class ShapeTransformed implements ShapeBase
 	transformToApply: TransformBase;
 	child: ShapeBase;
 
+	_childAfterTransformation: ShapeBase;
+
 	constructor(transformToApply: TransformBase, child: ShapeBase)
 	{
 		this.transformToApply = transformToApply;
 		this.child = child;
+
+		this._childAfterTransformation = this.child.clone();
 	}
 
 	static fromTransformAndChild
@@ -20,6 +24,17 @@ export class ShapeTransformed implements ShapeBase
 	): ShapeTransformed
 	{
 		return new ShapeTransformed(transformToApply, child);
+	}
+
+
+	shapeAfterTransformation(): ShapeBase
+	{
+		var returnValue =
+			this._childAfterTransformation
+				.overwriteWith(this.child)
+				.transform(this.transformToApply);
+
+		return returnValue;
 	}
 
 	// Clonable.
