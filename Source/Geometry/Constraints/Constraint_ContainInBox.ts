@@ -4,14 +4,14 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_ContainInBox implements Constraint
 {
-	boxToContainWithin: Box;
+	boxToContainWithin: BoxAxisAligned;
 
-	constructor(boxToContainWithin: Box)
+	constructor(boxToContainWithin: BoxAxisAligned)
 	{
 		this.boxToContainWithin = boxToContainWithin;
 	}
 
-	static fromBox(boxToContainWithin: Box): Constraint_ContainInBox
+	static fromBox(boxToContainWithin: BoxAxisAligned): Constraint_ContainInBox
 	{
 		return new Constraint_ContainInBox(boxToContainWithin);
 	}

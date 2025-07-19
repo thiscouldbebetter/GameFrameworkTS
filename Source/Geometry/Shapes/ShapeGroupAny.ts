@@ -85,7 +85,7 @@ export class ShapeGroupAny implements ShapeBase
 		return surfacePointOut;
 	}
 
-	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

@@ -9,7 +9,7 @@ class PlaceBuilderDemo_Movers {
         var carnivoreColor = Color.Instances().GrayDark;
         var carnivoreDimension = this.entityDimension;
         var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
-        var carnivoreCollider = new Sphere(Coords.create(), carnivoreDimension);
+        var carnivoreCollider = Sphere.fromRadius(carnivoreDimension);
         var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -181,13 +181,14 @@ class PlaceBuilderDemo_Movers {
         );
         // todo - Remove closures.
         var enemyEntityPrototype = new Entity(enemyTypeName + (damageTypeName || "Normal"), [
-            new Actor(enemyActivity),
+            Actor.fromActivity(enemyActivity),
             Animatable2.create(),
-            new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
+            Constrainable
+                .fromConstraint(new Constraint_SpeedMaxXY(speedMax)),
             Collidable.fromCollider(enemyCollider),
             Damager.fromDamagePerHit(Damage.fromAmountAndTypeName(10, damageTypeName)),
             Drawable.fromVisual(enemyVisual),
-            new Effectable([]),
+            Effectable.create(),
             new Enemy(weapon),
             enemyKillable,
             Locatable.create(),
@@ -354,8 +355,8 @@ class PlaceBuilderDemo_Movers {
         var friendlyColor = colors.GreenDark;
         var friendlyDimension = this.entityDimension;
         var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
-        var constrainable = new Constrainable([constraintSpeedMax1]);
-        var friendlyCollider = new Sphere(Coords.create(), friendlyDimension);
+        var constrainable = Constrainable.fromConstraint(constraintSpeedMax1);
+        var friendlyCollider = Sphere.fromRadius(friendlyDimension);
         var friendlyCollide = (uwpe, c) => {
             var u = uwpe.universe;
             var eFriendly = uwpe.entity;
@@ -446,7 +447,7 @@ class PlaceBuilderDemo_Movers {
         var friendlyEntityDefn = new Entity("Friendly", [
             actor,
             Animatable2.create(),
-            new Boundable(friendlyCollider.toBox(null)),
+            new Boundable(friendlyCollider.toBoxAxisAligned(null)),
             constrainable,
             collidable,
             Drawable.fromVisual(friendlyVisual),
@@ -465,7 +466,7 @@ class PlaceBuilderDemo_Movers {
         var grazerColor = colors.Brown;
         var grazerDimension = this.entityDimension;
         var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
-        var grazerCollider = new Sphere(Coords.create(), grazerDimension);
+        var grazerCollider = Sphere.fromRadius(grazerDimension);
         var visualEyeRadius = this.entityDimension * .75 / 2;
         var visualBuilder = new VisualBuilder();
         var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
@@ -607,7 +608,7 @@ class PlaceBuilderDemo_Movers {
         var playerHeadRadius = this.entityDimension * .75;
         var playerVisual = this.entityDefnBuildPlayer_Visual(entityDefnNamePlayer, playerHeadRadius);
         var playerCollider = Sphere.fromRadius(playerHeadRadius);
-        var playerBounds = playerCollider.toBox(null);
+        var playerBounds = playerCollider.toBoxAxisAligned(null);
         var boundable = new Boundable(playerBounds);
         var collidable = this.entityDefnBuildPlayer_Collidable(playerCollider);
         var constrainable = this.entityBuildDefnPlayer_Constrainable();

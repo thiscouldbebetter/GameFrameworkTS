@@ -88,9 +88,9 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBox(boxOut) {
+            toBoxAxisAligned(boxOut) {
                 if (boxOut == null) {
-                    boxOut = GameFramework.Box.create();
+                    boxOut = GameFramework.BoxAxisAligned.create();
                 }
                 var diameter = this.radius() * 2;
                 boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);

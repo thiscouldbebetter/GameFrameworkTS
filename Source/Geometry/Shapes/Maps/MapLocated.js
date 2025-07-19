@@ -7,9 +7,9 @@ var ThisCouldBeBetter;
             constructor(map, loc) {
                 this.map = map;
                 this.loc = loc;
-                this.box = new GameFramework.Box(this.loc.pos, this.map.size);
+                this.box = new GameFramework.BoxAxisAligned(this.loc.pos, this.map.size);
                 // Helper variables.
-                this._boxTransformed = GameFramework.Box.create();
+                this._boxTransformed = GameFramework.BoxAxisAligned.create();
             }
             static fromMap(map) {
                 return new MapLocated(map, GameFramework.Disposition.default());
@@ -48,7 +48,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBox(boxOut) { throw new Error("Not implemented!"); }
+            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 transformToApply.transformCoords(this.loc.pos);

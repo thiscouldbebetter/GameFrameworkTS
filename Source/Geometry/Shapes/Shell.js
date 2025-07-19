@@ -62,8 +62,8 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBox(boxOut) {
-                return this.sphereOuter.toBox(boxOut);
+            toBoxAxisAligned(boxOut) {
+                return this.sphereOuter.toBoxAxisAligned(boxOut);
             }
             // Transformable.
             transform(transformToApply) {

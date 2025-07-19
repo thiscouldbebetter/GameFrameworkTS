@@ -445,11 +445,11 @@ class BoxTests extends TestFixture
 		Assert.isTrue(surfacePointExpected.equals(surfacePointAtPosToCheck) );
 	}
 
-	toBox(): void
+	toBoxAxisAligned(): void
 	{
-		var box = Box.create().randomize(null);
+		var box = BoxAxisAligned.create().randomize(null);
 
-		var boxAsBox = box.toBox(Box.create());
+		var boxAsBox = box.toBoxAxisAligned(BoxAxisAligned.create());
 
 		Assert.isTrue(box.equals(boxAsBox) );
 	}

@@ -55,7 +55,7 @@ var ThisCouldBeBetter;
             }
             normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
             surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
-            toBox(boxOut) { throw new Error("Not implemented!"); }
+            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 throw new Error("Not implemented!");

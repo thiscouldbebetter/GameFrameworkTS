@@ -52,7 +52,7 @@ export class VisualBuilder
 				);
 
 				var sourceRegionBounds =
-					Box.fromMinAndSize(tilePosInPixels.clone(), tileSizeInPixels);
+					BoxAxisAligned.fromMinAndSize(tilePosInPixels.clone(), tileSizeInPixels);
 
 				var frame = new VisualImageScaledPartial
 				(

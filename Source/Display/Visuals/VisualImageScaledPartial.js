@@ -20,7 +20,7 @@ var ThisCouldBeBetter;
                     for (var x = 0; x < imageSizeInTiles.x; x++) {
                         sourcePosInTiles.x = x;
                         var sourcePosInPixels = sourcePosInTiles.clone().multiply(tileSizeInPixels);
-                        var sourceBox = GameFramework.Box.fromMinAndSize(sourcePosInPixels, tileSizeInPixels);
+                        var sourceBox = GameFramework.BoxAxisAligned.fromMinAndSize(sourcePosInPixels, tileSizeInPixels);
                         var visual = new VisualImageScaledPartial(sourceBox, sizeToScaleTo, visualImage);
                         returnVisuals.push(visual);
                     }

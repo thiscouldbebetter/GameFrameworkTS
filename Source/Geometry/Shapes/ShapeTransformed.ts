@@ -71,7 +71,7 @@ export class ShapeTransformed implements ShapeBase
 		throw new Error("Not yet implemented!");
 	}
 
-	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

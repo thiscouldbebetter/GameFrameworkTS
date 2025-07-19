@@ -113,10 +113,11 @@ class PlaceBuilderDemo_Emplacements
 			);
 		}
 
-		var collider = new Box
+		var collider = BoxAxisAligned.fromSize
 		(
-			Coords.create(),
-			new Coords(1, .1, 1).multiplyScalar(this.entityDimension)
+			Coords
+				.fromXYZ(1, .1, 1)
+				.multiplyScalar(this.entityDimension)
 		);
 		var collidable = new Collidable
 		(
@@ -287,7 +288,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var collidable = Collidable.fromCollider
 		(
-			new Box(Coords.create(), entitySize)
+			BoxAxisAligned.fromSize(entitySize)
 		);
 
 		var boundable = Boundable.fromCollidable(collidable);
@@ -370,7 +371,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var collidable = Collidable.fromCollider
 		(
-			new Box(Coords.create(), entitySize)
+			BoxAxisAligned.fromSize(entitySize)
 		);
 
 		var boundable = Boundable.fromCollidable(collidable);
@@ -464,11 +465,11 @@ class PlaceBuilderDemo_Emplacements
 		var obstacleRotationInTurns = .0625;
 		var obstacleCollider = new BoxRotated
 		(
-			new Box(Coords.create(), obstacleBarSize), obstacleRotationInTurns
+			BoxAxisAligned.fromSize(obstacleBarSize), obstacleRotationInTurns
 		);
 		var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
 		var obstacleBounds =
-			(obstacleCollidable.collider as BoxRotated).sphereSwept().toBox(Box.create());
+			(obstacleCollidable.collider as BoxRotated).sphereSwept().toBoxAxisAligned(BoxAxisAligned.create());
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
 		var obstacleLoc = new Disposition
@@ -578,7 +579,7 @@ class PlaceBuilderDemo_Emplacements
 		(
 			obstacleCollider
 		);
-		var obstacleBounds = new Box
+		var obstacleBounds = BoxAxisAligned.fromCenterAndSize
 		(
 			obstacleCollider.loc.pos, obstacleMappedMap.size
 		);
@@ -611,7 +612,7 @@ class PlaceBuilderDemo_Emplacements
 		(
 			new Shell
 			(
-				new Sphere(Coords.create(), obstacleRadiusOuter), // sphereOuter
+				Sphere.fromRadius(obstacleRadiusOuter), // sphereOuter
 				obstacleRadiusInner
 			),
 			new Wedge
@@ -752,7 +753,7 @@ class PlaceBuilderDemo_Emplacements
 		(
 			"Portal",
 			[
-				Collidable.fromCollider(Box.fromSize(entitySize)),
+				Collidable.fromCollider(BoxAxisAligned.fromSize(entitySize)),
 				Drawable.fromVisual(visual),
 				Locatable.create(),
 				new Portal(null, "Exit", Coords.create()),
@@ -796,7 +797,7 @@ class PlaceBuilderDemo_Emplacements
 		);
 
 		var colliderRadius = entityDimension * .25;
-		var collider = new Sphere(Coords.create(), colliderRadius);
+		var collider = Sphere.fromRadius(colliderRadius);
 		var collidable = new Collidable
 		(
 			false, // canCollideAgainWithoutSeparating
@@ -815,7 +816,7 @@ class PlaceBuilderDemo_Emplacements
 
 		var boundable = new Boundable
 		(
-			Box.fromSize
+			BoxAxisAligned.fromSize
 			(
 				Coords.fromXY(1, 1).multiplyScalar(colliderRadius)
 			)
@@ -873,10 +874,11 @@ class PlaceBuilderDemo_Emplacements
 		(
 			Coords.fromXY(0, 0 - this.entityDimension), visualTree
 		);
-		var collider = new Box
+		var collider = BoxAxisAligned.fromSize
 		(
-			Coords.create(),
-			new Coords(1, .1, 1).multiplyScalar(this.entityDimension * .25)
+			Coords
+				.fromXYZ(1, .1, 1)
+				.multiplyScalar(this.entityDimension * .25)
 		);
 		var collidable = new Collidable
 		(

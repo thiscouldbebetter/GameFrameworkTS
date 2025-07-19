@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Box {
+        class BoxAxisAligned {
             constructor(center, size) {
                 this.center = center || GameFramework.Coords.create();
                 this.size = size || GameFramework.Coords.create();
@@ -13,30 +13,30 @@ var ThisCouldBeBetter;
                 this._range = new GameFramework.RangeExtent(0, 0);
             }
             static create() {
-                return Box.fromCenterAndSize(GameFramework.Coords.create(), GameFramework.Coords.create());
+                return BoxAxisAligned.fromCenterAndSize(GameFramework.Coords.create(), GameFramework.Coords.create());
             }
             static default() {
-                return Box.fromCenterAndSize(GameFramework.Coords.zeroes(), GameFramework.Coords.ones());
+                return BoxAxisAligned.fromCenterAndSize(GameFramework.Coords.zeroes(), GameFramework.Coords.ones());
             }
             static fromCenterAndSize(center, size) {
                 // This takes the same arguments as the constructor.
-                return new Box(center, size);
+                return new BoxAxisAligned(center, size);
             }
             static fromMinAndMax(min, max) {
                 var center = min.clone().add(max).half();
                 var size = max.clone().subtract(min);
-                return new Box(center, size);
+                return new BoxAxisAligned(center, size);
             }
             static fromMinAndSize(min, size) {
                 var center = size.clone().half().add(min);
-                return new Box(center, size);
+                return new BoxAxisAligned(center, size);
             }
             static fromSize(size) {
-                return new Box(GameFramework.Coords.zeroes(), size);
+                return new BoxAxisAligned(GameFramework.Coords.zeroes(), size);
             }
             static fromSizeAndCenter(size, center) {
                 // Same arguments as the constructor, but different order.
-                return new Box(center, size);
+                return new BoxAxisAligned(center, size);
             }
             // Static methods.
             static doBoxesInSetsOverlap(boxSet0, boxSet1) {
@@ -88,8 +88,13 @@ var ThisCouldBeBetter;
                         maxSoFar.z = point.z;
                     }
                 }
-                this.center.overwriteWith(minSoFar).add(maxSoFar).half();
-                this.size.overwriteWith(maxSoFar).subtract(minSoFar);
+                this.center
+                    .overwriteWith(minSoFar)
+                    .add(maxSoFar)
+                    .half();
+                this.size
+                    .overwriteWith(maxSoFar)
+                    .subtract(minSoFar);
                 return this;
             }
             containsOther(other) {
@@ -133,7 +138,7 @@ var ThisCouldBeBetter;
                         center.dimensionSet(d, rangeForDimension.midpoint());
                         size.dimensionSet(d, rangeForDimension.size());
                     }
-                    returnValue = new Box(center, size);
+                    returnValue = BoxAxisAligned.fromCenterAndSize(center, size);
                 }
                 return returnValue;
             }
@@ -206,7 +211,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new Box(this.center.clone(), this.size.clone());
+                return new BoxAxisAligned(this.center.clone(), this.size.clone());
             }
             overwriteWith(other) {
                 this.center.overwriteWith(other.center);
@@ -264,18 +269,15 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBox(boxOut) {
+            toBoxAxisAligned(boxOut) {
                 return boxOut.overwriteWith(this);
             }
             // Transformable.
-            coordsGroupToTransform() {
-                return [this.center];
-            }
             transform(transformToApply) {
                 transformToApply.transformCoords(this.center);
                 return this;
             }
         }
-        GameFramework.Box = Box;
+        GameFramework.BoxAxisAligned = BoxAxisAligned;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

@@ -10,7 +10,7 @@ export class Camera implements EntityProperty<Camera>
 	_entitiesInViewSort: (e: Entity[]) => Entity[];
 
 	viewSizeHalf: Coords;
-	viewCollider: Box;
+	viewCollider: BoxAxisAligned;
 	entitiesInView: Entity[];
 
 	_clipPlanes: Plane[];
@@ -34,7 +34,7 @@ export class Camera implements EntityProperty<Camera>
 
 		var viewColliderSize = this.viewSize.clone();
 		viewColliderSize.z = Number.POSITIVE_INFINITY;
-		this.viewCollider = new Box
+		this.viewCollider = BoxAxisAligned.fromCenterAndSize
 		(
 			this.loc.pos, viewColliderSize
 		);
@@ -200,7 +200,7 @@ export class Camera implements EntityProperty<Camera>
 			? Coords.fromXY(placeSize.x, viewSizeHalf.y)
 			: placeSize.clone().subtract(viewSizeHalf);
 
-		var box = Box.fromMinAndMax(min, max);
+		var box = BoxAxisAligned.fromMinAndMax(min, max);
 
 		var constraintContainInBox =
 			Constraint_ContainInBox.fromBox(box);

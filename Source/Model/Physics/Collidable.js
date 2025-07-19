@@ -28,7 +28,7 @@ var ThisCouldBeBetter;
                 return Collidable.fromCollider(GameFramework.ShapeNone.Instance());
             }
             static default() {
-                var collider = GameFramework.Box.fromSize(GameFramework.Coords.ones().multiplyScalar(10));
+                var collider = GameFramework.BoxAxisAligned.fromSize(GameFramework.Coords.ones().multiplyScalar(10));
                 return Collidable.fromColliderAndCollideEntities(collider, Collidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog);
             }
             static entitiesFromPlace(place) {

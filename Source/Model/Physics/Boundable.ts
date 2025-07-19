@@ -21,10 +21,11 @@ export class Boundable<TBounds extends ShapeBase>
 		this._transformLocate = Transform_Locate.create();
 	}
 
-	static fromCollidable(collidable: Collidable): Boundable<Box>
+	static fromCollidable(collidable: Collidable): Boundable<BoxAxisAligned>
 	{
 		var collider = collidable.collider;
-		var colliderAsBox = collider.toBox(Box.create() );
+		var colliderAsBox =
+			collider.toBoxAxisAligned(BoxAxisAligned.create() );
 		var boundable = new Boundable(colliderAsBox);
 		return boundable;
 	}

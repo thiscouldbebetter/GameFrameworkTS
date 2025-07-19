@@ -58,7 +58,9 @@ class PlaceBuilderDemo_Emplacements {
         if (this.parent.visualsHaveText) {
             itemBoulderVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateFontAndColor(itemDefnName, this.font, colorBoulder)));
         }
-        var collider = new Box(Coords.create(), new Coords(1, .1, 1).multiplyScalar(this.entityDimension));
+        var collider = BoxAxisAligned.fromSize(Coords
+            .fromXYZ(1, .1, 1)
+            .multiplyScalar(this.entityDimension));
         var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
         0, // ticksToWaitBetweenCollisions
         collider, [Collidable.name], // entityPropertyNamesToCollideWith,
@@ -146,7 +148,7 @@ class PlaceBuilderDemo_Emplacements {
             VisualRectangle.fromSizeAndColorFill(Coords.fromXY(.5, .5).multiplyScalar(this.entityDimension), colors.Gray)
         ]);
         this.parent.textWithColorAddToVisual("Container", containerColor, visual);
-        var collidable = Collidable.fromCollider(new Box(Coords.create(), entitySize));
+        var collidable = Collidable.fromCollider(BoxAxisAligned.fromSize(entitySize));
         var boundable = Boundable.fromCollidable(collidable);
         var containerEntityDefn = new Entity("Container", [
             boundable,
@@ -182,7 +184,7 @@ class PlaceBuilderDemo_Emplacements {
             VisualOffset.fromOffsetAndChild(Coords.fromXY(this.entityDimension / 4, 0 - this.entityDimension * .6), VisualCircle.fromRadiusAndColorFill(this.entityDimension / 8, colors.Yellow))
         ]);
         this.parent.textWithColorAddToVisual("Exit", exitColor, visual);
-        var collidable = Collidable.fromCollider(new Box(Coords.create(), entitySize));
+        var collidable = Collidable.fromCollider(BoxAxisAligned.fromSize(entitySize));
         var boundable = Boundable.fromCollidable(collidable);
         var exitEntityDefn = new Entity("Exit", [
             boundable,
@@ -233,9 +235,9 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleColor = Color.Instances().Red;
         var obstacleBarSize = new Coords(6, 2, 1).multiplyScalar(this.entityDimension);
         var obstacleRotationInTurns = .0625;
-        var obstacleCollider = new BoxRotated(new Box(Coords.create(), obstacleBarSize), obstacleRotationInTurns);
+        var obstacleCollider = new BoxRotated(BoxAxisAligned.fromSize(obstacleBarSize), obstacleRotationInTurns);
         var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
-        var obstacleBounds = obstacleCollidable.collider.sphereSwept().toBox(Box.create());
+        var obstacleBounds = obstacleCollidable.collider.sphereSwept().toBoxAxisAligned(BoxAxisAligned.create());
         var obstacleBoundable = new Boundable(obstacleBounds);
         var obstacleLoc = new Disposition(Coords.create(), new Orientation(Coords.create().fromHeadingInTurns(obstacleRotationInTurns), new Coords(0, 0, 1)), null);
         var visualBody = VisualGroup.fromChildren([
@@ -284,7 +286,7 @@ class PlaceBuilderDemo_Emplacements {
         this.parent.textWithColorAddToVisual(entityDefnName, obstacleColor, obstacleMappedVisual);
         var obstacleCollider = new MapLocated(obstacleMappedMap, Disposition.create());
         var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
-        var obstacleBounds = new Box(obstacleCollider.loc.pos, obstacleMappedMap.size);
+        var obstacleBounds = BoxAxisAligned.fromCenterAndSize(obstacleCollider.loc.pos, obstacleMappedMap.size);
         var obstacleBoundable = new Boundable(obstacleBounds);
         var obstacleMappedEntityDefn = new Entity(entityDefnName, [
             obstacleBoundable,
@@ -302,7 +304,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleRadiusInner = obstacleRadiusOuter - this.entityDimension;
         var obstacleAngleSpannedInTurns = .85;
         var obstacleLoc = new Disposition(Coords.create(), null, null);
-        var obstacleCollider = new Arc(new Shell(new Sphere(Coords.create(), obstacleRadiusOuter), // sphereOuter
+        var obstacleCollider = new Arc(new Shell(Sphere.fromRadius(obstacleRadiusOuter), // sphereOuter
         obstacleRadiusInner), new Wedge(Coords.create(), // vertex
         Coords.fromXY(1, 0), // directionMin
         //obstacleLoc.orientation.forward, // directionMin
@@ -365,7 +367,7 @@ class PlaceBuilderDemo_Emplacements {
             Portal.of(eUsed).use(uwpe);
         };
         var portalEntity = new Entity("Portal", [
-            Collidable.fromCollider(Box.fromSize(entitySize)),
+            Collidable.fromCollider(BoxAxisAligned.fromSize(entitySize)),
             Drawable.fromVisual(visual),
             Locatable.create(),
             new Portal(null, "Exit", Coords.create()),
@@ -391,7 +393,7 @@ class PlaceBuilderDemo_Emplacements {
         ]);
         this.parent.textWithColorAddToVisual(entityName, color, visual);
         var colliderRadius = entityDimension * .25;
-        var collider = new Sphere(Coords.create(), colliderRadius);
+        var collider = Sphere.fromRadius(colliderRadius);
         var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
         0, // ticksToWaitBetweenCollisions
         collider, [Movable.name], // entityPropertyNamesToCollideWith,
@@ -402,7 +404,7 @@ class PlaceBuilderDemo_Emplacements {
             var e2 = uwpe.entity2;
             universe.collisionHelper.collideEntitiesBounce(e, e2);
         });
-        var boundable = new Boundable(Box.fromSize(Coords.fromXY(1, 1).multiplyScalar(colliderRadius)));
+        var boundable = new Boundable(BoxAxisAligned.fromSize(Coords.fromXY(1, 1).multiplyScalar(colliderRadius)));
         var entityDefn = Entity.fromNameAndProperties(entityName, [
             boundable,
             collidable,
@@ -426,7 +428,9 @@ class PlaceBuilderDemo_Emplacements {
         ]);
         this.parent.textWithColorAddToVisual(entityName, color, visualTree);
         var visual = VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension), visualTree);
-        var collider = new Box(Coords.create(), new Coords(1, .1, 1).multiplyScalar(this.entityDimension * .25));
+        var collider = BoxAxisAligned.fromSize(Coords
+            .fromXYZ(1, .1, 1)
+            .multiplyScalar(this.entityDimension * .25));
         var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
         0, // ticksToWaitBetweenCollisions
         collider, [Collidable.name], // entityPropertyNamesToCollideWith,

@@ -27,7 +27,11 @@ export class Image2 implements MediaItemBase
 		return new Image2(null, null);
 	}
 
-	static fromImageAndBox(imageSource: Image2, box: Box): Image2
+	static fromImageAndBox
+	(
+		imageSource: Image2,
+		box: BoxAxisAligned
+	): Image2
 	{
 		var display = Display2D.fromSizeAndIsInvisible
 		(
@@ -92,7 +96,7 @@ export class Image2 implements MediaItemBase
 					tileSizeInPixels
 				);
 
-				var box = Box.fromMinAndSize
+				var box = BoxAxisAligned.fromMinAndSize
 				(
 					tilePosInPixels, tileSizeInPixels
 				);

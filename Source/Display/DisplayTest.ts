@@ -124,13 +124,13 @@ export class DisplayTest implements Display
 
 	drawImagePartial
 	(
-		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: BoxAxisAligned
 	): void
 	{}
 
 	drawImagePartialScaled
 	(
-		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: BoxAxisAligned, sizeToDraw: Coords
 	): void
 	{}
 

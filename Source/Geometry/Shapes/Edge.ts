@@ -6,7 +6,7 @@ export class Edge implements ShapeBase
 {
 	vertices: Coords[];
 
-	_box: Box;
+	_box: BoxAxisAligned;
 	_direction: Coords;
 	_displacement: Coords;
 	_transverse: Coords;
@@ -126,7 +126,7 @@ export class Edge implements ShapeBase
 		throw new Error("Not implemented!");
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
 		return boxOut.containPoints(this.vertices);
 	}

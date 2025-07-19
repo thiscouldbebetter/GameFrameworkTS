@@ -40,7 +40,7 @@ var ThisCouldBeBetter;
                     for (var x = 0; x < sizeInTiles.x; x++) {
                         tilePosInTiles.x = x;
                         tilePosInPixels.overwriteWith(tilePosInTiles).multiply(tileSizeInPixels);
-                        var box = GameFramework.Box.fromMinAndSize(tilePosInPixels, tileSizeInPixels);
+                        var box = GameFramework.BoxAxisAligned.fromMinAndSize(tilePosInPixels, tileSizeInPixels);
                         var imageForTile = Image2.fromImageAndBox(this, box);
                         imagesInRow.push(imageForTile);
                     }

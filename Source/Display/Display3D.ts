@@ -524,14 +524,14 @@ export class Display3D implements Display
 		this._display2DOverlay.drawImage(imageToDraw, pos);
 	}
 
-	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: Box): void
+	drawImagePartial(imageToDraw: Image2, pos: Coords, boxToShow: BoxAxisAligned): void
 	{
 		this._display2DOverlay.drawImagePartial(imageToDraw, pos, boxToShow);
 	}
 
 	drawImagePartialScaled
 	(
-		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: BoxAxisAligned, sizeToDraw: Coords
 	): void
 	{
 		this._display2DOverlay.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, sizeToDraw);

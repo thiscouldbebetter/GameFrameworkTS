@@ -110,9 +110,9 @@ export class Shell implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
-		return this.sphereOuter.toBox(boxOut);
+		return this.sphereOuter.toBoxAxisAligned(boxOut);
 	}
 
 	// Transformable.

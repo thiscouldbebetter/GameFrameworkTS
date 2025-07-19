@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Box implements ShapeBase
+export class BoxAxisAligned implements ShapeBase
 {
 	center: Coords;
 	size: Coords;
@@ -25,49 +25,49 @@ export class Box implements ShapeBase
 		this._range = new RangeExtent(0, 0);
 	}
 
-	static create(): Box
+	static create(): BoxAxisAligned
 	{
-		return Box.fromCenterAndSize(Coords.create(), Coords.create());
+		return BoxAxisAligned.fromCenterAndSize(Coords.create(), Coords.create());
 	}
 
-	static default(): Box
+	static default(): BoxAxisAligned
 	{
-		return Box.fromCenterAndSize(Coords.zeroes(), Coords.ones() );
+		return BoxAxisAligned.fromCenterAndSize(Coords.zeroes(), Coords.ones() );
 	}
 
-	static fromCenterAndSize(center: Coords, size: Coords): Box
+	static fromCenterAndSize(center: Coords, size: Coords): BoxAxisAligned
 	{
 		// This takes the same arguments as the constructor.
-		return new Box(center, size);
+		return new BoxAxisAligned(center, size);
 	}
 
-	static fromMinAndMax(min: Coords, max: Coords): Box
+	static fromMinAndMax(min: Coords, max: Coords): BoxAxisAligned
 	{
 		var center = min.clone().add(max).half();
 		var size = max.clone().subtract(min);
-		return new Box(center, size);
+		return new BoxAxisAligned(center, size);
 	}
 
-	static fromMinAndSize(min: Coords, size: Coords): Box
+	static fromMinAndSize(min: Coords, size: Coords): BoxAxisAligned
 	{
 		var center = size.clone().half().add(min);
-		return new Box(center, size);
+		return new BoxAxisAligned(center, size);
 	}
 
-	static fromSize(size: Coords): Box
+	static fromSize(size: Coords): BoxAxisAligned
 	{
-		return new Box(Coords.zeroes(), size);
+		return new BoxAxisAligned(Coords.zeroes(), size);
 	}
 
-	static fromSizeAndCenter(size: Coords, center: Coords): Box
+	static fromSizeAndCenter(size: Coords, center: Coords): BoxAxisAligned
 	{
 		// Same arguments as the constructor, but different order.
-		return new Box(center, size);
+		return new BoxAxisAligned(center, size);
 	}
 
 	// Static methods.
 
-	static doBoxesInSetsOverlap(boxSet0: Box[], boxSet1: Box[]): boolean
+	static doBoxesInSetsOverlap(boxSet0: BoxAxisAligned[], boxSet1: BoxAxisAligned[]): boolean
 	{
 		var doAnyBoxOverlapSoFar = false;
 
@@ -96,7 +96,7 @@ export class Box implements ShapeBase
 
 	// Instance methods.
 
-	containOthers(boxes: Box[]): Box
+	containOthers(boxes: BoxAxisAligned[]): BoxAxisAligned
 	{
 		var boxExtremes = new Array<Coords>();
 
@@ -115,7 +115,7 @@ export class Box implements ShapeBase
 		return boxContainingBoxes;
 	}
 
-	containPoints(points: Coords[]): Box
+	containPoints(points: Coords[]): BoxAxisAligned
 	{
 		var point0 = points[0];
 		var minSoFar = this._min.overwriteWith(point0);
@@ -153,13 +153,18 @@ export class Box implements ShapeBase
 			}
 		}
 
-		this.center.overwriteWith(minSoFar).add(maxSoFar).half();
-		this.size.overwriteWith(maxSoFar).subtract(minSoFar);
+		this.center
+			.overwriteWith(minSoFar)
+			.add(maxSoFar)
+			.half();
+		this.size
+			.overwriteWith(maxSoFar)
+			.subtract(minSoFar);
 
 		return this;
 	}
 
-	containsOther(other: Box): boolean
+	containsOther(other: BoxAxisAligned): boolean
 	{
 		return ( this.containsPoint(other.min()) && this.containsPoint(other.max()) );
 	}
@@ -169,14 +174,14 @@ export class Box implements ShapeBase
 		return pointToCheck.isInRangeMinMaxXY(this.min(), this.max());
 	}
 
-	fromMinAndMax(min: Coords, max: Coords): Box
+	fromMinAndMax(min: Coords, max: Coords): BoxAxisAligned
 	{
 		this.center.overwriteWith(min).add(max).half();
 		this.size.overwriteWith(max).subtract(min);
 		return this;
 	}
 
-	intersectWith(other: Box): Box
+	intersectWith(other: BoxAxisAligned): BoxAxisAligned
 	{
 		var thisMinDimensions = this.min().dimensions();
 		var thisMaxDimensions = this.max().dimensions();
@@ -218,7 +223,7 @@ export class Box implements ShapeBase
 				size.dimensionSet(d, rangeForDimension.size());
 			}
 
-			returnValue = new Box(center, size);
+			returnValue = BoxAxisAligned.fromCenterAndSize(center, size);
 		}
 
 		return returnValue;
@@ -234,7 +239,7 @@ export class Box implements ShapeBase
 		return this._min.overwriteWith(this.center).subtract(this.sizeHalf());
 	}
 
-	overlapsWith(other: Box): boolean
+	overlapsWith(other: BoxAxisAligned): boolean
 	{
 		var returnValue =
 		(
@@ -245,7 +250,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	overlapsWithXY(other: Box): boolean
+	overlapsWithXY(other: BoxAxisAligned): boolean
 	{
 		var returnValue =
 		(
@@ -255,7 +260,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	overlapsWithOtherInDimension(other: Box, dimensionIndex: number): boolean
+	overlapsWithOtherInDimension(other: BoxAxisAligned, dimensionIndex: number): boolean
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -263,7 +268,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	randomize(randomizer: Randomizer): Box
+	randomize(randomizer: Randomizer): BoxAxisAligned
 	{
 		this.center.randomize(randomizer);
 		this.size.randomize(randomizer);
@@ -283,13 +288,13 @@ export class Box implements ShapeBase
 		return this._sizeHalf.overwriteWith(this.size).half();
 	}
 
-	sizeOverwriteWith(sizeOther: Coords): Box
+	sizeOverwriteWith(sizeOther: Coords): BoxAxisAligned
 	{
 		this.size.overwriteWith(sizeOther);
 		return this;
 	}
 
-	touches(other: Box): boolean
+	touches(other: BoxAxisAligned): boolean
 	{
 		var returnValue =
 		(
@@ -300,7 +305,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	touchesXY(other: Box): boolean
+	touchesXY(other: BoxAxisAligned): boolean
 	{
 		var returnValue =
 		(
@@ -310,7 +315,7 @@ export class Box implements ShapeBase
 		return returnValue;
 	}
 
-	touchesOtherInDimension(other: Box, dimensionIndex: number): boolean
+	touchesOtherInDimension(other: BoxAxisAligned, dimensionIndex: number): boolean
 	{
 		var rangeThis = this.rangeForDimension(dimensionIndex, this._range);
 		var rangeOther = other.rangeForDimension(dimensionIndex, other._range);
@@ -335,12 +340,12 @@ export class Box implements ShapeBase
 
 	// Clonable.
 
-	clone(): Box
+	clone(): BoxAxisAligned
 	{
-		return new Box(this.center.clone(), this.size.clone());
+		return new BoxAxisAligned(this.center.clone(), this.size.clone());
 	}
 
-	overwriteWith(other: Box): Box
+	overwriteWith(other: BoxAxisAligned): BoxAxisAligned
 	{
 		this.center.overwriteWith(other.center);
 		this.size.overwriteWith(other.size);
@@ -349,7 +354,7 @@ export class Box implements ShapeBase
 
 	// Equatable
 
-	equals(other: Box): boolean
+	equals(other: BoxAxisAligned): boolean
 	{
 		var returnValue =
 		(
@@ -456,19 +461,14 @@ export class Box implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
 		return boxOut.overwriteWith(this);
 	}
 
 	// Transformable.
 
-	coordsGroupToTransform(): Coords[]
-	{
-		return [ this.center ];
-	}
-
-	transform(transformToApply: TransformBase): Box
+	transform(transformToApply: TransformBase): BoxAxisAligned
 	{
 		transformToApply.transformCoords(this.center);
 		return this;

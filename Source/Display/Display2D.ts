@@ -404,7 +404,7 @@ export class Display2D implements Display
 	(
 		imageToDraw: Image2,
 		pos: Coords,
-		regionToDrawAsBox: Box
+		regionToDrawAsBox: BoxAxisAligned
 	): void
 	{
 		this.drawImagePartialScaled(imageToDraw, pos, regionToDrawAsBox, null);
@@ -414,7 +414,7 @@ export class Display2D implements Display
 	(
 		imageToDraw: Image2,
 		pos: Coords,
-		regionToDrawAsBox: Box,
+		regionToDrawAsBox: BoxAxisAligned,
 		sizeToDraw: Coords
 	): void
 	{

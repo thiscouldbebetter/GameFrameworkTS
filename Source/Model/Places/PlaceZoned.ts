@@ -130,14 +130,14 @@ export class PlaceZoned extends PlaceBase
 export class Zone
 {
 	name: string;
-	bounds: Box;
+	bounds: BoxAxisAligned;
 	zonesAdjacentNames: string[];
 	entities: Entity[];
 
 	constructor
 	(
 		name: string,
-		bounds: Box,
+		bounds: BoxAxisAligned,
 		zonesAdjacentNames: string[],
 		entities: Entity[]
 	)

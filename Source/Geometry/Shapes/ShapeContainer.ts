@@ -52,9 +52,9 @@ export class ShapeContainer implements ShapeBase
 		return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
-		return this.shape.toBox(boxOut);
+		return this.shape.toBoxAxisAligned(boxOut);
 	}
 
 	// Transformable.

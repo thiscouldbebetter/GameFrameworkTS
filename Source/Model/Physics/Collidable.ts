@@ -63,7 +63,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	static default(): Collidable
 	{
-		var collider = Box.fromSize
+		var collider = BoxAxisAligned.fromSize
 		(
 			Coords.ones().multiplyScalar(10)
 		);

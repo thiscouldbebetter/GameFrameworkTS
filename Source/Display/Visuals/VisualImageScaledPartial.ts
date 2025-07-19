@@ -5,7 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial>
 {
 	visualImageToExtractFrom: VisualImage;
-	regionToDrawAsBox: Box;
+	regionToDrawAsBox: BoxAxisAligned;
 	sizeToDraw: Coords;
 
 	sizeToDrawHalf: Coords;
@@ -14,7 +14,7 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 
 	constructor
 	(
-		regionToDrawAsBox: Box,
+		regionToDrawAsBox: BoxAxisAligned,
 		sizeToDraw: Coords,
 		visualImageToExtractFrom: VisualImage
 	)
@@ -53,7 +53,7 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 				var sourcePosInPixels =
 					sourcePosInTiles.clone().multiply(tileSizeInPixels);
 
-				var sourceBox = Box.fromMinAndSize
+				var sourceBox = BoxAxisAligned.fromMinAndSize
 				(
 					sourcePosInPixels,
 					tileSizeInPixels

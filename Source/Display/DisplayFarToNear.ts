@@ -220,7 +220,7 @@ export class DisplayFarToNear implements Display
 
 	drawImagePartial
 	(
-		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: BoxAxisAligned
 	): void
 	{
 		pos = pos.clone();
@@ -235,7 +235,7 @@ export class DisplayFarToNear implements Display
 	drawImagePartialScaled
 	(
 		imageToDraw: Image2, pos: Coords,
-		regionToDrawAsBox: Box, sizeToDraw: Coords
+		regionToDrawAsBox: BoxAxisAligned, sizeToDraw: Coords
 	): void
 	{
 		pos = pos.clone();

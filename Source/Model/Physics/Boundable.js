@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
             }
             static fromCollidable(collidable) {
                 var collider = collidable.collider;
-                var colliderAsBox = collider.toBox(GameFramework.Box.create());
+                var colliderAsBox = collider.toBoxAxisAligned(GameFramework.BoxAxisAligned.create());
                 var boundable = new Boundable(colliderAsBox);
                 return boundable;
             }

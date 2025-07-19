@@ -88,6 +88,12 @@ export class Orientation
 		return this.orthogonalize();
 	}
 
+	normalize(): Orientation
+	{
+		this.axes.forEach(x => x.normalize() );
+		return this;
+	}
+
 	orthogonalize(): Orientation
 	{
 		this.forward.normalize();
@@ -176,16 +182,16 @@ export class Orientation_Instances
 
 	constructor()
 	{
-		this.ForwardXDownZ = new Orientation
+		this.ForwardXDownZ = Orientation.fromForwardAndDown
 		(
-			new Coords(1, 0, 0), // forward
-			new Coords(0, 0, 1) // down
+			Coords.fromXYZ(1, 0, 0), // forward
+			Coords.fromXYZ(0, 0, 1) // down
 		);
 
-		this.ForwardZDownY = new Orientation
+		this.ForwardZDownY = Orientation.fromForwardAndDown
 		(
-			new Coords(0, 0, 1), // forward
-			new Coords(0, 1, 0) // down
+			Coords.fromXYZ(0, 0, 1), // forward
+			Coords.fromXYZ(0, 1, 0) // down
 		);
 	}
 }

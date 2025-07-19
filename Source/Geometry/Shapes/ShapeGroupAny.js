@@ -46,7 +46,7 @@ var ThisCouldBeBetter;
                 }
                 return surfacePointOut;
             }
-            toBox(boxOut) { throw new Error("Not implemented!"); }
+            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 this.shapes.forEach((x) => x.transform(transformToApply));

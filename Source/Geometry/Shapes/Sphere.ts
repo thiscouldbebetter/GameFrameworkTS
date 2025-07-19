@@ -151,11 +151,11 @@ export class Sphere implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
 		if (boxOut == null)
 		{
-			boxOut = Box.create();
+			boxOut = BoxAxisAligned.create();
 		}
 		var diameter = this.radius() * 2;
 		boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);

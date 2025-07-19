@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
             }
             box() {
                 if (this._box == null) {
-                    this._box = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create());
+                    this._box = GameFramework.BoxAxisAligned.create();
                 }
                 this._box.containPoints(this.vertices);
                 return this._box;
@@ -74,7 +74,7 @@ var ThisCouldBeBetter;
                 return null; // todo
             }
             surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
-            toBox(boxOut) {
+            toBoxAxisAligned(boxOut) {
                 return boxOut.containPoints(this.vertices);
             }
             // Transformable.

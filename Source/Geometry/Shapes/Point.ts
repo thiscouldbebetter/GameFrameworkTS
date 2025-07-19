@@ -70,7 +70,7 @@ export class Point implements ShapeBase
 		return this.pos.clone();
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
 		boxOut.size.clear(); // Will this work?
 		return boxOut;

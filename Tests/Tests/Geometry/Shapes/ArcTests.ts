@@ -108,11 +108,11 @@ class ArcTests extends TestFixture
 		Assert.isTrue(surfacePointNearPosExpected.equals(surfacePointNearPos) );
 	}
 
-	toBox(): void
+	toBoxAxisAligned(): void
 	{
 		var arc = this._arcDefault;
 
-		var arcAsBox = arc.toBox(Box.create());
+		var arcAsBox = arc.toBoxAxisAligned(BoxAxisAligned.create());
 
 		var arcAsBoxExpected =
 			Box.fromCenterAndSize(Coords.create(), new Coords(2, 2, 2) );

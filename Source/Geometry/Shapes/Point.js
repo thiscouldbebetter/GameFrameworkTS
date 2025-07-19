@@ -42,7 +42,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return this.pos.clone();
             }
-            toBox(boxOut) {
+            toBoxAxisAligned(boxOut) {
                 boxOut.size.clear(); // Will this work?
                 return boxOut;
             }

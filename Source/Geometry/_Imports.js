@@ -37,7 +37,8 @@ var Constraint_WrapToPlaceSizeXTrimY = gf.Constraint_WrapToPlaceSizeXTrimY;
 var Network = gf.Network;
 // Geometry - Shapes.
 var Arc = gf.Arc;
-var Box = gf.Box;
+var BoxAxisAligned = gf.BoxAxisAligned;
+var BoxOriented = gf.BoxOriented;
 var BoxRotated = gf.BoxRotated;
 var Cylinder = gf.Cylinder;
 var Edge = gf.Edge;

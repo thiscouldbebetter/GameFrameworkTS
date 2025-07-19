@@ -97,7 +97,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 throw new Error("Not implemented!");
             }
-            toBox(boxOut) {
+            toBoxAxisAligned(boxOut) {
                 throw new Error("Not implemented!");
             }
         }

@@ -11,6 +11,11 @@ export class Effectable implements EntityProperty<Effectable>
 		this.effects = effects || new Array<Effect>();
 	}
 
+	static create(): Effectable
+	{
+		return new Effectable([]);
+	}
+
 	static default(): Effectable
 	{
 		return new Effectable([]);

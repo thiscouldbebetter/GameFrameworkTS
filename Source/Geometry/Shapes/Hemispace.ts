@@ -88,7 +88,7 @@ export class Hemispace implements ShapeBase
 		);
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
 		throw new Error("Not implemented!");
 	}

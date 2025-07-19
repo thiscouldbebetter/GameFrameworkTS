@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
             static default() {
                 return Actor.fromActivityDefn(GameFramework.ActivityDefn.Instances().DoNothing);
             }
+            static fromActivity(activity) {
+                return new Actor(activity);
+            }
             static fromActivityDefn(activityDefn) {
                 return Actor.fromActivityDefnName(activityDefn.name);
             }

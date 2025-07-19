@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 this.viewSizeHalf = this.viewSize.clone().clearZ().half();
                 var viewColliderSize = this.viewSize.clone();
                 viewColliderSize.z = Number.POSITIVE_INFINITY;
-                this.viewCollider = new GameFramework.Box(this.loc.pos, viewColliderSize);
+                this.viewCollider = GameFramework.BoxAxisAligned.fromCenterAndSize(this.loc.pos, viewColliderSize);
                 this.entitiesInView = new Array();
                 this._displayToRestore = null;
                 this._posSaved = GameFramework.Coords.create();
@@ -99,7 +99,7 @@ var ThisCouldBeBetter;
                 var max = placeIsWrappedHorizontally
                     ? GameFramework.Coords.fromXY(placeSize.x, viewSizeHalf.y)
                     : placeSize.clone().subtract(viewSizeHalf);
-                var box = GameFramework.Box.fromMinAndMax(min, max);
+                var box = GameFramework.BoxAxisAligned.fromMinAndMax(min, max);
                 var constraintContainInBox = GameFramework.Constraint_ContainInBox.fromBox(box);
                 return constraintContainInBox;
             }

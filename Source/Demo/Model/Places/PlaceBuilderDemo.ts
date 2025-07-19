@@ -61,7 +61,7 @@ class PlaceBuilderDemo // Main.
 	{
 		this.build_Interior("Base", size, placeNameToReturnTo);
 
-		var entityPosRange = Box.fromCenterAndSize
+		var entityPosRange = BoxAxisAligned.fromCenterAndSize
 		(
 			size.clone().half(),
 			size.clone().subtract(this.marginSize)
@@ -250,7 +250,7 @@ class PlaceBuilderDemo // Main.
 		this.entityBuildExit(placeNameToReturnTo);
 
 		var zones = [];
-		var placeSizeInZones = new Coords(3, 3, 1);
+		var placeSizeInZones = Coords.fromXYZ(3, 3, 1);
 		var zonePosInZones = Coords.create();
 		var zoneSize = size;
 		var neighborOffsets =
@@ -265,7 +265,7 @@ class PlaceBuilderDemo // Main.
 			Coords.fromXY(1, -1)
 		];
 		var neighborPos = Coords.create();
-		var boxZeroes = new Box(Coords.create(), Coords.create());
+		var boxZeroes = BoxAxisAligned.create();
 		for (var y = 0; y < placeSizeInZones.y; y++)
 		{
 			zonePosInZones.y = y;
@@ -308,7 +308,7 @@ class PlaceBuilderDemo // Main.
 				var zone = new Zone
 				(
 					"Zone" + zonePosInZones.toStringXY(),
-					Box.fromMinAndSize(zonePos, zoneSize),
+					BoxAxisAligned.fromMinAndSize(zonePos, zoneSize),
 					neighborNames,
 					[
 						entityBoulderCorner
@@ -434,7 +434,7 @@ class PlaceBuilderDemo // Main.
 		var mapCellSize = size.clone().divide(mapSizeInCells).ceiling();
 		var mapCellSizeHalf = mapCellSize.clone().half();
 
-		var entityExitPosRange = Box.fromCenterAndSize
+		var entityExitPosRange = BoxAxisAligned.fromCenterAndSize
 		(
 			mapCellSize.clone().half(), Coords.create() // ?
 		);
@@ -448,7 +448,7 @@ class PlaceBuilderDemo // Main.
 		this.entities.push(exit);
 
 		var cellCollider =
-			Box.fromCenterAndSize(mapCellSizeHalf.clone(), mapCellSize);
+			BoxAxisAligned.fromCenterAndSize(mapCellSizeHalf.clone(), mapCellSize);
 		var cellCollide = (uwpe: UniverseWorldPlaceEntities) =>
 		{
 			var e0 = uwpe.entity;
@@ -716,7 +716,7 @@ class PlaceBuilderDemo // Main.
 			var tileSizeInPixels = imageSizeInPixels.clone().divide(imageSizeInTiles);
 			var tileSizeInPixelsHalf = tileSizeInPixels.clone().half();
 
-			var tileCenterBounds = new Box
+			var tileCenterBounds = BoxAxisAligned.fromCenterAndSize
 			(
 				imageSizeInPixels.clone().half(),
 				tileSizeInPixels
@@ -742,7 +742,7 @@ class PlaceBuilderDemo // Main.
 				visualOffsetInMapCellsHalf: Coords
 			) =>
 			{
-				var terrainVisualBounds = Box.fromMinAndSize
+				var terrainVisualBounds = BoxAxisAligned.fromMinAndSize
 				(
 					tileOffsetInTilesHalf.clone().multiply(tileSizeInPixelsHalf),
 					tileSizeInPixelsHalf
@@ -1025,9 +1025,8 @@ class PlaceBuilderDemo // Main.
 				[
 					new Boundable
 					(
-						new Box
+						BoxAxisAligned.fromSize
 						(
-							Coords.create(), //cellPosInPixels,
 							mapCellSize
 						)
 					),
@@ -1044,10 +1043,10 @@ class PlaceBuilderDemo // Main.
 		var mapCellsAsEntities = map.cellsAsEntities(mapAndCellPosToEntity);
 		this.entities.push(...mapCellsAsEntities);
 
-		var entityPosRange = new Box(size.clone().half(), size.clone().subtract(this.marginSize));
+		var entityPosRange = new BoxAxisAligned(size.clone().half(), size.clone().subtract(this.marginSize));
 		var randomizer = this.randomizer;
 
-		var ebfdac = (a: Entity, b: number, c: number, d: Box, e: Randomizer) =>
+		var ebfdac = (a: Entity, b: number, c: number, d: BoxAxisAligned, e: Randomizer) =>
 			this.entitiesBuildFromDefnAndCount(a, b, c, d, e)
 		this.entities.push(...ebfdac(this.entityDefnsByName.get("Carnivore"), 1, null, entityPosRange, randomizer));
 		this.entities.push(...ebfdac(this.entityDefnsByName.get("Doughnut"), 1, 12, entityPosRange, randomizer));
@@ -1079,7 +1078,7 @@ class PlaceBuilderDemo // Main.
 		var entities = this.entities;
 
 		var size = this.size;
-		var entityPosRange = new Box(size.clone().half(), size.clone().subtract(this.marginSize));
+		var entityPosRange = new BoxAxisAligned(size.clone().half(), size.clone().subtract(this.marginSize));
 		var randomizer = this.randomizer;
 
 		var es = entities;
@@ -1152,7 +1151,7 @@ class PlaceBuilderDemo // Main.
 		(
 			entities, entitySize, numberOfKeysToUnlockGoal
 		);
-		var entityPosRange = new Box
+		var entityPosRange = BoxAxisAligned.fromCenterAndSize
 		(
 			this.size.clone().half(),
 			this.size.clone().subtract(this.marginSize)
@@ -1216,7 +1215,7 @@ class PlaceBuilderDemo // Main.
 		var cameraHeightAbovePlayfield = cameraViewSize.x;
 		var cameraZ = 0 - cameraHeightAbovePlayfield;
 
-		var cameraPosBox = Box.fromMinAndMax
+		var cameraPosBox = BoxAxisAligned.fromMinAndMax
 		(
 			viewSizeHalf.clone().zSet(cameraZ),
 			placeSize.clone().subtract(viewSizeHalf).zSet(cameraZ)
@@ -1236,7 +1235,8 @@ class PlaceBuilderDemo // Main.
 			(entities: Entity[]) =>
 				Camera.entitiesSortByRenderingOrderThenZThenY(entities)
 		);
-		var cameraEntity = camera.toEntityForTargetEntityName("Player");
+		var cameraEntity =
+			camera.toEntityFollowingEntityWithName("Player");
 		Constrainable.of(cameraEntity).constraintAdd
 		(
 			new Constraint_ContainInBox(cameraPosBox)
@@ -1302,7 +1302,7 @@ class PlaceBuilderDemo // Main.
 	entityBuildExit(placeNameToReturnTo: string): Entity
 	{
 		var entityPosRange =
-			new Box(this.size.clone().half(), this.size.clone().subtract(this.marginSize) );
+			new BoxAxisAligned(this.size.clone().half(), this.size.clone().subtract(this.marginSize) );
 		var exit = this.entityBuildFromDefn(this.entityDefnsByName.get("Exit"), entityPosRange, this.randomizer);
 		var exitPortal = Portal.of(exit);
 		exitPortal.destinationPlaceName = placeNameToReturnTo;
@@ -1321,8 +1321,11 @@ class PlaceBuilderDemo // Main.
 
 	entitiesBuildFromDefnAndCount
 	(
-		entityDefn: Entity, entityCount: number, itemQuantityPerEntity: number,
-		posRange: Box, randomizer: Randomizer
+		entityDefn: Entity,
+		entityCount: number,
+		itemQuantityPerEntity: number,
+		posRange: BoxAxisAligned,
+		randomizer: Randomizer
 	): Entity[]
 	{
 		var returnEntities = [];
@@ -1348,7 +1351,7 @@ class PlaceBuilderDemo // Main.
 
 	entityBuildFromDefn
 	(
-		entityDefn: Entity, posRange: Box, randomizer: Randomizer
+		entityDefn: Entity, posRange: BoxAxisAligned, randomizer: Randomizer
 	): Entity
 	{
 		var entity = entityDefn.clone();
@@ -1419,7 +1422,7 @@ class PlaceBuilderDemo // Main.
 			"Goal",
 			[
 				Locatable.fromDisp(goalLoc),
-				Collidable.fromCollider(Box.fromSize(entitySize) ),
+				Collidable.fromCollider(BoxAxisAligned.fromSize(entitySize) ),
 				Drawable.fromVisual(goalVisual),
 				new Goal(numberOfKeysToUnlockGoal),
 			]
@@ -1469,7 +1472,9 @@ class PlaceBuilderDemo // Main.
 
 	entityBuildLoader
 	(
-		entityDefn: Entity, entityCount: number, entityPosRange: Box,
+		entityDefn: Entity,
+		entityCount: number,
+		entityPosRange: BoxAxisAligned,
 		randomizer: Randomizer
 	): Entity
 	{
@@ -1483,7 +1488,7 @@ class PlaceBuilderDemo // Main.
 				var randomizer =
 					RandomizerLCG.fromSeed(placeAsPlaceRoom.randomizerSeed);
 				var placeSize = place.size();
-				var entityPosRange = Box.fromCenterAndSize
+				var entityPosRange = BoxAxisAligned.fromCenterAndSize
 				(
 					placeSize.clone().half(), placeSize.clone()
 				);
@@ -1610,7 +1615,7 @@ class PlaceBuilderDemo // Main.
 				}
 			}
 
-			var wallCollider = Box.fromSize(wallSize);
+			var wallCollider = BoxAxisAligned.fromSize(wallSize);
 			var wallObstacle = new Obstacle();
 			var wallCollidable = Collidable.fromColliderPropertyNameAndCollide
 			(
@@ -1692,7 +1697,7 @@ class PlaceBuilderDemo // Main.
 					neighborOffset.clone().double()
 				);
 
-				var portalBox = Box.fromSize(portalSize);
+				var portalBox = BoxAxisAligned.fromSize(portalSize);
 
 				var collidable = Collidable.fromColliderPropertyNameAndCollide
 				(
@@ -1850,7 +1855,7 @@ class PlaceBuilderDemo // Main.
 			"Store",
 			[
 				Collidable.fromCollider(
-					Box.fromSize(entitySize)
+					BoxAxisAligned.fromSize(entitySize)
 				),
 				Drawable.fromVisual(visual),
 				new ItemStore("Coin"),
@@ -1915,7 +1920,7 @@ class PlaceBuilderDemo // Main.
 			Sphere.fromRadius(this.entityDimension / 2);
 		var collidable = Collidable.fromCollider(itemArmorCollider);
 		var box =
-			Box
+			BoxAxisAligned
 				.create()
 				.containPoints(path.points);
 		box.center = itemArmorCollider.center;
@@ -1951,7 +1956,7 @@ class PlaceBuilderDemo // Main.
 		var itemArrowCollider = Sphere.fromRadius(entityDimensionHalf);
 
 		var collidable = Collidable.fromCollider(itemArrowCollider);
-		var bounds = new Box(itemArrowCollider.center, arrowSize);
+		var bounds = BoxAxisAligned.fromCenterAndSize(itemArrowCollider.center, arrowSize);
 		var boundable = new Boundable(bounds);
 
 		var roundsPerPile = 5;
@@ -2043,10 +2048,13 @@ class PlaceBuilderDemo // Main.
 		]);
 
 		var userDirection = userVel.clone().normalize();
-		var userRadius = (Collidable.of(entityUser).collider as Sphere).radius;
+		var userRadius = (Collidable.of(entityUser).collider as Sphere).radius();
 		var projectilePos = userPos.clone().add
 		(
-			userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
+			userDirection
+				.clone()
+				.multiplyScalar(userRadius + projectileDimension)
+				.double()
 		);
 		var projectileOri = Orientation.fromForward
 		(
@@ -2216,10 +2224,14 @@ class PlaceBuilderDemo // Main.
 			var projectileVisual = itemArrowDefn.visual;
 
 			var userDirection = userVel.clone().normalize();
-			var userRadius = (Collidable.of(entityUser).collider as Sphere).radius;
+			var userRadius =
+				(Collidable.of(entityUser).collider as Sphere).radius();
 			var projectilePos = userPos.clone().add
 			(
-				userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
+				userDirection
+					.clone()
+					.multiplyScalar(userRadius + projectileDimension)
+					.double()
 			);
 			var projectileOri = Orientation.fromForward
 			(
@@ -2369,7 +2381,7 @@ class PlaceBuilderDemo // Main.
 
 				var regionPos = tileSizeInPixels.clone().multiply(tilePosInTiles);
 				var regionToDrawAsBox =
-					Box.fromMinAndSize(regionPos, tileSizeInPixels);
+					BoxAxisAligned.fromMinAndSize(regionPos, tileSizeInPixels);
 
 				var visualForFrame = new VisualImageScaledPartial
 				(
@@ -3126,12 +3138,16 @@ class PlaceBuilderDemo // Main.
 		userTirable.staminaSubtract(staminaToFire);
 
 		var userDirection = userVel.clone().normalize();
-		var userRadius = (Collidable.of(entityUser).collider as Sphere).radius;
+		var userRadius =
+			(Collidable.of(entityUser).collider as Sphere).radius();
 		var projectileDimension = 1.5;
 
 		var projectilePos = userPos.clone().add
 		(
-			userDirection.clone().multiplyScalar(userRadius + projectileDimension).double()
+			userDirection
+				.clone()
+				.multiplyScalar(userRadius + projectileDimension)
+				.double()
 		);
 		var projectileOri = Orientation.fromForward
 		(

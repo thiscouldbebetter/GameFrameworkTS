@@ -38,7 +38,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 throw new Error("Not yet implemented!");
             }
-            toBox(boxOut) { throw new Error("Not implemented!"); }
+            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 this.child.transform(transformToApply); // Is this correct?

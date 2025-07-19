@@ -19,7 +19,7 @@ class PlaceBuilderDemo_Movers
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
-		var carnivoreCollider = new Sphere(Coords.create(), carnivoreDimension);
+		var carnivoreCollider = Sphere.fromRadius(carnivoreDimension);
 
 		var visualEyeRadius = this.entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -374,16 +374,17 @@ class PlaceBuilderDemo_Movers
 		(
 			enemyTypeName + (damageTypeName || "Normal"),
 			[
-				new Actor(enemyActivity),
+				Actor.fromActivity(enemyActivity),
 				Animatable2.create(),
-				new Constrainable([new Constraint_SpeedMaxXY(speedMax)]),
+				Constrainable
+					.fromConstraint(new Constraint_SpeedMaxXY(speedMax)),
 				Collidable.fromCollider(enemyCollider),
 				Damager.fromDamagePerHit
 				(
 					Damage.fromAmountAndTypeName(10, damageTypeName)
 				),
 				Drawable.fromVisual(enemyVisual),
-				new Effectable([]),
+				Effectable.create(),
 				new Enemy(weapon),
 				enemyKillable,
 				Locatable.create(),
@@ -740,9 +741,10 @@ class PlaceBuilderDemo_Movers
 		var friendlyDimension = this.entityDimension;
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
-		var constrainable = new Constrainable([constraintSpeedMax1]);
+		var constrainable =
+			Constrainable.fromConstraint(constraintSpeedMax1);
 
-		var friendlyCollider = new Sphere(Coords.create(), friendlyDimension);
+		var friendlyCollider = Sphere.fromRadius(friendlyDimension);
 		var friendlyCollide =
 			(uwpe: UniverseWorldPlaceEntities, c: Collision) =>
 			{
@@ -914,7 +916,7 @@ class PlaceBuilderDemo_Movers
 			[
 				actor,
 				Animatable2.create(),
-				new Boundable(friendlyCollider.toBox(null) ),
+				new Boundable(friendlyCollider.toBoxAxisAligned(null) ),
 				constrainable,
 				collidable,
 				Drawable.fromVisual(friendlyVisual),
@@ -941,7 +943,7 @@ class PlaceBuilderDemo_Movers
 
 		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
-		var grazerCollider = new Sphere(Coords.create(), grazerDimension);
+		var grazerCollider = Sphere.fromRadius(grazerDimension);
 
 		var visualEyeRadius = this.entityDimension * .75 / 2;
 		var visualBuilder = new VisualBuilder();
@@ -1214,7 +1216,7 @@ class PlaceBuilderDemo_Movers
 		);
 
 		var playerCollider = Sphere.fromRadius(playerHeadRadius);
-		var playerBounds = playerCollider.toBox(null);
+		var playerBounds = playerCollider.toBoxAxisAligned(null);
 		var boundable = new Boundable(playerBounds);
 
 		var collidable =

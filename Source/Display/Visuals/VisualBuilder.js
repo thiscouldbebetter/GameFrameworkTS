@@ -24,7 +24,7 @@ var ThisCouldBeBetter;
                         // Frames.
                         tilePosInTiles.x = x;
                         tilePosInPixels.overwriteWith(tilePosInTiles).multiply(tileSizeInPixels);
-                        var sourceRegionBounds = GameFramework.Box.fromMinAndSize(tilePosInPixels.clone(), tileSizeInPixels);
+                        var sourceRegionBounds = GameFramework.BoxAxisAligned.fromMinAndSize(tilePosInPixels.clone(), tileSizeInPixels);
                         var frame = new GameFramework.VisualImageScaledPartial(sourceRegionBounds, tileSizeToDraw, visualImageSource);
                         frames.push(frame);
                     }

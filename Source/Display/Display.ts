@@ -52,11 +52,11 @@ export interface Display
 	drawImage(imageToDraw: Image2, pos: Coords): void;
 	drawImagePartial
 	(
-		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: BoxAxisAligned
 	): void;
 	drawImagePartialScaled
 	(
-		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: Box, sizeToDraw: Coords
+		imageToDraw: Image2, pos: Coords, regionToDrawAsBox: BoxAxisAligned, sizeToDraw: Coords
 	): void;
 	drawImageScaled(imageToDraw: Image2, pos: Coords, size: Coords): void;
 	drawLine(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number): void;

@@ -6,7 +6,7 @@ export class Face implements ShapeBase
 {
 	vertices: Coords[];
 
-	_box: Box;
+	_box: BoxAxisAligned;
 	_edges: Edge[];
 	_plane: Plane;
 
@@ -15,11 +15,11 @@ export class Face implements ShapeBase
 		this.vertices = vertices;
 	}
 
-	box(): Box
+	box(): BoxAxisAligned
 	{
 		if (this._box == null)
 		{
-			this._box = new Box(Coords.create(), Coords.create());
+			this._box = BoxAxisAligned.create();
 		}
 		this._box.containPoints(this.vertices);
 		return this._box;
@@ -144,7 +144,7 @@ export class Face implements ShapeBase
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw new Error("Not implemented!"); }
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
 		return boxOut.containPoints(this.vertices);
 	}

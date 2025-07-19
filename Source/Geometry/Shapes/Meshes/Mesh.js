@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
             }
             // static methods
             static boxOfSize(center, size) {
-                var box = new GameFramework.Box(center, size);
+                var box = GameFramework.BoxAxisAligned.fromCenterAndSize(center, size);
                 var returnValue = Mesh.fromBox(box);
                 return returnValue;
             }
@@ -19,36 +19,39 @@ var ThisCouldBeBetter;
                 if (center == null) {
                     center = GameFramework.Coords.create();
                 }
-                var size = new GameFramework.Coords(2, 2, 2);
+                var size = GameFramework.Coords.fromXYZ(2, 2, 2);
                 var returnValue = Mesh.boxOfSize(center, size);
                 return returnValue;
             }
             static fromBox(box) {
                 var sizeHalf = box.sizeHalf();
-                var min = new GameFramework.Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
-                var max = new GameFramework.Coords(sizeHalf.x, sizeHalf.y, sizeHalf.z);
+                var min = GameFramework.Coords.fromXYZ(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
+                var max = GameFramework.Coords.fromXYZ(sizeHalf.x, sizeHalf.y, sizeHalf.z);
                 var vertexOffsets = [
                     // top
-                    new GameFramework.Coords(min.x, min.y, min.z),
-                    new GameFramework.Coords(max.x, min.y, min.z),
-                    new GameFramework.Coords(max.x, max.y, min.z),
-                    new GameFramework.Coords(min.x, max.y, min.z),
+                    GameFramework.Coords.fromXYZ(min.x, min.y, min.z),
+                    GameFramework.Coords.fromXYZ(max.x, min.y, min.z),
+                    GameFramework.Coords.fromXYZ(max.x, max.y, min.z),
+                    GameFramework.Coords.fromXYZ(min.x, max.y, min.z),
                     // bottom
-                    new GameFramework.Coords(min.x, min.y, max.z),
-                    new GameFramework.Coords(max.x, min.y, max.z),
-                    new GameFramework.Coords(max.x, max.y, max.z),
-                    new GameFramework.Coords(min.x, max.y, max.z),
+                    GameFramework.Coords.fromXYZ(min.x, min.y, max.z),
+                    GameFramework.Coords.fromXYZ(max.x, min.y, max.z),
+                    GameFramework.Coords.fromXYZ(max.x, max.y, max.z),
+                    GameFramework.Coords.fromXYZ(min.x, max.y, max.z),
                 ];
                 var faceBuilders = [
-                    new Mesh_FaceBuilder([0, 1, 5, 4]), // north
-                    new Mesh_FaceBuilder([1, 2, 6, 5]), // east
-                    new Mesh_FaceBuilder([2, 3, 7, 6]), // south
-                    new Mesh_FaceBuilder([3, 0, 4, 7]), // west
-                    new Mesh_FaceBuilder([0, 3, 2, 1]), // top
-                    new Mesh_FaceBuilder([4, 5, 6, 7]), // bottom
+                    Mesh_FaceBuilder.fromVertexIndices([0, 1, 5, 4]), // north
+                    Mesh_FaceBuilder.fromVertexIndices([1, 2, 6, 5]), // east
+                    Mesh_FaceBuilder.fromVertexIndices([2, 3, 7, 6]), // south
+                    Mesh_FaceBuilder.fromVertexIndices([3, 0, 4, 7]), // west
+                    Mesh_FaceBuilder.fromVertexIndices([0, 3, 2, 1]), // top
+                    Mesh_FaceBuilder.fromVertexIndices([4, 5, 6, 7]), // bottom
                 ];
-                var returnValue = new Mesh(box.center, vertexOffsets, faceBuilders);
+                var returnValue = Mesh.fromCenterVertexOffsetsAndFaceBuilders(box.center, vertexOffsets, faceBuilders);
                 return returnValue;
+            }
+            static fromCenterVertexOffsetsAndFaceBuilders(center, vertexOffsets, faceBuilders) {
+                return new Mesh(center, vertexOffsets, faceBuilders);
             }
             static fromFace(center, faceToExtrude, thickness) {
                 var faceVertices = faceToExtrude.vertices;
@@ -57,7 +60,7 @@ var ThisCouldBeBetter;
                 var meshVertices = [];
                 var faceBuilders = [];
                 for (var z = 0; z < 2; z++) {
-                    var offsetForExtrusion = new GameFramework.Coords(0, 0, (z == 0 ? -1 : 1)).multiplyScalar(thicknessHalf);
+                    var offsetForExtrusion = GameFramework.Coords.fromXYZ(0, 0, (z == 0 ? -1 : 1)).multiplyScalar(thicknessHalf);
                     var vertexIndicesTopOrBottom = [];
                     for (var v = 0; v < numberOfFaceVertices; v++) {
                         var vertexIndex = meshVertices.length;
@@ -87,11 +90,11 @@ var ThisCouldBeBetter;
             }
             // instance methods
             box() {
-                if (this._box == null) {
-                    this._box = new GameFramework.Box(GameFramework.Coords.create(), GameFramework.Coords.create());
+                if (this._boxAxisAligned == null) {
+                    this._boxAxisAligned = GameFramework.BoxAxisAligned.create();
                 }
-                this._box.containPoints(this.vertices());
-                return this._box;
+                this._boxAxisAligned.containPoints(this.vertices());
+                return this._boxAxisAligned;
             }
             edges() {
                 return null; // todo
@@ -160,7 +163,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBox(boxOut) {
+            toBoxAxisAligned(boxOut) {
                 return boxOut.containPoints(this.vertices());
             }
         }
@@ -168,6 +171,9 @@ var ThisCouldBeBetter;
         class Mesh_FaceBuilder {
             constructor(vertexIndices) {
                 this.vertexIndices = vertexIndices;
+            }
+            static fromVertexIndices(vertexIndices) {
+                return new Mesh_FaceBuilder(vertexIndices);
             }
             toFace(meshVertices) {
                 var faceVertices = [];

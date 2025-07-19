@@ -18,7 +18,10 @@ export class Routable implements EntityProperty<Routable>
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.route.bounds =
-			Box.fromMinAndMax(Coords.create(), uwpe.place.size().clone());
+			BoxAxisAligned.fromMinAndMax
+			(
+				Coords.create(), uwpe.place.size().clone()
+			);
 	}
 
 	propertyName(): string { return Routable.name; }
@@ -46,7 +49,7 @@ export class Routable implements EntityProperty<Routable>
 export class Route
 {
 	neighborOffsets: Coords[];
-	bounds: Box;
+	bounds: BoxAxisAligned;
 	startPos: Coords;
 	goalPos: Coords;
 	lengthMax: number;
@@ -57,8 +60,11 @@ export class Route
 
 	constructor
 	(
-		neighborOffsets: Coords[], bounds: Box,
-		startPos: Coords, goalPos: Coords, lengthMax: number
+		neighborOffsets: Coords[],
+		bounds: BoxAxisAligned,
+		startPos: Coords,
+		goalPos: Coords,
+		lengthMax: number
 	)
 	{
 		this.neighborOffsets = neighborOffsets;

@@ -7,19 +7,19 @@ export class MapLocated implements ShapeBase
 	map: MapOfCells<any>;
 	loc: Disposition;
 
-	box: Box;
+	box: BoxAxisAligned;
 
-	_boxTransformed: Box;
+	_boxTransformed: BoxAxisAligned;
 
 	constructor(map: MapOfCells<any>, loc: Disposition)
 	{
 		this.map = map;
 		this.loc = loc;
 
-		this.box = new Box(this.loc.pos, this.map.size);
+		this.box = new BoxAxisAligned(this.loc.pos, this.map.size);
 
 		// Helper variables.
-		this._boxTransformed = Box.create();
+		this._boxTransformed = BoxAxisAligned.create();
 	}
 
 	static fromMap(map: MapOfCells<any>): MapLocated
@@ -27,12 +27,13 @@ export class MapLocated implements ShapeBase
 		return new MapLocated(map, Disposition.default());
 	}
 
-	cellsInBox(box: Box, cellsInBox: MapCell[]): MapCell[]
+	cellsInBox(box: BoxAxisAligned, cellsInBox: MapCell[]): MapCell[]
 	{
 		var boxTransformed =
 			this._boxTransformed.overwriteWith(box);
 		boxTransformed.center.subtract(this.loc.pos).add(this.map.sizeHalf);
-		var returnCells = this.map.cellsInBox(boxTransformed, cellsInBox);
+		var returnCells =
+			this.map.cellsInBox(boxTransformed, cellsInBox);
 		return returnCells;
 	}
 
@@ -84,7 +85,7 @@ export class MapLocated implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

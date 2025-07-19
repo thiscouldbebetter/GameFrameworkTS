@@ -8,7 +8,7 @@ export class Mesh implements ShapeBase
 	vertexOffsets: Coords[];
 	faceBuilders: Mesh_FaceBuilder[];
 
-	_box: Box;
+	_boxAxisAligned: BoxAxisAligned;
 	_faces: Face[];
 	_vertices: Coords[];
 
@@ -28,7 +28,7 @@ export class Mesh implements ShapeBase
 
 	static boxOfSize(center: Coords, size: Coords): Mesh
 	{
-		var box = new Box(center, size);
+		var box = BoxAxisAligned.fromCenterAndSize(center, size);
 		var returnValue = Mesh.fromBox(box);
 		return returnValue;
 	}
@@ -39,50 +39,60 @@ export class Mesh implements ShapeBase
 		{
 			center = Coords.create();
 		}
-		var size = new Coords(2, 2, 2);
+		var size = Coords.fromXYZ(2, 2, 2);
 		var returnValue = Mesh.boxOfSize(center, size);
 		return returnValue;
 	}
 
-	static fromBox(box: Box): Mesh
+	static fromBox(box: BoxAxisAligned): Mesh
 	{
 		var sizeHalf = box.sizeHalf();
-		var min = new Coords(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
-		var max = new Coords(sizeHalf.x, sizeHalf.y, sizeHalf.z);
+		var min = Coords.fromXYZ(-sizeHalf.x, -sizeHalf.y, -sizeHalf.z);
+		var max = Coords.fromXYZ(sizeHalf.x, sizeHalf.y, sizeHalf.z);
 
 		var vertexOffsets =
 		[
 			// top
-			new Coords(min.x, min.y, min.z),
-			new Coords(max.x, min.y, min.z),
-			new Coords(max.x, max.y, min.z),
-			new Coords(min.x, max.y, min.z),
+			Coords.fromXYZ(min.x, min.y, min.z),
+			Coords.fromXYZ(max.x, min.y, min.z),
+			Coords.fromXYZ(max.x, max.y, min.z),
+			Coords.fromXYZ(min.x, max.y, min.z),
 
 			// bottom
-			new Coords(min.x, min.y, max.z),
-			new Coords(max.x, min.y, max.z),
-			new Coords(max.x, max.y, max.z),
-			new Coords(min.x, max.y, max.z),
+			Coords.fromXYZ(min.x, min.y, max.z),
+			Coords.fromXYZ(max.x, min.y, max.z),
+			Coords.fromXYZ(max.x, max.y, max.z),
+			Coords.fromXYZ(min.x, max.y, max.z),
 		];
 
 		var faceBuilders =
 		[
-			new Mesh_FaceBuilder([0, 1, 5, 4]), // north
-			new Mesh_FaceBuilder([1, 2, 6, 5]), // east
+			Mesh_FaceBuilder.fromVertexIndices([0, 1, 5, 4]), // north
+			Mesh_FaceBuilder.fromVertexIndices([1, 2, 6, 5]), // east
 
-			new Mesh_FaceBuilder([2, 3, 7, 6]), // south
-			new Mesh_FaceBuilder([3, 0, 4, 7]), // west
+			Mesh_FaceBuilder.fromVertexIndices([2, 3, 7, 6]), // south
+			Mesh_FaceBuilder.fromVertexIndices([3, 0, 4, 7]), // west
 
-			new Mesh_FaceBuilder([0, 3, 2, 1]), // top
-			new Mesh_FaceBuilder([4, 5, 6, 7]), // bottom
+			Mesh_FaceBuilder.fromVertexIndices([0, 3, 2, 1]), // top
+			Mesh_FaceBuilder.fromVertexIndices([4, 5, 6, 7]), // bottom
 		];
 
-		var returnValue = new Mesh
+		var returnValue = Mesh.fromCenterVertexOffsetsAndFaceBuilders
 		(
 			box.center, vertexOffsets, faceBuilders
 		);
 
 		return returnValue;
+	}
+
+	static fromCenterVertexOffsetsAndFaceBuilders
+	(
+		center: Coords,
+		vertexOffsets: Coords[],
+		faceBuilders: Mesh_FaceBuilder[]
+	)
+	{
+		return new Mesh(center, vertexOffsets, faceBuilders);
 	}
 
 	static fromFace(center: Coords, faceToExtrude: Face, thickness: number): Mesh
@@ -96,7 +106,7 @@ export class Mesh implements ShapeBase
 
 		for (var z = 0; z < 2; z++)
 		{
-			var offsetForExtrusion = new Coords
+			var offsetForExtrusion = Coords.fromXYZ
 			(
 				0, 0, (z == 0 ? -1 : 1)
 			).multiplyScalar
@@ -161,14 +171,14 @@ export class Mesh implements ShapeBase
 
 	// instance methods
 
-	box(): Box
+	box(): BoxAxisAligned
 	{
-		if (this._box == null)
+		if (this._boxAxisAligned == null)
 		{
-			this._box = new Box(Coords.create(), Coords.create());
+			this._boxAxisAligned = BoxAxisAligned.create();
 		}
-		this._box.containPoints(this.vertices());
-		return this._box;
+		this._boxAxisAligned.containPoints(this.vertices());
+		return this._boxAxisAligned;
 	}
 
 	edges(): Edge[]
@@ -284,7 +294,7 @@ export class Mesh implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
 		return boxOut.containPoints(this.vertices());
 	}
@@ -297,6 +307,11 @@ export class Mesh_FaceBuilder
 	constructor(vertexIndices: number[])
 	{
 		this.vertexIndices = vertexIndices;
+	}
+
+	static fromVertexIndices(vertexIndices: number[]): Mesh_FaceBuilder
+	{
+		return new Mesh_FaceBuilder(vertexIndices);
 	}
 
 	toFace(meshVertices: Coords[]): Face

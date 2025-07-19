@@ -51,6 +51,10 @@ var ThisCouldBeBetter;
                 this.down.overwriteWith(down);
                 return this.orthogonalize();
             }
+            normalize() {
+                this.axes.forEach(x => x.normalize());
+                return this;
+            }
             orthogonalize() {
                 this.forward.normalize();
                 this.right.overwriteWith(this.down).crossProduct(this.forward).normalize();
@@ -95,11 +99,11 @@ var ThisCouldBeBetter;
         GameFramework.Orientation = Orientation;
         class Orientation_Instances {
             constructor() {
-                this.ForwardXDownZ = new Orientation(new GameFramework.Coords(1, 0, 0), // forward
-                new GameFramework.Coords(0, 0, 1) // down
+                this.ForwardXDownZ = Orientation.fromForwardAndDown(GameFramework.Coords.fromXYZ(1, 0, 0), // forward
+                GameFramework.Coords.fromXYZ(0, 0, 1) // down
                 );
-                this.ForwardZDownY = new Orientation(new GameFramework.Coords(0, 0, 1), // forward
-                new GameFramework.Coords(0, 1, 0) // down
+                this.ForwardZDownY = Orientation.fromForwardAndDown(GameFramework.Coords.fromXYZ(0, 0, 1), // forward
+                GameFramework.Coords.fromXYZ(0, 1, 0) // down
                 );
             }
         }

@@ -22,6 +22,11 @@ export class Actor implements EntityProperty<Actor>
 		);
 	}
 
+	static fromActivity(activity: Activity): Actor
+	{
+		return new Actor(activity);
+	}
+
 	static fromActivityDefn(activityDefn: ActivityDefn): Actor
 	{
 		return Actor.fromActivityDefnName(activityDefn.name);

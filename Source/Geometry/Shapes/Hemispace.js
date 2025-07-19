@@ -47,7 +47,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(this.plane.pointOnPlaneNearestPos(posToCheck));
             }
-            toBox(boxOut) {
+            toBoxAxisAligned(boxOut) {
                 throw new Error("Not implemented!");
             }
             // Transformable.

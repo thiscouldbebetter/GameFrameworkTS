@@ -50,7 +50,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBox(boxOut) { throw new Error("Not implemented!"); }
+            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Clonable.
             clone() {
                 return new BoxRotated(this.box.clone(), this.angleInTurns);

@@ -13,8 +13,8 @@ var ThisCouldBeBetter;
                 this.collisionFindByColliderTypeNameByColliderTypeName =
                     this.collisionFindLookupBuild();
                 // Helper variables.
-                this._box = GameFramework.Box.create();
-                this._box2 = GameFramework.Box.create();
+                this._box = GameFramework.BoxAxisAligned.create();
+                this._box2 = GameFramework.BoxAxisAligned.create();
                 this._collision = GameFramework.Collision.create();
                 this._displacement = GameFramework.Coords.create();
                 this._edge = GameFramework.Edge.create();
@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 var lookupOfLookups = new Map();
                 var lookup;
                 var notDefined = "undefined"; // todo
-                var boxName = (typeof GameFramework.Box == notDefined ? null : GameFramework.Box.name);
+                var boxName = (typeof GameFramework.BoxAxisAligned == notDefined ? null : GameFramework.BoxAxisAligned.name);
                 var boxRotatedName = (typeof GameFramework.BoxRotated == notDefined ? null : GameFramework.BoxRotated.name);
                 var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
                 var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
@@ -428,7 +428,7 @@ var ThisCouldBeBetter;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = new GameFramework.Box(GameFramework.Coords.create(), map.cellSize);
+                var cellAsBox = GameFramework.BoxAxisAligned.fromSize(map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -493,7 +493,7 @@ var ThisCouldBeBetter;
                 collision.isActive = doCollide;
                 if (doCollide && shouldCalculatePos) {
                     // todo - Fix this.
-                    var boxCircumscribedAroundSphere = GameFramework.Box.fromCenterAndSize(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphereRadius * 2));
+                    var boxCircumscribedAroundSphere = GameFramework.BoxAxisAligned.fromCenterAndSize(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphereRadius * 2));
                     collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
                 }
                 return collision;
@@ -541,8 +541,8 @@ var ThisCouldBeBetter;
                     collision = GameFramework.Collision.create();
                 }
                 collision.clear();
-                var edge0Bounds = edge0.toBox(this._box);
-                var edge1Bounds = edge1.toBox(this._box2);
+                var edge0Bounds = edge0.toBoxAxisAligned(this._box);
+                var edge1Bounds = edge1.toBoxAxisAligned(this._box2);
                 var doBoundsOverlap = edge0Bounds.overlapsWithXY(edge1Bounds);
                 if (doBoundsOverlap) {
                     var edge0ProjectedOntoEdge1 = this._edge.overwriteWith(edge0).projectOntoOther(edge1);
@@ -692,7 +692,7 @@ var ThisCouldBeBetter;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = new GameFramework.Box(GameFramework.Coords.create(), map.cellSize);
+                var cellAsBox = GameFramework.BoxAxisAligned.fromSize(map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -1095,7 +1095,7 @@ var ThisCouldBeBetter;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = new GameFramework.Box(GameFramework.Coords.create(), map.cellSize);
+                var cellAsBox = GameFramework.BoxAxisAligned.fromSize(map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -1248,7 +1248,7 @@ var ThisCouldBeBetter;
                 return false;
             }
             doesBoxContainSphere(box, sphere) {
-                var boxForSphere = new GameFramework.Box(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius() * 2));
+                var boxForSphere = GameFramework.BoxAxisAligned.fromCenterAndSize(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius() * 2));
                 var returnValue = box.containsOther(boxForSphere);
                 return returnValue;
             }

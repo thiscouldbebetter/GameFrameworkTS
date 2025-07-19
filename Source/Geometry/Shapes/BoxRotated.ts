@@ -4,10 +4,10 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class BoxRotated implements ShapeBase
 {
-	box: Box;
+	box: BoxAxisAligned;
 	angleInTurns: number;
 
-	constructor(box: Box, angleInTurns: number)
+	constructor(box: BoxAxisAligned, angleInTurns: number)
 	{
 		this.box = box;
 		this.angleInTurns = angleInTurns;
@@ -85,7 +85,7 @@ export class BoxRotated implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Clonable.
 

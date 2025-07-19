@@ -324,7 +324,7 @@ export class CollisionTrackerMapped extends CollisionTrackerBase implements Enti
 		}
 		var entityCollidable = Collidable.of(entity);
 
-		var entityBounds = entityBoundable.bounds as Box;
+		var entityBounds = entityBoundable.bounds as BoxAxisAligned;
 		var cellsToAddEntityTo = this.collisionMap.cellsInBox
 		(
 			entityBounds, ArrayHelper.clear(this._cells)

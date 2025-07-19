@@ -31,8 +31,8 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
             }
-            toBox(boxOut) {
-                return this.shape.toBox(boxOut);
+            toBoxAxisAligned(boxOut) {
+                return this.shape.toBoxAxisAligned(boxOut);
             }
             // Transformable.
             transform(transformToApply) { throw new Error("Not implemented!"); }

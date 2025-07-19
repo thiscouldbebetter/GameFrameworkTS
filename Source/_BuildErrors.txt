@@ -1,0 +1,108 @@
+error TS5033: Could not write file 'C:/Users/default.DESKTOP-FIO2EVL/Desktop/Stub/Source/Framework/Source/Geometry/Shapes/Box.js': UNKNOWN: unknown error, open 'C:\Users\default.DESKTOP-FIO2EVL\Desktop\Stub\Source\Framework\Source\Geometry\Shapes\Box.js'.
+Demo/Model/Places/PlaceBuilderDemo.ts(268,19): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo.ts(311,10): error TS2339: Property 'fromMinAndSize' does not exist on type 'typeof Box'.
+Demo/Model/Places/PlaceBuilderDemo.ts(719,27): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo.ts(745,35): error TS2339: Property 'fromMinAndSize' does not exist on type 'typeof Box'.
+Demo/Model/Places/PlaceBuilderDemo.ts(1028,7): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo.ts(1047,24): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo.ts(1082,24): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo.ts(1155,24): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo.ts(1219,26): error TS2339: Property 'fromMinAndMax' does not exist on type 'typeof Box'.
+Demo/Model/Places/PlaceBuilderDemo.ts(1239,29): error TS2339: Property 'toEntityForTargetEntityName' does not exist on type 'Camera'.
+Demo/Model/Places/PlaceBuilderDemo.ts(1305,4): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo.ts(1363,14): error TS2339: Property 'size' does not exist on type 'Box'.
+Demo/Model/Places/PlaceBuilderDemo.ts(1366,14): error TS2339: Property 'min' does not exist on type 'Box'.
+Demo/Model/Places/PlaceBuilderDemo.ts(1920,6): error TS2551: Property 'containPoints' does not exist on type 'Box'. Did you mean 'containsPoint'?
+Demo/Model/Places/PlaceBuilderDemo.ts(1954,16): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo.ts(2049,41): error TS2365: Operator '+' cannot be applied to types '() => number' and 'number'.
+Demo/Model/Places/PlaceBuilderDemo.ts(2222,42): error TS2365: Operator '+' cannot be applied to types '() => number' and 'number'.
+Demo/Model/Places/PlaceBuilderDemo.ts(2372,10): error TS2339: Property 'fromMinAndSize' does not exist on type 'typeof Box'.
+Demo/Model/Places/PlaceBuilderDemo.ts(3134,41): error TS2365: Operator '+' cannot be applied to types '() => number' and 'number'.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(116,18): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(290,4): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(373,4): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(467,4): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(471,79): error TS2345: Argument of type 'Box' is not assignable to parameter of type 'BoxAxisAligned'.
+  Type 'Box' is missing the following properties from type 'BoxAxisAligned': size, _min, _max, _range, and 22 more.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(489,26): error TS2339: Property 'size' does not exist on type 'Box'.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(581,24): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(614,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Coords'.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(799,46): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Coords'.
+Demo/Model/Places/PlaceBuilderDemo_Emplacements.ts(876,18): error TS2554: Expected 3 arguments, but got 2.
+Demo/Model/Places/PlaceBuilderDemo_Movers.ts(22,55): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Coords'.
+Demo/Model/Places/PlaceBuilderDemo_Movers.ts(745,54): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Coords'.
+Demo/Model/Places/PlaceBuilderDemo_Movers.ts(944,52): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Coords'.
+Display/Display2D.ts(421,37): error TS2339: Property 'min' does not exist on type 'Box'.
+Display/Display2D.ts(422,38): error TS2339: Property 'size' does not exist on type 'Box'.
+Display/Visuals/VisualBuilder.ts(55,10): error TS2339: Property 'fromMinAndSize' does not exist on type 'typeof Box'.
+Display/Visuals/VisualImageScaledPartial.ts(56,25): error TS2339: Property 'fromMinAndSize' does not exist on type 'typeof Box'.
+Display/Visuals/VisualMap.ts(106,19): error TS2339: Property 'min' does not exist on type 'Box'.
+Display/Visuals/VisualMap.ts(110,19): error TS2339: Property 'max' does not exist on type 'Box'.
+Geometry/Camera.ts(37,23): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Camera.ts(203,17): error TS2339: Property 'fromMinAndMax' does not exist on type 'typeof Box'.
+Geometry/Collisions/CollisionHelper.ts(686,32): error TS2339: Property 'intersectWith' does not exist on type 'Box'.
+Geometry/Collisions/CollisionHelper.ts(726,19): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Collisions/CollisionHelper.ts(767,31): error TS2339: Property 'intersectWith' does not exist on type 'Box'.
+Geometry/Collisions/CollisionHelper.ts(792,25): error TS2339: Property 'sizeHalf' does not exist on type 'Box'.
+Geometry/Collisions/CollisionHelper.ts(935,44): error TS2345: Argument of type 'Box' is not assignable to parameter of type 'BoxAxisAligned'.
+Geometry/Collisions/CollisionHelper.ts(936,44): error TS2345: Argument of type 'Box' is not assignable to parameter of type 'BoxAxisAligned'.
+Geometry/Collisions/CollisionHelper.ts(1127,25): error TS2339: Property 'vertices' does not exist on type 'Box'.
+Geometry/Collisions/CollisionHelper.ts(1224,19): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Collisions/CollisionHelper.ts(1439,26): error TS2339: Property 'overlapsWith' does not exist on type 'Box'.
+Geometry/Collisions/CollisionHelper.ts(1462,42): error TS2339: Property 'sizeHalf' does not exist on type 'Box'.
+Geometry/Collisions/CollisionHelper.ts(1933,19): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Collisions/CollisionHelper.ts(2186,22): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Collisions/CollisionHelper.ts(2231,9): error TS2339: Property 'size' does not exist on type 'Box'.
+Geometry/Constraints/Constraint_ContainInBox.ts(21,27): error TS2339: Property 'trimCoords' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(20,8): error TS2339: Property 'displacementFromCenterToCornerForwardRightDown' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(22,14): error TS2339: Property 'oneZeroZero' does not exist on type 'typeof Coords'.
+Geometry/Shapes/Box.ts(42,10): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Shapes/Box.ts(54,8): error TS2551: Property '_corners' does not exist on type 'Box'. Did you mean 'corners'?
+Geometry/Shapes/Box.ts(55,8): error TS2339: Property '_size' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(72,9): error TS2339: Property '_displacement' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(77,23): error TS2339: Property 'sizeHalf' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(79,37): error TS2554: Expected 2 arguments, but got 1.
+Geometry/Shapes/Box.ts(85,12): error TS2551: Property '_corners' does not exist on type 'Box'. Did you mean 'corners'?
+Geometry/Shapes/Box.ts(87,8): error TS6133: 'ori' is declared but its value is never read.
+Geometry/Shapes/Box.ts(90,5): error TS2304: Cannot find name 'todo'.
+Geometry/Shapes/Box.ts(92,8): error TS6133: 'cornersAbsolute' is declared but its value is never read.
+Geometry/Shapes/Box.ts(95,15): error TS2551: Property '_corners' does not exist on type 'Box'. Did you mean 'corners'?
+Geometry/Shapes/Box.ts(102,62): error TS2339: Property 'displacementToCorner' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(108,8): error TS2339: Property 'displacementToCorner' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(108,49): error TS2339: Property 'diplacementToCorner' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(120,12): error TS2339: Property 'size' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(120,30): error TS2339: Property 'size' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(130,15): error TS2339: Property 'min' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(130,45): error TS2339: Property 'max' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(135,15): error TS2339: Property 'min' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(135,47): error TS2339: Property 'max' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(148,39): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+Geometry/Shapes/Box.ts(150,19): error TS2339: Property 'size' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(151,8): error TS2339: Property '_displacement' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(170,41): error TS2339: Property 'displacementFromCenterToCornerForwardRightDown' does not exist on type 'Box'.
+Geometry/Shapes/Box.ts(171,26): error TS2349: This expression is not callable.
+  Type 'Coords[]' has no call signatures.
+Geometry/Shapes/Box.ts(177,12): error TS2339: Property 'normalize' does not exist on type 'Orientation'.
+Geometry/Shapes/BoxAxisAligned.ts(59,3): error TS2739: Type 'BoxAxisAligned' is missing the following properties from type 'Box': ori, displacementFromCenterToCorner, cachedValuesClear, corners
+Geometry/Shapes/BoxAxisAligned.ts(226,18): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Shapes/BoxAxisAligned.ts(229,3): error TS2322: Type 'Box' is not assignable to type 'BoxAxisAligned'.
+Geometry/Shapes/BoxAxisAligned.ts(474,3): error TS2322: Type 'this' is not assignable to type 'Box'.
+  Type 'BoxAxisAligned' is missing the following properties from type 'Box': ori, displacementFromCenterToCorner, cachedValuesClear, corners
+Geometry/Shapes/BoxRotated.ts(18,63): error TS2339: Property 'sizeHalf' does not exist on type 'Box'.
+Geometry/Shapes/BoxRotated.ts(38,22): error TS2339: Property 'sizeHalf' does not exist on type 'Box'.
+Geometry/Shapes/Face.ts(22,16): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Shapes/Face.ts(24,13): error TS2551: Property 'containPoints' does not exist on type 'Box'. Did you mean 'containsPoint'?
+Geometry/Shapes/Maps/MapLocated.ts(19,14): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Shapes/Maps/MapOfCells.ts(140,8): error TS2339: Property 'min' does not exist on type 'Box'.
+Geometry/Shapes/Maps/MapOfCells.ts(151,8): error TS2339: Property 'max' does not exist on type 'Box'.
+Geometry/Shapes/Meshes/Mesh.ts(31,13): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Shapes/Meshes/Mesh.ts(49,22): error TS2339: Property 'sizeHalf' does not exist on type 'Box'.
+Geometry/Shapes/Meshes/Mesh.ts(168,16): error TS2554: Expected 3 arguments, but got 2.
+Geometry/Shapes/Meshes/Mesh.ts(170,13): error TS2551: Property 'containPoints' does not exist on type 'Box'. Did you mean 'containsPoint'?
+Media/Image.ts(34,8): error TS2339: Property 'size' does not exist on type 'Box'.
+Media/Image.ts(95,19): error TS2339: Property 'fromMinAndSize' does not exist on type 'typeof Box'.
+Model/Physics/Boundable.ts(29,3): error TS2322: Type 'Boundable<BoxAxisAligned>' is not assignable to type 'Boundable<Box>'.
+  Type 'BoxAxisAligned' is not assignable to type 'Box'.
+Model/Places/PlaceZoned.ts(98,35): error TS2339: Property 'min' does not exist on type 'Box'.
+Model/Places/PlaceZoned.ts(115,35): error TS2339: Property 'min' does not exist on type 'Box'.
+Model/Routable.ts(21,8): error TS2339: Property 'fromMinAndMax' does not exist on type 'typeof Box'.

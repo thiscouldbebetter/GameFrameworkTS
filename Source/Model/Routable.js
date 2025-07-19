@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
             finalize(uwpe) { }
             initialize(uwpe) {
                 this.route.bounds =
-                    GameFramework.Box.fromMinAndMax(GameFramework.Coords.create(), uwpe.place.size().clone());
+                    GameFramework.BoxAxisAligned.fromMinAndMax(GameFramework.Coords.create(), uwpe.place.size().clone());
             }
             propertyName() { return Routable.name; }
             updateForTimerTick(uwpe) { }

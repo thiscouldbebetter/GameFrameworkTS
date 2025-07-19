@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(effects) {
                 this.effects = effects || new Array();
             }
+            static create() {
+                return new Effectable([]);
+            }
             static default() {
                 return new Effectable([]);
             }

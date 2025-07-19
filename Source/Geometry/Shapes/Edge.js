@@ -70,7 +70,7 @@ var ThisCouldBeBetter;
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 throw new Error("Not implemented!");
             }
-            toBox(boxOut) {
+            toBoxAxisAligned(boxOut) {
                 return boxOut.containPoints(this.vertices);
             }
             // Transformable.

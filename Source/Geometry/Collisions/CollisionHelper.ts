@@ -9,8 +9,8 @@ export class CollisionHelper
 	doesContainByColliderTypeNameByColliderTypeName: Map<string, Map<string, any> >;
 	collisionFindByColliderTypeNameByColliderTypeName: Map<string, Map<string, any> >;
 
-	_box: Box;
-	_box2: Box;
+	_box: BoxAxisAligned;
+	_box2: BoxAxisAligned;
 	_collision: Collision;
 	_displacement: Coords;
 	_edge: Edge;
@@ -35,8 +35,8 @@ export class CollisionHelper
 			this.collisionFindLookupBuild();
 
 		// Helper variables.
-		this._box = Box.create();
-		this._box2 = Box.create();
+		this._box = BoxAxisAligned.create();
+		this._box2 = BoxAxisAligned.create();
 		this._collision = Collision.create();
 		this._displacement = Coords.create();
 		this._edge = Edge.create();
@@ -59,7 +59,7 @@ export class CollisionHelper
 
 		var notDefined = "undefined"; // todo
 
-		var boxName = ( typeof Box == notDefined ? null : Box.name );
+		var boxName = ( typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name );
 		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
 		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
 		var mapLocated2Name = ( typeof MapLocated2 == notDefined ? null : MapLocated2.name );
@@ -676,7 +676,7 @@ export class CollisionHelper
 
 	// collisionOfXAndY
 
-	collisionOfBoxAndBox(box1: Box, box2: Box, collision: Collision): Collision
+	collisionOfBoxAndBox(box1: BoxAxisAligned, box2: BoxAxisAligned, collision: Collision): Collision
 	{
 		if (collision == null)
 		{
@@ -695,7 +695,10 @@ export class CollisionHelper
 
 	collisionOfBoxAndBoxRotated
 	(
-		box: Box, boxRotated: BoxRotated, collision: Collision, shouldCalculatePos: boolean
+		box: BoxAxisAligned,
+		boxRotated: BoxRotated,
+		collision: Collision,
+		shouldCalculatePos: boolean
 	): Collision
 	{
 		// hack
@@ -705,7 +708,7 @@ export class CollisionHelper
 		);
 	}
 
-	collisionOfBoxAndMapLocated(box: Box, mapLocated: MapLocated, collision: Collision): Collision
+	collisionOfBoxAndMapLocated(box: BoxAxisAligned, mapLocated: MapLocated, collision: Collision): Collision
 	{
 		var doBoundsCollide =
 			this.doBoxAndBoxCollide(mapLocated.box, box);
@@ -723,7 +726,7 @@ export class CollisionHelper
 		var mapCellSize = map.cellSize;
 		var mapSizeHalf = map.sizeHalf;
 		var mapPos = mapLocated.loc.pos;
-		var cellAsBox = new Box( Coords.create(), map.cellSize );
+		var cellAsBox = BoxAxisAligned.fromSize(map.cellSize);
 
 		for (var y = 0; y < mapSizeInCells.y; y++)
 		{
@@ -754,7 +757,7 @@ export class CollisionHelper
 		return collision;
 	}
 
-	collisionOfBoxAndMesh(box: Box, mesh: Mesh, collision: Collision): Collision
+	collisionOfBoxAndMesh(box: BoxAxisAligned, mesh: Mesh, collision: Collision): Collision
 	{
 		if (collision == null)
 		{
@@ -776,7 +779,7 @@ export class CollisionHelper
 
 	collisionOfBoxAndSphere
 	(
-		box: Box, sphere: Sphere, collision: Collision, shouldCalculatePos: boolean
+		box: BoxAxisAligned, sphere: Sphere, collision: Collision, shouldCalculatePos: boolean
 	): Collision
 	{
 		var doCollide = false;
@@ -837,11 +840,12 @@ export class CollisionHelper
 		if (doCollide && shouldCalculatePos)
 		{
 			// todo - Fix this.
-			var boxCircumscribedAroundSphere = Box.fromCenterAndSize
-			(
-				sphere.center,
-				Coords.ones().multiplyScalar(sphereRadius * 2)
-			);
+			var boxCircumscribedAroundSphere =
+				BoxAxisAligned.fromCenterAndSize
+				(
+					sphere.center,
+					Coords.ones().multiplyScalar(sphereRadius * 2)
+				);
 			collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
 		}
 
@@ -850,7 +854,7 @@ export class CollisionHelper
 
 	collisionOfBoxRotatedAndBox
 	(
-		boxRotated: BoxRotated, box: Box, collision: Collision, shouldCalculatePos: boolean
+		boxRotated: BoxRotated, box: BoxAxisAligned, collision: Collision, shouldCalculatePos: boolean
 	): Collision
 	{
 		return this.collisionOfBoxAndBoxRotated(box, boxRotated, collision, shouldCalculatePos);
@@ -932,8 +936,8 @@ export class CollisionHelper
 		}
 		collision.clear();
 
-		var edge0Bounds = edge0.toBox(this._box);
-		var edge1Bounds = edge1.toBox(this._box2);
+		var edge0Bounds = edge0.toBoxAxisAligned(this._box);
+		var edge1Bounds = edge1.toBoxAxisAligned(this._box2);
 
 		var doBoundsOverlap = edge0Bounds.overlapsWithXY(edge1Bounds);
 
@@ -1116,7 +1120,7 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	collisionOfHemispaceAndBox(hemispace: Hemispace, box: Box, collision: Collision): Collision
+	collisionOfHemispaceAndBox(hemispace: Hemispace, box: BoxAxisAligned, collision: Collision): Collision
 	{
 		if (collision == null)
 		{
@@ -1174,7 +1178,7 @@ export class CollisionHelper
 
 	collisionOfMapLocatedAndBox
 	(
-		mapLocated: MapLocated, box: Box, collision: Collision
+		mapLocated: MapLocated, box: BoxAxisAligned, collision: Collision
 	): Collision
 	{
 		return this.collisionOfBoxAndMapLocated(box, mapLocated, collision);
@@ -1221,7 +1225,7 @@ export class CollisionHelper
 		var mapCellSize = map.cellSize;
 		var mapSizeHalf = map.sizeHalf;
 		var mapPos = mapLocated.loc.pos;
-		var cellAsBox = new Box( Coords.create(), map.cellSize );
+		var cellAsBox = BoxAxisAligned.fromSize(map.cellSize);
 
 		for (var y = 0; y < mapSizeInCells.y; y++)
 		{
@@ -1252,7 +1256,7 @@ export class CollisionHelper
 		return collision;
 	}
 
-	collisionOfMeshAndBox(mesh: Mesh, box: Box, collision: Collision): Collision
+	collisionOfMeshAndBox(mesh: Mesh, box: BoxAxisAligned, collision: Collision): Collision
 	{
 		return this.collisionOfBoxAndMesh(box, mesh, collision);
 	}
@@ -1365,7 +1369,7 @@ export class CollisionHelper
 		return this.collisionOfShapeAndShapeTransformed(shape, shapeTransformed, collisionOut);
 	}
 
-	collisionOfSphereAndBox(sphere: Sphere, box: Box, collision: Collision, shouldCalculatePos: boolean): Collision
+	collisionOfSphereAndBox(sphere: Sphere, box: BoxAxisAligned, collision: Collision, shouldCalculatePos: boolean): Collision
 	{
 		return this.collisionOfBoxAndSphere(box, sphere, collision, shouldCalculatePos);
 	}
@@ -1434,20 +1438,20 @@ export class CollisionHelper
 
 	// doXAndYCollide
 
-	doBoxAndBoxCollide(box0: Box, box1: Box): boolean
+	doBoxAndBoxCollide(box0: BoxAxisAligned, box1: BoxAxisAligned): boolean
 	{
 		var returnValue = box0.overlapsWith(box1);
 		return returnValue;
 	}
 
-	doBoxAndBoxRotatedCollide(box: Box, boxRotated: BoxRotated): boolean
+	doBoxAndBoxRotatedCollide(box: BoxAxisAligned, boxRotated: BoxRotated): boolean
 	{
 		// todo
 		var boxRotatedAsSphere = boxRotated.sphereSwept();
 		return this.doBoxAndSphereCollide(box, boxRotatedAsSphere);
 	}
 
-	doBoxAndCylinderCollide(box: Box, cylinder: Cylinder): boolean
+	doBoxAndCylinderCollide(box: BoxAxisAligned, cylinder: Cylinder): boolean
 	{
 		var returnValue = false;
 
@@ -1486,7 +1490,7 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	doBoxAndHemispaceCollide(box: Box, hemispace: Hemispace): boolean
+	doBoxAndHemispaceCollide(box: BoxAxisAligned, hemispace: Hemispace): boolean
 	{
 		var returnValue = false;
 
@@ -1503,12 +1507,12 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	doBoxAndMapLocatedCollide(box: Box, mapLocated: MapLocated): boolean
+	doBoxAndMapLocatedCollide(box: BoxAxisAligned, mapLocated: MapLocated): boolean
 	{
 		return this.doBoxAndBoxCollide(box, mapLocated.box);
 	}
 
-	doBoxAndMapLocated2Collide(box: Box, mapLocated: MapLocated2): boolean
+	doBoxAndMapLocated2Collide(box: BoxAxisAligned, mapLocated: MapLocated2): boolean
 	{
 		var doCollide = this.doBoxAndBoxCollide(box, mapLocated.box);
 		if (doCollide)
@@ -1529,33 +1533,33 @@ export class CollisionHelper
 		return doCollide;
 	}
 
-	doBoxAndMeshCollide(box: Box, mesh: Mesh): boolean
+	doBoxAndMeshCollide(box: BoxAxisAligned, mesh: Mesh): boolean
 	{
 		// todo
 		return this.doBoxAndBoxCollide(box, mesh.box() );
 	}
 
-	doBoxAndShapeGroupAllCollide(box: Box, shapeGroupAll: ShapeGroupAll): boolean
+	doBoxAndShapeGroupAllCollide(box: BoxAxisAligned, shapeGroupAll: ShapeGroupAll): boolean
 	{
 		return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, box);
 	}
 
-	doBoxAndShapeGroupAnyCollide(box: Box, group: ShapeGroupAny): boolean
+	doBoxAndShapeGroupAnyCollide(box: BoxAxisAligned, group: ShapeGroupAny): boolean
 	{
 		return this.doShapeGroupAnyAndShapeCollide(group, box);
 	}
 
-	doBoxAndShapeInverseCollide(box: Box, shapeInverse: ShapeInverse): boolean
+	doBoxAndShapeInverseCollide(box: BoxAxisAligned, shapeInverse: ShapeInverse): boolean
 	{
 		return this.doShapeInverseAndShapeCollide(shapeInverse, box);
 	}
 
-	doBoxAndSphereCollide(box: Box, sphere: Sphere): boolean
+	doBoxAndSphereCollide(box: BoxAxisAligned, sphere: Sphere): boolean
 	{
 		return this.collisionOfBoxAndSphere(box, sphere, this._collision, false).isActive;
 	}
 
-	doBoxRotatedAndBoxCollide(boxRotated: BoxRotated, box: Box): boolean
+	doBoxRotatedAndBoxCollide(boxRotated: BoxRotated, box: BoxAxisAligned): boolean
 	{
 		return this.doBoxAndBoxRotatedCollide(box, boxRotated);
 	}
@@ -1688,7 +1692,7 @@ export class CollisionHelper
 		return (this.collisionOfEdgeAndPlane(edge, plane, this._collision.clear()) != null);
 	}
 
-	doHemispaceAndBoxCollide(hemispace: Hemispace, box: Box): boolean
+	doHemispaceAndBoxCollide(hemispace: Hemispace, box: BoxAxisAligned): boolean
 	{
 		var collision = this.collisionOfHemispaceAndBox(hemispace, box, this._collision.clear());
 
@@ -1702,7 +1706,7 @@ export class CollisionHelper
 		return collision.isActive;
 	}
 
-	doMeshAndBoxCollide(mesh: Mesh, box: Box): boolean
+	doMeshAndBoxCollide(mesh: Mesh, box: BoxAxisAligned): boolean
 	{
 		return this.doBoxAndMeshCollide(box, mesh);
 	}
@@ -1785,12 +1789,12 @@ export class CollisionHelper
 		return this.doShapeInverseAndShapeCollide(inverse, mesh);
 	}
 
-	doMapLocatedAndBoxCollide(mapLocated: MapLocated, box: Box): boolean
+	doMapLocatedAndBoxCollide(mapLocated: MapLocated, box: BoxAxisAligned): boolean
 	{
 		return this.doBoxAndMapLocatedCollide(box, mapLocated);
 	}
 
-	doMapLocated2AndBoxCollide(mapLocated: MapLocated2, box: Box): boolean
+	doMapLocated2AndBoxCollide(mapLocated: MapLocated2, box: BoxAxisAligned): boolean
 	{
 		return this.doBoxAndMapLocated2Collide(box, mapLocated);
 	}
@@ -1930,7 +1934,7 @@ export class CollisionHelper
 		var mapCellSize = map.cellSize;
 		var mapSizeHalf = map.sizeHalf;
 		var mapPos = mapLocated.loc.pos;
-		var cellAsBox = new Box( Coords.create(), map.cellSize );
+		var cellAsBox = BoxAxisAligned.fromSize(map.cellSize);
 
 		for (var y = 0; y < mapSizeInCells.y; y++)
 		{
@@ -1993,7 +1997,7 @@ export class CollisionHelper
 		return point0.pos.equals(point1.pos);
 	}
 
-	doSphereAndBoxCollide(sphere: Sphere, box: Box): boolean
+	doSphereAndBoxCollide(sphere: Sphere, box: BoxAxisAligned): boolean
 	{
 		return this.doBoxAndSphereCollide(box, sphere);
 	}
@@ -2056,7 +2060,7 @@ export class CollisionHelper
 
 	// boolean combinations
 
-	doShapeContainerAndBoxCollide(container: ShapeContainer, box: Box): boolean
+	doShapeContainerAndBoxCollide(container: ShapeContainer, box: BoxAxisAligned): boolean
 	{
 		return this.doShapeContainerAndShapeCollide(container, box);
 	}
@@ -2105,7 +2109,7 @@ export class CollisionHelper
 		return this.doShapeGroupAllAndShapeCollide(group, shape);
 	}
 
-	doShapeGroupAnyAndBoxCollide(groupAny: ShapeGroupAny, box: Box): boolean
+	doShapeGroupAnyAndBoxCollide(groupAny: ShapeGroupAny, box: BoxAxisAligned): boolean
 	{
 		return this.doShapeGroupAnyAndShapeCollide(groupAny, box);
 	}
@@ -2139,7 +2143,7 @@ export class CollisionHelper
 		return this.doShapeInverseAndShapeCollide(inverse, mesh);
 	}
 
-	doShapeInverseAndBoxCollide(inverse: ShapeInverse, box: Box): boolean
+	doShapeInverseAndBoxCollide(inverse: ShapeInverse, box: BoxAxisAligned): boolean
 	{
 		return this.doShapeInverseAndShapeCollide(inverse, box);
 	}
@@ -2171,19 +2175,19 @@ export class CollisionHelper
 
 	// contains
 
-	doesBoxContainBox(box0: Box, box1: Box): boolean
+	doesBoxContainBox(box0: BoxAxisAligned, box1: BoxAxisAligned): boolean
 	{
 		return box0.containsOther(box1);
 	}
 
-	doesBoxContainHemispace(box: Box, hemispace: Hemispace): boolean
+	doesBoxContainHemispace(box: BoxAxisAligned, hemispace: Hemispace): boolean
 	{
 		return false;
 	}
 
-	doesBoxContainSphere(box: Box, sphere: Sphere): boolean
+	doesBoxContainSphere(box: BoxAxisAligned, sphere: Sphere): boolean
 	{
-		var boxForSphere = new Box
+		var boxForSphere = BoxAxisAligned.fromCenterAndSize
 		(
 			sphere.center,
 			Coords.ones().multiplyScalar(sphere.radius() * 2)
@@ -2194,7 +2198,7 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	doesHemispaceContainBox(hemispace: Hemispace, box: Box): boolean
+	doesHemispaceContainBox(hemispace: Hemispace, box: BoxAxisAligned): boolean
 	{
 		var returnValue = true;
 
@@ -2222,7 +2226,7 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	doesSphereContainBox(sphere: Sphere, box: Box): boolean
+	doesSphereContainBox(sphere: Sphere, box: BoxAxisAligned): boolean
 	{
 		var sphereCircumscribingBox =
 			Sphere.fromCenterAndRadius

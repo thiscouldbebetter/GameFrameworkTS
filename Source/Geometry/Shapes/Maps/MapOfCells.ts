@@ -131,7 +131,7 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 		return this.sizeInCells.x * this.sizeInCells.y;
 	}
 
-	cellsInBox(box: Box, cellsInBox: TCell[]): TCell[]
+	cellsInBox(box: BoxAxisAligned, cellsInBox: TCell[]): TCell[]
 	{
 		ArrayHelper.clear(cellsInBox);
 

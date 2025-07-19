@@ -58,7 +58,7 @@ export class ShapeGroupAll implements ShapeBase
 		throw new Error("Not implemented!");
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
 		throw new Error("Not implemented!");
 	}

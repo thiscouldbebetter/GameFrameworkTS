@@ -97,9 +97,9 @@ export class Arc implements ShapeBase
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
 
-	toBox(boxOut: Box): Box
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
-		return this.shell.toBox(boxOut);
+		return this.shell.toBoxAxisAligned(boxOut);
 	}
 
 	// Transformable.

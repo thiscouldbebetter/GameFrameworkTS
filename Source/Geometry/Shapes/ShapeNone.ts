@@ -54,7 +54,7 @@ export class ShapeNone implements ShapeBase
 		throw new Error("Not implemented!");
 	}
 
-	toBox(boxOut: Box): Box { throw new Error("Not implemented!"); }
+	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 
