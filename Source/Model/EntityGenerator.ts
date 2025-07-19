@@ -7,10 +7,13 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 	entityToGenerate: Entity;
 	ticksPerGenerationAsRange: RangeExtent;
 	entitiesPerGenerationAsRange: RangeExtent;
-	entitiesGeneratedMax: number;
+	entitiesGeneratedMaxConcurrent: number;
+	entitiesGeneratedMaxAllTime: number;
 	entitySpeedAsRange: RangeExtent;
+	entityPositionRangeAsBox: BoxAxisAligned;
 
-	entitiesGenerated: Entity[];
+	entitiesGeneratedAllTimeCount: number;
+	entitiesGeneratedActive: Entity[];
 	ticksUntilNextGeneration: number
 
 	constructor
@@ -18,26 +21,71 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 		entityToGenerate: Entity,
 		ticksPerGenerationAsRange: RangeExtent,
 		entitiesPerGenerationAsRange: RangeExtent,
-		entitiesGeneratedMax: number,
+		entitiesGeneratedMaxConcurrent: number,
+		entitiesGeneratedMaxAllTime: number,
+		entityPositionRangeAsBox: BoxAxisAligned,
 		entitySpeedAsRange: RangeExtent
 	)
 	{
 		this.entityToGenerate = entityToGenerate;
 		this.ticksPerGenerationAsRange =
-			ticksPerGenerationAsRange || new RangeExtent(100, 100);
+			ticksPerGenerationAsRange || RangeExtent.fromNumber(100);
 		this.entitiesPerGenerationAsRange =
-			entitiesPerGenerationAsRange || new RangeExtent(1, 1);
-		this.entitiesGeneratedMax = entitiesGeneratedMax || 1;
+			entitiesPerGenerationAsRange || RangeExtent.fromNumber(1);
+		this.entitiesGeneratedMaxConcurrent =
+			entitiesGeneratedMaxConcurrent || 1;
+		this.entitiesGeneratedMaxAllTime =
+			entitiesGeneratedMaxAllTime;
+		this.entityPositionRangeAsBox =
+			entityPositionRangeAsBox;
 		this.entitySpeedAsRange =
-			entitySpeedAsRange || new RangeExtent(0, 0);
+			entitySpeedAsRange || RangeExtent.fromNumber(0);
 
-		this.entitiesGenerated = new Array<Entity>();
-		this.ticksUntilNextGeneration = null;
+		this.entitiesGeneratedAllTimeCount = 0;
+		this.entitiesGeneratedActive = new Array<Entity>();
+		this.ticksUntilNextGeneration = 0;
+	}
+
+	static fromEntityTicksBatchMaxesAndPosBox
+	(
+		entityToGenerate: Entity,
+		ticksPerGeneration: number,
+		entitiesPerGeneration: number,
+		entitiesGeneratedMaxConcurrent: number,
+		entitiesGeneratedMaxAllTime: number,
+		entityPositionRangeAsBox: BoxAxisAligned 
+	): EntityGenerator
+	{
+		return new EntityGenerator
+		(
+			entityToGenerate,
+			RangeExtent.fromNumber(ticksPerGeneration),
+			RangeExtent.fromNumber(entitiesPerGeneration),
+			entitiesGeneratedMaxConcurrent,
+			entitiesGeneratedMaxAllTime,
+			entityPositionRangeAsBox,
+			null
+		);
+	}
+
+	static of(entity: Entity): EntityGenerator
+	{
+		return entity.propertyByName(EntityGenerator.name) as EntityGenerator;
+	}
+
+	exhausted(): boolean
+	{
+		return (this.entitiesGeneratedAllTimeCount >= this.entitiesGeneratedMaxAllTime);
+	}
+
+	saturated(): boolean
+	{
+		return (this.entitiesGeneratedActive.length >= this.entitiesGeneratedMaxConcurrent);
 	}
 
 	toEntity(): Entity
 	{
-		return new Entity(EntityGenerator.name, [ this ] );
+		return Entity.fromNameAndProperties(EntityGenerator.name, [ this ] );
 	}
 
 	// EntityProperty.
@@ -49,14 +97,22 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
+		if (this.exhausted() )
+		{
+			return;
+		}
+
 		var place = uwpe.place;
 
-		this.entitiesGenerated = this.entitiesGenerated.filter
-		(
-			e => place.entityByName(e.name) != null
-		);
+		this.entitiesGeneratedActive =
+			this.entitiesGeneratedActive.filter
+			(
+				e => place.entityByName(e.name) != null
+			);
 
-		if (this.entitiesGenerated.length < this.entitiesGeneratedMax)
+		var saturated = this.saturated();
+
+		if (saturated == false)
 		{
 			var randomizer = uwpe.universe.randomizer;
 
@@ -88,17 +144,22 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 				{
 					var entityGenerated = this.entityToGenerate.clone();
 					var entityGeneratedLoc = Locatable.of(entityGenerated).loc;
+					var entityGeneratedPos = entityGeneratedLoc.pos;
 
-					if (generatorLocatable == null)
+					if (this.entityPositionRangeAsBox != null)
+					{
+						entityGeneratedPos.overwriteWith
+						(
+							this.entityPositionRangeAsBox
+								.pointRandom(randomizer)
+						);
+					}
+					else if (generatorLocatable == null)
 					{
 						var placeSize = place.size();
-						entityGeneratedLoc.pos.randomize
-						(
-							randomizer
-						).multiply
-						(
-							placeSize
-						);
+						entityGeneratedPos
+							.randomize(randomizer)
+							.multiply(placeSize);
 					}
 					else
 					{
@@ -106,24 +167,24 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 						(
 							generatorLocatable.loc
 						);
-
-						var entityGeneratedSpeed =
-							this.entitySpeedAsRange.random(randomizer);
-						if (entityGeneratedSpeed > 0)
-						{
-							var entityGeneratedVel = entityGeneratedLoc.vel;
-							Polar.create().random(randomizer).toCoords
-							(
-								entityGeneratedVel
-							).multiplyScalar
-							(
-								entityGeneratedSpeed
-							);
-						}
 					}
-					this.entitiesGenerated.push(entityGenerated);
+
+					var entityGeneratedSpeed =
+						this.entitySpeedAsRange.random(randomizer);
+					if (entityGeneratedSpeed > 0)
+					{
+						var entityGeneratedVel = entityGeneratedLoc.vel;
+						Polar
+							.create()
+							.random(randomizer)
+							.toCoords(entityGeneratedVel)
+							.multiplyScalar(entityGeneratedSpeed);
+					}
+
+					this.entitiesGeneratedActive.push(entityGenerated);
 					var uwpe2 = uwpe.clone().entitySet(entityGenerated);
 					place.entitySpawn(uwpe2);
+					this.entitiesGeneratedAllTimeCount++;
 				}
 			}
 		}
@@ -138,17 +199,27 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 			this.entityToGenerate,
 			this.ticksPerGenerationAsRange.clone(),
 			this.entitiesPerGenerationAsRange.clone(),
-			this.entitiesGeneratedMax,
+			this.entitiesGeneratedMaxConcurrent,
+			this.entitiesGeneratedMaxAllTime,
+			this.entityPositionRangeAsBox.clone(),
 			this.entitySpeedAsRange.clone()
 		);
 	}
 
 	overwriteWith(other: EntityGenerator): EntityGenerator
 	{
-		this.entityToGenerate = other.entityToGenerate; // todo
-		this.ticksPerGenerationAsRange.overwriteWith(other.ticksPerGenerationAsRange);
-		this.entitiesPerGenerationAsRange.overwriteWith(other.entitiesPerGenerationAsRange);
-		this.entitiesGeneratedMax = other.entitiesGeneratedMax;
+		this.entityToGenerate =
+			other.entityToGenerate; // todo
+		this.ticksPerGenerationAsRange
+			.overwriteWith(other.ticksPerGenerationAsRange);
+		this.entitiesPerGenerationAsRange
+			.overwriteWith(other.entitiesPerGenerationAsRange);
+		this.entitiesGeneratedMaxConcurrent =
+			other.entitiesGeneratedMaxConcurrent;
+		this.entitiesGeneratedMaxAllTime =
+			other.entitiesGeneratedMaxAllTime;
+		this.entityPositionRangeAsBox
+			.overwriteWith(other.entityPositionRangeAsBox);
 		this.entitySpeedAsRange.overwriteWith(other.entitySpeedAsRange);
 		return this;
 	}

@@ -322,7 +322,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 8.2. First, we'll create the victim, which we'll call a Habitat.  In the Model directory, add a new file named "Habitat.ts", containing the following text:
 
-	class Habitat extends Entity
+	class Habitat extends Entity implements EntityProperty<Habitat>
 	{
 		constructor(pos: Coords)
 		{
@@ -350,22 +350,47 @@ This guide illustrates the creation of a new game from scratch using the This Co
 					Locatable.fromPos(pos)
 				]
 			);
+
+			this.propertyAdd(this);
 		}
 
 		static fromPos(pos: Coords): Habitat
 		{
 			return new Habitat(pos);
 		}
+
+		// Clonable.
+
+		clone(): Habitat
+		{
+			throw new Error("Not implemented!");
+		}
+
+		overwriteWith(other: Habitat): Habitat
+		{
+			throw new Error("Not implemented!");
+		}
+
+		// EntityProperty
+
+		equals(other: Habitat): boolean
+		{
+			return (this == other);
+		}
+
+		propertyName(): string
+		{
+			return Habitat.name;
+		}
+
 	}
+
+(Observe that the Habitat class is a subclass of the Entity class, and it also implements the EntityProperty interface.  Then, in the constructor, each newly created Habitat entity adds itself as one of its properties!  This was done to save some work implementing the interface's methods, but it's perhaps a little suspect from the perspective of software architecture.  This approach will work, though, as long as the EntityProperty part doesn't have to do very much.  By contrast, the Raider class implemented in the next section will use a separate subclass of EntityProperty named RaiderProperty.)
 
 8.3. Next, we'll create the villain, which we'll call a "Raider".  Still in the Model directory, create a new file named Raider.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the raider has to actually move around and kidnap people and stuff, while all the Habitat has to do is sit there looking vulnerable.
 
 	class Raider extends Entity
 	{
-		habitatCaptured: Habitat;
-
-		_displacement: Coords;
-
 		constructor(pos: Coords)
 		{
 			super
@@ -384,32 +409,16 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 					Drawable.fromVisual
 					(
-						VisualGroup.fromChildren
-						(
-							VisualEllipse.fromSemiaxesAndColorFill
-							(
-								6, 4, Color.Instances().Green
-							),
-							VisualEllipse.fromSemiaxesAndColorFill
-							(
-								4, 3, Color.Instances().Red
-							),
-							VisualFan.fromRadiusAnglesStartAndSpannedAndColorsFillAndBorder
-							(
-								4, // radius
-								.5, .5, // angleStart-, angleSpannedInTurns
-								Color.Instances().Red, null // colorFill, colorBorder
-							)
-						)
+						Raider.visualBuild()
 					),
 
 					Locatable.fromPos(pos),
 
-					Movable.fromAccelerationAndSpeedMax(2, 1)
+					Movable.fromAccelerationAndSpeedMax(2, 1),
+
+					RaiderProperty.create()
 				]
 			);
-
-			this._displacement = Coords.create();
 		}
 
 		static fromPos(pos: Coords): Raider
@@ -433,9 +442,9 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 			var raider = entity as Raider;
 
-			var raiderPos = raider.locatable().loc.pos;
+			var raiderPos = Locatable.of(raider).loc.pos;
 
-			var raiderActor = raider.actor();
+			var raiderActor = Actor.of(raider);
 			var raiderActivity = raiderActor.activity;
 			var targetEntity = raiderActivity.targetEntity();
 
@@ -457,48 +466,53 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				}
 			}
 
-			var targetPos = targetEntity.locatable().loc.pos;
-			var displacementToTarget = raider._displacement.overwriteWith
-			(
-				targetPos
-			).subtract
-			(
-				raiderPos
-			);
+			var targetPos = Locatable.of(targetEntity).loc.pos;
+			var displacementToTarget =
+				Raider.displacement()
+				.overwriteWith(targetPos)
+				.subtract(raiderPos);
 			var distanceToTarget = displacementToTarget.magnitude();
-			var raiderMovable = raider.movable();
-			if (distanceToTarget >= raiderMovable.accelerationPerTick)
+			var raiderMovable = Movable.of(raider);
+			var raiderAccelerationPerTick =
+				raiderMovable.accelerationPerTick(uwpe);
+			if (distanceToTarget >= raiderAccelerationPerTick)
 			{
-				var displacementToMove = displacementToTarget.divideScalar
-				(
-					distanceToTarget
-				).multiplyScalar
-				(
-					raiderMovable.speedMax
-				);
+				var raiderSpeedMax =
+					raiderMovable.speedMax(uwpe);
+				var displacementToMove =
+					displacementToTarget
+						.divideScalar(distanceToTarget)
+						.multiplyScalar(raiderSpeedMax);
 				raiderPos.add(displacementToMove);
 			}
 			else
 			{
 				raiderPos.overwriteWith(targetPos);
-				if (raider.habitatCaptured == null)
+				var raiderProperty = RaiderProperty.of(raider);
+				if (raiderProperty.habitatCaptured == null)
 				{
-					raider.habitatCaptured = targetEntity;
+					raiderProperty.habitatCaptured = targetEntity as Habitat;
 
-					var targetConstrainable = targetEntity.constrainable();
+					var targetConstrainable =
+						Constrainable.of(targetEntity);
 
-					var constraintToAddToTarget = new Constraint_Multiple
+					var constraintToAddToTarget = Constraint_Multiple.fromChildren
 					([
-						Constraint_AttachToEntityWithId.fromTargetEntityId(raider.id),
+						Constraint_AttachToEntityWithId
+							.fromTargetEntityId(raider.id),
 						Constraint_Transform.fromTransform
 						(
-							Transform_Translate.fromDisplacement(Coords.fromXY(0, 10) )
+							Transform_Translate.fromDisplacement
+							(
+								Coords.fromXY(0, 10)
+							)
 						)
 					]);
 
-					targetConstrainable.constraintAdd(constraintToAddToTarget);
+					targetConstrainable
+						.constraintAdd(constraintToAddToTarget);
 
-					targetEntity = new Entity
+					targetEntity = Entity.fromNameAndProperties
 					(
 						"EscapePoint",
 						[
@@ -506,7 +520,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 							(
 								raiderPos.clone().addXY
 								(
-									0, 0 - place.size.y
+									0, 0 - place.size().y
 								)
 							)
 						]
@@ -515,13 +529,100 @@ This guide illustrates the creation of a new game from scratch using the This Co
 				}
 				else
 				{
-					place.entityToRemoveAdd(raider.habitatCaptured);
+					place.entityToRemoveAdd(raiderProperty.habitatCaptured);
 					place.entityToRemoveAdd(raider);
 				}
 			}
 		}
 
+		static _displacement: Coords;
+		static displacement(): Coords
+		{
+			if (this._displacement == null)
+			{
+				this._displacement = Coords.create();
+			}
+			return this._displacement;
+		}
+
+		static visualBuild(): VisualBase
+		{
+			return VisualGroup.fromChildren
+			([
+				VisualEllipse.fromSemiaxesHorizontalAndVerticalAndColorFill
+				(
+					6, 4, Color.Instances().Green
+				),
+				VisualEllipse.fromSemiaxesHorizontalAndVerticalAndColorFill
+				(
+					4, 3, Color.Instances().Red
+				),
+				VisualFan.fromRadiusAnglesStartAndSpannedAndColorsFillAndBorder
+				(
+					4, // radius
+					.5, .5, // angleStart-, angleSpannedInTurns
+					Color.Instances().Red, null // colorFill, colorBorder
+				)
+			]);
+		}
 	}
+
+	class RaiderProperty implements EntityProperty<RaiderProperty>
+	{
+		habitatCaptured: Habitat;
+
+		static create()
+		{
+			return new RaiderProperty();
+		}
+
+		static of(entity: Entity)
+		{
+			return entity.propertyByName(RaiderProperty.name) as RaiderProperty;
+		}
+
+		// Clonable.
+
+		clone(): RaiderProperty
+		{
+			return new RaiderProperty();
+		}
+
+		overwriteWith(other: RaiderProperty): RaiderProperty
+		{
+			this.habitatCaptured = other.habitatCaptured;
+			return this;
+		}
+
+		// EntityProperty.
+
+		equals(other: RaiderProperty): boolean
+		{
+			return (this.habitatCaptured == other.habitatCaptured);
+		}
+
+		finalize(uwpe: UniverseWorldPlaceEntities): void
+		{
+			// Do nothing.
+		}
+
+		initialize(uwpe: UniverseWorldPlaceEntities): void
+		{
+			// Do nothing.
+		}
+
+		propertyName(): string
+		{
+			return RaiderProperty.name;
+		}
+
+		updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
+		{
+			// Do nothing.
+		}
+
+	}
+
 
 8.4. The Raider class uses the Actor property, and defines its very own ActivityDefn to use with it, so we need to register that ActivityDefn with the WorldDefn.  Open WorldGame.ts, locate the .defnBuild() method, and add the new activity definition in the proper place, adjusting commas as necessary:
 
@@ -531,10 +632,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	habitats(): Habitat[]
 	{
-		return this._entities.filter
-		(
-			x => x.constructor.name == Habitat.name
-		) as Habitat[];
+		return this.entitiesByPropertyName(Habitat.name) as Habitat[];
 	}
 
 8.6. We also need to add references to the newly declared Habitat and Raider classes in Game.html.  These should be added near the ones previously added for Planet and Ship:
@@ -635,21 +733,21 @@ To fix it, we need to modify the Killable property on the Raider entity so that 
 
 Open Raider.ts, locate the place in the constructor where the existing Killable property is being built, replace it with the following, adjust commas, and save:
 
-	Killable.fromIntegrityMaxAndDie
-	(
-		1, // integrityMax
-		(uwpe: UniverseWorldPlaceEntities) => // die
+	Killable.fromDie(Raider.killableDie)
+
+Then, still in Raider.ts, add the .killableDie() method:
+
+	static killableDie(uwpe: UniverseWorldPlaceEntities)
+	{
+		var raider = uwpe.entity as Raider;
+		var habitatCaptured = raider.habitatCaptured;
+		if (habitatCaptured != null)
 		{
-			var raider = uwpe.entity as Raider;
-			var habitatCaptured = raider.habitatCaptured;
-			if (habitatCaptured != null)
-			{
-				var constrainable =
-					Constrainable.of(habitatCaptured);
-				constrainable.constraintRemoveFinal();
-			}
+			var constrainable =
+				Constrainable.of(habitatCaptured);
+			constrainable.constraintRemoveFinal();
 		}
-	)
+	}
 
 Now when you destroy the raider after it's picked up the habitat, the habitat will just float there eerily instead of falling.  This may not seem like progress, but it is, because now at least the habitat's not falling for the wrong reasons.
 
@@ -779,11 +877,14 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 	): boolean
 	{
 		var level = uwpe.place as PlaceDefault;
-		var habitatIsStillThere =
-			(level.habitats().length > 0);
 		var raidersAreAllGone =
 			(level.raiders().length == 0);
-		return (raidersAreAllGone && habitatIsStillThere);
+		var habitatIsStillThere =
+			(level.habitats().length > 0);
+		var playerHasWon = 
+			raidersAreAllGone
+			&& habitatIsStillThere;
+		return playerHasWon;
 	}
 
 	static triggerWinReactToBeingTriggered
@@ -823,10 +924,7 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 
 	raiders(): Raider[]
 	{
-		return this._entities.filter
-		(
-			x => x.constructor.name == Raider.name
-		) as Raider[];
+		return this.entitiesByPropertyName(RaiderProperty.name) as Raider[];
 	}
 
 12.5. Save the changes, run the build script, and refresh the browser.  Now, when you blow up the raider, or when the raider takes the habitat off the top of the screen, you'll see either a win or lose message.  When you click the button to dismiss the message dialog, the game will end and return to the title screen.
@@ -1074,15 +1172,152 @@ We'll fix the wrapping of the bullets first, because it's easiest.  We'll add a 
 
 After making this latest change, the bullets will act more like how the raider does.  But they and the raider will still disappear inappropriately whenever they and the player's ship are on opposite sides of the discontinuity line.  As mentioned earlier, to fix that problem, either the colliders for the bullets and raider or the collider for the camera's field of view will need to be wrapped.
 
-Rather than wrapping the collider for every entity that's both drawable and collidable, instead let's try to just wrap the collider for the camera's field of view.  Open PlaceDefault.ts and locate the .cameraEntity() method.
+Rather than wrapping the collider for every entity that's both drawable and collidable, instead let's try to just wrap the collider for the camera's field of view.  Open PlaceDefault.ts and locate the .cameraEntity() method, and add the following lines before the return statement:
 
-[To be continued...]
+	var collidable = Collidable.of(cameraEntity);
+
+	var colliderCenter = collidable.collider;
+
+	var colliderLeft = ShapeTransformed.fromTransformAndChild
+	(
+		Transform_Translate.fromDisplacement
+		(
+			Coords.fromXY(0 - placeSize.x, 0)
+		),
+		colliderCenter.clone()
+	)
+
+	var colliderRight = ShapeTransformed.fromTransformAndChild
+	(
+		Transform_Translate.fromDisplacement
+		(
+			Coords.fromXY(placeSize.x, 0)
+		),
+		colliderCenter.clone()
+	)
+
+	var colliderAfterWrapping = ShapeGroupAny.fromShapes
+	([
+		colliderLeft,
+		colliderCenter,
+		colliderRight
+	]);
+
+	collidable.colliderAtRestSet(colliderAfterWrapping);
+
+This code makes three copies of the camera's field of view, and applies them one width of the level to the left and right of the "central" field of view.  This means that, when the wrapping boundary line is present on the screen, anything that happens to be on the opposite side of the boundary from the player, and thus the camera, will still be seen by the camera and drawn.  (This may or may not be the most efficient way to do things, but it's good enough for now.)
 
 
-15. Conclusion
+15. More Habitats and Raiders
+-----------------------------
+
+15.1. The last section was pretty complicated and abstract, what with all the invisible "colliders" and "wrapping boundary" and whatnot, so let's take a breather and do something a little more down to earth.  Literally, because we're going to be putting more habitats down on the earth.  Oh, and more raiders to come and steal them.
+
+Open up PlaceDefault.ts and replace the existing constructor with the following:
+
+	constructor()
+	{
+		var size = Coords.fromXY(800, 300);
+
+		var entities =
+		[
+			PlaceDefault.cameraEntity(Coords.fromXY(800, 300) ),
+			Planet.fromSizeAndHorizonHeight
+			(
+				Coords.fromXY(800, 300), 50
+			),
+			Ship.fromPos(Coords.fromXY(100, 100) )
+		];
+
+		var habitats: Habitat[] = [];
+		var habitatsCount = 4;
+		var habitatSpacing = size.x / habitatsCount;
+		for (var i = 0; i < habitatsCount; i++)
+		{
+			var habitat =
+				Habitat.fromPos(Coords.fromXY(i * habitatSpacing, 250) );
+			habitats.push(habitat);
+		}
+		entities.push(...habitats);
+
+		var raidersCount = habitatsCount * 2;
+		var raiderGenerationZone = BoxAxisAligned.fromMinAndMax
+		(
+			Coords.fromXY(0, 0), Coords.fromXY(size.x, 0)
+		);
+		var raiderGenerator = EntityGenerator.fromEntityTicksBatchMaxesAndPosBox
+		(
+			Raider.fromPos(Coords.create() ),
+			100, // ticksPerGeneration
+			1, // entitiesPerGeneration
+			raidersCount, // concurrent
+			raidersCount, // all-time
+			raiderGenerationZone
+		);
+		entities.push(raiderGenerator.toEntity() );
+
+		super
+		(
+			PlaceDefault.name,
+			PlaceDefault.defnBuild().name,
+			null, // parentName
+			size,
+			entities
+		);
+	}
+
+This code replaces the single habitat with four habitats spaced evenly over the planet surface, and the single raider with eight raiders, generated one after another, about five seconds apart.
+
+15.2. Since there is a single tick when no raiders exist, though, it'll be necessary to change the win condition so that it doesn't trigger instantly when the level starts and it sees that there's no raiders.  Instead, we'll wait until the raider generator is exhausted and all of the raiders are gone.  Open Planet.ts, locate the existing .triggerWinIsTriggered() method, and replace it with the following:
+
+	static triggerWinIsTriggered
+	(
+		uwpe: UniverseWorldPlaceEntities
+	): boolean
+	{
+		var level = uwpe.place as PlaceDefault;
+		var raiderGeneratorIsExhausted =
+			level.raiderGenerator().exhausted();
+		var raidersAreAllGone =
+			(level.raiders().length == 0);
+		var habitatIsStillThere =
+			(level.habitats().length > 0);
+		var playerHasWon =
+			raiderGeneratorIsExhausted
+			&& raidersAreAllGone
+			&& habitatIsStillThere;
+		return playerHasWon;
+	}
+
+15.3. The new win condition uses the PlaceDefault.raiderGenerator() convenience method, which doesn't exist yet.  To create it, in PlaceDefault.ts, right before the .raiders() method, add the following:
+
+	raiderGenerator(): EntityGenerator
+	{
+		var entity = this._entities.find
+		(
+			x => x.propertyByName(EntityGenerator.name) != null
+		);
+		var entityGenerator = EntityGenerator.of(entity);
+		return entityGenerator;
+	}
+
+15.4.Finally, in order for the EntityGenerator to actually work, that property names need to be added to the list of known properties.  In PlaceDefault.defnBuild(), locate the declaration of the entityPropertyNamesToProcess variable and add the following line in alphabetical order, adjusting commas as needed:
+
+	EntityGenerator.name,
+
+15.5. Now run the build script and refresh the browser.  Accelerate to the right and just cruise for a while.  You'll see raiders start to arrive one by one, at random places at the top of the screen.  Each raider will pick out a habitat, descend on it, and carry it back off the top of the screen.  If you wait until the last habitat disappears, the lose message will appear.  If you instead destroy all the raiders before all the habitats are carried off, the win message will appear.
+
+
+16. Adding Status Indicators
+----------------------------
+
+
+
+
+n. Conclusion
 --------------
 
-15.1. Well, it's certainly technically a game at this point.  Congratulations!  Here's some future features that might make the game even more fun:
+n.1. Well, it's certainly technically a game at this point.  Congratulations!  Here's some future features that might make the game even more fun:
 
 * Add more appropriate visual and sound effects when things happen, like explosions.
 * Destroy the player's ship when it runs into a raider.
@@ -1092,8 +1327,8 @@ Rather than wrapping the collider for every entity that's both drawable and coll
 * Require the player to catch a habitat as it falls, or else it explodes on impact.
 * Generate more raiders, on a timer.
 * Add a minimap to show the parts of the planet that are not currently on screen.
+* Make ammuntion limited and add reloading by picking up bullets.
 * Add some on-screen controls to show how many raiders, habitats, bullets, and lives are left.
 * Transition to a new and harder level when the player wins the current level.
-* Make ammuntion limited and add reloading by picking up bullets.
 
 The framework contains features to support all these, though it might not be easy to figure out how.  To be continued!
