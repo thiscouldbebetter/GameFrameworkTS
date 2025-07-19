@@ -4,6 +4,8 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ShapeContainer implements ShapeBase
 {
+	// Only collides if the other shape is fully contained in the child shape.
+
 	shape: ShapeBase;
 
 	constructor(shape: ShapeBase)

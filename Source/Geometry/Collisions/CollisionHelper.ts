@@ -60,7 +60,6 @@ export class CollisionHelper
 		var notDefined = "undefined"; // todo
 
 		var boxName = ( typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name );
-		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
 		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
 		var mapLocated2Name = ( typeof MapLocated2 == notDefined ? null : MapLocated2.name );
 		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
@@ -76,7 +75,6 @@ export class CollisionHelper
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.collisionOfBoxAndBox ],
-				[ boxRotatedName, this.collisionOfBoxAndBoxRotated ],
 				[ mapLocatedName, this.collisionOfBoxAndMapLocated ],
 				[ mapLocated2Name, this.collisionOfBoxAndMapLocated ],
 				[ meshName, this.collisionOfBoxAndMesh ],
@@ -89,22 +87,11 @@ export class CollisionHelper
 			lookupOfLookups.set(boxName, lookup);
 		}
 
-		if (boxRotatedName != null)
-		{
-			lookup = new Map<string, any>
-			([
-				[ boxName, this.collisionOfBoxRotatedAndBox ],
-				[ boxRotatedName, this.collisionOfBoxRotatedAndBoxRotated ]
-			]);
-			lookupOfLookups.set(boxRotatedName, lookup);
-		}
-
 		if (mapLocatedName != null)
 		{
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.collisionOfMapLocatedAndBox ],
-				[ boxRotatedName, this.collisionOfMapLocatedAndBoxRotated ],
 				[ mapLocatedName, this.collisionOfMapLocatedAndMapLocated ],
 				[ shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll ],
 				[ sphereName, this.collisionOfMapLocatedAndSphere ]
@@ -182,7 +169,6 @@ export class CollisionHelper
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.collisionOfSphereAndBox ],
-				[ boxRotatedName, this.collisionOfSphereAndBoxRotated ],
 				[ mapLocatedName, this.collisionOfSphereAndMapLocated ],
 				[ meshName, this.collisionOfSphereAndMesh ],
 				[ shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll ],
@@ -205,11 +191,12 @@ export class CollisionHelper
 		var notDefined = "undefined"; // todo
 
 		var boxName = ( typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name );
-		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
+		var hemispaceName = (typeof Hemispace == notDefined ? null : Hemispace.name );
 		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
 		var mapLocated2Name = ( typeof MapLocated2 == notDefined ? null : MapLocated2.name );
 		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
 		var pointName = (typeof Point == notDefined ? null : Point.name );
+		var shapeContainerName = (typeof ShapeContainer == notDefined ? null : ShapeContainer.name);
 		var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
 		var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
 		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
@@ -221,10 +208,11 @@ export class CollisionHelper
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.doBoxAndBoxCollide ],
-				[ boxRotatedName, this.doBoxAndBoxRotatedCollide ],
+				[ hemispaceName, this.doBoxAndHemispaceCollide ],
 				[ mapLocatedName, this.doBoxAndMapLocatedCollide ],
 				[ mapLocated2Name, this.doBoxAndMapLocatedCollide ],
 				[ meshName, this.doBoxAndMeshCollide ],
+				[ shapeContainerName, this.doBoxAndShapeContainerCollide ],
 				[ shapeGroupAllName, this.doBoxAndShapeGroupAllCollide ],
 				[ shapeGroupAnyName, this.doBoxAndShapeGroupAnyCollide ],
 				[ shapeInverseName, this.doBoxAndShapeInverseCollide ],
@@ -234,14 +222,13 @@ export class CollisionHelper
 			lookupOfLookups.set(boxName, lookup);
 		}
 
-		if (boxRotatedName != null)
+		if (hemispaceName != null)
 		{
 			lookup = new Map<string, any>
 			([
-				[ boxName, this.doBoxRotatedAndBoxCollide ],
-				[ boxRotatedName, this.doBoxRotatedAndBoxRotatedCollide ]
+				[ boxName, this.doHemispaceAndBoxCollide ],
 			]);
-			lookupOfLookups.set(boxRotatedName, lookup);
+			lookupOfLookups.set(hemispaceName, lookup);
 		}
 
 		if (mapLocatedName != null)
@@ -249,7 +236,6 @@ export class CollisionHelper
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.doMapLocatedAndBoxCollide ],
-				[ boxRotatedName, this.doMapLocatedAndBoxRotatedCollide ],
 				[ mapLocatedName, this.doMapLocatedAndMapLocatedCollide ],
 				[ shapeGroupAllName, this.doShapeAndShapeGroupAllCollide ],
 				[ sphereName, this.doMapLocatedAndSphereCollide ]
@@ -276,6 +262,17 @@ export class CollisionHelper
 				[ pointName, this.doPointAndPointCollide ],
 			]);
 			lookupOfLookups.set(pointName, lookup);
+		}
+
+		if (shapeContainerName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doShapeContainerAndShapeCollide ],
+				[ meshName, this.doShapeContainerAndShapeCollide ],
+				[ sphereName, this.doShapeContainerAndShapeCollide ]
+			]);
+			lookupOfLookups.set(shapeContainerName, lookup);
 		}
 
 		if (shapeGroupAllName != null)
@@ -327,7 +324,6 @@ export class CollisionHelper
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.doSphereAndBoxCollide ],
-				[ boxRotatedName, this.doSphereAndBoxRotatedCollide ],
 				[ mapLocatedName, this.doSphereAndMapLocatedCollide ],
 				[ meshName, this.doSphereAndMeshCollide ],
 				[ shapeGroupAllName, this.doShapeAndShapeGroupAllCollide ],
@@ -350,7 +346,6 @@ export class CollisionHelper
 		var notDefined = "undefined"; // todo
 
 		var boxName = ( typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name );
-		var boxRotatedName = ( typeof BoxRotated == notDefined ? null : BoxRotated.name );
 		var mapLocatedName = ( typeof MapLocated == notDefined ? null : MapLocated.name );
 		var mapLocated2Name = ( typeof MapLocated2 == notDefined ? null : MapLocated2.name );
 		var meshName = ( typeof Mesh == notDefined ? null : Mesh.name );
@@ -366,7 +361,6 @@ export class CollisionHelper
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.doesBoxContainBox ],
-				[ boxRotatedName, this.doesBoxContainBoxRotated ],
 				[ mapLocatedName, this.doesBoxContainMapLocated ],
 				[ mapLocated2Name, this.doesBoxContainMapLocated ],
 				[ meshName, this.doesBoxContainMesh ],
@@ -379,22 +373,11 @@ export class CollisionHelper
 			lookupOfLookups.set(boxName, lookup);
 		}
 
-		if (boxRotatedName != null)
-		{
-			lookup = new Map<string, any>
-			([
-				[ boxName, this.doesBoxRotatedContainBox ],
-				[ boxRotatedName, this.doesBoxRotatedContainBoxRotated ]
-			]);
-			lookupOfLookups.set(boxRotatedName, lookup);
-		}
-
 		if (mapLocatedName != null)
 		{
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.doesMapLocatedContainBox ],
-				[ boxRotatedName, this.doesMapLocatedContainBoxRotated ],
 				[ mapLocatedName, this.doesMapLocatedContainMapLocated ],
 				[ shapeGroupAllName, this.doesShapeContainShapeGroupAll ],
 				[ sphereName, this.doesMapLocatedContainSphere ]
@@ -472,7 +455,6 @@ export class CollisionHelper
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.doesSphereContainBox ],
-				[ boxRotatedName, this.doesSphereContainBoxRotated ],
 				[ mapLocatedName, this.doesSphereContainMapLocated ],
 				[ meshName, this.doesSphereContainMesh ],
 				[ shapeGroupAllName, this.doesShapeContainShapeGroupAll ],
@@ -903,21 +885,6 @@ export class CollisionHelper
 		return collision;
 	}
 
-	collisionOfBoxAndBoxRotated
-	(
-		box: BoxAxisAligned,
-		boxRotated: BoxRotated,
-		collision: Collision,
-		shouldCalculatePos: boolean
-	): Collision
-	{
-		// hack
-		return this.collisionOfBoxAndSphere
-		(
-			box, boxRotated.sphereSwept(), collision, shouldCalculatePos
-		);
-	}
-
 	collisionOfBoxAndMapLocated(box: BoxAxisAligned, mapLocated: MapLocated, collision: Collision): Collision
 	{
 		var doBoundsCollide =
@@ -1057,80 +1024,6 @@ export class CollisionHelper
 					Coords.ones().multiplyScalar(sphereRadius * 2)
 				);
 			collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
-		}
-
-		return collision;
-	}
-
-	collisionOfBoxRotatedAndBox
-	(
-		boxRotated: BoxRotated, box: BoxAxisAligned, collision: Collision, shouldCalculatePos: boolean
-	): Collision
-	{
-		return this.collisionOfBoxAndBoxRotated(box, boxRotated, collision, shouldCalculatePos);
-	}
-
-	collisionOfBoxRotatedAndBoxRotated
-	(
-		boxRotated0: BoxRotated, boxRotated1: BoxRotated, collision: Collision, shouldCalculatePos: boolean
-	): Collision
-	{
-		return this.collisionOfBoxAndBox(boxRotated0.box, boxRotated1.box, collision); // todo
-	}
-
-	collisionOfBoxRotatedAndMapLocated
-	(
-		boxRotated: BoxRotated, mapLocated: MapLocated, collision: Collision, shouldCalculatePos: boolean
-	): Collision
-	{
-		return collision; // todo
-	}
-
-	collisionOfBoxRotatedAndSphere
-	(
-		boxRotated: BoxRotated, sphere: Sphere, collision: Collision, shouldCalculatePos: boolean
-	): Collision
-	{
-		if (collision == null)
-		{
-			collision = Collision.create();
-		}
-
-		var doCollide = this.doBoxRotatedAndSphereCollide
-		(
-			boxRotated, sphere
-		);
-
-		if (doCollide)
-		{
-			var collisionPos = collision.pos;
-			var rectangleCenter = boxRotated.box.center;
-			var displacementBetweenCenters =
-				collisionPos
-					.overwriteWith(sphere.center)
-					.subtract(rectangleCenter);
-
-			var distanceBetweenCenters =
-				displacementBetweenCenters.magnitude();
-			var sphereRadius = sphere.radius();
-			var distanceFromRectangleCenterToSphere =
-				distanceBetweenCenters - sphereRadius;
-			var displacementToSphere =
-				displacementBetweenCenters
-					.divideScalar(distanceBetweenCenters)
-					.multiplyScalar(distanceFromRectangleCenterToSphere);
-
-			collisionPos = displacementToSphere.add(rectangleCenter);
-
-			var normals = collision.normals;
-			boxRotated.normalAtPos(collision.pos, normals[0]);
-			normals[1].overwriteWith(normals[0]).invert();
-
-			var colliders = collision.colliders;
-			colliders[0] = boxRotated;
-			colliders[1] = sphere;
-
-			return collision;
 		}
 
 		return collision;
@@ -1394,18 +1287,6 @@ export class CollisionHelper
 		return this.collisionOfBoxAndMapLocated(box, mapLocated, collision);
 	}
 
-	collisionOfMapLocatedAndBoxRotated
-	(
-		mapLocated: MapLocated, boxRotated: BoxRotated,
-		collision: Collision, shouldCalculateCollisionPos: boolean
-	): Collision
-	{
-		return this.collisionOfBoxRotatedAndMapLocated
-		(
-			boxRotated, mapLocated, collision, shouldCalculateCollisionPos
-		);
-	}
-
 	collisionOfMapLocatedAndMapLocated
 	(
 		mapLocated0: MapLocated, mapLocated1: MapLocated, collision: Collision
@@ -1584,11 +1465,6 @@ export class CollisionHelper
 		return this.collisionOfBoxAndSphere(box, sphere, collision, shouldCalculatePos);
 	}
 
-	collisionOfSphereAndBoxRotated(sphere: Sphere, boxRotated: BoxRotated, collision: Collision, shouldCalculatePos: boolean): Collision
-	{
-		return this.collisionOfBoxRotatedAndSphere(boxRotated, sphere, collision, shouldCalculatePos);
-	}
-
 	collisionOfSphereAndMapLocated(sphere: Sphere, mapLocated: MapLocated, collision: Collision): Collision
 	{
 		return this.collisionOfMapLocatedAndSphere(mapLocated, sphere, collision);
@@ -1652,13 +1528,6 @@ export class CollisionHelper
 	{
 		var returnValue = box0.overlapsWith(box1);
 		return returnValue;
-	}
-
-	doBoxAndBoxRotatedCollide(box: BoxAxisAligned, boxRotated: BoxRotated): boolean
-	{
-		// todo
-		var boxRotatedAsSphere = boxRotated.sphereSwept();
-		return this.doBoxAndSphereCollide(box, boxRotatedAsSphere);
 	}
 
 	doBoxAndCylinderCollide(box: BoxAxisAligned, cylinder: Cylinder): boolean
@@ -1749,6 +1618,11 @@ export class CollisionHelper
 		return this.doBoxAndBoxCollide(box, mesh.box() );
 	}
 
+	doBoxAndShapeContainerCollide(box: BoxAxisAligned, shapeContainer: ShapeContainer): boolean
+	{
+		return this.doShapeContainerAndShapeCollide(shapeContainer, box);
+	}
+
 	doBoxAndShapeGroupAllCollide(box: BoxAxisAligned, shapeGroupAll: ShapeGroupAll): boolean
 	{
 		return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, box);
@@ -1772,45 +1646,6 @@ export class CollisionHelper
 	doBoxAndSphereCollide(box: BoxAxisAligned, sphere: Sphere): boolean
 	{
 		return this.collisionOfBoxAndSphere(box, sphere, this._collision, false).isActive;
-	}
-
-	doBoxRotatedAndBoxCollide(boxRotated: BoxRotated, box: BoxAxisAligned): boolean
-	{
-		return this.doBoxAndBoxRotatedCollide(box, boxRotated);
-	}
-
-	doBoxRotatedAndBoxRotatedCollide(boxRotated0: BoxRotated, boxRotated1: BoxRotated): boolean
-	{
-		return false; // todo
-	}
-
-	doBoxRotatedAndMapLocatedCollide(boxRotated: BoxRotated, mapLocated: MapLocated): boolean
-	{
-		// todo
-		return this.doBoxAndBoxCollide(boxRotated.box, mapLocated.box);
-	}
-
-	doBoxRotatedAndSphereCollide(boxRotated: BoxRotated, sphere: Sphere): boolean
-	{
-		var box = boxRotated.box;
-		var center = box.center;
-		var sphereCenter = sphere.center;
-		var sphereCenterToRestore = this._pos.overwriteWith(sphereCenter);
-		sphereCenter.subtract(center);
-		var polar = this._polar;
-		polar.azimuthInTurns = boxRotated.angleInTurns;
-		polar.radius = 1;
-		var rectangleAxisX = polar.toCoords(Coords.create());
-		polar.azimuthInTurns += .25;
-		var rectangleAxisY = polar.toCoords(Coords.create());
-		var x = sphereCenter.dotProduct(rectangleAxisX);
-		var y = sphereCenter.dotProduct(rectangleAxisY);
-		sphereCenter.x = x;
-		sphereCenter.y = y;
-		sphereCenter.add(box.center);
-		var returnValue = this.doBoxAndSphereCollide(box, sphere);
-		sphereCenter.overwriteWith(sphereCenterToRestore);
-		return returnValue;
 	}
 
 	doCylinderAndCylinderCollide(cylinder0: Cylinder, cylinder1: Cylinder): boolean
@@ -2014,11 +1849,6 @@ export class CollisionHelper
 		return this.doBoxAndMapLocated2Collide(box, mapLocated);
 	}
 
-	doMapLocatedAndBoxRotatedCollide(mapLocated: MapLocated, boxRotated: BoxRotated): boolean
-	{
-		return this.doBoxRotatedAndMapLocatedCollide(boxRotated, mapLocated);
-	}
-
 	doMapLocatedAndMapLocatedCollide(mapLocated0: MapLocated, mapLocated1: MapLocated): boolean
 	{
 		var returnValue = false;
@@ -2214,22 +2044,22 @@ export class CollisionHelper
 
 	doShapeAndShapeGroupAllCollide(shape: ShapeBase, shapeGroupAll: ShapeGroupAll): boolean
 	{
-		throw new Error("todo");
+		return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, shape);
 	}
 
-	doShapeAndShapeGroupAnyCollide(shape: ShapeBase, shapeGroupAll: ShapeGroupAny): boolean
+	doShapeAndShapeGroupAnyCollide(shape: ShapeBase, shapeGroupAny: ShapeGroupAny): boolean
 	{
-		throw new Error("todo");
+		return this.doShapeGroupAnyAndShapeCollide(shapeGroupAny, shape);
 	}
 
 	doShapeAndShapeInverseCollide(shape: ShapeBase, shapeInverse: ShapeInverse): boolean
 	{
-		throw new Error("todo");
+		return this.doShapeInverseAndShapeCollide(shapeInverse, shape);
 	}
 
 	doShapeAndShapeTransformedCollide(shape: ShapeBase, shapeTransformed: ShapeTransformed): boolean
 	{
-		throw new Error("todo");
+		return this.doShapeTransformedAndShapeCollide(shapeTransformed, shape);
 	}
 
 	doSphereAndBoxCollide(sphere: Sphere, box: BoxAxisAligned): boolean
@@ -2245,11 +2075,6 @@ export class CollisionHelper
 	doSphereAndMeshCollide(sphere: Sphere, mesh: Mesh): boolean
 	{
 		return this.doMeshAndSphereCollide(mesh, sphere);
-	}
-
-	doSphereAndBoxRotatedCollide(sphere: Sphere, boxRotated: BoxRotated): boolean
-	{
-		return this.doBoxRotatedAndSphereCollide(boxRotated, sphere);
 	}
 
 	doSphereAndShapeContainerCollide(sphere: Sphere, shapeContainer: ShapeContainer): boolean
@@ -2417,11 +2242,6 @@ export class CollisionHelper
 		return box0.containsOther(box1);
 	}
 
-	doesBoxContainBoxRotated(box: BoxAxisAligned, boxRotated: BoxRotated): boolean
-	{
-		throw new Error("todo");
-	}
-
 	doesBoxContainHemispace(box: BoxAxisAligned, hemispace: Hemispace): boolean
 	{
 		return false;
@@ -2453,16 +2273,6 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	doesBoxRotatedContainBox(boxRotated: BoxRotated, box: BoxAxisAligned): boolean
-	{
-		throw new Error("todo");
-	}
-
-	doesBoxRotatedContainBoxRotated(box0: BoxRotated, box1: BoxRotated): boolean
-	{
-		throw new Error("todo");
-	}
-
 	doesHemispaceContainBox(hemispace: Hemispace, box: BoxAxisAligned): boolean
 	{
 		var returnValue = true;
@@ -2492,11 +2302,6 @@ export class CollisionHelper
 	}
 
 	doesMapLocatedContainBox(mapLocated: MapLocated, box: BoxAxisAligned): boolean
-	{
-		throw new Error("todo");
-	}
-
-	doesMapLocatedContainBoxRotated(mapLocated: MapLocated, boxRotated: BoxRotated): boolean
 	{
 		throw new Error("todo");
 	}
@@ -2576,11 +2381,6 @@ export class CollisionHelper
 			);
 		var returnValue = sphere.containsOther(sphereCircumscribingBox);
 		return returnValue;
-	}
-
-	doesSphereContainBoxRotated(sphere: Sphere, hemispace: Hemispace): boolean
-	{
-		throw new Error("todo");
 	}
 
 	doesSphereContainHemispace(sphere: Sphere, hemispace: Hemispace): boolean

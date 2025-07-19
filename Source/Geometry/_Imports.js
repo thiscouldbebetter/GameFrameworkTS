@@ -39,7 +39,6 @@ var Network = gf.Network;
 var Arc = gf.Arc;
 var BoxAxisAligned = gf.BoxAxisAligned;
 var BoxOriented = gf.BoxOriented;
-var BoxRotated = gf.BoxRotated;
 var Cylinder = gf.Cylinder;
 var Edge = gf.Edge;
 var Face = gf.Face;

@@ -454,13 +454,9 @@ class PlaceBuilderDemo_Emplacements
 
 		var obstacleBarSize = Coords.fromXYZ(6, 2, 1).multiplyScalar(this.entityDimension);
 		var obstacleRotationInTurns = .0625;
-		var obstacleCollider = new BoxRotated
-		(
-			BoxAxisAligned.fromSize(obstacleBarSize), obstacleRotationInTurns
-		);
+		var obstacleCollider = BoxAxisAligned.fromSize(obstacleBarSize); // todo - Rotate.
 		var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
-		var obstacleBounds =
-			(obstacleCollidable.collider as BoxRotated).sphereSwept().toBoxAxisAligned(BoxAxisAligned.create());
+		var obstacleBounds = obstacleCollider;
 		var obstacleBoundable = new Boundable(obstacleBounds);
 
 		var obstacleLoc = Disposition.fromPosAndOri
@@ -477,7 +473,7 @@ class PlaceBuilderDemo_Emplacements
 		([
 			VisualRectangle.fromSizeAndColorsFillAndBorder
 			(
-				obstacleCollider.box.size, obstacleColor, obstacleColor
+				obstacleCollider.size, obstacleColor, obstacleColor
 			)
 		]);
 

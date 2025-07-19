@@ -227,13 +227,13 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleColor = Color.Instances().Red;
         var obstacleBarSize = Coords.fromXYZ(6, 2, 1).multiplyScalar(this.entityDimension);
         var obstacleRotationInTurns = .0625;
-        var obstacleCollider = new BoxRotated(BoxAxisAligned.fromSize(obstacleBarSize), obstacleRotationInTurns);
+        var obstacleCollider = BoxAxisAligned.fromSize(obstacleBarSize); // todo - Rotate.
         var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
-        var obstacleBounds = obstacleCollidable.collider.sphereSwept().toBoxAxisAligned(BoxAxisAligned.create());
+        var obstacleBounds = obstacleCollider;
         var obstacleBoundable = new Boundable(obstacleBounds);
         var obstacleLoc = Disposition.fromPosAndOri(Coords.create(), Orientation.fromForwardAndDown(Coords.create().fromHeadingInTurns(obstacleRotationInTurns), Coords.fromXYZ(0, 0, 1)));
         var visualBody = VisualGroup.fromChildren([
-            VisualRectangle.fromSizeAndColorsFillAndBorder(obstacleCollider.box.size, obstacleColor, obstacleColor)
+            VisualRectangle.fromSizeAndColorsFillAndBorder(obstacleCollider.size, obstacleColor, obstacleColor)
         ]);
         this.parent.textWithColorAddToVisual("Bar", obstacleColor, visualBody);
         var visual = VisualRotate.fromChild(visualBody);

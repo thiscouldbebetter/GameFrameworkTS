@@ -45,7 +45,6 @@ import Network = gf.Network;
 import Arc = gf.Arc;
 import BoxAxisAligned = gf.BoxAxisAligned;
 import BoxOriented = gf.BoxOriented;
-import BoxRotated = gf.BoxRotated;
 import Cylinder = gf.Cylinder;
 import Edge = gf.Edge;
 import Face = gf.Face;
