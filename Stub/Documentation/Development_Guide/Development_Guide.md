@@ -104,29 +104,21 @@ This guide illustrates the creation of a new game from scratch using the This Co
 3. Adding a Ship for the Player
 -------------------------------
 
-3.1. Now there's some ground, but there's a reason the Landscape Channel went out of business.  Ground by itself is almost as boring as a void.  Let's add a spaceship.  For that, we'll need another class file.
+3.1. Now there's some ground, but there's a reason the Landscape Channel went out of business.  Ground by itself is almost as boring as a void.  Let's add a spaceship for the player to fly around.  For that, we'll need another class file.
 
-3.2. Back in the Model directory, create a new file name "Ship.ts", containing the text below:
+3.2. Back in the Model directory, create a new file name "Player.ts", containing the text below:
 
-	class Ship extends Entity
+	class Player extends Entity
 	{
 		constructor(pos: Coords)
 		{
 			super
 			(
-				Ship.name,
+				Player.name,
 				[
 					Drawable.fromVisual
 					(
-						VisualPolygon.fromVerticesAndColorFill
-						(
-							[
-								Coords.fromXY(-5, -5),
-								Coords.fromXY(5, 0),
-								Coords.fromXY(-5, 5),
-							],
-							Color.Instances().Gray
-						)
+						Player.visualBuild()
 					),
 
 					Locatable.fromPos(pos)
@@ -134,35 +126,48 @@ This guide illustrates the creation of a new game from scratch using the This Co
 			);
 		}
 
-		static fromPos(pos: Coords): Ship
+		static fromPos(pos: Coords): Player
 		{
-			return new Ship(pos);
+			return new Player(pos);
+		}
+
+		static visualBuild(): VisualBase
+		{
+			return VisualPolygon.fromVerticesAndColorFill
+			(
+				[
+					Coords.fromXY(-5, -5),
+					Coords.fromXY(5, 0),
+					Coords.fromXY(-5, 5),
+				],
+				Color.Instances().Gray
+			);
 		}
 	}
 
-3.3. Like the Planet class, the new Ship class is a subclass of Entity, and it has its own instances of the same two property types, namely, Drawable and Locatable.
+Like the Planet class, the new Player class is a subclass of Entity, and it has its own instances of the same two property types, namely, Drawable and Locatable.
 
-3.4. Since we've added a new class, we'll need to add a reference to it in Game.html.  Add the following line right below the one recently added for Planet.js, and save:
+3.3. Since we've added a new class, we'll need to add a reference to it in Game.html.  Add the following line right below the one recently added for Planet.js, and save:
 
-	<script type="text/javascript" src="Model/Ship.js"></script>
+	<script type="text/javascript" src="Model/Player.js"></script>
 
-3.5. Now that the Ship class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceDefault instance.  Back in the Source directory, open the file PlaceDefault.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, make sure that there are commas between all the array elements, and save the file.
+3.4. Now that the Player class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceDefault instance.  Back in the Source directory, open the file PlaceDefault.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, make sure that there are commas between all the array elements, and save the file.
 
-	Ship.fromPos(Coords.fromXY(100, 100) )
+	Player.fromPos(Coords.fromXY(100, 100) )
 
-3.6. Compile the program again by running the script named "_Build", then refresh Game.html in the web browser, start the game, and progress past the startup screens as before.  A gray triangle pointing right, representing a spaceship, now appears above the ground.
+3.5. Compile the program again by running the script named "_Build", then refresh Game.html in the web browser, start the game, and progress past the startup screens as before.  A gray triangle pointing right, representing a spaceship, now appears above the ground.
 
 	<img src="Screenshot-3-Ship-Stationary.png" />
 
-3.7. In the browser's address bar, append the text "?debug=SkipOpening" to the end of the URL for Game.html and press the Enter key to reload.  This will skip past the opening screens to the main part of the game, saving the time and trouble needed to skip past them every time.
+3.6. In the browser's address bar, append the text "?debug=SkipOpening" to the end of the URL for Game.html and press the Enter key to reload.  This will skip past the opening screens to the main part of the game, saving the time and trouble needed to skip past them every time.
 
 
-4. Making the Ship Move
------------------------
+4. Making the Player's Ship Move
+--------------------------------
 
 4.1. Now there's a spaceship, which should be exciting.  But it doesn't move.  So it's still pretty boring for a spaceship.  More of a spaceblimp.  Except even blimps move faster than this.  So let's make it move.
 
-4.2. To make it move, we'll assign it a velocity to go along with its position.  Open Ship.ts in a text editor, replace the line "Locatable.fromPos(pos)" with the following text, and save:
+4.2. To make it move, we'll assign it a velocity to go along with its position.  Open Player.ts in a text editor, replace the line "Locatable.fromPos(pos)" with the following text, and save:
 
 	Locatable.fromDisposition
 	(
@@ -178,12 +183,12 @@ This guide illustrates the creation of a new game from scratch using the This Co
 <img src="Screenshot-4-Ship-Moving.gif" />
 
 
-5. Making the Ship Wrap Around
-------------------------------
+5. Making the Player's Ship Wrap Around
+---------------------------------------
 
-5.1. The spaceship is briefly somewhat more interesting than when it was stationary, but once it moves off the right side of the screen, the view is even more boring that it was before.  To fix that, that, we can make the screen "wrap", so that when the spaceship moves off the right side of the screen, it reappears on the left side.  That, in turn, can be accomplished by giving the Ship entity the Constrainable property and putting a Constraint on it.
+5.1. The spaceship is briefly somewhat more interesting than when it was stationary, but once it moves off the right side of the screen, the view is even more boring that it was before.  To fix that, that, we can make the screen "wrap", so that when the spaceship moves off the right side of the screen, it reappears on the left side.  That, in turn, can be accomplished by giving the Player entity the Constrainable property and putting a Constraint on it.
 
-5.2. Open Ship.ts and, somewhere in the list of properties being passed to the super() constructor, add the following text, making sure to add commas between elements as appropriate:
+5.2. Open Player.ts and, somewhere in the list of properties being passed to the super() constructor, add the following text, making sure to add commas between elements as appropriate:
 
 	Constrainable.fromConstraint
 	(
@@ -200,7 +205,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 6.1. Now the ship wraps to stay in view continuously, so the view stays interesting.  It would be more interesting still if the ship changed speed and direction.  To make that work, we need to give it the Actor property. 
 
-6.2. To define the ActivityDefn for the ship's behavior, open Ship.ts and add the following method after the constructor:
+6.2. To define the ActivityDefn for the ship's behavior, open Player.ts and add the following method after the constructor:
 
 	static activityDefnDoSpaceshipStuffBuild(): ActivityDefn
 	{
@@ -215,7 +220,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 				var placeWidthHalf = place.size.x / 2;
 
-				var ship = entity as Ship;
+				var ship = entity as Player;
 				var shipLoc = ship.locatable().loc;
 				var shipPos = shipLoc.pos;
 				var shipOrientation = shipLoc.orientation;
@@ -241,9 +246,9 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 6.3. Now that the ActivityDefn for the Ship is defined, we want to make sure that the WorldDefn knows about it, so that it's there when the Ship entity's Actor property tries to look it up.  Open WorldGame.ts, locate the existing line that starts with "UserInputListener", and add the following line within that same array, making sure that there are commas between all the array elements:
 
-	Ship.activityDefnDoSpaceshipStuffBuild()
+	Player.activityDefnDoSpaceshipStuffBuild()
 
-6.4. Finally, give the Actor property to the Ship.  In Ship.ts, add a new entry to the array of entity properties, right below the Locatable instance, making sure as always to include a comma between each element in the array:
+6.4. Finally, give the Actor property to the Player.  In Player.ts, add a new entry to the array of entity properties, right below the Locatable instance, making sure as always to include a comma between each element in the array:
 
 	Actor.fromActivityDefnName("DoSpaceshipStuff")
 
@@ -251,7 +256,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 <img src="Screenshot-6-Ship-Accelerating.gif" />
 
-6.6. Furthermore, our spaceship faces to the right when it's accelerating right, and to the left when it's accelerating left.  Ordinarily, we'd need to modify the Visual for the Ship for this to work, but since we're using a VisualPolygon, by default it automatically transforms the visual based on the Ship's orientation.  And we already added the code to set the Ship's orientation, in the same place where we're setting the acceleration, that is, in Ship.activityDefnDoSpaceshipStuffBuild().  Nice!
+6.6. Furthermore, our spaceship faces to the right when it's accelerating right, and to the left when it's accelerating left.  Ordinarily, we'd need to modify the Visual for the Player for this to work, but since we're using a VisualPolygon, by default it automatically transforms the visual based on the Player's orientation.  And we already added the code to set the Player's orientation, in the same place where we're setting the acceleration, that is, in Player.activityDefnDoSpaceshipStuffBuild().  Nice!
 
 
 7. Letting the User Control the Ship
@@ -263,52 +268,56 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 7.3. The Actions we need happen to already be defined as part of the Movable class, so they and their corresponding mappings just need to be registered in the PlaceDefault class.  Open PlaceDefault.ts, locate the existing declaration of the "actions" variable, and add the following elements to the array, adding commas as necessary:
 
-	Movable.actionAccelerateDown(),
-	Movable.actionAccelerateLeft(),
-	Movable.actionAccelerateRight(),
-	Movable.actionAccelerateUp()
+	Movable.actionAccelerateAndFaceLeft(),
+	Movable.actionAccelerateAndFaceRight(),
+
+	Movable.actionAccelerateWithoutFacingUp(),
+	Movable.actionAccelerateWithoutFacingDown(),
+
+Note that the actions selected mean that, when accelerating left and right, the player ship will turn to face the chosen direction, but it will not change direction when accelerating up and down.  This matches the behavior in the original game.
 
 7.4. Still in PlaceDefault.ts, locate the existing declaration of the "actionToInputsMappings" array, and add these items, adjusting commas as necessary:
 
 	ActionToInputsMapping.fromActionNameAndInputName
 	(
-		Movable.actionAccelerateDown().name,
-		inputNames.ArrowDown
+		Movable.actionAccelerateAndFaceLeft().name,
+		inputs.ArrowLeft.name
 	),
 	ActionToInputsMapping.fromActionNameAndInputName
 	(
-		Movable.actionAccelerateLeft().name,
-		inputNames.ArrowLeft
+		Movable.actionAccelerateAndFaceRight().name,
+		inputs.ArrowRight.name
+	),
+
+	ActionToInputsMapping.fromActionNameAndInputName
+	(
+		Movable.actionAccelerateWithoutFacingDown().name,
+		inputs.ArrowDown.name
 	),
 	ActionToInputsMapping.fromActionNameAndInputName
 	(
-		Movable.actionAccelerateRight().name,
-		inputNames.ArrowRight
-	),
-	ActionToInputsMapping.fromActionNameAndInputName
-	(
-		Movable.actionAccelerateUp().name,
-		inputNames.ArrowUp
+		Movable.actionAccelerateWithoutFacingUp().name,
+		inputs.ArrowUp.name
 	)
 
-7.4. This code defines the Actions and the input mappings for them, but in order to actually use them, we'll need to give the Ship entity the Movable property.  We also need to change its Actor property's activity so that it listens to the user's input rather than mindlessly shuttling back and forth forever.
+7.4. This code defines the Actions and the input mappings for them, but in order to actually use them, we'll need to give the Player entity the Movable property.  We also need to change its Actor property's activity so that it listens to the user's input rather than mindlessly shuttling back and forth forever.
 
-7.5. Open Ship.ts and replace the existing declaration of the Actor property with the following text, adjusting commas as necessary:
+7.5. Open Player.ts and replace the existing declaration of the Actor property with the following text, adjusting commas as necessary:
 
 	Actor.fromActivityDefnName
 	(
 		UserInputListener.activityDefn().name
 	)
 
-7.6. Still in Ship.ts, add the following to the list of properties just modified, adjusting commas as necessary:
+7.6. Still in Player.ts, add the following to the list of properties just modified, adjusting commas as necessary:
 
 	Movable.fromAccelerationAndSpeedMax(0.2, 2)
 
-7.7. Also, now that we're not using the "DoSpaceshipStuff" ActivityDefn, we can remove the declaration of the static Ship.activityDefnDoSpaceshipStuffBuild() method entirely.  (I know we just added it, but less code is always better!  Technically, for quality's sake we should've quit before we started.)
+7.7. Also, now that we're not using the "DoSpaceshipStuff" ActivityDefn, we can remove the declaration of the static Player.activityDefnDoSpaceshipStuffBuild() method entirely.  (I know we just added it, but less code is always better!  Technically, for quality's sake we should've quit before we started.)
 
-7.8. Because we removed the declaration of the "DoSpaceshipStuff" ActivityDefn, we'll also need to remove the reference to it.  Open WorldGame.ts and, in the static .defnBuild() method, remove the line "Ship.activityDefnDoSpaceshipStuffBuild()" from the ActivityDefns being passed to the WorldDefn constructor call.
+7.8. Because we removed the declaration of the "DoSpaceshipStuff" ActivityDefn, we'll also need to remove the reference to it.  Open WorldGame.ts and, in the static .defnBuild() method, remove the line "Player.activityDefnDoSpaceshipStuffBuild()" from the ActivityDefns being passed to the WorldDefn constructor call.
 
-7.9. Now that the Ship entity is listening for user input, we no longer need that instance of UserInputListener() that came built-in to the stub code.  Two entities listening and reacting to the same input might get weird.  Open PlaceDefault.ts again and, in the constructor, remove the line "new UserInputListener()" from the list of entities being passed to the super() call.
+7.9. Now that the Player entity is listening for user input, we no longer need that instance of UserInputListener() that came built-in to the stub code.  Two entities listening and reacting to the same input might get weird.  Open PlaceDefault.ts again and, in the constructor, remove the line "new UserInputListener()" from the list of entities being passed to the super() call.
 
 7.10. Run the _Build script and refresh the web browser.  Use the arrow keys to cause the spaceship to acelerate up, down, left, and right.  You're a driver, you're a winner.
 
@@ -334,17 +343,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 					Drawable.fromVisual
 					(
-						VisualPolygon.fromVerticesAndColorFill
-						(
-							[
-								Coords.fromXY(4, 0),
-								Coords.fromXY(-4, 0),
-								Coords.fromXY(-4, -4),
-								Coords.fromXY(0, -8),
-								Coords.fromXY(4, -4)
-							],
-							Color.Instances().Brown
-						)
+						Habitat.visualBuild()
 					),
 
 					Locatable.fromPos(pos)
@@ -357,6 +356,21 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		static fromPos(pos: Coords): Habitat
 		{
 			return new Habitat(pos);
+		}
+
+		static visualBuild(): VisualBase
+		{
+			return VisualPolygon.fromVerticesAndColorFill
+			(
+				[
+					Coords.fromXY(4, 0),
+					Coords.fromXY(-4, 0),
+					Coords.fromXY(-4, -4),
+					Coords.fromXY(0, -8),
+					Coords.fromXY(4, -4)
+				],
+				Color.byName("Brown")
+			);
 		}
 
 		// Clonable.
@@ -635,7 +649,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 		return this.entitiesByPropertyName(Habitat.name) as Habitat[];
 	}
 
-8.6. We also need to add references to the newly declared Habitat and Raider classes in Game.html.  These should be added near the ones previously added for Planet and Ship:
+8.6. We also need to add references to the newly declared Habitat and Raider classes in Game.html.  These should be added near the ones previously added for Planet and Player:
 
 	<script type="text/javascript" src="Model/Habitat.js"></script>
 	<script type="text/javascript" src="Model/Raider.js"></script>
@@ -657,7 +671,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 So let's give this kitten some claws.  (The kitten is your spaceship.  The claws are, like, plasma blasters.)
 
-9.2. To give your spaceship the ability to fire bullets, open Ship.ts and add these lines to the list of entity properties in the constructor, remembering to adjust commas to separate array elements:
+9.2. To give your spaceship the ability to fire bullets, open Player.ts and add these lines to the list of entity properties in the constructor, remembering to adjust commas to separate array elements:
 
 	ProjectileGenerator.fromNameAndGenerations
 	(
@@ -777,7 +791,7 @@ Open Habitat.ts, then, in the constructor, locate where the existing Constrainab
 
 Every tick, the first new constraint will accelerate the habitat downward, and the second will prevent it from tunnelling into the surface of the planet.  Unless it's currently being carried off by a raider, in which case the constraint that the raider puts on the habitat undoes the other constraints.
 
-11.4. Just like the habitat, your spaceship should also not tunnel into the surface of the planet, at least not without consequences.  For now, open Ship.ts, locate the existing Constrainable in its constructor, and replace it with the following, adjusting commas as needed:
+11.4. Just like the habitat, your spaceship should also not tunnel into the surface of the planet, at least not without consequences.  For now, open Player.ts, locate the existing Constrainable in its constructor, and replace it with the following, adjusting commas as needed:
 
 	Constrainable.fromConstraints
 	([
@@ -1063,7 +1077,7 @@ To add a camera, open PlaceDefault.ts and add this method:
 			)
 		);
 
-		var cameraEntity = camera.toEntity(Ship.name);
+		var cameraEntity = camera.toEntity(Player.name);
 
 		var constraintContainInBox =
 			camera.constraintContainInBoxForPlaceSizeNotWrapped
@@ -1125,9 +1139,9 @@ But the Raider entity does have a Collidable property, and so, when the player's
 
 Second, bullets act weird around the discontinuity line, in a way similar to but not exactly the same as the strange way the raiders act.  If you fire bullets across the line and then move the ship across the line to follow them, they will disappear.  The bullets have a Collidable property like the raider, but unlike the raider their Drawable property hasn't been set up to wrap yet.  And unlike the player's ship, they don't have a constraint to make their physical position wrap at the discontinuity line.  We'll need to set up that constraint and that wrapping of the Drawable, but even after that the bullets will pop in and out of visibility based on which sides of the discontinuity line they and the ship are, just like the raider.  To fix this problem, again, either the collider for the camera or the collider for each bullet will have to be made to wrap.
 
-Note that the player's ship doesn't exhibit these visibility problems.  This is because an attempt is always made to draw the Ship entity, as it too lacks a Collidable property right now.  But even if it had a Collidable property, it would still always be drawn, because the camera moves around to follow it.  And because the camera and the ship are always on the same side of the discontinuity line, the ship's Drawable doesn't need to be wrapped, either.
+Note that the player's ship doesn't exhibit these visibility problems.  This is because an attempt is always made to draw the Player entity, as it too lacks a Collidable property right now.  But even if it had a Collidable property, it would still always be drawn, because the camera moves around to follow it.  And because the camera and the ship are always on the same side of the discontinuity line, the ship's Drawable doesn't need to be wrapped, either.
 
-We'll fix the wrapping of the bullets first, because it's easiest.  We'll add a constraint to wrap the bullets just like the player's ship is being wrapped, and then set up wrapping on the Drawable just like for the Drawables of the planet and habitat.  Open Ship.ts, and replace the existing declaration of the ProjectileGenerator property in the constructor with the following:
+We'll fix the wrapping of the bullets first, because it's easiest.  We'll add a constraint to wrap the bullets just like the player's ship is being wrapped, and then set up wrapping on the Drawable just like for the Drawables of the planet and habitat.  Open Player.ts, and replace the existing declaration of the ProjectileGenerator property in the constructor with the following:
 
 	ProjectileGenerator.fromNameAndGenerations
 	(
@@ -1226,7 +1240,7 @@ Open up PlaceDefault.ts and replace the existing constructor with the following:
 			(
 				Coords.fromXY(800, 300), 50
 			),
-			Ship.fromPos(Coords.fromXY(100, 100) )
+			Player.fromPos(Coords.fromXY(100, 100) )
 		];
 
 		var habitats: Habitat[] = [];
@@ -1311,7 +1325,73 @@ This code replaces the single habitat with four habitats spaced evenly over the 
 16. Adding Status Indicators
 ----------------------------
 
+16.1. We'll add some on-screen indicators to keep track of how the game's going.  To start with, the indicators will show how many habitats and raiders there currently are, as well as how many ships the player has in reserve (though, as we haven't implemented any reserve ships yet, initially that will be zero).
 
+First, open Player.ts, and, above the contructor, add a count of the number of ships in reserve:
+
+	shipsInReserve: number;
+
+16.2. Then, inside the constructor, at the very bottom, initialize the count of ships in reserve that was added in the previous step by adding this line:
+
+	this.shipsInReserve = 0;
+
+16.2. Still in the Player constructor, in the list of properties, add the following entries, adjusting commas as necessary:
+
+	Controllable.fromToControl
+	(
+		uwpe => Player.toControl(uwpe)
+	),
+
+	Playable.create()
+
+Note that the Player.toControl() method doesn't exist yet.  We'll create that in the next step.
+
+16.3. Still in the Player class, add the following method:
+
+	static toControl(uwpe: UniverseWorldPlaceEntities): ControlBase
+	{
+		return ControlContainer.fromPosSizeAndChildren
+		(
+			Coords.fromXY(0, 0), // pos
+			Coords.fromXY(40, 50), // size
+			[
+				ControlVisual.fromPosAndVisual
+				(
+					Coords.fromXY(8, 10),
+					DataBinding.fromContext(Player.visualBuild())
+				),
+				ControlLabel.fromPosAndText
+				(
+					Coords.fromXY(20, 4),
+					DataBinding.fromGet(() => "" + (uwpe.entity as Player).shipsInReserve),
+				),
+
+				ControlVisual.fromPosAndVisual
+				(
+					Coords.fromXY(8, 30),
+					DataBinding.fromContext(Habitat.visualBuild())
+				),
+				ControlLabel.fromPosAndText
+				(
+					Coords.fromXY(20, 20),
+					DataBinding.fromGet(() => "" + (uwpe.place as PlaceDefault).habitats().length)
+				),
+
+				ControlVisual.fromPosAndVisual
+				(
+					Coords.fromXY(8, 42),
+					DataBinding.fromContext(Raider.visualBuild())
+				),
+				ControlLabel.fromPosAndText
+				(
+					Coords.fromXY(20, 35),
+					DataBinding.fromGet(() => "" + (uwpe.place as PlaceDefault).raiders().length)
+				)
+			]
+		).toControlContainerTransparent()
+	}
+
+16.4.  Now run the build script and refresh the browser.  A display will appear in the upper-left corner showing the current count of reserve player ships, habitats, and raiders.
 
 
 n. Conclusion
@@ -1321,14 +1401,12 @@ n.1. Well, it's certainly technically a game at this point.  Congratulations!  H
 
 * Add more appropriate visual and sound effects when things happen, like explosions.
 * Destroy the player's ship when it runs into a raider.
-* Give the player multiple lives.
 * Let the raiders shoot bullets.
 * Add more habitats to protect.
 * Require the player to catch a habitat as it falls, or else it explodes on impact.
 * Generate more raiders, on a timer.
 * Add a minimap to show the parts of the planet that are not currently on screen.
 * Make ammuntion limited and add reloading by picking up bullets.
-* Add some on-screen controls to show how many raiders, habitats, bullets, and lives are left.
 * Transition to a new and harder level when the player wins the current level.
 
 The framework contains features to support all these, though it might not be easy to figure out how.  To be continued!

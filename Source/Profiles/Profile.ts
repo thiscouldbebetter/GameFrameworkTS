@@ -260,7 +260,7 @@ export class Profile
 
 		var imagePosX = margin * 2 + listSize.x;
 
-		var visualSnapshot = ControlVisual.fromNamePosSizeVisualColorBackground
+		var visualSnapshot = ControlVisual.fromNamePosSizeVisualAndColorBackground
 		(
 			"visualSnapshot",
 			Coords.fromXY(imagePosX, listPosY),
@@ -843,38 +843,6 @@ export class Profile
 		var fontNameAndHeight = controlBuilder.fontBase;
 		var buttonHeightBase = controlBuilder.buttonHeightBase;
 
-		var create = () =>
-		{
-			var venueControls = universe.venueCurrent() as VenueControls;
-			var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
-			var textBoxName =
-				controlRootAsContainer.childByName("textBoxName") as ControlTextBox<any>;
-			var profileName = textBoxName.text(null);
-			if (profileName == "")
-			{
-				return;
-			}
-
-			var storageHelper = universe.storageHelper;
-
-			var profile = new Profile(profileName, []);
-			var profileNames = storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
-			if (profileNames == null)
-			{
-				profileNames = [];
-			}
-			profileNames.push(profileName);
-			storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
-			storageHelper.save(profileName, profile);
-
-			universe.profileSet(profile);
-			var venueNext: Venue = Profile.toControlSaveStateLoad
-			(
-				universe, null, universe.venueCurrent()
-			).toVenue();
-			universe.venueTransitionTo(venueNext);
-		};
-
 		var cancel = () => // click
 		{
 			var venueNext = Profile.toControlProfileSelect
@@ -884,7 +852,7 @@ export class Profile
 			universe.venueTransitionTo(venueNext);
 		};
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerProfileNew",
 			Coords.create(), // pos
@@ -921,7 +889,7 @@ export class Profile
 					Coords.fromXY(45, buttonHeightBase), // size
 					"Create",
 					fontNameAndHeight,
-					create
+					() => this.toControlProfileNew_Create(universe)
 				).isEnabledSet
 				(
 					DataBinding.fromContextAndGet
@@ -945,6 +913,38 @@ export class Profile
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
+	}
+
+	static toControlProfileNew_Create(universe: Universe): void
+	{
+		var venueControls = universe.venueCurrent() as VenueControls;
+		var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
+		var textBoxName =
+			controlRootAsContainer.childByName("textBoxName") as ControlTextBox<any>;
+		var profileName = textBoxName.text(null);
+		if (profileName == "")
+		{
+			return;
+		}
+
+		var storageHelper = universe.storageHelper;
+
+		var profile = new Profile(profileName, []);
+		var profileNames = storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
+		if (profileNames == null)
+		{
+			profileNames = [];
+		}
+		profileNames.push(profileName);
+		storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
+		storageHelper.save(profileName, profile);
+
+		universe.profileSet(profile);
+		var venueNext: Venue = Profile.toControlSaveStateLoad
+		(
+			universe, null, universe.venueCurrent()
+		).toVenue();
+		universe.venueTransitionTo(venueNext);
 	}
 
 	static toControlProfileSelect
@@ -1074,7 +1074,7 @@ export class Profile
 			}
 		);
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerProfileSelect",
 			Coords.create(), // pos

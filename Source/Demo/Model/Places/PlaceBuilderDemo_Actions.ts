@@ -30,10 +30,10 @@ class PlaceBuilderDemo_Actions
 
 			actionsAll.ShowMenuPlayer,
 
-			Movable.actionAccelerateDown(),
-			Movable.actionAccelerateLeft(),
-			Movable.actionAccelerateRight(),
-			Movable.actionAccelerateUp(),
+			Movable.actionAccelerateAndFaceDown(),
+			Movable.actionAccelerateAndFaceLeft(),
+			Movable.actionAccelerateAndFaceRight(),
+			Movable.actionAccelerateAndFaceUp(),
 
 			a("Fire", this.actionPerform_Fire),
 			a("Hide", this.actionPerform_Hide),
@@ -82,7 +82,7 @@ class PlaceBuilderDemo_Actions
 
 			atim
 			(
-				Movable.actionAccelerateDown().name,
+				Movable.actionAccelerateAndFaceDown().name,
 				[
 					inputs.ArrowDown.name,
 					inputs.s.name,
@@ -92,7 +92,7 @@ class PlaceBuilderDemo_Actions
 			),
 			atim
 			(
-				Movable.actionAccelerateLeft().name,
+				Movable.actionAccelerateAndFaceLeft().name,
 				[
 					inputs.ArrowLeft.name,
 					inputs.a.name,
@@ -102,7 +102,7 @@ class PlaceBuilderDemo_Actions
 			),
 			atim
 			(
-				Movable.actionAccelerateRight().name,
+				Movable.actionAccelerateAndFaceRight().name,
 				[
 					inputs.ArrowRight.name,
 					inputs.d.name,
@@ -112,7 +112,7 @@ class PlaceBuilderDemo_Actions
 			),
 			atim
 			(
-				Movable.actionAccelerateUp().name,
+				Movable.actionAccelerateAndFaceUp().name,
 				[
 					inputs.ArrowUp.name,
 					inputs.w.name,

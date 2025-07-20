@@ -4,6 +4,11 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Playable implements EntityProperty<Playable>
 {
+	static create(): Playable
+	{
+		return new Playable();
+	}
+
 	static entityFromPlace(place: Place): Entity
 	{
 		return place.entitiesByPropertyName(Playable.name)[0];
@@ -161,7 +166,7 @@ export class Playable implements EntityProperty<Playable>
 		);
 		controlsForTabs.push(gameAndSettingsMenuAsControl);
 
-		var statusAsControl = ControlContainer.fromNamePosSizeChildren
+		var statusAsControl = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"Status",
 			Coords.create(), // pos
@@ -208,17 +213,12 @@ export class Playable implements EntityProperty<Playable>
 		var playerVisualBarSize = Coords.fromXY(entityDimension * 4, entityDimension);
 
 		var killable = Killable.of(entity);
-		var playerVisualHealthBar = new VisualBar
+		var playerVisualHealthBar = VisualBar.fromSizeColorAndBindingsForValueAndMax
 		(
-			null, // "H", // abbreviation
 			playerVisualBarSize,
 			Color.Instances().Red,
 			DataBinding.fromGet((c: Entity) => killable.integrity),
-			null, // amountThreshold
-			DataBinding.fromGet((c: Entity) => killable.integrityMax),
-			null, // fractionBelowWhichToShow
-			null, // colorForBorderAsValueBreakGroup
-			null // text
+			DataBinding.fromGet((c: Entity) => killable.integrityMax)
 		);
 
 		var playerVisualHealthIcon = worldDefn.itemDefnByName("Heart").visual;
@@ -234,17 +234,12 @@ export class Playable implements EntityProperty<Playable>
 		]);
 
 		var starvable = Starvable.of(entity);
-		var playerVisualSatietyBar = new VisualBar
+		var playerVisualSatietyBar = VisualBar.fromSizeColorAndBindingsForValueAndMax
 		(
-			null, // "F", // abbreviation
 			playerVisualBarSize,
 			Color.Instances().Brown,
 			DataBinding.fromGet((c: Entity) => starvable.satiety),
-			null, // amountThreshold
-			DataBinding.fromGet( (c: Entity) => starvable.satietyMax ),
-			null, // fractionBelowWhichToShow
-			null, // colorForBorderAsValueBreakGroup
-			null // text
+			DataBinding.fromGet( (c: Entity) => starvable.satietyMax )
 		);
 
 		var playerVisualSatietyIcon =
@@ -287,10 +282,10 @@ export class Playable implements EntityProperty<Playable>
 			null // text
 		);
 
-		var playerVisualStaminaIcon = new VisualImageScaled
+		var playerVisualStaminaIcon = VisualImageScaled.fromSizeAndChild
 		(
 			Coords.fromXY(1, 1).multiplyScalar(playerVisualBarSize.y * 1.5),
-			new VisualImageFromLibrary("Zap")
+			VisualImageFromLibrary.fromImageName("Zap")
 		);
 
 		var playerVisualStaminaBarPlusIcon = VisualGroup.fromChildren
@@ -388,7 +383,7 @@ export class Playable implements EntityProperty<Playable>
 			)
 		]);
 
-		var controlPlayerStatusInfo = ControlVisual.fromNamePosSizeVisual
+		var controlPlayerStatusInfo = ControlVisual.fromNamePosSizeAndVisual
 		(
 			"visualPlayerStatusInfo",
 			Coords.fromXY(5, 2).multiplyScalar(playerVisualBarSize.y), // pos
@@ -469,7 +464,7 @@ export class Playable implements EntityProperty<Playable>
 				false // canBeHeldDown
 			);
 
-			var visualItemInQuickSlot = ControlVisual.fromNamePosSizeVisual
+			var visualItemInQuickSlot = ControlVisual.fromNamePosSizeAndVisual
 			(
 				"visualItemInQuickSlot",
 				buttonPos.clone(),
@@ -498,16 +493,15 @@ export class Playable implements EntityProperty<Playable>
 			buttonPos.x += buttonSize.x + buttonMargin;
 		}
 
-		var controlOverlayContainer = new ControlContainer
+		var controlOverlayContainer = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerPlayer",
 			Coords.create(), // pos,
 			universe.display.sizeInPixels.clone(),
-			childControls,
-			null, null
+			childControls
 		);
-		var controlOverlayTransparent
-			= new ControlContainerTransparent(controlOverlayContainer);
+		var controlOverlayTransparent =
+			ControlContainerTransparent.fromContainer(controlOverlayContainer);
 
 		controlOverlayTransparent.styleName = ControlStyle.Instances().Dark.name;
 

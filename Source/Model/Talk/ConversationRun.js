@@ -349,7 +349,7 @@ var ThisCouldBeBetter;
                 var soundMusicName = this.defn.soundMusicName;
                 if (soundMusicName != null) {
                     var visualSound = new GameFramework.VisualSound(soundMusicName, true);
-                    var visualMusic = GameFramework.ControlVisual.fromNamePosSizeVisual("visualMusic", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualSound));
+                    var visualMusic = GameFramework.ControlVisual.fromNamePosSizeAndVisual("visualMusic", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualSound));
                     childControls.push(visualMusic);
                 }
                 if (containerButtonsPos != null) {
@@ -375,7 +375,7 @@ var ThisCouldBeBetter;
                         buttons.push(buttonLeave);
                     }
                     var containerButtonsSize = GameFramework.Coords.fromXY(buttonSize.x, buttonSize.y * (buttons.length) + marginSize.y * (buttons.length + 1));
-                    var containerButtonsInner = GameFramework.ControlContainer.fromNamePosSizeChildren("containerButtons", containerButtonsPos, containerButtonsSize, 
+                    var containerButtonsInner = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerButtons", containerButtonsPos, containerButtonsSize, 
                     // children
                     buttons);
                     containerButtonsInner.childrenLayOutWithSpacingVertically(marginSize);
@@ -399,7 +399,7 @@ var ThisCouldBeBetter;
                 var buttonHeight = 25;
                 var marginSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(marginWidth);
                 var listSize = GameFramework.Coords.fromXY(size.x * .75, size.y - labelHeight - marginSize.y * 3);
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildren("containerConversation", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerConversation", GameFramework.Coords.create(), // pos
                 size, 
                 // children
                 [

@@ -80,6 +80,32 @@ export class VenueMessage<TContext> implements Venue
 		);
 	}
 
+	static fromTextAndAcknowledge<TContext>
+	(
+		text: string,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void
+	): VenueMessage<TContext>
+	{
+		return VenueMessage.fromMessageAndAcknowledge
+		(
+			DataBinding.fromGet( (c: TContext) => text ),
+			acknowledge
+		);
+	}
+
+	static fromTextAndAcknowledgeNoButtons<TContext>
+	(
+		text: string,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void
+	): VenueMessage<TContext>
+	{
+		return VenueMessage.fromMessageAndAcknowledge
+		(
+			DataBinding.fromGet( (c: TContext) => text ),
+			acknowledge
+		).showMessageOnlySet(true);
+	}
+
 	static fromTextNoButtons<TContext>(text: string): VenueMessage<TContext>
 	{
 		return VenueMessage.fromMessage<TContext>
@@ -100,19 +126,6 @@ export class VenueMessage<TContext> implements Venue
 			DataBinding.fromGet( (c: TContext) => text ),
 			acknowledge,
 			sizeInPixels
-		);
-	}
-
-	static fromTextAndAcknowledge<TContext>
-	(
-		text: string,
-		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void
-	): VenueMessage<TContext>
-	{
-		return VenueMessage.fromMessageAndAcknowledge
-		(
-			DataBinding.fromGet( (c: TContext) => text ),
-			acknowledge
 		);
 	}
 

@@ -34,25 +34,23 @@ var ThisCouldBeBetter;
             accelerationPerTick(uwpe) {
                 return this._accelerationPerTick(uwpe);
             }
-            accelerateForward(uwpe) {
-                var entityMovable = uwpe.entity;
-                var entityLoc = GameFramework.Locatable.of(entityMovable).loc;
-                var forward = entityLoc.orientation.forward;
-                var accel = this.accelerationPerTick(uwpe);
-                entityLoc.accel.overwriteWith(forward).multiplyScalar(accel);
+            accelerateAndFaceForwardIfAble(uwpe) {
+                var forward = GameFramework.Locatable.of(uwpe.entity).loc.orientation.forward;
+                this.accelerateInDirectionIfAble(uwpe, forward, true);
             }
-            accelerateForwardIfAble(uwpe) {
-                if (this.canAccelerate(uwpe)) {
-                    this.accelerateForward(uwpe);
-                }
-            }
-            accelerateInDirectionIfAble(uwpe, directionToMove) {
+            accelerateInDirectionIfAble(uwpe, directionToAccelerateIn, orientationMatchesAcceleration) {
                 var entity = uwpe.entity;
                 var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var canAccelerate = this.canAccelerate(uwpe);
                 if (canAccelerate) {
-                    entityLoc.orientation.forwardSet(directionToMove);
-                    Movable.of(entity).accelerateForward(uwpe);
+                    var accel = this.accelerationPerTick(uwpe);
+                    entityLoc
+                        .accel
+                        .overwriteWith(directionToAccelerateIn)
+                        .multiplyScalar(accel);
+                    if (orientationMatchesAcceleration) {
+                        entityLoc.orientation.forwardSet(directionToAccelerateIn);
+                    }
                 }
             }
             canAccelerate(uwpe) {
@@ -85,71 +83,69 @@ var ThisCouldBeBetter;
             // Equatable
             equals(other) { return false; } // todo
             // Actions.
-            static actionAccelerateDown() {
-                return new GameFramework.Action("AccelerateDown", 
-                // perform
-                (uwpe) => {
-                    var actor = uwpe.entity;
-                    var movable = Movable.of(actor);
-                    var direction = GameFramework.Coords.Instances().ZeroOneZero;
-                    movable.accelerateInDirectionIfAble(uwpe, direction);
-                });
+            static actionAccelerate_Perform(uwpe, direction, orientationMatchesAcceleration) {
+                var actor = uwpe.entity;
+                var movable = Movable.of(actor);
+                movable.accelerateInDirectionIfAble(uwpe, direction, orientationMatchesAcceleration);
             }
-            static actionAccelerateLeft() {
-                return new GameFramework.Action("AccelerateLeft", 
-                // perform
-                (uwpe) => {
-                    var actor = uwpe.entity;
-                    var movable = Movable.of(actor);
-                    var direction = GameFramework.Coords.Instances().MinusOneZeroZero;
-                    movable.accelerateInDirectionIfAble(uwpe, direction);
-                });
+            static actionAccelerateAndFaceDown() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Down", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroOneZero, true // orientationMatchesAcceleration
+                ));
             }
-            static actionAccelerateRight() {
-                return new GameFramework.Action("AccelerateRight", 
-                // perform
-                (uwpe) => {
-                    var actor = uwpe.entity;
-                    var movable = Movable.of(actor);
-                    var direction = GameFramework.Coords.Instances().OneZeroZero;
-                    movable.accelerateInDirectionIfAble(uwpe, direction);
-                });
+            static actionAccelerateAndFaceLeft() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Left", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().MinusOneZeroZero, true // orientationMatchesAcceleration
+                ));
             }
-            static actionAccelerateUp() {
-                return new GameFramework.Action("AccelerateUp", 
-                // perform
-                (uwpe) => {
-                    var actor = uwpe.entity;
-                    var movable = Movable.of(actor);
-                    var direction = GameFramework.Coords.Instances().ZeroMinusOneZero;
-                    movable.accelerateInDirectionIfAble(uwpe, direction);
-                });
+            static actionAccelerateAndFaceRight() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Right", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().OneZeroZero, true // orientationMatchesAcceleration
+                ));
+            }
+            static actionAccelerateAndFaceUp() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Up", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero, true // orientationMatchesAcceleration
+                ));
+            }
+            static actionAccelerateWithoutFacingDown() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate Down", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroOneZero, false // orientationMatchesAcceleration
+                ));
+            }
+            static actionAccelerateWithoutFacingLeft() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate Left", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().MinusOneZeroZero, false // orientationMatchesAcceleration
+                ));
+            }
+            static actionAccelerateWithoutFacingRight() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate Right", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().OneZeroZero, false // orientationMatchesAcceleration
+                ));
+            }
+            static actionAccelerateWithoutFacingUp() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate Up", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero, false // orientationMatchesAcceleration
+                ));
             }
             // Activities.
             static activityDefnWanderBuild() {
-                var returnValue = new GameFramework.ActivityDefn("Wander", (uwpe) => {
-                    var entityActor = uwpe.entity;
-                    var actor = GameFramework.Actor.of(entityActor);
-                    var activity = actor.activity;
-                    var targetEntity = activity.targetEntity();
-                    if (targetEntity == null) {
-                        var place = uwpe.place;
-                        var randomizer = uwpe.universe.randomizer;
-                        var targetPos = GameFramework.Coords.create().randomize(randomizer).multiply(place.size());
-                        targetEntity = GameFramework.Locatable.fromPos(targetPos).toEntity();
-                        activity.targetEntitySet(targetEntity);
-                    }
-                    var movable = Movable.of(entityActor);
-                    var actorLocatable = GameFramework.Locatable.of(entityActor);
-                    var targetLocatable = GameFramework.Locatable.of(targetEntity);
-                    var accelerationPerTick = movable.accelerationPerTick(uwpe);
-                    var speedMax = movable.speedMax(uwpe);
-                    var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(targetLocatable, accelerationPerTick, speedMax);
-                    if (distanceToTarget < speedMax) {
-                        activity.targetEntityClear();
-                    }
-                });
+                var returnValue = GameFramework.ActivityDefn.fromNameAndPerform("Wander", uwpe => this.activityDefnWander_Perform(uwpe));
                 return returnValue;
+            }
+            static activityDefnWander_Perform(uwpe) {
+                var entityActor = uwpe.entity;
+                var actor = GameFramework.Actor.of(entityActor);
+                var activity = actor.activity;
+                var targetEntity = activity.targetEntity();
+                if (targetEntity == null) {
+                    var place = uwpe.place;
+                    var randomizer = uwpe.universe.randomizer;
+                    var targetPos = GameFramework.Coords.create().randomize(randomizer).multiply(place.size());
+                    targetEntity = GameFramework.Locatable.fromPos(targetPos).toEntity();
+                    activity.targetEntitySet(targetEntity);
+                }
+                var movable = Movable.of(entityActor);
+                var actorLocatable = GameFramework.Locatable.of(entityActor);
+                var targetLocatable = GameFramework.Locatable.of(targetEntity);
+                var accelerationPerTick = movable.accelerationPerTick(uwpe);
+                var speedMax = movable.speedMax(uwpe);
+                var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(targetLocatable, accelerationPerTick, speedMax);
+                if (distanceToTarget < speedMax) {
+                    activity.targetEntityClear();
+                }
             }
         }
         GameFramework.Movable = Movable;

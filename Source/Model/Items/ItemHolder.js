@@ -367,7 +367,7 @@ var ThisCouldBeBetter;
                         return (i == null ? "-" : i.toString(world));
                     }), // text
                     fontSmall),
-                    GameFramework.ControlVisual.fromNamePosSizeVisualColorBackground("visualImage", GameFramework.Coords.fromXY(125, 25), // pos
+                    GameFramework.ControlVisual.fromNamePosSizeVisualAndColorBackground("visualImage", GameFramework.Coords.fromXY(125, 25), // pos
                     GameFramework.Coords.fromXY(50, 50), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         var i = c.itemSelected;

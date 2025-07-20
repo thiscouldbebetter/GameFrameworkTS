@@ -727,7 +727,7 @@ export class ConversationRun
 		{
 			var visualSound: VisualBase = new VisualSound(soundMusicName, true);
 
-			var visualMusic = ControlVisual.fromNamePosSizeVisual
+			var visualMusic = ControlVisual.fromNamePosSizeAndVisual
 			(
 				"visualMusic",
 				portraitPos,
@@ -815,7 +815,7 @@ export class ConversationRun
 				buttonSize.y * (buttons.length) + marginSize.y * (buttons.length + 1)
 			);
 
-			var containerButtonsInner = ControlContainer.fromNamePosSizeChildren
+			var containerButtonsInner = ControlContainer.fromNamePosSizeAndChildren
 			(
 				"containerButtons",
 				containerButtonsPos,
@@ -874,7 +874,7 @@ export class ConversationRun
 			size.y - labelHeight - marginSize.y * 3
 		);
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerConversation",
 			Coords.create(), // pos

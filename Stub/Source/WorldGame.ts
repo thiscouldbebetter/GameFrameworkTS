@@ -31,9 +31,4 @@ class WorldGame extends World
 			]
 		]);
 	}
-
-	toControl(): ControlBase
-	{
-		return new ControlNone();
-	}
 }

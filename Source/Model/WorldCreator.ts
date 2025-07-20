@@ -89,7 +89,7 @@ export class WorldCreator
 				)
 		);
 
-		var returnControl = ControlContainer.fromNamePosSizeChildren
+		var returnControl = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerWorldCreator",
 			Coords.zeroes(), // pos

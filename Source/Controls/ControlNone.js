@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor() {
                 super(null, null, null, null);
             }
+            static create() {
+                return new ControlNone();
+            }
         }
         GameFramework.ControlNone = ControlNone;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

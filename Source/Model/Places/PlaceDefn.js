@@ -12,9 +12,12 @@ var ThisCouldBeBetter;
                 this.propertyNamesToProcess = propertyNamesToProcess;
                 this._placeInitialize = placeInitialize;
                 this._placeFinalize = placeFinalize;
-                this.actionsByName = GameFramework.ArrayHelper.addLookupsByName(this.actions);
-                this.actionToInputsMappings = GameFramework.ArrayHelper.clone(this.actionToInputsMappingsDefault);
-                this.actionToInputsMappingsEdited = GameFramework.ArrayHelper.clone(this.actionToInputsMappings);
+                this.actionsByName =
+                    GameFramework.ArrayHelper.addLookupsByName(this.actions);
+                this.actionToInputsMappings =
+                    GameFramework.ArrayHelper.clone(this.actionToInputsMappingsDefault);
+                this.actionToInputsMappingsEdited =
+                    GameFramework.ArrayHelper.clone(this.actionToInputsMappings);
                 this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
             }
             static default() {

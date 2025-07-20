@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
                 var buttonSize = GameFramework.Coords.fromXY(3, 1.2).multiplyScalar(fontHeight);
                 var wordBubble = this;
-                var containerWordBubble = GameFramework.ControlContainer.fromNamePosSizeChildren("containerWordBubble", GameFramework.Coords.fromXY(margin, sizeBase.y - margin - containerSize.y), // pos
+                var containerWordBubble = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerWordBubble", GameFramework.Coords.fromXY(margin, sizeBase.y - margin - containerSize.y), // pos
                 containerSize, 
                 // children
                 [

@@ -46,6 +46,28 @@ export class VisualBar implements Visual<VisualBar>
 		this._sizeHalf = this.size.clone().half();
 	}
 
+	static fromSizeColorAndBindingsForValueAndMax
+	(
+		size: Coords,
+		color: Color,
+		amountCurrent: DataBinding<Entity, number>,
+		amountMax: DataBinding<Entity, number>
+	): VisualBar
+	{
+		return new VisualBar
+		(
+			null, // abbreviation
+			size,
+			color,
+			amountCurrent,
+			null, // amountThreshold
+			amountMax,
+			null, // fractionBelowWhichToShow
+			null, // colorForBorderAsValueBreakGroup,
+			null // text
+		);
+	}
+
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void

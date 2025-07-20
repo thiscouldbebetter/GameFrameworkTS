@@ -10,6 +10,7 @@ export class ControlVisual extends ControlBase
 
 	_drawPos: Coords;
 	_entity: Entity;
+	_entityPosToRestore: Coords
 	_sizeHalf: Coords;
 
 	constructor(
@@ -37,10 +38,11 @@ export class ControlVisual extends ControlBase
 				Drawable.fromVisual(new VisualNone())
 			]
 		);
+		this._entityPosToRestore = Coords.create();
 		this._sizeHalf = Coords.create();
 	}
 
-	static fromNamePosSizeVisual
+	static fromNamePosSizeAndVisual
 	(
 		name: string,
 		pos: Coords,
@@ -51,7 +53,7 @@ export class ControlVisual extends ControlBase
 		return new ControlVisual(name, pos, size, visual, null, null);
 	}
 
-	static fromNamePosSizeVisualColorBackground
+	static fromNamePosSizeVisualAndColorBackground
 	(
 		name: string,
 		pos: Coords,
@@ -61,6 +63,25 @@ export class ControlVisual extends ControlBase
 	)
 	{
 		return new ControlVisual(name, pos, size, visual, colorBackground, null);
+	}
+
+	static fromPosAndVisual
+	(
+		pos: Coords,
+		visual: DataBinding<any, VisualBase>
+	)
+	{
+		return new ControlVisual(null, pos, null, visual, null, null);
+	}
+
+	static fromPosSizeAndVisual
+	(
+		pos: Coords,
+		size: Coords,
+		visual: DataBinding<any, VisualBase>
+	)
+	{
+		return new ControlVisual(null, pos, size, visual, null, null);
 	}
 
 	actionHandle(actionName: string, universe: Universe): boolean
@@ -117,20 +138,32 @@ export class ControlVisual extends ControlBase
 		var visualToDraw = this.visual.get();
 		if (visualToDraw != null)
 		{
-			var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
-			var style = style || this.style(universe);
+			var drawPos =
+				this._drawPos
+					.overwriteWith(drawLoc.pos)
+					.add(this.pos);
 
-			var colorFill = this.colorBackground || Color.Instances()._Transparent;
-			var colorBorder = this.colorBorder || style.colorBorder();
-			display.drawRectangle
-			(
-				drawPos, this.size, colorFill, colorBorder
-			);
+			if (this.size != null)
+			{
+				var style = style || this.style(universe);
 
-			this._sizeHalf.overwriteWith(this.size).half();
-			drawPos.add(this._sizeHalf);
+				var colorFill = this.colorBackground || Color.Instances()._Transparent;
+				var colorBorder = this.colorBorder || style.colorBorder();
+				display.drawRectangle
+				(
+					drawPos, this.size, colorFill, colorBorder
+				);
+
+				this._sizeHalf
+					.overwriteWith(this.size)
+					.half();
+				drawPos.add(this._sizeHalf);
+			}
+
 			var entity = this._entity;
-			Locatable.of(entity).loc.pos.overwriteWith(drawPos);
+			var entityPos = Locatable.of(entity).loc.pos;
+			this._entityPosToRestore.overwriteWith(entityPos);
+			entityPos.overwriteWith(drawPos);
 
 			var world = universe.world;
 			var place = (world == null ? null : world.placeCurrent);
@@ -139,6 +172,8 @@ export class ControlVisual extends ControlBase
 				universe, world, place, entity, null
 			);
 			visualToDraw.draw(uwpe, display);
+
+			entityPos.overwriteWith(this._entityPosToRestore);
 		}
 	}
 }

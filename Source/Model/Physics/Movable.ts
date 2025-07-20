@@ -72,34 +72,17 @@ export class Movable implements EntityProperty<Movable>
 		return this._accelerationPerTick(uwpe);
 	}
 
-	accelerateForward(uwpe: UniverseWorldPlaceEntities): void
+	accelerateAndFaceForwardIfAble(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var entityMovable = uwpe.entity;
-		var entityLoc = Locatable.of(entityMovable).loc;
-		var forward = entityLoc.orientation.forward;
-		var accel = this.accelerationPerTick(uwpe);
-
-		entityLoc.accel.overwriteWith
-		(
-			forward
-		).multiplyScalar
-		(
-			accel
-		);
-	}
-
-	accelerateForwardIfAble(uwpe: UniverseWorldPlaceEntities): void
-	{
-		if (this.canAccelerate(uwpe))
-		{
-			this.accelerateForward(uwpe);
-		}
+		var forward = Locatable.of(uwpe.entity).loc.orientation.forward;
+		this.accelerateInDirectionIfAble(uwpe, forward, true);
 	}
 
 	accelerateInDirectionIfAble
 	(
 		uwpe: UniverseWorldPlaceEntities,
-		directionToMove: Coords
+		directionToAccelerateIn: Coords,
+		orientationMatchesAcceleration: boolean
 	): void
 	{
 		var entity = uwpe.entity;
@@ -107,8 +90,17 @@ export class Movable implements EntityProperty<Movable>
 		var canAccelerate = this.canAccelerate(uwpe);
 		if (canAccelerate)
 		{
-			entityLoc.orientation.forwardSet(directionToMove);
-			Movable.of(entity).accelerateForward(uwpe);
+			var accel = this.accelerationPerTick(uwpe);
+
+			entityLoc
+				.accel
+				.overwriteWith(directionToAccelerateIn)
+				.multiplyScalar(accel);
+
+			if (orientationMatchesAcceleration)
+			{
+				entityLoc.orientation.forwardSet(directionToAccelerateIn);
+			}
 		}
 	}
 
@@ -167,67 +159,138 @@ export class Movable implements EntityProperty<Movable>
 
 	// Actions.
 
-	static actionAccelerateDown(): Action
+	static actionAccelerate_Perform
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		direction: Coords,
+		orientationMatchesAcceleration: boolean
+	): void
 	{
-		return new Action
+		var actor = uwpe.entity;
+		var movable = Movable.of(actor);
+		movable.accelerateInDirectionIfAble
 		(
-			"AccelerateDown",
-			// perform
-			(uwpe: UniverseWorldPlaceEntities) =>
-			{
-				var actor = uwpe.entity;
-				var movable = Movable.of(actor);
-				var direction = Coords.Instances().ZeroOneZero;
-				movable.accelerateInDirectionIfAble(uwpe, direction);
-			}
-		)
-	}
-
-	static actionAccelerateLeft(): Action
-	{
-		return new Action
-		(
-			"AccelerateLeft",
-			// perform
-			(uwpe: UniverseWorldPlaceEntities) =>
-			{
-				var actor = uwpe.entity;
-				var movable = Movable.of(actor);
-				var direction = Coords.Instances().MinusOneZeroZero;
-				movable.accelerateInDirectionIfAble(uwpe, direction);
-			}
+			uwpe, direction, orientationMatchesAcceleration
 		);
 	}
 
-	static actionAccelerateRight(): Action
+	static actionAccelerateAndFaceDown(): Action
 	{
-		return new Action
+		return Action.fromNameAndPerform
 		(
-			"AccelerateRight",
-			// perform
-			(uwpe: UniverseWorldPlaceEntities) =>
-			{
-				var actor = uwpe.entity;
-				var movable = Movable.of(actor);
-				var direction = Coords.Instances().OneZeroZero;
-				movable.accelerateInDirectionIfAble(uwpe, direction);
-			}
+			"Accelerate and Face Down",
+			uwpe =>
+				this.actionAccelerate_Perform
+				(
+					uwpe,
+					Coords.Instances().ZeroOneZero,
+					true // orientationMatchesAcceleration
+				)
 		);
 	}
 
-	static actionAccelerateUp(): Action
+	static actionAccelerateAndFaceLeft(): Action
 	{
-		return new Action
+		return Action.fromNameAndPerform
 		(
-			"AccelerateUp",
-			// perform
-			(uwpe: UniverseWorldPlaceEntities) =>
-			{
-				var actor = uwpe.entity;
-				var movable = Movable.of(actor);
-				var direction = Coords.Instances().ZeroMinusOneZero;
-				movable.accelerateInDirectionIfAble(uwpe, direction);
-			}
+			"Accelerate and Face Left",
+			uwpe =>
+				this.actionAccelerate_Perform
+				(
+					uwpe,
+					Coords.Instances().MinusOneZeroZero,
+					true // orientationMatchesAcceleration
+				)
+		);
+	}
+
+	static actionAccelerateAndFaceRight(): Action
+	{
+		return Action.fromNameAndPerform
+		(
+			"Accelerate and Face Right",
+			uwpe =>
+				this.actionAccelerate_Perform
+				(
+					uwpe,
+					Coords.Instances().OneZeroZero,
+					true // orientationMatchesAcceleration
+				)
+		);
+	}
+
+	static actionAccelerateAndFaceUp(): Action
+	{
+		return Action.fromNameAndPerform
+		(
+			"Accelerate and Face Up",
+			uwpe =>
+				this.actionAccelerate_Perform
+				(
+					uwpe,
+					Coords.Instances().ZeroMinusOneZero,
+					true // orientationMatchesAcceleration
+				)
+		);
+	}
+
+	static actionAccelerateWithoutFacingDown(): Action
+	{
+		return Action.fromNameAndPerform
+		(
+			"Accelerate Down",
+			uwpe =>
+				this.actionAccelerate_Perform
+				(
+					uwpe,
+					Coords.Instances().ZeroOneZero,
+					false // orientationMatchesAcceleration
+				)
+		);
+	}
+
+	static actionAccelerateWithoutFacingLeft(): Action
+	{
+		return Action.fromNameAndPerform
+		(
+			"Accelerate Left",
+			uwpe =>
+				this.actionAccelerate_Perform
+				(
+					uwpe,
+					Coords.Instances().MinusOneZeroZero,
+					false // orientationMatchesAcceleration
+				)
+		);
+	}
+
+	static actionAccelerateWithoutFacingRight(): Action
+	{
+		return Action.fromNameAndPerform
+		(
+			"Accelerate Right",
+			uwpe =>
+				this.actionAccelerate_Perform
+				(
+					uwpe,
+					Coords.Instances().OneZeroZero,
+					false // orientationMatchesAcceleration
+				)
+		);
+	}
+
+	static actionAccelerateWithoutFacingUp(): Action
+	{
+		return Action.fromNameAndPerform
+		(
+			"Accelerate Up",
+			uwpe =>
+				this.actionAccelerate_Perform
+				(
+					uwpe,
+					Coords.Instances().ZeroMinusOneZero,
+					false // orientationMatchesAcceleration
+				)
 		);
 	}
 
@@ -235,55 +298,58 @@ export class Movable implements EntityProperty<Movable>
 
 	static activityDefnWanderBuild(): ActivityDefn
 	{
-		var returnValue = new ActivityDefn
+		var returnValue = ActivityDefn.fromNameAndPerform
 		(
 			"Wander",
-			(uwpe: UniverseWorldPlaceEntities) =>
-			{
-				var entityActor = uwpe.entity;
-
-				var actor = Actor.of(entityActor);
-				var activity = actor.activity;
-				var targetEntity = activity.targetEntity();
-				if (targetEntity == null)
-				{
-					var place = uwpe.place;
-					var randomizer = uwpe.universe.randomizer;
-
-					var targetPos = Coords.create().randomize
-					(
-						randomizer
-					).multiply
-					(
-						place.size()
-					);
-
-					targetEntity = Locatable.fromPos(targetPos).toEntity();
-					activity.targetEntitySet(targetEntity);
-				}
-
-				var movable = Movable.of(entityActor);
-				var actorLocatable = Locatable.of(entityActor);
-				var targetLocatable = Locatable.of(targetEntity);
-				var accelerationPerTick = movable.accelerationPerTick(uwpe);
-				var speedMax = movable.speedMax(uwpe);
-				var distanceToTarget =
-					actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance
-					(
-						targetLocatable,
-						accelerationPerTick,
-						speedMax
-					);
-
-				if (distanceToTarget < speedMax)
-				{
-					activity.targetEntityClear();
-				}
-			}
+			uwpe => this.activityDefnWander_Perform(uwpe)
 		);
 
 		return returnValue;
 	}
+
+	static activityDefnWander_Perform(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var entityActor = uwpe.entity;
+
+		var actor = Actor.of(entityActor);
+		var activity = actor.activity;
+		var targetEntity = activity.targetEntity();
+		if (targetEntity == null)
+		{
+			var place = uwpe.place;
+			var randomizer = uwpe.universe.randomizer;
+
+			var targetPos = Coords.create().randomize
+			(
+				randomizer
+			).multiply
+			(
+				place.size()
+			);
+
+			targetEntity = Locatable.fromPos(targetPos).toEntity();
+			activity.targetEntitySet(targetEntity);
+		}
+
+		var movable = Movable.of(entityActor);
+		var actorLocatable = Locatable.of(entityActor);
+		var targetLocatable = Locatable.of(targetEntity);
+		var accelerationPerTick = movable.accelerationPerTick(uwpe);
+		var speedMax = movable.speedMax(uwpe);
+		var distanceToTarget =
+			actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance
+			(
+				targetLocatable,
+				accelerationPerTick,
+				speedMax
+			);
+
+		if (distanceToTarget < speedMax)
+		{
+			activity.targetEntityClear();
+		}
+	}
+
 }
 
 }

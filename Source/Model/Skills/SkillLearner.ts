@@ -262,7 +262,7 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 		var skillsAll = defns.skills;
 		var skillsAllByName = defns.skillsByName;
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"Skills", // name,
 			Coords.create(), // pos,

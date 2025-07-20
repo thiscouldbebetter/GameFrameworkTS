@@ -14,10 +14,10 @@ class PlaceBuilderDemo_Actions {
             actionsAll.DoNothing,
             DisplayRecorder.actionStartStop(),
             actionsAll.ShowMenuPlayer,
-            Movable.actionAccelerateDown(),
-            Movable.actionAccelerateLeft(),
-            Movable.actionAccelerateRight(),
-            Movable.actionAccelerateUp(),
+            Movable.actionAccelerateAndFaceDown(),
+            Movable.actionAccelerateAndFaceLeft(),
+            Movable.actionAccelerateAndFaceRight(),
+            Movable.actionAccelerateAndFaceUp(),
             a("Fire", this.actionPerform_Fire),
             a("Hide", this.actionPerform_Hide),
             a("Jump", this.actionPerform_Jump),
@@ -47,22 +47,22 @@ class PlaceBuilderDemo_Actions {
         var atim = (a, b, c) => new ActionToInputsMapping(a, b, c);
         var actionToInputsMappings = [
             atim(actions.ShowMenuPlayer.name, [inputs.Escape.name, inputs.Tab.name], inactivateFalse),
-            atim(Movable.actionAccelerateDown().name, [
+            atim(Movable.actionAccelerateAndFaceDown().name, [
                 inputs.ArrowDown.name,
                 inputs.s.name,
                 inputs.GamepadMoveDown.name + "0"
             ], inactivateFalse),
-            atim(Movable.actionAccelerateLeft().name, [
+            atim(Movable.actionAccelerateAndFaceLeft().name, [
                 inputs.ArrowLeft.name,
                 inputs.a.name,
                 inputs.GamepadMoveLeft.name + "0"
             ], inactivateFalse),
-            atim(Movable.actionAccelerateRight().name, [
+            atim(Movable.actionAccelerateAndFaceRight().name, [
                 inputs.ArrowRight.name,
                 inputs.d.name,
                 inputs.GamepadMoveRight.name + "0"
             ], inactivateFalse),
-            atim(Movable.actionAccelerateUp().name, [
+            atim(Movable.actionAccelerateAndFaceUp().name, [
                 inputs.ArrowUp.name,
                 inputs.w.name,
                 inputs.GamepadMoveUp.name + "0"

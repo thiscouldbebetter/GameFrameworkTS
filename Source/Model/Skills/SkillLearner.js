@@ -139,7 +139,7 @@ var ThisCouldBeBetter;
                 var skillLearner = this;
                 var skillsAll = defns.skills;
                 var skillsAllByName = defns.skillsByName;
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildren("Skills", // name,
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("Skills", // name,
                 GameFramework.Coords.create(), // pos,
                 size.clone(), 
                 // children

@@ -28,10 +28,10 @@ var ThisCouldBeBetter;
         GameFramework.Action = Action;
         class Action_Instances {
             constructor() {
-                this.DoNothing = Action.fromNameAndPerform("DoNothing", (uwpe) => {
+                this.DoNothing = Action.fromNameAndPerform("Do Nothing", (uwpe) => {
                     // Do nothing.
                 });
-                this.ShowMenuPlayer = Action.fromNameAndPerform("ShowMenuPlayer", 
+                this.ShowMenuPlayer = Action.fromNameAndPerform("Show Menu Player", 
                 // perform
                 (uwpe) => {
                     var universe = uwpe.universe;
@@ -40,7 +40,7 @@ var ThisCouldBeBetter;
                     var venueNext = control.toVenue();
                     universe.venueTransitionTo(venueNext);
                 });
-                this.ShowMenuSettings = Action.fromNameAndPerform("ShowMenuSettings", 
+                this.ShowMenuSettings = Action.fromNameAndPerform("Show Menu Settings", 
                 // perform
                 (uwpe) => {
                     var universe = uwpe.universe;

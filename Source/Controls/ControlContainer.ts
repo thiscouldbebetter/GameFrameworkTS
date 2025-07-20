@@ -63,7 +63,7 @@ export class ControlContainer extends ControlBase
 		this._posToCheck = Coords.create();
 	}
 
-	static fromNamePosSizeChildren
+	static fromNamePosSizeAndChildren
 	(
 		name: string,
 		pos: Coords,
@@ -105,6 +105,19 @@ export class ControlContainer extends ControlBase
 		return new ControlContainer
 		(
 			name, pos, size, children, actions, actionToInputsMappings
+		);
+	}
+
+	static fromPosSizeAndChildren
+	(
+		pos: Coords,
+		size: Coords,
+		children: ControlBase[]
+	): ControlContainer
+	{
+		return new ControlContainer
+		(
+			ControlContainer.name, pos, size, children, null, null
 		);
 	}
 

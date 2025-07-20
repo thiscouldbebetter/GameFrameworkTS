@@ -18,6 +18,14 @@ var ThisCouldBeBetter;
                 this._sizeCurrent = this.size.clone();
                 this._sizeHalf = this.size.clone().half();
             }
+            static fromSizeColorAndBindingsForValueAndMax(size, color, amountCurrent, amountMax) {
+                return new VisualBar(null, // abbreviation
+                size, color, amountCurrent, null, // amountThreshold
+                amountMax, null, // fractionBelowWhichToShow
+                null, // colorForBorderAsValueBreakGroup,
+                null // text
+                );
+            }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.

@@ -57,7 +57,7 @@ class Action_Instances
 	{
 		this.DoNothing = Action.fromNameAndPerform
 		(
-			"DoNothing",
+			"Do Nothing",
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
 				// Do nothing.
@@ -66,7 +66,7 @@ class Action_Instances
 
 		this.ShowMenuPlayer = Action.fromNameAndPerform
 		(
-			"ShowMenuPlayer",
+			"Show Menu Player",
 			// perform
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
@@ -83,7 +83,7 @@ class Action_Instances
 
 		this.ShowMenuSettings = Action.fromNameAndPerform
 		(
-			"ShowMenuSettings",
+			"Show Menu Settings",
 			// perform
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{

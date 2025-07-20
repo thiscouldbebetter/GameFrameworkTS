@@ -46,7 +46,7 @@ export class ControlBuilder
 
 	static default(): ControlBuilder
 	{
-		return new ControlBuilder(null, null, true);
+		return new ControlBuilder(null, null, false);
 	}
 
 	static fromStyle(style: ControlStyle): ControlBuilder
@@ -279,7 +279,7 @@ export class ControlBuilder
 			() => this.choiceList_Choose(universe, listOptions, select)
 		);
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerChoice",
 			Coords.create(),
@@ -651,7 +651,7 @@ export class ControlBuilder
 			buttonSettings
 		];
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"Game",
 			this._zeroes.clone(), // pos
@@ -735,8 +735,8 @@ export class ControlBuilder
 
 		var labelActions = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
-			Coords.fromXY(100, 15), // pos
-			Coords.fromXY(100, 20), // size
+			Coords.fromXY(25, 10), // pos
+			Coords.fromXY(150, 20), // size
 			DataBinding.fromContext("Actions:"),
 			font
 		);
@@ -744,8 +744,8 @@ export class ControlBuilder
 		var listActions = ControlList.fromNamePosSizeItemsTextFontSelectedValue
 		(
 			"listActions",
-			Coords.fromXY(50, 25), // pos
-			Coords.fromXY(100, 40), // size
+			Coords.fromXY(25, 25), // pos
+			Coords.fromXY(150, 40), // size
 			DataBinding.fromGet
 			(
 				(c: PlaceDefn) => placeDefn.actionToInputsMappingsEdited
@@ -766,16 +766,16 @@ export class ControlBuilder
 
 		var labelInputs = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
-			Coords.fromXY(100, 70), // pos
-			Coords.fromXY(100, 15), // size
-			DataBinding.fromContext("Inputs:"),
+			Coords.fromXY(25, 65), // pos
+			Coords.fromXY(150, 20), // size
+			DataBinding.fromContext("Inputs for Selected Action:"),
 			font
 		);
 
 		var labelInputNames = ControlLabel.fromPosSizeTextFontCenteredHorizontally
 		(
-			Coords.fromXY(100, 80), // pos
-			Coords.fromXY(200, 15), // size
+			Coords.fromXY(25, 75), // pos
+			Coords.fromXY(150, 25), // size
 			DataBinding.fromContextAndGet
 			(
 				placeDefn,
@@ -878,7 +878,7 @@ export class ControlBuilder
 			)
 		);
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerGameControls",
 			this._zeroes, // pos
@@ -1045,7 +1045,7 @@ export class ControlBuilder
 
 		var controlActionNames = ControlActionNames.Instances();
 
-		var imageOpening = ControlVisual.fromNamePosSizeVisual
+		var imageOpening = ControlVisual.fromNamePosSizeAndVisual
 		(
 			"imageOpening",
 			this._zeroes.clone(),
@@ -1119,7 +1119,7 @@ export class ControlBuilder
 
 		var controlActionNames = ControlActionNames.Instances();
 
-		var imageProducer = ControlVisual.fromNamePosSizeVisual
+		var imageProducer = ControlVisual.fromNamePosSizeAndVisual
 		(
 			"imageProducer",
 			this._zeroes.clone(),
@@ -1423,7 +1423,7 @@ export class ControlBuilder
 						universe, controlsForSlides, i + 1, venueAfterSlideshow
 					);
 
-			var imageSlide = ControlVisual.fromNamePosSizeVisual
+			var imageSlide = ControlVisual.fromNamePosSizeAndVisual
 			(
 				"imageSlide",
 				this._zeroes,
@@ -1530,7 +1530,7 @@ export class ControlBuilder
 			VisualSound.fromSoundNameAndRepeat("Music_Title", true)
 		]);
 
-		var imageTitle = ControlVisual.fromNamePosSizeVisual
+		var imageTitle = ControlVisual.fromNamePosSizeAndVisual
 		(
 			"imageTitle",
 			this._zeroes.clone(),
@@ -1699,7 +1699,7 @@ export class ControlBuilder
 			() => this.worldDetail_DeleteSaveStateSelected(universe, size)
 		);
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerWorldDetail",
 			this._zeroes, // pos
@@ -1880,7 +1880,7 @@ export class ControlBuilder
 			() => this.worldLoad_Return(universe, size)
 		);
 
-		var returnValue = ControlContainer.fromNamePosSizeChildren
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerWorldLoad",
 			this._zeroes, // pos

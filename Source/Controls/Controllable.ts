@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Controllable implements EntityProperty<Controllable>
 {
-	toControl:
+	_toControl:
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		size: Coords,
@@ -24,10 +24,39 @@ export class Controllable implements EntityProperty<Controllable>
 		this.toControl = toControl;
 	}
 
+	static fromToControl
+	(
+		toControl:
+		(
+			uwpe: UniverseWorldPlaceEntities,
+			size: Coords,
+			controlTypeName: string
+		) => ControlBase
+	): Controllable
+	{
+		return new Controllable(toControl);
+	}
+
 	static of(entity: Entity): Controllable
 	{
 		return entity.propertyByName(Controllable.name) as Controllable;
 	}
+
+	toControl
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		size: Coords,
+		controlTypeName: string
+	): ControlBase
+	{
+		var control =
+			(this._toControl == null)
+			? ControlNone.create()
+			: this._toControl(uwpe, size, controlTypeName);
+
+		return control;
+	}
+
 
 	// Clonable.
 	clone(): Controllable { return this; }

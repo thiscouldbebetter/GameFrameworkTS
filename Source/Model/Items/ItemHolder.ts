@@ -747,7 +747,7 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 				fontSmall
 			),
 
-			ControlVisual.fromNamePosSizeVisualColorBackground
+			ControlVisual.fromNamePosSizeVisualAndColorBackground
 			(
 				"visualImage",
 				Coords.fromXY(125, 25), // pos

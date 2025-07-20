@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                 this._mouseMovePos = GameFramework.Coords.create();
                 this._posToCheck = GameFramework.Coords.create();
             }
-            static fromNamePosSizeChildren(name, pos, size, children) {
+            static fromNamePosSizeAndChildren(name, pos, size, children) {
                 return new ControlContainer(name, pos, size, children, null, null);
             }
             static fromNamePosSizeChildrenAndActions(name, pos, size, children, actions) {
@@ -35,6 +35,9 @@ var ThisCouldBeBetter;
             }
             static fromNamePosSizeChildrenActionsAndMappings(name, pos, size, children, actions, actionToInputsMappings) {
                 return new ControlContainer(name, pos, size, children, actions, actionToInputsMappings);
+            }
+            static fromPosSizeAndChildren(pos, size, children) {
+                return new ControlContainer(ControlContainer.name, pos, size, children, null, null);
             }
             // instance methods
             // actions

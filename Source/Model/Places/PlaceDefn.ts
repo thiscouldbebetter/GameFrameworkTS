@@ -37,14 +37,18 @@ export class PlaceDefn
 		this._placeInitialize = placeInitialize;
 		this._placeFinalize = placeFinalize;
 
-		this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
+		this.actionsByName =
+			ArrayHelper.addLookupsByName(this.actions);
 
-		this.actionToInputsMappings = ArrayHelper.clone(this.actionToInputsMappingsDefault);
-		this.actionToInputsMappingsEdited = ArrayHelper.clone(this.actionToInputsMappings);
+		this.actionToInputsMappings =
+			ArrayHelper.clone(this.actionToInputsMappingsDefault);
+		this.actionToInputsMappingsEdited =
+			ArrayHelper.clone(this.actionToInputsMappings);
 
 		this.actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
 		(
-			this.actionToInputsMappings, (x: ActionToInputsMapping) => x.inputNames
+			this.actionToInputsMappings,
+			(x: ActionToInputsMapping) => x.inputNames
 		);
 	}
 

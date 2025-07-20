@@ -65,7 +65,7 @@ export class WordBubble
 
 		var wordBubble = this;
 
-		var containerWordBubble = ControlContainer.fromNamePosSizeChildren
+		var containerWordBubble = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerWordBubble",
 			Coords.fromXY

@@ -28,14 +28,17 @@ var ThisCouldBeBetter;
             static fromText(text) {
                 return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text));
             }
+            static fromTextAndAcknowledge(text, acknowledge) {
+                return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge);
+            }
+            static fromTextAndAcknowledgeNoButtons(text, acknowledge) {
+                return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge).showMessageOnlySet(true);
+            }
             static fromTextNoButtons(text) {
                 return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text)).showMessageOnlySet(true);
             }
             static fromTextAcknowledgeAndSize(text, acknowledge, sizeInPixels) {
                 return VenueMessage.fromMessageAcknowledgeAndSize(GameFramework.DataBinding.fromGet((c) => text), acknowledge, sizeInPixels);
-            }
-            static fromTextAndAcknowledge(text, acknowledge) {
-                return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge);
             }
             static fromTextAcknowledgeAndVenuePrev(text, acknowledge, venuePrev) {
                 return VenueMessage.fromMessageAcknowledgeAndVenuePrev(GameFramework.DataBinding.fromGet((c) => text), acknowledge, venuePrev);

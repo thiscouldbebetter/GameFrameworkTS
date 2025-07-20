@@ -30,6 +30,7 @@ import Constraint_FrictionXY = gf.Constraint_FrictionXY;
 import Constraint_Gravity = gf.Constraint_Gravity;
 import Constraint_Multiple = gf.Constraint_Multiple;
 import Constraint_OrientTowardEntityWithName = gf.Constraint_OrientTowardEntityWithName;
+import Constraint_OrientationRound = gf.Constraint_OrientationRound;
 import Constraint_SpeedMaxXY = gf.Constraint_SpeedMaxXY;
 import Constraint_StopBelowSpeedMin = gf.Constraint_StopBelowSpeedMin;
 import Constraint_Transform = gf.Constraint_Transform;

@@ -99,7 +99,7 @@ var ThisCouldBeBetter;
                 var buttonDelete = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(margin * 4 + buttonSize.x * 3, buttonPosY), // pos
                 buttonSize.clone(), "Delete", fontNameAndHeight, deleteSaveStateSelected).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => (c.saveStateNameSelected != null)));
                 var imagePosX = margin * 2 + listSize.x;
-                var visualSnapshot = GameFramework.ControlVisual.fromNamePosSizeVisualColorBackground("visualSnapshot", GameFramework.Coords.fromXY(imagePosX, listPosY), visualThumbnailSize, GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
+                var visualSnapshot = GameFramework.ControlVisual.fromNamePosSizeVisualAndColorBackground("visualSnapshot", GameFramework.Coords.fromXY(imagePosX, listPosY), visualThumbnailSize, GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => {
                     var saveState = c.saveStateSelected();
                     var saveStateImageSnapshot = (saveState == null
                         ? null
@@ -351,33 +351,12 @@ var ThisCouldBeBetter;
                 var scaleMultiplier = size.clone().divide(sizeBase);
                 var fontNameAndHeight = controlBuilder.fontBase;
                 var buttonHeightBase = controlBuilder.buttonHeightBase;
-                var create = () => {
-                    var venueControls = universe.venueCurrent();
-                    var controlRootAsContainer = venueControls.controlRoot;
-                    var textBoxName = controlRootAsContainer.childByName("textBoxName");
-                    var profileName = textBoxName.text(null);
-                    if (profileName == "") {
-                        return;
-                    }
-                    var storageHelper = universe.storageHelper;
-                    var profile = new Profile(profileName, []);
-                    var profileNames = storageHelper.load(Profile.StorageKeyProfileNames);
-                    if (profileNames == null) {
-                        profileNames = [];
-                    }
-                    profileNames.push(profileName);
-                    storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
-                    storageHelper.save(profileName, profile);
-                    universe.profileSet(profile);
-                    var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent()).toVenue();
-                    universe.venueTransitionTo(venueNext);
-                };
                 var cancel = () => // click
                  {
                     var venueNext = Profile.toControlProfileSelect(universe, null, universe.venueCurrent()).toVenue();
                     universe.venueTransitionTo(venueNext);
                 };
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildren("containerProfileNew", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerProfileNew", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
                 [
@@ -392,13 +371,34 @@ var ThisCouldBeBetter;
                     ),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(50, 80), // pos
                     GameFramework.Coords.fromXY(45, buttonHeightBase), // size
-                    "Create", fontNameAndHeight, create).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => { return c.name.length > 0; })),
+                    "Create", fontNameAndHeight, () => this.toControlProfileNew_Create(universe)).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => { return c.name.length > 0; })),
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(105, 80), // pos
                     GameFramework.Coords.fromXY(45, buttonHeightBase), // size
                     "Cancel", fontNameAndHeight, cancel),
                 ]);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
+            }
+            static toControlProfileNew_Create(universe) {
+                var venueControls = universe.venueCurrent();
+                var controlRootAsContainer = venueControls.controlRoot;
+                var textBoxName = controlRootAsContainer.childByName("textBoxName");
+                var profileName = textBoxName.text(null);
+                if (profileName == "") {
+                    return;
+                }
+                var storageHelper = universe.storageHelper;
+                var profile = new Profile(profileName, []);
+                var profileNames = storageHelper.load(Profile.StorageKeyProfileNames);
+                if (profileNames == null) {
+                    profileNames = [];
+                }
+                profileNames.push(profileName);
+                storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
+                storageHelper.save(profileName, profile);
+                universe.profileSet(profile);
+                var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent()).toVenue();
+                universe.venueTransitionTo(venueNext);
             }
             static toControlProfileSelect(universe, size, venuePrev) {
                 if (size == null) {
@@ -448,7 +448,7 @@ var ThisCouldBeBetter;
                  {
                     universe.venueTransitionTo(venuePrev);
                 });
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildren("containerProfileSelect", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerProfileSelect", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
                 [
