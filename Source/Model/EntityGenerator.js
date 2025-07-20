@@ -98,7 +98,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new EntityGenerator(this.entityToGenerate, this.ticksPerGenerationAsRange.clone(), this.entitiesPerGenerationAsRange.clone(), this.entitiesGeneratedMaxConcurrent, this.entitiesGeneratedMaxAllTime, this.entityPositionRangeAsBox.clone(), this.entitySpeedAsRange.clone());
+                return new EntityGenerator(this.entityToGenerate, this.ticksPerGenerationAsRange.clone(), this.entitiesPerGenerationAsRange.clone(), this.entitiesGeneratedMaxConcurrent, this.entitiesGeneratedMaxAllTime, this.entityPositionRangeAsBox == null ? null : this.entityPositionRangeAsBox.clone(), this.entitySpeedAsRange.clone());
             }
             overwriteWith(other) {
                 this.entityToGenerate =

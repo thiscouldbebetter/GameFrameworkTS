@@ -2646,13 +2646,14 @@ class PlaceBuilderDemo // Main.
 
 	entityDefnBuildGenerator(entityDefnToGenerate: Entity): Entity
 	{
-		var generator = new EntityGenerator
+		var generator = EntityGenerator.fromEntityTicksBatchMaxesAndPosBox
 		(
 			entityDefnToGenerate,
-			RangeExtent.fromNumber(1200), // ticksPerGenerationAsRange
-			RangeExtent.fromNumber(1), // entitiesPerGenerationAsRange\
-			1, // entitiesGeneratedMax
-			null // entitySpeedAsRange
+			1200, // ticksPerGeneration
+			1, // entitiesPerGeneration
+			1, // entitiesGeneratedMaxConcurrent
+			null, // entitiesGeneratedMaxAllTime
+			null // boxToGenerateEntitiesWithin
 		);
 
 		var entityDefnGenerator = Entity.fromNameAndProperties

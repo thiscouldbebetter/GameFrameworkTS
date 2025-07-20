@@ -1423,10 +1423,11 @@ class PlaceBuilderDemo // Main.
         return itemFruitEntityDefn;
     }
     entityDefnBuildGenerator(entityDefnToGenerate) {
-        var generator = new EntityGenerator(entityDefnToGenerate, RangeExtent.fromNumber(1200), // ticksPerGenerationAsRange
-        RangeExtent.fromNumber(1), // entitiesPerGenerationAsRange\
-        1, // entitiesGeneratedMax
-        null // entitySpeedAsRange
+        var generator = EntityGenerator.fromEntityTicksBatchMaxesAndPosBox(entityDefnToGenerate, 1200, // ticksPerGeneration
+        1, // entitiesPerGeneration
+        1, // entitiesGeneratedMaxConcurrent
+        null, // entitiesGeneratedMaxAllTime
+        null // boxToGenerateEntitiesWithin
         );
         var entityDefnGenerator = Entity.fromNameAndProperties(entityDefnToGenerate.name + "Generator", [
             generator,

@@ -201,7 +201,7 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 			this.entitiesPerGenerationAsRange.clone(),
 			this.entitiesGeneratedMaxConcurrent,
 			this.entitiesGeneratedMaxAllTime,
-			this.entityPositionRangeAsBox.clone(),
+			this.entityPositionRangeAsBox == null ? null : this.entityPositionRangeAsBox.clone(),
 			this.entitySpeedAsRange.clone()
 		);
 	}
