@@ -915,7 +915,7 @@ class PlaceBuilderDemo_Movers
 			[
 				actor,
 				Animatable2.create(),
-				new Boundable(friendlyCollider.toBoxAxisAligned(null) ),
+				Boundable.fromBounds(friendlyCollider.toBoxAxisAligned(null) ),
 				constrainable,
 				collidable,
 				Drawable.fromVisual(friendlyVisual),
@@ -1216,7 +1216,7 @@ class PlaceBuilderDemo_Movers
 
 		var playerCollider = Sphere.fromRadius(playerHeadRadius);
 		var playerBounds = playerCollider.toBoxAxisAligned(null);
-		var boundable = new Boundable(playerBounds);
+		var boundable = Boundable.fromBounds(playerBounds);
 
 		var collidable =
 			this.entityDefnBuildPlayer_Collidable(playerCollider);

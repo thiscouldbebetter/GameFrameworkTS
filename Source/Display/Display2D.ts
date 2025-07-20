@@ -35,20 +35,21 @@ export class Display2D implements Display
 			sizesAvailable
 			||
 			[
-				new Coords(400, 300, 1),
-				new Coords(640, 480, 1),
-				new Coords(800, 600, 1),
-				new Coords(1200, 900, 1),
+				Coords.fromXYZ(400, 300, 1),
+				Coords.fromXYZ(640, 480, 1),
+				Coords.fromXYZ(800, 600, 1),
+				Coords.fromXYZ(1200, 900, 1),
 				// Wrap.
-				new Coords(200, 150, 1),
+				Coords.fromXYZ(200, 150, 1),
 			];
 		this._sizeDefault = this.sizesAvailable[0];
 		this.sizeInPixels = this._sizeDefault;
 		this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
 		this.fontNameAndHeight =
 			fontNameAndHeight || FontNameAndHeight.default();
-		this.colorFore = colorFore || Color.Instances().Gray;
-		this.colorBack = colorBack || Color.Instances().White;
+		var colors = Color.Instances();
+		this.colorFore = colorFore || colors.Gray;
+		this.colorBack = colorBack || colors.White;
 		this.isInvisible = isInvisible || false;
 
 		// Helper variables.
@@ -93,6 +94,17 @@ export class Display2D implements Display
 	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean): Display2D
 	{
 		return new Display2D([size], null, null, null, isInvisible);
+	}
+
+	static fromSizesFontAndColorsForeAndBack
+	(
+		sizesAvailable: Coords[],
+		fontNameAndHeight: FontNameAndHeight,
+		colorFore: Color,
+		colorBack: Color
+	): Display2D
+	{
+		return new Display2D(sizesAvailable, fontNameAndHeight, colorFore, colorBack, null);
 	}
 
 	// constants

@@ -58,6 +58,15 @@ var ThisCouldBeBetter;
                 worldCreator);
                 return universe;
             }
+            static fromNameTicksPerSecondMediaFilePathsAndWorldCreator(name, ticksPerSecond, mediaFilePaths, worldCreator) {
+                var version = _BuildRecord.version();
+                var timerHelper = GameFramework.TimerHelper.fromTicksPerSecond(20);
+                var display = GameFramework.Display2D.default();
+                var soundHelper = new GameFramework.SoundHelperLive();
+                var mediaLibrary = GameFramework.MediaLibrary.fromMediaFilePaths(mediaFilePaths);
+                var controlBuilder = GameFramework.ControlBuilder.default();
+                return new Universe(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator);
+            }
             static fromWorld(world) {
                 var universe = Universe.default();
                 universe.world = world;
@@ -87,6 +96,9 @@ var ThisCouldBeBetter;
                 var universe = this;
                 //this.mediaLibrary.shouldLoadAllItemsBeforehandSet(false); // todo
                 this.mediaLibrary.loadItemsBeforehandIfNecessary(() => callback(universe));
+            }
+            initializeAndStart() {
+                this.initialize(() => this.start());
             }
             profileSet(value) {
                 this.profile = value;

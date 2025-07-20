@@ -20,6 +20,9 @@ var ThisCouldBeBetter;
                 this.actionToInputsMappingsByInputName =
                     GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
             }
+            static fromVideoNameAndVenueNext(videoName, venueNext) {
+                return new VenueVideo(videoName, venueNext);
+            }
             draw() {
                 // do nothing
             }

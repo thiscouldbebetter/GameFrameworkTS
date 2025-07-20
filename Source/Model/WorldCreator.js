@@ -58,7 +58,7 @@ var ThisCouldBeBetter;
                     var worldCreator = universe.worldCreator;
                     return worldCreator.worldCreate(universe, worldCreator);
                 };
-                var venueTask = new GameFramework.VenueTask(venueMessage, worldGeneratePerform, (world) => // done
+                var venueTask = GameFramework.VenueTask.fromVenueInnerPerformAndDone(venueMessage, worldGeneratePerform, (world) => // done
                  {
                     universe.worldSet(world);
                     var venueNext = universe.world.toVenue();

@@ -457,7 +457,7 @@ class PlaceBuilderDemo_Emplacements
 		var obstacleCollider = BoxAxisAligned.fromSize(obstacleBarSize); // todo - Rotate.
 		var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
 		var obstacleBounds = obstacleCollider;
-		var obstacleBoundable = new Boundable(obstacleBounds);
+		var obstacleBoundable = Boundable.fromBounds(obstacleBounds);
 
 		var obstacleLoc = Disposition.fromPosAndOri
 		(
@@ -569,7 +569,7 @@ class PlaceBuilderDemo_Emplacements
 		(
 			obstacleCollider.loc.pos, obstacleMappedMap.size
 		);
-		var obstacleBoundable = new Boundable(obstacleBounds);
+		var obstacleBoundable = Boundable.fromBounds(obstacleBounds);
 
 		var obstacleMappedEntityDefn = Entity.fromNameAndProperties
 		(
@@ -796,7 +796,7 @@ class PlaceBuilderDemo_Emplacements
 			}
 		);
 
-		var boundable = new Boundable
+		var boundable = Boundable.fromBounds
 		(
 			BoxAxisAligned.fromSize
 			(

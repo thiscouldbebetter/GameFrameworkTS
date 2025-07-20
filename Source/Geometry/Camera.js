@@ -212,7 +212,7 @@ var ThisCouldBeBetter;
                 return entitiesToSort;
             }
             toEntityFollowingEntityWithName(targetEntityName) {
-                var boundable = new GameFramework.Boundable(this.viewCollider);
+                var boundable = GameFramework.Boundable.fromBounds(this.viewCollider);
                 var collidable = GameFramework.Collidable
                     .fromCollider(this.viewCollider)
                     .canCollideAgainWithoutSeparatingSet(true);

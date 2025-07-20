@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this.sizeToDrawHalf = this.sizeToDraw.clone().half();
                 this._posSaved = GameFramework.Coords.create();
             }
+            static fromSizeAndChild(size, child) {
+                return new VisualImageScaled(size, child);
+            }
             static manyFromSizeAndVisuals(sizeToDraw, visualsToScale) {
                 var returnValues = [];
                 for (var i = 0; i < visualsToScale.length; i++) {

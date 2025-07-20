@@ -19,6 +19,11 @@ export class VisualImageScaled implements VisualImage
 		this._posSaved = Coords.create();
 	}
 
+	static fromSizeAndChild(size: Coords, child: VisualImage): VisualImageScaled
+	{
+		return new VisualImageScaled(size, child);
+	}
+
 	static manyFromSizeAndVisuals
 	(
 		sizeToDraw: Coords, visualsToScale: VisualImage[]

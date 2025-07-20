@@ -77,6 +77,37 @@ export class ControlContainer extends ControlBase
 		);
 	}
 
+	static fromNamePosSizeChildrenAndActions
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		children: ControlBase[],
+		actions: Action[]
+	): ControlContainer
+	{
+		return new ControlContainer
+		(
+			name, pos, size, children, actions, null
+		);
+	}
+
+	static fromNamePosSizeChildrenActionsAndMappings
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		children: ControlBase[],
+		actions: Action[],
+		actionToInputsMappings: ActionToInputsMapping[]
+	): ControlContainer
+	{
+		return new ControlContainer
+		(
+			name, pos, size, children, actions, actionToInputsMappings
+		);
+	}
+
 	// instance methods
 
 	// actions

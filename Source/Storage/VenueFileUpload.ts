@@ -40,6 +40,11 @@ export class VenueFileUpload implements Venue
 			);
 	}
 
+	static create(): VenueFileUpload
+	{
+		return new VenueFileUpload(null, null);
+	}
+
 	// venue
 
 	draw(universe: Universe): void {}

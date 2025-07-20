@@ -41,6 +41,11 @@ export class VenueVideo implements Venue
 			);
 	}
 
+	static fromVideoNameAndVenueNext(videoName: string, venueNext: Venue): VenueVideo
+	{
+		return new VenueVideo(videoName, venueNext);
+	}
+
 	draw(): void
 	{
 		// do nothing

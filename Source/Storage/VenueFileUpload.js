@@ -19,6 +19,9 @@ var ThisCouldBeBetter;
                 this.actionToInputsMappingsByInputName =
                     GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
             }
+            static create() {
+                return new VenueFileUpload(null, null);
+            }
             // venue
             draw(universe) { }
             finalize(universe) {

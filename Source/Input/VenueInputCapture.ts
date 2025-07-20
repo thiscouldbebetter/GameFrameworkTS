@@ -21,6 +21,15 @@ export class VenueInputCapture implements Venue
 		this.isFirstTime = true;
 	}
 
+	static fromVenueToReturnToAndCapture
+	(
+		venueToReturnTo: Venue,
+		functionToPassInputCapturedTo: (inputCaptured: Input) => void
+	): VenueInputCapture
+	{
+		return new VenueInputCapture(venueToReturnTo, functionToPassInputCapturedTo);
+	}
+
 	draw(universe: Universe): void
 	{
 		// Do nothing.

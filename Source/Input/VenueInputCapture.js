@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.functionToPassInputCapturedTo = functionToPassInputCapturedTo;
                 this.isFirstTime = true;
             }
+            static fromVenueToReturnToAndCapture(venueToReturnTo, functionToPassInputCapturedTo) {
+                return new VenueInputCapture(venueToReturnTo, functionToPassInputCapturedTo);
+            }
             draw(universe) {
                 // Do nothing.
             }

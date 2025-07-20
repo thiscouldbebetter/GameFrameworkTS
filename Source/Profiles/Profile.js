@@ -416,88 +416,95 @@ var ThisCouldBeBetter;
                     storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
                 }
                 var profiles = profileNames.map(x => storageHelper.load(x));
-                var create = () => {
-                    var profile = Profile.blank();
-                    universe.profileSet(profile);
-                    var venueNext = Profile.toControlProfileNew(universe, null).toVenue();
-                    universe.venueTransitionTo(venueNext);
-                };
-                var select = () => {
-                    var venueControls = universe.venueCurrent();
-                    var controlRootAsContainer = venueControls.controlRoot;
-                    var listProfiles = controlRootAsContainer.childByName("listProfiles");
-                    var profileSelected = listProfiles.itemSelected();
-                    universe.profileSet(profileSelected);
-                    if (profileSelected != null) {
-                        var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent()).toVenue();
-                        universe.venueTransitionTo(venueNext);
-                    }
-                };
-                var deleteProfileConfirm = () => {
-                    var profileSelected = universe.profile;
-                    var storageHelper = universe.storageHelper;
-                    storageHelper.delete(profileSelected.name);
-                    var profileNames = storageHelper.load(Profile.StorageKeyProfileNames);
-                    GameFramework.ArrayHelper.remove(profileNames, profileSelected.name);
-                    storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
-                };
-                var deleteProfile = () => {
-                    var profileSelected = universe.profile;
-                    if (profileSelected != null) {
-                        var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Delete profile \""
-                            + profileSelected.name
-                            + "\"?", universe.venueCurrent(), deleteProfileConfirm, null // cancel
-                        );
-                        var venueNext = controlConfirm.toVenue();
-                        universe.venueTransitionTo(venueNext);
-                    }
-                };
+                var labelSelectAProfile = GameFramework.ControlLabel.fromPosSizeTextFontCentered(GameFramework.Coords.fromXY(30, 35), // pos
+                GameFramework.Coords.fromXY(140, 15), // size
+                GameFramework.DataBinding.fromContext("Select a Profile:"), fontNameAndHeight);
+                var listProfiles = new GameFramework.ControlList("listProfiles", GameFramework.Coords.fromXY(30, 50), // pos
+                GameFramework.Coords.fromXY(140, 40), // size
+                GameFramework.DataBinding.fromGet((c) => profiles), // items
+                GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemText
+                fontNameAndHeight, GameFramework.DataBinding.fromContextGetAndSet(universe, (c) => c.profile, (c, v) => c.profileSet(v)), // bindingForOptionSelected
+                GameFramework.DataBinding.fromGet((c) => c.name), // value
+                null, // bindingForIsEnabled
+                () => this.toControlProfileSelect_Select(universe), // confirm
+                null // widthInItems
+                );
+                var buttonNew = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(30, 95), // pos
+                GameFramework.Coords.fromXY(35, buttonHeightBase), // size
+                "New", fontNameAndHeight, () => this.toControlProfileSelect_Create(universe));
+                var buttonSelect = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(70, 95), // pos
+                GameFramework.Coords.fromXY(35, buttonHeightBase), // size
+                "Select", fontNameAndHeight, () => this.toControlProfileSelect_Select(universe)).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(universe, (c) => { return (c.profile != null); }));
+                var buttonSkip = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(110, 95), // pos
+                GameFramework.Coords.fromXY(35, buttonHeightBase), // size
+                "Skip", fontNameAndHeight, () => this.toControlProfileSelect_Skip(universe));
+                var buttonDelete = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(150, 95), // pos
+                GameFramework.Coords.fromXY(20, buttonHeightBase), // size
+                "X", fontNameAndHeight, () => this.toControlProfileSelect_DeleteProfile(universe, size) // click
+                ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(universe, (c) => { return (c.profile != null); }));
+                var buttonBack = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(sizeBase.x - 10 - 25, sizeBase.y - 10 - 20), // pos
+                GameFramework.Coords.fromXY(25, 20), // size
+                "Back", fontNameAndHeight, () => // click
+                 {
+                    universe.venueTransitionTo(venuePrev);
+                });
                 var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildren("containerProfileSelect", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
                 [
-                    GameFramework.ControlLabel.fromPosSizeTextFontCentered(GameFramework.Coords.fromXY(30, 35), // pos
-                    GameFramework.Coords.fromXY(140, 15), // size
-                    GameFramework.DataBinding.fromContext("Select a Profile:"), fontNameAndHeight),
-                    new GameFramework.ControlList("listProfiles", GameFramework.Coords.fromXY(30, 50), // pos
-                    GameFramework.Coords.fromXY(140, 40), // size
-                    GameFramework.DataBinding.fromGet((c) => profiles), // items
-                    GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemText
-                    fontNameAndHeight, new GameFramework.DataBinding(universe, (c) => c.profile, (c, v) => c.profileSet(v)), // bindingForOptionSelected
-                    GameFramework.DataBinding.fromGet((c) => c.name), // value
-                    null, // bindingForIsEnabled
-                    select, // confirm
-                    null // widthInItems
-                    ),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(30, 95), // pos
-                    GameFramework.Coords.fromXY(35, buttonHeightBase), // size
-                    "New", fontNameAndHeight, create // click
-                    ),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(70, 95), // pos
-                    GameFramework.Coords.fromXY(35, buttonHeightBase), // size
-                    "Select", fontNameAndHeight, select // click
-                    ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(universe, (c) => { return (c.profile != null); })),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(110, 95), // pos
-                    GameFramework.Coords.fromXY(35, buttonHeightBase), // size
-                    "Skip", fontNameAndHeight, () => {
-                        var profile = Profile.anonymous();
-                        universe.profileSet(profile);
-                        var venueNext = universe.worldCreator.toVenue(universe);
-                        universe.venueTransitionTo(venueNext);
-                    }),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(150, 95), // pos
-                    GameFramework.Coords.fromXY(20, buttonHeightBase), // size
-                    "X", fontNameAndHeight, deleteProfile // click
-                    ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(universe, (c) => { return (c.profile != null); })),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(sizeBase.x - 10 - 25, sizeBase.y - 10 - 20), // pos
-                    GameFramework.Coords.fromXY(25, 20), // size
-                    "Back", fontNameAndHeight, () => // click
-                     {
-                        universe.venueTransitionTo(venuePrev);
-                    }),
+                    labelSelectAProfile,
+                    listProfiles,
+                    buttonNew,
+                    buttonSelect,
+                    buttonSkip,
+                    buttonDelete,
+                    buttonBack
                 ]);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
+            }
+            static toControlProfileSelect_Create(universe) {
+                var profile = Profile.blank();
+                universe.profileSet(profile);
+                var venueNext = Profile.toControlProfileNew(universe, null).toVenue();
+                universe.venueTransitionTo(venueNext);
+            }
+            static toControlProfileSelect_DeleteProfile(universe, size) {
+                var profileSelected = universe.profile;
+                if (profileSelected != null) {
+                    var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue(universe, size, "Delete profile \""
+                        + profileSelected.name
+                        + "\"?", universe.venueCurrent(), () => this.toControlProfileSelect_DeleteProfile_Confirm(universe), null // cancel
+                    );
+                    var venueNext = controlConfirm.toVenue();
+                    universe.venueTransitionTo(venueNext);
+                }
+            }
+            ;
+            static toControlProfileSelect_DeleteProfile_Confirm(universe) {
+                var profileSelected = universe.profile;
+                var storageHelper = universe.storageHelper;
+                storageHelper.delete(profileSelected.name);
+                var profileNames = storageHelper.load(Profile.StorageKeyProfileNames);
+                GameFramework.ArrayHelper.remove(profileNames, profileSelected.name);
+                storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
+            }
+            static toControlProfileSelect_Select(universe) {
+                var venueControls = universe.venueCurrent();
+                var controlRootAsContainer = venueControls.controlRoot;
+                var listProfiles = controlRootAsContainer.childByName("listProfiles");
+                var profileSelected = listProfiles.itemSelected();
+                universe.profileSet(profileSelected);
+                if (profileSelected != null) {
+                    var venueNext = Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent()).toVenue();
+                    universe.venueTransitionTo(venueNext);
+                }
+            }
+            static toControlProfileSelect_Skip(universe) {
+                var profile = Profile.anonymous();
+                universe.profileSet(profile);
+                var venueNext = universe.worldCreator.toVenue(universe);
+                universe.venueTransitionTo(venueNext);
             }
         }
         Profile.StorageKeyProfileNames = "ProfileNames";

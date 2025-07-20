@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this.done = done;
                 this.timeStarted = null;
             }
+            static fromVenueInnerPerformAndDone(venueInner, perform, done) {
+                return new VenueTask(venueInner, perform, done);
+            }
             secondsSinceStarted() {
                 var returnValue = 0;
                 if (this.timeStarted != null) {

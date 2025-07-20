@@ -1019,7 +1019,7 @@ class PlaceBuilderDemo // Main.
             .create()
             .containPoints(path.points);
         box.center = itemArmorCollider.center;
-        var boundable = new Boundable(box);
+        var boundable = Boundable.fromBounds(box);
         var itemArmorEntityDefn = Entity.fromNameAndProperties(itemDefnArmorName, [
             new Armor(.5),
             boundable,
@@ -1039,7 +1039,7 @@ class PlaceBuilderDemo // Main.
         var itemArrowCollider = Sphere.fromRadius(entityDimensionHalf);
         var collidable = Collidable.fromCollider(itemArrowCollider);
         var bounds = BoxAxisAligned.fromCenterAndSize(itemArrowCollider.center, arrowSize);
-        var boundable = new Boundable(bounds);
+        var boundable = Boundable.fromBounds(bounds);
         var roundsPerPile = 5;
         var itemArrowEntityDefn = Entity.fromNameAndProperties(itemDefnArrowName, [
             boundable,

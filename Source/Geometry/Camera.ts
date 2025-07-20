@@ -429,7 +429,7 @@ export class Camera implements EntityProperty<Camera>
 	): Entity
 	{
 		var boundable =
-			new Boundable(this.viewCollider);
+			Boundable.fromBounds(this.viewCollider);
 
 		var collidable =
 			Collidable

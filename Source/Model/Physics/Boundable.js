@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this._boundsAtRest = this.bounds.clone();
                 this._transformLocate = GameFramework.Transform_Locate.create();
             }
+            static fromBounds(bounds) {
+                return new Boundable(bounds);
+            }
             static fromCollidable(collidable) {
                 var collider = collidable.collider;
                 var colliderAsBox = collider.toBoxAxisAligned(GameFramework.BoxAxisAligned.create());

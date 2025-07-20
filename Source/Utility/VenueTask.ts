@@ -24,6 +24,16 @@ export class VenueTask<TResult> implements Venue
 		this.timeStarted = null;
 	}
 
+	static fromVenueInnerPerformAndDone<TResult>
+	(
+		venueInner: Venue,
+		perform: () => TResult,
+		done: (result: TResult) => void
+	): VenueTask<TResult>
+	{
+		return new VenueTask(venueInner, perform, done);
+	}
+
 	secondsSinceStarted()
 	{
 		var returnValue = 0

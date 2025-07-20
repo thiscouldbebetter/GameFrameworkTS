@@ -146,6 +146,34 @@ export class Universe
 		return universe;
 	}
 
+	static fromNameTicksPerSecondMediaFilePathsAndWorldCreator
+	(
+		name: string,
+		ticksPerSecond: number,
+		mediaFilePaths: string[],
+		worldCreator: WorldCreator
+	)
+	{
+		var version = _BuildRecord.version();
+		var timerHelper = TimerHelper.fromTicksPerSecond(20);
+		var display = Display2D.default();
+		var soundHelper = new SoundHelperLive();
+		var mediaLibrary = MediaLibrary.fromMediaFilePaths(mediaFilePaths);
+		var controlBuilder = ControlBuilder.default();
+
+		return new Universe
+		(
+			name,
+			version,
+			timerHelper,
+			display,
+			soundHelper,
+			mediaLibrary,
+			controlBuilder,
+			worldCreator
+		);
+	}
+
 	static fromWorld(world: World)
 	{
 		var universe = Universe.default();
@@ -202,6 +230,14 @@ export class Universe
 		this.mediaLibrary.loadItemsBeforehandIfNecessary
 		(
 			() => callback(universe)
+		);
+	}
+
+	initializeAndStart(): void
+	{
+		this.initialize
+		(
+			() => this.start()
 		);
 	}
 

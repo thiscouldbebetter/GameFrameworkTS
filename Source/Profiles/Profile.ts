@@ -974,67 +974,105 @@ export class Profile
 		var profiles =
 			profileNames.map(x => storageHelper.load<Profile>(x));
 
-		var create = () =>
-		{
-			var profile = Profile.blank();
-			universe.profileSet(profile);
-			var venueNext = Profile.toControlProfileNew(universe, null).toVenue();
-			universe.venueTransitionTo(venueNext);
-		};
+		var labelSelectAProfile = ControlLabel.fromPosSizeTextFontCentered
+		(
+			Coords.fromXY(30, 35), // pos
+			Coords.fromXY(140, 15), // size
+			DataBinding.fromContext("Select a Profile:"),
+			fontNameAndHeight
+		);
 
-		var select = () =>
-		{
-			var venueControls =
-				universe.venueCurrent() as VenueControls;
-			var controlRootAsContainer =
-				venueControls.controlRoot as ControlContainer;
-			var listProfiles =
-				controlRootAsContainer.childByName("listProfiles") as ControlList<Universe, Profile, string>;
-			var profileSelected = listProfiles.itemSelected();
-			universe.profileSet(profileSelected);
-			if (profileSelected != null)
+		var listProfiles = new ControlList<Universe, Profile, string>
+		(
+			"listProfiles",
+			Coords.fromXY(30, 50), // pos
+			Coords.fromXY(140, 40), // size
+			DataBinding.fromGet
+			(
+				(c: Universe) => profiles
+			), // items
+			DataBinding.fromGet
+			(
+				(c: Profile) => c.name
+			), // bindingForItemText
+			fontNameAndHeight,
+			DataBinding.fromContextGetAndSet
+			(
+				universe,
+				(c: Universe) => c.profile,
+				(c: Universe, v: Profile) => c.profileSet(v)
+			), // bindingForOptionSelected
+			DataBinding.fromGet( (c: Profile) => c.name ), // value
+			null, // bindingForIsEnabled
+			() => this.toControlProfileSelect_Select(universe), // confirm
+			null // widthInItems
+		);
+
+		var buttonNew = ControlButton.fromPosSizeTextFontClick
+		(
+			Coords.fromXY(30, 95), // pos
+			Coords.fromXY(35, buttonHeightBase), // size
+			"New",
+			fontNameAndHeight,
+			() => this.toControlProfileSelect_Create(universe)
+		);
+
+		var buttonSelect = ControlButton.fromPosSizeTextFontClick<Universe>
+		(
+			Coords.fromXY(70, 95), // pos
+			Coords.fromXY(35, buttonHeightBase), // size
+			"Select",
+			fontNameAndHeight,
+			() => this.toControlProfileSelect_Select(universe)
+		).isEnabledSet
+		(
+			DataBinding.fromContextAndGet
+			(
+				universe,
+				(c: Universe) => { return (c.profile != null); }
+			)
+		);
+
+		var buttonSkip = ControlButton.fromPosSizeTextFontClick
+		(
+			Coords.fromXY(110, 95), // pos
+			Coords.fromXY(35, buttonHeightBase), // size
+			"Skip",
+			fontNameAndHeight,
+			() => this.toControlProfileSelect_Skip(universe)
+		);
+
+		var buttonDelete = ControlButton.fromPosSizeTextFontClick<Universe>
+		(
+			Coords.fromXY(150, 95), // pos
+			Coords.fromXY(20, buttonHeightBase), // size
+			"X",
+			fontNameAndHeight,
+			() => this.toControlProfileSelect_DeleteProfile(universe, size) // click
+		).isEnabledSet
+		(
+			DataBinding.fromContextAndGet
+			(
+				universe,
+				(c: Universe) => { return (c.profile != null); }
+			)
+		);
+
+		var buttonBack = ControlButton.fromPosSizeTextFontClick
+		(
+			Coords.fromXY
+			(
+				sizeBase.x - 10 - 25,
+				sizeBase.y - 10 - 20
+			), // pos
+			Coords.fromXY(25, 20), // size
+			"Back",
+			fontNameAndHeight,
+			() => // click
 			{
-				var venueNext = Profile.toControlSaveStateLoad
-				(
-					universe, null, universe.venueCurrent()
-				).toVenue();
-				universe.venueTransitionTo(venueNext);
+				universe.venueTransitionTo(venuePrev);
 			}
-		};
-
-		var deleteProfileConfirm = () =>
-		{
-			var profileSelected = universe.profile;
-
-			var storageHelper = universe.storageHelper;
-			storageHelper.delete(profileSelected.name);
-			var profileNames =
-				storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
-			ArrayHelper.remove(profileNames, profileSelected.name);
-			storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
-		};
-
-		var deleteProfile = () =>
-		{
-			var profileSelected = universe.profile;
-			if (profileSelected != null)
-			{
-				var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
-				(
-					universe,
-					size,
-					"Delete profile \""
-						+ profileSelected.name
-						+ "\"?",
-					universe.venueCurrent(),
-					deleteProfileConfirm,
-					null // cancel
-				);
-
-				var venueNext = controlConfirm.toVenue();
-				universe.venueTransitionTo(venueNext);
-			}
-		};
+		);
 
 		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
@@ -1043,111 +1081,13 @@ export class Profile
 			sizeBase.clone(), // size
 			// children
 			[
-				ControlLabel.fromPosSizeTextFontCentered
-				(
-					Coords.fromXY(30, 35), // pos
-					Coords.fromXY(140, 15), // size
-					DataBinding.fromContext("Select a Profile:"),
-					fontNameAndHeight
-				),
-
-				new ControlList<Universe, Profile, string>
-				(
-					"listProfiles",
-					Coords.fromXY(30, 50), // pos
-					Coords.fromXY(140, 40), // size
-					DataBinding.fromGet
-					(
-						(c: Universe) => profiles
-					), // items
-					DataBinding.fromGet
-					(
-						(c: Profile) => c.name
-					), // bindingForItemText
-					fontNameAndHeight,
-					new DataBinding
-					(
-						universe,
-						(c: Universe) => c.profile,
-						(c: Universe, v: Profile) => c.profileSet(v)
-					), // bindingForOptionSelected
-					DataBinding.fromGet( (c: Profile) => c.name ), // value
-					null, // bindingForIsEnabled
-					select, // confirm
-					null // widthInItems
-				),
-
-				ControlButton.fromPosSizeTextFontClick
-				(
-					Coords.fromXY(30, 95), // pos
-					Coords.fromXY(35, buttonHeightBase), // size
-					"New",
-					fontNameAndHeight,
-					create // click
-				),
-
-				ControlButton.fromPosSizeTextFontClick<Universe>
-				(
-					Coords.fromXY(70, 95), // pos
-					Coords.fromXY(35, buttonHeightBase), // size
-					"Select",
-					fontNameAndHeight,
-					select // click
-				).isEnabledSet
-				(
-					DataBinding.fromContextAndGet
-					(
-						universe,
-						(c: Universe) => { return (c.profile != null); }
-					)
-				),
-
-				ControlButton.fromPosSizeTextFontClick
-				(
-					Coords.fromXY(110, 95), // pos
-					Coords.fromXY(35, buttonHeightBase), // size
-					"Skip",
-					fontNameAndHeight,
-					() =>
-					{
-						var profile = Profile.anonymous();
-						universe.profileSet(profile);
-						var venueNext = universe.worldCreator.toVenue(universe);
-						universe.venueTransitionTo(venueNext)
-					}
-				),
-
-				ControlButton.fromPosSizeTextFontClick<Universe>
-				(
-					Coords.fromXY(150, 95), // pos
-					Coords.fromXY(20, buttonHeightBase), // size
-					"X",
-					fontNameAndHeight,
-					deleteProfile // click
-				).isEnabledSet
-				(
-					DataBinding.fromContextAndGet
-					(
-						universe,
-						(c: Universe) => { return (c.profile != null); }
-					),
-				),
-
-				ControlButton.fromPosSizeTextFontClick
-				(
-					Coords.fromXY
-					(
-						sizeBase.x - 10 - 25,
-						sizeBase.y - 10 - 20
-					), // pos
-					Coords.fromXY(25, 20), // size
-					"Back",
-					fontNameAndHeight,
-					() => // click
-					{
-						universe.venueTransitionTo(venuePrev);
-					}
-				),
+				labelSelectAProfile,
+				listProfiles,
+				buttonNew,
+				buttonSelect,
+				buttonSkip,
+				buttonDelete,
+				buttonBack
 			]
 		);
 
@@ -1155,6 +1095,77 @@ export class Profile
 
 		return returnValue;
 	}
+
+	static toControlProfileSelect_Create(universe: Universe): void
+	{
+		var profile = Profile.blank();
+		universe.profileSet(profile);
+		var venueNext = Profile.toControlProfileNew(universe, null).toVenue();
+		universe.venueTransitionTo(venueNext);
+	}
+
+	static toControlProfileSelect_DeleteProfile(universe: Universe, size: Coords): void
+	{
+		var profileSelected = universe.profile;
+		if (profileSelected != null)
+		{
+			var controlConfirm = universe.controlBuilder.confirmAndReturnToVenue
+			(
+				universe,
+				size,
+				"Delete profile \""
+					+ profileSelected.name
+					+ "\"?",
+				universe.venueCurrent(),
+				() => this.toControlProfileSelect_DeleteProfile_Confirm(universe),
+				null // cancel
+			);
+
+			var venueNext = controlConfirm.toVenue();
+			universe.venueTransitionTo(venueNext);
+		}
+	};
+
+	static toControlProfileSelect_DeleteProfile_Confirm(universe: Universe): void
+	{
+		var profileSelected = universe.profile;
+
+		var storageHelper = universe.storageHelper;
+		storageHelper.delete(profileSelected.name);
+		var profileNames =
+			storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
+		ArrayHelper.remove(profileNames, profileSelected.name);
+		storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
+	}
+
+	static toControlProfileSelect_Select(universe: Universe): void
+	{
+		var venueControls =
+			universe.venueCurrent() as VenueControls;
+		var controlRootAsContainer =
+			venueControls.controlRoot as ControlContainer;
+		var listProfiles =
+			controlRootAsContainer.childByName("listProfiles") as ControlList<Universe, Profile, string>;
+		var profileSelected = listProfiles.itemSelected();
+		universe.profileSet(profileSelected);
+		if (profileSelected != null)
+		{
+			var venueNext = Profile.toControlSaveStateLoad
+			(
+				universe, null, universe.venueCurrent()
+			).toVenue();
+			universe.venueTransitionTo(venueNext);
+		}
+	}
+
+	static toControlProfileSelect_Skip(universe: Universe): void
+	{
+		var profile = Profile.anonymous();
+		universe.profileSet(profile);
+		var venueNext = universe.worldCreator.toVenue(universe);
+		universe.venueTransitionTo(venueNext)
+	}
+
 }
 
 }

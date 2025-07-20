@@ -9,20 +9,21 @@ var ThisCouldBeBetter;
                     sizesAvailable
                         ||
                             [
-                                new GameFramework.Coords(400, 300, 1),
-                                new GameFramework.Coords(640, 480, 1),
-                                new GameFramework.Coords(800, 600, 1),
-                                new GameFramework.Coords(1200, 900, 1),
+                                GameFramework.Coords.fromXYZ(400, 300, 1),
+                                GameFramework.Coords.fromXYZ(640, 480, 1),
+                                GameFramework.Coords.fromXYZ(800, 600, 1),
+                                GameFramework.Coords.fromXYZ(1200, 900, 1),
                                 // Wrap.
-                                new GameFramework.Coords(200, 150, 1),
+                                GameFramework.Coords.fromXYZ(200, 150, 1),
                             ];
                 this._sizeDefault = this.sizesAvailable[0];
                 this.sizeInPixels = this._sizeDefault;
                 this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
                 this.fontNameAndHeight =
                     fontNameAndHeight || GameFramework.FontNameAndHeight.default();
-                this.colorFore = colorFore || GameFramework.Color.Instances().Gray;
-                this.colorBack = colorBack || GameFramework.Color.Instances().White;
+                var colors = GameFramework.Color.Instances();
+                this.colorFore = colorFore || colors.Gray;
+                this.colorBack = colorBack || colors.White;
                 this.isInvisible = isInvisible || false;
                 // Helper variables.
                 this._curveControlPos = GameFramework.Coords.create();
@@ -50,6 +51,9 @@ var ThisCouldBeBetter;
             }
             static fromSizeAndIsInvisible(size, isInvisible) {
                 return new Display2D([size], null, null, null, isInvisible);
+            }
+            static fromSizesFontAndColorsForeAndBack(sizesAvailable, fontNameAndHeight, colorFore, colorBack) {
+                return new Display2D(sizesAvailable, fontNameAndHeight, colorFore, colorBack, null);
             }
             // Methods.
             toComponentArrayRGBA() {

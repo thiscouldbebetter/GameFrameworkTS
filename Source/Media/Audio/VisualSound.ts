@@ -27,6 +27,11 @@ export class VisualSound implements Visual<VisualSound>
 		return new VisualSound(soundName, false); // isMusic
 	}
 
+	static fromSoundNameAndRepeat(soundName: string, repeat: boolean): VisualSound
+	{
+		return new VisualSound(soundName, repeat);
+	}
+
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void

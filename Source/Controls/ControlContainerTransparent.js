@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 super(containerInner.name, containerInner.pos, containerInner.size, containerInner.fontNameAndHeight);
                 this.containerInner = containerInner;
             }
+            static fromContainer(containerInner) {
+                return new ControlContainerTransparent(containerInner);
+            }
             // instance methods
             actionHandle(actionNameToHandle, universe) {
                 return this.containerInner.actionHandle(actionNameToHandle, universe);

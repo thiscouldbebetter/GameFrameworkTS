@@ -4,31 +4,12 @@ class GameDemo {
         this.contentDirectoryPath = contentDirectoryPath;
     }
     main() {
-        // It may be necessary to clear local storage to prevent errors on
-        // deserialization of existing saved items after the schema changes.
-        // localStorage.clear();
+        var ticksPerSecond = 20;
         var mediaFilePaths = this.mediaFilePathsBuild();
-        var mediaLibrary = MediaLibrary.fromMediaFilePaths(mediaFilePaths);
-        var displaySizesAvailable = [
-            new Coords(400, 300, 1),
-            new Coords(640, 480, 1),
-            new Coords(800, 600, 1),
-            new Coords(1200, 900, 1),
-            // Wrap.
-            new Coords(200, 150, 1),
-        ];
-        var colors = Color.Instances();
-        var display = new Display2D(displaySizesAvailable, new FontNameAndHeight("Font", 10), colors.Gray, colors.White, // colorFore, colorBack
-        null);
-        var timerHelper = new TimerHelper(20);
-        var controlBuilder = ControlBuilder.fromStyles([
-            ControlStyle.Instances().Rounded,
-            ControlStyle.Instances().Dark
-        ]);
-        var version = _BuildRecord.version();
-        var universe = Universe.create("Game Framework Demo Game", version, timerHelper, display, null, // soundHelper
-        mediaLibrary, controlBuilder, WorldCreator.fromWorldCreate(WorldDemo.create));
-        universe.initialize(() => universe.start());
+        var worldCreator = WorldCreator.fromWorldCreate(WorldDemo.create);
+        var universe = Universe.fromNameTicksPerSecondMediaFilePathsAndWorldCreator("Game Framework Demo Game", ticksPerSecond, mediaFilePaths, worldCreator);
+        universe.controlBuilder.profileMenusAreIncludedSet(false);
+        universe.initializeAndStart();
     }
     mediaFilePathsBuild() {
         var contentDirectoryPath = this.contentDirectoryPath;
@@ -59,7 +40,6 @@ class GameDemo {
             videoDirectoryPath + "Movie.webm",
             fontDirectoryPath + "Font.ttf",
             textStringDirectoryPath + "Conversation.json",
-            // textStringDirectoryPath + "Conversation.json.txtpng", // Turns out text read from images is subject to CORS too.
             textStringDirectoryPath + "Conversation_psv.txt",
             textStringDirectoryPath + "Instructions.txt",
         ];

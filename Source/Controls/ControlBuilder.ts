@@ -5,14 +5,15 @@ namespace ThisCouldBeBetter.GameFramework
 export class ControlBuilder
 {
 	styles: ControlStyle[];
-	stylesByName: Map<string, ControlStyle>;
 	venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue;
+	profileMenusAreIncluded: boolean;
 
 	buttonHeightBase: number;
 	buttonHeightSmallBase: number;
 	fontBase: FontNameAndHeight;
 	fontHeightInPixelsBase: number;
 	sizeBase: Coords;
+	stylesByName: Map<string, ControlStyle>;
 
 	_zeroes: Coords;
 	_scaleMultiplier: Coords;
@@ -20,12 +21,14 @@ export class ControlBuilder
 	constructor
 	(
 		styles: Array<ControlStyle>,
-		venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue
+		venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue,
+		profileMenusAreIncluded: boolean
 	)
 	{
 		this.styles = styles || ControlStyle.Instances()._All;
 		this.venueTransitionalFromTo =
 			venueTransitionalFromTo || this.venueFaderFromTo;
+		this.profileMenusAreIncluded = profileMenusAreIncluded || false;
 
 		this.stylesByName = ArrayHelper.addLookupsByName(this.styles);
 
@@ -33,7 +36,7 @@ export class ControlBuilder
 		this.fontHeightInPixelsBase = this.fontBase.heightInPixels;
 		this.buttonHeightBase = this.fontHeightInPixelsBase * 2;
 		this.buttonHeightSmallBase = this.fontHeightInPixelsBase * 1.5;
-		this.sizeBase = new Coords(200, 150, 1);
+		this.sizeBase = Coords.fromXYZ(200, 150, 1);
 
 		// Helper variables.
 
@@ -43,7 +46,7 @@ export class ControlBuilder
 
 	static default(): ControlBuilder
 	{
-		return new ControlBuilder(null, null);
+		return new ControlBuilder(null, null, true);
 	}
 
 	static fromStyle(style: ControlStyle): ControlBuilder
@@ -53,7 +56,13 @@ export class ControlBuilder
 
 	static fromStyles(styles: ControlStyle[]): ControlBuilder
 	{
-		return new ControlBuilder( styles, null);
+		return new ControlBuilder( styles, null, true);
+	}
+
+	profileMenusAreIncludedSet(value: boolean): ControlBuilder
+	{
+		this.profileMenusAreIncluded = value;
+		return this;
 	}
 
 	styleByName(styleName: string): ControlStyle
@@ -172,19 +181,18 @@ export class ControlBuilder
 			var controlActionNames = ControlActionNames.Instances();
 			actions =
 			[
-				new Action( controlActionNames.ControlCancel, acknowledge ),
-				new Action( controlActionNames.ControlConfirm, acknowledge ),
+				Action.fromNameAndPerform(controlActionNames.ControlCancel, acknowledge),
+				Action.fromNameAndPerform(controlActionNames.ControlConfirm, acknowledge),
 			];
 		}
 
-		var controlContainer = new ControlContainer
+		var controlContainer = ControlContainer.fromNamePosSizeChildrenAndActions
 		(
 			"containerChoice",
 			containerPosScaled,
 			containerSizeScaled,
 			childControls,
-			actions,
-			null //?
+			actions
 		);
 
 		controlContainer.scalePosAndSize(scaleMultiplier);
@@ -193,7 +201,7 @@ export class ControlBuilder
 
 		if (showMessageOnly)
 		{
-			returnValue = new ControlContainerTransparent(controlContainer);
+			returnValue = ControlContainerTransparent.fromContainer(controlContainer);
 		}
 		else
 		{
@@ -254,16 +262,12 @@ export class ControlBuilder
 			font
 		);
 
-		var listOptions = ControlList.fromNamePosSizeItemsTextFontSelectedValue
+		var listOptions = ControlList.fromPosSizeItemsAndBindingForItemText
 		(
-			"listOptions",
 			Coords.fromXY(marginSize.x, labelSize.y + marginSize.y * 2),
 			listSize,
 			options,
-			bindingForOptionText,
-			font,
-			null, // bindingForItemSelected
-			null // bindingForItemValue
+			bindingForOptionText
 		);
 
 		var buttonChoose = ControlButton.fromPosSizeTextFontClick
@@ -272,14 +276,7 @@ export class ControlBuilder
 			buttonSize,
 			buttonSelectText,
 			font,
-			() => // click
-			{
-				var itemSelected = listOptions.itemSelected();
-				if (itemSelected != null)
-				{
-					select(universe, itemSelected);
-				}
-			}
+			() => this.choiceList_Choose(universe, listOptions, select)
 		);
 
 		var returnValue = ControlContainer.fromNamePosSizeChildren
@@ -295,6 +292,20 @@ export class ControlBuilder
 		);
 
 		return returnValue;
+	}
+
+	choiceList_Choose<TContext, TItem, TValue>
+	(
+		universe: Universe,
+		listOptions: ControlList<TContext,TItem,TValue>,
+		select: (u: Universe, itemSelected: TItem) => void
+	): void
+	{
+		var itemSelected = listOptions.itemSelected();
+		if (itemSelected != null)
+		{
+			select(universe, itemSelected);
+		}
 	}
 
 	confirm
@@ -326,7 +337,7 @@ export class ControlBuilder
 			cancel = () => universe.venuePrevJumpTo();
 		}
 
-		return this.choice
+		var returnValue = this.choice
 		(
 			universe,
 			size,
@@ -337,12 +348,18 @@ export class ControlBuilder
 			null, // fontHeight
 			null // buttonPosY
 		);
+
+		return returnValue;
 	}
 
 	confirmAndReturnToVenue
 	(
-		universe: Universe, size: Coords, message: string,
-		venuePrev: Venue, confirm: () => void, cancel: () => void
+		universe: Universe,
+		size: Coords,
+		message: string,
+		venuePrev: Venue,
+		confirm: () => void,
+		cancel: () => void
 	): ControlBase
 	{
 		var confirmThenReturnToVenuePrev = () =>
@@ -454,7 +471,7 @@ export class ControlBuilder
 			back // click
 		);
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"containerStorage",
 			this._zeroes, // pos
@@ -468,9 +485,9 @@ export class ControlBuilder
 				buttonBack
 			],
 
-			[ new Action("Back", back) ],
+			[ Action.fromNameAndPerform("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ "Escape" ], true ) ],
+			[ new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true ) ],
 
 		);
 
@@ -499,18 +516,14 @@ export class ControlBuilder
 
 		var venueCurrent = universe.venueCurrent();
 
-		var venueToReturnTo = universe.venueCurrent();
-
-		var venueNext = new VenueMessage
+		var venueNext = VenueMessage.fromTextAcknowledgeAndSize
 		(
-			DataBinding.fromContext(aboutText),
+			aboutText,
 			() => // acknowledge
 			{
 				universe.venueTransitionTo(venueCurrent);
 			},
-			venueToReturnTo,
-			size,
-			false
+			size
 		);
 		universe.venueTransitionTo(venueNext);
 	}
@@ -531,30 +544,30 @@ export class ControlBuilder
 
 	game_Quit(universe: Universe, size: Coords, venueToReturnTo: Venue): void
 	{
-		var confirm = () =>
-		{
-			universe.reset();
-			var venueNext =
-				universe.controlBuilder.title(universe, null).toVenue();
-			universe.venueTransitionTo(venueNext);
-		};
-
-		var cancel = () =>
-		{
-			var venueNext = venueToReturnTo;
-			universe.venueTransitionTo(venueNext);
-		};
-
 		var controlConfirm = universe.controlBuilder.confirm
 		(
 			universe,
 			size,
 			"Are you sure you want to quit?",
-			confirm,
-			cancel
+			() => this.game_Quit_Confirm(universe),
+			() => this.game_Quit_Cancel(universe, venueToReturnTo)
 		);
 
 		var venueNext: Venue = controlConfirm.toVenue();
+		universe.venueTransitionTo(venueNext);
+	}
+
+	game_Quit_Cancel(universe: Universe, venueToReturnTo: Venue): void
+	{
+		var venueNext = venueToReturnTo;
+		universe.venueTransitionTo(venueNext);
+	};
+
+	game_Quit_Confirm(universe: Universe): void
+	{
+		universe.reset();
+		var venueNext =
+			universe.controlBuilder.title(universe, null).toVenue();
 		universe.venueTransitionTo(venueNext);
 	}
 
@@ -632,18 +645,18 @@ export class ControlBuilder
 			() => this.gameAndSettings_Settings(universe)
 		);
 
-		var returnValue = new ControlContainer
+		var children =
+		[
+			buttonGame,
+			buttonSettings
+		];
+
+		var returnValue = ControlContainer.fromNamePosSizeChildren
 		(
 			"Game",
 			this._zeroes.clone(), // pos
 			this.sizeBase.clone(),
-			// children
-			[
-				buttonGame,
-				buttonSettings
-			],
-			[], // actions
-			[] // mappings
+			children
 		);
 
 		if (includeResumeButton)
@@ -661,7 +674,7 @@ export class ControlBuilder
 
 			returnValue.actions.push
 			(
-				new Action
+				Action.fromNameAndPerform
 				(
 					"Back",
 					() => this.gameAndSettings_Back(universe, venuePrev)
@@ -670,7 +683,7 @@ export class ControlBuilder
 
 			returnValue._actionToInputsMappings.push
 			(
-				new ActionToInputsMapping( "Back", [ "Escape" ], true )
+				new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true )
 			);
 		}
 
@@ -700,8 +713,7 @@ export class ControlBuilder
 			universe, null, universe.venueCurrent()
 		).toVenue();
 		universe.venueTransitionTo(venueNext);
-	};
-
+	}
 
 	inputs(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
@@ -743,7 +755,7 @@ export class ControlBuilder
 				(c: ActionToInputsMapping) => c.actionName
 			), // bindingForItemText
 			font,
-			new DataBinding
+			DataBinding.fromContextGetAndSet
 			(
 				placeDefn,
 				(c: PlaceDefn) => c.actionToInputsMappingSelected,
@@ -896,7 +908,7 @@ export class ControlBuilder
 		var mappingSelected = placeDefn.actionToInputsMappingSelected;
 		if (mappingSelected != null)
 		{
-			var venueInputCapture = new VenueInputCapture
+			var venueInputCapture = VenueInputCapture.fromVenueToReturnToAndCapture
 			(
 				universe.venueCurrent(),
 				(inputCaptured: Input) =>
@@ -982,7 +994,7 @@ export class ControlBuilder
 			optionFunctions.push(acknowledge);
 		}
 
-		return this.choice
+		var returnValue = this.choice
 		(
 			universe,
 			size,
@@ -993,6 +1005,8 @@ export class ControlBuilder
 			fontNameAndHeight,
 			null // buttonPosY
 		);
+
+		return returnValue;
 	}
 
 	message4
@@ -1018,14 +1032,6 @@ export class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var goToVenueNext = () =>
-		{
-			universe.soundHelper.soundsAllStop(universe);
-
-			var venueNext = this.producer(universe, size).toVenue();
-			universe.venueTransitionTo(venueNext);
-		};
-
 		var visual: VisualBase = VisualGroup.fromChildren
 		([
 			new VisualImageScaled
@@ -1039,14 +1045,15 @@ export class ControlBuilder
 
 		var controlActionNames = ControlActionNames.Instances();
 
-		var imageOpening = new ControlVisual
+		var imageOpening = ControlVisual.fromNamePosSizeVisual
 		(
 			"imageOpening",
 			this._zeroes.clone(),
 			this.sizeBase.clone(), // size
-			DataBinding.fromContext(visual),
-			null, null // colors
+			DataBinding.fromContext(visual)
 		);
+
+		var goToVenueNext = () => this.opening_GoToVenueNext(universe, size);
 
 		var buttonNext = ControlButton.fromPosSizeTextFontClick
 		(
@@ -1059,11 +1066,11 @@ export class ControlBuilder
 
 		var actions =
 		[
-			new Action( controlActionNames.ControlCancel, goToVenueNext ),
-			new Action( controlActionNames.ControlConfirm, goToVenueNext )
+			Action.fromNameAndPerform(controlActionNames.ControlCancel, goToVenueNext),
+			Action.fromNameAndPerform(controlActionNames.ControlConfirm, goToVenueNext)
 		];
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenAndActions
 		(
 			"containerOpening",
 			this._zeroes, // pos
@@ -1073,15 +1080,20 @@ export class ControlBuilder
 				imageOpening,
 				buttonNext
 			],
-
-			actions,
-
-			null
+			actions
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
+	}
+
+	opening_GoToVenueNext(universe: Universe, size: Coords): void
+	{
+		universe.soundHelper.soundsAllStop(universe);
+
+		var venueNext = this.producer(universe, size).toVenue();
+		universe.venueTransitionTo(venueNext);
 	}
 
 	producer(universe: Universe, size: Coords): ControlBase
@@ -1096,33 +1108,26 @@ export class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var goToVenueNext = () =>
-		{
-			universe.soundHelper.soundsAllStop(universe);
-
-			var venueTitle = this.title(universe, size).toVenue();
-			universe.venueTransitionTo(venueTitle);
-		};
-
 		var visual: VisualBase = VisualGroup.fromChildren
 		([
-			new VisualImageScaled
+			VisualImageScaled.fromSizeAndChild
 			(
 				size, new VisualImageFromLibrary("Titles_Producer")
 			),
-			new VisualSound("Music_Producer", false) // repeat
+			VisualSound.fromSoundNameAndRepeat("Music_Producer", false) // repeat
 		]);
 
 		var controlActionNames = ControlActionNames.Instances();
 
-		var imageProducer = new ControlVisual
+		var imageProducer = ControlVisual.fromNamePosSizeVisual
 		(
 			"imageProducer",
 			this._zeroes.clone(),
 			this.sizeBase.clone(), // size
-			DataBinding.fromContext(visual),
-			null, null // colors
+			DataBinding.fromContext(visual)
 		);
+
+		var goToVenueNext = () => this.producer_GoToVenueNext(universe, size);
 
 		var buttonNext = ControlButton.fromPosSizeTextFontClick
 		(
@@ -1135,11 +1140,11 @@ export class ControlBuilder
 
 		var actions = 
 		[
-			new Action( controlActionNames.ControlCancel, goToVenueNext ),
-			new Action( controlActionNames.ControlConfirm, goToVenueNext )
+			Action.fromNameAndPerform(controlActionNames.ControlCancel, goToVenueNext ),
+			Action.fromNameAndPerform(controlActionNames.ControlConfirm, goToVenueNext )
 		];
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenAndActions
 		(
 			"containerProducer",
 			this._zeroes, // pos
@@ -1148,16 +1153,21 @@ export class ControlBuilder
 			[
 				imageProducer,
 				buttonNext
-			], // end children
-
-			actions,
-
-			null
+			],
+			actions
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
 
 		return returnValue;
+	}
+
+	producer_GoToVenueNext(universe: Universe, size: Coords): void
+	{
+		universe.soundHelper.soundsAllStop(universe);
+
+		var venueTitle = this.title(universe, size).toVenue();
+		universe.venueTransitionTo(venueTitle);
 	}
 
 	settings(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
@@ -1202,7 +1212,7 @@ export class ControlBuilder
 			"selectMusicVolume",
 			Coords.fromXY(70, row1PosY), // pos
 			Coords.fromXY(30, buttonHeight), // size
-			new DataBinding
+			DataBinding.fromContextGetAndSet
 			(
 				universe.soundHelper,
 				(c: SoundHelper) => c.musicVolume,
@@ -1237,7 +1247,7 @@ export class ControlBuilder
 			"selectSoundVolume",
 			Coords.fromXY(140, row1PosY), // pos
 			Coords.fromXY(30, buttonHeight), // size
-			new DataBinding
+			DataBinding.fromContextGetAndSet
 			(
 				universe.soundHelper,
 				(c: SoundHelper) => c.effectVolume,
@@ -1322,7 +1332,7 @@ export class ControlBuilder
 			back // click
 		);
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"containerSettings",
 			this._zeroes, // pos
@@ -1340,9 +1350,9 @@ export class ControlBuilder
 				buttonDone
 			],
 
-			[ new Action("Back", back) ],
+			[ Action.fromNameAndPerform("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ "Escape" ], true ) ],
+			[ new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true ) ],
 
 		);
 
@@ -1393,22 +1403,7 @@ export class ControlBuilder
 		var scaleMultiplier =
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
 
-		var controlsForSlides = new Array<ControlBase>();
-
-		var nextDefn = (slideIndexNext: number) => // click
-		{
-			var venueNext;
-			if (slideIndexNext < controlsForSlides.length)
-			{
-				var controlForSlideNext = controlsForSlides[slideIndexNext];
-				venueNext = controlForSlideNext.toVenue();
-			}
-			else
-			{
-				venueNext = venueAfterSlideshow;
-			}
-			universe.venueTransitionTo(venueNext);
-		};
+		var controlsForSlides: ControlBase[] = [];
 
 		var skip = () =>
 		{
@@ -1421,22 +1416,26 @@ export class ControlBuilder
 			var imageName = imageNameAndMessage[0];
 			var message = imageNameAndMessage[1];
 
-			var next = nextDefn.bind(this, i + 1);
+			var next =
+				() =>
+					this.slideshow_NextDefn.bind // Does this work?  Check history if not.
+					(
+						universe, controlsForSlides, i + 1, venueAfterSlideshow
+					);
 
-			var imageSlide = new ControlVisual
+			var imageSlide = ControlVisual.fromNamePosSizeVisual
 			(
 				"imageSlide",
 				this._zeroes,
 				this.sizeBase.clone(), // size
 				DataBinding.fromContext
 				(
-					new VisualImageScaled
+					VisualImageScaled.fromSizeAndChild
 					(
 						this.sizeBase.clone().multiply(scaleMultiplier), // sizeToDrawScaled
-						new VisualImageFromLibrary(imageName)
+						VisualImageFromLibrary.fromImageName(imageName)
 					) as VisualBase
-				),
-				null, null // colorBackground, colorBorder
+				)
 			);
 
 			var labelSlideText = ControlLabel.fromPosSizeTextFontCenteredHorizontally
@@ -1460,13 +1459,14 @@ export class ControlBuilder
 				next
 			);
 
+			var controlActionNames = ControlActionNames.Instances();
 			var actions =
 			[
-				new Action( ControlActionNames.Instances().ControlCancel, skip ),
-				new Action( ControlActionNames.Instances().ControlConfirm, next )
+				Action.fromNameAndPerform(controlActionNames.ControlCancel, skip),
+				Action.fromNameAndPerform(controlActionNames.ControlConfirm, next)
 			];
 
-			var containerSlide = new ControlContainer
+			var containerSlide = ControlContainer.fromNamePosSizeChildrenAndActions
 			(
 				"containerSlide_" + i,
 				this._zeroes, // pos
@@ -1477,11 +1477,7 @@ export class ControlBuilder
 					labelSlideText,
 					buttonNext
 				],
-
-				actions,
-
-				null
-
+				actions
 			);
 
 			containerSlide.scalePosAndSize(scaleMultiplier);
@@ -1490,6 +1486,27 @@ export class ControlBuilder
 		}
 
 		return controlsForSlides[0];
+	}
+
+	slideshow_NextDefn
+	(
+		universe: Universe,
+		controlsForSlides: ControlBase[],
+		slideIndexNext: number,
+		venueAfterSlideshow: Venue
+	): void
+	{
+		var venueNext;
+		if (slideIndexNext < controlsForSlides.length)
+		{
+			var controlForSlideNext = controlsForSlides[slideIndexNext];
+			venueNext = controlForSlideNext.toVenue();
+		}
+		else
+		{
+			venueNext = venueAfterSlideshow;
+		}
+		universe.venueTransitionTo(venueNext);
 	}
 
 	title(universe: Universe, size: Coords): ControlBase
@@ -1506,11 +1523,11 @@ export class ControlBuilder
 
 		var visual: VisualBase = VisualGroup.fromChildren
 		([
-			new VisualImageScaled
+			VisualImageScaled.fromSizeAndChild
 			(
-				size, new VisualImageFromLibrary("Titles_Title")
+				size, VisualImageFromLibrary.fromImageName("Titles_Title")
 			),
-			new VisualSound("Music_Title", true) // isMusic
+			VisualSound.fromSoundNameAndRepeat("Music_Title", true)
 		]);
 
 		var imageTitle = ControlVisual.fromNamePosSizeVisual
@@ -1530,26 +1547,32 @@ export class ControlBuilder
 			() => this.title_Start(universe)
 		).hasBorderSet(false);
 
+		var controlActionNames = ControlActionNames.Instances();
 		var actions =
 		[
-			new Action( ControlActionNames.Instances().ControlCancel, () => this.title_Start(universe) ),
-			new Action( ControlActionNames.Instances().ControlConfirm, () => this.title_Start(universe) )
+			Action.fromNameAndPerform
+			(
+				controlActionNames.ControlCancel,
+				() => this.title_Start(universe)
+			),
+			Action.fromNameAndPerform
+			(
+				controlActionNames.ControlConfirm,
+				() => this.title_Start(universe)
+			)
 		];
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenAndActions
 		(
 			"containerTitle",
-			this._zeroes, // pos
-			this.sizeBase.clone(), // size
+			this._zeroes,
+			this.sizeBase.clone(),
 			// children
 			[
 				imageTitle,
 				buttonStart
 			],
-
-			actions,
-
-			null
+			actions
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
@@ -1559,21 +1582,31 @@ export class ControlBuilder
 
 	title_Start(universe: Universe): void
 	{
-		var venueMessage = VenueMessage.fromText("Loading profiles...");
+		var venueNext: Venue;
 
-		var venueTask = new VenueTask
-		(
-			venueMessage,
-			() =>
-				Profile.toControlProfileSelect(universe, null, universe.venueCurrent() ),
-			(result: ControlBase) => // done
-			{
-				var venueProfileSelect = result.toVenue();
-				universe.venueTransitionTo(venueProfileSelect);
-			}
-		);
+		if (this.profileMenusAreIncluded)
+		{
+			var venueMessage = VenueMessage.fromText("Loading profiles...");
 
-		universe.venueTransitionTo(venueTask);
+			venueNext = VenueTask.fromVenueInnerPerformAndDone
+			(
+				venueMessage,
+				() =>
+					Profile.toControlProfileSelect(universe, null, universe.venueCurrent() ),
+				(result: ControlBase) => // done
+				{
+					var venueProfileSelect = result.toVenue();
+					universe.venueTransitionTo(venueProfileSelect);
+				}
+			);
+		}
+		else
+		{
+			venueNext = universe.worldCreator.venueWorldGenerate(universe);
+		}
+
+		universe.venueTransitionTo(venueNext);
+
 	}
 
 	worldDetail(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
@@ -1753,7 +1786,7 @@ export class ControlBuilder
 			var venueInstructions =
 				controlInstructions.toVenue();
 
-			var venueMovie = new VenueVideo
+			var venueMovie = VenueVideo.fromVideoNameAndVenueNext
 			(
 				"Movie", // videoName
 				venueInstructions // fader implicit
@@ -1808,7 +1841,7 @@ export class ControlBuilder
 			), // items
 			DataBinding.fromGet( (c: SaveStateBase) => c.name ), // bindingForOptionText
 			font,
-			new DataBinding
+			DataBinding.fromContextGetAndSet
 			(
 				universe.profile,
 				(c: Profile) => c.saveStateSelected(),
@@ -1827,7 +1860,7 @@ export class ControlBuilder
 			() => this.worldLoad_LoadFromServer(universe, size)
 		);
 
-		var venueFileUpload = new VenueFileUpload(null, null);
+		var venueFileUpload = VenueFileUpload.create();
 
 		var buttonLoadFromFile = ControlButton.fromPosSizeTextFontClick
 		(
@@ -1889,7 +1922,7 @@ export class ControlBuilder
 			messageAsDataBinding
 		);
 
-		var venueTask = new VenueTask
+		var venueTask = VenueTask.fromVenueInnerPerformAndDone
 		(
 			venueMessage,
 			() => // perform

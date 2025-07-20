@@ -1,0 +1,59 @@
+// Generated with Windows "tree" command, then edited.
+// Intended to help automate the building of the media file list.
+
+Audio
+
+	Effects
+		Bading-880-1760Hz-1s.wav
+		Boom-1250ms.wav
+		Buzz-Square_Wave-20hz-1s.wav
+		Chirp-Sine-440-1320Hz-Faded-250ms.wav
+		Chirp-Sine-440-1320Hz-Reversed-Faded-250ms.wav
+		Cowbell.wav
+		Slap-Synthesized-1760Hz-100ms.wav
+		Sound.wav
+
+		Drums
+			Cymbal-High_Hat-Closed.wav
+			Cymbal-High_Hat-Closing.wav
+			Cymbal-Ride-3s.wav
+			Drum-Bass.wav
+			Drum-Rim_Tap.wav
+			Drum-Snare-Closed-Edge.wav
+			Drum-Snare-Closed.wav
+			Drum-Snare-Open.wav
+			Drum-Tom-Floor.wav
+			Drum-Tom-Medium.wav
+			Drum-Tom-Small.wav
+ 
+	Music
+		Music.mp3
+		Producer.mp3
+		Title.mp3
+
+Fonts
+	Font.ttf
+
+Images
+	Anvil.svg
+	Car.png
+	Friendly.png
+	Grain.svg
+	Grass.svg
+	Pillow.svg
+	Terrain-Sand.png
+	Zap.svg
+ 
+	Titles
+		Opening.png
+		Producer.png
+		Title-Generic.png
+		Title.png
+
+Text
+	Conversation.json
+	Conversation_psv.txt
+	Instructions.txt
+
+Video
+	Movie.webm

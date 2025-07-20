@@ -140,7 +140,7 @@ export class WorldCreator
 			return worldCreator.worldCreate(universe, worldCreator);
 		};
 
-		var venueTask = new VenueTask
+		var venueTask = VenueTask.fromVenueInnerPerformAndDone
 		(
 			venueMessage,
 			worldGeneratePerform,

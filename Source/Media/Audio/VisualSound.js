@@ -14,6 +14,9 @@ var ThisCouldBeBetter;
             static fromSoundName(soundName) {
                 return new VisualSound(soundName, false); // isMusic
             }
+            static fromSoundNameAndRepeat(soundName, repeat) {
+                return new VisualSound(soundName, repeat);
+            }
             // Visual.
             initialize(uwpe) {
                 // todo - Initialize the sound.

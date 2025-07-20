@@ -230,7 +230,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleCollider = BoxAxisAligned.fromSize(obstacleBarSize); // todo - Rotate.
         var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
         var obstacleBounds = obstacleCollider;
-        var obstacleBoundable = new Boundable(obstacleBounds);
+        var obstacleBoundable = Boundable.fromBounds(obstacleBounds);
         var obstacleLoc = Disposition.fromPosAndOri(Coords.create(), Orientation.fromForwardAndDown(Coords.create().fromHeadingInTurns(obstacleRotationInTurns), Coords.fromXYZ(0, 0, 1)));
         var visualBody = VisualGroup.fromChildren([
             VisualRectangle.fromSizeAndColorsFillAndBorder(obstacleCollider.size, obstacleColor, obstacleColor)
@@ -279,7 +279,7 @@ class PlaceBuilderDemo_Emplacements {
         var obstacleCollider = new MapLocated(obstacleMappedMap, Disposition.create());
         var obstacleCollidable = Collidable.fromCollider(obstacleCollider);
         var obstacleBounds = BoxAxisAligned.fromCenterAndSize(obstacleCollider.loc.pos, obstacleMappedMap.size);
-        var obstacleBoundable = new Boundable(obstacleBounds);
+        var obstacleBoundable = Boundable.fromBounds(obstacleBounds);
         var obstacleMappedEntityDefn = Entity.fromNameAndProperties(entityDefnName, [
             obstacleBoundable,
             obstacleCollidable,
@@ -393,7 +393,7 @@ class PlaceBuilderDemo_Emplacements {
             var e2 = uwpe.entity2;
             universe.collisionHelper.collideEntitiesBounce(e, e2);
         });
-        var boundable = new Boundable(BoxAxisAligned.fromSize(Coords.fromXY(1, 1).multiplyScalar(colliderRadius)));
+        var boundable = Boundable.fromBounds(BoxAxisAligned.fromSize(Coords.fromXY(1, 1).multiplyScalar(colliderRadius)));
         var entityDefn = Entity.fromNameAndProperties(entityName, [
             boundable,
             collidable,

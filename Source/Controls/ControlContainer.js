@@ -30,6 +30,12 @@ var ThisCouldBeBetter;
             static fromNamePosSizeChildren(name, pos, size, children) {
                 return new ControlContainer(name, pos, size, children, null, null);
             }
+            static fromNamePosSizeChildrenAndActions(name, pos, size, children, actions) {
+                return new ControlContainer(name, pos, size, children, actions, null);
+            }
+            static fromNamePosSizeChildrenActionsAndMappings(name, pos, size, children, actions, actionToInputsMappings) {
+                return new ControlContainer(name, pos, size, children, actions, actionToInputsMappings);
+            }
             // instance methods
             // actions
             actionHandle(actionNameToHandle, universe) {

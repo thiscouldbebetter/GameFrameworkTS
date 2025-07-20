@@ -18,6 +18,11 @@ export class ControlContainerTransparent extends ControlBase
 		this.containerInner = containerInner;
 	}
 
+	static fromContainer(containerInner: ControlContainer): ControlContainerTransparent
+	{
+		return new ControlContainerTransparent(containerInner);
+	}
+
 	// instance methods
 
 	actionHandle(actionNameToHandle: string, universe: Universe): boolean
