@@ -215,7 +215,8 @@ var ThisCouldBeBetter;
                 var boundable = GameFramework.Boundable.fromBounds(this.viewCollider);
                 var collidable = GameFramework.Collidable
                     .fromCollider(this.viewCollider)
-                    .canCollideAgainWithoutSeparatingSet(true);
+                    .canCollideAgainWithoutSeparatingSet(true)
+                    .exemptFromCollisionEffectsOfOtherSet(true);
                 var constrainable = this.toEntityFollowingEntityWithName_Constrainable(targetEntityName);
                 var locatable = GameFramework.Locatable.fromDisp(this.loc);
                 var movable = GameFramework.Movable.default();

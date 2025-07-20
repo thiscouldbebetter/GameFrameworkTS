@@ -4,9 +4,11 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Collidable {
-            constructor(canCollideAgainWithoutSeparating, ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntitiesForUniverseWorldPlaceEntitiesAndCollision) {
+            constructor(canCollideAgainWithoutSeparating, exemptFromCollisionEffectsOfOther, ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntitiesForUniverseWorldPlaceEntitiesAndCollision) {
                 this.canCollideAgainWithoutSeparating =
                     canCollideAgainWithoutSeparating || false;
+                this.exemptFromCollisionEffectsOfOther =
+                    exemptFromCollisionEffectsOfOther || false;
                 this.ticksToWaitBetweenCollisions =
                     ticksToWaitBetweenCollisions || 0;
                 this.colliderAtRestSet(colliderAtRest);
@@ -39,6 +41,7 @@ var ThisCouldBeBetter;
             }
             static fromColliderAndCollideEntities(colliderAtRest, collideEntities) {
                 return new Collidable(false, // canCollideAgainWithoutSeparating
+                false, // exemptFromCollisionEffectsOfOther
                 0, // ticksToWaitBetweenCollisions
                 colliderAtRest, null, // entityPropertyNamesToCollideWith
                 collideEntities);
@@ -48,11 +51,13 @@ var ThisCouldBeBetter;
             }
             static fromColliderPropertyNameToCollideWithAndCollide(colliderAtRest, entityPropertyNameToCollideWith, collideEntities) {
                 return new Collidable(false, // canCollideAgainWithoutSeparating
+                false, // exemptFromCollisionEffectsOfOther
                 null, // ticksToWaitBetweenCollisions
                 colliderAtRest, [entityPropertyNameToCollideWith], collideEntities);
             }
             static fromColliderPropertyNamesToCollideWithAndCollide(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
                 return new Collidable(false, // canCollideAgainWithoutSeparating
+                false, // exemptFromCollisionEffectsOfOther
                 0, // ticksToWaitBetweenCollisions
                 colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
             }
@@ -131,10 +136,12 @@ var ThisCouldBeBetter;
                     var entityOther = entitiesColliding[1];
                     uwpe.entitySet(entity).entity2Set(entityOther);
                     this.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
-                    var entityOtherCollidable = Collidable.of(entityOther);
-                    uwpe.entitiesSwap();
-                    entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
-                    uwpe.entitiesSwap();
+                    if (this.exemptFromCollisionEffectsOfOther == false) {
+                        var entityOtherCollidable = Collidable.of(entityOther);
+                        uwpe.entitiesSwap();
+                        entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision(uwpe, collision);
+                        uwpe.entitiesSwap();
+                    }
                     Collidable.of(entity).entityAlreadyCollidedWithAddIfNotPresent(entityOther);
                     Collidable.of(entityOther).entityAlreadyCollidedWithAddIfNotPresent(entity);
                 }
@@ -229,7 +236,10 @@ var ThisCouldBeBetter;
                 return collisionsSoFar;
             }
             collisionsHandle(uwpe, collisions) {
-                collisions.forEach(collision => this.collisionHandle(uwpe, collision));
+                for (var i = 0; i < collisions.length; i++) {
+                    var collision = collisions[i];
+                    this.collisionHandle(uwpe, collision);
+                }
             }
             collisionTrackerCollidableData(collisionTracker) {
                 if (this._collisionTrackerCollidableData == null) {
@@ -237,6 +247,10 @@ var ThisCouldBeBetter;
                         collisionTracker.collidableDataCreate();
                 }
                 return this._collisionTrackerCollidableData;
+            }
+            disable() {
+                this.isDisabled = true;
+                return this;
             }
             static doEntitiesCollide(entity0, entity1, collisionHelper) {
                 var doEntitiesCollide = false;
@@ -261,6 +275,10 @@ var ThisCouldBeBetter;
                         collisionHelper.doCollidersCollide(collider0, collider1);
                 }
                 return doEntitiesCollide;
+            }
+            enable() {
+                this.isDisabled = false;
+                return this;
             }
             entitiesAlreadyCollidedWithClear() {
                 this._entitiesAlreadyCollidedWith.length = 0;
@@ -287,6 +305,10 @@ var ThisCouldBeBetter;
                 if (index >= 0) {
                     this._entitiesAlreadyCollidedWith.splice(index, 1);
                 }
+            }
+            exemptFromCollisionEffectsOfOtherSet(value) {
+                this.exemptFromCollisionEffectsOfOther = value;
+                return this;
             }
             isEntityStationary(entity) {
                 // This way would be better, but it causes strange glitches.
@@ -351,7 +373,7 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                return new Collidable(this.canCollideAgainWithoutSeparating, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision);
+                return new Collidable(this.canCollideAgainWithoutSeparating, this.exemptFromCollisionEffectsOfOther, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision);
             }
             overwriteWith(other) { return this; }
             // Equatable

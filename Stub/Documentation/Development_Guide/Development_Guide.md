@@ -31,7 +31,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 1.10. In the Source directory, locate the script named "RunChromeWithFileAccess.sh" (or the .bat equivalent if running Windows) and run it.  This will start the web browser with the necessary permissions for running the game locally without a dedicated web server.
 
-1.11. Open Game.html in the web browser.  Press the Enter key a few times to progress past the default opening screens showing placeholder screens for the game's framework, producer, and title.  Then, when prompted to create or choose a profile, click the Skip button.  After that, a blank screen is displayed.  You can press Escape to see the menu, but there's nothing more to the game yet.
+1.11. Open Game.html in the web browser.  Press the Enter key a few times to progress past the default opening screens showing placeholder screens for the game's framework, producer, and title.  After that, a blank screen is displayed.  You can press Escape to see the menu, but there's nothing more to the game yet.
 
 <img src="Screenshot-1-Blank.png" />
 
@@ -154,7 +154,7 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	<img src="Screenshot-3-Ship-Stationary.png" />
 
-3.7. In the browser's address bar, append the text "?debug=SkipOpening" to the end of the URL for Game.html and press the Enter key to reload.  This will skip the opening scenes to the main part of the game, saving the time and trouble needed to skip past them every time.
+3.7. In the browser's address bar, append the text "?debug=SkipOpening" to the end of the URL for Game.html and press the Enter key to reload.  This will skip past the opening screens to the main part of the game, saving the time and trouble needed to skip past them every time.
 
 
 4. Making the Ship Move

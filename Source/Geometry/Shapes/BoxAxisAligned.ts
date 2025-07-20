@@ -325,7 +325,9 @@ export class BoxAxisAligned implements ShapeBase
 
 	trimCoords(coordsToTrim: Coords): Coords
 	{
-		return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
+		var min = this.min();
+		var max = this.max();
+		return coordsToTrim.trimToRangeMinMax(min, max);
 	}
 
 	vertices(): Coords[]

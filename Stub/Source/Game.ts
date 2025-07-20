@@ -35,10 +35,7 @@ class Game
 			worldCreator
 		);
 
-		universe.initialize
-		(
-			() => { universe.start(); }
-		);
+		universe.initializeAndStart();
 	}
 
 	mediaFilePathsBuild(): string[]

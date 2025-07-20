@@ -434,7 +434,8 @@ export class Camera implements EntityProperty<Camera>
 		var collidable =
 			Collidable
 				.fromCollider(this.viewCollider)
-				.canCollideAgainWithoutSeparatingSet(true);
+				.canCollideAgainWithoutSeparatingSet(true)
+				.exemptFromCollisionEffectsOfOtherSet(true);
 
 		var constrainable =
 			this.toEntityFollowingEntityWithName_Constrainable(targetEntityName);

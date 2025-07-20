@@ -11,7 +11,8 @@ var ThisCouldBeBetter;
                 return new Constraint_ContainInBox(boxToContainWithin);
             }
             constrain(uwpe) {
-                this.boxToContainWithin.trimCoords(GameFramework.Locatable.of(uwpe.entity).loc.pos);
+                var constrainablePos = GameFramework.Locatable.of(uwpe.entity).loc.pos;
+                this.boxToContainWithin.trimCoords(constrainablePos);
             }
             // Clonable.
             clone() {

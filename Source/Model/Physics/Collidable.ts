@@ -5,6 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class Collidable implements EntityProperty<Collidable>
 {
 	canCollideAgainWithoutSeparating: boolean;
+	exemptFromCollisionEffectsOfOther: boolean;
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: ShapeBase;
 	entityPropertyNamesToCollideWith: string[];
@@ -26,6 +27,7 @@ export class Collidable implements EntityProperty<Collidable>
 	constructor
 	(
 		canCollideAgainWithoutSeparating: boolean,
+		exemptFromCollisionEffectsOfOther: boolean,
 		ticksToWaitBetweenCollisions: number,
 		colliderAtRest: ShapeBase,
 		entityPropertyNamesToCollideWith: string[],
@@ -35,6 +37,8 @@ export class Collidable implements EntityProperty<Collidable>
 	{
 		this.canCollideAgainWithoutSeparating =
 			canCollideAgainWithoutSeparating || false;
+		this.exemptFromCollisionEffectsOfOther =
+			exemptFromCollisionEffectsOfOther || false;
 		this.ticksToWaitBetweenCollisions =
 			ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRestSet(colliderAtRest);
@@ -97,6 +101,7 @@ export class Collidable implements EntityProperty<Collidable>
 		return new Collidable
 		(
 			false, // canCollideAgainWithoutSeparating
+			false, // exemptFromCollisionEffectsOfOther
 			0, // ticksToWaitBetweenCollisions
 			colliderAtRest,
 			null, // entityPropertyNamesToCollideWith
@@ -129,6 +134,7 @@ export class Collidable implements EntityProperty<Collidable>
 		return new Collidable
 		(
 			false, // canCollideAgainWithoutSeparating
+			false, // exemptFromCollisionEffectsOfOther
 			null, // ticksToWaitBetweenCollisions
 			colliderAtRest,
 			[ entityPropertyNameToCollideWith ],
@@ -146,6 +152,7 @@ export class Collidable implements EntityProperty<Collidable>
 		return new Collidable
 		(
 			false, // canCollideAgainWithoutSeparating
+			false, // exemptFromCollisionEffectsOfOther
 			0, // ticksToWaitBetweenCollisions
 			colliderAtRest,
 			entityPropertyNamesToCollideWith,
@@ -311,13 +318,16 @@ export class Collidable implements EntityProperty<Collidable>
 				uwpe, collision
 			);
 
-			var entityOtherCollidable = Collidable.of(entityOther);
-			uwpe.entitiesSwap();
-			entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
-			(
-				uwpe, collision
-			);
-			uwpe.entitiesSwap();
+			if (this.exemptFromCollisionEffectsOfOther == false)
+			{
+				var entityOtherCollidable = Collidable.of(entityOther);
+				uwpe.entitiesSwap();
+				entityOtherCollidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
+				(
+					uwpe, collision
+				);
+				uwpe.entitiesSwap();
+			}
 
 			Collidable.of(entity).entityAlreadyCollidedWithAddIfNotPresent(entityOther);
 			Collidable.of(entityOther).entityAlreadyCollidedWithAddIfNotPresent(entity);
@@ -495,10 +505,11 @@ export class Collidable implements EntityProperty<Collidable>
 
 	collisionsHandle(uwpe: UniverseWorldPlaceEntities, collisions: Collision[]): void
 	{
-		collisions.forEach
-		(
-			collision => this.collisionHandle(uwpe, collision)
-		);
+		for (var i = 0; i < collisions.length; i++)
+		{
+			var collision = collisions[i];
+			this.collisionHandle(uwpe, collision);
+		}
 	}
 
 	collisionTrackerCollidableData
@@ -512,6 +523,12 @@ export class Collidable implements EntityProperty<Collidable>
 				collisionTracker.collidableDataCreate();
 		}
 		return this._collisionTrackerCollidableData;
+	}
+
+	disable(): Collidable
+	{
+		this.isDisabled = true;
+		return this;
 	}
 
 	static doEntitiesCollide
@@ -561,6 +578,12 @@ export class Collidable implements EntityProperty<Collidable>
 		return doEntitiesCollide;
 	}
 
+	enable(): Collidable
+	{
+		this.isDisabled = false;
+		return this;
+	}
+
 	entitiesAlreadyCollidedWithClear(): void
 	{
 		this._entitiesAlreadyCollidedWith.length = 0;
@@ -603,6 +626,12 @@ export class Collidable implements EntityProperty<Collidable>
 		{
 			this._entitiesAlreadyCollidedWith.splice(index, 1);
 		}
+	}
+
+	exemptFromCollisionEffectsOfOtherSet(value: boolean): Collidable
+	{
+		this.exemptFromCollisionEffectsOfOther = value;
+		return this;
 	}
 
 	isEntityStationary(entity: Entity): boolean
@@ -709,6 +738,7 @@ export class Collidable implements EntityProperty<Collidable>
 		return new Collidable
 		(
 			this.canCollideAgainWithoutSeparating,
+			this.exemptFromCollisionEffectsOfOther,
 			this.ticksToWaitBetweenCollisions,
 			this.colliderAtRest.clone(),
 			this.entityPropertyNamesToCollideWith,

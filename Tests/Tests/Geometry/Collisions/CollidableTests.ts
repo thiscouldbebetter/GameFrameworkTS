@@ -72,6 +72,7 @@ class CollidableTests extends TestFixture
 		var collidable = new Collidable
 		(
 			false, // canCollideAgainWithoutSeparating
+			false, // exempt
 			null, // ticksToWaitBetweenCollisions
 			collider,
 			[ Collidable.name ], // entityPropertyNamesToCollideWith

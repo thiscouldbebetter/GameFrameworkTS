@@ -200,7 +200,9 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             trimCoords(coordsToTrim) {
-                return coordsToTrim.trimToRangeMinMax(this.min(), this.max());
+                var min = this.min();
+                var max = this.max();
+                return coordsToTrim.trimToRangeMinMax(min, max);
             }
             vertices() {
                 if (this._vertices == null) {
