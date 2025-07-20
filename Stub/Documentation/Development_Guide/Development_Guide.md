@@ -1402,7 +1402,6 @@ n.1. Well, it's certainly technically a game at this point.  Congratulations!  H
 * Add more appropriate visual and sound effects when things happen, like explosions.
 * Destroy the player's ship when it runs into a raider.
 * Let the raiders shoot bullets.
-* Add more habitats to protect.
 * Require the player to catch a habitat as it falls, or else it explodes on impact.
 * Generate more raiders, on a timer.
 * Add a minimap to show the parts of the planet that are not currently on screen.
