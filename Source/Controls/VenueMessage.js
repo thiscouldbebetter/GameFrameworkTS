@@ -28,6 +28,9 @@ var ThisCouldBeBetter;
             static fromText(text) {
                 return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text));
             }
+            static fromTextNoButtons(text) {
+                return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text)).showMessageOnlySet(true);
+            }
             static fromTextAcknowledgeAndSize(text, acknowledge, sizeInPixels) {
                 return VenueMessage.fromMessageAcknowledgeAndSize(GameFramework.DataBinding.fromGet((c) => text), acknowledge, sizeInPixels);
             }
@@ -55,6 +58,10 @@ var ThisCouldBeBetter;
             updateForTimerTick(universe) {
                 var venueInner = this.venueInner(universe);
                 venueInner.updateForTimerTick(universe);
+            }
+            showMessageOnlySet(value) {
+                this.showMessageOnly = value;
+                return this;
             }
             sizeInPixels(universe) {
                 if (this._sizeInPixels == null) {

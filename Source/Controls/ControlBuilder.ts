@@ -1586,7 +1586,7 @@ export class ControlBuilder
 
 		if (this.profileMenusAreIncluded)
 		{
-			var venueMessage = VenueMessage.fromText("Loading profiles...");
+			var venueMessage = VenueMessage.fromTextNoButtons("Loading profiles...");
 
 			venueNext = VenueTask.fromVenueInnerPerformAndDone
 			(

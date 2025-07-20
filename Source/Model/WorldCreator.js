@@ -52,21 +52,20 @@ var ThisCouldBeBetter;
                 return returnVenue;
             }
             venueWorldGenerate(universe) {
-                var messageAsDataBinding = GameFramework.DataBinding.fromGet((c) => "Generating world...");
-                var venueMessage = GameFramework.VenueMessage.fromMessage(messageAsDataBinding);
-                var worldGeneratePerform = () => {
-                    var worldCreator = universe.worldCreator;
-                    return worldCreator.worldCreate(universe, worldCreator);
-                };
-                var venueTask = GameFramework.VenueTask.fromVenueInnerPerformAndDone(venueMessage, worldGeneratePerform, (world) => // done
-                 {
-                    universe.worldSet(world);
-                    var venueNext = universe.world.toVenue();
-                    universe.venueTransitionTo(venueNext);
-                });
-                messageAsDataBinding.contextSet(venueTask);
+                var message = "Generating world...";
+                var venueMessage = GameFramework.VenueMessage.fromTextNoButtons(message);
+                var venueTask = GameFramework.VenueTask.fromVenueInnerPerformAndDone(venueMessage, () => this.venueWorldGenerate_Perform(universe), worldGenerated => this.venueWorldGenerate_Perform_Done(universe, worldGenerated));
                 var returnValue = universe.controlBuilder.venueTransitionalFromTo(universe.venueCurrent(), venueTask);
                 return returnValue;
+            }
+            venueWorldGenerate_Perform(universe) {
+                var worldCreator = universe.worldCreator;
+                return worldCreator.worldCreate(universe, worldCreator);
+            }
+            venueWorldGenerate_Perform_Done(universe, world) {
+                universe.worldSet(world);
+                var venueNext = universe.world.toVenue();
+                universe.venueTransitionTo(venueNext);
             }
         }
         GameFramework.WorldCreator = WorldCreator;

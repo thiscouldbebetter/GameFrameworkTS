@@ -126,34 +126,18 @@ export class WorldCreator
 
 	venueWorldGenerate(universe: Universe): Venue
 	{
-		var messageAsDataBinding = DataBinding.fromGet
-		(
-			(c: VenueTask<World>) => "Generating world...",
-		);
+		var message = "Generating world...";
 
 		var venueMessage =
-			VenueMessage.fromMessage(messageAsDataBinding);
-
-		var worldGeneratePerform = () =>
-		{
-			var worldCreator = universe.worldCreator;
-			return worldCreator.worldCreate(universe, worldCreator);
-		};
+			VenueMessage.fromTextNoButtons(message);
 
 		var venueTask = VenueTask.fromVenueInnerPerformAndDone
 		(
 			venueMessage,
-			worldGeneratePerform,
-			(world: World) => // done
-			{
-				universe.worldSet(world);
-
-				var venueNext = universe.world.toVenue();
-				universe.venueTransitionTo(venueNext);
-			}
+			() => this.venueWorldGenerate_Perform(universe),
+			worldGenerated =>
+				this.venueWorldGenerate_Perform_Done(universe, worldGenerated),
 		);
-
-		messageAsDataBinding.contextSet(venueTask);
 
 		var returnValue =
 			universe.controlBuilder.venueTransitionalFromTo
@@ -165,6 +149,19 @@ export class WorldCreator
 		return returnValue;
 	}
 
+	venueWorldGenerate_Perform(universe: Universe): World
+	{
+		var worldCreator = universe.worldCreator;
+		return worldCreator.worldCreate(universe, worldCreator);
+	}
+
+	venueWorldGenerate_Perform_Done(universe: Universe, world: World): void
+	{
+		universe.worldSet(world);
+
+		var venueNext = universe.world.toVenue();
+		universe.venueTransitionTo(venueNext);
+	}
 }
 
 }

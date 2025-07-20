@@ -688,7 +688,7 @@ var ThisCouldBeBetter;
             title_Start(universe) {
                 var venueNext;
                 if (this.profileMenusAreIncluded) {
-                    var venueMessage = GameFramework.VenueMessage.fromText("Loading profiles...");
+                    var venueMessage = GameFramework.VenueMessage.fromTextNoButtons("Loading profiles...");
                     venueNext = GameFramework.VenueTask.fromVenueInnerPerformAndDone(venueMessage, () => GameFramework.Profile.toControlProfileSelect(universe, null, universe.venueCurrent()), (result) => // done
                      {
                         var venueProfileSelect = result.toVenue();

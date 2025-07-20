@@ -80,6 +80,14 @@ export class VenueMessage<TContext> implements Venue
 		);
 	}
 
+	static fromTextNoButtons<TContext>(text: string): VenueMessage<TContext>
+	{
+		return VenueMessage.fromMessage<TContext>
+		(
+			DataBinding.fromGet( (c: TContext) => text )
+		).showMessageOnlySet(true);
+	}
+
 	static fromTextAcknowledgeAndSize<TContext>
 	(
 		text: string,
@@ -152,6 +160,12 @@ export class VenueMessage<TContext> implements Venue
 	{
 		var venueInner = this.venueInner(universe);
 		venueInner.updateForTimerTick(universe);
+	}
+
+	showMessageOnlySet(value: boolean): VenueMessage<TContext>
+	{
+		this.showMessageOnly = value;
+		return this;
 	}
 
 	sizeInPixels(universe: Universe): Coords
