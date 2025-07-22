@@ -14,9 +14,6 @@ var ThisCouldBeBetter;
             static fromDie(die) {
                 return new Killable(1, null, die);
             }
-            static fromIntegrityMaxDamageApplyAndDie(integrityMax, damageApply, die) {
-                return new Killable(integrityMax, damageApply, die);
-            }
             static default() {
                 return Killable.fromIntegrityMax(1);
             }
@@ -25,6 +22,9 @@ var ThisCouldBeBetter;
             }
             static fromIntegrityMaxAndDie(integrityMax, die) {
                 return new Killable(integrityMax, null, die);
+            }
+            static fromIntegrityMaxDamageApplyAndDie(integrityMax, damageApply, die) {
+                return new Killable(integrityMax, damageApply, die);
             }
             static of(entity) {
                 return entity.propertyByName(Killable.name);

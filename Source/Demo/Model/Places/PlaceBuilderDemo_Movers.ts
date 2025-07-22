@@ -17,8 +17,6 @@ class PlaceBuilderDemo_Movers
 		var carnivoreColor = Color.Instances().GrayDark;
 		var carnivoreDimension = this.entityDimension;
 
-		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
-
 		var carnivoreCollider = Sphere.fromRadius(carnivoreDimension);
 
 		var visualEyeRadius = this.entityDimension * .75 / 2;
@@ -48,7 +46,7 @@ class PlaceBuilderDemo_Movers
 		([
 			VisualPolygon.fromPathAndColorFill
 			(
-				new Path
+				Path.fromPoints
 				([
 					Coords.fromXY(-2, -1),
 					Coords.fromXY(-0.5, 0),
@@ -57,10 +55,10 @@ class PlaceBuilderDemo_Movers
 					Coords.fromXY(0, 2),
 				]).transform
 				(
-					new Transform_Multiple
+					Transform_Multiple.fromChildren
 					([
-						new Transform_Translate(Coords.fromXY(0, -0.5)),
-						new Transform_Scale
+						Transform_Translate.fromDisplacement(Coords.fromXY(0, -0.5)),
+						Transform_Scale.fromScaleFactors
 						(
 							Coords.ones().multiplyScalar(this.entityDimension)
 						)
@@ -210,7 +208,7 @@ class PlaceBuilderDemo_Movers
 				Animatable2.create(),
 				Boundable.fromCollidable(carnivoreCollidable),
 				carnivoreCollidable,
-				new Constrainable([constraintSpeedMax1]),
+				Constrainable.create(),
 				Drawable.fromVisual(carnivoreVisual),
 				new Killable(10, null, carnivoreDie),
 				Locatable.create(),
@@ -376,8 +374,7 @@ class PlaceBuilderDemo_Movers
 			[
 				Actor.fromActivity(enemyActivity),
 				Animatable2.create(),
-				Constrainable
-					.fromConstraint(new Constraint_SpeedMaxXY(speedMax)),
+				Constrainable.create(),
 				Collidable.fromCollider(enemyCollider),
 				Damager.fromDamagePerHit
 				(
@@ -740,9 +737,7 @@ class PlaceBuilderDemo_Movers
 		var friendlyColor = colors.GreenDark;
 		var friendlyDimension = this.entityDimension;
 
-		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
-		var constrainable =
-			Constrainable.fromConstraint(constraintSpeedMax1);
+		var constrainable = Constrainable.create();
 
 		var friendlyCollider = Sphere.fromRadius(friendlyDimension);
 		var friendlyCollide =
@@ -886,19 +881,16 @@ class PlaceBuilderDemo_Movers
 
 		var actor = new Actor(friendlyActivity);
 
-		var itemHolder = new ItemHolder
+		var itemHolder = ItemHolder.fromItems
 		(
 			[
-				new Item("Arrow", 200),
-				new Item("Bow", 1),
-				new Item("Coin", 200),
-				new Item("Iron", 3),
-				new Item("Key", 1),
-				new Item("Medicine", 4),
-			],
-			null, // weightMax
-			null, // reachRadius
-			null // retainsItemsWithZeroQuantities
+				Item.fromDefnNameAndQuantity("Arrow", 200),
+				Item.fromDefnNameAndQuantity("Bow", 1),
+				Item.fromDefnNameAndQuantity("Coin", 200),
+				Item.fromDefnNameAndQuantity("Iron", 3),
+				Item.fromDefnNameAndQuantity("Key", 1),
+				Item.fromDefnNameAndQuantity("Medicine", 4),
+			]
 		);
 
 		var route = new Route
@@ -909,7 +901,7 @@ class PlaceBuilderDemo_Movers
 		);
 		var routable = new Routable(route);
 
-		var friendlyEntityDefn = new Entity
+		var friendlyEntityDefn = Entity.fromNameAndProperties
 		(
 			"Friendly",
 			[
@@ -939,8 +931,6 @@ class PlaceBuilderDemo_Movers
 		var colors = Color.Instances();
 		var grazerColor = colors.Brown;
 		var grazerDimension = this.entityDimension;
-
-		var constraintSpeedMax1 = new Constraint_SpeedMaxXY(1);
 
 		var grazerCollider = Sphere.fromRadius(grazerDimension);
 
@@ -1173,7 +1163,7 @@ class PlaceBuilderDemo_Movers
 						e.propertyRemoveForPlace(Actor.of(e), p);
 						Locatable.of(e).loc.vel.clear();
 
-						var ephemeral = new Ephemeral(300, null);
+						var ephemeral = Ephemeral.fromTicksToLive(300);
 						e.propertyAddForPlace(ephemeral, p);
 					}
 				)
@@ -1182,18 +1172,18 @@ class PlaceBuilderDemo_Movers
 
 		var grazerCollidable = Collidable.fromCollider(grazerCollider);
 
-		var grazerEntityDefn = new Entity
+		var grazerEntityDefn = Entity.fromNameAndProperties
 		(
 			"Grazer",
 			[
-				new Actor(grazerActivity),
+				Actor.fromActivity(grazerActivity),
 				Animatable2.create(),
 				Boundable.fromCollidable(grazerCollidable),
 				grazerPhased,
 				grazerCollidable,
-				new Constrainable([constraintSpeedMax1]),
+				Constrainable.create(),
 				Drawable.fromVisual(grazerVisual),
-				new Killable(10, null, grazerDie),
+				Killable.fromIntegrityMaxAndDie(10, grazerDie),
 				Locatable.create(),
 				Movable.default()
 			]
@@ -1373,7 +1363,7 @@ class PlaceBuilderDemo_Movers
 		var selector = Selector.default();
 		var skillLearner = SkillLearner.default();
 
-		var playerEntityDefn = new Entity
+		var playerEntityDefn = Entity.fromNameAndProperties
 		(
 			entityDefnNamePlayer,
 			[
@@ -1496,7 +1486,6 @@ class PlaceBuilderDemo_Movers
 					)
 				)
 			),
-			new Constraint_SpeedMaxXY(5),
 			new Constraint_Conditional
 			(
 				(uwpe: UniverseWorldPlaceEntities) =>

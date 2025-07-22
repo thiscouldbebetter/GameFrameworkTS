@@ -52,7 +52,8 @@ class PlaceDefault extends PlaceBase
 			Constrainable.name,
 			Ephemeral.name,
 			Killable.name,
-			Locatable.name
+			Locatable.name,
+			Movable.name
 		];
 
 		return PlaceDefn.fromNameMusicActionsMappingsAndPropertyNames

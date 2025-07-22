@@ -3,21 +3,22 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_SpeedMaxXY {
-            constructor(targetSpeedMax) {
-                this.targetSpeedMax = targetSpeedMax;
+        class Constraint_Movable {
+            static create() {
+                return new Constraint_Movable();
             }
             constrain(uwpe) {
-                var targetSpeedMax = this.targetSpeedMax;
-                var entityLoc = GameFramework.Locatable.of(uwpe.entity).loc;
+                var entity = uwpe.entity;
+                var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var entityVel = entityLoc.vel;
-                var zSaved = entityVel.z;
-                entityVel.z = 0;
                 var speed = entityVel.magnitude();
-                if (speed > targetSpeedMax) {
-                    entityVel.normalize().multiplyScalar(targetSpeedMax);
+                var entityMovable = GameFramework.Movable.of(entity);
+                var speedMax = entityMovable.speedMax(uwpe);
+                if (speed > speedMax) {
+                    entityVel
+                        .normalize()
+                        .multiplyScalar(speedMax);
                 }
-                entityVel.z = zSaved;
             }
             // Clonable.
             clone() {
@@ -27,6 +28,6 @@ var ThisCouldBeBetter;
                 return this; // todo
             }
         }
-        GameFramework.Constraint_SpeedMaxXY = Constraint_SpeedMaxXY;
+        GameFramework.Constraint_Movable = Constraint_Movable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

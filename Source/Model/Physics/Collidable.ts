@@ -113,7 +113,7 @@ export class Collidable implements EntityProperty<Collidable>
 	(
 		colliderAtRest: ShapeBase,
 		entityPropertyToCollideWithName: string,
-		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	): Collidable
 	{
 		return Collidable.fromColliderPropertyNameToCollideWithAndCollide

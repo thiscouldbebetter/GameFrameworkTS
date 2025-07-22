@@ -65,7 +65,7 @@ class WorldDemo extends World
 			Tirable.name,
 
 			//Camera.name,
-		]
+		];
 
 		var placeDefnDemo = new PlaceDefn
 		(

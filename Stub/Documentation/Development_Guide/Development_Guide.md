@@ -121,7 +121,9 @@ This guide illustrates the creation of a new game from scratch using the This Co
 						Player.visualBuild()
 					),
 
-					Locatable.fromPos(pos)
+					Locatable.fromPos(pos),
+
+					Playable.create()
 				]
 			);
 		}
@@ -324,8 +326,8 @@ Note that the actions selected mean that, when accelerating left and right, the 
 <img src="Screenshot-7-Ship-Maneuvering.gif" />
 
 
-8. Adding an Ally and an Enemy
-------------------------------
+8. Adding a Ally and an Enemy
+-----------------------------
 
 8.1. Driving around aimlessly is fun for a while, but conflict is the essence of drama.  It's time to add a villain and a victim, so that you can be the rescuer.
 
@@ -414,6 +416,22 @@ Note that the actions selected mean that, when accelerating left and right, the 
 					Actor.fromActivityDefnName
 					(
 						Raider.activityDefnBuild().name
+					),
+
+					Collidable.fromColliderPropertyNameToCollideWithAndCollide
+					(
+						Sphere.fromRadius(4),
+						Player.name,
+						(uwpe: UniverseWorldPlaceEntities, c: Collision) =>
+						{
+							var entityOther = uwpe.entity2;
+							if (entityOther.name == Player.name)
+							{
+								var playerEnitty = entityOther as Player;
+								var playerKillable = Killable.of(entityPlayer);
+								playerKillable.kill();
+							}
+						}
 					),
 
 					Constrainable.fromConstraint
@@ -637,7 +655,6 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 	}
 
-
 8.4. The Raider class uses the Actor property, and defines its very own ActivityDefn to use with it, so we need to register that ActivityDefn with the WorldDefn.  Open WorldGame.ts, locate the .defnBuild() method, and add the new activity definition in the proper place, adjusting commas as necessary:
 
 	Raider.activityDefnBuild()
@@ -717,19 +734,43 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 10. Making Weapons Work
 -----------------------
 
-10.1. The bad news is, those bullets don't do anything yet.  Even if you manage to hit the raider with them, they'll just pass harmlessly through it, because right now it's pretty much immortal.  It's too dumb to die!
+10.1. The bad news is, those bullets don't do anything yet.  Even if you manage to hit the raider with them, they'll just pass harmlessly through it, because right now it's pretty much immortal.  It's not killable, or even touchable.  It's too dumb to die!
 
 10.2. So let's make it mortal.  Open Raider.ts and add the following lines to the array of entity properties being declared in the constructor.  You could add them at the end of the array, or make things a bit neater and add them in alphabetical order.  Whichever you choose, be sure to add commas in the proper places.
 
+	Collidable.fromColliderPropertyNameToCollideWithAndCollide
+	(
+		Sphere.fromRadius(4),
+		Player.name,
+		(uwpe: UniverseWorldPlaceEntities, c: Collision) =>
+		{
+			var entityOther = uwpe.entity2;
+			if (entityOther.name == Player.name)
+			{
+				var playerEnitty = entityOther as Player;
+				var playerKillable = Killable.of(entityPlayer);
+				playerKillable.kill();
+			}
+		}
+	),
+
+	Killable.default()
+
+These lines make the raider collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.  The Collidable declaration would also make touching a raider deadly for the player, except that right now, just like the raider was, the player's ship isn't killable, or really even touchable.  We'll need to fix that more or less the same way.
+
+10.3. To make the player touchable and killable, open Player.ts and, in the constructor, add the following to the list of properties, adjusting commas as needed:
+
 	Collidable.fromCollider(Sphere.fromRadius(4) ),
 
-	Killable.fromIntegrityMax(1),
+	Killable.default()
 
-These lines make the raider collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.
+Now the player can be collided with and killed as well.  It's only fair.
 
-10.3 Re-compile the game and refresh the web browser.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
+10.4. Re-compile the game and refresh the web browser.  Locate the raider, aim carefully, and shoot a bullet at it.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
 
 <img src="Screenshot-10-Bullet_Destroys_Raider.gif" />
+
+10.5. Refresh the web browser again, and this time, run your ship into the raider.  This time, the raider will destroy you.  At last, this game has some stakes!
 
 
 11. Giving the Ground Some Weight
@@ -816,9 +857,11 @@ The new constraint is exactly the same as the one for the habitat, and will have
 12. Adding Win and Lose Conditions
 ----------------------------------
 
-12.1. The program we've written so far is closer to being a real game than ever, but it still lacks some things.  For one thing, there's no way to lose, which might appeal to certain people.  But then again, there's no way to win, other than whatever feeling of satisfaction you can derive from a single habitat not being destroyed by alien raiders.  But, having growing up in our modern go-go culture, most players would prefer more external validation.
+12.1. The program we've written so far is closer to being a real game than ever, but it still lacks some things.  For one thing, the only way to lose is by running into a raider.  But even when that happens, the game doesn't really end, it just keeps running forever.  It's a little like being a ghost, I guess.  No closure.
 
-So let's add some.  We'll add some code that checks each tick to see if there are no more raiders, in which case the player wins, or if there are no more habitats, in which case, the player loses.  In either case, a message will be displayed that explains what just happened, and the game will return to the title screen.
+And there's no way to win, either, other than whatever feeling of satisfaction you can derive from a single habitat not being destroyed by alien raiders.  After you shoot the raider, the game just sort of keeps on going forever.  You've got this cool space fighter with wicked plasma blasters, but nothing to shoot with them.  Having growing up in our modern go-go culture, most players prefer more external validation.
+
+So let's add some.  We'll add some code that checks each tick to see if there are no more raiders, in which case the player wins, or if there are no more habitats, in which case, the player loses, or if the player's ship has been destroyed, in which case, again, the player loses.  In any case, a message will be displayed that explains what just happened, and the game will return to the title screen.
 
 Since the planet is guaranteed not to be destroyed no matter what, we'll put the triggers that fire when the game is won or lost on the planet itself.  We could declare the entirety of the Triggerable property in the constructor of Planet, but it's quite long, so it might be better to break it out into its own method, or even several methods.  So first, open Planet.ts and insert the methods below:
 
@@ -855,9 +898,14 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 	): boolean
 	{
 		var level = uwpe.place as PlaceDefault;
+		var playerShipIsGone =
+			(level.playable() == null);
 		var habitatsAreAllGone =
 			(level.habitats().length == 0);
-		return habitatsAreAllGone;
+		var playerHasLost =
+			playerShipIsGone
+			|| habitatsAreAllGone;
+		return playerHasLost;
 	}
 
 	static triggerLoseReactToBeingTriggered
@@ -868,7 +916,7 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 		var universe = uwpe.universe;
 		universe.venueNextSet
 		(
-			VenueMessage.fromTextAndAcknowledge
+			VenueMessage.fromTextAndAcknowledgeNoButtons
 			(
 				"You lose!",
 				() => // acknowledge
@@ -909,7 +957,7 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 		var universe = uwpe.universe;
 		universe.venueNextSet
 		(
-			VenueMessage.fromTextAndAcknowledge
+			VenueMessage.fromTextAndAcknowledgeNoButtons
 			(
 				"You win!",
 				() => // acknowledge
@@ -934,7 +982,12 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 
 	Triggerable.name
 
-12.4. Also, you'll need to add this method at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell how many raiders are left:
+12.4. Also, you'll need to add a couple of methods at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell when and if the player's ship or all the raiders have been destroyed:
+
+	playable(): Player
+	{
+		return this.entitiesByPropertyName(Playable.name)[0] as Player;
+	}
 
 	raiders(): Raider[]
 	{
@@ -1341,8 +1394,6 @@ First, open Player.ts, and, above the contructor, add a count of the number of s
 	(
 		uwpe => Player.toControl(uwpe)
 	),
-
-	Playable.create()
 
 Note that the Player.toControl() method doesn't exist yet.  We'll create that in the next step.
 

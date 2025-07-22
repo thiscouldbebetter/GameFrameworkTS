@@ -8,6 +8,7 @@ import EntityPropertyFromValue = gf.EntityPropertyFromValue;
 import LoadableProperty = gf.LoadableProperty;
 import NamableProperty = gf.NamableProperty;
 import Playable = gf.Playable;
+import Relatable = gf.Relatable;
 import Selectable = gf.Selectable;
 import Selector = gf.Selector;
 import Trigger = gf.Trigger;

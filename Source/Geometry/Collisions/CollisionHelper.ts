@@ -137,6 +137,8 @@ export class CollisionHelper
 			([
 				[ boxName, this.collisionOfShapeGroupAnyAndShape ],
 				[ meshName, this.collisionOfShapeGroupAnyAndShape ],
+				[ shapeGroupAnyName, this.collisionOfShapeGroupAnyAndShape ],
+				[ shapeTransformedName, this.collisionOfShapeGroupAnyAndShape ],
 				[ sphereName, this.collisionOfShapeGroupAnyAndShape ]
 			]);
 			lookupOfLookups.set(shapeGroupAnyName, lookup);
@@ -159,6 +161,8 @@ export class CollisionHelper
 			([
 				[ boxName, this.collisionOfShapeTransformedAndShape ],
 				[ meshName, this.collisionOfShapeTransformedAndShape ],
+				[ shapeGroupAnyName, this.collisionOfShapeTransformedAndShape ],
+				[ shapeTransformedName, this.collisionOfShapeTransformedAndShape ],
 				[ sphereName, this.collisionOfShapeTransformedAndShape ]
 			]);
 			lookupOfLookups.set(shapeTransformedName, lookup);
@@ -292,6 +296,8 @@ export class CollisionHelper
 			([
 				[ boxName, this.doShapeGroupAnyAndShapeCollide ],
 				[ meshName, this.doShapeGroupAnyAndShapeCollide ],
+				[ shapeGroupAnyName, this.doShapeGroupAnyAndShapeCollide ],
+				[ shapeTransformedName, this.doShapeGroupAnyAndShapeCollide ],
 				[ sphereName, this.doShapeGroupAnyAndShapeCollide ]
 			]);
 			lookupOfLookups.set(shapeGroupAnyName, lookup);
@@ -314,6 +320,7 @@ export class CollisionHelper
 			([
 				[ boxName, this.doShapeTransformedAndShapeCollide ],
 				[ meshName, this.doShapeTransformedAndShapeCollide ],
+				[ shapeGroupAnyName, this.doShapeTransformedAndShapeCollide ],
 				[ sphereName, this.doShapeTransformedAndShapeCollide ]
 			]);
 			lookupOfLookups.set(shapeTransformedName, lookup);

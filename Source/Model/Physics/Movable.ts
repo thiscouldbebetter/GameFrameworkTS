@@ -121,11 +121,6 @@ export class Movable implements EntityProperty<Movable>
 		return this._speedMax(uwpe);
 	}
 
-	toConstraint(): Constraint_SpeedMaxXY
-	{
-		return new Constraint_SpeedMaxXY(this.speedMax(null));
-	}
-
 	// Clonable.
 
 	clone(): Movable
@@ -149,7 +144,24 @@ export class Movable implements EntityProperty<Movable>
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var entity = uwpe.entity;
+		var constrainable = Constrainable.of(entity);
+		if (constrainable != null)
+		{
+			var constraintMovable =
+				constrainable.constraintByClassName(Constraint_Movable.name);
+
+			if (constraintMovable == null)
+			{
+				constraintMovable = Constraint_Movable.create();
+				constrainable.constraintAdd(constraintMovable);
+			}
+		}
+	}
+
 	propertyName(): string { return Movable.name; }
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 

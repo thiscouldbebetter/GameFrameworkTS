@@ -349,13 +349,15 @@ class ConstraintTests extends TestFixture
 		);
 	}
 
-	speedMaxXY(): void
+	movable(): void
 	{
 		var entityVel = this._entityToConstrainLoc.vel;
 		entityVel.overwriteWithDimensions(1, 1, 1).multiplyScalar(100);
 
 		var speedMax = 1;
-		var constraint = new Constraint_SpeedMaxXY(speedMax);
+		var movable = Movable.fromSpeedMax(speedMax);
+		movable.initialize(null); // todo
+		var constraint = new Constraint_Movable();
 		this._constrainable.clear().constraintAdd(constraint);
 
 		var speedZBeforeConstraint = entityVel.z;

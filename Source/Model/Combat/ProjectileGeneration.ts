@@ -5,7 +5,7 @@ export class ProjectileGeneration
 {
 	radius: number;
 	distanceInitial: number;
-	speedRelativeToShooter: number;
+	speed: number;
 	ticksToLive: number;
 	damage: Damage;
 	visual: VisualBase;
@@ -15,7 +15,7 @@ export class ProjectileGeneration
 	(
 		radius: number,
 		distanceInitial: number,
-		speedRelativeToShooter: number,
+		speed: number,
 		ticksToLive: number,
 		damage: Damage,
 		visual: VisualBase,
@@ -24,7 +24,7 @@ export class ProjectileGeneration
 	{
 		this.radius = radius;
 		this.distanceInitial = distanceInitial;
-		this.speedRelativeToShooter = speedRelativeToShooter;
+		this.speed = speed;
 		this.ticksToLive = ticksToLive;
 		this.damage = damage;
 		this.visual = visual;
@@ -35,7 +35,7 @@ export class ProjectileGeneration
 	(
 		radius: number,
 		distanceInitial: number,
-		speedRelativeToShooter: number,
+		speed: number,
 		ticksToLive: number,
 		damage: Damage,
 		visual: VisualBase
@@ -45,7 +45,7 @@ export class ProjectileGeneration
 		(
 			radius,
 			distanceInitial,
-			speedRelativeToShooter,
+			speed,
 			ticksToLive,
 			damage,
 			visual,
@@ -57,7 +57,7 @@ export class ProjectileGeneration
 	(
 		radius: number,
 		distanceInitial: number,
-		speedRelativeToShooter: number,
+		speed: number,
 		ticksToLive: number,
 		damage: Damage,
 		visual: VisualBase,
@@ -68,7 +68,7 @@ export class ProjectileGeneration
 		(
 			radius,
 			distanceInitial,
-			speedRelativeToShooter,
+			speed,
 			ticksToLive,
 			damage,
 			visual,
@@ -82,7 +82,7 @@ export class ProjectileGeneration
 		(
 			0, // radius
 			0, // distanceInitial,
-			0, // speedRelativeToShooter
+			0, // speed
 			1, // ticksToLive
 			null, // damage
 			visual,
@@ -102,8 +102,6 @@ export class ProjectileGeneration
 	{
 		var shooterLoc = Locatable.of(entityFiring).loc;
 		var shooterPos = shooterLoc.pos;
-		var shooterVel = shooterLoc.vel;
-		var shooterSpeed = shooterVel.magnitude();
 		var shooterOri = shooterLoc.orientation;
 		var shooterForward = shooterOri.forward;
 
@@ -121,14 +119,31 @@ export class ProjectileGeneration
 		var shotOri = Orientation.fromForward(shooterForward);
 
 		var shotLoc = Disposition.fromPosAndOri(shotPos, shotOri);
-		var shotSpeedAbsolute =
-			this.speedRelativeToShooter + shooterSpeed;
 		shotLoc.vel
 			.overwriteWith(shooterForward)
-			.multiplyScalar(shotSpeedAbsolute);
+			.multiplyScalar(this.speed);
 
 		var shotAudible = Audible.create();
-		var shotCollider = Sphere.fromRadius(this.radius);
+
+		// Shots may move so fast that they "pass through" targets
+		// without ever colliding with them, so duplicate the collider
+		// to make sure anything between the before and after points is hit.
+		var colliderPartBeforeTransform = Sphere.fromRadius(this.radius); 
+		var shotDiameter = this.radius * 2;
+		var colliderPartsCount = this.speed / shotDiameter;
+		var colliderParts: ShapeBase[] = [];
+		for (var i = 0; i < colliderPartsCount; i++)
+		{
+			var displacement =
+				shooterForward
+					.clone()
+					.multiplyScalar(i * shotDiameter);
+			var transform = Transform_Translate.fromDisplacement(displacement);
+			var colliderPart =
+				ShapeTransformed.fromTransformAndChild(transform, colliderPartBeforeTransform);
+			colliderParts.push(colliderPart);
+		}
+		var shotCollider = ShapeGroupAny.fromShapes(colliderParts);
 		var shotCollidable = Collidable.fromColliderPropertyNameToCollideWithAndCollide
 		(
 			shotCollider,
@@ -140,7 +155,12 @@ export class ProjectileGeneration
 		var shotEphemeral = Ephemeral.fromTicksToLive(this.ticksToLive);
 		var shotKillable = Killable.fromIntegrityMax(1);
 		var shotLocatable = Locatable.fromDisposition(shotLoc);
-		var shotMovable = Movable.default();
+		var shotMovable = Movable.fromSpeedMax(this.speed);
+		var shotRelatable =
+			Relatable.fromRelationshipNameAndEntityRelatedId
+			(
+				"Originator", entityFiring.id
+			);
 
 		var shotEntity = Entity.fromNameAndProperties
 		(
@@ -153,7 +173,8 @@ export class ProjectileGeneration
 				shotEphemeral,
 				shotKillable,
 				shotLocatable,
-				shotMovable
+				shotMovable,
+				shotRelatable
 			]
 		);
 
@@ -166,16 +187,22 @@ export class ProjectileGeneration
 	{
 		var entityProjectile = uwpe.entity;
 		var entityOther = uwpe.entity2;
-		var targetKillable = Killable.of(entityOther);
-		if (targetKillable != null)
-		{
-			var damageToApply = Damager.of(entityProjectile).damagePerHit;
-			targetKillable.damageApply(uwpe, damageToApply);
 
-			var projectileKillable = Killable.of(entityProjectile);
-			if (projectileKillable != null)
+		var entityProjectileRelatable = Relatable.of(entityProjectile);
+
+		if (entityProjectileRelatable.entityRelatedId != entityOther.id)
+		{
+			var targetKillable = Killable.of(entityOther);
+			if (targetKillable != null)
 			{
-				projectileKillable.kill();
+				var damageToApply = Damager.of(entityProjectile).damagePerHit;
+				targetKillable.damageApply(uwpe, damageToApply);
+
+				var projectileKillable = Killable.of(entityProjectile);
+				if (projectileKillable != null)
+				{
+					projectileKillable.kill();
+				}
 			}
 		}
 	}

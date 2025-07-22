@@ -62,9 +62,6 @@ var ThisCouldBeBetter;
             speedMax(uwpe) {
                 return this._speedMax(uwpe);
             }
-            toConstraint() {
-                return new GameFramework.Constraint_SpeedMaxXY(this.speedMax(null));
-            }
             // Clonable.
             clone() {
                 return new Movable(this._accelerationPerTick, this._speedMax, this._canAccelerate);
@@ -77,7 +74,17 @@ var ThisCouldBeBetter;
             }
             // EntityProperty.
             finalize(uwpe) { }
-            initialize(uwpe) { }
+            initialize(uwpe) {
+                var entity = uwpe.entity;
+                var constrainable = GameFramework.Constrainable.of(entity);
+                if (constrainable != null) {
+                    var constraintMovable = constrainable.constraintByClassName(GameFramework.Constraint_Movable.name);
+                    if (constraintMovable == null) {
+                        constraintMovable = GameFramework.Constraint_Movable.create();
+                        constrainable.constraintAdd(constraintMovable);
+                    }
+                }
+            }
             propertyName() { return Movable.name; }
             updateForTimerTick(uwpe) { }
             // Equatable

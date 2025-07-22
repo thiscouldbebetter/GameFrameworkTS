@@ -7,6 +7,7 @@ var EntityPropertyFromValue = gf.EntityPropertyFromValue;
 var LoadableProperty = gf.LoadableProperty;
 var NamableProperty = gf.NamableProperty;
 var Playable = gf.Playable;
+var Relatable = gf.Relatable;
 var Selectable = gf.Selectable;
 var Selector = gf.Selector;
 var Trigger = gf.Trigger;
