@@ -4,12 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlBuilder {
-            constructor(styles, venueTransitionalFromTo, profilesMultiple, gameCanBeSaved) {
+            constructor(styles, venueTransitionalFromTo) {
                 this.styles = styles || GameFramework.ControlStyle.Instances()._All;
                 this.venueTransitionalFromTo =
                     venueTransitionalFromTo || this.venueFaderFromTo;
-                this.profilesMultiple = profilesMultiple || false;
-                this.gameCanBeSaved = gameCanBeSaved || false;
                 this.stylesByName = GameFramework.ArrayHelper.addLookupsByName(this.styles);
                 this.fontBase = GameFramework.FontNameAndHeight.default();
                 this.fontHeightInPixelsBase = this.fontBase.heightInPixels;
@@ -21,21 +19,13 @@ var ThisCouldBeBetter;
                 this._scaleMultiplier = GameFramework.Coords.create();
             }
             static default() {
-                return new ControlBuilder(null, null, null, null);
+                return new ControlBuilder(null, null);
             }
             static fromStyle(style) {
                 return ControlBuilder.fromStyles([style]);
             }
             static fromStyles(styles) {
-                return new ControlBuilder(styles, null, null, null);
-            }
-            gameCanBeSavedSet(value) {
-                this.gameCanBeSaved = value;
-                return this;
-            }
-            profilesMultipleSet(value) {
-                this.profilesMultiple = value;
-                return this;
+                return new ControlBuilder(styles, null);
             }
             styleByName(styleName) {
                 return this.stylesByName.get(styleName);
@@ -173,13 +163,13 @@ var ThisCouldBeBetter;
                 var buttonHeight = this.buttonHeightBase;
                 var padding = 5;
                 var rowHeight = buttonHeight + padding;
-                var buttonCount = this.gameCanBeSaved ? 5 : 3;
+                var buttonCount = universe.profileHelper.gameCanBeSaved ? 5 : 3;
                 var buttonsAllHeight = buttonCount * buttonHeight + (buttonCount - 1) * padding;
                 var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
                 var buttonSize = GameFramework.Coords.fromXY(40, buttonHeight);
                 var posX = (this.sizeBase.x - buttonSize.x) / 2;
                 var buttons = [];
-                if (this.gameCanBeSaved) {
+                if (universe.profileHelper.gameCanBeSaved) {
                     var save = () => this.game_Save(universe, size);
                     var load = () => this.game_Load(universe);
                     var buttonSave = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Save", font, save);
@@ -534,7 +524,7 @@ var ThisCouldBeBetter;
                 font);
                 var labelSound = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(105, row1PosY + labelPadding), // pos
                 GameFramework.Coords.fromXY(75, buttonHeight), // size
-                GameFramework.DataBinding.fromContext("Sound:"), font);
+                GameFramework.DataBinding.fromContext("Effects:"), font);
                 var selectSoundVolume = new GameFramework.ControlSelect("selectSoundVolume", GameFramework.Coords.fromXY(140, row1PosY), // pos
                 GameFramework.Coords.fromXY(30, buttonHeight), // size
                 GameFramework.DataBinding.fromContextGetAndSet(universe.soundHelper, (c) => c.effectVolume, (c, v) => { c.effectVolume = v; }), // valueSelected
@@ -688,7 +678,7 @@ var ThisCouldBeBetter;
             }
             title_Start(universe) {
                 var venueNext;
-                if (this.profilesMultiple) {
+                if (universe.profileHelper.profilesMultipleAreAllowed) {
                     var venueMessage = GameFramework.VenueMessage.fromTextNoButtons("Loading profiles...");
                     venueNext = GameFramework.VenueTask.fromVenueInnerPerformAndDone(venueMessage, () => GameFramework.Profile.toControlProfileSelect(universe, null, universe.venueCurrent()), (result) => // done
                      {

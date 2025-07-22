@@ -22,7 +22,9 @@ class GameDemo
 			worldCreator
 		);
 
-		universe.controlBuilder.profilesMultipleSet(true);
+		universe.profileHelper
+			.profilesMultipleAreAllowedSet(true)
+			.gameCanBeSavedSet(true);
 
 		universe.initializeAndStart();
 	}

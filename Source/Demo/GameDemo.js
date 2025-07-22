@@ -8,7 +8,9 @@ class GameDemo {
         var mediaFilePaths = this.mediaFilePathsBuild();
         var worldCreator = WorldCreator.fromWorldCreate(WorldDemo.create);
         var universe = Universe.fromNameTicksPerSecondMediaFilePathsAndWorldCreator("Game Framework Demo Game", ticksPerSecond, mediaFilePaths, worldCreator);
-        universe.controlBuilder.profilesMultipleSet(true);
+        universe.profileHelper
+            .profilesMultipleAreAllowedSet(true)
+            .gameCanBeSavedSet(true);
         universe.initializeAndStart();
     }
     mediaFilePathsBuild() {

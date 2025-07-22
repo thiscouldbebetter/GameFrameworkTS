@@ -6,8 +6,6 @@ export class ControlBuilder
 {
 	styles: ControlStyle[];
 	venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue;
-	profilesMultiple: boolean;
-	gameCanBeSaved: boolean;
 
 	buttonHeightBase: number;
 	buttonHeightSmallBase: number;
@@ -22,16 +20,12 @@ export class ControlBuilder
 	constructor
 	(
 		styles: Array<ControlStyle>,
-		venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue,
-		profilesMultiple: boolean,
-		gameCanBeSaved: boolean
+		venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue
 	)
 	{
 		this.styles = styles || ControlStyle.Instances()._All;
 		this.venueTransitionalFromTo =
 			venueTransitionalFromTo || this.venueFaderFromTo;
-		this.profilesMultiple = profilesMultiple || false;
-		this.gameCanBeSaved = gameCanBeSaved || false;
 
 		this.stylesByName = ArrayHelper.addLookupsByName(this.styles);
 
@@ -49,7 +43,7 @@ export class ControlBuilder
 
 	static default(): ControlBuilder
 	{
-		return new ControlBuilder(null, null, null, null);
+		return new ControlBuilder(null, null);
 	}
 
 	static fromStyle(style: ControlStyle): ControlBuilder
@@ -59,19 +53,7 @@ export class ControlBuilder
 
 	static fromStyles(styles: ControlStyle[]): ControlBuilder
 	{
-		return new ControlBuilder(styles, null, null, null);
-	}
-
-	gameCanBeSavedSet(value: boolean): ControlBuilder
-	{
-		this.gameCanBeSaved = value;
-		return this;
-	}
-
-	profilesMultipleSet(value: boolean): ControlBuilder
-	{
-		this.profilesMultiple = value;
-		return this;
+		return new ControlBuilder(styles, null);
 	}
 
 	styleByName(styleName: string): ControlStyle
@@ -414,7 +396,7 @@ export class ControlBuilder
 		var buttonHeight = this.buttonHeightBase;
 		var padding = 5;
 		var rowHeight = buttonHeight + padding;
-		var buttonCount = this.gameCanBeSaved ? 5 : 3;
+		var buttonCount = universe.profileHelper.gameCanBeSaved ? 5 : 3;
 		var buttonsAllHeight =
 			buttonCount * buttonHeight + (buttonCount - 1) * padding;
 		var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
@@ -424,7 +406,7 @@ export class ControlBuilder
 
 		var buttons = [];
 
-		if (this.gameCanBeSaved)
+		if (universe.profileHelper.gameCanBeSaved)
 		{
 			var save = () => this.game_Save(universe, size);
 			var load = () => this.game_Load(universe);
@@ -1254,7 +1236,7 @@ export class ControlBuilder
 		(
 			Coords.fromXY(105, row1PosY + labelPadding), // pos
 			Coords.fromXY(75, buttonHeight), // size
-			DataBinding.fromContext("Sound:"),
+			DataBinding.fromContext("Effects:"),
 			font
 		);
 
@@ -1604,7 +1586,7 @@ export class ControlBuilder
 	{
 		var venueNext: Venue;
 
-		if (this.profilesMultiple)
+		if (universe.profileHelper.profilesMultipleAreAllowed)
 		{
 			var venueMessage = VenueMessage.fromTextNoButtons("Loading profiles...");
 

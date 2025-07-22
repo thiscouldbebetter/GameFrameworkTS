@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Universe {
-            constructor(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator) {
+            constructor(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, profileHelper, worldCreator) {
                 this.name = name || "Untitled";
                 this.version = version || "no_version_specified";
                 this.timerHelper = timerHelper || GameFramework.TimerHelper.default();
@@ -12,6 +12,7 @@ var ThisCouldBeBetter;
                 this.soundHelper = soundHelper || new GameFramework.SoundHelperLive();
                 this.mediaLibrary = mediaLibrary || GameFramework.MediaLibrary.default();
                 this.controlBuilder = controlBuilder || GameFramework.ControlBuilder.default();
+                this.profileHelper = profileHelper || GameFramework.ProfileHelper.default();
                 this.worldCreator =
                     worldCreator
                         ||
@@ -32,8 +33,8 @@ var ThisCouldBeBetter;
                 this.debuggingModeName = debuggingModeName;
             }
             // static methods
-            static create(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator) {
-                var returnValue = new Universe(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator);
+            static create(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, profileHelper, worldCreator) {
+                var returnValue = new Universe(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, profileHelper, worldCreator);
                 return returnValue;
             }
             static default() {
@@ -44,6 +45,7 @@ var ThisCouldBeBetter;
                 null, // soundHelper,
                 null, // mediaLibrary
                 null, // controlBuilder
+                null, // profileHelper
                 null // worldCreator
                 );
                 return universe;
@@ -55,6 +57,7 @@ var ThisCouldBeBetter;
                 null, // display
                 null, // soundHelper,
                 mediaLibrary, null, // controlBuilder
+                null, // profileHelper
                 worldCreator);
                 return universe;
             }
@@ -65,7 +68,8 @@ var ThisCouldBeBetter;
                 var soundHelper = new GameFramework.SoundHelperLive();
                 var mediaLibrary = GameFramework.MediaLibrary.fromMediaFilePaths(mediaFilePaths);
                 var controlBuilder = GameFramework.ControlBuilder.default();
-                return new Universe(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, worldCreator);
+                var profileHelper = GameFramework.ProfileHelper.default();
+                return new Universe(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, profileHelper, worldCreator);
             }
             static fromWorld(world) {
                 var universe = Universe.default();

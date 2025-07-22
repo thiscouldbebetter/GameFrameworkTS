@@ -21,6 +21,7 @@ export class Universe
 	idHelper: IDHelper;
 	inputHelper: InputHelper;
 	platformHelper: PlatformHelper;
+	profileHelper: ProfileHelper;
 	randomizer: RandomizerSystem;
 	serializer: Serializer;
 	storageHelper: StorageHelper;
@@ -28,6 +29,7 @@ export class Universe
 
 	debuggingModeName: string;
 	profile: Profile;
+
 	private _venueNext: Venue;
 	venueStack: Stack<Venue>;
 
@@ -40,6 +42,7 @@ export class Universe
 		soundHelper: SoundHelper,
 		mediaLibrary: MediaLibrary,
 		controlBuilder: ControlBuilder,
+		profileHelper: ProfileHelper,
 		worldCreator: WorldCreator
 	)
 	{
@@ -50,6 +53,7 @@ export class Universe
 		this.soundHelper = soundHelper || new SoundHelperLive();
 		this.mediaLibrary = mediaLibrary || MediaLibrary.default();
 		this.controlBuilder = controlBuilder || ControlBuilder.default();
+		this.profileHelper = profileHelper || ProfileHelper.default();
 		this.worldCreator =
 			worldCreator
 			||
@@ -90,6 +94,7 @@ export class Universe
 		soundHelper: SoundHelper,
 		mediaLibrary: MediaLibrary,
 		controlBuilder: ControlBuilder,
+		profileHelper: ProfileHelper,
 		worldCreator: WorldCreator
 	): Universe
 	{
@@ -102,6 +107,7 @@ export class Universe
 			soundHelper,
 			mediaLibrary,
 			controlBuilder,
+			profileHelper,
 			worldCreator
 		);
 
@@ -119,6 +125,7 @@ export class Universe
 			null, // soundHelper,
 			null, // mediaLibrary
 			null, // controlBuilder
+			null, // profileHelper
 			null // worldCreator
 		);
 
@@ -140,6 +147,7 @@ export class Universe
 			null, // soundHelper,
 			mediaLibrary,
 			null, // controlBuilder
+			null, // profileHelper
 			worldCreator
 		);
 
@@ -160,6 +168,7 @@ export class Universe
 		var soundHelper = new SoundHelperLive();
 		var mediaLibrary = MediaLibrary.fromMediaFilePaths(mediaFilePaths);
 		var controlBuilder = ControlBuilder.default();
+		var profileHelper = ProfileHelper.default();
 
 		return new Universe
 		(
@@ -170,6 +179,7 @@ export class Universe
 			soundHelper,
 			mediaLibrary,
 			controlBuilder,
+			profileHelper,
 			worldCreator
 		);
 	}
