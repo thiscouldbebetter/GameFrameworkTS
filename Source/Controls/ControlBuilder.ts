@@ -6,7 +6,8 @@ export class ControlBuilder
 {
 	styles: ControlStyle[];
 	venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue;
-	profileMenusAreIncluded: boolean;
+	profilesMultiple: boolean;
+	gameCanBeSaved: boolean;
 
 	buttonHeightBase: number;
 	buttonHeightSmallBase: number;
@@ -22,13 +23,15 @@ export class ControlBuilder
 	(
 		styles: Array<ControlStyle>,
 		venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue,
-		profileMenusAreIncluded: boolean
+		profilesMultiple: boolean,
+		gameCanBeSaved: boolean
 	)
 	{
 		this.styles = styles || ControlStyle.Instances()._All;
 		this.venueTransitionalFromTo =
 			venueTransitionalFromTo || this.venueFaderFromTo;
-		this.profileMenusAreIncluded = profileMenusAreIncluded || false;
+		this.profilesMultiple = profilesMultiple || false;
+		this.gameCanBeSaved = gameCanBeSaved || false;
 
 		this.stylesByName = ArrayHelper.addLookupsByName(this.styles);
 
@@ -46,7 +49,7 @@ export class ControlBuilder
 
 	static default(): ControlBuilder
 	{
-		return new ControlBuilder(null, null, false);
+		return new ControlBuilder(null, null, null, null);
 	}
 
 	static fromStyle(style: ControlStyle): ControlBuilder
@@ -56,12 +59,18 @@ export class ControlBuilder
 
 	static fromStyles(styles: ControlStyle[]): ControlBuilder
 	{
-		return new ControlBuilder( styles, null, true);
+		return new ControlBuilder(styles, null, null, null);
 	}
 
-	profileMenusAreIncludedSet(value: boolean): ControlBuilder
+	gameCanBeSavedSet(value: boolean): ControlBuilder
 	{
-		this.profileMenusAreIncluded = value;
+		this.gameCanBeSaved = value;
+		return this;
+	}
+
+	profilesMultipleSet(value: boolean): ControlBuilder
+	{
+		this.profilesMultiple = value;
 		return this;
 	}
 
@@ -405,90 +414,94 @@ export class ControlBuilder
 		var buttonHeight = this.buttonHeightBase;
 		var padding = 5;
 		var rowHeight = buttonHeight + padding;
-		var rowCount = 5;
-		var buttonsAllHeight = rowCount * buttonHeight + (rowCount - 1) * padding;
+		var buttonCount = this.gameCanBeSaved ? 5 : 3;
+		var buttonsAllHeight =
+			buttonCount * buttonHeight + (buttonCount - 1) * padding;
 		var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
 
 		var buttonSize = Coords.fromXY(40, buttonHeight);
 		var posX = (this.sizeBase.x - buttonSize.x) / 2;
 
-		var row0PosY = margin;
-		var row1PosY = row0PosY + rowHeight;
-		var row2PosY = row1PosY + rowHeight;
-		var row3PosY = row2PosY + rowHeight;
-		var row4PosY = row3PosY + rowHeight;
+		var buttons = [];
+
+		if (this.gameCanBeSaved)
+		{
+			var save = () => this.game_Save(universe, size);
+			var load = () => this.game_Load(universe);
+
+			var buttonSave = ControlButton.fromPosSizeTextFontClick
+			(
+				Coords.fromXY(posX, margin + buttons.length * rowHeight),
+				buttonSize.clone(),
+				"Save",
+				font,
+				save
+			);
+			buttons.push(buttonSave);
+
+			var buttonLoad = ControlButton.fromPosSizeTextFontClick
+			(
+				Coords.fromXY(posX, margin + buttons.length * rowHeight),
+				buttonSize.clone(),
+				"Load",
+				font,
+				load
+			);
+			buttons.push(buttonLoad);
+		}
 
 		var about = () => this.game_About(universe, size);
-
-		var back = () => this.game_Back(universe, venuePrev);
-
-		var quit = () => this.game_Quit(universe, size, venuePrev);
-
-		var save = () => this.game_Save(universe, size);
-
-		var buttonSave = ControlButton.fromPosSizeTextFontClick
-		(
-			Coords.fromXY(posX, row0PosY), // pos
-			buttonSize.clone(),
-			"Save",
-			font,
-			save
-		);
-
-		var buttonLoad = ControlButton.fromPosSizeTextFontClick
-		(
-			Coords.fromXY(posX, row1PosY), // pos
-			buttonSize.clone(),
-			"Load",
-			font,
-			() => this.game_Load(universe)
-		);
-
 		var buttonAbout = ControlButton.fromPosSizeTextFontClick
 		(
-			Coords.fromXY(posX, row2PosY), // pos
+			Coords.fromXY(posX, margin + buttons.length * rowHeight),
 			buttonSize.clone(),
 			"About",
 			font,
 			about
 		);
+		buttons.push(buttonAbout);
 
+		var quit = () => this.game_Quit(universe, size, venuePrev);
 		var buttonQuit = ControlButton.fromPosSizeTextFontClick
 		(
-			Coords.fromXY(posX, row3PosY), // pos
+			Coords.fromXY(posX, margin + buttons.length * rowHeight),
 			buttonSize.clone(),
 			"Quit",
 			font,
 			quit
 		);
+		buttons.push(buttonQuit);
 
+		var back = () => this.game_Back(universe, venuePrev);
 		var buttonBack = ControlButton.fromPosSizeTextFontClick
 		(
-			Coords.fromXY(posX, row4PosY), // pos
+			Coords.fromXY(posX, margin + buttons.length * rowHeight),
 			buttonSize.clone(),
 			"Back",
 			font,
-			back // click
+			back
 		);
+		buttons.push(buttonBack);
+
+		var actions = [ Action.fromNameAndPerform("Back", back) ];
+		var mappings =
+		[
+			ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce
+			(
+				"Back",
+				Input.Instances().Escape.name,
+				true
+			)
+		];
 
 		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"containerStorage",
 			this._zeroes, // pos
 			this.sizeBase.clone(),
-			// children
-			[
-				buttonSave,
-				buttonLoad,
-				buttonAbout,
-				buttonQuit,
-				buttonBack
-			],
-
-			[ Action.fromNameAndPerform("Back", back) ],
-
-			[ new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true ) ],
-
+			buttons,
+			actions,
+			mappings
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
@@ -683,7 +696,10 @@ export class ControlBuilder
 
 			returnValue._actionToInputsMappings.push
 			(
-				new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true )
+				ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce
+				(
+					"Back", Input.Instances().Escape.name, true
+				)
 			);
 		}
 
@@ -1034,9 +1050,9 @@ export class ControlBuilder
 
 		var visual: VisualBase = VisualGroup.fromChildren
 		([
-			new VisualImageScaled
+			VisualImageScaled.fromSizeAndChild
 			(
-				size, new VisualImageFromLibrary("Titles_Opening")
+				size, VisualImageFromLibrary.fromImageName("Titles_Opening")
 			)
 			// Note: Sound won't work on the opening screen,
 			// because the user has to interact somehow
@@ -1352,8 +1368,12 @@ export class ControlBuilder
 
 			[ Action.fromNameAndPerform("Back", back) ],
 
-			[ new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true ) ],
-
+			[
+				ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce
+				(
+					"Back", Input.Instances().Escape.name, true
+				)
+			]
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
@@ -1584,7 +1604,7 @@ export class ControlBuilder
 	{
 		var venueNext: Venue;
 
-		if (this.profileMenusAreIncluded)
+		if (this.profilesMultiple)
 		{
 			var venueMessage = VenueMessage.fromTextNoButtons("Loading profiles...");
 

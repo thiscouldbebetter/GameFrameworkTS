@@ -16,6 +16,12 @@ var ThisCouldBeBetter;
             static fromActionNameAndInputNames(actionName, inputNames) {
                 return new ActionToInputsMapping(actionName, inputNames, false);
             }
+            static fromActionNameInputNameAndOnlyOnce(actionName, inputName, inactivateInputWhenActionPerformed) {
+                return new ActionToInputsMapping(actionName, [inputName], inactivateInputWhenActionPerformed);
+            }
+            static fromActionNameInputNamesAndOnlyOnce(actionName, inputNames, inactivateInputWhenActionPerformed) {
+                return new ActionToInputsMapping(actionName, inputNames, inactivateInputWhenActionPerformed);
+            }
             action(universe) {
                 return universe.world.defn.actionByName(this.actionName);
             }

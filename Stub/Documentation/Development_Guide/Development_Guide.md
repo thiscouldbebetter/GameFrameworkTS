@@ -500,9 +500,10 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 			var targetPos = Locatable.of(targetEntity).loc.pos;
 			var displacementToTarget =
-				Raider.displacement()
-				.overwriteWith(targetPos)
-				.subtract(raiderPos);
+				Raider
+					.displacement()
+					.overwriteWith(targetPos)
+					.subtract(raiderPos);
 			var distanceToTarget = displacementToTarget.magnitude();
 			var raiderMovable = Movable.of(raider);
 			var raiderAccelerationPerTick =
@@ -698,8 +699,8 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 			(
 				2, // radius
 				5, // distanceInitial
-				4, // speed
-				32, // ticksToLive
+				16, // speed
+				8, // ticksToLive
 				Damage.fromAmount(1),
 				VisualGroup.fromChildren
 				([
@@ -1204,8 +1205,8 @@ We'll fix the wrapping of the bullets first, because it's easiest.  We'll add a 
 			(
 				2, // radius
 				5, // distanceInitial
-				4, // speed
-				32, // ticksToLive
+				16, // speed
+				8, // ticksToLive
 				Damage.fromAmount(1),
 				VisualGroup.fromChildren
 				([

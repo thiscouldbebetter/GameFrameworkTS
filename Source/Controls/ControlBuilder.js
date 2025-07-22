@@ -4,11 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlBuilder {
-            constructor(styles, venueTransitionalFromTo, profileMenusAreIncluded) {
+            constructor(styles, venueTransitionalFromTo, profilesMultiple, gameCanBeSaved) {
                 this.styles = styles || GameFramework.ControlStyle.Instances()._All;
                 this.venueTransitionalFromTo =
                     venueTransitionalFromTo || this.venueFaderFromTo;
-                this.profileMenusAreIncluded = profileMenusAreIncluded || false;
+                this.profilesMultiple = profilesMultiple || false;
+                this.gameCanBeSaved = gameCanBeSaved || false;
                 this.stylesByName = GameFramework.ArrayHelper.addLookupsByName(this.styles);
                 this.fontBase = GameFramework.FontNameAndHeight.default();
                 this.fontHeightInPixelsBase = this.fontBase.heightInPixels;
@@ -20,16 +21,20 @@ var ThisCouldBeBetter;
                 this._scaleMultiplier = GameFramework.Coords.create();
             }
             static default() {
-                return new ControlBuilder(null, null, false);
+                return new ControlBuilder(null, null, null, null);
             }
             static fromStyle(style) {
                 return ControlBuilder.fromStyles([style]);
             }
             static fromStyles(styles) {
-                return new ControlBuilder(styles, null, true);
+                return new ControlBuilder(styles, null, null, null);
             }
-            profileMenusAreIncludedSet(value) {
-                this.profileMenusAreIncluded = value;
+            gameCanBeSavedSet(value) {
+                this.gameCanBeSaved = value;
+                return this;
+            }
+            profilesMultipleSet(value) {
+                this.profilesMultiple = value;
                 return this;
             }
             styleByName(styleName) {
@@ -168,41 +173,35 @@ var ThisCouldBeBetter;
                 var buttonHeight = this.buttonHeightBase;
                 var padding = 5;
                 var rowHeight = buttonHeight + padding;
-                var rowCount = 5;
-                var buttonsAllHeight = rowCount * buttonHeight + (rowCount - 1) * padding;
+                var buttonCount = this.gameCanBeSaved ? 5 : 3;
+                var buttonsAllHeight = buttonCount * buttonHeight + (buttonCount - 1) * padding;
                 var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
                 var buttonSize = GameFramework.Coords.fromXY(40, buttonHeight);
                 var posX = (this.sizeBase.x - buttonSize.x) / 2;
-                var row0PosY = margin;
-                var row1PosY = row0PosY + rowHeight;
-                var row2PosY = row1PosY + rowHeight;
-                var row3PosY = row2PosY + rowHeight;
-                var row4PosY = row3PosY + rowHeight;
+                var buttons = [];
+                if (this.gameCanBeSaved) {
+                    var save = () => this.game_Save(universe, size);
+                    var load = () => this.game_Load(universe);
+                    var buttonSave = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Save", font, save);
+                    buttons.push(buttonSave);
+                    var buttonLoad = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Load", font, load);
+                    buttons.push(buttonLoad);
+                }
                 var about = () => this.game_About(universe, size);
-                var back = () => this.game_Back(universe, venuePrev);
+                var buttonAbout = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "About", font, about);
+                buttons.push(buttonAbout);
                 var quit = () => this.game_Quit(universe, size, venuePrev);
-                var save = () => this.game_Save(universe, size);
-                var buttonSave = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, row0PosY), // pos
-                buttonSize.clone(), "Save", font, save);
-                var buttonLoad = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, row1PosY), // pos
-                buttonSize.clone(), "Load", font, () => this.game_Load(universe));
-                var buttonAbout = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, row2PosY), // pos
-                buttonSize.clone(), "About", font, about);
-                var buttonQuit = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, row3PosY), // pos
-                buttonSize.clone(), "Quit", font, quit);
-                var buttonBack = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, row4PosY), // pos
-                buttonSize.clone(), "Back", font, back // click
-                );
+                var buttonQuit = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Quit", font, quit);
+                buttons.push(buttonQuit);
+                var back = () => this.game_Back(universe, venuePrev);
+                var buttonBack = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Back", font, back);
+                buttons.push(buttonBack);
+                var actions = [GameFramework.Action.fromNameAndPerform("Back", back)];
+                var mappings = [
+                    GameFramework.ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce("Back", GameFramework.Input.Instances().Escape.name, true)
+                ];
                 var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("containerStorage", this._zeroes, // pos
-                this.sizeBase.clone(), 
-                // children
-                [
-                    buttonSave,
-                    buttonLoad,
-                    buttonAbout,
-                    buttonQuit,
-                    buttonBack
-                ], [GameFramework.Action.fromNameAndPerform("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true)]);
+                this.sizeBase.clone(), buttons, actions, mappings);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
@@ -289,7 +288,7 @@ var ThisCouldBeBetter;
                     "Resume", this.fontBase, () => this.gameAndSettings_Back(universe, venuePrev));
                     returnValue.children.push(buttonResume);
                     returnValue.actions.push(GameFramework.Action.fromNameAndPerform("Back", () => this.gameAndSettings_Back(universe, venuePrev)));
-                    returnValue._actionToInputsMappings.push(new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true));
+                    returnValue._actionToInputsMappings.push(GameFramework.ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce("Back", GameFramework.Input.Instances().Escape.name, true));
                 }
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
@@ -436,7 +435,7 @@ var ThisCouldBeBetter;
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var fontHeight = this.fontHeightInPixelsBase;
                 var visual = GameFramework.VisualGroup.fromChildren([
-                    new GameFramework.VisualImageScaled(size, new GameFramework.VisualImageFromLibrary("Titles_Opening"))
+                    GameFramework.VisualImageScaled.fromSizeAndChild(size, GameFramework.VisualImageFromLibrary.fromImageName("Titles_Opening"))
                     // Note: Sound won't work on the opening screen,
                     // because the user has to interact somehow
                     // before the browser will play sound.
@@ -582,7 +581,9 @@ var ThisCouldBeBetter;
                     buttonChange,
                     buttonInputs,
                     buttonDone
-                ], [GameFramework.Action.fromNameAndPerform("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true)]);
+                ], [GameFramework.Action.fromNameAndPerform("Back", back)], [
+                    GameFramework.ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce("Back", GameFramework.Input.Instances().Escape.name, true)
+                ]);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
@@ -687,7 +688,7 @@ var ThisCouldBeBetter;
             }
             title_Start(universe) {
                 var venueNext;
-                if (this.profileMenusAreIncluded) {
+                if (this.profilesMultiple) {
                     var venueMessage = GameFramework.VenueMessage.fromTextNoButtons("Loading profiles...");
                     venueNext = GameFramework.VenueTask.fromVenueInnerPerformAndDone(venueMessage, () => GameFramework.Profile.toControlProfileSelect(universe, null, universe.venueCurrent()), (result) => // done
                      {

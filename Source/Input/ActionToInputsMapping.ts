@@ -37,6 +37,32 @@ export class ActionToInputsMapping
 		return new ActionToInputsMapping(actionName, inputNames, false);
 	}
 
+	static fromActionNameInputNameAndOnlyOnce
+	(
+		actionName: string,
+		inputName: string,
+		inactivateInputWhenActionPerformed: boolean
+	): ActionToInputsMapping
+	{
+		return new ActionToInputsMapping
+		(
+			actionName, [ inputName ], inactivateInputWhenActionPerformed
+		);
+	}
+
+	static fromActionNameInputNamesAndOnlyOnce
+	(
+		actionName: string,
+		inputNames: string[],
+		inactivateInputWhenActionPerformed: boolean
+	): ActionToInputsMapping
+	{
+		return new ActionToInputsMapping
+		(
+			actionName, inputNames, inactivateInputWhenActionPerformed
+		);
+	}
+
 	action(universe: Universe): Action
 	{
 		return universe.world.defn.actionByName(this.actionName);
