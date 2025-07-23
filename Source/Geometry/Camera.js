@@ -215,6 +215,7 @@ var ThisCouldBeBetter;
                 var boundable = GameFramework.Boundable.fromBounds(this.viewCollider);
                 var collidable = GameFramework.Collidable
                     .fromCollider(this.viewCollider)
+                    .collidesOnlyWithEntitiesHavingPropertyNamedSet(GameFramework.Drawable.name)
                     .canCollideAgainWithoutSeparatingSet(true)
                     .exemptFromCollisionEffectsOfOtherSet(true);
                 var constrainable = this.toEntityFollowingEntityWithName_Constrainable(targetEntityName);

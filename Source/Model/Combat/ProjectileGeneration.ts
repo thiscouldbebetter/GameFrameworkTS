@@ -144,12 +144,13 @@ export class ProjectileGeneration
 			colliderParts.push(colliderPart);
 		}
 		var shotCollider = ShapeGroupAny.fromShapes(colliderParts);
-		var shotCollidable = Collidable.fromColliderPropertyNameToCollideWithAndCollide
-		(
-			shotCollider,
-			Collidable.name,
-			(uwpe: UniverseWorldPlaceEntities) => this.collide(uwpe)
-		);
+		var shotCollidable =
+			Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide
+			(
+				shotCollider,
+				Collidable.name,
+				(uwpe: UniverseWorldPlaceEntities) => this.collide(uwpe)
+			);
 		var shotDamager = Damager.fromDamagePerHit(this.damage);
 		var shotDrawable = Drawable.fromVisual(this.visual); // hack
 		var shotEphemeral = Ephemeral.fromTicksToLive(this.ticksToLive);

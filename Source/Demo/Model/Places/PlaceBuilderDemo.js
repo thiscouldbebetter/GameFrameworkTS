@@ -1758,7 +1758,7 @@ class PlaceBuilderDemo // Main.
             Ephemeral.fromTicksToLive(8),
             killable,
             Locatable.fromDisp(projectileLoc),
-            Collidable.fromColliderPropertyNamesToCollideWithAndCollide(projectileCollider, [Killable.name], projectileCollide),
+            Collidable.fromColliderPropertyNameAndCollide(projectileCollider, Killable.name, projectileCollide),
             Drawable.fromVisual(projectileVisual)
         ]);
         place.entityToSpawnAdd(projectileEntity);

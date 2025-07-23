@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Collidable {
-            constructor(canCollideAgainWithoutSeparating, exemptFromCollisionEffectsOfOther, ticksToWaitBetweenCollisions, colliderAtRest, entityPropertyNamesToCollideWith, collideEntitiesForUniverseWorldPlaceEntitiesAndCollision) {
+            constructor(canCollideAgainWithoutSeparating, exemptFromCollisionEffectsOfOther, ticksToWaitBetweenCollisions, colliderAtRest, collidesOnlyWithEntitiesHavingPropertiesNamed, collideEntitiesForUniverseWorldPlaceEntitiesAndCollision) {
                 this.canCollideAgainWithoutSeparating =
                     canCollideAgainWithoutSeparating || false;
                 this.exemptFromCollisionEffectsOfOther =
@@ -12,8 +12,8 @@ var ThisCouldBeBetter;
                 this.ticksToWaitBetweenCollisions =
                     ticksToWaitBetweenCollisions || 0;
                 this.colliderAtRestSet(colliderAtRest);
-                this.entityPropertyNamesToCollideWith =
-                    entityPropertyNamesToCollideWith || [Collidable.name];
+                this.collidesOnlyWithEntitiesHavingPropertiesNamed =
+                    collidesOnlyWithEntitiesHavingPropertiesNamed || [Collidable.name];
                 this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision =
                     collideEntitiesForUniverseWorldPlaceEntitiesAndCollision;
                 this.locPrev = GameFramework.Disposition.create();
@@ -43,23 +43,24 @@ var ThisCouldBeBetter;
                 return new Collidable(false, // canCollideAgainWithoutSeparating
                 false, // exemptFromCollisionEffectsOfOther
                 0, // ticksToWaitBetweenCollisions
-                colliderAtRest, null, // entityPropertyNamesToCollideWith
+                colliderAtRest, null, // collidesOnlyWithEntitiesHavingPropertiesNamed
                 collideEntities);
             }
-            static fromColliderPropertyNameAndCollide(colliderAtRest, entityPropertyToCollideWithName, collideEntities) {
-                return Collidable.fromColliderPropertyNameToCollideWithAndCollide(colliderAtRest, entityPropertyToCollideWithName, collideEntities);
+            static fromColliderAndCollidesOnlyWithEntitiesHavingPropertyNamed(colliderAtRest, collidesOnlyWithEntitiesHavingPropertyNamed) {
+                return Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertyNamed, null // collideEntities
+                );
             }
-            static fromColliderPropertyNameToCollideWithAndCollide(colliderAtRest, entityPropertyNameToCollideWith, collideEntities) {
-                return new Collidable(false, // canCollideAgainWithoutSeparating
-                false, // exemptFromCollisionEffectsOfOther
+            static fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertyNamed, collideEntities) {
+                return Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertiesNamedAndCollide(colliderAtRest, [collidesOnlyWithEntitiesHavingPropertyNamed], collideEntities);
+            }
+            static fromColliderCollidesOnlyWithEntitiesHavingPropertiesNamedAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertiesNamed, collideEntities) {
+                return new Collidable(null, // canCollideAgainWithoutSeparating
+                null, // exemptFromCollisionEffectsOfOther
                 null, // ticksToWaitBetweenCollisions
-                colliderAtRest, [entityPropertyNameToCollideWith], collideEntities);
+                colliderAtRest, collidesOnlyWithEntitiesHavingPropertiesNamed, collideEntities);
             }
-            static fromColliderPropertyNamesToCollideWithAndCollide(colliderAtRest, entityPropertyNamesToCollideWith, collideEntities) {
-                return new Collidable(false, // canCollideAgainWithoutSeparating
-                false, // exemptFromCollisionEffectsOfOther
-                0, // ticksToWaitBetweenCollisions
-                colliderAtRest, entityPropertyNamesToCollideWith, collideEntities);
+            static fromColliderPropertyNameAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertyNamed, collideEntities) {
+                return Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertyNamed, collideEntities);
             }
             static fromShape(shapeAtRest) {
                 return Collidable.fromColliderAndCollideEntities(shapeAtRest, null);
@@ -79,7 +80,7 @@ var ThisCouldBeBetter;
                 return this;
             }
             canCollideWithTypeOfEntity(entityOther) {
-                var returnValue = this.entityPropertyNamesToCollideWith.some(propertyName => {
+                var returnValue = this.collidesOnlyWithEntitiesHavingPropertiesNamed.some(propertyName => {
                     var collisionsBetweenEntityTypesAreTracked = (entityOther.propertyByName(propertyName) != null);
                     return collisionsBetweenEntityTypesAreTracked;
                 });
@@ -124,6 +125,10 @@ var ThisCouldBeBetter;
                 var transform = this._transformLocate;
                 transform.loc.overwriteWith(entityLoc);
                 this.collider.transform(transform);
+            }
+            collidesOnlyWithEntitiesHavingPropertyNamedSet(value) {
+                this.collidesOnlyWithEntitiesHavingPropertiesNamed = [value];
+                return this;
             }
             colliderResetToRestPosition() {
                 this.collider.overwriteWith(this.colliderAtRest);
@@ -217,8 +222,9 @@ var ThisCouldBeBetter;
                 var place = uwpe.place;
                 var entity = uwpe.entity;
                 var collisionHelper = universe.collisionHelper;
-                for (var p = 0; p < this.entityPropertyNamesToCollideWith.length; p++) {
-                    var entityPropertyName = this.entityPropertyNamesToCollideWith[p];
+                var propertyNames = this.collidesOnlyWithEntitiesHavingPropertiesNamed;
+                for (var p = 0; p < propertyNames.length; p++) {
+                    var entityPropertyName = propertyNames[p];
                     var entitiesWithProperty = place.entitiesByPropertyName(entityPropertyName);
                     if (entitiesWithProperty != null) {
                         for (var e = 0; e < entitiesWithProperty.length; e++) {
@@ -373,7 +379,7 @@ var ThisCouldBeBetter;
             }
             // cloneable
             clone() {
-                return new Collidable(this.canCollideAgainWithoutSeparating, this.exemptFromCollisionEffectsOfOther, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.entityPropertyNamesToCollideWith, this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision);
+                return new Collidable(this.canCollideAgainWithoutSeparating, this.exemptFromCollisionEffectsOfOther, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.collidesOnlyWithEntitiesHavingPropertiesNamed, this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision);
             }
             overwriteWith(other) { return this; }
             // Equatable

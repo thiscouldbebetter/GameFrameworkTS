@@ -434,6 +434,7 @@ export class Camera implements EntityProperty<Camera>
 		var collidable =
 			Collidable
 				.fromCollider(this.viewCollider)
+				.collidesOnlyWithEntitiesHavingPropertyNamedSet(Drawable.name)
 				.canCollideAgainWithoutSeparatingSet(true)
 				.exemptFromCollisionEffectsOfOtherSet(true);
 

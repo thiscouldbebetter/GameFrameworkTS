@@ -3257,9 +3257,9 @@ class PlaceBuilderDemo // Main.
 				Ephemeral.fromTicksToLive(8),
 				killable,
 				Locatable.fromDisp(projectileLoc),
-				Collidable.fromColliderPropertyNamesToCollideWithAndCollide
+				Collidable.fromColliderPropertyNameAndCollide
 				(
-					projectileCollider, [ Killable.name ], projectileCollide
+					projectileCollider, Killable.name, projectileCollide
 				),
 				Drawable.fromVisual(projectileVisual)
 			]

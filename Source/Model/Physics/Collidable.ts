@@ -8,7 +8,7 @@ export class Collidable implements EntityProperty<Collidable>
 	exemptFromCollisionEffectsOfOther: boolean;
 	ticksToWaitBetweenCollisions: number;
 	colliderAtRest: ShapeBase;
-	entityPropertyNamesToCollideWith: string[];
+	collidesOnlyWithEntitiesHavingPropertiesNamed: string[];
 	_collideEntitiesForUniverseWorldPlaceEntitiesAndCollision:
 		(uwpe: UniverseWorldPlaceEntities, c: Collision) => void;
 
@@ -30,7 +30,7 @@ export class Collidable implements EntityProperty<Collidable>
 		exemptFromCollisionEffectsOfOther: boolean,
 		ticksToWaitBetweenCollisions: number,
 		colliderAtRest: ShapeBase,
-		entityPropertyNamesToCollideWith: string[],
+		collidesOnlyWithEntitiesHavingPropertiesNamed: string[],
 		collideEntitiesForUniverseWorldPlaceEntitiesAndCollision:
 			(uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	)
@@ -42,8 +42,8 @@ export class Collidable implements EntityProperty<Collidable>
 		this.ticksToWaitBetweenCollisions =
 			ticksToWaitBetweenCollisions || 0;
 		this.colliderAtRestSet(colliderAtRest);
-		this.entityPropertyNamesToCollideWith =
-			entityPropertyNamesToCollideWith || [ Collidable.name ];
+		this.collidesOnlyWithEntitiesHavingPropertiesNamed =
+			collidesOnlyWithEntitiesHavingPropertiesNamed || [ Collidable.name ];
 		this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision =
 			collideEntitiesForUniverseWorldPlaceEntitiesAndCollision;
 
@@ -104,7 +104,54 @@ export class Collidable implements EntityProperty<Collidable>
 			false, // exemptFromCollisionEffectsOfOther
 			0, // ticksToWaitBetweenCollisions
 			colliderAtRest,
-			null, // entityPropertyNamesToCollideWith
+			null, // collidesOnlyWithEntitiesHavingPropertiesNamed
+			collideEntities
+		);
+	}
+
+	static fromColliderAndCollidesOnlyWithEntitiesHavingPropertyNamed
+	(
+		colliderAtRest: ShapeBase,
+		collidesOnlyWithEntitiesHavingPropertyNamed: string
+	): Collidable
+	{
+		return Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide
+		(
+			colliderAtRest,
+			collidesOnlyWithEntitiesHavingPropertyNamed,
+			null // collideEntities
+		);
+	}
+
+	static fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide
+	(
+		colliderAtRest: ShapeBase,
+		collidesOnlyWithEntitiesHavingPropertyNamed: string,
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
+	): Collidable
+	{
+		return Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertiesNamedAndCollide
+		(
+			colliderAtRest,
+			[ collidesOnlyWithEntitiesHavingPropertyNamed ],
+			collideEntities
+		);
+	}
+
+	static fromColliderCollidesOnlyWithEntitiesHavingPropertiesNamedAndCollide
+	(
+		colliderAtRest: ShapeBase,
+		collidesOnlyWithEntitiesHavingPropertiesNamed: string[],
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
+	): Collidable
+	{
+		return new Collidable
+		(
+			null, // canCollideAgainWithoutSeparating
+			null, // exemptFromCollisionEffectsOfOther
+			null, // ticksToWaitBetweenCollisions
+			colliderAtRest,
+			collidesOnlyWithEntitiesHavingPropertiesNamed,
 			collideEntities
 		);
 	}
@@ -112,50 +159,14 @@ export class Collidable implements EntityProperty<Collidable>
 	static fromColliderPropertyNameAndCollide
 	(
 		colliderAtRest: ShapeBase,
-		entityPropertyToCollideWithName: string,
+		collidesOnlyWithEntitiesHavingPropertyNamed: string,
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	): Collidable
 	{
-		return Collidable.fromColliderPropertyNameToCollideWithAndCollide
+		return Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide
 		(
 			colliderAtRest,
-			entityPropertyToCollideWithName,
-			collideEntities
-		);
-	}
-
-	static fromColliderPropertyNameToCollideWithAndCollide
-	(
-		colliderAtRest: ShapeBase,
-		entityPropertyNameToCollideWith: string,
-		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
-	): Collidable
-	{
-		return new Collidable
-		(
-			false, // canCollideAgainWithoutSeparating
-			false, // exemptFromCollisionEffectsOfOther
-			null, // ticksToWaitBetweenCollisions
-			colliderAtRest,
-			[ entityPropertyNameToCollideWith ],
-			collideEntities
-		);
-	}
-
-	static fromColliderPropertyNamesToCollideWithAndCollide
-	(
-		colliderAtRest: ShapeBase,
-		entityPropertyNamesToCollideWith: string[],
-		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision)=>void
-	): Collidable
-	{
-		return new Collidable
-		(
-			false, // canCollideAgainWithoutSeparating
-			false, // exemptFromCollisionEffectsOfOther
-			0, // ticksToWaitBetweenCollisions
-			colliderAtRest,
-			entityPropertyNamesToCollideWith,
+			collidesOnlyWithEntitiesHavingPropertyNamed,
 			collideEntities
 		);
 	}
@@ -193,7 +204,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	canCollideWithTypeOfEntity(entityOther: Entity): boolean
 	{
-		var returnValue = this.entityPropertyNamesToCollideWith.some
+		var returnValue = this.collidesOnlyWithEntitiesHavingPropertiesNamed.some
 		(
 			propertyName =>
 			{
@@ -295,6 +306,12 @@ export class Collidable implements EntityProperty<Collidable>
 		var transform = this._transformLocate;
 		transform.loc.overwriteWith(entityLoc);
 		this.collider.transform(transform);
+	}
+
+	collidesOnlyWithEntitiesHavingPropertyNamedSet(value: string): Collidable
+	{
+		this.collidesOnlyWithEntitiesHavingPropertiesNamed = [value];
+		return this;
 	}
 
 	colliderResetToRestPosition(): void
@@ -471,10 +488,14 @@ export class Collidable implements EntityProperty<Collidable>
 
 		var collisionHelper = universe.collisionHelper;
 
-		for (var p = 0; p < this.entityPropertyNamesToCollideWith.length; p++)
+		var propertyNames = this.collidesOnlyWithEntitiesHavingPropertiesNamed;
+		for (var p = 0; p < propertyNames.length; p++)
 		{
-			var entityPropertyName = this.entityPropertyNamesToCollideWith[p];
-			var entitiesWithProperty = place.entitiesByPropertyName(entityPropertyName);
+			var entityPropertyName = propertyNames[p];
+
+			var entitiesWithProperty =
+				place.entitiesByPropertyName(entityPropertyName);
+
 			if (entitiesWithProperty != null)
 			{
 				for (var e = 0; e < entitiesWithProperty.length; e++)
@@ -741,7 +762,7 @@ export class Collidable implements EntityProperty<Collidable>
 			this.exemptFromCollisionEffectsOfOther,
 			this.ticksToWaitBetweenCollisions,
 			this.colliderAtRest.clone(),
-			this.entityPropertyNamesToCollideWith,
+			this.collidesOnlyWithEntitiesHavingPropertiesNamed,
 			this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
 		);
 	}
