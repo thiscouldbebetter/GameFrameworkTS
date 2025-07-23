@@ -177,6 +177,7 @@ var ThisCouldBeBetter;
                 this.Pink = c("Pink", "p", [1, 0.5, 0.5, 1]);
                 this.Purple = c("Purple", null, [0.5, 0, 0.5, 1]);
                 this.Red = c("Red", "r", [1, 0, 0, 1]);
+                this.RedOrange = c("Red-Orange", "ro", [1, 0.25, 0, 1]);
                 this.RedDark = c("RedDark", "R", [.5, 0, 0, 1]);
                 this.Tan = c("Tan", "T", [.8, .7, .5, 1]);
                 this.Violet = c("Violet", "v", [1, 0, 1, 1]);
@@ -186,6 +187,7 @@ var ThisCouldBeBetter;
                 this.White = c("White", "w", [1, 1, 1, 1]);
                 this.Yellow = c("Yellow", "y", [1, 1, 0, 1]);
                 this.YellowDark = c("YellowDark", "Y", [.5, .5, 0, 1]);
+                this.YellowOrange = c("Yellow-Orange", "yo", [1, 0.75, 0, 1]);
                 this._All =
                     [
                         this._Transparent,
@@ -212,6 +214,7 @@ var ThisCouldBeBetter;
                         this.Pink,
                         this.Purple,
                         this.Red,
+                        this.RedOrange,
                         this.RedDark,
                         this.Tan,
                         this.Violet,
@@ -220,6 +223,7 @@ var ThisCouldBeBetter;
                         this.VioletQuarter,
                         this.White,
                         this.Yellow,
+                        this.YellowOrange,
                         this.YellowDark,
                     ];
                 this._AllByCode = GameFramework.ArrayHelper.addLookups(this._All, (x) => x.code);

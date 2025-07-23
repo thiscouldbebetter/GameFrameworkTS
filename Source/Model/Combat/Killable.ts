@@ -4,30 +4,38 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Killable implements EntityProperty<Killable>
 {
+	ticksOfImmunityInitial: number;
 	integrityMax: number;
 	_damageApply:
 	(
 		uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
 	) => number;
 	_die: (uwpe: UniverseWorldPlaceEntities) => void;
+	livesInReserve: number;
 
 	deathIsIgnored: boolean; // For debugging.
 	integrity: number;
+	ticksOfImmunityRemaining: number;
 
 	constructor
 	(
+		ticksOfImmunityInitial: number,
 		integrityMax: number,
 		damageApply:
 		(
 			uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
 		) => number,
-		die: (uwpe: UniverseWorldPlaceEntities) => void
+		die: (uwpe: UniverseWorldPlaceEntities) => void,
+		livesInReserve: number
 	)
 	{
-		this.integrityMax = integrityMax;
+		this.ticksOfImmunityInitial = ticksOfImmunityInitial || 0;
+		this.integrityMax = integrityMax || 1;
 		this._damageApply = damageApply;
 		this._die = die;
+		this.livesInReserve = livesInReserve || 0;
 
+		this.ticksOfImmunityRemaining = this.ticksOfImmunityInitial;
 		this.deathIsIgnored = false;
 		this.integritySetToMax();
 	}
@@ -37,7 +45,7 @@ export class Killable implements EntityProperty<Killable>
 		die: (uwpe: UniverseWorldPlaceEntities) => void
 	): Killable
 	{
-		return new Killable(1, null, die);
+		return new Killable(null, null, null, die, null);
 	}
 
 	static default(): Killable
@@ -47,7 +55,7 @@ export class Killable implements EntityProperty<Killable>
 
 	static fromIntegrityMax(integrityMax: number): Killable
 	{
-		return new Killable(integrityMax, null, null);
+		return new Killable(null, integrityMax, null, null, null);
 	}
 
 	static fromIntegrityMaxAndDie
@@ -56,7 +64,7 @@ export class Killable implements EntityProperty<Killable>
 		die: (uwpe: UniverseWorldPlaceEntities) => void
 	): Killable
 	{
-		return new Killable(integrityMax, null, die);
+		return new Killable(null, integrityMax, null, die, null);
 	}
 
 	static fromIntegrityMaxDamageApplyAndDie
@@ -69,7 +77,62 @@ export class Killable implements EntityProperty<Killable>
 		die: (uwpe: UniverseWorldPlaceEntities) => void
 	): Killable
 	{
-		return new Killable(integrityMax, damageApply, die);
+		return new Killable(null, integrityMax, damageApply, die, null);
+	}
+
+	static fromTicksOfImmunity
+	(
+		ticksOfImmunityInitial: number
+	): Killable
+	{
+		return new Killable(ticksOfImmunityInitial, null, null, null, null);
+	}
+
+	static fromTicksOfImmunityAndDie
+	(
+		ticksOfImmunityInitial: number,
+		die: (uwpe: UniverseWorldPlaceEntities) => void
+	): Killable
+	{
+		return new Killable(ticksOfImmunityInitial, null, null, die, null);
+	}
+
+	static fromTicksOfImmunityDieAndLives
+	(
+		ticksOfImmunityInitial: number,
+		die: (uwpe: UniverseWorldPlaceEntities) => void,
+		livesInReserve: number
+	): Killable
+	{
+		return new Killable(ticksOfImmunityInitial, null, null, die, livesInReserve);
+	}
+
+	static fromTicksOfImmunityIntegrityMaxAndDie
+	(
+		ticksOfImmunityInitial: number,
+		integrityMax: number,
+		die: (uwpe: UniverseWorldPlaceEntities) => void
+	): Killable
+	{
+		return new Killable(ticksOfImmunityInitial, integrityMax, null, die, null);
+	}
+
+	static fromTicksOfImmunityIntegrityMaxDamageApplyDieAndLives
+	(
+		ticksOfImmunityInitial: number,
+		integrityMax: number,
+		damageApply:
+		(
+			uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
+		) => number,
+		die: (uwpe: UniverseWorldPlaceEntities) => void,
+		livesInReserve: number
+	): Killable
+	{
+		return new Killable
+		(
+			ticksOfImmunityInitial, integrityMax, damageApply, die, livesInReserve
+		);
 	}
 
 	static of(entity: Entity): Killable
@@ -161,9 +224,9 @@ export class Killable implements EntityProperty<Killable>
 		this.integrityAdd(0 - amountToSubtract);
 	}
 
-	kill(): void
+	immunityIsInEffect(): boolean
 	{
-		this.integritySet(0);
+		return (this.ticksOfImmunityRemaining > 0);
 	}
 
 	isAlive(): boolean
@@ -171,10 +234,30 @@ export class Killable implements EntityProperty<Killable>
 		return (this.integrity > 0 || this.deathIsIgnored);
 	}
 
+	kill(): void
+	{
+		this.integritySet(0);
+	}
+
+	ticksOfImmunityInitialSet(value: number): Killable
+	{
+		this.ticksOfImmunityInitial = value;
+		return this;
+	}
+
+	ticksOfImmunityRemainingReset(): void
+	{
+		this.ticksOfImmunityRemaining = this.ticksOfImmunityInitial;
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
+
+	initialize(uwpe: UniverseWorldPlaceEntities): void
+	{
+		this.ticksOfImmunityRemainingReset();
+	}
 
 	propertyName(): string { return Killable.name; }
 
@@ -183,13 +266,21 @@ export class Killable implements EntityProperty<Killable>
 		uwpe: UniverseWorldPlaceEntities
 	): void
 	{
-		var killableIsAlive = this.isAlive();
-		if (killableIsAlive == false)
+		var immunityIsInEffect = this.immunityIsInEffect();
+		if (immunityIsInEffect)
 		{
-			var place = uwpe.place;
-			var entityKillable = uwpe.entity;
-			place.entityToRemoveAdd(entityKillable);
-			this.die(uwpe);
+			this.ticksOfImmunityRemaining--;
+		}
+		else
+		{
+			var killableIsAlive = this.isAlive();
+			if (killableIsAlive == false)
+			{
+				var place = uwpe.place;
+				var entityKillable = uwpe.entity;
+				place.entityToRemoveAdd(entityKillable);
+				this.die(uwpe);
+			}
 		}
 	}
 
@@ -197,10 +288,29 @@ export class Killable implements EntityProperty<Killable>
 
 	clone(): Killable
 	{
-		return new Killable(this.integrityMax, this._damageApply, this._die);
+		return new Killable
+		(
+			this.ticksOfImmunityInitial,
+			this.integrityMax,
+			this._damageApply,
+			this._die,
+			this.livesInReserve
+		);
 	}
 
-	overwriteWith(other: Killable): Killable { return this; }
+	overwriteWith(other: Killable): Killable
+	{
+		this.ticksOfImmunityInitial = other.ticksOfImmunityInitial;
+		this.integrityMax = other.integrityMax;
+		this._damageApply = other._damageApply;
+		this._die = other._die;
+		this.livesInReserve = other.livesInReserve;
+
+		this.integrity = other.integrity;
+		this.ticksOfImmunityRemaining = other.ticksOfImmunityRemaining;
+
+		return this;
+	}
 
 	// Equatable
 

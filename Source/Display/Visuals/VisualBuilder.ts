@@ -14,6 +14,27 @@ export class VisualBuilder
 		return VisualBuilder._instance;
 	}
 
+	archeryTarget(radiusOuter: number): VisualBase
+	{
+		var diameterOuter = radiusOuter * 2;
+		var bullseyeDiameter = diameterOuter / 3;
+		var bullseyeRadius = bullseyeDiameter / 2;
+
+		var colors = Color.Instances();
+		var visual = VisualGroup.fromNameAndChildren
+		(
+			"ArcheryTarget",
+			[
+				VisualCircle.fromRadiusAndColorFill(radiusOuter, colors.Blue),
+				VisualCircle.fromRadiusAndColorFill(bullseyeDiameter, colors.White),
+				VisualCircle.fromRadiusAndColorFill(bullseyeRadius, colors.Red)
+			]
+		);
+
+		return visual;
+	}
+
+
 	directionalAnimationsFromTiledImage
 	(
 		visualImageSource: VisualImage,

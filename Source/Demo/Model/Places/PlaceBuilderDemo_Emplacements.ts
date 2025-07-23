@@ -80,6 +80,42 @@ class PlaceBuilderDemo_Emplacements
 		return itemAnvilEntityDefn;
 	}
 
+	entityDefnBuildArcheryTarget(): Entity
+	{
+		var entityDimensionHalf = this.entityDimension / 2;
+
+		var name = "ArcheryTarget";
+
+		var visual = VisualBuilder.Instance().archeryTarget(this.entityDimension);
+
+		var collider =
+			Sphere.fromRadius(entityDimensionHalf);
+		var collide = (uwpe: UniverseWorldPlaceEntities) =>
+		{
+			console.log("todo - Collide with archery target.");
+		};
+		var collidable = Collidable.fromColliderAndCollideEntities
+		(
+			collider,
+			collide
+		);
+
+		var boundable = Boundable.fromCollidable(collidable);
+
+		var entityDefn = Entity.fromNameAndProperties
+		(
+			name,
+			[
+				boundable,
+				collidable,
+				Drawable.fromVisual(visual),
+				Locatable.create()
+			]
+		);
+
+		return entityDefn;
+	}
+
 	entityDefnBuildBoulder(): Entity
 	{
 		var entityDimension = this.entityDimension / 2;
@@ -752,27 +788,30 @@ class PlaceBuilderDemo_Emplacements
 	{
 		var entityName = "TrafficCone";
 		var entityDimension = this.entityDimension * 1.5;
-		var color = Color.Instances().Orange;
+		var colors = Color.Instances();
+		var color = colors.Orange;
 		var visual = VisualGroup.fromChildren
 		([
+			VisualEllipse.fromSemiaxesHorizontalAndVerticalAndColorFill
+			(
+				this.entityDimension / 2,
+				this.entityDimension / 4,
+				colors.YellowOrange
+			),
 			VisualPolygon.fromPathAndColorFill
 			(
 				Path.fromPoints
 				([
-					Coords.fromXY(-1, 0),
-					Coords.fromXY(-1, -0.1),
-					Coords.fromXY(-0.5, -0.1),
+					Coords.fromXY(-0.5, 0),
 					Coords.fromXY(-0.1, -1.5), // tip left
 					Coords.fromXY(0.1, -1.5), // tip right
-					Coords.fromXY(0.5, -0.1),
-					Coords.fromXY(1, -0.1),
-					Coords.fromXY(1, 0)
+					Coords.fromXY(0.5, 0),
 				]).transform
 				(
 					Transform_Scale.fromScalar(this.entityDimension * 0.75)
 				),
 				color
-			),
+			)
 		]);
 
 		this.parent.textWithColorAddToVisual

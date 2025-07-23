@@ -46,6 +46,13 @@ var ThisCouldBeBetter;
             static fromPosOrientationAndPlaceName(pos, orientation, placeName) {
                 return new Disposition(pos, orientation, placeName);
             }
+            clear() {
+                this.pos.clear();
+                this.vel.clear();
+                this.accel.clear();
+                this.force.clear();
+                return this;
+            }
             equals(other) {
                 var placeName = this.placeName();
                 var otherPlaceName = other.placeName();

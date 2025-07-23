@@ -99,6 +99,15 @@ export class Disposition
 		return new Disposition(pos, orientation, placeName);
 	}
 
+	clear(): Disposition
+	{
+		this.pos.clear();
+		this.vel.clear();
+		this.accel.clear();
+		this.force.clear();
+		return this;
+	}
+
 	equals(other: Disposition): boolean
 	{
 		var placeName = this.placeName();

@@ -737,23 +737,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 
 10.1. The bad news is, those bullets don't do anything yet.  Even if you manage to hit the raider with them, they'll just pass harmlessly through it, because right now it's pretty much immortal.  It's not killable, or even touchable.  It's too dumb to die!
 
-10.2. So let's make it mortal.  Open Raider.ts and add the following lines to the array of entity properties being declared in the constructor.  You could add them at the end of the array, or make things a bit neater and add them in alphabetical order.  Whichever you choose, be sure to add commas in the proper places.
-
-	Collidable.fromColliderPropertyNameToCollideWithAndCollide
-	(
-		Sphere.fromRadius(4),
-		Player.name,
-		(uwpe: UniverseWorldPlaceEntities, c: Collision) =>
-		{
-			var entityOther = uwpe.entity2;
-			if (entityOther.name == Player.name)
-			{
-				var playerEnitty = entityOther as Player;
-				var playerKillable = Killable.of(entityPlayer);
-				playerKillable.kill();
-			}
-		}
-	),
+10.2. So let's make it mortal.  Open Raider.ts and add the following line to the array of entity properties being declared in the constructor.  Whichever you choose, be sure to add commas in the proper places.
 
 	Killable.default()
 
@@ -765,7 +749,7 @@ These lines make the raider collidable, which means that your bullets can hit it
 
 	Killable.default()
 
-Now the player can be collided with and killed as well.  It's only fair.
+Now the player can be collided with and killed as well.  Hey, it's only fair.
 
 10.4. Re-compile the game and refresh the web browser.  Locate the raider, aim carefully, and shoot a bullet at it.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
 
@@ -919,7 +903,7 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 		(
 			VenueMessage.fromTextAndAcknowledgeNoButtons
 			(
-				"You lose!",
+				"GAME OVER",
 				() => // acknowledge
 				{
 					universe.venueNextSet
@@ -1379,15 +1363,7 @@ This code replaces the single habitat with four habitats spaced evenly over the 
 16. Adding Status Indicators
 ----------------------------
 
-16.1. We'll add some on-screen indicators to keep track of how the game's going.  To start with, the indicators will show how many habitats and raiders there currently are, as well as how many ships the player has in reserve (though, as we haven't implemented any reserve ships yet, initially that will be zero).
-
-First, open Player.ts, and, above the contructor, add a count of the number of ships in reserve:
-
-	shipsInReserve: number;
-
-16.2. Then, inside the constructor, at the very bottom, initialize the count of ships in reserve that was added in the previous step by adding this line:
-
-	this.shipsInReserve = 0;
+16.1. We'll add some on-screen indicators to keep track of how the game's going.  To start with, the indicators will show how many habitats and raiders there currently are, as well as how many ships the player has in reserve (though, as we haven't implemented any reserve ship functionality yet, initially that'll be zero).
 
 16.2. Still in the Player constructor, in the list of properties, add the following entries, adjusting commas as necessary:
 
@@ -1415,7 +1391,7 @@ Note that the Player.toControl() method doesn't exist yet.  We'll create that in
 				ControlLabel.fromPosAndText
 				(
 					Coords.fromXY(20, 4),
-					DataBinding.fromGet(() => "" + (uwpe.entity as Player).shipsInReserve),
+					DataBinding.fromGet(() => "" + Killable.of(uwpe.entity).livesInReserve),
 				),
 
 				ControlVisual.fromPosAndVisual
@@ -1444,6 +1420,77 @@ Note that the Player.toControl() method doesn't exist yet.  We'll create that in
 	}
 
 16.4.  Now run the build script and refresh the browser.  A display will appear in the upper-left corner showing the current count of reserve player ships, habitats, and raiders.
+
+
+17. Ships in Reserve
+--------------------
+
+17.1. As we noted in the previous section, even though the newly-added status indicators say that the player has two ships in reserve, right now getting killed even one darn time puts you out of the game.  Is that fair?  Well, yeah, kind of.  But let's make it unfair, in our favor--America, baby!--by making the reserve ships work.
+
+First, open Player.ts, and, in the list of properties in the constructor, replace the existing Killable declaration with the following, adjusting commas as necessary:
+
+	Killable.fromTicksOfImmunityDieAndLives
+	(
+		40, Player.killableDie, 2
+	)
+
+17.2. Still in Player.ts, add the following new method:
+
+	static killableDie(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var playerEntity = uwpe.entity as Player;
+
+		var playerLoc = Locatable.of(playerEntity).loc;
+		var playerPos = playerLoc.pos;
+
+		var place = uwpe.place;
+
+		var playerExplosionAndRespawner = Entity.fromNameAndProperties
+		(
+			"PlayerExplosionAndRespawner",
+			[
+				Drawable.fromVisual
+				(
+					VisualGroup.fromChildren
+					([
+						VisualSound.default(),
+
+						VisualCircle.fromRadiusAndColorFill
+						(
+							10,
+							Color.Instances().Yellow
+						)
+					])
+				),
+
+				Ephemeral.fromTicksAndExpire
+				(
+					60, // 3 seconds.
+					uwpe =>
+					{
+						var playerKillable = Killable.of(playerEntity);
+						if (playerKillable.livesInReserve > 0)
+						{
+							playerKillable.livesInReserve--;
+							playerLoc.clear();
+							var placeSizeHalf = place.size().clone().half();
+							playerPos.overwriteWith(placeSizeHalf);
+							playerKillable.integritySetToMax();
+							place.entityToSpawnAdd(playerEntity);
+						}
+					}
+				),
+
+				Locatable.fromPos(playerPos.clone() ),
+
+				Playable.create()
+			]
+		);
+
+		place.entityToSpawnAdd(playerExplosionAndRespawner);
+	}
+
+17.3. Run the build script and refresh the browser.  Then run the ship into a raider.  The ship will explode, the count of ships in reserve will go down by one, and, after a few seconds, the player will respawn somewhere else.
 
 
 n. Conclusion

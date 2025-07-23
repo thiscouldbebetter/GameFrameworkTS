@@ -210,7 +210,7 @@ class PlaceBuilderDemo_Movers
 				carnivoreCollidable,
 				Constrainable.create(),
 				Drawable.fromVisual(carnivoreVisual),
-				new Killable(10, null, carnivoreDie),
+				Killable.fromIntegrityMaxAndDie(10, carnivoreDie),
 				Locatable.create(),
 				Movable.default()
 			]
@@ -356,7 +356,7 @@ class PlaceBuilderDemo_Movers
 			}
 		};
 
-		var enemyKillable = new Killable
+		var enemyKillable = Killable.fromIntegrityMaxDamageApplyAndDie
 		(
 			integrityMax, enemyDamageApply, enemyDie
 		);

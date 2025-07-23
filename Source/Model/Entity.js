@@ -8,10 +8,14 @@ var ThisCouldBeBetter;
                 this.id = GameFramework.IDHelper.Instance().idNext();
                 this.name = name || "_" + this.id;
                 this.properties = properties;
-                this.propertiesByName = new Map(this.properties.map(x => [x.propertyName(), x]));
+                this.propertiesByName =
+                    new Map(this.properties.map(x => [x.propertyName(), x]));
             }
             static fromNameAndProperties(name, properties) {
                 return new Entity(name, properties);
+            }
+            static fromNameAndProperty(name, property) {
+                return new Entity(name, [property]);
             }
             static fromProperty(property) {
                 return new Entity(null, [property]);

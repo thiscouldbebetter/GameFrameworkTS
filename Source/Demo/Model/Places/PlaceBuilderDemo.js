@@ -30,6 +30,7 @@ class PlaceBuilderDemo // Main.
         e.push(this.entityBuildFromDefn(entityDefns.get("Player"), entityPosRange, randomizer));
         var epebfdac = (a, b, c) => e.push(...this.entitiesBuildFromDefnAndCount(entityDefns.get(a), b, c, entityPosRange, randomizer));
         epebfdac("Anvil", 1, null);
+        epebfdac("ArcheryTarget", 1, null);
         epebfdac("Arrow", 1, 20);
         epebfdac("Bar", 1, null);
         epebfdac("Bomb", 3, null);
@@ -1816,6 +1817,7 @@ class PlaceBuilderDemo // Main.
         var mb = this.moversBuilder;
         var entityDefns = [
             eb.entityDefnBuildAnvil(),
+            eb.entityDefnBuildArcheryTarget(),
             eb.entityDefnBuildBoulder(),
             eb.entityDefnBuildCampfire(),
             eb.entityDefnBuildContainer(),

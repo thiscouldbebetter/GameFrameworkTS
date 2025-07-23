@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
             static default() {
                 return Ephemeral.fromTicksToLive(100);
             }
+            static fromTicksAndExpire(ticksToLive, expire) {
+                return new Ephemeral(ticksToLive, expire);
+            }
             static fromTicksToLive(ticksToLive) {
                 return new Ephemeral(ticksToLive, null);
             }

@@ -10,6 +10,18 @@ var ThisCouldBeBetter;
                 }
                 return VisualBuilder._instance;
             }
+            archeryTarget(radiusOuter) {
+                var diameterOuter = radiusOuter * 2;
+                var bullseyeDiameter = diameterOuter / 3;
+                var bullseyeRadius = bullseyeDiameter / 2;
+                var colors = GameFramework.Color.Instances();
+                var visual = GameFramework.VisualGroup.fromNameAndChildren("ArcheryTarget", [
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(radiusOuter, colors.Blue),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(bullseyeDiameter, colors.White),
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(bullseyeRadius, colors.Red)
+                ]);
+                return visual;
+            }
             directionalAnimationsFromTiledImage(visualImageSource, imageSource, imageSourceSizeInTiles, tileSizeToDraw) {
                 var imageSourceSizeInPixels = imageSource.sizeInPixels;
                 var tileSizeInPixels = imageSourceSizeInPixels.clone().divide(imageSourceSizeInTiles);

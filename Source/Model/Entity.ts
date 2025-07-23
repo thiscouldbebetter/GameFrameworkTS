@@ -15,7 +15,14 @@ export class Entity implements Clonable<Entity>
 		this.name = name || "_" + this.id;
 		this.properties = properties;
 
-		this.propertiesByName = new Map<string, any>(this.properties.map(x => [x.propertyName(), x] ) );
+		this.propertiesByName =
+			new Map<string, any>
+			(
+				this.properties.map
+				(
+					x => [x.propertyName(), x]
+				)
+			);
 	}
 
 	static fromNameAndProperties
@@ -25,6 +32,11 @@ export class Entity implements Clonable<Entity>
 	): Entity
 	{
 		return new Entity(name, properties);
+	}
+
+	static fromNameAndProperty(name: string, property: EntityPropertyBase): Entity
+	{
+		return new Entity(name, [ property ] );
 	}
 
 	static fromProperty(property: EntityPropertyBase): Entity

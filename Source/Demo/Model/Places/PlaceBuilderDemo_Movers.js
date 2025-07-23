@@ -106,7 +106,7 @@ class PlaceBuilderDemo_Movers {
             carnivoreCollidable,
             Constrainable.create(),
             Drawable.fromVisual(carnivoreVisual),
-            new Killable(10, null, carnivoreDie),
+            Killable.fromIntegrityMaxAndDie(10, carnivoreDie),
             Locatable.create(),
             Movable.default()
         ]);
@@ -174,7 +174,7 @@ class PlaceBuilderDemo_Movers {
                 place.entitySpawn(uwpe.clone().entitySet(universe.entityBuilder.messageFloater(learningMessage, this.font, Locatable.of(entityPlayer).loc.pos, Color.Instances().Green)));
             }
         };
-        var enemyKillable = new Killable(integrityMax, enemyDamageApply, enemyDie);
+        var enemyKillable = Killable.fromIntegrityMaxDamageApplyAndDie(integrityMax, enemyDamageApply, enemyDie);
         var enemyPerceptor = new Perceptor(1, // sightThreshold
         1 // hearingThreshold
         );
