@@ -145,7 +145,7 @@ export class ProjectileGeneration
 		}
 		var shotCollider = ShapeGroupAny.fromChildren(colliderParts);
 		var shotCollidable =
-			Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide
+			Collidable.fromColliderPropertyNameAndCollide
 			(
 				shotCollider,
 				Collidable.name,

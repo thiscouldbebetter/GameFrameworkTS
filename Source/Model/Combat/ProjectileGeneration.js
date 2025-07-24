@@ -68,7 +68,7 @@ var ThisCouldBeBetter;
                     colliderParts.push(colliderPart);
                 }
                 var shotCollider = GameFramework.ShapeGroupAny.fromChildren(colliderParts);
-                var shotCollidable = GameFramework.Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide(shotCollider, GameFramework.Collidable.name, (uwpe) => this.collide(uwpe));
+                var shotCollidable = GameFramework.Collidable.fromColliderPropertyNameAndCollide(shotCollider, GameFramework.Collidable.name, (uwpe) => this.collide(uwpe));
                 var shotDamager = GameFramework.Damager.fromDamagePerHit(this.damage);
                 var shotDrawable = GameFramework.Drawable.fromVisual(this.visual); // hack
                 var shotEphemeral = GameFramework.Ephemeral.fromTicksToLive(this.ticksToLive);

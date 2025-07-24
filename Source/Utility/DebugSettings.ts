@@ -16,17 +16,21 @@ export class DebugSettings
 
 	static fromString(stringToParse: string): DebugSettings
 	{
-		var settingsAsStrings: string[] =
-			stringToParse.split("|");
-		var settingNameValuePairs =
-			settingsAsStrings.map(x => x.split(":") );
 		var settingValuesByName = new Map();
-		for (var i = 0; i < settingNameValuePairs.length; i++)
+
+		if (stringToParse != null)
 		{
-			var settingNameAndValue = settingNameValuePairs[i];
-			var settingName = settingNameAndValue[0];
-			var settingValue = settingNameAndValue[1] || settingName;
-			settingValuesByName.set(settingName, settingValue);
+			var settingsAsStrings: string[] =
+				stringToParse.split("|");
+			var settingNameValuePairs =
+				settingsAsStrings.map(x => x.split(":") );
+			for (var i = 0; i < settingNameValuePairs.length; i++)
+			{
+				var settingNameAndValue = settingNameValuePairs[i];
+				var settingName = settingNameAndValue[0];
+				var settingValue = settingNameAndValue[1] || settingName;
+				settingValuesByName.set(settingName, settingValue);
+			}
 		}
 		return new DebugSettings(settingValuesByName);
 	}

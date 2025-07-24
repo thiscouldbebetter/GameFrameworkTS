@@ -1,5 +1,6 @@
 "use strict";
 var DateTime = gf.DateTime;
+var Debug = gf.Debug;
 var DebugSettings = gf.DebugSettings;
 var DiceRoll = gf.DiceRoll;
 var IDHelper = gf.IDHelper;

@@ -8,14 +8,16 @@ var ThisCouldBeBetter;
                 this.settingValuesByName = settingValuesByName;
             }
             static fromString(stringToParse) {
-                var settingsAsStrings = stringToParse.split("|");
-                var settingNameValuePairs = settingsAsStrings.map(x => x.split(":"));
                 var settingValuesByName = new Map();
-                for (var i = 0; i < settingNameValuePairs.length; i++) {
-                    var settingNameAndValue = settingNameValuePairs[i];
-                    var settingName = settingNameAndValue[0];
-                    var settingValue = settingNameAndValue[1] || settingName;
-                    settingValuesByName.set(settingName, settingValue);
+                if (stringToParse != null) {
+                    var settingsAsStrings = stringToParse.split("|");
+                    var settingNameValuePairs = settingsAsStrings.map(x => x.split(":"));
+                    for (var i = 0; i < settingNameValuePairs.length; i++) {
+                        var settingNameAndValue = settingNameValuePairs[i];
+                        var settingName = settingNameAndValue[0];
+                        var settingValue = settingNameAndValue[1] || settingName;
+                        settingValuesByName.set(settingName, settingValue);
+                    }
                 }
                 return new DebugSettings(settingValuesByName);
             }
