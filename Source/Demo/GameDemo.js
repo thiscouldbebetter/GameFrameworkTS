@@ -22,28 +22,35 @@ class GameDemo {
         var soundMusicDirectoryPath = contentDirectoryPath + "Audio/Music/";
         var textStringDirectoryPath = contentDirectoryPath + "Text/";
         var videoDirectoryPath = contentDirectoryPath + "Video/";
+        var title = (a) => imageTitlesDirectoryPath + a;
+        var effect = (a) => soundEffectDirectoryPath + a;
+        var image = (a) => imageDirectoryPath + a;
+        var music = (a) => soundMusicDirectoryPath + a;
+        var video = (a) => videoDirectoryPath + a;
+        var font = (a) => fontDirectoryPath + a;
+        var text = (a) => textStringDirectoryPath + a;
         var mediaFilePaths = [
-            imageTitlesDirectoryPath + "Opening.png",
-            imageTitlesDirectoryPath + "Producer.png",
-            imageTitlesDirectoryPath + "Title.png",
-            imageDirectoryPath + "Anvil.svg",
-            imageDirectoryPath + "Car.png",
-            imageDirectoryPath + "Friendly.png",
-            imageDirectoryPath + "Grass.svg",
-            imageDirectoryPath + "Grain.svg",
-            imageDirectoryPath + "Pillow.svg",
-            imageDirectoryPath + "Terrain-Sand.png",
-            imageDirectoryPath + "Zap.svg",
-            soundEffectDirectoryPath + "Sound.wav",
-            soundEffectDirectoryPath + "Clang.wav",
-            soundMusicDirectoryPath + "Music.mp3",
-            soundMusicDirectoryPath + "Producer.mp3",
-            soundMusicDirectoryPath + "Title.mp3",
-            videoDirectoryPath + "Movie.webm",
-            fontDirectoryPath + "Font.ttf",
-            textStringDirectoryPath + "Conversation.json",
-            textStringDirectoryPath + "Conversation_psv.txt",
-            textStringDirectoryPath + "Instructions.txt",
+            title("Opening.png"),
+            title("Producer.png"),
+            title("Title.png"),
+            image("Anvil.svg"),
+            image("Car.png"),
+            image("Friendly.png"),
+            image("Grass.svg"),
+            image("Grain.svg"),
+            image("Pillow.svg"),
+            image("Terrain-Sand.png"),
+            image("Zap.svg"),
+            effect("Sound.wav"),
+            effect("Clang.wav"),
+            music("_Default.mp3"),
+            music("Producer.mp3"),
+            music("Title.mp3"),
+            video("Movie.webm"),
+            font("Font.ttf"),
+            text("Conversation.json"),
+            text("Conversation_psv.txt"),
+            text("Instructions.txt"),
         ];
         return mediaFilePaths;
     }

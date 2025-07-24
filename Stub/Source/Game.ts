@@ -12,10 +12,6 @@ class Game
 
 	start(): void
 	{
-		// It may be necessary to clear local storage to prevent errors on
-		// deserialization of existing saved items after the schema changes.
-		// localStorage.clear();
-
 		var mediaFilePaths = this.mediaFilePathsBuild();
 
 		var mediaLibrary =
@@ -42,6 +38,9 @@ class Game
 	{
 		var contentDirectoryPath = this.contentDirectoryPath;
 
+		// Use built-in content from the Framework.
+		contentDirectoryPath = "../Source/Framework/Content/" + contentDirectoryPath;
+
 		var fontDirectoryPath = contentDirectoryPath + "Fonts/";
 		var imageDirectoryPath = contentDirectoryPath + "Images/";
 		var imageTitlesDirectoryPath = imageDirectoryPath + "Titles/";
@@ -50,23 +49,40 @@ class Game
 		var textStringDirectoryPath = contentDirectoryPath + "Text/";
 		var videoDirectoryPath = contentDirectoryPath + "Video/";
 
+		var title = (a: string) => imageTitlesDirectoryPath + a;
+		// var image = (a: string) => imageDirectoryPath + a;
+		var effect = (a: string) => soundEffectDirectoryPath + a;
+		var music = (a: string) => soundMusicDirectoryPath + a;
+		var video = (a: string) => videoDirectoryPath + a;
+		var font = (a: string) => fontDirectoryPath + a;
+		var text = (a: string) => textStringDirectoryPath + a;
+
 		var mediaFilePaths =
 		[
-			imageTitlesDirectoryPath + "Opening.png",
-			imageTitlesDirectoryPath + "Producer.png",
-			imageTitlesDirectoryPath + "Title.png",
+			title("Opening.png"),
+			title("Producer.png"),
+			title("Title.png"),
 
-			soundEffectDirectoryPath + "Sound.wav",
+			effect("_Default.wav"),
+			effect("Bading.wav"),
+			effect("Blip.wav"),
+			effect("Boom.wav"),
+			effect("Buzz.wav"),
+			effect("Chirp.wav"),
+			effect("Chirp-Reversed.wav"),
+			effect("Clank.wav"),
+			effect("Pluck.wav"),
+			effect("Slap.wav"),
 
-			soundMusicDirectoryPath + "Music.mp3",
-			soundMusicDirectoryPath + "Producer.mp3",
-			soundMusicDirectoryPath + "Title.mp3",
+			music("_Default.mp3"),
+			music("Producer.mp3"),
+			music("Title.mp3"),
 
-			videoDirectoryPath + "Movie.webm",
+			video("Movie.webm"),
 
-			fontDirectoryPath + "Font.ttf",
+			font("Font.ttf"),
 
-			textStringDirectoryPath + "Instructions.txt",
+			text("Instructions.txt"),
 		];
 
 		return mediaFilePaths;

@@ -104,13 +104,18 @@ export class SoundHelperLive
 		var sound = this.soundsByName.get(soundName);
 		sound.isRepeating = false;
 
+		/*
+		// This disallows multiple instances of the same effect,
+		// which is bad for inherently repetitive effects,
+		// like shooting a ray gun.
 		var soundIsAlreadyPlaying =
 			(this.soundsForEffectsInProgress.indexOf(sound) >= 0);
 		if (soundIsAlreadyPlaying == false)
 		{
-			this.soundsForEffectsInProgress.push(sound);
-			sound.play(universe, this.effectVolume);
-		}
+		*/
+
+		this.soundsForEffectsInProgress.push(sound);
+		sound.play(universe, this.effectVolume);
 	}
 
 	soundWithNamePlayAsMusic(universe: Universe, soundToPlayName: string): void

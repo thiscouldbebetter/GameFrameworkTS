@@ -41,36 +41,43 @@ class GameDemo
 		var textStringDirectoryPath = contentDirectoryPath + "Text/";
 		var videoDirectoryPath = contentDirectoryPath + "Video/";
 
+		var title = (a: string) => imageTitlesDirectoryPath + a;
+		var effect = (a: string) => soundEffectDirectoryPath + a;
+		var image = (a: string) => imageDirectoryPath + a;
+		var music = (a: string) => soundMusicDirectoryPath + a;
+		var video = (a: string) => videoDirectoryPath + a;
+		var font = (a: string) => fontDirectoryPath + a;
+		var text = (a: string) => textStringDirectoryPath + a;
+
 		var mediaFilePaths =
 		[
-			imageTitlesDirectoryPath + "Opening.png",
-			imageTitlesDirectoryPath + "Producer.png",
-			imageTitlesDirectoryPath + "Title.png",
+			title("Opening.png"),
+			title("Producer.png"),
+			title("Title.png"),
 
-			imageDirectoryPath + "Anvil.svg",
-			imageDirectoryPath + "Car.png",
-			imageDirectoryPath + "Friendly.png",
-			imageDirectoryPath + "Grass.svg",
-			imageDirectoryPath + "Grain.svg",
-			imageDirectoryPath + "Pillow.svg",
-			imageDirectoryPath + "Terrain-Sand.png",
-			imageDirectoryPath + "Zap.svg",
+			image("Anvil.svg"),
+			image("Car.png"),
+			image("Friendly.png"),
+			image("Grass.svg"),
+			image("Grain.svg"),
+			image("Pillow.svg"),
+			image("Terrain-Sand.png"),
+			image("Zap.svg"),
 
-			soundEffectDirectoryPath + "Sound.wav",
-			soundEffectDirectoryPath + "Clang.wav",
+			effect("Sound.wav"),
+			effect("Clang.wav"),
 
-			soundMusicDirectoryPath + "Music.mp3",
-			soundMusicDirectoryPath + "Producer.mp3",
-			soundMusicDirectoryPath + "Title.mp3",
+			music("_Default.mp3"),
+			music("Producer.mp3"),
+			music("Title.mp3"),
 
-			videoDirectoryPath + "Movie.webm",
+			video("Movie.webm"),
 
-			fontDirectoryPath + "Font.ttf",
+			font("Font.ttf"),
 
-			textStringDirectoryPath + "Conversation.json",
-			textStringDirectoryPath + "Conversation_psv.txt",
-
-			textStringDirectoryPath + "Instructions.txt",
+			text("Conversation.json"),
+			text("Conversation_psv.txt"),
+			text("Instructions.txt"),
 		];
 
 		return mediaFilePaths;

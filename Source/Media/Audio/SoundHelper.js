@@ -55,11 +55,17 @@ var ThisCouldBeBetter;
             soundWithNamePlayAsEffect(universe, soundName) {
                 var sound = this.soundsByName.get(soundName);
                 sound.isRepeating = false;
-                var soundIsAlreadyPlaying = (this.soundsForEffectsInProgress.indexOf(sound) >= 0);
-                if (soundIsAlreadyPlaying == false) {
-                    this.soundsForEffectsInProgress.push(sound);
-                    sound.play(universe, this.effectVolume);
-                }
+                /*
+                // This disallows multiple instances of the same effect,
+                // which is bad for inherently repetitive effects,
+                // like shooting a ray gun.
+                var soundIsAlreadyPlaying =
+                    (this.soundsForEffectsInProgress.indexOf(sound) >= 0);
+                if (soundIsAlreadyPlaying == false)
+                {
+                */
+                this.soundsForEffectsInProgress.push(sound);
+                sound.play(universe, this.effectVolume);
             }
             soundWithNamePlayAsMusic(universe, soundToPlayName) {
                 var soundToPlay = this.soundsByName.get(soundToPlayName);

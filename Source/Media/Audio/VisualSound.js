@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.isMusic = isMusic;
             }
             static default() {
-                return new VisualSound("Effects_Sound", false);
+                return new VisualSound("Effects__Default", false);
             }
             static fromSoundName(soundName) {
                 return new VisualSound(soundName, false); // isMusic
@@ -29,7 +29,10 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var soundHelper = universe.soundHelper;
                 var audible = GameFramework.Audible.of(entity);
-                if (audible != null) {
+                if (audible == null) {
+                    throw new Error("The entity has no Audible property!");
+                }
+                else {
                     if (audible.hasBeenHeard == false) {
                         if (this.isMusic) {
                             soundHelper.soundWithNamePlayAsMusic(universe, this.soundNameToPlay);

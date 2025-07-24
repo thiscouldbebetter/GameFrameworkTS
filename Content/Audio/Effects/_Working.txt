@@ -1,0 +1,28 @@
+How Various Sound Effects Were Made
+===================================
+
+Sources
+=======
+
+Code		Name
+---------	----
+Audacity	Audacity
+Sample		A recording of a real-world sound effect.
+TCBB SFXS	This Could Be Better Sound Effect Synthesizer
+
+
+Effects
+=======
+
+Effect Name		Source			Made by
+-----------		---------		-------
+Bading			TCBB SFXS		Two tones, 880 and then 1760Hz.
+Blip			TCBB SFXS		Sawtooth, starting at 3000Hz and ending at 500Hz.
+Boom			Sample+Audacity	Sample of bass drum, low-pass-filtered and reverbed repeatedly.
+Buzz			Audacity?		20Hz square wave.
+Chirp			Audacity		Select "Generate - Chirp" from menu, choose 440-1320 Hz, fade.
+Chirp-Reverse	Audacity		Reverse of previous.
+Clank			Sample			A metallic clank rather like a cowbell.
+Slap			TCBB SFXS		Noise, 1760Hz, fading.
+Pluck			Audacity		Select "Generate - Pluck" from the menu.
+

@@ -19,7 +19,7 @@ export class VisualSound implements Visual<VisualSound>
 
 	static default(): VisualSound
 	{
-		return new VisualSound("Effects_Sound", false);
+		return new VisualSound("Effects__Default", false);
 	}
 
 	static fromSoundName(soundName: string): VisualSound
@@ -52,7 +52,11 @@ export class VisualSound implements Visual<VisualSound>
 		var soundHelper = universe.soundHelper;
 
 		var audible = Audible.of(entity);
-		if (audible != null)
+		if (audible == null)
+		{
+			throw new Error("The entity has no Audible property!");
+		}
+		else
 		{
 			if (audible.hasBeenHeard == false)
 			{

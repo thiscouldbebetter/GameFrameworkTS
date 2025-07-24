@@ -10,7 +10,6 @@ var Playable = gf.Playable;
 var Relatable = gf.Relatable;
 var Selectable = gf.Selectable;
 var Selector = gf.Selector;
-var StatsKeeper = gf.StatsKeeper;
 var Trigger = gf.Trigger;
 var Triggerable = gf.Triggerable;
 var Universe = gf.Universe;
@@ -88,6 +87,10 @@ var Zone = gf.Zone;
 // Model - Skills.
 var Skill = gf.Skill;
 var SkillLearner = gf.SkillLearner;
+// Model - Statistics.
+var Leaderboard = gf.Leaderboard;
+var Scorable = gf.Scorable;
+var StatsKeeper = gf.StatsKeeper;
 // Model - Talk.
 var ConversationDefn = gf.ConversationDefn;
 var ConversationRun = gf.ConversationRun;

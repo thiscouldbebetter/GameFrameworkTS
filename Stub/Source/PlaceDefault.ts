@@ -59,7 +59,7 @@ class PlaceDefault extends PlaceBase
 		return PlaceDefn.fromNameMusicActionsMappingsAndPropertyNames
 		(
 			PlaceDefault.name,
-			"Music_Music", // soundForMusicName
+			"Music__Default", // soundForMusicName
 			actions,
 			actionToInputsMappings,
 			entityPropertyNamesToProcess

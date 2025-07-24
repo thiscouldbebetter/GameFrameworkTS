@@ -348,7 +348,7 @@ var ThisCouldBeBetter;
                 ]; // children
                 var soundMusicName = this.defn.soundMusicName;
                 if (soundMusicName != null) {
-                    var visualSound = new GameFramework.VisualSound(soundMusicName, true);
+                    var visualSound = GameFramework.VisualSound.fromSoundNameAndRepeat(soundMusicName, true);
                     var visualMusic = GameFramework.ControlVisual.fromNamePosSizeAndVisual("visualMusic", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualSound));
                     childControls.push(visualMusic);
                 }

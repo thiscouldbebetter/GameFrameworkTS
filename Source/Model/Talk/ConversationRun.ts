@@ -725,7 +725,8 @@ export class ConversationRun
 		var soundMusicName = this.defn.soundMusicName;
 		if (soundMusicName != null)
 		{
-			var visualSound: VisualBase = new VisualSound(soundMusicName, true);
+			var visualSound: VisualBase =
+				VisualSound.fromSoundNameAndRepeat(soundMusicName, true);
 
 			var visualMusic = ControlVisual.fromNamePosSizeAndVisual
 			(
