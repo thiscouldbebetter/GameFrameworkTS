@@ -43,21 +43,23 @@ export class SoundHelperLive
 
 	controlSelectOptionsVolume(): ControlSelectOption<number>[]
 	{
+		var cso = (a: number, b: string) => new ControlSelectOption<number>(a, b);
+
 		if (this._controlSelectOptionsVolume == null)
 		{
 			this._controlSelectOptionsVolume =
 			[
-				new ControlSelectOption<number>(1, "100%"),
-				new ControlSelectOption<number>(0, "0%"),
-				new ControlSelectOption<number>(.1, "10%"),
-				new ControlSelectOption<number>(.2, "20%"),
-				new ControlSelectOption<number>(.3, "30%"),
-				new ControlSelectOption<number>(.4, "40%"),
-				new ControlSelectOption<number>(.5, "50%"),
-				new ControlSelectOption<number>(.6, "60%"),
-				new ControlSelectOption<number>(.7, "70%"),
-				new ControlSelectOption<number>(.8, "80%"),
-				new ControlSelectOption<number>(.9, "90%"),
+				cso(1, "100%"),
+				cso(0, "0%"),
+				cso(.1, "10%"),
+				cso(.2, "20%"),
+				cso(.3, "30%"),
+				cso(.4, "40%"),
+				cso(.5, "50%"),
+				cso(.6, "60%"),
+				cso(.7, "70%"),
+				cso(.8, "80%"),
+				cso(.9, "90%"),
 			];
 		};
 

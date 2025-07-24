@@ -11,20 +11,21 @@ var ThisCouldBeBetter;
                 this.soundForMusic = null;
             }
             controlSelectOptionsVolume() {
+                var cso = (a, b) => new GameFramework.ControlSelectOption(a, b);
                 if (this._controlSelectOptionsVolume == null) {
                     this._controlSelectOptionsVolume =
                         [
-                            new GameFramework.ControlSelectOption(1, "100%"),
-                            new GameFramework.ControlSelectOption(0, "0%"),
-                            new GameFramework.ControlSelectOption(.1, "10%"),
-                            new GameFramework.ControlSelectOption(.2, "20%"),
-                            new GameFramework.ControlSelectOption(.3, "30%"),
-                            new GameFramework.ControlSelectOption(.4, "40%"),
-                            new GameFramework.ControlSelectOption(.5, "50%"),
-                            new GameFramework.ControlSelectOption(.6, "60%"),
-                            new GameFramework.ControlSelectOption(.7, "70%"),
-                            new GameFramework.ControlSelectOption(.8, "80%"),
-                            new GameFramework.ControlSelectOption(.9, "90%"),
+                            cso(1, "100%"),
+                            cso(0, "0%"),
+                            cso(.1, "10%"),
+                            cso(.2, "20%"),
+                            cso(.3, "30%"),
+                            cso(.4, "40%"),
+                            cso(.5, "50%"),
+                            cso(.6, "60%"),
+                            cso(.7, "70%"),
+                            cso(.8, "80%"),
+                            cso(.9, "90%"),
                         ];
                 }
                 ;
