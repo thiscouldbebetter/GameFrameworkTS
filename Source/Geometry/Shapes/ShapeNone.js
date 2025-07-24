@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ShapeNone {
+        class ShapeNone extends GameFramework.ShapeBase {
             static Instance() {
                 if (this._instance == null) {
                     this._instance = new ShapeNone();
@@ -20,20 +20,9 @@ var ThisCouldBeBetter;
             // Equatable
             equals(other) { return false; }
             // ShapeBase.
-            collider() { return null; }
             containsPoint(pointToCheck) {
                 return false;
             }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not implemented!");
-            }
-            pointRandom(randomizer) {
-                throw new Error("Not implemented!");
-            }
-            surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw new Error("Not implemented!");
-            }
-            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) { return this; }
         }

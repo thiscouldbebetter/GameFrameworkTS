@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Shell implements ShapeBase
+export class Shell extends ShapeBase
 {
 	sphereOuter: Sphere;
 	radiusInner: number;
@@ -13,6 +13,8 @@ export class Shell implements ShapeBase
 
 	constructor(sphereOuter: Sphere, radiusInner: number)
 	{
+		super();
+
 		this.sphereOuter = sphereOuter;
 		this.radiusInner = radiusInner;
 
@@ -77,7 +79,7 @@ export class Shell implements ShapeBase
 
 	// ShapeBase.
 
-	collider(): ShapeBase
+	collider(): Shape
 	{
 		return this._collider;
 	}
@@ -98,11 +100,6 @@ export class Shell implements ShapeBase
 		}
 		normalOut.normalize();
 		return normalOut;
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords

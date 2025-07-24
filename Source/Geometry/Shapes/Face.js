@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Face {
+        class Face extends GameFramework.ShapeBase {
             constructor(vertices) {
+                super();
                 this.vertices = vertices;
             }
             box() {
@@ -66,14 +67,6 @@ var ThisCouldBeBetter;
                 return GameFramework.ArrayHelper.equals(this.vertices, other.vertices);
             }
             // ShapeBase.
-            collider() { return null; }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not implemented!");
-            }
-            pointRandom(randomizer) {
-                return null; // todo
-            }
-            surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
             toBoxAxisAligned(boxOut) {
                 return boxOut.containPoints(this.vertices);
             }

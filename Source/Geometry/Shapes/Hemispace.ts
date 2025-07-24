@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Hemispace implements ShapeBase
+export class Hemispace extends ShapeBase
 {
 	plane: Plane;
 
@@ -10,6 +10,8 @@ export class Hemispace implements ShapeBase
 
 	constructor(plane: Plane)
 	{
+		super();
+
 		this.plane = plane;
 
 		this._displacement = Coords.create();
@@ -62,22 +64,18 @@ export class Hemispace implements ShapeBase
 		return this;
 	}
 
-	// Equatable
+	// Equatable.
 
-	equals(other: ShapeBase) { return false; } // todo
+	equals(other: Hemispace): boolean
+	{
+		return this.plane.equals(other.plane);
+	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return this.plane.normal;
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
@@ -86,11 +84,6 @@ export class Hemispace implements ShapeBase
 		(
 			this.plane.pointOnPlaneNearestPos(posToCheck)
 		);
-	}
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
-	{
-		throw new Error("Not implemented!");
 	}
 
 	// Transformable.

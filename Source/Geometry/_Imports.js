@@ -49,6 +49,7 @@ var PathBuilder = gf.PathBuilder;
 var Plane = gf.Plane;
 var Point = gf.Point;
 var Ray = gf.Ray;
+var ShapeBase = gf.ShapeBase;
 var ShapeContainer = gf.ShapeContainer;
 var ShapeGroupAll = gf.ShapeGroupAll;
 var ShapeGroupAny = gf.ShapeGroupAny;

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class MapLocated {
+        class MapLocated extends GameFramework.ShapeBase {
             constructor(map, loc) {
+                super();
                 this.map = map;
                 this.loc = loc;
                 this.box = new GameFramework.BoxAxisAligned(this.loc.pos, this.map.size);
@@ -35,20 +36,12 @@ var ThisCouldBeBetter;
                 return [this.loc.pos];
             }
             // ShapeBase.
-            collider() { return null; }
-            containsPoint(pointToCheck) {
-                throw new Error("Not yet implemented!");
-            }
             normalAtPos(posToCheck, normalOut) {
                 return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
-            }
-            pointRandom(randomizer) {
-                return null; // todo
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo
             }
-            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 transformToApply.transformCoords(this.loc.pos);

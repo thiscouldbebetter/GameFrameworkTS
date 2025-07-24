@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class BoxAxisAligned {
+        class BoxAxisAligned extends GameFramework.ShapeBase {
             constructor(center, size) {
+                super();
                 this.center = center || GameFramework.Coords.create();
                 this.size = size || GameFramework.Coords.create();
                 this._sizeHalf = GameFramework.Coords.create();
@@ -234,7 +235,6 @@ var ThisCouldBeBetter;
                 return this.min().toStringXY() + ":" + this.max().toStringXY();
             }
             // ShapeBase.
-            collider() { return null; }
             containsPoint(pointToCheck) {
                 return pointToCheck.isInRangeMinMax(this.min(), this.max());
             }

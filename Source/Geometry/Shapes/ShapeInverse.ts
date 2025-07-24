@@ -2,57 +2,50 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ShapeInverse implements ShapeBase
+export class ShapeInverse extends ShapeBase
 {
-	shape: ShapeBase;
+	child: Shape;
 
-	constructor(shape: ShapeBase)
+	constructor(child: Shape)
 	{
-		this.shape = shape;
+		super();
+
+		this.child = child;
 	}
 
 	// Clonable.
 
 	clone(): ShapeInverse
 	{
-		return new ShapeInverse(this.shape.clone());
+		return new ShapeInverse(this.child.clone());
 	}
 
 	overwriteWith(other: ShapeInverse): ShapeInverse
 	{
-		this.shape.overwriteWith(other.shape);
+		this.child.overwriteWith(other.child);
 		return this;
 	}
 
 	// Equatable
 
-	equals(other: ShapeBase) { return false; } // todo
+	equals(other: Shape) { return this.child.equals( (other as ShapeInverse).child); }
 
 	// ShapeBase.
 
-	collider(): ShapeBase { return null; }
-
 	containsPoint(pointToCheck: Coords): boolean
 	{
-		return (this.shape.containsPoint(pointToCheck) == false);
+		return (this.child.containsPoint(pointToCheck) == false);
 	}
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
-		return this.shape.normalAtPos(posToCheck, normalOut).invert();
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
+		return this.child.normalAtPos(posToCheck, normalOut).invert();
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
-		return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
+		return this.child.surfacePointNearPos(posToCheck, surfacePointOut);
 	}
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

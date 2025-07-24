@@ -140,7 +140,8 @@ var ThisCouldBeBetter;
             drawEntitiesInView(uwpe, cameraEntity, display) {
                 var universe = uwpe.universe;
                 this.loc.pos.round(); // hack - To prevent lines between map tiles.
-                this.entitiesInView = this.drawEntitiesInView_1_FindEntitiesInView(uwpe, cameraEntity, universe.collisionHelper, this.entitiesInView);
+                this.entitiesInView =
+                    this.drawEntitiesInView_1_FindEntitiesInView(uwpe, cameraEntity, universe.collisionHelper, this.entitiesInView);
                 this._displayToRestore = universe.display;
                 universe.display = display;
                 this.drawEntitiesInView_2_Draw(uwpe, this.entitiesInView);
@@ -167,6 +168,9 @@ var ThisCouldBeBetter;
                 return entitiesInView;
             }
             drawEntitiesInView_2_Draw(uwpe, entitiesInView) {
+                var universe = uwpe.universe;
+                var drawColliders = universe.debugSettings.drawColliders();
+                var display = universe.display;
                 this.entitiesInViewSort(entitiesInView);
                 for (var i = 0; i < entitiesInView.length; i++) {
                     var entity = entitiesInView[i];
@@ -176,6 +180,13 @@ var ThisCouldBeBetter;
                     this._posSaved.overwriteWith(entityPos);
                     this.coordsTransformWorldToView(entityPos);
                     drawable.draw(uwpe);
+                    if (drawColliders) {
+                        var collidable = GameFramework.Collidable.of(entity);
+                        if (collidable != null) {
+                            var collider = collidable.collider;
+                            collider.drawToDisplayAtPos(display, entityPos);
+                        }
+                    }
                     entityPos.overwriteWith(this._posSaved);
                 }
             }

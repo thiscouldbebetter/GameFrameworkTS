@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ShapeTransformed {
+        class ShapeTransformed extends GameFramework.ShapeBase {
             constructor(transformToApply, child) {
+                super();
                 this.transformToApply = transformToApply;
                 this.child = child;
                 this._childAfterTransformation = this.child.clone();
@@ -29,23 +30,8 @@ var ThisCouldBeBetter;
             }
             // Equatable
             equals(other) {
-                throw new Error("Not yet implemented!");
+                return this.child.equals(other.child); // todo - && this.transform.equals(other.transform);
             }
-            // ShapeBase.
-            collider() { return null; }
-            containsPoint(pointToCheck) {
-                throw new Error("Not yet implemented!");
-            }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not yet implemented!");
-            }
-            pointRandom(randomizer) {
-                throw new Error("Not yet implemented!");
-            }
-            surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw new Error("Not yet implemented!");
-            }
-            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 this.child.transform(transformToApply); // Is this correct?

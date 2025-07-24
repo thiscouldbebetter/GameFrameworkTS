@@ -2,68 +2,72 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ShapeGroupAny implements ShapeBase
+export class ShapeGroupAny extends ShapeBase
 {
-	shapes: ShapeBase[];
+	children: Shape[];
 
 	private _displacement: Coords;
 	private _surfacePointForChild: Coords;
 
-	constructor(shapes: ShapeBase[])
+	constructor(children: Shape[])
 	{
-		this.shapes = shapes;
+		super();
+
+		this.children = children;
 
 		this._displacement = Coords.create();
 		this._surfacePointForChild = Coords.create();
 	}
 
-	static fromShapes(shapes: ShapeBase[]): ShapeGroupAny
+	static fromChildren(children: Shape[]): ShapeGroupAny
 	{
-		return new ShapeGroupAny(shapes);
+		return new ShapeGroupAny(children);
 	}
 
 	// Clonable.
 
 	clone(): ShapeGroupAny
 	{
-		return new ShapeGroupAny(ArrayHelper.clone(this.shapes));
+		return new ShapeGroupAny(ArrayHelper.clone(this.children));
 	}
 
 	overwriteWith(other: ShapeGroupAny): ShapeGroupAny
 	{
-		ArrayHelper.overwriteWith(this.shapes, other.shapes);
+		ArrayHelper.overwriteWith(this.children, other.children);
 		return this;
 	}
 
-	// Equatable
+	// Equatable.
 
-	equals(other: ShapeBase) { return false; } // todo
+	equals(other: ShapeGroupAny): boolean
+	{
+		var thisAndOtherAreEqualSoFar =
+			(this.children.length == other.children.length);
+		if (thisAndOtherAreEqualSoFar)
+		{
+			for (var i = 0; i < this.children.length; i++)
+			{
+				var childOfThis = this.children[i];
+				var childOfOther = other.children[i];
+				var childrenOfThisAndOtherAreEqual = childOfThis.equals(childOfOther);
+				if (childrenOfThisAndOtherAreEqual == false)
+				{
+					thisAndOtherAreEqualSoFar = false;
+					break;
+				}
+			}
+		}
+		return thisAndOtherAreEqualSoFar;
+	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
-	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
 		var distanceMinSoFar = Number.POSITIVE_INFINITY;
-		for (var i = 0; i < this.shapes.length; i++)
+		for (var i = 0; i < this.children.length; i++)
 		{
-			var shape = this.shapes[i];
+			var shape = this.children[i];
 
 			shape.surfacePointNearPos(posToCheck, this._surfacePointForChild);
 
@@ -85,13 +89,11 @@ export class ShapeGroupAny implements ShapeBase
 		return surfacePointOut;
 	}
 
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
-
 	// Transformable.
 
 	transform(transformToApply: TransformBase): ShapeGroupAny
 	{
-		this.shapes.forEach( (x: ShapeBase) => x.transform(transformToApply));
+		this.children.forEach( (x: Shape) => x.transform(transformToApply));
 		return this;
 	}
 }

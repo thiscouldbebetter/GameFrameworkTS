@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Mesh {
+        class Mesh extends GameFramework.ShapeBase {
             constructor(center, vertexOffsets, faceBuilders) {
+                super();
                 this.center = center;
                 this.vertexOffsets = vertexOffsets;
                 this.faceBuilders = faceBuilders;
@@ -150,15 +151,8 @@ var ThisCouldBeBetter;
                 return this;
             }
             // ShapeBase.
-            collider() { return null; }
-            containsPoint(pointToCheck) {
-                throw new Error("Not yet implemented!");
-            }
             normalAtPos(posToCheck, normalOut) {
                 return this.box().normalAtPos(posToCheck, normalOut);
-            }
-            pointRandom(randomizer) {
-                return null; // todo
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo

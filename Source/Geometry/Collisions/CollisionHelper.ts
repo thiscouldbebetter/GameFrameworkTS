@@ -511,7 +511,7 @@ export class CollisionHelper
 
 	collisionOfColliders
 	(
-		collider0: ShapeBase, collider1: ShapeBase, collisionOut: Collision
+		collider0: Shape, collider1: Shape, collisionOut: Collision
 	): Collision
 	{
 		collisionOut.clear();
@@ -601,7 +601,7 @@ export class CollisionHelper
 		return doCollidersCollide;
 	}
 
-	doCollidersCollide(collider0: ShapeBase, collider1: ShapeBase): boolean
+	doCollidersCollide(collider0: Shape, collider1: Shape): boolean
 	{
 		var returnValue = false;
 
@@ -644,7 +644,7 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	doesColliderContainOther(collider0: ShapeBase, collider1: ShapeBase): boolean
+	doesColliderContainOther(collider0: Shape, collider1: Shape): boolean
 	{
 		var returnValue = false;
 
@@ -1378,7 +1378,7 @@ export class CollisionHelper
 
 	collisionOfShapeAndShapeGroupAll
 	(
-		shape: ShapeBase,
+		shape: Shape,
 		shapeGroupAll: ShapeGroupAll,
 		collisionOut: Collision
 	): Collision
@@ -1386,19 +1386,19 @@ export class CollisionHelper
 		return this.collisionOfColliders
 		(
 			shape,
-			shapeGroupAll.shapes[0], // Seems wrong.
+			shapeGroupAll.children[0], // Seems wrong.
 			collisionOut
 		);
 	}
 
 	collisionOfShapeAndShapeGroupAny
 	(
-		shape: ShapeBase,
+		shape: Shape,
 		shapeGroupAny: ShapeGroupAny,
 		collisionOut: Collision
 	): Collision
 	{
-		var shapesAny = shapeGroupAny.shapes;
+		var shapesAny = shapeGroupAny.children;
 		for (var i = 0; i < shapesAny.length; i++)
 		{
 			var shapeAny = shapesAny[i];
@@ -1417,14 +1417,14 @@ export class CollisionHelper
 		return collisionOut;
 	}
 
-	collisionOfShapeAndShapeInverse(shape: ShapeBase, shapeInverse: ShapeInverse, collisionOut: Collision): Collision
+	collisionOfShapeAndShapeInverse(shape: Shape, shapeInverse: ShapeInverse, collisionOut: Collision): Collision
 	{
 		return collisionOut; // todo
 	}
 
 	collisionOfShapeAndShapeTransformed
 	(
-		shape: ShapeBase,
+		shape: Shape,
 		shapeTransformed: ShapeTransformed, 
 		collisionOut: Collision
 	): Collision
@@ -1437,7 +1437,7 @@ export class CollisionHelper
 
 	collisionOfShapeGroupAllAndShape
 	(
-		shapeGroupAll: ShapeGroupAll, shape: ShapeBase, collisionOut: Collision
+		shapeGroupAll: ShapeGroupAll, shape: Shape, collisionOut: Collision
 	): Collision
 	{
 		return this.collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut);
@@ -1445,7 +1445,7 @@ export class CollisionHelper
 
 	collisionOfShapeGroupAnyAndShape
 	(
-		shapeGroupAny: ShapeGroupAny, shape: ShapeBase, collisionOut: Collision
+		shapeGroupAny: ShapeGroupAny, shape: Shape, collisionOut: Collision
 	): Collision
 	{
 		return this.collisionOfShapeAndShapeGroupAny(shape, shapeGroupAny, collisionOut);
@@ -1453,7 +1453,7 @@ export class CollisionHelper
 
 	collisionOfShapeInverseAndShape
 	(
-		shapeInverse: ShapeInverse, shape: ShapeBase, collisionOut: Collision
+		shapeInverse: ShapeInverse, shape: Shape, collisionOut: Collision
 	): Collision
 	{
 		return this.collisionOfShapeAndShapeInverse(shape, shapeInverse, collisionOut);
@@ -1461,7 +1461,7 @@ export class CollisionHelper
 
 	collisionOfShapeTransformedAndShape
 	(
-		shapeTransformed: ShapeTransformed, shape: ShapeBase, collisionOut: Collision
+		shapeTransformed: ShapeTransformed, shape: Shape, collisionOut: Collision
 	): Collision
 	{
 		return this.collisionOfShapeAndShapeTransformed(shape, shapeTransformed, collisionOut);
@@ -2049,22 +2049,22 @@ export class CollisionHelper
 		return point0.pos.equals(point1.pos);
 	}
 
-	doShapeAndShapeGroupAllCollide(shape: ShapeBase, shapeGroupAll: ShapeGroupAll): boolean
+	doShapeAndShapeGroupAllCollide(shape: Shape, shapeGroupAll: ShapeGroupAll): boolean
 	{
 		return this.doShapeGroupAllAndShapeCollide(shapeGroupAll, shape);
 	}
 
-	doShapeAndShapeGroupAnyCollide(shape: ShapeBase, shapeGroupAny: ShapeGroupAny): boolean
+	doShapeAndShapeGroupAnyCollide(shape: Shape, shapeGroupAny: ShapeGroupAny): boolean
 	{
 		return this.doShapeGroupAnyAndShapeCollide(shapeGroupAny, shape);
 	}
 
-	doShapeAndShapeInverseCollide(shape: ShapeBase, shapeInverse: ShapeInverse): boolean
+	doShapeAndShapeInverseCollide(shape: Shape, shapeInverse: ShapeInverse): boolean
 	{
 		return this.doShapeInverseAndShapeCollide(shapeInverse, shape);
 	}
 
-	doShapeAndShapeTransformedCollide(shape: ShapeBase, shapeTransformed: ShapeTransformed): boolean
+	doShapeAndShapeTransformedCollide(shape: Shape, shapeTransformed: ShapeTransformed): boolean
 	{
 		return this.doShapeTransformedAndShapeCollide(shapeTransformed, shape);
 	}
@@ -2132,9 +2132,9 @@ export class CollisionHelper
 		return this.doShapeContainerAndShapeCollide(container, box);
 	}
 
-	doShapeContainerAndShapeCollide(container: ShapeContainer, shapeOther: ShapeBase): boolean
+	doShapeContainerAndShapeCollide(container: ShapeContainer, shapeOther: Shape): boolean
 	{
-		return this.doesColliderContainOther(container.shape, shapeOther);
+		return this.doesColliderContainOther(container.child, shapeOther);
 	}
 
 	doShapeContainerAndSphereCollide(container: ShapeContainer, sphere: Sphere): boolean
@@ -2142,7 +2142,7 @@ export class CollisionHelper
 		return this.doShapeContainerAndShapeCollide(container, sphere);
 	}
 
-	doShapeGroupAllAndBoxCollide(groupAll: ShapeGroupAll, shapeOther: ShapeBase): boolean
+	doShapeGroupAllAndBoxCollide(groupAll: ShapeGroupAll, shapeOther: Shape): boolean
 	{
 		return this.doShapeGroupAllAndShapeCollide(groupAll, shapeOther);
 	}
@@ -2152,11 +2152,11 @@ export class CollisionHelper
 		return this.doShapeGroupAllAndShapeCollide(groupAll, mesh);
 	}
 
-	doShapeGroupAllAndShapeCollide(groupAll: ShapeGroupAll, shapeOther: ShapeBase): boolean
+	doShapeGroupAllAndShapeCollide(groupAll: ShapeGroupAll, shapeOther: Shape): boolean
 	{
 		var returnValue = true;
 
-		var shapesThis = groupAll.shapes;
+		var shapesThis = groupAll.children;
 		for (var i = 0; i < shapesThis.length; i++)
 		{
 			var shapeThis = shapesThis[i];
@@ -2171,7 +2171,7 @@ export class CollisionHelper
 		return returnValue;
 	}
 
-	doShapeGroupAllAndSphereCollide(group: ShapeGroupAll, shape: ShapeBase): boolean
+	doShapeGroupAllAndSphereCollide(group: ShapeGroupAll, shape: Shape): boolean
 	{
 		return this.doShapeGroupAllAndShapeCollide(group, shape);
 	}
@@ -2181,11 +2181,11 @@ export class CollisionHelper
 		return this.doShapeGroupAnyAndShapeCollide(groupAny, box);
 	}
 
-	doShapeGroupAnyAndShapeCollide(groupAny: ShapeGroupAny, shapeOther: ShapeBase): boolean
+	doShapeGroupAnyAndShapeCollide(groupAny: ShapeGroupAny, shapeOther: Shape): boolean
 	{
 		var returnValue = false;
 
-		var shapesThis = groupAny.shapes;
+		var shapesThis = groupAny.children;
 		for (var i = 0; i < shapesThis.length; i++)
 		{
 			var shapeThis = shapesThis[i];
@@ -2215,9 +2215,9 @@ export class CollisionHelper
 		return this.doShapeInverseAndShapeCollide(inverse, box);
 	}
 
-	doShapeInverseAndShapeCollide(inverse: ShapeInverse, shapeOther: ShapeBase): boolean
+	doShapeInverseAndShapeCollide(inverse: ShapeInverse, shapeOther: Shape): boolean
 	{
-		return (this.doCollidersCollide(inverse.shape, shapeOther) == false);
+		return (this.doCollidersCollide(inverse.child, shapeOther) == false);
 	}
 
 	doShapeInverseAndSphereCollide(inverse: ShapeInverse, sphere: Sphere): boolean
@@ -2230,7 +2230,7 @@ export class CollisionHelper
 		return this.doShapeTransformedAndShapeCollide(shapeTransformed, mesh);
 	}
 
-	doShapeTransformedAndShapeCollide(shapeTransformed: ShapeTransformed, shapeOther: ShapeBase): boolean
+	doShapeTransformedAndShapeCollide(shapeTransformed: ShapeTransformed, shapeOther: Shape): boolean
 	{
 		var shapeTransformedAfterTransformation =
 			shapeTransformed.shapeAfterTransformation();
@@ -2338,42 +2338,42 @@ export class CollisionHelper
 		throw new Error("todo");
 	}
 
-	doesShapeContainShapeGroupAll(shape: ShapeBase, shapeGroupAll: ShapeGroupAll): boolean
+	doesShapeContainShapeGroupAll(shape: Shape, shapeGroupAll: ShapeGroupAll): boolean
 	{
 		throw new Error("todo");
 	}
 
-	doesShapeContainShapeGroupAny(shape: ShapeBase, shapeGroupAny: ShapeGroupAny): boolean
+	doesShapeContainShapeGroupAny(shape: Shape, shapeGroupAny: ShapeGroupAny): boolean
 	{
 		throw new Error("todo");
 	}
 
-	doesShapeContainShapeInverse(shape: ShapeBase, shapeInverse: ShapeInverse): boolean
+	doesShapeContainShapeInverse(shape: Shape, shapeInverse: ShapeInverse): boolean
 	{
 		throw new Error("todo");
 	}
 
-	doesShapeContainShapeTransformed(shape: ShapeBase, shapeTransformed: ShapeTransformed): boolean
+	doesShapeContainShapeTransformed(shape: Shape, shapeTransformed: ShapeTransformed): boolean
 	{
 		throw new Error("todo");
 	}
 
-	doesShapeGroupAllContainShape(shapeGroupAll: ShapeGroupAll, shape: ShapeBase): boolean
+	doesShapeGroupAllContainShape(shapeGroupAll: ShapeGroupAll, shape: Shape): boolean
 	{
 		throw new Error("todo");
 	}
 
-	doesShapeGroupAnyContainShape(shapeGroupAny: ShapeGroupAny, shape: ShapeBase): boolean
+	doesShapeGroupAnyContainShape(shapeGroupAny: ShapeGroupAny, shape: Shape): boolean
 	{
 		throw new Error("todo");
 	}
 
-	doesShapeInverseContainShape(shapeInverse: ShapeInverse, shape: ShapeBase): boolean
+	doesShapeInverseContainShape(shapeInverse: ShapeInverse, shape: Shape): boolean
 	{
 		throw new Error("todo");
 	}
 
-	doesShapeTransformedContainShape(shapeTransformed: ShapeTransformed, shape: ShapeBase): boolean
+	doesShapeTransformedContainShape(shapeTransformed: ShapeTransformed, shape: Shape): boolean
 	{
 		throw new Error("todo");
 	}

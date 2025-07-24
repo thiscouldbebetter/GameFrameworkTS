@@ -29,8 +29,8 @@ var ThisCouldBeBetter;
                 this.serializer = new GameFramework.Serializer();
                 this.venueStack = new GameFramework.Stack();
                 this._venueNext = null;
-                var debuggingModeName = GameFramework.URLParser.fromWindow().queryStringParameterByName("debug");
-                this.debuggingModeName = debuggingModeName;
+                var debugSettingsAsString = GameFramework.URLParser.fromWindow().queryStringParameterByName("debug");
+                this.debugSettings = GameFramework.DebugSettings.fromString(debugSettingsAsString);
             }
             // static methods
             static create(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, profileHelper, worldCreator) {
@@ -85,7 +85,7 @@ var ThisCouldBeBetter;
                 this.soundHelper.initialize(this.mediaLibrary.sounds);
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
                 var venueInitial = null;
-                if (this.debuggingModeName == GameFramework.DebuggingModeNames.SkipOpening) {
+                if (this.debugSettings.skipOpening()) {
                     var profile = GameFramework.Profile.anonymous();
                     this.profileSet(profile);
                     venueInitial = this.worldCreator.toVenue(this);

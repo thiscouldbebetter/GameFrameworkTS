@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Edge implements ShapeBase
+export class Edge extends ShapeBase
 {
 	vertices: Coords[];
 
@@ -13,6 +13,8 @@ export class Edge implements ShapeBase
 
 	constructor(vertices: Coords[])
 	{
+		super();
+
 		this.vertices = vertices || [ Coords.create(), Coords.create() ];
 
 		this._direction = Coords.create();
@@ -100,31 +102,6 @@ export class Edge implements ShapeBase
 	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
-	}
-
-	surfacePointNearPos
-	(
-		posToCheck: Coords, surfacePointOut: Coords
-	): Coords
-	{
-		throw new Error("Not implemented!");
-	}
 
 	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{

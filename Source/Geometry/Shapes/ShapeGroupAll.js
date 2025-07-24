@@ -3,42 +3,47 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ShapeGroupAll {
-            constructor(shapes) {
-                this.shapes = shapes;
+        class ShapeGroupAll extends GameFramework.ShapeBase {
+            constructor(children) {
+                super();
+                this.children = children;
+            }
+            static fromChildren(children) {
+                return new ShapeGroupAll(children);
             }
             // Clonable.
             clone() {
-                return new ShapeGroupAll(GameFramework.ArrayHelper.clone(this.shapes));
+                return new ShapeGroupAll(GameFramework.ArrayHelper.clone(this.children));
             }
             overwriteWith(other) {
-                GameFramework.ArrayHelper.overwriteWith(this.shapes, other.shapes);
+                GameFramework.ArrayHelper.overwriteWith(this.children, other.children);
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
+            // Equatable.
+            equals(other) {
+                var thisAndOtherAreEqualSoFar = (this.children.length == other.children.length);
+                if (thisAndOtherAreEqualSoFar) {
+                    for (var i = 0; i < this.children.length; i++) {
+                        var childOfThis = this.children[i];
+                        var childOfOther = other.children[i];
+                        var childrenOfThisAndOtherAreEqual = childOfThis.equals(childOfOther);
+                        if (childrenOfThisAndOtherAreEqual == false) {
+                            thisAndOtherAreEqualSoFar = false;
+                            break;
+                        }
+                    }
+                }
+                return thisAndOtherAreEqualSoFar;
+            }
             // ShapeBase.
-            collider() { return null; }
             containsPoint(pointToCheck) {
-                var doAnyChildShapesNotContainPoint = this.shapes.some(x => x.containsPoint(pointToCheck) == false);
+                var doAnyChildShapesNotContainPoint = this.children.some(x => x.containsPoint(pointToCheck) == false);
                 var doAllChildShapesContainPoint = (doAnyChildShapesNotContainPoint == false);
                 return doAllChildShapesContainPoint;
             }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not implemented!");
-            }
-            pointRandom(randomizer) {
-                return null; // todo
-            }
-            surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw new Error("Not implemented!");
-            }
-            toBoxAxisAligned(boxOut) {
-                throw new Error("Not implemented!");
-            }
             // Transformable.
             transform(transformToApply) {
-                this.shapes.forEach((x) => x.transform(transformToApply));
+                this.children.forEach((x) => x.transform(transformToApply));
                 return this;
             }
         }

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Face implements ShapeBase
+export class Face extends ShapeBase
 {
 	vertices: Coords[];
 
@@ -12,6 +12,8 @@ export class Face implements ShapeBase
 
 	constructor(vertices: Coords[])
 	{
+		super();
+
 		this.vertices = vertices;
 	}
 
@@ -129,20 +131,6 @@ export class Face implements ShapeBase
 	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
-	}
-
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw new Error("Not implemented!"); }
 
 	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{

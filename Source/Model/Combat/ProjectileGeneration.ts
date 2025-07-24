@@ -131,7 +131,7 @@ export class ProjectileGeneration
 		var colliderPartBeforeTransform = Sphere.fromRadius(this.radius); 
 		var shotDiameter = this.radius * 2;
 		var colliderPartsCount = this.speed / shotDiameter;
-		var colliderParts: ShapeBase[] = [];
+		var colliderParts: Shape[] = [];
 		for (var i = 0; i < colliderPartsCount; i++)
 		{
 			var displacement =
@@ -143,7 +143,7 @@ export class ProjectileGeneration
 				ShapeTransformed.fromTransformAndChild(transform, colliderPartBeforeTransform);
 			colliderParts.push(colliderPart);
 		}
-		var shotCollider = ShapeGroupAny.fromShapes(colliderParts);
+		var shotCollider = ShapeGroupAny.fromChildren(colliderParts);
 		var shotCollidable =
 			Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide
 			(

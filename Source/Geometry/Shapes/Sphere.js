@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Sphere {
+        class Sphere extends GameFramework.ShapeBase {
             constructor(center, pointOnSurface) {
+                super();
                 this.center = center;
                 this.pointOnSurface = pointOnSurface;
                 // Helper variables.
@@ -81,7 +82,6 @@ var ThisCouldBeBetter;
                 return (this.center.equals(other.center) && this.radius == other.radius);
             }
             // ShapeBase.
-            collider() { return null; }
             normalAtPos(posToCheck, normalOut) {
                 return normalOut.overwriteWith(posToCheck).subtract(this.center).normalize();
             }

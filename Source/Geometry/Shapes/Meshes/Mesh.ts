@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Mesh implements ShapeBase
+export class Mesh extends ShapeBase
 {
 	center: Coords;
 	vertexOffsets: Coords[];
@@ -19,6 +19,8 @@ export class Mesh implements ShapeBase
 		faceBuilders: Mesh_FaceBuilder[]
 	)
 	{
+		super();
+
 		this.center = center;
 		this.vertexOffsets = vertexOffsets;
 		this.faceBuilders = faceBuilders;
@@ -248,7 +250,7 @@ export class Mesh implements ShapeBase
 
 	// Equatable
 
-	equals(other: ShapeBase) { return false; } // todo
+	equals(other: Shape) { return false; } // todo
 
 	// Transformable.
 
@@ -272,21 +274,9 @@ export class Mesh implements ShapeBase
 
 	// ShapeBase.
 
-	collider(): ShapeBase { return null; }
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return this.box().normalAtPos(posToCheck, normalOut);
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords

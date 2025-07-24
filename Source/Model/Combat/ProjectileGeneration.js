@@ -67,7 +67,7 @@ var ThisCouldBeBetter;
                     var colliderPart = GameFramework.ShapeTransformed.fromTransformAndChild(transform, colliderPartBeforeTransform);
                     colliderParts.push(colliderPart);
                 }
-                var shotCollider = GameFramework.ShapeGroupAny.fromShapes(colliderParts);
+                var shotCollider = GameFramework.ShapeGroupAny.fromChildren(colliderParts);
                 var shotCollidable = GameFramework.Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide(shotCollider, GameFramework.Collidable.name, (uwpe) => this.collide(uwpe));
                 var shotDamager = GameFramework.Damager.fromDamagePerHit(this.damage);
                 var shotDrawable = GameFramework.Drawable.fromVisual(this.visual); // hack

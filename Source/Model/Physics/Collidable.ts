@@ -7,12 +7,12 @@ export class Collidable implements EntityProperty<Collidable>
 	canCollideAgainWithoutSeparating: boolean;
 	exemptFromCollisionEffectsOfOther: boolean;
 	ticksToWaitBetweenCollisions: number;
-	colliderAtRest: ShapeBase;
+	colliderAtRest: Shape;
 	collidesOnlyWithEntitiesHavingPropertiesNamed: string[];
 	_collideEntitiesForUniverseWorldPlaceEntitiesAndCollision:
 		(uwpe: UniverseWorldPlaceEntities, c: Collision) => void;
 
-	collider: ShapeBase;
+	collider: Shape;
 	locPrev: Disposition;
 	ticksUntilCanCollide: number;
 	_entitiesAlreadyCollidedWith: Entity[];
@@ -29,7 +29,7 @@ export class Collidable implements EntityProperty<Collidable>
 		canCollideAgainWithoutSeparating: boolean,
 		exemptFromCollisionEffectsOfOther: boolean,
 		ticksToWaitBetweenCollisions: number,
-		colliderAtRest: ShapeBase,
+		colliderAtRest: Shape,
 		collidesOnlyWithEntitiesHavingPropertiesNamed: string[],
 		collideEntitiesForUniverseWorldPlaceEntitiesAndCollision:
 			(uwpe: UniverseWorldPlaceEntities, c: Collision) => void
@@ -84,7 +84,7 @@ export class Collidable implements EntityProperty<Collidable>
 		return place.entitiesByPropertyName(Collidable.name);
 	}
 
-	static fromCollider(colliderAtRest: ShapeBase): Collidable
+	static fromCollider(colliderAtRest: Shape): Collidable
 	{
 		return Collidable.fromColliderAndCollideEntities
 		(
@@ -94,7 +94,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	static fromColliderAndCollideEntities
 	(
-		colliderAtRest: ShapeBase,
+		colliderAtRest: Shape,
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	): Collidable
 	{
@@ -111,7 +111,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	static fromColliderAndCollidesOnlyWithEntitiesHavingPropertyNamed
 	(
-		colliderAtRest: ShapeBase,
+		colliderAtRest: Shape,
 		collidesOnlyWithEntitiesHavingPropertyNamed: string
 	): Collidable
 	{
@@ -125,7 +125,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	static fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide
 	(
-		colliderAtRest: ShapeBase,
+		colliderAtRest: Shape,
 		collidesOnlyWithEntitiesHavingPropertyNamed: string,
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	): Collidable
@@ -140,7 +140,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	static fromColliderCollidesOnlyWithEntitiesHavingPropertiesNamedAndCollide
 	(
-		colliderAtRest: ShapeBase,
+		colliderAtRest: Shape,
 		collidesOnlyWithEntitiesHavingPropertiesNamed: string[],
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	): Collidable
@@ -158,7 +158,7 @@ export class Collidable implements EntityProperty<Collidable>
 
 	static fromColliderPropertyNameAndCollide
 	(
-		colliderAtRest: ShapeBase,
+		colliderAtRest: Shape,
 		collidesOnlyWithEntitiesHavingPropertyNamed: string,
 		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	): Collidable
@@ -171,7 +171,7 @@ export class Collidable implements EntityProperty<Collidable>
 		);
 	}
 
-	static fromShape(shapeAtRest: ShapeBase): Collidable
+	static fromShape(shapeAtRest: Shape): Collidable
 	{
 		return Collidable.fromColliderAndCollideEntities
 		(
@@ -292,7 +292,7 @@ export class Collidable implements EntityProperty<Collidable>
 		console.log(message);
 	}
 
-	colliderAtRestSet(value: ShapeBase): Collidable
+	colliderAtRestSet(value: Shape): Collidable
 	{
 		this.colliderAtRest = value.clone();
 		this.collider = this.colliderAtRest.clone();

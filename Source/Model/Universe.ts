@@ -27,7 +27,7 @@ export class Universe
 	storageHelper: StorageHelper;
 	videoHelper: VideoHelper;
 
-	debuggingModeName: string;
+	debugSettings: DebugSettings;
 	profile: Profile;
 
 	private _venueNext: Venue;
@@ -78,9 +78,9 @@ export class Universe
 		this.venueStack = new Stack<Venue>();
 		this._venueNext = null;
 
-		var debuggingModeName =
+		var debugSettingsAsString =
 			URLParser.fromWindow().queryStringParameterByName("debug");
-		this.debuggingModeName = debuggingModeName;
+		this.debugSettings = DebugSettings.fromString(debugSettingsAsString);
 	}
 
 	// static methods
@@ -211,7 +211,7 @@ export class Universe
 
 		var venueInitial: Venue = null;
 
-		if (this.debuggingModeName == DebuggingModeNames.SkipOpening)
+		if (this.debugSettings.skipOpening() )
 		{
 			var profile = Profile.anonymous();
 			this.profileSet(profile);

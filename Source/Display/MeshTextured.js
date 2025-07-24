@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class MeshTextured {
+        class MeshTextured extends GameFramework.ShapeBase {
             constructor(geometry, materials, faceTextures, vertexGroups) {
+                super();
                 this.geometry = geometry;
                 this.materials = materials;
                 this.materialsByName = GameFramework.ArrayHelper.addLookupsByName(this.materials);
@@ -83,23 +84,6 @@ var ThisCouldBeBetter;
             }
             // Equatable
             equals(other) { return false; } // todo
-            // ShapeBase.
-            collider() { return null; }
-            containsPoint(pointToCheck) {
-                throw new Error("Not yet implemented!");
-            }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not implemented!");
-            }
-            pointRandom(randomizer) {
-                return null; // todo
-            }
-            surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw new Error("Not implemented!");
-            }
-            toBoxAxisAligned(boxOut) {
-                throw new Error("Not implemented!");
-            }
         }
         GameFramework.MeshTextured = MeshTextured;
         class MeshTexturedFaceTexture {

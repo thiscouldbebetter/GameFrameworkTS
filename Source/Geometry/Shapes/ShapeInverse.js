@@ -3,35 +3,31 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ShapeInverse {
-            constructor(shape) {
-                this.shape = shape;
+        class ShapeInverse extends GameFramework.ShapeBase {
+            constructor(child) {
+                super();
+                this.child = child;
             }
             // Clonable.
             clone() {
-                return new ShapeInverse(this.shape.clone());
+                return new ShapeInverse(this.child.clone());
             }
             overwriteWith(other) {
-                this.shape.overwriteWith(other.shape);
+                this.child.overwriteWith(other.child);
                 return this;
             }
             // Equatable
-            equals(other) { return false; } // todo
+            equals(other) { return this.child.equals(other.child); }
             // ShapeBase.
-            collider() { return null; }
             containsPoint(pointToCheck) {
-                return (this.shape.containsPoint(pointToCheck) == false);
+                return (this.child.containsPoint(pointToCheck) == false);
             }
             normalAtPos(posToCheck, normalOut) {
-                return this.shape.normalAtPos(posToCheck, normalOut).invert();
-            }
-            pointRandom(randomizer) {
-                return null; // todo
+                return this.child.normalAtPos(posToCheck, normalOut).invert();
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
-                return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
+                return this.child.surfacePointNearPos(posToCheck, surfacePointOut);
             }
-            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) { throw new Error("Not implemented!"); }
         }

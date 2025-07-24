@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class BoxOriented {
+        class BoxOriented extends GameFramework.ShapeBase {
             constructor(center, ori, displacementFromCenterToCornerForwardRightDown) {
+                super();
                 this.center = center || GameFramework.Coords.create();
                 this.ori = ori || GameFramework.Orientation.default();
                 this.displacementFromCenterToCornerForwardRightDown =
@@ -95,16 +96,10 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // ShapeBase.
-            collider() { throw new Error("Not yet implemented!"); }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not yet implemented!");
-            }
             pointRandom(randomizer) {
                 var size = this.size();
                 return this._displacement.randomize(randomizer).multiply(size);
-            }
-            surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw new Error("Not yet implemented!");
+                // todo - Orient it?
             }
             toBoxAxisAligned(boxOut) {
                 var corners = this.corners();

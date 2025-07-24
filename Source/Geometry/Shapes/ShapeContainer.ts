@@ -2,61 +2,54 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ShapeContainer implements ShapeBase
+export class ShapeContainer extends ShapeBase
 {
 	// Only collides if the other shape is fully contained in the child shape.
 
-	shape: ShapeBase;
+	child: Shape;
 
-	constructor(shape: ShapeBase)
+	constructor(child: Shape)
 	{
-		this.shape = shape;
+		super();
+
+		this.child = child;
 	}
 
 	// Clonable.
 
 	clone(): ShapeContainer
 	{
-		return new ShapeContainer(this.shape.clone());
+		return new ShapeContainer(this.child.clone());
 	}
 
 	overwriteWith(other: ShapeContainer): ShapeContainer
 	{
-		this.shape.overwriteWith(other.shape);
+		this.child.overwriteWith(other.child);
 		return this;
 	}
 
-	// Equatable
+	// Equatable.
 
-	equals(other: ShapeBase) { return false; } // todo
+	equals(other: ShapeContainer)
+	{
+		return this.child.equals(other.child);
+	}
 
 	// ShapeBase.
 
-	collider(): ShapeBase { return null; }
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
-		return this.shape.normalAtPos(posToCheck, normalOut);
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
+		return this.child.normalAtPos(posToCheck, normalOut);
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{
-		return this.shape.surfacePointNearPos(posToCheck, surfacePointOut);
+		return this.child.surfacePointNearPos(posToCheck, surfacePointOut);
 	}
 
 	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
 	{
-		return this.shape.toBoxAxisAligned(boxOut);
+		return this.child.toBoxAxisAligned(boxOut);
 	}
 
 	// Transformable.

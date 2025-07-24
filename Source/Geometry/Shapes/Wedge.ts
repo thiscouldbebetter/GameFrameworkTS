@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Wedge implements ShapeBase
+export class Wedge extends ShapeBase
 {
 	vertex: Coords;
 	directionMin: Coords;
@@ -21,10 +21,12 @@ export class Wedge implements ShapeBase
 	shapeGroupAll: ShapeGroupAll;
 	shapeGroupAny: ShapeGroupAny;
 
-	_collider: ShapeBase;
+	_collider: Shape;
 
 	constructor(vertex: Coords, directionMin: Coords, angleSpannedInTurns: number)
 	{
+		super();
+
 		this.vertex = vertex;
 		this.directionMin = directionMin;
 		this.angleSpannedInTurns = angleSpannedInTurns;
@@ -72,26 +74,26 @@ export class Wedge implements ShapeBase
 		).azimuthInTurns;
 	}
 
-	collider(): ShapeBase
+	collider(): Shape
 	{
 		if (this._collider == null)
 		{
-			this.rayDirectionMinAsPolar = new Polar(0, 1, 0);
-			this.rayDirectionMaxAsPolar = new Polar(0, 1, 0);
+			this.rayDirectionMinAsPolar = Polar.default();
+			this.rayDirectionMaxAsPolar = Polar.default();
 			this.rayDirectionMin = Coords.create();
 			this.rayDirectionMax = Coords.create();
 			this.downFromVertex = Coords.create();
 			this.directionMinFromVertex = Coords.create();
 			this.directionMaxFromVertex = Coords.create();
-			this.planeForAngleMin = new Plane(Coords.create(), 0);
-			this.planeForAngleMax = new Plane(Coords.create(), 0);
+			this.planeForAngleMin = Plane.create();
+			this.planeForAngleMax = Plane.create();
 			this.hemispaces = 
 			[ 
-				new Hemispace(this.planeForAngleMin),
-				new Hemispace(this.planeForAngleMax)
+				Hemispace.fromPlane(this.planeForAngleMin),
+				Hemispace.fromPlane(this.planeForAngleMax)
 			];
-			this.shapeGroupAll = new ShapeGroupAll(this.hemispaces);
-			this.shapeGroupAny = new ShapeGroupAny(this.hemispaces);
+			this.shapeGroupAll = ShapeGroupAll.fromChildren(this.hemispaces);
+			this.shapeGroupAny = ShapeGroupAny.fromChildren(this.hemispaces);
 		}
 
 		var angleInTurnsMin = this.angleInTurnsMin();
@@ -104,29 +106,17 @@ export class Wedge implements ShapeBase
 
 		var down = Coords.Instances().ZeroZeroOne;
 
-		this.downFromVertex.overwriteWith
-		(
-			this.vertex
-		).add
-		(
-			down
-		);
+		this.downFromVertex
+			.overwriteWith(this.vertex)
+			.add(down);
 
-		this.directionMinFromVertex.overwriteWith
-		(
-			this.vertex
-		).add
-		(
-			this.rayDirectionMin
-		);
+		this.directionMinFromVertex
+			.overwriteWith(this.vertex)
+			.add(this.rayDirectionMin);
 
-		this.directionMaxFromVertex.overwriteWith
-		(
-			this.vertex
-		).add
-		(
-			this.rayDirectionMax
-		);
+		this.directionMaxFromVertex
+			.overwriteWith(this.vertex)
+			.add(this.rayDirectionMax);
 
 		this.planeForAngleMin.fromPoints
 		(
@@ -153,11 +143,6 @@ export class Wedge implements ShapeBase
 		}
 
 		return this._collider;
-	}
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
 	}
 
 	// Clonable.
@@ -188,25 +173,6 @@ export class Wedge implements ShapeBase
 
 		return returnValue;
 	}
-
-	// ShapeBase.
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
-	}
-
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

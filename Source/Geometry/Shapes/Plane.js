@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Plane {
+        class Plane extends GameFramework.ShapeBase {
             constructor(normal, distanceFromOrigin) {
+                super();
                 this.normal = normal;
                 this.distanceFromOrigin = distanceFromOrigin;
                 this._displacementFromPoint0To2 = GameFramework.Coords.create();
@@ -49,13 +50,6 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // ShapeBase.
-            collider() { return null; }
-            containsPoint(pointToCheck) {
-                throw new Error("Not yet implemented!");
-            }
-            normalAtPos(posToCheck, normalOut) { throw new Error("Not implemented!"); }
-            surfacePointNearPos(posToCheck, surfacePointOut) { throw new Error("Not implemented!"); }
-            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 throw new Error("Not implemented!");

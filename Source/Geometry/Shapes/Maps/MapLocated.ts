@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class MapLocated implements ShapeBase
+export class MapLocated extends ShapeBase
 {
 	map: MapOfCells<any>;
 	loc: Disposition;
@@ -13,6 +13,8 @@ export class MapLocated implements ShapeBase
 
 	constructor(map: MapOfCells<any>, loc: Disposition)
 	{
+		super();
+
 		this.map = map;
 		this.loc = loc;
 
@@ -52,7 +54,7 @@ export class MapLocated implements ShapeBase
 
 	// Equatable.
 
-	equals(other: ShapeBase): boolean { return false; } // todo
+	equals(other: Shape): boolean { return false; } // todo
 
 	// Transformable.
 
@@ -63,29 +65,15 @@ export class MapLocated implements ShapeBase
 
 	// ShapeBase.
 
-	collider(): ShapeBase { return null; }
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
-	}
-
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{
 		return normalOut.overwriteWith(posToCheck).subtract(this.loc.pos).normalize();
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
 	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords)
 	{
 		return surfacePointOut.overwriteWith(posToCheck); // todo
 	}
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

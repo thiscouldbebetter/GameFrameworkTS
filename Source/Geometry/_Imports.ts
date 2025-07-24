@@ -55,6 +55,7 @@ import PathBuilder = gf.PathBuilder;
 import Plane = gf.Plane;
 import Point = gf.Point;
 import Ray = gf.Ray;
+import Shape = gf.Shape;
 import ShapeBase = gf.ShapeBase;
 import ShapeContainer = gf.ShapeContainer;
 import ShapeGroupAll = gf.ShapeGroupAll;

@@ -3,40 +3,45 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ShapeGroupAny {
-            constructor(shapes) {
-                this.shapes = shapes;
+        class ShapeGroupAny extends GameFramework.ShapeBase {
+            constructor(children) {
+                super();
+                this.children = children;
                 this._displacement = GameFramework.Coords.create();
                 this._surfacePointForChild = GameFramework.Coords.create();
             }
-            static fromShapes(shapes) {
-                return new ShapeGroupAny(shapes);
+            static fromChildren(children) {
+                return new ShapeGroupAny(children);
             }
             // Clonable.
             clone() {
-                return new ShapeGroupAny(GameFramework.ArrayHelper.clone(this.shapes));
+                return new ShapeGroupAny(GameFramework.ArrayHelper.clone(this.children));
             }
             overwriteWith(other) {
-                GameFramework.ArrayHelper.overwriteWith(this.shapes, other.shapes);
+                GameFramework.ArrayHelper.overwriteWith(this.children, other.children);
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
+            // Equatable.
+            equals(other) {
+                var thisAndOtherAreEqualSoFar = (this.children.length == other.children.length);
+                if (thisAndOtherAreEqualSoFar) {
+                    for (var i = 0; i < this.children.length; i++) {
+                        var childOfThis = this.children[i];
+                        var childOfOther = other.children[i];
+                        var childrenOfThisAndOtherAreEqual = childOfThis.equals(childOfOther);
+                        if (childrenOfThisAndOtherAreEqual == false) {
+                            thisAndOtherAreEqualSoFar = false;
+                            break;
+                        }
+                    }
+                }
+                return thisAndOtherAreEqualSoFar;
+            }
             // ShapeBase.
-            collider() { return null; }
-            containsPoint(pointToCheck) {
-                throw new Error("Not yet implemented!");
-            }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not implemented!");
-            }
-            pointRandom(randomizer) {
-                return null; // todo
-            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 var distanceMinSoFar = Number.POSITIVE_INFINITY;
-                for (var i = 0; i < this.shapes.length; i++) {
-                    var shape = this.shapes[i];
+                for (var i = 0; i < this.children.length; i++) {
+                    var shape = this.children[i];
                     shape.surfacePointNearPos(posToCheck, this._surfacePointForChild);
                     var distanceFromPosToCheck = this._displacement.overwriteWith(this._surfacePointForChild).subtract(posToCheck).magnitude();
                     if (distanceFromPosToCheck < distanceMinSoFar) {
@@ -46,10 +51,9 @@ var ThisCouldBeBetter;
                 }
                 return surfacePointOut;
             }
-            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
-                this.shapes.forEach((x) => x.transform(transformToApply));
+                this.children.forEach((x) => x.transform(transformToApply));
                 return this;
             }
         }

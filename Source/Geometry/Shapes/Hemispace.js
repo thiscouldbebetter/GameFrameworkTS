@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Hemispace {
+        class Hemispace extends GameFramework.ShapeBase {
             constructor(plane) {
+                super();
                 this.plane = plane;
                 this._displacement = GameFramework.Coords.create();
             }
@@ -34,21 +35,16 @@ var ThisCouldBeBetter;
                 this.plane.overwriteWith(other.plane);
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
+            // Equatable.
+            equals(other) {
+                return this.plane.equals(other.plane);
+            }
             // ShapeBase.
-            collider() { return null; }
             normalAtPos(posToCheck, normalOut) {
                 return this.plane.normal;
             }
-            pointRandom(randomizer) {
-                return null; // todo
-            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(this.plane.pointOnPlaneNearestPos(posToCheck));
-            }
-            toBoxAxisAligned(boxOut) {
-                throw new Error("Not implemented!");
             }
             // Transformable.
             transform(transformToApply) {

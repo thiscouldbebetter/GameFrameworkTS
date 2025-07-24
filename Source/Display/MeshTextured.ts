@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class MeshTextured implements ShapeBase
+export class MeshTextured extends ShapeBase
 {
 	geometry: Mesh;
 	materials: Material[];
@@ -21,6 +21,8 @@ export class MeshTextured implements ShapeBase
 		vertexGroups: VertexGroup[]
 	)
 	{
+		super();
+
 		this.geometry = geometry;
 		this.materials = materials;
 		this.materialsByName = ArrayHelper.addLookupsByName(this.materials);
@@ -149,36 +151,7 @@ export class MeshTextured implements ShapeBase
 
 	// Equatable
 
-	equals(other: ShapeBase) { return false; } // todo
-
-	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
-	}
-
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
-	{
-		throw new Error("Not implemented!");
-	}
+	equals(other: Shape) { return false; } // todo
 }
 
 export class MeshTexturedFaceTexture

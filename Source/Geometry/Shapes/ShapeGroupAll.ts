@@ -2,40 +2,64 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ShapeGroupAll implements ShapeBase
+export class ShapeGroupAll extends ShapeBase
 {
-	shapes: ShapeBase[];
+	children: Shape[];
 
-	constructor(shapes: ShapeBase[])
+	constructor(children: Shape[])
 	{
-		this.shapes = shapes;
+		super();
+
+		this.children = children;
+	}
+
+	static fromChildren(children: Shape[]): ShapeGroupAll
+	{
+		return new ShapeGroupAll(children);
 	}
 
 	// Clonable.
 
 	clone(): ShapeGroupAll
 	{
-		return new ShapeGroupAll(ArrayHelper.clone(this.shapes));
+		return new ShapeGroupAll(ArrayHelper.clone(this.children));
 	}
 
 	overwriteWith(other: ShapeGroupAll): ShapeGroupAll
 	{
-		ArrayHelper.overwriteWith(this.shapes, other.shapes);
+		ArrayHelper.overwriteWith(this.children, other.children);
 		return this;
 	}
 
-	// Equatable
+	// Equatable.
 
-	equals(other: ShapeBase) { return false; } // todo
+	equals(other: ShapeGroupAll): boolean
+	{
+		var thisAndOtherAreEqualSoFar =
+			(this.children.length == other.children.length);
+		if (thisAndOtherAreEqualSoFar)
+		{
+			for (var i = 0; i < this.children.length; i++)
+			{
+				var childOfThis = this.children[i];
+				var childOfOther = other.children[i];
+				var childrenOfThisAndOtherAreEqual = childOfThis.equals(childOfOther);
+				if (childrenOfThisAndOtherAreEqual == false)
+				{
+					thisAndOtherAreEqualSoFar = false;
+					break;
+				}
+			}
+		}
+		return thisAndOtherAreEqualSoFar;
+	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
 
 	containsPoint(pointToCheck: Coords): boolean
 	{
 		var doAnyChildShapesNotContainPoint =
-			this.shapes.some(x => x.containsPoint(pointToCheck) == false);
+			this.children.some(x => x.containsPoint(pointToCheck) == false);
 
 		var doAllChildShapesContainPoint =
 			(doAnyChildShapesNotContainPoint == false);
@@ -43,31 +67,11 @@ export class ShapeGroupAll implements ShapeBase
 		return doAllChildShapesContainPoint;
 	}
 
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		return null; // todo
-	}
-
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
-	{
-		throw new Error("Not implemented!");
-	}
-
 	// Transformable.
 
 	transform(transformToApply: TransformBase): ShapeGroupAll
 	{
-		this.shapes.forEach( (x: ShapeBase) => x.transform(transformToApply));
+		this.children.forEach( (x: Shape) => x.transform(transformToApply));
 		return this;
 	}
 }

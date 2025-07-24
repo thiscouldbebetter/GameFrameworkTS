@@ -847,11 +847,11 @@ var ThisCouldBeBetter;
                 return collisionOut;
             }
             collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut) {
-                return this.collisionOfColliders(shape, shapeGroupAll.shapes[0], // Seems wrong.
+                return this.collisionOfColliders(shape, shapeGroupAll.children[0], // Seems wrong.
                 collisionOut);
             }
             collisionOfShapeAndShapeGroupAny(shape, shapeGroupAny, collisionOut) {
-                var shapesAny = shapeGroupAny.shapes;
+                var shapesAny = shapeGroupAny.children;
                 for (var i = 0; i < shapesAny.length; i++) {
                     var shapeAny = shapesAny[i];
                     collisionOut = this.collisionOfColliders(shape, shapeAny, collisionOut);
@@ -1267,7 +1267,7 @@ var ThisCouldBeBetter;
                 return this.doShapeContainerAndShapeCollide(container, box);
             }
             doShapeContainerAndShapeCollide(container, shapeOther) {
-                return this.doesColliderContainOther(container.shape, shapeOther);
+                return this.doesColliderContainOther(container.child, shapeOther);
             }
             doShapeContainerAndSphereCollide(container, sphere) {
                 return this.doShapeContainerAndShapeCollide(container, sphere);
@@ -1280,7 +1280,7 @@ var ThisCouldBeBetter;
             }
             doShapeGroupAllAndShapeCollide(groupAll, shapeOther) {
                 var returnValue = true;
-                var shapesThis = groupAll.shapes;
+                var shapesThis = groupAll.children;
                 for (var i = 0; i < shapesThis.length; i++) {
                     var shapeThis = shapesThis[i];
                     var doShapesCollide = this.doCollidersCollide(shapeThis, shapeOther);
@@ -1299,7 +1299,7 @@ var ThisCouldBeBetter;
             }
             doShapeGroupAnyAndShapeCollide(groupAny, shapeOther) {
                 var returnValue = false;
-                var shapesThis = groupAny.shapes;
+                var shapesThis = groupAny.children;
                 for (var i = 0; i < shapesThis.length; i++) {
                     var shapeThis = shapesThis[i];
                     var doShapesCollide = this.doCollidersCollide(shapeThis, shapeOther);
@@ -1320,7 +1320,7 @@ var ThisCouldBeBetter;
                 return this.doShapeInverseAndShapeCollide(inverse, box);
             }
             doShapeInverseAndShapeCollide(inverse, shapeOther) {
-                return (this.doCollidersCollide(inverse.shape, shapeOther) == false);
+                return (this.doCollidersCollide(inverse.child, shapeOther) == false);
             }
             doShapeInverseAndSphereCollide(inverse, sphere) {
                 return this.doShapeInverseAndShapeCollide(inverse, sphere);

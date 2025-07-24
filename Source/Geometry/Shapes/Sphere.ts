@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Sphere implements ShapeBase
+export class Sphere extends ShapeBase
 {
 	center: Coords;
 	pointOnSurface: Coords;
@@ -14,6 +14,8 @@ export class Sphere implements ShapeBase
 
 	constructor(center: Coords, pointOnSurface: Coords)
 	{
+		super();
+
 		this.center = center;
 		this.pointOnSurface = pointOnSurface;
 
@@ -132,8 +134,6 @@ export class Sphere implements ShapeBase
 	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
 
 	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
 	{

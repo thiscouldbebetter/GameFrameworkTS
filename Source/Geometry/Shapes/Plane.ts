@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Plane implements ShapeBase
+export class Plane extends ShapeBase
 {
 	normal: Coords;
 	distanceFromOrigin: number;
@@ -11,6 +11,8 @@ export class Plane implements ShapeBase
 
 	constructor(normal: Coords, distanceFromOrigin: number)
 	{
+		super();
+
 		this.normal = normal;
 		this.distanceFromOrigin = distanceFromOrigin;
 
@@ -106,19 +108,6 @@ export class Plane implements ShapeBase
 	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords { throw new Error("Not implemented!"); }
-
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords { throw new Error("Not implemented!"); }
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ShapeNone implements ShapeBase
+export class ShapeNone extends ShapeBase
 {
 	static _instance: ShapeNone;
 	static Instance(): ShapeNone
@@ -28,33 +28,14 @@ export class ShapeNone implements ShapeBase
 
 	// Equatable
 
-	equals(other: ShapeBase) { return false; }
+	equals(other: Shape) { return false; }
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
 
 	containsPoint(pointToCheck: Coords): boolean
 	{
 		return false;
 	}
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

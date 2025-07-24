@@ -2,15 +2,17 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ShapeTransformed implements ShapeBase
+export class ShapeTransformed extends ShapeBase
 {
 	transformToApply: TransformBase;
-	child: ShapeBase;
+	child: Shape;
 
-	_childAfterTransformation: ShapeBase;
+	_childAfterTransformation: Shape;
 
-	constructor(transformToApply: TransformBase, child: ShapeBase)
+	constructor(transformToApply: TransformBase, child: Shape)
 	{
+		super();
+
 		this.transformToApply = transformToApply;
 		this.child = child;
 
@@ -20,14 +22,13 @@ export class ShapeTransformed implements ShapeBase
 	static fromTransformAndChild
 	(
 		transformToApply: TransformBase,
-		child: ShapeBase
+		child: Shape
 	): ShapeTransformed
 	{
 		return new ShapeTransformed(transformToApply, child);
 	}
 
-
-	shapeAfterTransformation(): ShapeBase
+	shapeAfterTransformation(): Shape
 	{
 		var returnValue =
 			this._childAfterTransformation
@@ -57,36 +58,10 @@ export class ShapeTransformed implements ShapeBase
 
 	// Equatable
 
-	equals(other: ShapeBase): boolean
+	equals(other: ShapeTransformed): boolean
 	{
-		throw new Error("Not yet implemented!");
+		return this.child.equals(other.child); // todo - && this.transform.equals(other.transform);
 	}
-
-	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
-
-	containsPoint(pointToCheck: Coords): boolean
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	pointRandom(randomizer: Randomizer): Coords
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned { throw new Error("Not implemented!"); }
 
 	// Transformable.
 

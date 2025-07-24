@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Point implements ShapeBase
+export class Point extends ShapeBase
 {
 	pos: Coords;
 
 	constructor(pos: Coords)
 	{
+		super();
+
 		this.pos = pos;
 	}
 
@@ -57,13 +59,6 @@ export class Point implements ShapeBase
 	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not implemented!");
-	}
 
 	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
 	{

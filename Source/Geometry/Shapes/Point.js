@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Point {
+        class Point extends GameFramework.ShapeBase {
             constructor(pos) {
+                super();
                 this.pos = pos;
             }
             static default() {
@@ -35,10 +36,6 @@ var ThisCouldBeBetter;
                 return this.pos.equals(other.pos);
             }
             // ShapeBase.
-            collider() { return null; }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not implemented!");
-            }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return this.pos.clone();
             }

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Edge {
+        class Edge extends GameFramework.ShapeBase {
             constructor(vertices) {
+                super();
                 this.vertices = vertices || [GameFramework.Coords.create(), GameFramework.Coords.create()];
                 this._direction = GameFramework.Coords.create();
                 this._displacement = GameFramework.Coords.create();
@@ -57,19 +58,6 @@ var ThisCouldBeBetter;
                 return GameFramework.ArrayHelper.equals(this.vertices, other.vertices);
             }
             // ShapeBase.
-            collider() { return null; }
-            containsPoint(pointToCheck) {
-                throw new Error("Not yet implemented!");
-            }
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not implemented!");
-            }
-            pointRandom(randomizer) {
-                return null; // todo
-            }
-            surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw new Error("Not implemented!");
-            }
             toBoxAxisAligned(boxOut) {
                 return boxOut.containPoints(this.vertices);
             }

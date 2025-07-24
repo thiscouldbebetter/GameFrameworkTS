@@ -3,6 +3,7 @@
 // Utility.
 import Clonable = gf.Clonable;
 import DateTime = gf.DateTime;
+import DebugSettings = gf.DebugSettings;
 import DiceRoll = gf.DiceRoll;
 import Equatable = gf.Equatable;
 import IDHelper = gf.IDHelper;

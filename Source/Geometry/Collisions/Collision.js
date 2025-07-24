@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 this.isActive = false;
             }
             static create() {
-                return new Collision(GameFramework.Coords.create(), 0, new Array(), new Array());
+                return new Collision(null, null, null, null);
             }
             static fromEntitiesColliding(entityColliding, entityCollidedWith) {
                 var entitiesColliding = [entityColliding, entityCollidedWith];

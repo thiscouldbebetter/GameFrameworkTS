@@ -11,9 +11,5 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.Debug = Debug;
-        class DebuggingModeNames {
-        }
-        DebuggingModeNames.SkipOpening = "SkipOpening";
-        GameFramework.DebuggingModeNames = DebuggingModeNames;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

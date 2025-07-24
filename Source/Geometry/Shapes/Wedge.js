@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Wedge {
+        class Wedge extends GameFramework.ShapeBase {
             constructor(vertex, directionMin, angleSpannedInTurns) {
+                super();
                 this.vertex = vertex;
                 this.directionMin = directionMin;
                 this.angleSpannedInTurns = angleSpannedInTurns;
@@ -30,22 +31,22 @@ var ThisCouldBeBetter;
             }
             collider() {
                 if (this._collider == null) {
-                    this.rayDirectionMinAsPolar = new GameFramework.Polar(0, 1, 0);
-                    this.rayDirectionMaxAsPolar = new GameFramework.Polar(0, 1, 0);
+                    this.rayDirectionMinAsPolar = GameFramework.Polar.default();
+                    this.rayDirectionMaxAsPolar = GameFramework.Polar.default();
                     this.rayDirectionMin = GameFramework.Coords.create();
                     this.rayDirectionMax = GameFramework.Coords.create();
                     this.downFromVertex = GameFramework.Coords.create();
                     this.directionMinFromVertex = GameFramework.Coords.create();
                     this.directionMaxFromVertex = GameFramework.Coords.create();
-                    this.planeForAngleMin = new GameFramework.Plane(GameFramework.Coords.create(), 0);
-                    this.planeForAngleMax = new GameFramework.Plane(GameFramework.Coords.create(), 0);
+                    this.planeForAngleMin = GameFramework.Plane.create();
+                    this.planeForAngleMax = GameFramework.Plane.create();
                     this.hemispaces =
                         [
-                            new GameFramework.Hemispace(this.planeForAngleMin),
-                            new GameFramework.Hemispace(this.planeForAngleMax)
+                            GameFramework.Hemispace.fromPlane(this.planeForAngleMin),
+                            GameFramework.Hemispace.fromPlane(this.planeForAngleMax)
                         ];
-                    this.shapeGroupAll = new GameFramework.ShapeGroupAll(this.hemispaces);
-                    this.shapeGroupAny = new GameFramework.ShapeGroupAny(this.hemispaces);
+                    this.shapeGroupAll = GameFramework.ShapeGroupAll.fromChildren(this.hemispaces);
+                    this.shapeGroupAny = GameFramework.ShapeGroupAny.fromChildren(this.hemispaces);
                 }
                 var angleInTurnsMin = this.angleInTurnsMin();
                 var angleInTurnsMax = this.angleInTurnsMax();
@@ -54,9 +55,15 @@ var ThisCouldBeBetter;
                 this.rayDirectionMaxAsPolar.azimuthInTurns = angleInTurnsMax;
                 this.rayDirectionMaxAsPolar.toCoords(this.rayDirectionMax);
                 var down = GameFramework.Coords.Instances().ZeroZeroOne;
-                this.downFromVertex.overwriteWith(this.vertex).add(down);
-                this.directionMinFromVertex.overwriteWith(this.vertex).add(this.rayDirectionMin);
-                this.directionMaxFromVertex.overwriteWith(this.vertex).add(this.rayDirectionMax);
+                this.downFromVertex
+                    .overwriteWith(this.vertex)
+                    .add(down);
+                this.directionMinFromVertex
+                    .overwriteWith(this.vertex)
+                    .add(this.rayDirectionMin);
+                this.directionMaxFromVertex
+                    .overwriteWith(this.vertex)
+                    .add(this.rayDirectionMax);
                 this.planeForAngleMin.fromPoints(
                 // Order matters!
                 this.vertex, this.directionMinFromVertex, this.downFromVertex);
@@ -68,9 +75,6 @@ var ThisCouldBeBetter;
                     this._collider = this.shapeGroupAny;
                 }
                 return this._collider;
-            }
-            containsPoint(pointToCheck) {
-                throw new Error("Not yet implemented!");
             }
             // Clonable.
             clone() {
@@ -89,17 +93,6 @@ var ThisCouldBeBetter;
                     && this.angleSpannedInTurns == other.angleSpannedInTurns);
                 return returnValue;
             }
-            // ShapeBase.
-            normalAtPos(posToCheck, normalOut) {
-                throw new Error("Not implemented!");
-            }
-            pointRandom(randomizer) {
-                return null; // todo
-            }
-            surfacePointNearPos(posToCheck, surfacePointOut) {
-                throw new Error("Not implemented!");
-            }
-            toBoxAxisAligned(boxOut) { throw new Error("Not implemented!"); }
             // Transformable.
             transform(transformToApply) {
                 transformToApply.transformCoords(this.vertex);

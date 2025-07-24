@@ -4,15 +4,15 @@ namespace ThisCouldBeBetter.GameFramework
 
 export interface BoundableBase extends EntityPropertyBase
 {
-	bounds: ShapeBase;
+	bounds: Shape;
 }
 
-export class Boundable<TBounds extends ShapeBase>
+export class Boundable<TBounds extends Shape>
 	implements BoundableBase, EntityProperty<Boundable<TBounds>>
 {
 	bounds: TBounds;
 
-	_boundsAtRest: ShapeBase;
+	_boundsAtRest: Shape;
 	_transformLocate: Transform_Locate;
 
 	constructor(bounds: TBounds)
@@ -23,7 +23,7 @@ export class Boundable<TBounds extends ShapeBase>
 		this._transformLocate = Transform_Locate.create();
 	}
 
-	static fromBounds<TBounds extends ShapeBase>(bounds: TBounds): Boundable<TBounds>
+	static fromBounds<TBounds extends Shape>(bounds: TBounds): Boundable<TBounds>
 	{
 		return new Boundable(bounds);
 	}

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Arc {
+        class Arc extends GameFramework.ShapeBase {
             constructor(shell, wedge) {
+                super();
                 this.shell = shell;
                 this.wedge = wedge;
                 this._collider = new GameFramework.ShapeGroupAll([

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class BoxAxisAligned implements ShapeBase
+export class BoxAxisAligned extends ShapeBase
 {
 	center: Coords;
 	size: Coords;
@@ -15,6 +15,8 @@ export class BoxAxisAligned implements ShapeBase
 
 	constructor(center: Coords, size: Coords)
 	{
+		super();
+
 		this.center = center || Coords.create();
 		this.size = size || Coords.create();
 
@@ -380,8 +382,6 @@ export class BoxAxisAligned implements ShapeBase
 	}
 
 	// ShapeBase.
-
-	collider(): ShapeBase { return null; }
 
 	containsPoint(pointToCheck: Coords): boolean
 	{

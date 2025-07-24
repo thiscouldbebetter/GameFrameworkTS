@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Arc implements ShapeBase
+export class Arc extends ShapeBase
 {
 	shell: Shell;
 	wedge: Wedge;
@@ -11,6 +11,8 @@ export class Arc implements ShapeBase
 
 	constructor(shell: Shell, wedge: Wedge)
 	{
+		super();
+
 		this.shell = shell;
 		this.wedge = wedge;
 

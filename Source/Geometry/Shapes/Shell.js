@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Shell {
+        class Shell extends GameFramework.ShapeBase {
             constructor(sphereOuter, radiusInner) {
+                super();
                 this.sphereOuter = sphereOuter;
                 this.radiusInner = radiusInner;
                 this.sphereInner = GameFramework.Sphere.fromCenterAndRadius(this.sphereOuter.center, this.radiusInner);
@@ -55,9 +56,6 @@ var ThisCouldBeBetter;
                 }
                 normalOut.normalize();
                 return normalOut;
-            }
-            pointRandom(randomizer) {
-                return null; // todo
             }
             surfacePointNearPos(posToCheck, surfacePointOut) {
                 return surfacePointOut.overwriteWith(posToCheck); // todo

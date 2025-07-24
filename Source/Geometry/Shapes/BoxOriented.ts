@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class BoxOriented implements ShapeBase
+export class BoxOriented extends ShapeBase
 {
 	center: Coords;
 	ori: Orientation;
@@ -17,6 +17,8 @@ export class BoxOriented implements ShapeBase
 		displacementFromCenterToCornerForwardRightDown: Coords
 	)
 	{
+		super();
+
 		this.center = center || Coords.create();
 		this.ori = ori || Orientation.default();
 		this.displacementFromCenterToCornerForwardRightDown =
@@ -176,23 +178,11 @@ export class BoxOriented implements ShapeBase
 
 	// ShapeBase.
 
-	collider(): ShapeBase { throw new Error("Not yet implemented!"); }
-
-
-	normalAtPos(posToCheck: Coords, normalOut: Coords): Coords
-	{
-		throw new Error("Not yet implemented!");
-	}
-
 	pointRandom(randomizer: Randomizer): Coords
 	{
 		var size = this.size();
 		return this._displacement.randomize(randomizer).multiply(size);
-	}
-
-	surfacePointNearPos(posToCheck: Coords, surfacePointOut: Coords): Coords
-	{
-		throw new Error("Not yet implemented!");
+		// todo - Orient it?
 	}
 
 	toBoxAxisAligned(boxOut: BoxAxisAligned): BoxAxisAligned
