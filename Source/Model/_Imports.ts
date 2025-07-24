@@ -11,6 +11,7 @@ import Playable = gf.Playable;
 import Relatable = gf.Relatable;
 import Selectable = gf.Selectable;
 import Selector = gf.Selector;
+import StatsKeeper = gf.StatsKeeper;
 import Trigger = gf.Trigger;
 import Triggerable = gf.Triggerable;
 import Universe = gf.Universe;

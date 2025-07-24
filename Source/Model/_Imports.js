@@ -10,6 +10,7 @@ var Playable = gf.Playable;
 var Relatable = gf.Relatable;
 var Selectable = gf.Selectable;
 var Selector = gf.Selector;
+var StatsKeeper = gf.StatsKeeper;
 var Trigger = gf.Trigger;
 var Triggerable = gf.Triggerable;
 var Universe = gf.Universe;

@@ -1378,48 +1378,57 @@ Note that the Player.toControl() method doesn't exist yet.  We'll create that in
 
 	static toControl(uwpe: UniverseWorldPlaceEntities): ControlBase
 	{
+		var place = uwpe.place as PlaceDefault;
+		var placeSize = place.size();
+
 		return ControlContainer.fromPosSizeAndChildren
 		(
-			Coords.fromXY(0, 0), // pos
+			Coords.fromXY(0, placeSize.y - 20), // pos
 			Coords.fromXY(40, 50), // size
 			[
 				ControlVisual.fromPosAndVisual
 				(
-					Coords.fromXY(8, 10),
+					Coords.fromXY(10, 10),
 					DataBinding.fromContext(Player.visualBuild())
 				),
 				ControlLabel.fromPosAndText
 				(
 					Coords.fromXY(20, 4),
-					DataBinding.fromGet(() => "" + Killable.of(uwpe.entity).livesInReserve),
+					DataBinding.fromGet
+					(
+						() => "" + Killable.of(uwpe.entity).livesInReserve
+					),
 				),
 
 				ControlVisual.fromPosAndVisual
 				(
-					Coords.fromXY(8, 30),
+					Coords.fromXY(40, 15),
 					DataBinding.fromContext(Habitat.visualBuild())
 				),
 				ControlLabel.fromPosAndText
 				(
-					Coords.fromXY(20, 20),
-					DataBinding.fromGet(() => "" + (uwpe.place as PlaceDefault).habitats().length)
+					Coords.fromXY(50, 4),
+					DataBinding.fromGet
+					(
+						() => "" + place.habitats().length
+					)
 				),
 
 				ControlVisual.fromPosAndVisual
 				(
-					Coords.fromXY(8, 42),
+					Coords.fromXY(70, 10),
 					DataBinding.fromContext(Raider.visualBuild())
 				),
 				ControlLabel.fromPosAndText
 				(
-					Coords.fromXY(20, 35),
-					DataBinding.fromGet(() => "" + (uwpe.place as PlaceDefault).raiders().length)
+					Coords.fromXY(80, 4),
+					DataBinding.fromGet(() => "" + place.raiders().length)
 				)
 			]
 		).toControlContainerTransparent()
 	}
 
-16.4.  Now run the build script and refresh the browser.  A display will appear in the upper-left corner showing the current count of reserve player ships, habitats, and raiders.
+16.4.  Now run the build script and refresh the browser.  A display will appear in the lower-left corner showing the current count of reserve player ships, habitats, and raiders.
 
 
 17. Ships in Reserve
@@ -1491,6 +1500,45 @@ First, open Player.ts, and, in the list of properties in the constructor, replac
 	}
 
 17.3. Run the build script and refresh the browser.  Then run the ship into a raider.  The ship will explode, the count of ships in reserve will go down by one, and, after a few seconds, the player will respawn somewhere else.
+
+
+18. Adding a Kill Counter
+=========================
+
+18.1. The game is more and more like a real arcade game, but it doesn't have a score yet.  Real arcade games have scores, so that players competing with each other for the high score brings in more quarters.  Our game doesn't have a quarter slot, either, of course, but adding that will be much trickier.  So let's start by adding a score.
+
+First, we'll need some place to store the player's stats.  The good news is that the framework has a StatsKeeper object built into it, which will be ideal for keeping our socre.  Now, we could add that new property to the Player entity, but the Player entity will be removed when the player is killed, and we want the score to persist even after that.  And we could add the new StatsKeeper property to a new entity in the PlaceDefault's list of entities, but th PlaceDefault isn't permanent, either, because eventually we want the player to advance from the current PlaceDefault to the next one, when the level is complete.
+
+So instead, we'll add the StatsKeeper to the WorldGame class.  Open WorldGame.ts, and add the following line at the top, just before the constructor:
+
+	statsKeeper: StatsKeeper;
+
+18.2. Still in WorldGame.ts, add the following line to the end of the constructor to initialize the newly added StatsKeeper instance:
+
+	this.statsKeeper = StatsKeeper.create();
+
+18.3. Now we'll add the on-screen status display to show the player's current kill count.  Open Player.ts and, in the .toControl() method, add the following lines at the end:
+
+	ControlVisual.fromPosAndVisual
+	(
+		Coords.fromXY(100, 10),
+		DataBinding.fromContext(VisualBuilder.Instance().archeryTarget(6) )
+	),
+	ControlLabel.fromPosAndText
+	(
+		Coords.fromXY(110, 4),
+		DataBinding.fromGet
+		(
+			() => "" + (uwpe.world as WorldGame).statsKeeper.kills()
+		)
+	)
+
+18.3. Now the player's kill count will be displayed, but since nothing is actually adding to it, it will remain at zero forever.  To fix that, we need to increment the player's kill count every time a raider dies.  Open Raider.ts, and add the following at the bottom of the .killableDie() method:
+
+		var world = uwpe.world as WorldGame;
+		world.statsKeeper.killsIncrement();
+
+18.4. Run the build script and refresh the browser.  Notice the new target icon that shows how many kills the player has.  Shoot down a raider or two and watch the count increase.  Finally, you're getting the credit you deserve.
 
 
 n. Conclusion
