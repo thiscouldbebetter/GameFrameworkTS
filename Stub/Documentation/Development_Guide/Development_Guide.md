@@ -418,7 +418,7 @@ Note that the actions selected mean that, when accelerating left and right, the 
 						Raider.activityDefnBuild().name
 					),
 
-					Collidable.fromColliderPropertyNameToCollideWithAndCollide
+					Collidable.fromColliderPropertyNameAndCollide
 					(
 						Sphere.fromRadius(4),
 						Player.name,
@@ -1248,7 +1248,7 @@ Rather than wrapping the collider for every entity that's both drawable and coll
 		colliderCenter.clone()
 	)
 
-	var colliderAfterWrapping = ShapeGroupAny.fromShapes
+	var colliderAfterWrapping = ShapeGroupAny.fromChildren
 	([
 		colliderLeft,
 		colliderCenter,
