@@ -11,10 +11,7 @@ export interface SoundHelper
 	musicVolume: number;
 	reset(): void;
 	soundForMusic: Sound;
-	soundForMusicPause(universe: Universe): void;
-	soundWithNamePlayAsEffect(universe: Universe, soundName: string): void;
-	soundWithNamePlayAsMusic(universe: Universe, soundName: string): void;
-	soundWithNameStop(soundName: string): void;
+	soundWithName(universe: Universe, soundName: string): Sound;
 	soundsAllStop(universe: Universe): void;
 }
 
@@ -26,7 +23,6 @@ export class SoundHelperLive
 
 	effectVolume: number;
 	musicVolume: number;
-	soundsForEffectsInProgress: Sound[];
 	soundForMusic: Sound;
 	_audioContext: AudioContext;
 
@@ -37,7 +33,6 @@ export class SoundHelperLive
 		this.effectVolume = 1;
 		this.musicVolume = 1;
 
-		this.soundsForEffectsInProgress = [];
 		this.soundForMusic = null;
 	}
 
@@ -93,67 +88,9 @@ export class SoundHelperLive
 		}
 	}
 
-	soundForMusicPause(universe: Universe): void
+	soundWithName(universe: Universe, name: string): Sound
 	{
-		if (this.soundForMusic != null)
-		{
-			this.soundForMusic.pause(universe);
-		}
-	}
-
-	soundWithNamePlayAsEffect(universe: Universe, soundName: string): void
-	{
-		var sound = this.soundsByName.get(soundName);
-		sound.isRepeating = false;
-
-		/*
-		// This disallows multiple instances of the same effect,
-		// which is bad for inherently repetitive effects,
-		// like shooting a ray gun.
-		var soundIsAlreadyPlaying =
-			(this.soundsForEffectsInProgress.indexOf(sound) >= 0);
-		if (soundIsAlreadyPlaying == false)
-		{
-		*/
-
-		this.soundsForEffectsInProgress.push(sound);
-		sound.play(universe, this.effectVolume);
-	}
-
-	soundWithNamePlayAsMusic(universe: Universe, soundToPlayName: string): void
-	{
-		var soundToPlay = this.soundsByName.get(soundToPlayName);
-		soundToPlay.isRepeating = true;
-
-		var soundAlreadyPlaying = this.soundForMusic;
-
-		if (soundAlreadyPlaying == null)
-		{
-			soundToPlay.play(universe, this.musicVolume);
-		}
-		else if (soundAlreadyPlaying.name != soundToPlayName)
-		{
-			soundAlreadyPlaying.stop(universe);
-			soundToPlay.play(universe, this.musicVolume);
-		}
-
-		this.soundForMusic = soundToPlay;
-	}
-
-	soundWithNameStop(soundToStopName: string): void
-	{
-		var soundToStop = this.soundsByName.get(soundToStopName);
-
-		var soundToStopIndex = this.soundsForEffectsInProgress.indexOf(soundToStop);
-		if (soundToStopIndex >= 0)
-		{
-			this.soundsForEffectsInProgress.splice(soundToStopIndex, 1);
-		}
-
-		if (soundToStop == this.soundForMusic)
-		{
-			this.soundForMusic = null;
-		}
+		return this.soundsByName.get(name);
 	}
 
 	soundsAllStop(universe: Universe): void

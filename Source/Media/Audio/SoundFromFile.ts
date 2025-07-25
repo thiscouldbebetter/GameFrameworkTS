@@ -12,47 +12,41 @@ export class SoundFromFile implements Sound
 
 	domElement: HTMLAudioElement;
 
-	constructor(name: string, sourcePath: string)
+	constructor(name: string, sourcePath: string, isRepeating: boolean)
 	{
 		this.name = name;
 		this.sourcePath = sourcePath;
+		this.isRepeating = isRepeating || false;
 
 		this.offsetInSeconds = 0;
 	}
 
-	domElementBuild(universe: Universe, volume: number): HTMLAudioElement
+	_audioElement: HTMLAudioElement;
+	audioElement(): HTMLAudioElement
 	{
-		this.domElement = document.createElement("audio");
-		//this.domElement.sound = this;
-		this.domElement.autoplay = true;
-		this.domElement.onended = this.stopOrRepeat.bind(this, universe);
-		this.domElement.loop = this.isRepeating;
-		this.domElement.volume = volume;
-
-		var domElementForSoundSource = document.createElement("source");
-		domElementForSoundSource.src = this.sourcePath;
-
-		this.domElement.appendChild
-		(
-			domElementForSoundSource
-		);
-
-		return this.domElement;
+		if (this._audioElement == null)
+		{
+			this._audioElement = new Audio(this.sourcePath);
+			this._audioElement.loop = this.isRepeating;
+		}
+		return this._audioElement;
 	}
 
 	pause(universe: Universe): void
 	{
-		var offsetInSeconds = this.domElement.currentTime;
+		var audio = this.audioElement();
+		var offsetInSeconds = audio.currentTime;
 		this.stop(universe);
 		this.offsetInSeconds = offsetInSeconds;
 	}
 
 	play(universe: Universe, volume: number): void
 	{
-		this.domElementBuild(universe, volume);
-		this.domElement.currentTime = this.offsetInSeconds;
-
-		universe.platformHelper.platformableAdd(this);
+		var audio = this.audioElement();
+		audio.volume = volume;
+		audio.currentTime = this.offsetInSeconds;
+		audio.preload = "auto";
+		audio.play();
 	}
 
 	reset(): void
@@ -67,17 +61,8 @@ export class SoundFromFile implements Sound
 
 	stop(universe: Universe): void
 	{
-		universe.platformHelper.platformableRemove(this);
-		universe.soundHelper.soundWithNameStop(this.name);
+		this.audioElement().pause();
 		this.offsetInSeconds = 0;
-	}
-
-	stopOrRepeat(universe: Universe): void
-	{
-		if (this.isRepeating == false)
-		{
-			this.stop(universe);
-		}
 	}
 
 	// Loadable.

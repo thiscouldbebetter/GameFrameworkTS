@@ -21,15 +21,7 @@ export class VenueWorld implements Venue
 	}
 
 	finalize(universe: Universe): void
-	{
-		/*
-		var soundForMusic = universe.soundHelper.soundForMusic;
-		if (soundForMusic != null)
-		{
-			soundForMusic.pause(universe);
-		}
-		*/
-	}
+	{}
 
 	finalizeIsComplete(): boolean { return true; }
 
@@ -41,11 +33,6 @@ export class VenueWorld implements Venue
 			universe, this.world
 		);
 		this.world.initialize(uwpe);
-
-		/*
-		var soundHelper = universe.soundHelper;
-		soundHelper.soundWithNamePlayAsMusic(universe, "Music_Music");
-		*/
 
 		this.venueControls = new VenueControls
 		(

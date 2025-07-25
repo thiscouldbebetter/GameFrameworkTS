@@ -46,6 +46,15 @@ var ThisCouldBeBetter;
                 var returnValue = GameFramework.VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections(directions[1], directions);
                 return returnValue;
             }
+            explosion(radius, soundName) {
+                var visuals = [
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(radius, GameFramework.Color.Instances().Yellow)
+                ];
+                if (soundName != null) {
+                    visuals.push(GameFramework.VisualSound.fromSoundName(soundName));
+                }
+                return GameFramework.VisualGroup.fromNameAndChildren("Explosion", visuals);
+            }
             eyesBlinking(visualEyeRadius) {
                 var visualPupilRadius = visualEyeRadius / 2;
                 var colors = GameFramework.Color.Instances();

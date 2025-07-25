@@ -6,30 +6,30 @@ export class VisualSound implements Visual<VisualSound>
 {
 	// Yes, obviously sounds aren't really visual.
 
-	soundNameToPlay: string;
-	isMusic: boolean;
+	soundToPlayName: string;
+	repeats: boolean;
 
 	hasBeenStarted: boolean;
 
-	constructor(soundNameToPlay: string, isMusic: boolean)
+	constructor(soundToPlayName: string, repeats: boolean)
 	{
-		this.soundNameToPlay = soundNameToPlay;
-		this.isMusic = isMusic;
+		this.soundToPlayName = soundToPlayName;
+		this.repeats = repeats;
 	}
 
 	static default(): VisualSound
 	{
-		return new VisualSound("Effects__Default", false);
+		return new VisualSound("Effects__Default", false); // repeats
 	}
 
 	static fromSoundName(soundName: string): VisualSound
 	{
-		return new VisualSound(soundName, false); // isMusic
+		return new VisualSound(soundName, false); // repeats
 	}
 
-	static fromSoundNameAndRepeat(soundName: string, repeat: boolean): VisualSound
+	static fromSoundNameAndRepeat(soundName: string, repeats: boolean): VisualSound
 	{
-		return new VisualSound(soundName, repeat);
+		return new VisualSound(soundName, repeats);
 	}
 
 	// Visual.
@@ -60,15 +60,10 @@ export class VisualSound implements Visual<VisualSound>
 		{
 			if (audible.hasBeenHeard == false)
 			{
-				if (this.isMusic)
-				{
-					soundHelper.soundWithNamePlayAsMusic(universe, this.soundNameToPlay);
-				}
-				else
-				{
-					soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
-				}
-
+				var sound =
+					soundHelper.soundWithName(universe, this.soundToPlayName);
+				var volume = soundHelper.effectVolume; // todo
+				sound.play(universe, volume);
 				audible.hasBeenHeard = true;
 			}
 		}
@@ -78,13 +73,13 @@ export class VisualSound implements Visual<VisualSound>
 
 	clone(): VisualSound
 	{
-		return new VisualSound(this.soundNameToPlay, this.isMusic);
+		return new VisualSound(this.soundToPlayName, this.repeats);
 	}
 
 	overwriteWith(other: VisualSound): VisualSound
 	{
-		this.soundNameToPlay = other.soundNameToPlay;
-		this.isMusic = other.isMusic;
+		this.soundToPlayName = other.soundToPlayName;
+		this.repeats = other.repeats;
 		return this;
 	}
 

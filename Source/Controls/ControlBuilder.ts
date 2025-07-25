@@ -1584,6 +1584,8 @@ export class ControlBuilder
 
 	title_Start(universe: Universe): void
 	{
+		universe.soundHelper.soundsAllStop(universe);
+
 		var venueNext: Venue;
 
 		if (universe.profileHelper.profilesMultipleAreAllowed)

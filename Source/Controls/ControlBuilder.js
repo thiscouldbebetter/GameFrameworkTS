@@ -677,6 +677,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             title_Start(universe) {
+                universe.soundHelper.soundsAllStop(universe);
                 var venueNext;
                 if (universe.profileHelper.profilesMultipleAreAllowed) {
                     var venueMessage = GameFramework.VenueMessage.fromTextNoButtons("Loading profiles...");

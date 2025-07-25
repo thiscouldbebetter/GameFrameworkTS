@@ -4,6 +4,39 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class EntityBuilder
 {
+	explosion
+	(
+		pos: Coords,
+		radius: number,
+		soundName: string,
+		ticksToLive: number,
+		ephemeralExpire: (uwpe: UniverseWorldPlaceEntities) => void
+	): Entity
+	{
+		var explosionEntity = Entity.fromNameAndProperties
+		(
+			"Explosion",
+			[
+				Audible.create(),
+
+				Drawable.fromVisual
+				(
+					VisualBuilder.Instance().explosion(radius, soundName)
+				),
+
+				Ephemeral.fromTicksAndExpire
+				(
+					ticksToLive,
+					ephemeralExpire
+				),
+
+				Locatable.fromPos(pos)
+			]
+		);
+
+		return explosionEntity;
+	}
+
 	messageFloater
 	(
 		text: string,

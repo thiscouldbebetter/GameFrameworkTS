@@ -75,7 +75,7 @@ class Game
 			effect("Slap.wav"),
 
 			music("_Default.mp3"),
-			music("Producer.mp3"),
+			music("Producer.wav"),
 			music("Title.mp3"),
 
 			video("Movie.webm"),

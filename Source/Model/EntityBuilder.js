@@ -4,6 +4,15 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class EntityBuilder {
+            explosion(pos, radius, soundName, ticksToLive, ephemeralExpire) {
+                var explosionEntity = GameFramework.Entity.fromNameAndProperties("Explosion", [
+                    GameFramework.Audible.create(),
+                    GameFramework.Drawable.fromVisual(GameFramework.VisualBuilder.Instance().explosion(radius, soundName)),
+                    GameFramework.Ephemeral.fromTicksAndExpire(ticksToLive, ephemeralExpire),
+                    GameFramework.Locatable.fromPos(pos)
+                ]);
+                return explosionEntity;
+            }
             messageFloater(text, font, pos, color) {
                 var ticksToLive = 32;
                 var riseSpeed = -1;

@@ -4,18 +4,18 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualSound {
-            constructor(soundNameToPlay, isMusic) {
-                this.soundNameToPlay = soundNameToPlay;
-                this.isMusic = isMusic;
+            constructor(soundToPlayName, repeats) {
+                this.soundToPlayName = soundToPlayName;
+                this.repeats = repeats;
             }
             static default() {
-                return new VisualSound("Effects__Default", false);
+                return new VisualSound("Effects__Default", false); // repeats
             }
             static fromSoundName(soundName) {
-                return new VisualSound(soundName, false); // isMusic
+                return new VisualSound(soundName, false); // repeats
             }
-            static fromSoundNameAndRepeat(soundName, repeat) {
-                return new VisualSound(soundName, repeat);
+            static fromSoundNameAndRepeat(soundName, repeats) {
+                return new VisualSound(soundName, repeats);
             }
             // Visual.
             initialize(uwpe) {
@@ -34,23 +34,20 @@ var ThisCouldBeBetter;
                 }
                 else {
                     if (audible.hasBeenHeard == false) {
-                        if (this.isMusic) {
-                            soundHelper.soundWithNamePlayAsMusic(universe, this.soundNameToPlay);
-                        }
-                        else {
-                            soundHelper.soundWithNamePlayAsEffect(universe, this.soundNameToPlay);
-                        }
+                        var sound = soundHelper.soundWithName(universe, this.soundToPlayName);
+                        var volume = soundHelper.effectVolume; // todo
+                        sound.play(universe, volume);
                         audible.hasBeenHeard = true;
                     }
                 }
             }
             // Clonable.
             clone() {
-                return new VisualSound(this.soundNameToPlay, this.isMusic);
+                return new VisualSound(this.soundToPlayName, this.repeats);
             }
             overwriteWith(other) {
-                this.soundNameToPlay = other.soundNameToPlay;
-                this.isMusic = other.isMusic;
+                this.soundToPlayName = other.soundToPlayName;
+                this.repeats = other.repeats;
                 return this;
             }
             // Transformable.

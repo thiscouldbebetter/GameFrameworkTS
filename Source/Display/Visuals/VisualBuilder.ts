@@ -34,7 +34,6 @@ export class VisualBuilder
 		return visual;
 	}
 
-
 	directionalAnimationsFromTiledImage
 	(
 		visualImageSource: VisualImage,
@@ -97,6 +96,32 @@ export class VisualBuilder
 		);
 
 		return returnValue;
+	}
+
+	explosion(radius: number, soundName: string): VisualBase
+	{
+		var visuals: VisualBase[] =
+		[
+			VisualCircle.fromRadiusAndColorFill
+			(
+				radius,
+				Color.Instances().Yellow
+			)
+		];
+
+		if (soundName != null)
+		{
+			visuals.push
+			(
+				VisualSound.fromSoundName(soundName)
+			);
+		}
+
+		return VisualGroup.fromNameAndChildren
+		(
+			"Explosion",
+			visuals
+		);
 	}
 
 	eyesBlinking(visualEyeRadius: number): VisualBase

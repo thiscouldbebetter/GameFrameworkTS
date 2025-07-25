@@ -166,7 +166,8 @@ export class PlaceDefn
 			)
 			{
 				soundForMusicAlreadyPlaying.stop(universe);
-				soundHelper.soundWithNamePlayAsMusic(universe, this.soundForMusicName);
+				var sound = soundHelper.soundWithName(universe, this.soundForMusicName);
+				sound.play(universe, universe.soundHelper.effectVolume);
 			}
 		}
 

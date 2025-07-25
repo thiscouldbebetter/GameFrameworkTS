@@ -253,19 +253,11 @@ export class PlaceBase implements Place, Loadable
 				for (var p = 0; p < propertyNamesToProcess.length; p++)
 				{
 					var propertyName = propertyNamesToProcess[p];
-					var entitiesWithProperty =
-						this.entitiesByPropertyName(propertyName);
-					if (entitiesWithProperty != null)
+					var entityProperty =
+						entityToSpawn.propertyByName(propertyName);
+					if (entityProperty != null)
 					{
-						for (var i = 0; i < entitiesWithProperty.length; i++)
-						{
-							var entityWithProperty = entitiesWithProperty[i];
-							var entityProperty =
-								entityWithProperty.propertyByName(propertyName);
-							uwpe.entitySet(entityWithProperty);
-							entityProperty.initialize(uwpe);
-							uwpe.entitySet(entityToSpawn);
-						}
+						entityProperty.initialize(uwpe);
 					}
 				}
 			}
