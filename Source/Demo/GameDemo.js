@@ -44,7 +44,7 @@ class GameDemo {
             effect("Sound.wav"),
             effect("Clang.wav"),
             music("_Default.mp3"),
-            music("Producer.mp3"),
+            music("Producer.wav"),
             music("Title.mp3"),
             video("Movie.webm"),
             font("Font.ttf"),

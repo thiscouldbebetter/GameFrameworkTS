@@ -728,7 +728,8 @@ class PlaceBuilderDemo_Movers {
                 //collisionHelper.collideEntitiesBlock(entityPlayer, entityOther);
                 var damageToApply = entityOtherDamager.damageToApply(universe);
                 Killable.of(entityPlayer).damageApply(uwpe, damageToApply);
-                soundHelper.soundWithNamePlayAsEffect(universe, "Effects_Clang");
+                var sound = soundHelper.soundWithName(universe, "Effects_Clang");
+                sound.play(universe, soundHelper.effectVolume);
             }
             else if (entityOther.propertiesByName.get(Goal.name) != null) {
                 var itemDefnKeyName = "Key";

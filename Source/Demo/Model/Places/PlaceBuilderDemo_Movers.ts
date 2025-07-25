@@ -1422,7 +1422,8 @@ class PlaceBuilderDemo_Movers
 					uwpe, damageToApply
 				);
 
-				soundHelper.soundWithNamePlay(universe, "Effects_Clang");
+				var sound = soundHelper.soundWithName(universe, "Effects_Clang");
+				sound.play(universe, soundHelper.effectVolume);
 			}
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{
