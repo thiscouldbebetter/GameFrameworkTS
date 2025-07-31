@@ -969,14 +969,14 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 
 12.4. Also, you'll need to add a couple of methods at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell when and if the player's ship or all the enemies have been destroyed:
 
-	playable(): Player
-	{
-		return this.entitiesByPropertyName(Playable.name)[0] as Player;
-	}
-
 	enemies(): Enemy[]
 	{
 		return this.entitiesByPropertyName(EnemyProperty.name) as Enemy[];
+	}
+
+	playable(): Player
+	{
+		return this.entitiesByPropertyName(Playable.name)[0] as Player;
 	}
 
 12.5. Save the changes, run the build script, and refresh the browser.  Now, when you blow up the enemy, or when the enemy takes the habitat off the top of the screen, you'll see either a win or lose message.  When you click the button to dismiss the message dialog, the game will end and return to the title screen.
