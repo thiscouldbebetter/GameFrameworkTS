@@ -1,8 +1,5 @@
 
-namespace ThisCouldBeBetter.GameFramework
-{
-
-export class Enemy implements EntityProperty<Enemy>
+class Enemy implements EntityProperty<Enemy>
 {
 	weapon: Weapon;
 
@@ -135,6 +132,4 @@ export class Enemy implements EntityProperty<Enemy>
 	// Equatable
 
 	equals(other: Enemy): boolean { return false; } // todo
-}
-
 }

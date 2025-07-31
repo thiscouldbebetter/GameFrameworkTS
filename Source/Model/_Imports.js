@@ -28,7 +28,6 @@ var Armor = gf.Armor;
 var Damage = gf.Damage;
 var DamageType = gf.DamageType;
 var Damager = gf.Damager;
-var Enemy = gf.Enemy;
 var Killable = gf.Killable;
 var ProjectileGeneration = gf.ProjectileGeneration;
 var ProjectileGenerator = gf.ProjectileGenerator;

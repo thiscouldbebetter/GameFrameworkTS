@@ -401,21 +401,21 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 	}
 
-(Observe that the Habitat class is a subclass of the Entity class, and it also implements the EntityProperty interface.  Then, in the constructor, each newly created Habitat entity adds itself as one of its properties!  This was done to save some work implementing the interface's methods, but it's perhaps a little suspect from the perspective of software architecture.  This approach will work, though, as long as the EntityProperty part doesn't have to do very much.  By contrast, the Raider class implemented in the next section will use a separate subclass of EntityProperty named RaiderProperty.)
+(Observe that the Habitat class is a subclass of the Entity class, and it also implements the EntityProperty interface.  Then, in the constructor, each newly created Habitat entity adds itself as one of its properties!  This was done to save some work implementing the interface's methods, but it's perhaps a little suspect from the perspective of software architecture.  This approach will work, though, as long as the EntityProperty part doesn't have to do very much.  By contrast, the Enemy class implemented in the next section will use a separate subclass of EntityProperty named EnemyProperty.)
 
-8.3. Next, we'll create the villain, which we'll call a "Raider".  Still in the Model directory, create a new file named Raider.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the raider has to actually move around and kidnap people and stuff, while all the Habitat has to do is sit there looking vulnerable.
+8.3. Next, we'll create the villain, which we'll call a "Enemy".  Still in the Model directory, create a new file named Enemy.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the enemy has to actually move around and kidnap people and stuff, while all the Habitat has to do is sit there looking vulnerable.
 
-	class Raider extends Entity
+	class Enemy extends Entity
 	{
 		constructor(pos: Coords)
 		{
 			super
 			(
-				Raider.name,
+				Enemy.name,
 				[
 					Actor.fromActivityDefnName
 					(
-						Raider.activityDefnBuild().name
+						Enemy.activityDefnBuild().name
 					),
 
 					Collidable.fromColliderPropertyNameAndCollide
@@ -441,28 +441,28 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 					Drawable.fromVisual
 					(
-						Raider.visualBuild()
+						Enemy.visualBuild()
 					),
 
 					Locatable.fromPos(pos),
 
 					Movable.fromAccelerationAndSpeedMax(2, 1),
 
-					RaiderProperty.create()
+					EnemyProperty.create()
 				]
 			);
 		}
 
-		static fromPos(pos: Coords): Raider
+		static fromPos(pos: Coords): Enemy
 		{
-			return new Raider(pos);
+			return new Enemy(pos);
 		}
 
 		static activityDefnBuild(): ActivityDefn
 		{
 			return new ActivityDefn
 			(
-				Raider.name, Raider.activityDefnPerform
+				Enemy.name, Enemy.activityDefnPerform
 			);
 		}
 
@@ -472,13 +472,13 @@ Note that the actions selected mean that, when accelerating left and right, the 
 			var place = uwpe.place;
 			var entity = uwpe.entity;
 
-			var raider = entity as Raider;
+			var enemy = entity as Enemy;
 
-			var raiderPos = Locatable.of(raider).loc.pos;
+			var enemyPos = Locatable.of(enemy).loc.pos;
 
-			var raiderActor = Actor.of(raider);
-			var raiderActivity = raiderActor.activity;
-			var targetEntity = raiderActivity.targetEntity();
+			var enemyActor = Actor.of(enemy);
+			var enemyActivity = enemyActor.activity;
+			var targetEntity = enemyActivity.targetEntity();
 
 			if (targetEntity == null)
 			{
@@ -494,37 +494,37 @@ Note that the actions selected mean that, when accelerating left and right, the 
 					(
 						habitats, universe.randomizer
 					);
-					raiderActivity.targetEntitySet(targetEntity);
+					enemyActivity.targetEntitySet(targetEntity);
 				}
 			}
 
 			var targetPos = Locatable.of(targetEntity).loc.pos;
 			var displacementToTarget =
-				Raider
+				Enemy
 					.displacement()
 					.overwriteWith(targetPos)
-					.subtract(raiderPos);
+					.subtract(enemyPos);
 			var distanceToTarget = displacementToTarget.magnitude();
-			var raiderMovable = Movable.of(raider);
-			var raiderAccelerationPerTick =
-				raiderMovable.accelerationPerTick(uwpe);
-			if (distanceToTarget >= raiderAccelerationPerTick)
+			var enemyMovable = Movable.of(enemy);
+			var enemyAccelerationPerTick =
+				enemyMovable.accelerationPerTick(uwpe);
+			if (distanceToTarget >= enemyAccelerationPerTick)
 			{
-				var raiderSpeedMax =
-					raiderMovable.speedMax(uwpe);
+				var enemySpeedMax =
+					enemyMovable.speedMax(uwpe);
 				var displacementToMove =
 					displacementToTarget
 						.divideScalar(distanceToTarget)
-						.multiplyScalar(raiderSpeedMax);
-				raiderPos.add(displacementToMove);
+						.multiplyScalar(enemySpeedMax);
+				enemyPos.add(displacementToMove);
 			}
 			else
 			{
-				raiderPos.overwriteWith(targetPos);
-				var raiderProperty = RaiderProperty.of(raider);
-				if (raiderProperty.habitatCaptured == null)
+				enemyPos.overwriteWith(targetPos);
+				var enemyProperty = EnemyProperty.of(enemy);
+				if (enemyProperty.habitatCaptured == null)
 				{
-					raiderProperty.habitatCaptured = targetEntity as Habitat;
+					enemyProperty.habitatCaptured = targetEntity as Habitat;
 
 					var targetConstrainable =
 						Constrainable.of(targetEntity);
@@ -532,7 +532,7 @@ Note that the actions selected mean that, when accelerating left and right, the 
 					var constraintToAddToTarget = Constraint_Multiple.fromChildren
 					([
 						Constraint_AttachToEntityWithId
-							.fromTargetEntityId(raider.id),
+							.fromTargetEntityId(enemy.id),
 						Constraint_Transform.fromTransform
 						(
 							Transform_Translate.fromDisplacement
@@ -551,19 +551,19 @@ Note that the actions selected mean that, when accelerating left and right, the 
 						[
 							Locatable.fromPos
 							(
-								raiderPos.clone().addXY
+								enemyPos.clone().addXY
 								(
 									0, 0 - place.size().y
 								)
 							)
 						]
 					);
-					raiderActivity.targetEntitySet(targetEntity);
+					enemyActivity.targetEntitySet(targetEntity);
 				}
 				else
 				{
-					place.entityToRemoveAdd(raiderProperty.habitatCaptured);
-					place.entityToRemoveAdd(raider);
+					place.entityToRemoveAdd(enemyProperty.habitatCaptured);
+					place.entityToRemoveAdd(enemy);
 				}
 			}
 		}
@@ -600,28 +600,28 @@ Note that the actions selected mean that, when accelerating left and right, the 
 		}
 	}
 
-	class RaiderProperty implements EntityProperty<RaiderProperty>
+	class EnemyProperty implements EntityProperty<EnemyProperty>
 	{
 		habitatCaptured: Habitat;
 
 		static create()
 		{
-			return new RaiderProperty();
+			return new EnemyProperty();
 		}
 
 		static of(entity: Entity)
 		{
-			return entity.propertyByName(RaiderProperty.name) as RaiderProperty;
+			return entity.propertyByName(EnemyProperty.name) as EnemyProperty;
 		}
 
 		// Clonable.
 
-		clone(): RaiderProperty
+		clone(): EnemyProperty
 		{
-			return new RaiderProperty();
+			return new EnemyProperty();
 		}
 
-		overwriteWith(other: RaiderProperty): RaiderProperty
+		overwriteWith(other: EnemyProperty): EnemyProperty
 		{
 			this.habitatCaptured = other.habitatCaptured;
 			return this;
@@ -629,7 +629,7 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 		// EntityProperty.
 
-		equals(other: RaiderProperty): boolean
+		equals(other: EnemyProperty): boolean
 		{
 			return (this.habitatCaptured == other.habitatCaptured);
 		}
@@ -646,7 +646,7 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 		propertyName(): string
 		{
-			return RaiderProperty.name;
+			return EnemyProperty.name;
 		}
 
 		updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
@@ -656,30 +656,30 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 	}
 
-8.4. The Raider class uses the Actor property, and defines its very own ActivityDefn to use with it, so we need to register that ActivityDefn with the WorldDefn.  Open WorldGame.ts, locate the .defnBuild() method, and add the new activity definition in the proper place, adjusting commas as necessary:
+8.4. The Enemy class uses the Actor property, and defines its very own ActivityDefn to use with it, so we need to register that ActivityDefn with the WorldDefn.  Open WorldGame.ts, locate the .defnBuild() method, and add the new activity definition in the proper place, adjusting commas as necessary:
 
-	Raider.activityDefnBuild()
+	Enemy.activityDefnBuild()
 
-8.5. The Raider's activity makes use of the method PlaceDefault.habitats() to get a convenient array of all the Habitats on the level.  However, the sharp-eyed observer will note that that method doesn't exist yet.  So open PlaceDefault.ts and add the following lines just before the final close brace of the class:</p>
+8.5. The Enemy's activity makes use of the method PlaceDefault.habitats() to get a convenient array of all the Habitats on the level.  However, the sharp-eyed observer will note that that method doesn't exist yet.  So open PlaceDefault.ts and add the following lines just before the final close brace of the class:</p>
 
 	habitats(): Habitat[]
 	{
 		return this.entitiesByPropertyName(Habitat.name) as Habitat[];
 	}
 
-8.6. We also need to add references to the newly declared Habitat and Raider classes in Game.html.  These should be added near the ones previously added for Planet and Player:
+8.6. We also need to add references to the newly declared Habitat and Enemy classes in Game.html.  These should be added near the ones previously added for Planet and Player:
 
 	<script type="text/javascript" src="Model/Habitat.js"></script>
-	<script type="text/javascript" src="Model/Raider.js"></script>
+	<script type="text/javascript" src="Model/Enemy.js"></script>
 
-8.7. Now we'll add one habitat and one raider to the level.  Open PlaceDefault.ts, and, in the constructor, add these two lines to the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
+8.7. Now we'll add one habitat and one enemy to the level.  Open PlaceDefault.ts, and, in the constructor, add these two lines to the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
 
 	Habitat.fromPos(Coords.fromXY(150, 250) ),
-	Raider.fromPos(Coords.fromXY(100, -50) )
+	Enemy.fromPos(Coords.fromXY(100, -50) )
 
-8.8. Finally, run the build script and refresh the web browser.  Now a civilian habitat appears on the ground.  An alien raider will descend from the top of the screen, pick up the habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
+8.8. Finally, run the build script and refresh the web browser.  Now a civilian habitat appears on the ground.  An alien enemy will descend from the top of the screen, pick up the habitat, carry it back up to the top of the screen, and disappear forever.  Tragic!
 
-<img src="Screenshot-8-Raider_Takes_Habitat.gif" />
+<img src="Screenshot-8-Enemy_Takes_Habitat.gif" />
 
 
 9. Adding Weapons
@@ -704,7 +704,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 				Damage.fromAmount(1),
 				VisualGroup.fromChildren
 				([
-					VisualSound.default(),
+					VisualSound.fromSoundName("Effects_Blip"),
 
 					VisualCircle.fromRadiusAndColorFill
 					(
@@ -735,13 +735,13 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 10. Making Weapons Work
 -----------------------
 
-10.1. The bad news is, those bullets don't do anything yet.  Even if you manage to hit the raider with them, they'll just pass harmlessly through it, because right now it's pretty much immortal.  It's not killable, or even touchable.  It's too dumb to die!
+10.1. The bad news is, those bullets don't do anything yet.  Even if you manage to hit the enemy with them, they'll just pass harmlessly through it, because right now it's pretty much immortal.  It's not killable, or even touchable.  It's too dumb to die!
 
-10.2. So let's make it mortal.  Open Raider.ts and add the following line to the array of entity properties being declared in the constructor.  Whichever you choose, be sure to add commas in the proper places.
+10.2. So let's make it mortal.  Open Enemy.ts and add the following line to the array of entity properties being declared in the constructor.  Whichever you choose, be sure to add commas in the proper places.
 
 	Killable.default()
 
-These lines make the raider collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.  The Collidable declaration would also make touching a raider deadly for the player, except that right now, just like the raider was, the player's ship isn't killable, or really even touchable.  We'll need to fix that more or less the same way.
+These lines make the enemy collidable, which means that your bullets can hit it, and killable, which means that when you bullets hit it they can hurt it.  The Collidable declaration would also make touching a enemy deadly for the player, except that right now, just like the enemy was, the player's ship isn't killable, or really even touchable.  We'll need to fix that more or less the same way.
 
 10.3. To make the player touchable and killable, open Player.ts and, in the constructor, add the following to the list of properties, adjusting commas as needed:
 
@@ -751,11 +751,11 @@ These lines make the raider collidable, which means that your bullets can hit it
 
 Now the player can be collided with and killed as well.  Hey, it's only fair.
 
-10.4. Re-compile the game and refresh the web browser.  Locate the raider, aim carefully, and shoot a bullet at it.  Now your bullets can destroy the Raider, which is good, because otherwise what's the point of bullets, man?
+10.4. Re-compile the game and refresh the web browser.  Locate the enemy, aim carefully, and shoot a bullet at it.  Now your bullets can destroy the Enemy, which is good, because otherwise what's the point of bullets, man?
 
-<img src="Screenshot-10-Bullet_Destroys_Raider.gif" />
+<img src="Screenshot-10-Bullet_Destroys_Enemy.gif" />
 
-10.5. Refresh the web browser again, and this time, run your ship into the raider.  This time, the raider will destroy you.  At last, this game has some stakes!
+10.5. Refresh the web browser again, and this time, run your ship into the enemy.  This time, the enemy will destroy you.  At last, this game has some stakes!
 
 
 11. Giving the Ground Some Weight
@@ -765,22 +765,22 @@ Now the player can be collided with and killed as well.  Hey, it's only fair.
 
 First of all, when your ship flies into the ground, nothing happens.  When you fly real spaceships into the ground, they explode.  Just ask NASA.  Actually, you could probably ask anyone.
 
-Second, when you destroy the raider after it picks up the Habitat and lifts it into the air, the habitat, being a massive object in a planetary gravity field, should fall back to the ground.  And actually, it does fall!  Just not on purpose, and not because of gravity.  And it then falls right through the ground and keeps falling forever, which really hurts the fidelity of the simulation.
+Second, when you destroy the enemy after it picks up the Habitat and lifts it into the air, the habitat, being a massive object in a planetary gravity field, should fall back to the ground.  And actually, it does fall!  Just not on purpose, and not because of gravity.  And it then falls right through the ground and keeps falling forever, which really hurts the fidelity of the simulation.
 
-11.2. Before we fix the problem of the habitat not falling when it should, we have to fix the problem of the habitat falling for the wrong reason.  It's falling because of the constraint that the raider set on it when it picked it up isn't cleared when the raider is destroyed.  That constraint basically moves the habitat to wherever the raider is and then moves it a little bit down from there.  Now that the raider's been destroyed, the habitat can't copy the raider's position like before, and so it just keeps moving it down from wherever it currently is.
+11.2. Before we fix the problem of the habitat not falling when it should, we have to fix the problem of the habitat falling for the wrong reason.  It's falling because of the constraint that the enemy set on it when it picked it up isn't cleared when the enemy is destroyed.  That constraint basically moves the habitat to wherever the enemy is and then moves it a little bit down from there.  Now that the enemy's been destroyed, the habitat can't copy the enemy's position like before, and so it just keeps moving it down from wherever it currently is.
 
-To fix it, we need to modify the Killable property on the Raider entity so that it clears the constraint it added on the habitat when it dies.
+To fix it, we need to modify the Killable property on the Enemy entity so that it clears the constraint it added on the habitat when it dies.
 
-Open Raider.ts, locate the place in the constructor where the existing Killable property is being built, replace it with the following, adjust commas, and save:
+Open Enemy.ts, locate the place in the constructor where the existing Killable property is being built, replace it with the following, adjust commas, and save:
 
-	Killable.fromDie(Raider.killableDie)
+	Killable.fromDie(Enemy.killableDie)
 
-Then, still in Raider.ts, add the .killableDie() method:
+Then, still in Enemy.ts, add the .killableDie() method:
 
 	static killableDie(uwpe: UniverseWorldPlaceEntities)
 	{
-		var raider = uwpe.entity as Raider;
-		var habitatCaptured = raider.habitatCaptured;
+		var enemy = uwpe.entity as Enemy;
+		var habitatCaptured = enemy.habitatCaptured;
 		if (habitatCaptured != null)
 		{
 			var constrainable =
@@ -789,7 +789,7 @@ Then, still in Raider.ts, add the .killableDie() method:
 		}
 	}
 
-Now when you destroy the raider after it's picked up the habitat, the habitat will just float there eerily instead of falling.  This may not seem like progress, but it is, because now at least the habitat's not falling for the wrong reasons.
+Now when you destroy the enemy after it's picked up the habitat, the habitat will just float there eerily instead of falling.  This may not seem like progress, but it is, because now at least the habitat's not falling for the wrong reasons.
 
 11.3. Now let's make the habitat fall for the right reasons.  To do that, we'll add more constraints on it.  One constraint will make it subject to gravity, and another will keep it from passing through the planet surface like a ghost.
 
@@ -815,7 +815,7 @@ Open Habitat.ts, then, in the constructor, locate where the existing Constrainab
 
 (Now, "hemispace" is a fancy word, but it just means that half of all space that lies on one side of a given plane.  In this case, the plane in question is the ground, and we're constraining the habitat so that it can only occupy the half of space that lies above the plane of the ground, that is, the sky.  Actually, technically we're constraining it so that it can only occupy the half of space below a plane whose normal points downward into the ground, but that's semantics.)
 
-Every tick, the first new constraint will accelerate the habitat downward, and the second will prevent it from tunnelling into the surface of the planet.  Unless it's currently being carried off by a raider, in which case the constraint that the raider puts on the habitat undoes the other constraints.
+Every tick, the first new constraint will accelerate the habitat downward, and the second will prevent it from tunnelling into the surface of the planet.  Unless it's currently being carried off by a enemy, in which case the constraint that the enemy puts on the habitat undoes the other constraints.
 
 11.4. Just like the habitat, your spaceship should also not tunnel into the surface of the planet, at least not without consequences.  For now, open Player.ts, locate the existing Constrainable in its constructor, and replace it with the following, adjusting commas as needed:
 
@@ -836,17 +836,17 @@ Every tick, the first new constraint will accelerate the habitat downward, and t
 
 The new constraint is exactly the same as the one for the habitat, and will have exactly the same effect, that is, keeping your ship from moving below the level of the ground.
 
-11.5. Run the build script and refresh the browser.  Let the raider grab the habitat and carry it up a short distance, then shoot the raider.  The habitat will fall back to the planet surface.  Also, you will no longer be able to fly your ship below the surface of the planet, although you can still smack into it as fast as you want with no consequences.  And there's no such thing as friction, so you'll keep your velocity, too, meaning you'll just sort of slide along the ground indefinitely, and you'll have to actually accelerate upward for a second before you can rise again.  But we'll ignore those issues for now.  One problem at a time.
+11.5. Run the build script and refresh the browser.  Let the enemy grab the habitat and carry it up a short distance, then shoot the enemy.  The habitat will fall back to the planet surface.  Also, you will no longer be able to fly your ship below the surface of the planet, although you can still smack into it as fast as you want with no consequences.  And there's no such thing as friction, so you'll keep your velocity, too, meaning you'll just sort of slide along the ground indefinitely, and you'll have to actually accelerate upward for a second before you can rise again.  But we'll ignore those issues for now.  One problem at a time.
 
 
 12. Adding Win and Lose Conditions
 ----------------------------------
 
-12.1. The program we've written so far is closer to being a real game than ever, but it still lacks some things.  For one thing, the only way to lose is by running into a raider.  But even when that happens, the game doesn't really end, it just keeps running forever.  It's a little like being a ghost, I guess.  No closure.
+12.1. The program we've written so far is closer to being a real game than ever, but it still lacks some things.  For one thing, the only way to lose is by running into a enemy.  But even when that happens, the game doesn't really end, it just keeps running forever.  It's a little like being a ghost, I guess.  No closure.
 
-And there's no way to win, either, other than whatever feeling of satisfaction you can derive from a single habitat not being destroyed by alien raiders.  After you shoot the raider, the game just sort of keeps on going forever.  You've got this cool space fighter with wicked plasma blasters, but nothing to shoot with them.  Having growing up in our modern go-go culture, most players prefer more external validation.
+And there's no way to win, either, other than whatever feeling of satisfaction you can derive from a single habitat not being destroyed by alien enemies.  After you shoot the enemy, the game just sort of keeps on going forever.  You've got this cool space fighter with wicked plasma blasters, but nothing to shoot with them.  Having growing up in our modern go-go culture, most players prefer more external validation.
 
-So let's add some.  We'll add some code that checks each tick to see if there are no more raiders, in which case the player wins, or if there are no more habitats, in which case, the player loses, or if the player's ship has been destroyed, in which case, again, the player loses.  In any case, a message will be displayed that explains what just happened, and the game will return to the title screen.
+So let's add some.  We'll add some code that checks each tick to see if there are no more enemies, in which case the player wins, or if there are no more habitats, in which case, the player loses, or if the player's ship has been destroyed, in which case, again, the player loses.  In any case, a message will be displayed that explains what just happened, and the game will return to the title screen.
 
 Since the planet is guaranteed not to be destroyed no matter what, we'll put the triggers that fire when the game is won or lost on the planet itself.  We could declare the entirety of the Triggerable property in the constructor of Planet, but it's quite long, so it might be better to break it out into its own method, or even several methods.  So first, open Planet.ts and insert the methods below:
 
@@ -924,12 +924,12 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 	): boolean
 	{
 		var level = uwpe.place as PlaceDefault;
-		var raidersAreAllGone =
-			(level.raiders().length == 0);
+		var enemiesAreAllGone =
+			(level.enemies().length == 0);
 		var habitatIsStillThere =
 			(level.habitats().length > 0);
 		var playerHasWon = 
-			raidersAreAllGone
+			enemiesAreAllGone
 			&& habitatIsStillThere;
 		return playerHasWon;
 	}
@@ -967,19 +967,19 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 
 	Triggerable.name
 
-12.4. Also, you'll need to add a couple of methods at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell when and if the player's ship or all the raiders have been destroyed:
+12.4. Also, you'll need to add a couple of methods at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell when and if the player's ship or all the enemies have been destroyed:
 
 	playable(): Player
 	{
 		return this.entitiesByPropertyName(Playable.name)[0] as Player;
 	}
 
-	raiders(): Raider[]
+	enemies(): Enemy[]
 	{
-		return this.entitiesByPropertyName(RaiderProperty.name) as Raider[];
+		return this.entitiesByPropertyName(EnemyProperty.name) as Enemy[];
 	}
 
-12.5. Save the changes, run the build script, and refresh the browser.  Now, when you blow up the raider, or when the raider takes the habitat off the top of the screen, you'll see either a win or lose message.  When you click the button to dismiss the message dialog, the game will end and return to the title screen.
+12.5. Save the changes, run the build script, and refresh the browser.  Now, when you blow up the enemy, or when the enemy takes the habitat off the top of the screen, you'll see either a win or lose message.  When you click the button to dismiss the message dialog, the game will end and return to the title screen.
 
 
 13. Scenery
@@ -1159,9 +1159,9 @@ Note that we've removed the "Not" before "Wrapped".
 
 14.7. Run the build script and refresh the browser.  Now the camera follows the ship to keep it in th center of the view no matter what, so there's no way for the ship to ever reach the left or right side of the screen as before.  However, there's still a discontinuity.  When the ship approaches within half a screen of the left side of the planet, nothing to the left of that border can be seen.  When the ship passes where the leftmost edge of the planet used to be, the leftmost side of the planet disappears, and the rightmost side of the planet suddently pops into view.  The opposite happens when crossing the line in the other direction.
 
-14.8. To fix the remaining discontinuity, we'll need to modify the Drawable properties of the planet, the raider, the habitat, and the bullets so that they are drawn even if they're on the wrong side of the discontinuity.  Basically, the system will draw three copies of the level, one to the left of the regular level, the regular level in the center, and one on the right of the regular level.  This may not be the most efficient way to do things, but it will work, at least until we end up adding more stuff to draw than the system can handle.  It's probably fine for now.
+14.8. To fix the remaining discontinuity, we'll need to modify the Drawable properties of the planet, the enemy, the habitat, and the bullets so that they are drawn even if they're on the wrong side of the discontinuity.  Basically, the system will draw three copies of the level, one to the left of the regular level, the regular level in the center, and one on the right of the regular level.  This may not be the most efficient way to do things, but it will work, at least until we end up adding more stuff to draw than the system can handle.  It's probably fine for now.
 
-Open each of the files Habitat.ts, Planet.ts, and Raider.ts, locate the place in each constructor where the Drawable property is being initialized, and add the following call right after the closing parenthesis:
+Open each of the files Habitat.ts, Planet.ts, and Enemy.ts, locate the place in each constructor where the Drawable property is being initialized, and add the following call right after the closing parenthesis:
 
 	.sizeInWrappedInstancesSet(Coords.fromXYZ(3, 1, 1) )
 
@@ -1169,13 +1169,13 @@ Open each of the files Habitat.ts, Planet.ts, and Raider.ts, locate the place in
 
 14.10. But there remain several other problems.
 
-First, unfortunately, the raider will still not be visible, even though it should be, whenever the player's ship is just to the left of the discontinuity line.  In fact, if you stay just to the left of the line and keep the habitat in view, you'll eventually see the habitat rise into the air, apparently of its own accord!  It's being lifted by the invisible raider.  If you move back to the right of the discontinuity line, the raider will suddenly pop back into visibility.
+First, unfortunately, the enemy will still not be visible, even though it should be, whenever the player's ship is just to the left of the discontinuity line.  In fact, if you stay just to the left of the line and keep the habitat in view, you'll eventually see the habitat rise into the air, apparently of its own accord!  It's being lifted by the invisible enemy.  If you move back to the right of the discontinuity line, the enemy will suddenly pop back into visibility.
 
 Why is this?  Well, the entities for the planet surface and the habitat don't have the Collidable property on them, at least not yet.  If a given entity has a Collidable property, then the camera uses it to determine whether that entity is in its field of view or not, and then only draws those entities that are in its field of view.  By contrast, entities with no Collidable property, like the planet and the habitat, have to always be drawn no matter what, because the camera has no way of telling if they're in its field of view or not.  Even if their current positions don't fit within the screen at the moment, they're still drawn, they're just drawn off the screen.
 
-But the Raider entity does have a Collidable property, and so, when the player's ship moves just to the left of the discontinuity line, and the camera follows it there, suddenly the camera's field of view no longer collides with the raider.  This is because, technically, the camera is about 700 pixels to the right of the raider.  In order for the raider to collide with the camera's field of view under these circumstances, either the collider for the camera or the collider for the raider must be made to wrap.
+But the Enemy entity does have a Collidable property, and so, when the player's ship moves just to the left of the discontinuity line, and the camera follows it there, suddenly the camera's field of view no longer collides with the enemy.  This is because, technically, the camera is about 700 pixels to the right of the enemy.  In order for the enemy to collide with the camera's field of view under these circumstances, either the collider for the camera or the collider for the enemy must be made to wrap.
 
-Second, bullets act weird around the discontinuity line, in a way similar to but not exactly the same as the strange way the raiders act.  If you fire bullets across the line and then move the ship across the line to follow them, they will disappear.  The bullets have a Collidable property like the raider, but unlike the raider their Drawable property hasn't been set up to wrap yet.  And unlike the player's ship, they don't have a constraint to make their physical position wrap at the discontinuity line.  We'll need to set up that constraint and that wrapping of the Drawable, but even after that the bullets will pop in and out of visibility based on which sides of the discontinuity line they and the ship are, just like the raider.  To fix this problem, again, either the collider for the camera or the collider for each bullet will have to be made to wrap.
+Second, bullets act weird around the discontinuity line, in a way similar to but not exactly the same as the strange way the enemies act.  If you fire bullets across the line and then move the ship across the line to follow them, they will disappear.  The bullets have a Collidable property like the enemy, but unlike the enemy their Drawable property hasn't been set up to wrap yet.  And unlike the player's ship, they don't have a constraint to make their physical position wrap at the discontinuity line.  We'll need to set up that constraint and that wrapping of the Drawable, but even after that the bullets will pop in and out of visibility based on which sides of the discontinuity line they and the ship are, just like the enemy.  To fix this problem, again, either the collider for the camera or the collider for each bullet will have to be made to wrap.
 
 Note that the player's ship doesn't exhibit these visibility problems.  This is because an attempt is always made to draw the Player entity, as it too lacks a Collidable property right now.  But even if it had a Collidable property, it would still always be drawn, because the camera moves around to follow it.  And because the camera and the ship are always on the same side of the discontinuity line, the ship's Drawable doesn't need to be wrapped, either.
 
@@ -1222,7 +1222,7 @@ We'll fix the wrapping of the bullets first, because it's easiest.  We'll add a 
 
 (The ProjectileGenerator declaration is probably long enough now that it should be moved into its own method, but we'll leave it where it is for now.)
 
-After making this latest change, the bullets will act more like how the raider does.  But they and the raider will still disappear inappropriately whenever they and the player's ship are on opposite sides of the discontinuity line.  As mentioned earlier, to fix that problem, either the colliders for the bullets and raider or the collider for the camera's field of view will need to be wrapped.
+After making this latest change, the bullets will act more like how the enemy does.  But they and the enemy will still disappear inappropriately whenever they and the player's ship are on opposite sides of the discontinuity line.  As mentioned earlier, to fix that problem, either the colliders for the bullets and enemy or the collider for the camera's field of view will need to be wrapped.
 
 Rather than wrapping the collider for every entity that's both drawable and collidable, instead let's try to just wrap the collider for the camera's field of view.  Open PlaceDefault.ts and locate the .cameraEntity() method, and add the following lines before the return statement:
 
@@ -1260,10 +1260,10 @@ Rather than wrapping the collider for every entity that's both drawable and coll
 This code makes three copies of the camera's field of view, and applies them one width of the level to the left and right of the "central" field of view.  This means that, when the wrapping boundary line is present on the screen, anything that happens to be on the opposite side of the boundary from the player, and thus the camera, will still be seen by the camera and drawn.  (This may or may not be the most efficient way to do things, but it's good enough for now.)
 
 
-15. More Habitats and Raiders
+15. More Habitats and Enemies
 -----------------------------
 
-15.1. The last section was pretty complicated and abstract, what with all the invisible "colliders" and "wrapping boundary" and whatnot, so let's take a breather and do something a little more down to earth.  Literally, because we're going to be putting more habitats down on the earth.  Oh, and more raiders to come and steal them.
+15.1. The last section was pretty complicated and abstract, what with all the invisible "colliders" and "wrapping boundary" and whatnot, so let's take a breather and do something a little more down to earth.  Literally, because we're going to be putting more habitats down on the earth.  Oh, and more enemies to come and steal them.
 
 Open up PlaceDefault.ts and replace the existing constructor with the following:
 
@@ -1292,21 +1292,21 @@ Open up PlaceDefault.ts and replace the existing constructor with the following:
 		}
 		entities.push(...habitats);
 
-		var raidersCount = habitatsCount * 2;
-		var raiderGenerationZone = BoxAxisAligned.fromMinAndMax
+		var enemiesCount = habitatsCount * 2;
+		var enemyGenerationZone = BoxAxisAligned.fromMinAndMax
 		(
 			Coords.fromXY(0, 0), Coords.fromXY(size.x, 0)
 		);
-		var raiderGenerator = EntityGenerator.fromEntityTicksBatchMaxesAndPosBox
+		var enemyGenerator = EntityGenerator.fromEntityTicksBatchMaxesAndPosBox
 		(
-			Raider.fromPos(Coords.create() ),
+			Enemy.fromPos(Coords.create() ),
 			100, // ticksPerGeneration
 			1, // entitiesPerGeneration
-			raidersCount, // concurrent
-			raidersCount, // all-time
-			raiderGenerationZone
+			enemiesCount, // concurrent
+			enemiesCount, // all-time
+			enemyGenerationZone
 		);
-		entities.push(raiderGenerator.toEntity() );
+		entities.push(enemyGenerator.toEntity() );
 
 		super
 		(
@@ -1318,9 +1318,9 @@ Open up PlaceDefault.ts and replace the existing constructor with the following:
 		);
 	}
 
-This code replaces the single habitat with four habitats spaced evenly over the planet surface, and the single raider with eight raiders, generated one after another, about five seconds apart.
+This code replaces the single habitat with four habitats spaced evenly over the planet surface, and the single enemy with eight enemies, generated one after another, about five seconds apart.
 
-15.2. Since there is a single tick when no raiders exist, though, it'll be necessary to change the win condition so that it doesn't trigger instantly when the level starts and it sees that there's no raiders.  Instead, we'll wait until the raider generator is exhausted and all of the raiders are gone.  Open Planet.ts, locate the existing .triggerWinIsTriggered() method, and replace it with the following:
+15.2. Since there is a single tick when no enemies exist, though, it'll be necessary to change the win condition so that it doesn't trigger instantly when the level starts and it sees that there's no enemies.  Instead, we'll wait until the enemy generator is exhausted and all of the enemies are gone.  Open Planet.ts, locate the existing .triggerWinIsTriggered() method, and replace it with the following:
 
 	static triggerWinIsTriggered
 	(
@@ -1328,22 +1328,22 @@ This code replaces the single habitat with four habitats spaced evenly over the 
 	): boolean
 	{
 		var level = uwpe.place as PlaceDefault;
-		var raiderGeneratorIsExhausted =
-			level.raiderGenerator().exhausted();
-		var raidersAreAllGone =
-			(level.raiders().length == 0);
+		var enemyGeneratorIsExhausted =
+			level.enemyGenerator().exhausted();
+		var enemiesAreAllGone =
+			(level.enemies().length == 0);
 		var habitatIsStillThere =
 			(level.habitats().length > 0);
 		var playerHasWon =
-			raiderGeneratorIsExhausted
-			&& raidersAreAllGone
+			enemyGeneratorIsExhausted
+			&& enemiesAreAllGone
 			&& habitatIsStillThere;
 		return playerHasWon;
 	}
 
-15.3. The new win condition uses the PlaceDefault.raiderGenerator() convenience method, which doesn't exist yet.  To create it, in PlaceDefault.ts, right before the .raiders() method, add the following:
+15.3. The new win condition uses the PlaceDefault.enemyGenerator() convenience method, which doesn't exist yet.  To create it, in PlaceDefault.ts, right before the .enemies() method, add the following:
 
-	raiderGenerator(): EntityGenerator
+	enemyGenerator(): EntityGenerator
 	{
 		var entity = this._entities.find
 		(
@@ -1357,13 +1357,13 @@ This code replaces the single habitat with four habitats spaced evenly over the 
 
 	EntityGenerator.name,
 
-15.5. Now run the build script and refresh the browser.  Accelerate to the right and just cruise for a while.  You'll see raiders start to arrive one by one, at random places at the top of the screen.  Each raider will pick out a habitat, descend on it, and carry it back off the top of the screen.  If you wait until the last habitat disappears, the lose message will appear.  If you instead destroy all the raiders before all the habitats are carried off, the win message will appear.
+15.5. Now run the build script and refresh the browser.  Accelerate to the right and just cruise for a while.  You'll see enemies start to arrive one by one, at random places at the top of the screen.  Each enemy will pick out a habitat, descend on it, and carry it back off the top of the screen.  If you wait until the last habitat disappears, the lose message will appear.  If you instead destroy all the enemies before all the habitats are carried off, the win message will appear.
 
 
 16. Adding Status Indicators
 ----------------------------
 
-16.1. We'll add some on-screen indicators to keep track of how the game's going.  To start with, the indicators will show how many habitats and raiders there currently are, as well as how many ships the player has in reserve (though, as we haven't implemented any reserve ship functionality yet, initially that'll be zero).
+16.1. We'll add some on-screen indicators to keep track of how the game's going.  To start with, the indicators will show how many habitats and enemies there currently are, as well as how many ships the player has in reserve (though, as we haven't implemented any reserve ship functionality yet, initially that'll be zero).
 
 16.2. Still in the Player constructor, in the list of properties, add the following entries, adjusting commas as necessary:
 
@@ -1397,7 +1397,7 @@ Note that the Player.toControl() method doesn't exist yet.  We'll create that in
 					DataBinding.fromGet
 					(
 						() => "" + Killable.of(uwpe.entity).livesInReserve
-					),
+					)
 				),
 
 				ControlVisual.fromPosAndVisual
@@ -1417,7 +1417,7 @@ Note that the Player.toControl() method doesn't exist yet.  We'll create that in
 				ControlVisual.fromPosAndVisual
 				(
 					Coords.fromXY(70, 10),
-					DataBinding.fromContext(Raider.visualBuild())
+					DataBinding.fromContext(Enemy.visualBuild())
 				),
 				ControlLabel.fromPosAndText
 				(
@@ -1425,10 +1425,10 @@ Note that the Player.toControl() method doesn't exist yet.  We'll create that in
 					DataBinding.fromGet(() => "" + place.raiders().length)
 				)
 			]
-		).toControlContainerTransparent()
+		).toControlContainerTransparent();
 	}
 
-16.4.  Now run the build script and refresh the browser.  A display will appear in the lower-left corner showing the current count of reserve player ships, habitats, and raiders.
+16.4.  Now run the build script and refresh the browser.  A display will appear in the lower-left corner showing the current count of reserve player ships, habitats, and enemies.
 
 
 17. Ships in Reserve
@@ -1454,52 +1454,33 @@ First, open Player.ts, and, in the list of properties in the constructor, replac
 
 		var place = uwpe.place;
 
-		var playerExplosionAndRespawner = Entity.fromNameAndProperties
+		var playerExplosionAndRespawner = uwpe.universe.entityBuilder.explosion
 		(
-			"PlayerExplosionAndRespawner",
-			[
-				Drawable.fromVisual
-				(
-					VisualGroup.fromChildren
-					([
-						VisualSound.default(),
-
-						VisualCircle.fromRadiusAndColorFill
-						(
-							10,
-							Color.Instances().Yellow
-						)
-					])
-				),
-
-				Ephemeral.fromTicksAndExpire
-				(
-					60, // 3 seconds.
-					uwpe =>
-					{
-						var playerKillable = Killable.of(playerEntity);
-						if (playerKillable.livesInReserve > 0)
-						{
-							playerKillable.livesInReserve--;
-							playerLoc.clear();
-							var placeSizeHalf = place.size().clone().half();
-							playerPos.overwriteWith(placeSizeHalf);
-							playerKillable.integritySetToMax();
-							place.entityToSpawnAdd(playerEntity);
-						}
-					}
-				),
-
-				Locatable.fromPos(playerPos.clone() ),
-
-				Playable.create()
-			]
+			playerPos.clone(),
+			10, // radius
+			"Effects_Boom",
+			60, // 3 seconds.
+			uwpe =>
+			{
+				var playerKillable = Killable.of(playerEntity);
+				if (playerKillable.livesInReserve > 0)
+				{
+					playerKillable.livesInReserve--;
+					playerLoc.clear();
+					var placeSizeHalf = place.size().clone().half();
+					playerPos.overwriteWith(placeSizeHalf);
+					playerKillable.integritySetToMax();
+					place.entityToSpawnAdd(playerEntity);
+				}
+			}
 		);
+
+		playerExplosionAndRespawner.propertyAdd(Playable.create())
 
 		place.entityToSpawnAdd(playerExplosionAndRespawner);
 	}
 
-17.3. Run the build script and refresh the browser.  Then run the ship into a raider.  The ship will explode, the count of ships in reserve will go down by one, and, after a few seconds, the player will respawn somewhere else.
+17.3. Run the build script and refresh the browser.  Then run the ship into a enemy.  The ship will explode, the count of ships in reserve will go down by one, and, after a few seconds, the player will respawn somewhere else.
 
 
 18. Adding a Kill Counter
@@ -1517,7 +1498,7 @@ So instead, we'll add the StatsKeeper to the WorldGame class.  Open WorldGame.ts
 
 	this.statsKeeper = StatsKeeper.create();
 
-18.3. Now we'll add the on-screen status display to show the player's current kill count.  Open Player.ts and, in the .toControl() method, add the following lines at the end:
+18.3. Now we'll add the on-screen status display to show the player's current kill count.  Open Player.ts and, in the .toControl() method, add the following lines at the end of the existing list of child controls:
 
 	ControlVisual.fromPosAndVisual
 	(
@@ -1533,12 +1514,12 @@ So instead, we'll add the StatsKeeper to the WorldGame class.  Open WorldGame.ts
 		)
 	)
 
-18.3. Now the player's kill count will be displayed, but since nothing is actually adding to it, it will remain at zero forever.  To fix that, we need to increment the player's kill count every time a raider dies.  Open Raider.ts, and add the following at the bottom of the .killableDie() method:
+18.3. Now the player's kill count will be displayed, but since nothing is actually adding to it, it will remain at zero forever.  To fix that, we need to increment the player's kill count every time a enemy dies.  Open Enemy.ts, and add the following at the bottom of the .killableDie() method:
 
 		var world = uwpe.world as WorldGame;
 		world.statsKeeper.killsIncrement();
 
-18.4. Run the build script and refresh the browser.  Notice the new target icon that shows how many kills the player has.  Shoot down a raider or two and watch the count increase.  Finally, you're getting the credit you deserve.
+18.4. Run the build script and refresh the browser.  Notice the new target icon that shows how many kills the player has.  Shoot down a enemy or two and watch the count increase.  Finally, you're getting the credit you deserve.
 
 
 n. Conclusion
@@ -1547,10 +1528,10 @@ n. Conclusion
 n.1. Well, it's certainly technically a game at this point.  Congratulations!  Here's some future features that might make the game even more fun:
 
 * Add more appropriate visual and sound effects when things happen, like explosions.
-* Destroy the player's ship when it runs into a raider.
-* Let the raiders shoot bullets.
+* Destroy the player's ship when it runs into a enemy.
+* Let the enemies shoot bullets.
 * Require the player to catch a habitat as it falls, or else it explodes on impact.
-* Generate more raiders, on a timer.
+* Generate more enemies, on a timer.
 * Add a minimap to show the parts of the planet that are not currently on screen.
 * Make ammuntion limited and add reloading by picking up bullets.
 * Transition to a new and harder level when the player wins the current level.
