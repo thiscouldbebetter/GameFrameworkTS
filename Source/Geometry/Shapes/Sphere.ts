@@ -92,7 +92,7 @@ export class Sphere extends ShapeBase
 		var returnValue =
 			polar
 				.random(null)
-				.toCoords(this._pointRandom)
+				.overwriteCoords(this._pointRandom)
 				.add(this.center);
 
 		return returnValue;

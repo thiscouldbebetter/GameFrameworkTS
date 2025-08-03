@@ -10,6 +10,12 @@ var ThisCouldBeBetter;
             static create() {
                 return new Scorable(null);
             }
+            static fromPoints(pointsToScore) {
+                return Scorable.fromScoreGet((uwpe) => pointsToScore);
+            }
+            static fromScoreGet(scoreGet) {
+                return new Scorable(scoreGet);
+            }
             static of(entity) {
                 return entity.propertyByName(Scorable.name);
             }

@@ -3,6 +3,8 @@ This Could Be Better Game Framework Development Guide
 
 This guide illustrates the creation of a new game from scratch using the This Could Be Better Game Framework.
 
+This guide assumes a very basic understanding of programming, ideally with the TypeScript programming language, but at least with some relatively similar programming language, of which there are many.  You'll be expected to locate program files within a directory structure, to edit program files with a text editor, and identify and add to classes, constructors, methods, and arrays.  Also, if you mis-type something, you may need to identify and fix that problem based on the error message.  You'll also be expected to install some necessary third-party programs and run some command-line scripts.  With some effort, though, you might be able to pick up these concepts as you go along.
+
 
 1. Setting Up a New Game from Stubs
 -----------------------------------
@@ -85,18 +87,28 @@ This guide illustrates the creation of a new game from scratch using the This Co
 
 	<script type="text/javascript" src="Model/Planet.js"></script>
 
-2.6. Now that we've declared the Planet class and added references to it and to the VisualRectangle class that we need to draw it, we'll add an instance of Planet to PlaceDefault.
+2.6. Now that we've declared the Planet class and added references to it and to the VisualRectangle class that we need to draw it, we'll add an instance of Planet to PlaceDefault.  But first we'll rename it to PlacePlanet.
 
-2.7. Back in the Source directory, open the file PlaceDefault.ts in a text editor.  Locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, locate the existing "new UserInputListener()" element, add a comma after it, add the following text on the line below, then save the file.
+In the Source directory, locate the file "PlaceDefault.ts" and rename it to "PlacePlanet.ts".
+
+2.7. Open the newly renamed PlacePlanet.ts in a text editor and, at the top, change the name of the class from "PlaceDefault" to "PlacePlanet".
+
+2.8. Still in PlacePlanet.ts, locate the constructor, and within it, the array being passed as the "entities" argument of the super() constructor.  Within that array, locate the existing "new UserInputListener()" element, add a comma after it, add the following text on the line below, then save the file.
 
 	Planet.fromSizeAndHorizonHeight
 	(
 		Coords.fromXY(800, 300), 50
 	)
 
-2.8. From the _Scripts directory, run the command "_Build.sh" or "_Build.bat" to compile the program again.  Wait for the command to complete, and verify that no errors are displayed.
+2.9. Because the PlaceDefault class was renamed to PlacePlanet in the class definition, we'll also need to update all the now-outdated references to PlaceDefault in other files.
 
-2.9. In the web browser, refresh Game.html and advance through the startup screens to start the game again.  Verify that a green field, representing the ground, appears at the bottom of the screen.
+There are two such outdated references in the file WorldGame.ts.  Open it in a text editor, search for the text "PlaceDefault" within it, and replace each instance with "PlacePlanet", then save.
+
+2.10. We'll also need to update the existing reference to the PlanetDefault.js class in Game.html.  Open Game.html, locate the existing reference to "PlaceDefault.js" within it, change it to "PlacePlanet.js" instead, and save.
+
+2.11. From the _Scripts directory, run whichever of the scripts "_Build.sh" or "_Build.bat" works for your system to compile the program again.  Wait for the command to complete, and verify that no errors are displayed.
+
+2.12. In the web browser, refresh Game.html and advance through the startup screens to start the game again.  Verify that a green field, representing the ground, appears at the bottom of the screen.
 
 <img src="Screenshot-2-Ground.png" />
 
@@ -153,7 +165,7 @@ Like the Planet class, the new Player class is a subclass of Entity, and it has 
 
 	<script type="text/javascript" src="Model/Player.js"></script>
 
-3.4. Now that the Player class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlaceDefault instance.  Back in the Source directory, open the file PlaceDefault.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, make sure that there are commas between all the array elements, and save the file.
+3.4. Now that the Player class is defined and referenced, let's create an instance of it and add it to the entity collection of our PlacePlanet instance.  Back in the Source directory, open the file PlacePlanet.ts in a text editor again.  Within the array being passed as the "entities" argument of the super() constructor, add the following line, make sure that there are commas between all the array elements, and save the file.
 
 	Player.fromPos(Coords.fromXY(100, 100) )
 
@@ -268,7 +280,7 @@ Like the Planet class, the new Player class is a subclass of Entity, and it has 
 
 7.2. To do that, we need to add some Actions that the ship can perform in order to accelerate up, down, left, or right, and then we need to associate, or "map", those Actions to keyboard inputs using some ActionToInputsMapping instances.
 
-7.3. The Actions we need happen to already be defined as part of the Movable class, so they and their corresponding mappings just need to be registered in the PlaceDefault class.  Open PlaceDefault.ts, locate the existing declaration of the "actions" variable, and add the following elements to the array, adding commas as necessary:
+7.3. The Actions we need happen to already be defined as part of the Movable class, so they and their corresponding mappings just need to be registered in the PlacePlanet class.  Open PlacePlanet.ts, locate the existing declaration of the "actions" variable, and add the following elements to the array, adding commas as necessary:
 
 	Movable.actionAccelerateAndFaceLeft(),
 	Movable.actionAccelerateAndFaceRight(),
@@ -278,7 +290,7 @@ Like the Planet class, the new Player class is a subclass of Entity, and it has 
 
 Note that the actions selected mean that, when accelerating left and right, the player ship will turn to face the chosen direction, but it will not change direction when accelerating up and down.  This matches the behavior in the original game.
 
-7.4. Still in PlaceDefault.ts, locate the existing declaration of the "actionToInputsMappings" array, and add these items, adjusting commas as necessary:
+7.4. Still in PlacePlanet.ts, locate the existing declaration of the "actionToInputsMappings" array, and add these items, adjusting commas as necessary:
 
 	ActionToInputsMapping.fromActionNameAndInputName
 	(
@@ -319,7 +331,7 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 7.8. Because we removed the declaration of the "DoSpaceshipStuff" ActivityDefn, we'll also need to remove the reference to it.  Open WorldGame.ts and, in the static .defnBuild() method, remove the line "Player.activityDefnDoSpaceshipStuffBuild()" from the ActivityDefns being passed to the WorldDefn constructor call.
 
-7.9. Now that the Player entity is listening for user input, we no longer need that instance of UserInputListener() that came built-in to the stub code.  Two entities listening and reacting to the same input might get weird.  Open PlaceDefault.ts again and, in the constructor, remove the line "new UserInputListener()" from the list of entities being passed to the super() call.
+7.9. Now that the Player entity is listening for user input, we no longer need that instance of UserInputListener() that came built-in to the stub code.  Two entities listening and reacting to the same input might get weird.  Open PlacePlanet.ts again and, in the constructor, remove the line "new UserInputListener()" from the list of entities being passed to the super() call.
 
 7.10. Run the _Build script and refresh the web browser.  Use the arrow keys to cause the spaceship to acelerate up, down, left, and right.  You're a driver, you're a winner.
 
@@ -351,8 +363,6 @@ Note that the actions selected mean that, when accelerating left and right, the 
 					Locatable.fromPos(pos)
 				]
 			);
-
-			this.propertyAdd(this);
 		}
 
 		static fromPos(pos: Coords): Habitat
@@ -398,10 +408,51 @@ Note that the actions selected mean that, when accelerating left and right, the 
 		{
 			return Habitat.name;
 		}
-
 	}
 
-(Observe that the Habitat class is a subclass of the Entity class, and it also implements the EntityProperty interface.  Then, in the constructor, each newly created Habitat entity adds itself as one of its properties!  This was done to save some work implementing the interface's methods, but it's perhaps a little suspect from the perspective of software architecture.  This approach will work, though, as long as the EntityProperty part doesn't have to do very much.  By contrast, the Enemy class implemented in the next section will use a separate subclass of EntityProperty named EnemyProperty.)
+	class HabitatProperty implements EntityProperty<HabitatProperty>
+	{
+		static create(): HabitatProperty
+		{
+			return new HabitatProperty();
+		}
+
+		// Clonable.
+
+		clone(): HabitatProperty
+		{
+			throw new Error("Not implemented!");
+		}
+
+		overwriteWith(other: HabitatProperty): HabitatProperty
+		{
+			throw new Error("Not implemented!");
+		}
+
+		// EntityProperty.
+
+		equals(other: HabitatProperty): boolean
+		{
+			return (this == other);
+		}
+
+		finalize(): void
+		{
+			// Do nothing.
+		}
+
+		initialize(): void
+		{
+			// Do nothing.
+		}
+
+		propertyName(): string
+		{
+			return HabitatProperty.name;
+		}
+	}
+
+The sharp-eyed observer will notice that two classes are declared in this file--the Habitat class and the HabitatProperty class.  An instance of HabitatProperty is created and passed into the Habitat constructor's property list.  That HabitatProperty class will make it easier to identify Habitat instances when they're mixed in amongst other Entities.
 
 8.3. Next, we'll create the villain, which we'll call a "Enemy".  Still in the Model directory, create a new file named Enemy.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the enemy has to actually move around and kidnap people and stuff, while all the Habitat has to do is sit there looking vulnerable.
 
@@ -444,11 +495,11 @@ Note that the actions selected mean that, when accelerating left and right, the 
 						Enemy.visualBuild()
 					),
 
+					EnemyProperty.create(),
+
 					Locatable.fromPos(pos),
 
-					Movable.fromAccelerationAndSpeedMax(2, 1),
-
-					EnemyProperty.create()
+					Movable.fromAccelerationAndSpeedMax(2, 1)
 				]
 			);
 		}
@@ -482,8 +533,8 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 			if (targetEntity == null)
 			{
-				var placeDefault = place as PlaceDefault;
-				var habitats = placeDefault.habitats();
+				var placePlanet = place as PlacePlanet;
+				var habitats = PlacePlanet.habitats();
 				if (habitats.length == 0)
 				{
 					return; // todo
@@ -660,7 +711,7 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 	Enemy.activityDefnBuild()
 
-8.5. The Enemy's activity makes use of the method PlaceDefault.habitats() to get a convenient array of all the Habitats on the level.  However, the sharp-eyed observer will note that that method doesn't exist yet.  So open PlaceDefault.ts and add the following lines just before the final close brace of the class:</p>
+8.5. The Enemy's activity makes use of the method PlacePlanet.habitats() to get a convenient array of all the Habitats on the level.  However, the sharp-eyed observer will note that that method doesn't exist yet.  So open PlacePlanet.ts and add the following lines just before the final close brace of the class:</p>
 
 	habitats(): Habitat[]
 	{
@@ -672,7 +723,7 @@ Note that the actions selected mean that, when accelerating left and right, the 
 	<script type="text/javascript" src="Model/Habitat.js"></script>
 	<script type="text/javascript" src="Model/Enemy.js"></script>
 
-8.7. Now we'll add one habitat and one enemy to the level.  Open PlaceDefault.ts, and, in the constructor, add these two lines to the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
+8.7. Now we'll add one habitat and one enemy to the level.  Open PlacePlanet.ts, and, in the constructor, add these two lines to the array of Entities being passed to the super() call.  Make sure to separate all the array elements with commas as appropriate:
 
 	Habitat.fromPos(Coords.fromXY(150, 250) ),
 	Enemy.fromPos(Coords.fromXY(100, -50) )
@@ -715,7 +766,7 @@ So let's give this kitten some claws.  (The kitten is your spaceship.  The claws
 		]
 	)
 
-9.3. Now your ship has a gun, but no trigger.  That is to say, it could technically generate bullets, only there's no ActionToInputsMapping to detect when you want to fire them, and even if there were, there's no Action to map that mapping to.  To add the Action and its mapping, open PlaceDefault.ts and, in the .defnBuild() method, add this line to the end of the "actions" array:
+9.3. Now your ship has a gun, but no trigger.  That is to say, it could technically generate bullets, only there's no ActionToInputsMapping to detect when you want to fire them, and even if there were, there's no Action to map that mapping to.  To add the Action and its mapping, open PlacePlanet.ts and, in the .defnBuild() method, add this line to the end of the "actions" array:
 
 	ProjectileGenerator.actionFire()
 
@@ -882,7 +933,7 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 		uwpe: UniverseWorldPlaceEntities
 	): boolean
 	{
-		var level = uwpe.place as PlaceDefault;
+		var level = uwpe.place as PlacePlanet;
 		var playerShipIsGone =
 			(level.playable() == null);
 		var habitatsAreAllGone =
@@ -923,7 +974,7 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 		uwpe: UniverseWorldPlaceEntities
 	): boolean
 	{
-		var level = uwpe.place as PlaceDefault;
+		var level = uwpe.place as PlacePlanet;
 		var enemiesAreAllGone =
 			(level.enemies().length == 0);
 		var habitatIsStillThere =
@@ -963,11 +1014,11 @@ Since the planet is guaranteed not to be destroyed no matter what, we'll put the
 
 	Planet.triggerable()
 
-12.3. It will be necessary to add Triggerable to the list of entity properties that the PlaceDefault class handles.  Open PlaceDefault.ts, locate the existing entityPropertyNamesToProcess declaration, and add the following line to the list, adjusting commas as needed:
+12.3. It will be necessary to add Triggerable to the list of entity properties that the PlacePlanet class handles.  Open PlacePlanet.ts, locate the existing entityPropertyNamesToProcess declaration, and add the following line to the list, adjusting commas as needed:
 
 	Triggerable.name
 
-12.4. Also, you'll need to add a couple of methods at the end of the PlaceDefault class, right below the existing .habitats() method, so that it can tell when and if the player's ship or all the enemies have been destroyed:
+12.4. Also, you'll need to add a couple of methods at the end of the PlacePlanet class, right below the existing .habitats() method, so that it can tell when and if the player's ship or all the enemies have been destroyed:
 
 	enemies(): Enemy[]
 	{
@@ -1085,9 +1136,9 @@ Open Planet.ts.  To add a mountain range to the ground that's already there, we'
 
 With a single screen, which we've had until now, you can always tell how the ship is moving because the position of the ship relative to the edges of the screen is always changing.  But after scrolling is added, the ship will stay horizontally centered in the view most of the time, and without some sort of scenery other than the perfectly flat ground, it would be impossible to tell how fast you were moving relative to the ground.
 
-14.2. First, we'll increase the size of the PlaceDefault, and double its width.  Since it was previously exactly the same width as the screen, this means the Place will now be two screens in width.
+14.2. First, we'll increase the size of the PlacePlanet, and double its width.  Since it was previously exactly the same width as the screen, this means the Place will now be two screens in width.
 
-Open PlaceDefault.ts and, in the constructor, replace the existing line that sets the size to double its width, like this:
+Open PlacePlanet.ts and, in the constructor, replace the existing line that sets the size to double its width, like this:
 
 	Coords.fromXY(800, 300), // size
 
@@ -1097,7 +1148,7 @@ If you ran the build script and refreshed the browser, then accelerated to the r
 
 Or, more specifically, let's make a camera entity, and then constrain it to follow the ship around.  Because there previously hasn't been any entity with the Camera property, the framework is defaulting to its default rendering behavior, which is just to look at the upper-left corner of the Place at all times.
 
-To add a camera, open PlaceDefault.ts and add this method:
+To add a camera, open PlacePlanet.ts and add this method:
 
 	static cameraEntity(placeSize: Coords): Entity
 	{
@@ -1131,23 +1182,23 @@ To add a camera, open PlaceDefault.ts and add this method:
 
 14.4. Then, in the constructor, add the following call in the list of entities, adjusting commas as needed:
 
-	PlaceDefault.cameraEntity(Coords.fromXY(800, 300) )
+	PlacePlanet.cameraEntity(Coords.fromXY(800, 300) )
 
 14.5. Run the build script and refresh the browser, then accelerate to the right.  As soon as the ship moves past the middle of the screen, the camera will start to follow it.  The planet surface and mountain range will scroll off the screen to the left, to be replaced with a blank background.  As you continue moving to the right, eventually the camera will stop scrolling and the ship will pass off the right edge of the screen, then reappear at the left side of the screen.
 
 There are a couple of problems with this.
 
-14.5. The first problem is, the planet surface and mountain range shouldn't disappear when you move far enough to the right.  That's now how planets work.  To fix this, we need to make the planet surface twice as wide as it currently is.  Open PlaceDefault.ts, and, in the constructor, replace the existing line for the Planet entity with this:
+14.5. The first problem is, the planet surface and mountain range shouldn't disappear when you move far enough to the right.  That's now how planets work.  To fix this, we need to make the planet surface twice as wide as it currently is.  Open PlacePlanet.ts, and, in the constructor, replace the existing line for the Planet entity with this:
 
 	new Planet(Planet.name, Coords.fromXY(800, 300), 50),
 
-Note that the Planet is now twice as wide as it was.  (Since the size of the PlaceDefault is now declared in three separate places, it would probably be better to store that value in a variable and reference the variable three times, but whatever.)
+Note that the Planet is now twice as wide as it was.  (Since the size of the PlacePlanet is now declared in three separate places, it would probably be better to store that value in a variable and reference the variable three times, but whatever.)
 
 14.5. Run the build script and refresh the browser, then accelerate to the right.  The planet surface will now stay visible the whole time.
 
 14.6. However, there is still a discontinuity at the left edge and right edge of the planet, where the view abruptly changes as ship passes off the edge and wraps around to the other end.
 
-To fix that will require some fancier modifications.  Open PlaceDefault.ts, and, within the .cameraEntity() method, replace the existing assignment of the constraintContainInBox variable with the following:
+To fix that will require some fancier modifications.  Open PlacePlanet.ts, and, within the .cameraEntity() method, replace the existing assignment of the constraintContainInBox variable with the following:
 
 	var constraintContainInBox =
 		camera.constraintContainInBoxForPlaceSizeWrapped
@@ -1224,7 +1275,7 @@ We'll fix the wrapping of the bullets first, because it's easiest.  We'll add a 
 
 After making this latest change, the bullets will act more like how the enemy does.  But they and the enemy will still disappear inappropriately whenever they and the player's ship are on opposite sides of the discontinuity line.  As mentioned earlier, to fix that problem, either the colliders for the bullets and enemy or the collider for the camera's field of view will need to be wrapped.
 
-Rather than wrapping the collider for every entity that's both drawable and collidable, instead let's try to just wrap the collider for the camera's field of view.  Open PlaceDefault.ts and locate the .cameraEntity() method, and add the following lines before the return statement:
+Rather than wrapping the collider for every entity that's both drawable and collidable, instead let's try to just wrap the collider for the camera's field of view.  Open PlacePlanet.ts and locate the .cameraEntity() method, and add the following lines before the return statement:
 
 	var collidable = Collidable.of(cameraEntity);
 
@@ -1265,15 +1316,30 @@ This code makes three copies of the camera's field of view, and applies them one
 
 15.1. The last section was pretty complicated and abstract, what with all the invisible "colliders" and "wrapping boundary" and whatnot, so let's take a breather and do something a little more down to earth.  Literally, because we're going to be putting more habitats down on the earth.  Oh, and more enemies to come and steal them.
 
-Open up PlaceDefault.ts and replace the existing constructor with the following:
+While we're at is, we'll give each PlacePlanet instance a .levelIndex, so that we can increase the difficulty as the player progresses through the levels.  Not that that's implemented yet, but it'll save us time later.
 
-	constructor()
+Open up PlacePlanet.ts and replace the existing constructor with the following:
+
+	levelIndex: number;
+
+	constructor(levelIndex: number)
 	{
 		var size = Coords.fromXY(800, 300);
 
+		super
+		(
+			"Level " + (levelIndex + 1),
+			PlacePlanet.defnBuild().name,
+			null, // parentName
+			size,
+			[] // entities
+		);
+
+		this.levelIndex = levelIndex;
+
 		var entities =
 		[
-			PlaceDefault.cameraEntity(Coords.fromXY(800, 300) ),
+			PlacePlanet.cameraEntity(Coords.fromXY(800, 300) ),
 			Planet.fromSizeAndHorizonHeight
 			(
 				Coords.fromXY(800, 300), 50
@@ -1282,7 +1348,7 @@ Open up PlaceDefault.ts and replace the existing constructor with the following:
 		];
 
 		var habitats: Habitat[] = [];
-		var habitatsCount = 4;
+		var habitatsCount = this.habitatsCountInitial();
 		var habitatSpacing = size.x / habitatsCount;
 		for (var i = 0; i < habitatsCount; i++)
 		{
@@ -1292,7 +1358,7 @@ Open up PlaceDefault.ts and replace the existing constructor with the following:
 		}
 		entities.push(...habitats);
 
-		var enemiesCount = habitatsCount * 2;
+		var enemiesCount = this.enemiesCountInitial();
 		var enemyGenerationZone = BoxAxisAligned.fromMinAndMax
 		(
 			Coords.fromXY(0, 0), Coords.fromXY(size.x, 0)
@@ -1308,26 +1374,42 @@ Open up PlaceDefault.ts and replace the existing constructor with the following:
 		);
 		entities.push(enemyGenerator.toEntity() );
 
-		super
-		(
-			PlaceDefault.name,
-			PlaceDefault.defnBuild().name,
-			null, // parentName
-			size,
-			entities
-		);
+		this.entitiesToSpawnAdd(entities);
 	}
 
-This code replaces the single habitat with four habitats spaced evenly over the planet surface, and the single enemy with eight enemies, generated one after another, about five seconds apart.
+	static fromLevelIndex(levelIndex: number): PlacePlanet
+	{
+		return new PlacePlanet(levelIndex);
+	}
 
-15.2. Since there is a single tick when no enemies exist, though, it'll be necessary to change the win condition so that it doesn't trigger instantly when the level starts and it sees that there's no enemies.  Instead, we'll wait until the enemy generator is exhausted and all of the enemies are gone.  Open Planet.ts, locate the existing .triggerWinIsTriggered() method, and replace it with the following:
+This code replaces the single habitat with some predetermined number of habitats spaced evenly over the planet surface, and the single enemy with some predetermined number of enemies, generated one after another, about five seconds apart.  We also sneaked in a static method to create a new PlacePlanet from its levelIndex.
+
+15.2. The new constructor calls the methods .habitatsCountInitial() and .enemiesCountInitial(), which don't exist yet.  Add them by adding the following methods in the appropriate places within PlacePlanet.ts:
+
+	enemiesCountInitial(): number
+	{
+		var habitatsCount = this.habitatsCountInitial();
+		var enemiesCountForLevel0 = habitatsCount * 2;
+		var enemiesAdditionalPerLevel = 3;
+		var enemiesCount =
+			enemiesCountForLevel0
+			+ enemiesAdditionalPerLevel * this.levelIndex;
+		return enemiesCount;
+	}
+
+	habitatsCountInitial(): number
+	{
+		return 4;
+	}
+
+15.3. Since there is a single tick when no enemies exist, though, it'll be necessary to change the win condition so that it doesn't trigger instantly when the level starts and it sees that there's no enemies.  Instead, we'll wait until the enemy generator is exhausted and all of the enemies are gone.  Open Planet.ts, locate the existing .triggerWinIsTriggered() method, and replace it with the following:
 
 	static triggerWinIsTriggered
 	(
 		uwpe: UniverseWorldPlaceEntities
 	): boolean
 	{
-		var level = uwpe.place as PlaceDefault;
+		var level = uwpe.place as PlacePlanet;
 		var enemyGeneratorIsExhausted =
 			level.enemyGenerator().exhausted();
 		var enemiesAreAllGone =
@@ -1341,7 +1423,7 @@ This code replaces the single habitat with four habitats spaced evenly over the 
 		return playerHasWon;
 	}
 
-15.3. The new win condition uses the PlaceDefault.enemyGenerator() convenience method, which doesn't exist yet.  To create it, in PlaceDefault.ts, right before the .enemies() method, add the following:
+15.4. The new win condition uses the PlacePlanet.enemyGenerator() convenience method, which doesn't exist yet.  To create it, in PlacePlanet.ts, right before the .enemies() method, add the following:
 
 	enemyGenerator(): EntityGenerator
 	{
@@ -1353,17 +1435,21 @@ This code replaces the single habitat with four habitats spaced evenly over the 
 		return entityGenerator;
 	}
 
-15.4.Finally, in order for the EntityGenerator to actually work, that property names need to be added to the list of known properties.  In PlaceDefault.defnBuild(), locate the declaration of the entityPropertyNamesToProcess variable and add the following line in alphabetical order, adjusting commas as needed:
+15.5. And in order for the EntityGenerator to actually work, that property names need to be added to the list of known properties.  In PlacePlanet.defnBuild(), locate the declaration of the entityPropertyNamesToProcess variable and add the following line in alphabetical order, adjusting commas as needed:
 
 	EntityGenerator.name,
 
-15.5. Now run the build script and refresh the browser.  Accelerate to the right and just cruise for a while.  You'll see enemies start to arrive one by one, at random places at the top of the screen.  Each enemy will pick out a habitat, descend on it, and carry it back off the top of the screen.  If you wait until the last habitat disappears, the lose message will appear.  If you instead destroy all the enemies before all the habitats are carried off, the win message will appear.
+15.6.  Finally, open WorldGame.ts and, in the constructor, replace the existing line that sets the place variable to an instance of PlacePlanet with the following, so that the new levelIndex parameter is set as it should be:
+
+	var place = PlacePlanet.fromLevelIndex(0);
+
+15.7. Now run the build script and refresh the browser.  Accelerate to the right and just cruise for a while.  You'll see enemies start to arrive one by one, at random places at the top of the screen.  Each enemy will pick out a habitat, descend on it, and carry it back off the top of the screen.  If you wait until the last habitat disappears, the lose message will appear.  If you instead destroy all the enemies before all the habitats are carried off, the win message will appear.
 
 
 16. Adding Status Indicators
 ----------------------------
 
-16.1. We'll add some on-screen indicators to keep track of how the game's going.  To start with, the indicators will show how many habitats and enemies there currently are, as well as how many ships the player has in reserve (though, as we haven't implemented any reserve ship functionality yet, initially that'll be zero).
+16.1. We'll add some on-screen indicators to keep track of how the game's going.  To start with, the indicators will show how many habitats and enemies there currently are, as well as how many ships the player has in reserve (though, as we haven't implemented any reserve ship functionality yet, initially that'll be zero).  Finally, we'll track of how many enemies have been killed, and how many points have been scored.
 
 16.2. Still in the Player constructor, in the list of properties, add the following entries, adjusting commas as necessary:
 
@@ -1372,14 +1458,34 @@ This code replaces the single habitat with four habitats spaced evenly over the 
 		uwpe => Player.toControl(uwpe)
 	),
 
+	StatsKeeper.create()
+
 Note that the Player.toControl() method doesn't exist yet.  We'll create that in the next step.
 
 16.3. Still in the Player class, add the following method:
 
 	static toControl(uwpe: UniverseWorldPlaceEntities): ControlBase
 	{
-		var place = uwpe.place as PlaceDefault;
+		var place = uwpe.place as PlacePlanet;
+		var player = place.player();
+
 		var placeSize = place.size();
+
+		var playerStatsKeeper = StatsKeeper.of(player);
+
+		var visualBuilder = VisualBuilder.Instance();
+
+		var visualKills =
+			visualBuilder.explosionStarburstOfRadius(8);
+
+		var visualScore =
+			visualBuilder.starburstWithPointsRatioRadiusAndColor
+			(
+				5, // points
+				.5, // radiusInnerAsFractionOfOuter
+				6, // radiusOuter
+				Color.Instances().Yellow
+			);
 
 		return ControlContainer.fromPosSizeAndChildren
 		(
@@ -1422,13 +1528,47 @@ Note that the Player.toControl() method doesn't exist yet.  We'll create that in
 				ControlLabel.fromPosAndText
 				(
 					Coords.fromXY(80, 4),
-					DataBinding.fromGet(() => "" + place.raiders().length)
+					DataBinding.fromGet(() => "" + place.enemies().length)
+				),
+
+				ControlVisual.fromPosAndVisual
+				(
+					Coords.fromXY(100, 10),
+					DataBinding.fromContext
+					(
+						visualKills
+					)
+				),
+				ControlLabel.fromPosAndText
+				(
+					Coords.fromXY(110, 4),
+					DataBinding.fromGet
+					(
+						() => "" + playerStatsKeeper.kills()
+					)
+				),
+
+				ControlVisual.fromPosAndVisual
+				(
+					Coords.fromXY(130, 10),
+					DataBinding.fromContext
+					(
+						visualScore
+					)
+				),
+				ControlLabel.fromPosAndText
+				(
+					Coords.fromXY(140, 4),
+					DataBinding.fromGet
+					(
+						() => "" + playerStatsKeeper.score()
+					)
 				)
 			]
-		).toControlContainerTransparent();
+		).toControlContainerTransparent()
 	}
 
-16.4.  Now run the build script and refresh the browser.  A display will appear in the lower-left corner showing the current count of reserve player ships, habitats, and enemies.
+16.4.  Now run the build script and refresh the browser.  A display will appear in the lower-left corner showing the current count of reserve player ships, habitats, and enemies, along with not-yet-functioning counts of the number of kills made by the player and the score so far.
 
 
 17. Ships in Reserve
@@ -1457,7 +1597,7 @@ First, open Player.ts, and, in the list of properties in the constructor, replac
 		var playerExplosionAndRespawner = uwpe.universe.entityBuilder.explosion
 		(
 			playerPos.clone(),
-			10, // radius
+			10,
 			"Effects_Boom",
 			60, // 3 seconds.
 			uwpe =>
@@ -1483,43 +1623,140 @@ First, open Player.ts, and, in the list of properties in the constructor, replac
 17.3. Run the build script and refresh the browser.  Then run the ship into a enemy.  The ship will explode, the count of ships in reserve will go down by one, and, after a few seconds, the player will respawn somewhere else.
 
 
-18. Adding a Kill Counter
-=========================
+18. Updating the Kill Counter and Score
+=======================================
 
-18.1. The game is more and more like a real arcade game, but it doesn't have a score yet.  Real arcade games have scores, so that players competing with each other for the high score brings in more quarters.  Our game doesn't have a quarter slot, either, of course, but adding that will be much trickier.  So let's start by adding a score.
+18.1. The game is more and more like a real arcade game, but the score doesn't work yet.  Real arcade games have scores, so that players competing with each other for the high score brings in more quarters.  Our game doesn't have a quarter slot, either, of course, but adding that will be much trickier.  So let's start by making the score and kill count work.
 
-First, we'll need some place to store the player's stats.  The good news is that the framework has a StatsKeeper object built into it, which will be ideal for keeping our socre.  Now, we could add that new property to the Player entity, but the Player entity will be removed when the player is killed, and we want the score to persist even after that.  And we could add the new StatsKeeper property to a new entity in the PlaceDefault's list of entities, but th PlaceDefault isn't permanent, either, because eventually we want the player to advance from the current PlaceDefault to the next one, when the level is complete.
+First, we'll need some place to store these stats.  The good news is that the framework has a StatsKeeper object built into it, which will be ideal for keeping our score and kill count, and we already added one as a property to the Player entity when we added the rest of the status displays.  Now we just need to wire it up.
 
-So instead, we'll add the StatsKeeper to the WorldGame class.  Open WorldGame.ts, and add the following line at the top, just before the constructor:
+18.2. Since nothing is actually adding to the score or the kill count, they will remain at zero forever.  To fix that, we need to increment the player's kill count and score every time a enemy dies.  Open Enemy.ts, and add the following to the list of properties being declared in the constructor, adjusting commas as needed:
 
-	statsKeeper: StatsKeeper;
+	Scorable.fromPoints(100)
 
-18.2. Still in WorldGame.ts, add the following line to the end of the constructor to initialize the newly added StatsKeeper instance:
+18.3. Still in Enemy.ts, add the following at the bottom of the .killableDie() method:
 
-	this.statsKeeper = StatsKeeper.create();
+	var place = uwpe.place as PlacePlanet;
 
-18.3. Now we'll add the on-screen status display to show the player's current kill count.  Open Player.ts and, in the .toControl() method, add the following lines at the end of the existing list of child controls:
+	place.entityToSpawnAdd(entityExplosion);
 
-	ControlVisual.fromPosAndVisual
+	// Stats.
+
+	var player = place.player();
+	var playerStatsKeeper = StatsKeeper.of(player);
+
+	playerStatsKeeper.killsIncrement();
+
+	var scorable = Scorable.of(enemy);
+	var scoreForKillingEnemy = scorable.scoreGet(uwpe);
+	playerStatsKeeper.scoreAdd(scoreForKillingEnemy);
+
+18.4. Run the build script and refresh the browser.  The values next to the two icons at the right will now increase whenever the player shoots an enemy.  Shoot down a enemy or two and watch the count increase.  Finally, you're getting the credit you deserve.
+
+
+19. Taking Things to the Next Level
+===================================
+
+19.1 So far, there's only one level, and when it's done, the game ends.  To be more like a real arcade game, there need to be a lot more levels.  Maybe as many as 255.  No more than that, though--255 is the highest number.  Just kidding, there are higher numbers.
+
+Open Planet.ts and replace the existing .triggerWinReactToBeingTriggered() method with the following:
+
+	static triggerWinReactToBeingTriggered
 	(
-		Coords.fromXY(100, 10),
-		DataBinding.fromContext(VisualBuilder.Instance().archeryTarget(6) )
-	),
-	ControlLabel.fromPosAndText
-	(
-		Coords.fromXY(110, 4),
-		DataBinding.fromGet
+		uwpe: UniverseWorldPlaceEntities
+	): void
+	{
+		var universe = uwpe.universe;
+		var place = uwpe.place as PlacePlanet;
+		var player = place.player();
+
+		var playerStatsKeeper = StatsKeeper.of(player);
+		var enemiesKilled = playerStatsKeeper.kills();
+		var enemiesTotal = place.enemiesCountInitial();
+
+		var habitatsRemaining = place.habitats().length;
+		var habitatsTotal = place.habitatsCountInitial();
+
+		var shotsHit = playerStatsKeeper.hits();
+		var shotsFired = playerStatsKeeper.shots();
+
+		var timerTicksToComplete = place.timerTicksSoFar();
+		var secondsToComplete =
+			universe.timerHelper.ticksToSeconds(timerTicksToComplete);
+
+		var statLengthMax = 8;
+		var messageAsLines =
+		[
+			place.name + " complete!",
+			"",
+			"Enemies killed: " + (enemiesKilled + "/" + enemiesTotal).padStart(statLengthMax, " "),
+			"Habitats saved: " + (habitatsRemaining + "/" + habitatsTotal).padStart(statLengthMax, " "),
+			"Hits/Shots:     " + (shotsHit + "/" + shotsFired).padStart(statLengthMax, " "),
+			"Seconds taken:  " + ("" + secondsToComplete).padStart(statLengthMax, " "),
+			"",
+			"Press Enter to start the next level."
+		];
+
+		var newline = "\n";
+		var messageAsString = messageAsLines.join(newline);
+
+		universe.venueTransitionTo
 		(
-			() => "" + (uwpe.world as WorldGame).statsKeeper.kills()
+			VenueMessage.fromTextAndAcknowledgeNoButtons
+			(
+				messageAsString,
+				() => // acknowledge
+				{
+					var placeNext = PlacePlanet.fromLevelIndex(place.levelIndex + 1);
+					universe.world.placeNextSet(placeNext);
+					universe.venuePrevTransitionTo();
+				}
+			)
 		)
-	)
+	}
 
-18.3. Now the player's kill count will be displayed, but since nothing is actually adding to it, it will remain at zero forever.  To fix that, we need to increment the player's kill count every time a enemy dies.  Open Enemy.ts, and add the following at the bottom of the .killableDie() method:
+The new code shows, whenever the player completes a level, a list of statistics about the player's performance on the level, then waits for the player to press the Enter key, after which a new and harder (though right now it's really just longer) level starts.
 
-		var world = uwpe.world as WorldGame;
-		world.statsKeeper.killsIncrement();
+19.2.  However, as it's currently implemented, every time the player advances to a new level, their score resets to zero.  This is because a new player is created each time a new PlacePlanet is created, and a new PlacePlanet is created with every new level.
 
-18.4. Run the build script and refresh the browser.  Notice the new target icon that shows how many kills the player has.  Shoot down a enemy or two and watch the count increase.  Finally, you're getting the credit you deserve.
+To prevent this, we need to keep the existing Player object and re-use it on every level.  Perhaps the easiest way to accomplish this recycling is by passing the Player object as a parameter to the constructor of the PlacePlanet.
+
+Open PlacePlanet.ts and replace the top line of the constructor with the following:
+
+	constructor(levelIndex: number, player: Player)
+
+19.3. Still in PlacePlanet.ts, locate the declaration of the "entities" array and, within that array, replace the existing call to Player.fromPos() with the following, adjusting commas as needed:
+
+	player
+
+19.4. Still in PlacePlanet.ts, replace the existing .fromLevelIndex() method with the following, to accomodate the newly added  constructor parameter:
+
+	static fromLevelIndexAndPlayer(levelIndex: number, player: Player): PlacePlanet
+	{
+		return new PlacePlanet(levelIndex, player);
+	}
+
+19.5. Now open WorldGame.ts, locate the line with the existing call to Place.fromLevelIndex(), and replace it with the following lines:
+
+	var player = Player.fromPos(Coords.fromXY(100, 100) );
+	var place = PlacePlanet.fromLevelIndexAndPlayer(0, player);
+
+19.6. Finally, open Planet.ts, and, in the .triggerWinReactToBeingTriggered() method, locate the existing line where the placeNext variable is being declared, and replace it with the following:
+
+	var levelNextIndex = place.levelIndex + 1;
+	var placeNext = PlacePlanet.fromLevelIndexAndPlayer
+	(
+		levelNextIndex, player
+	);
+
+19.7.  Now the player's score will be preserved across levels.  But so will their kill, shots, and hits counts.  To reset those stats to zero each level, right above the code added in the previous step, add the following:
+
+	playerStatsKeeper
+		.killsClear()
+		.shotsClear()
+		.hitsClear();
+
+19.8. Run the build script and refresh the browser, then play through a couple of levels.  After the second level starts, verify that the score hasn't been reset, but the kill counter has been.  After the second level is over, look at the displayed stats to make sure that they all make sense, and that none of the kills, shots, and hits from the first level are still included in the numbers.
 
 
 n. Conclusion
@@ -1527,13 +1764,10 @@ n. Conclusion
 
 n.1. Well, it's certainly technically a game at this point.  Congratulations!  Here's some future features that might make the game even more fun:
 
-* Add more appropriate visual and sound effects when things happen, like explosions.
-* Destroy the player's ship when it runs into a enemy.
+* Add a leaderboard to show which players hold the current high scores.
 * Let the enemies shoot bullets.
 * Require the player to catch a habitat as it falls, or else it explodes on impact.
-* Generate more enemies, on a timer.
 * Add a minimap to show the parts of the planet that are not currently on screen.
-* Make ammuntion limited and add reloading by picking up bullets.
-* Transition to a new and harder level when the player wins the current level.
+* Make ammuntion limited and add reloading by picking up bullets.  Or maybe just replenish bullets slowly, on a timer.
 
 The framework contains features to support all these, though it might not be easy to figure out how.  To be continued!

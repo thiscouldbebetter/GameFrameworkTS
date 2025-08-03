@@ -85,7 +85,7 @@ var ThisCouldBeBetter;
                                 GameFramework.Polar
                                     .create()
                                     .random(randomizer)
-                                    .toCoords(entityGeneratedVel)
+                                    .overwriteCoords(entityGeneratedVel)
                                     .multiplyScalar(entityGeneratedSpeed);
                             }
                             this.entitiesGeneratedActive.push(entityGenerated);

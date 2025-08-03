@@ -15,10 +15,10 @@ var ThisCouldBeBetter;
                 // hack - Assume axis is (0, 0, 1).
                 var polar = new GameFramework.Polar(0, 0, 0).fromCoords(coordsToTransform);
                 polar.azimuthInTurns = GameFramework.NumberHelper.wrapToRangeMinMax(polar.azimuthInTurns + this.angleInTurns(), 0, 1);
-                return polar.toCoords(coordsToTransform);
+                return polar.overwriteCoords(coordsToTransform);
             }
             transformOrientation(orientation) {
-                orientation.forwardSet(this.transformCoords(orientation.forward));
+                return orientation.forwardSet(this.transformCoords(orientation.forward));
             }
         }
         GameFramework.Rotation = Rotation;

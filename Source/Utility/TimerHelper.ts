@@ -68,6 +68,16 @@ export class TimerHelper
 		return this.ticksToString(ticksToConvert, " hours ", " minutes ", " seconds");
 	}
 
+	ticksToSeconds(ticksToConvert: number): number
+	{
+		var secondsTotal = Math.floor
+		(
+			ticksToConvert / this.ticksPerSecond
+		);
+
+		return secondsTotal;
+	}
+
 	ticksToString
 	(
 		ticksToConvert: number,
@@ -76,10 +86,7 @@ export class TimerHelper
 		unitStringSeconds: string
 	): string
 	{
-		var secondsTotal = Math.floor
-		(
-			ticksToConvert / this.ticksPerSecond
-		);
+		var secondsTotal = this.ticksToSeconds(ticksToConvert);
 		var minutesTotal = Math.floor(secondsTotal / 60);
 		var hoursTotal = Math.floor(minutesTotal / 60);
 

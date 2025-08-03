@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.child = child;
                 this._childTransformed = child.clone();
             }
+            static fromTransformAndChild(transformToApply, child) {
+                return new VisualTransform(transformToApply, child);
+            }
             // Cloneable.
             clone() {
                 return new VisualTransform(this.transformToApply, this.child.clone());

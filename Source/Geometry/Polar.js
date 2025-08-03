@@ -50,6 +50,13 @@ var ThisCouldBeBetter;
                 }
                 return this;
             }
+            overwriteCoords(coords) {
+                var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
+                var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;
+                var cosineOfElevation = Math.cos(elevationInRadians);
+                coords.overwriteWithDimensions(Math.cos(azimuthInRadians) * cosineOfElevation, Math.sin(azimuthInRadians) * cosineOfElevation, Math.sin(elevationInRadians)).multiplyScalar(this.radius);
+                return coords;
+            }
             overwriteWith(other) {
                 this.azimuthInTurns = other.azimuthInTurns;
                 this.radius = other.radius;
@@ -76,12 +83,8 @@ var ThisCouldBeBetter;
                 this.radius = value;
                 return this;
             }
-            toCoords(coords) {
-                var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
-                var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;
-                var cosineOfElevation = Math.cos(elevationInRadians);
-                coords.overwriteWithDimensions(Math.cos(azimuthInRadians) * cosineOfElevation, Math.sin(azimuthInRadians) * cosineOfElevation, Math.sin(elevationInRadians)).multiplyScalar(this.radius);
-                return coords;
+            toCoords() {
+                return this.overwriteCoords(GameFramework.Coords.create());
             }
             wrap() {
                 while (this.azimuthInTurns < 0) {

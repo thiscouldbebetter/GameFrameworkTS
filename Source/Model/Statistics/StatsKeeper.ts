@@ -31,6 +31,15 @@ export class StatsKeeper implements EntityProperty<StatsKeeper>
 		return this._statValuesByName.get(name);
 	}
 
+	statWithNameAddValue(name: string, valueToAdd: number): void
+	{
+		this._statValuesByName.set
+		(
+			name,
+			this.statValueByName(name) + valueToAdd
+		);
+	}
+
 	statWithNameIncrement(name: string): void
 	{
 		this._statValuesByName.set
@@ -48,12 +57,46 @@ export class StatsKeeper implements EntityProperty<StatsKeeper>
 
 	// Common stats.
 
+	StatNameScore = "Score";
+	StatNameHits = "Hits";
 	StatNameKills = "Kills";
 	StatNameShots = "Shots";
+
+	hits(): number
+	{
+		return this.statValueByName(this.StatNameHits);
+	}
+
+	hitsClear(): StatsKeeper
+	{
+		this._statValuesByName.set(this.StatNameHits, 0);
+		return this;
+	}
+
+	hitsIncrement(): void
+	{
+		this.statWithNameIncrement(this.StatNameHits);
+	}
+
+	score(): number
+	{
+		return this.statValueByName(this.StatNameScore);
+	}
+
+	scoreAdd(valueToAdd: number): void
+	{
+		this.statWithNameAddValue(this.StatNameScore, valueToAdd);
+	}
 
 	shots(): number
 	{
 		return this.statValueByName(this.StatNameShots);
+	}
+
+	shotsClear(): StatsKeeper
+	{
+		this._statValuesByName.set(this.StatNameShots, 0);
+		return this;
 	}
 
 	shotsIncrement(): void
@@ -64,6 +107,12 @@ export class StatsKeeper implements EntityProperty<StatsKeeper>
 	kills(): number
 	{
 		return this.statValueByName(this.StatNameKills);
+	}
+
+	killsClear(): StatsKeeper
+	{
+		this._statValuesByName.set(this.StatNameKills, 0);
+		return this;
 	}
 
 	killsIncrement(): void

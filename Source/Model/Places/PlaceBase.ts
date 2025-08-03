@@ -83,6 +83,12 @@ export class PlaceBase implements Place, Loadable
 		return placesInAncestry;
 	}
 
+	_timerTicksSoFar: number;
+	timerTicksSoFar(): number
+	{
+		return this._timerTicksSoFar;
+	}
+
 	size(): Coords
 	{
 		return this._size;
@@ -300,6 +306,8 @@ export class PlaceBase implements Place, Loadable
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
+		this._timerTicksSoFar = 0;
+
 		uwpe.placeSet(this);
 		var world = uwpe.world;
 		var placeDefn = this.defn(world);
@@ -372,6 +380,8 @@ export class PlaceBase implements Place, Loadable
 				}
 			}
 		}
+
+		this._timerTicksSoFar++;
 	}
 
 	// Loadable.

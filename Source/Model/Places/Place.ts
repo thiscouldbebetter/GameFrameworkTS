@@ -25,6 +25,7 @@ export interface Place extends Namable, Equatable<Place>
 	initialize(uwpe: UniverseWorldPlaceEntities): void;
 	placeParent(world: World): Place;
 	placesAncestors(world: World, placesInAncestry: Place[]): Place[];
+	timerTicksSoFar(): number;
 	size(): Coords;
 	toControl(universe: Universe, world: World): ControlBase;
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void;

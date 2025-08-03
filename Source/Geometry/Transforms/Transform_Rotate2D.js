@@ -21,7 +21,11 @@ var ThisCouldBeBetter;
                 return transformable; // todo
             }
             transformCoords(coordsToTransform) {
-                this._polar.fromCoords(coordsToTransform).addToAzimuthInTurns(this.turnsToRotate).wrap().toCoords(coordsToTransform);
+                this._polar
+                    .fromCoords(coordsToTransform)
+                    .addToAzimuthInTurns(this.turnsToRotate)
+                    .wrap()
+                    .overwriteCoords(coordsToTransform);
                 return coordsToTransform;
             }
         }

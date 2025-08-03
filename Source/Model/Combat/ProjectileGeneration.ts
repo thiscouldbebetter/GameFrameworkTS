@@ -7,6 +7,7 @@ export class ProjectileGeneration
 	distanceInitial: number;
 	speed: number;
 	ticksToLive: number;
+	_hit: (uwpe: UniverseWorldPlaceEntities) => void;
 	damage: Damage;
 	visual: VisualBase;
 	_projectileEntityInitialize: (entity: Entity) => void
@@ -17,6 +18,7 @@ export class ProjectileGeneration
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
+		hit: (uwpe: UniverseWorldPlaceEntities) => void,
 		damage: Damage,
 		visual: VisualBase,
 		projectileEntityInitialize: (entity: Entity) => void
@@ -26,17 +28,19 @@ export class ProjectileGeneration
 		this.distanceInitial = distanceInitial;
 		this.speed = speed;
 		this.ticksToLive = ticksToLive;
+		this._hit = hit;
 		this.damage = damage;
 		this.visual = visual;
 		this._projectileEntityInitialize = projectileEntityInitialize;
 	}
 
-	static fromRadiusDistanceSpeedTicksDamageAndVisual
+	static fromRadiusDistanceSpeedTicksHitDamageAndVisual
 	(
 		radius: number,
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
+		hit: (uwpe: UniverseWorldPlaceEntities) => void,
 		damage: Damage,
 		visual: VisualBase
 	): ProjectileGeneration
@@ -47,6 +51,7 @@ export class ProjectileGeneration
 			distanceInitial,
 			speed,
 			ticksToLive,
+			hit,
 			damage,
 			visual,
 			null // projectileEntityInitialize
@@ -70,6 +75,32 @@ export class ProjectileGeneration
 			distanceInitial,
 			speed,
 			ticksToLive,
+			null, // hit
+			damage,
+			visual,
+			projectileEntityInitialize
+		);
+	}
+
+	static fromRadiusDistanceSpeedTicksHitDamageVisualAndInit
+	(
+		radius: number,
+		distanceInitial: number,
+		speed: number,
+		ticksToLive: number,
+		hit: (uwpe: UniverseWorldPlaceEntities) => void,
+		damage: Damage,
+		visual: VisualBase,
+		projectileEntityInitialize: (entity: Entity) => void
+	): ProjectileGeneration
+	{
+		return new ProjectileGeneration
+		(
+			radius,
+			distanceInitial,
+			speed,
+			ticksToLive,
+			hit,
 			damage,
 			visual,
 			projectileEntityInitialize
@@ -84,10 +115,19 @@ export class ProjectileGeneration
 			0, // distanceInitial,
 			0, // speed
 			1, // ticksToLive
+			null, // hit
 			null, // damage
 			visual,
 			null // projectileEntityInitialize
 		);
+	}
+
+	hit(uwpe: UniverseWorldPlaceEntities): void
+	{
+		if (this._hit != null)
+		{
+			this._hit(uwpe);
+		}
 	}
 
 	projectileEntityInitialize(entity: Entity): void
@@ -196,12 +236,15 @@ export class ProjectileGeneration
 			var targetKillable = Killable.of(entityOther);
 			if (targetKillable != null)
 			{
-				var damageToApply = Damager.of(entityProjectile).damagePerHit;
-				targetKillable.damageApply(uwpe, damageToApply);
-
 				var projectileKillable = Killable.of(entityProjectile);
-				if (projectileKillable != null)
+				var projectileIsAlive = projectileKillable.isAlive();
+				if (projectileIsAlive)
 				{
+					this.hit(uwpe);
+
+					var damageToApply = Damager.of(entityProjectile).damagePerHit;
+					targetKillable.damageApply(uwpe, damageToApply);
+
 					projectileKillable.kill();
 				}
 			}

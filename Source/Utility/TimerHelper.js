@@ -35,8 +35,12 @@ var ThisCouldBeBetter;
             ticksToStringHours_Minutes_Seconds(ticksToConvert) {
                 return this.ticksToString(ticksToConvert, " hours ", " minutes ", " seconds");
             }
-            ticksToString(ticksToConvert, unitStringHours, unitStringMinutes, unitStringSeconds) {
+            ticksToSeconds(ticksToConvert) {
                 var secondsTotal = Math.floor(ticksToConvert / this.ticksPerSecond);
+                return secondsTotal;
+            }
+            ticksToString(ticksToConvert, unitStringHours, unitStringMinutes, unitStringSeconds) {
+                var secondsTotal = this.ticksToSeconds(ticksToConvert);
                 var minutesTotal = Math.floor(secondsTotal / 60);
                 var hoursTotal = Math.floor(minutesTotal / 60);
                 var timeAsString = hoursTotal + unitStringHours

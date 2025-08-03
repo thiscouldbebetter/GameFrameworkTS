@@ -4,30 +4,41 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ProjectileGeneration {
-            constructor(radius, distanceInitial, speed, ticksToLive, damage, visual, projectileEntityInitialize) {
+            constructor(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, projectileEntityInitialize) {
                 this.radius = radius;
                 this.distanceInitial = distanceInitial;
                 this.speed = speed;
                 this.ticksToLive = ticksToLive;
+                this._hit = hit;
                 this.damage = damage;
                 this.visual = visual;
                 this._projectileEntityInitialize = projectileEntityInitialize;
             }
-            static fromRadiusDistanceSpeedTicksDamageAndVisual(radius, distanceInitial, speed, ticksToLive, damage, visual) {
-                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, damage, visual, null // projectileEntityInitialize
+            static fromRadiusDistanceSpeedTicksHitDamageAndVisual(radius, distanceInitial, speed, ticksToLive, hit, damage, visual) {
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, null // projectileEntityInitialize
                 );
             }
             static fromRadiusDistanceSpeedTicksDamageVisualAndInit(radius, distanceInitial, speed, ticksToLive, damage, visual, projectileEntityInitialize) {
-                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, damage, visual, projectileEntityInitialize);
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, null, // hit
+                damage, visual, projectileEntityInitialize);
+            }
+            static fromRadiusDistanceSpeedTicksHitDamageVisualAndInit(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, projectileEntityInitialize) {
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, projectileEntityInitialize);
             }
             static fromVisual(visual) {
                 return new ProjectileGeneration(0, // radius
                 0, // distanceInitial,
                 0, // speed
                 1, // ticksToLive
+                null, // hit
                 null, // damage
                 visual, null // projectileEntityInitialize
                 );
+            }
+            hit(uwpe) {
+                if (this._hit != null) {
+                    this._hit(uwpe);
+                }
             }
             projectileEntityInitialize(entity) {
                 if (this._projectileEntityInitialize != null) {
@@ -97,10 +108,12 @@ var ThisCouldBeBetter;
                 if (entityProjectileRelatable.entityRelatedId != entityOther.id) {
                     var targetKillable = GameFramework.Killable.of(entityOther);
                     if (targetKillable != null) {
-                        var damageToApply = GameFramework.Damager.of(entityProjectile).damagePerHit;
-                        targetKillable.damageApply(uwpe, damageToApply);
                         var projectileKillable = GameFramework.Killable.of(entityProjectile);
-                        if (projectileKillable != null) {
+                        var projectileIsAlive = projectileKillable.isAlive();
+                        if (projectileIsAlive) {
+                            this.hit(uwpe);
+                            var damageToApply = GameFramework.Damager.of(entityProjectile).damagePerHit;
+                            targetKillable.damageApply(uwpe, damageToApply);
                             projectileKillable.kill();
                         }
                     }

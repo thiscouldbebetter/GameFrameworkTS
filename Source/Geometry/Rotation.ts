@@ -13,12 +13,12 @@ export class Rotation
 		this.angleInTurnsRef = angleInTurnsRef;
 	}
 
-	angleInTurns()
+	angleInTurns(): number
 	{
 		return this.angleInTurnsRef.value;
 	}
 
-	transformCoords(coordsToTransform: Coords)
+	transformCoords(coordsToTransform: Coords): Coords
 	{
 		// hack - Assume axis is (0, 0, 1).
 		var polar = new Polar(0, 0, 0).fromCoords(coordsToTransform);
@@ -28,12 +28,12 @@ export class Rotation
 			polar.azimuthInTurns + this.angleInTurns(), 0, 1
 		);
 
-		return polar.toCoords(coordsToTransform);
+		return polar.overwriteCoords(coordsToTransform);
 	}
 
-	transformOrientation(orientation: Orientation)
+	transformOrientation(orientation: Orientation): Orientation
 	{
-		orientation.forwardSet(this.transformCoords(orientation.forward));
+		return orientation.forwardSet(this.transformCoords(orientation.forward));
 	}
 }
 

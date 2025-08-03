@@ -100,9 +100,9 @@ export class Wedge extends ShapeBase
 		var angleInTurnsMax = this.angleInTurnsMax();
 
 		this.rayDirectionMinAsPolar.azimuthInTurns = angleInTurnsMin;
-		this.rayDirectionMinAsPolar.toCoords(this.rayDirectionMin);
+		this.rayDirectionMinAsPolar.overwriteCoords(this.rayDirectionMin);
 		this.rayDirectionMaxAsPolar.azimuthInTurns = angleInTurnsMax;
-		this.rayDirectionMaxAsPolar.toCoords(this.rayDirectionMax);
+		this.rayDirectionMaxAsPolar.overwriteCoords(this.rayDirectionMax);
 
 		var down = Coords.Instances().ZeroZeroOne;
 

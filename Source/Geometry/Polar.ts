@@ -85,6 +85,23 @@ export class Polar
 		return this;
 	}
 
+	overwriteCoords(coords: Coords): Coords
+	{
+		var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
+		var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;
+
+		var cosineOfElevation = Math.cos(elevationInRadians);
+
+		coords.overwriteWithDimensions
+		(
+			Math.cos(azimuthInRadians) * cosineOfElevation,
+			Math.sin(azimuthInRadians) * cosineOfElevation,
+			Math.sin(elevationInRadians)
+		).multiplyScalar(this.radius);
+
+		return coords;
+	}
+
 	overwriteWith(other: Polar): Polar
 	{
 		this.azimuthInTurns = other.azimuthInTurns;
@@ -125,21 +142,9 @@ export class Polar
 		return this;
 	}
 
-	toCoords(coords: Coords): Coords
+	toCoords(): Coords
 	{
-		var azimuthInRadians = this.azimuthInTurns * Polar.RadiansPerTurn;
-		var elevationInRadians = this.elevationInTurns * Polar.RadiansPerTurn;
-
-		var cosineOfElevation = Math.cos(elevationInRadians);
-
-		coords.overwriteWithDimensions
-		(
-			Math.cos(azimuthInRadians) * cosineOfElevation,
-			Math.sin(azimuthInRadians) * cosineOfElevation,
-			Math.sin(elevationInRadians)
-		).multiplyScalar(this.radius);
-
-		return coords;
+		return this.overwriteCoords(Coords.create() );
 	}
 
 	wrap(): Polar

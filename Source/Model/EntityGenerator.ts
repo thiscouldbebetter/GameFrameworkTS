@@ -177,7 +177,7 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 						Polar
 							.create()
 							.random(randomizer)
-							.toCoords(entityGeneratedVel)
+							.overwriteCoords(entityGeneratedVel)
 							.multiplyScalar(entityGeneratedSpeed);
 					}
 

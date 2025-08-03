@@ -34,6 +34,150 @@ export class VisualBuilder
 		return visual;
 	}
 
+	boneLong
+	(
+		shaftLength: number,
+		shaftThickness: number
+	): VisualBase
+	{
+		var colors = Color.Instances();
+		var color = colors.White;
+		var shaftSize = Coords.fromXY(shaftLength, shaftThickness);
+
+		var visualShaft =
+			VisualRectangle.fromSizeAndColorFill(shaftSize, color);
+
+		var knobRadius = shaftThickness / 2;
+		var knobOffsetFromCenterOfEpiphysis = knobRadius;
+		var visualEpiphysisKnob =
+			VisualCircle.fromRadiusAndColorFill(knobRadius, color);
+
+		var visualEpiphysis = VisualGroup.fromChildren
+		([
+			VisualOffset.fromOffsetAndChild
+			(
+				Coords.fromXY(0, 0 - knobOffsetFromCenterOfEpiphysis),
+				visualEpiphysisKnob
+			),
+			VisualOffset.fromOffsetAndChild
+			(
+				Coords.fromXY(0, knobOffsetFromCenterOfEpiphysis),
+				visualEpiphysisKnob
+			)
+		]);
+
+		var shaftLengthHalf = shaftLength / 2;
+		var visualEpiphysisLeft =
+			VisualOffset.fromOffsetAndChild
+			(
+				Coords.fromXY(0 - shaftLengthHalf, 0),
+				visualEpiphysis
+			);
+		var visualEpiphysisRight =
+			VisualOffset.fromOffsetAndChild
+			(
+				Coords.fromXY(shaftLengthHalf, 0),
+				visualEpiphysis
+			);
+
+		var visual = VisualGroup.fromNameAndChildren
+		(
+			"Bone",
+			[
+				visualShaft,
+				visualEpiphysisLeft,
+				visualEpiphysisRight
+			]
+		);
+
+		return visual;
+	}
+
+	boneSkull(headRadius: number): VisualBase
+	{
+		var colors = Color.Instances();
+
+		var boneColor = colors.White;
+		var socketColor = colors.Black;
+
+		var skullWithoutFeatures =
+			VisualCircle.fromRadiusAndColorFill(headRadius, boneColor);
+
+		var eyeSocketRadius = headRadius / 2;
+		var eyeSocket = VisualGroup.fromNameAndChildren
+		(
+			"EyeSocket",
+			[
+				VisualCircle.fromRadiusAndColorFill(eyeSocketRadius, socketColor)
+			]
+		);
+
+		var eyeSockets = VisualGroup.fromNameAndChildren
+		(
+			"EyesSockets",
+			[
+				VisualOffset.fromChildAndOffset
+				(
+					eyeSocket, Coords.fromXY(-eyeSocketRadius, 0)
+				),
+				VisualOffset.fromChildAndOffset
+				(
+					eyeSocket, Coords.fromXY(eyeSocketRadius, 0)
+				)
+			]
+		);
+
+		var skull = VisualGroup.fromNameAndChildren
+		(
+			"Skull",
+			[
+				skullWithoutFeatures,
+				eyeSockets
+			]
+		);
+
+		return skull;
+	}
+
+	boneSkullAndCrossbones
+	(
+		headRadius: number,
+		shaftLength: number,
+		shaftThickness: number
+	): VisualBase
+	{
+		var skull = this.boneSkull(headRadius);
+		var bone = this.boneLong(shaftLength, shaftThickness);
+		var boneBack = VisualTransform.fromTransformAndChild
+		(
+			Transform_None.create(),
+			bone
+		);
+		var boneFront = VisualTransform.fromTransformAndChild
+		(
+			Transform_None.create(),
+			bone
+		);
+		var bonesCrossed = VisualGroup.fromChildren
+		([
+			boneBack,
+			boneFront
+		]);
+		var bonesCrossedOffset = VisualOffset.fromOffsetAndChild
+		(
+			Coords.fromXY(0, 0), // todo
+			bonesCrossed
+		);
+
+		var skullAndBonesCrossed = VisualGroup.fromChildren
+		([
+			bonesCrossedOffset,
+			skull
+		]);
+
+		return skullAndBonesCrossed;
+	}
+
 	directionalAnimationsFromTiledImage
 	(
 		visualImageSource: VisualImage,
@@ -98,7 +242,7 @@ export class VisualBuilder
 		return returnValue;
 	}
 
-	explosion(radius: number, soundName: string): VisualBase
+	explosionCircularOfRadius(radius: number): VisualBase
 	{
 		var visuals: VisualBase[] =
 		[
@@ -109,18 +253,38 @@ export class VisualBuilder
 			)
 		];
 
-		if (soundName != null)
-		{
-			visuals.push
+		return VisualGroup.fromNameAndChildren
+		(
+			"ExplosionSimple",
+			visuals
+		);
+	}
+
+	explosionStarburstOfRadius(radius: number): VisualBase
+	{
+		var colors = Color.Instances();
+
+		var numberOfPoints = 12;
+		var radiusInnerOverOuter = 0.5;
+
+		var starburstOuter =
+			this.starburstWithPointsRatioRadiusAndColor
 			(
-				VisualSound.fromSoundName(soundName)
+				numberOfPoints, radiusInnerOverOuter, radius, colors.Orange
 			);
-		}
+		var starburstInner =
+			this.starburstWithPointsRatioRadiusAndColor
+			(
+				numberOfPoints, radiusInnerOverOuter, radius * .75, colors.Yellow
+			);
 
 		return VisualGroup.fromNameAndChildren
 		(
 			"Explosion",
-			visuals
+			[
+				starburstOuter,
+				starburstInner
+			]
 		);
 	}
 
@@ -1034,7 +1198,6 @@ export class VisualBuilder
 		return flameVisual;
 	}
 
-
 	ice(dimension: number): VisualBase
 	{
 		var dimensionHalf = dimension / 2;
@@ -1060,6 +1223,43 @@ export class VisualBuilder
 				color // border
 			),
 		]);
+
+		return visual;
+	}
+
+	starburstWithPointsRatioRadiusAndColor
+	(
+		numberOfPoints: number,
+		radiusInnerAsFractionOfOuter: number,
+		radiusOuter: number,
+		color: Color
+	): VisualBase
+	{
+		var name = "StarburstWith" + numberOfPoints + "Points";
+
+		var path = PathBuilder.Instance().star
+		(
+			numberOfPoints,
+			radiusInnerAsFractionOfOuter
+		);
+
+		var transform =
+			Transform_Scale.fromScaleFactor(radiusOuter);
+
+		path.transform(transform);
+
+		var visual = VisualGroup.fromNameAndChildren
+		(
+			name,
+			[
+				VisualPolygon.fromPathAndColorsFillAndBorder
+				(
+					path,
+					color, // colorFill
+					null // border
+				)
+			]
+		);
 
 		return visual;
 	}

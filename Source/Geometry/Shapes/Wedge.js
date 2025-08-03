@@ -51,9 +51,9 @@ var ThisCouldBeBetter;
                 var angleInTurnsMin = this.angleInTurnsMin();
                 var angleInTurnsMax = this.angleInTurnsMax();
                 this.rayDirectionMinAsPolar.azimuthInTurns = angleInTurnsMin;
-                this.rayDirectionMinAsPolar.toCoords(this.rayDirectionMin);
+                this.rayDirectionMinAsPolar.overwriteCoords(this.rayDirectionMin);
                 this.rayDirectionMaxAsPolar.azimuthInTurns = angleInTurnsMax;
-                this.rayDirectionMaxAsPolar.toCoords(this.rayDirectionMax);
+                this.rayDirectionMaxAsPolar.overwriteCoords(this.rayDirectionMax);
                 var down = GameFramework.Coords.Instances().ZeroZeroOne;
                 this.downFromVertex
                     .overwriteWith(this.vertex)

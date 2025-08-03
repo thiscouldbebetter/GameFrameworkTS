@@ -4,6 +4,16 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class PathBuilder
 {
+	static _instance: PathBuilder;
+	static Instance(): PathBuilder
+	{
+		if (this._instance == null)
+		{
+			this._instance = new PathBuilder();
+		}
+		return this._instance;
+	}
+
 	star(numberOfPoints: number, ratioOfInnerRadiusToOuter: number)
 	{
 		var numberOfVertices = numberOfPoints * 2;
@@ -14,7 +24,7 @@ export class PathBuilder
 		for (var i = 0; i < numberOfVertices; i++)
 		{
 			polar.radius = (i % 2 == 0 ? 1 : ratioOfInnerRadiusToOuter);
-			var vertex = polar.toCoords( Coords.create() );
+			var vertex = polar.toCoords();
 			vertices.push(vertex);
 			polar.azimuthInTurns += turnsPerVertex;
 		}

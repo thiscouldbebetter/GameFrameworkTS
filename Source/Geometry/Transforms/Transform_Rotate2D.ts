@@ -37,16 +37,11 @@ export class Transform_Rotate2D implements Transform<Transform_Rotate2D>
 
 	transformCoords(coordsToTransform: Coords): Coords
 	{
-		this._polar.fromCoords
-		(
-			coordsToTransform
-		).addToAzimuthInTurns
-		(
-			this.turnsToRotate
-		).wrap().toCoords
-		(
-			coordsToTransform
-		);
+		this._polar
+			.fromCoords(coordsToTransform)
+			.addToAzimuthInTurns(this.turnsToRotate)
+			.wrap()
+			.overwriteCoords(coordsToTransform);
 
 		return coordsToTransform;
 	}

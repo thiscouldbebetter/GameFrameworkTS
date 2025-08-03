@@ -61,4 +61,6 @@ type _BuildErrors.txt
 echo:
 echo ...done displaying any build errors.
 
+cd _Scripts
+
 pause

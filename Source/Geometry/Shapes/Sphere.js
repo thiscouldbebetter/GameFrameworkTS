@@ -54,7 +54,7 @@ var ThisCouldBeBetter;
                 var polar = GameFramework.Polar.fromRadius(this.radius());
                 var returnValue = polar
                     .random(null)
-                    .toCoords(this._pointRandom)
+                    .overwriteCoords(this._pointRandom)
                     .add(this.center);
                 return returnValue;
             }

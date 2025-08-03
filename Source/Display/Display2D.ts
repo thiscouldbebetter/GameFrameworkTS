@@ -191,7 +191,7 @@ export class Display2D implements Display
 			);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( Coords.create() )
+				new Polar(angleStopInTurns, radiusOuter, 0).toCoords()
 			);
 			g.lineTo(drawPos.x, drawPos.y);
 			g.arc
@@ -217,7 +217,7 @@ export class Display2D implements Display
 			);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radiusOuter, 0).toCoords( Coords.create() )
+				new Polar(angleStopInTurns, radiusOuter, 0).toCoords()
 			);
 			g.lineTo(drawPos.x, drawPos.y);
 			g.arc
@@ -357,11 +357,15 @@ export class Display2D implements Display
 			);
 
 			polarForLine.radius = radiusInner;
-			drawPos.overwriteWith(center).add(polarForLine.toCoords(offset));
+			drawPos
+				.overwriteWith(center)
+				.add(polarForLine.overwriteCoords(offset) );
 			g.moveTo(drawPos.x, drawPos.y);
 
 			polarForLine.radius = radiusOuter;
-			drawPos.overwriteWith(center).add(polarForLine.toCoords(offset));
+			drawPos
+				.overwriteWith(center)
+				.add(polarForLine.overwriteCoords(offset) );
 			g.lineTo(drawPos.x, drawPos.y);
 		}
 
@@ -886,51 +890,53 @@ export class Display2D implements Display
 		angleStopInTurns: number, colorFill: Color, colorBorder: Color
 	): void
 	{
+		var g = this.graphics;
+
 		var drawPos = this._drawPos.overwriteWith(center);
 		var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
 		var angleStopInRadians = angleStopInTurns * Display2D.RadiansPerTurn;
 
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = Color.systemColorGet(colorFill);
+			g.fillStyle = Color.systemColorGet(colorFill);
 
-			this.graphics.beginPath();
-			this.graphics.moveTo(center.x, center.y);
+			g.beginPath();
+			g.moveTo(center.x, center.y);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radius, 0).toCoords( Coords.create() )
+				new Polar(angleStopInTurns, radius, 0).toCoords()
 			);
-			this.graphics.lineTo(drawPos.x, drawPos.y);
-			this.graphics.arc
+			g.lineTo(drawPos.x, drawPos.y);
+			g.arc
 			(
 				center.x, center.y,
 				radius,
 				angleStopInRadians, angleStartInRadians,
 				true // counterclockwise
 			);
-			this.graphics.closePath();
-			this.graphics.fill();
+			g.closePath();
+			g.fill();
 		}
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
-			this.graphics.beginPath();
-			this.graphics.moveTo(center.x, center.y);
+			g.strokeStyle = Color.systemColorGet(colorBorder);
+			g.beginPath();
+			g.moveTo(center.x, center.y);
 			drawPos.overwriteWith(center).add
 			(
-				new Polar(angleStopInTurns, radius, 0).toCoords( Coords.create() )
+				new Polar(angleStopInTurns, radius, 0).toCoords()
 			);
-			this.graphics.lineTo(drawPos.x, drawPos.y);
-			this.graphics.arc
+			g.lineTo(drawPos.x, drawPos.y);
+			g.arc
 			(
 				center.x, center.y,
 				radius,
 				angleStopInRadians, angleStartInRadians,
 				true // counterclockwise
 			);
-			this.graphics.closePath();
-			this.graphics.stroke();
+			g.closePath();
+			g.stroke();
 		}
 	}
 

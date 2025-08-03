@@ -21,7 +21,11 @@ export class EntityBuilder
 
 				Drawable.fromVisual
 				(
-					VisualBuilder.Instance().explosion(radius, soundName)
+					VisualGroup.fromChildren
+					([
+						VisualSound.fromSoundName(soundName),
+						VisualBuilder.Instance().explosionStarburstOfRadius(radius)
+					])
 				),
 
 				Ephemeral.fromTicksAndExpire

@@ -5,6 +5,10 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class Transform_None {
             constructor() { }
+            static create() {
+                return new Transform_None();
+            }
+            // Transform.
             clone() { return this; } // todo
             overwriteWith(other) {
                 return this;

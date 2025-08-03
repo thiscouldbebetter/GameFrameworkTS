@@ -53,7 +53,7 @@ export class VisualPolars implements Visual<VisualPolars>
 			polar.overwriteWith(this.polars[i]);
 			polar.azimuthInTurns =
 				NumberHelper.wrapToRangeZeroOne(polar.azimuthInTurns +  drawableHeadingInTurns);
-			polar.toCoords(toPos).add(fromPos);
+			polar.overwriteCoords(toPos).add(fromPos);
 
 			display.drawLine
 			(

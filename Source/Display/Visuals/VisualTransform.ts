@@ -17,6 +17,14 @@ export class VisualTransform implements Visual<VisualTransform>
 		this._childTransformed = child.clone();
 	}
 
+	static fromTransformAndChild
+	(
+		transformToApply: TransformBase, child: VisualBase
+	): VisualTransform
+	{
+		return new VisualTransform(transformToApply, child);
+	}
+
 	// Cloneable.
 
 	clone(): VisualTransform

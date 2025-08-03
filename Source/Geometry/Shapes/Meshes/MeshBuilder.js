@@ -335,7 +335,7 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < numberOfVertices; i++) {
                     var vertexAngleInTurns = i / numberOfVertices;
                     var vertexPolar = new GameFramework.Polar(vertexAngleInTurns, 1, 0);
-                    var vertex = vertexPolar.toCoords(GameFramework.Coords.create());
+                    var vertex = vertexPolar.toCoords();
                     vertices.push(vertex);
                     vertexIndicesForFace.splice(0, 0, i);
                 }

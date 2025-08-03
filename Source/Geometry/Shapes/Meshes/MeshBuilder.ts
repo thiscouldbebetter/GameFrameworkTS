@@ -685,7 +685,7 @@ export class MeshBuilder
 			var vertexAngleInTurns = i / numberOfVertices;
 
 			var vertexPolar = new Polar(vertexAngleInTurns, 1, 0);
-			var vertex = vertexPolar.toCoords(Coords.create());
+			var vertex = vertexPolar.toCoords();
 
 			vertices.push(vertex);
 

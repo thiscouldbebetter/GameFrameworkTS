@@ -6,6 +6,8 @@ var ThisCouldBeBetter;
         class StatsKeeper {
             constructor() {
                 // Common stats.
+                this.StatNameScore = "Score";
+                this.StatNameHits = "Hits";
                 this.StatNameKills = "Kills";
                 this.StatNameShots = "Shots";
                 this._statValuesByName = new Map();
@@ -22,6 +24,9 @@ var ThisCouldBeBetter;
                 }
                 return this._statValuesByName.get(name);
             }
+            statWithNameAddValue(name, valueToAdd) {
+                this._statValuesByName.set(name, this.statValueByName(name) + valueToAdd);
+            }
             statWithNameIncrement(name) {
                 this._statValuesByName.set(name, this.statValueByName(name) + 1);
             }
@@ -29,14 +34,38 @@ var ThisCouldBeBetter;
                 this._statValuesByName.clear();
                 return this;
             }
+            hits() {
+                return this.statValueByName(this.StatNameHits);
+            }
+            hitsClear() {
+                this._statValuesByName.set(this.StatNameHits, 0);
+                return this;
+            }
+            hitsIncrement() {
+                this.statWithNameIncrement(this.StatNameHits);
+            }
+            score() {
+                return this.statValueByName(this.StatNameScore);
+            }
+            scoreAdd(valueToAdd) {
+                this.statWithNameAddValue(this.StatNameScore, valueToAdd);
+            }
             shots() {
                 return this.statValueByName(this.StatNameShots);
+            }
+            shotsClear() {
+                this._statValuesByName.set(this.StatNameShots, 0);
+                return this;
             }
             shotsIncrement() {
                 this.statWithNameIncrement(this.StatNameShots);
             }
             kills() {
                 return this.statValueByName(this.StatNameKills);
+            }
+            killsClear() {
+                this._statValuesByName.set(this.StatNameKills, 0);
+                return this;
             }
             killsIncrement() {
                 this.statWithNameIncrement(this.StatNameKills);

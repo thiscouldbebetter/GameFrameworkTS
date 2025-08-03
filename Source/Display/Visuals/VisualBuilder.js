@@ -22,6 +22,64 @@ var ThisCouldBeBetter;
                 ]);
                 return visual;
             }
+            boneLong(shaftLength, shaftThickness) {
+                var colors = GameFramework.Color.Instances();
+                var color = colors.White;
+                var shaftSize = GameFramework.Coords.fromXY(shaftLength, shaftThickness);
+                var visualShaft = GameFramework.VisualRectangle.fromSizeAndColorFill(shaftSize, color);
+                var knobRadius = shaftThickness / 2;
+                var knobOffsetFromCenterOfEpiphysis = knobRadius;
+                var visualEpiphysisKnob = GameFramework.VisualCircle.fromRadiusAndColorFill(knobRadius, color);
+                var visualEpiphysis = GameFramework.VisualGroup.fromChildren([
+                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(0, 0 - knobOffsetFromCenterOfEpiphysis), visualEpiphysisKnob),
+                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(0, knobOffsetFromCenterOfEpiphysis), visualEpiphysisKnob)
+                ]);
+                var shaftLengthHalf = shaftLength / 2;
+                var visualEpiphysisLeft = GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(0 - shaftLengthHalf, 0), visualEpiphysis);
+                var visualEpiphysisRight = GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(shaftLengthHalf, 0), visualEpiphysis);
+                var visual = GameFramework.VisualGroup.fromNameAndChildren("Bone", [
+                    visualShaft,
+                    visualEpiphysisLeft,
+                    visualEpiphysisRight
+                ]);
+                return visual;
+            }
+            boneSkull(headRadius) {
+                var colors = GameFramework.Color.Instances();
+                var boneColor = colors.White;
+                var socketColor = colors.Black;
+                var skullWithoutFeatures = GameFramework.VisualCircle.fromRadiusAndColorFill(headRadius, boneColor);
+                var eyeSocketRadius = headRadius / 2;
+                var eyeSocket = GameFramework.VisualGroup.fromNameAndChildren("EyeSocket", [
+                    GameFramework.VisualCircle.fromRadiusAndColorFill(eyeSocketRadius, socketColor)
+                ]);
+                var eyeSockets = GameFramework.VisualGroup.fromNameAndChildren("EyesSockets", [
+                    GameFramework.VisualOffset.fromChildAndOffset(eyeSocket, GameFramework.Coords.fromXY(-eyeSocketRadius, 0)),
+                    GameFramework.VisualOffset.fromChildAndOffset(eyeSocket, GameFramework.Coords.fromXY(eyeSocketRadius, 0))
+                ]);
+                var skull = GameFramework.VisualGroup.fromNameAndChildren("Skull", [
+                    skullWithoutFeatures,
+                    eyeSockets
+                ]);
+                return skull;
+            }
+            boneSkullAndCrossbones(headRadius, shaftLength, shaftThickness) {
+                var skull = this.boneSkull(headRadius);
+                var bone = this.boneLong(shaftLength, shaftThickness);
+                var boneBack = GameFramework.VisualTransform.fromTransformAndChild(GameFramework.Transform_None.create(), bone);
+                var boneFront = GameFramework.VisualTransform.fromTransformAndChild(GameFramework.Transform_None.create(), bone);
+                var bonesCrossed = GameFramework.VisualGroup.fromChildren([
+                    boneBack,
+                    boneFront
+                ]);
+                var bonesCrossedOffset = GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(0, 0), // todo
+                bonesCrossed);
+                var skullAndBonesCrossed = GameFramework.VisualGroup.fromChildren([
+                    bonesCrossedOffset,
+                    skull
+                ]);
+                return skullAndBonesCrossed;
+            }
             directionalAnimationsFromTiledImage(visualImageSource, imageSource, imageSourceSizeInTiles, tileSizeToDraw) {
                 var imageSourceSizeInPixels = imageSource.sizeInPixels;
                 var tileSizeInPixels = imageSourceSizeInPixels.clone().divide(imageSourceSizeInTiles);
@@ -46,14 +104,22 @@ var ThisCouldBeBetter;
                 var returnValue = GameFramework.VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections(directions[1], directions);
                 return returnValue;
             }
-            explosion(radius, soundName) {
+            explosionCircularOfRadius(radius) {
                 var visuals = [
                     GameFramework.VisualCircle.fromRadiusAndColorFill(radius, GameFramework.Color.Instances().Yellow)
                 ];
-                if (soundName != null) {
-                    visuals.push(GameFramework.VisualSound.fromSoundName(soundName));
-                }
-                return GameFramework.VisualGroup.fromNameAndChildren("Explosion", visuals);
+                return GameFramework.VisualGroup.fromNameAndChildren("ExplosionSimple", visuals);
+            }
+            explosionStarburstOfRadius(radius) {
+                var colors = GameFramework.Color.Instances();
+                var numberOfPoints = 12;
+                var radiusInnerOverOuter = 0.5;
+                var starburstOuter = this.starburstWithPointsRatioRadiusAndColor(numberOfPoints, radiusInnerOverOuter, radius, colors.Orange);
+                var starburstInner = this.starburstWithPointsRatioRadiusAndColor(numberOfPoints, radiusInnerOverOuter, radius * .75, colors.Yellow);
+                return GameFramework.VisualGroup.fromNameAndChildren("Explosion", [
+                    starburstOuter,
+                    starburstInner
+                ]);
             }
             eyesBlinking(visualEyeRadius) {
                 var visualPupilRadius = visualEyeRadius / 2;
@@ -398,6 +464,18 @@ var ThisCouldBeBetter;
                     ]).transform(GameFramework.Transform_Scale.fromScaleFactor(dimensionHalf)), null, // colorFill
                     color // border
                     ),
+                ]);
+                return visual;
+            }
+            starburstWithPointsRatioRadiusAndColor(numberOfPoints, radiusInnerAsFractionOfOuter, radiusOuter, color) {
+                var name = "StarburstWith" + numberOfPoints + "Points";
+                var path = GameFramework.PathBuilder.Instance().star(numberOfPoints, radiusInnerAsFractionOfOuter);
+                var transform = GameFramework.Transform_Scale.fromScaleFactor(radiusOuter);
+                path.transform(transform);
+                var visual = GameFramework.VisualGroup.fromNameAndChildren(name, [
+                    GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(path, color, // colorFill
+                    null // border
+                    )
                 ]);
                 return visual;
             }

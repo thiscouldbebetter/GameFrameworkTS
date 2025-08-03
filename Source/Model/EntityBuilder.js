@@ -7,7 +7,10 @@ var ThisCouldBeBetter;
             explosion(pos, radius, soundName, ticksToLive, ephemeralExpire) {
                 var explosionEntity = GameFramework.Entity.fromNameAndProperties("Explosion", [
                     GameFramework.Audible.create(),
-                    GameFramework.Drawable.fromVisual(GameFramework.VisualBuilder.Instance().explosion(radius, soundName)),
+                    GameFramework.Drawable.fromVisual(GameFramework.VisualGroup.fromChildren([
+                        GameFramework.VisualSound.fromSoundName(soundName),
+                        GameFramework.VisualBuilder.Instance().explosionStarburstOfRadius(radius)
+                    ])),
                     GameFramework.Ephemeral.fromTicksAndExpire(ticksToLive, ephemeralExpire),
                     GameFramework.Locatable.fromPos(pos)
                 ]);

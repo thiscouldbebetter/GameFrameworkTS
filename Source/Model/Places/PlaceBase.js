@@ -43,6 +43,9 @@ var ThisCouldBeBetter;
                 placesInAncestry.push(this);
                 return placesInAncestry;
             }
+            timerTicksSoFar() {
+                return this._timerTicksSoFar;
+            }
             size() {
                 return this._size;
             }
@@ -179,6 +182,7 @@ var ThisCouldBeBetter;
                 }
             }
             initialize(uwpe) {
+                this._timerTicksSoFar = 0;
                 uwpe.placeSet(this);
                 var world = uwpe.world;
                 var placeDefn = this.defn(world);
@@ -228,6 +232,7 @@ var ThisCouldBeBetter;
                         }
                     }
                 }
+                this._timerTicksSoFar++;
             }
             // Loadable.
             load(uwpe, callback) {

@@ -92,7 +92,7 @@ var ThisCouldBeBetter;
                     g.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     g.beginPath();
                     g.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.create()));
+                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords());
                     g.lineTo(drawPos.x, drawPos.y);
                     g.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -103,7 +103,7 @@ var ThisCouldBeBetter;
                     g.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     g.beginPath();
                     g.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords(GameFramework.Coords.create()));
+                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords());
                     g.lineTo(drawPos.x, drawPos.y);
                     g.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -162,10 +162,14 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < numberOfLines; i++) {
                     polarForLine.azimuthInTurns = GameFramework.NumberHelper.wrapToRangeMax(.75 + i / numberOfLines, 1);
                     polarForLine.radius = radiusInner;
-                    drawPos.overwriteWith(center).add(polarForLine.toCoords(offset));
+                    drawPos
+                        .overwriteWith(center)
+                        .add(polarForLine.overwriteCoords(offset));
                     g.moveTo(drawPos.x, drawPos.y);
                     polarForLine.radius = radiusOuter;
-                    drawPos.overwriteWith(center).add(polarForLine.toCoords(offset));
+                    drawPos
+                        .overwriteWith(center)
+                        .add(polarForLine.overwriteCoords(offset));
                     g.lineTo(drawPos.x, drawPos.y);
                 }
                 g.stroke();
@@ -428,30 +432,31 @@ var ThisCouldBeBetter;
                 return stringTrimmed;
             }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {
+                var g = this.graphics;
                 var drawPos = this._drawPos.overwriteWith(center);
                 var angleStartInRadians = angleStartInTurns * Display2D.RadiansPerTurn;
                 var angleStopInRadians = angleStopInTurns * Display2D.RadiansPerTurn;
                 if (colorFill != null) {
-                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
-                    this.graphics.beginPath();
-                    this.graphics.moveTo(center.x, center.y);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords(GameFramework.Coords.create()));
-                    this.graphics.lineTo(drawPos.x, drawPos.y);
-                    this.graphics.arc(center.x, center.y, radius, angleStopInRadians, angleStartInRadians, true // counterclockwise
+                    g.fillStyle = GameFramework.Color.systemColorGet(colorFill);
+                    g.beginPath();
+                    g.moveTo(center.x, center.y);
+                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords());
+                    g.lineTo(drawPos.x, drawPos.y);
+                    g.arc(center.x, center.y, radius, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
-                    this.graphics.closePath();
-                    this.graphics.fill();
+                    g.closePath();
+                    g.fill();
                 }
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
-                    this.graphics.beginPath();
-                    this.graphics.moveTo(center.x, center.y);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords(GameFramework.Coords.create()));
-                    this.graphics.lineTo(drawPos.x, drawPos.y);
-                    this.graphics.arc(center.x, center.y, radius, angleStopInRadians, angleStartInRadians, true // counterclockwise
+                    g.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
+                    g.beginPath();
+                    g.moveTo(center.x, center.y);
+                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords());
+                    g.lineTo(drawPos.x, drawPos.y);
+                    g.arc(center.x, center.y, radius, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
-                    this.graphics.closePath();
-                    this.graphics.stroke();
+                    g.closePath();
+                    g.stroke();
                 }
             }
             eraseModeSet(value) {
