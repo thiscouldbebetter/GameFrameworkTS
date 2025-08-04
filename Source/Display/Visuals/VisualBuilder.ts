@@ -1183,7 +1183,7 @@ export class VisualBuilder
 		) as VisualGroup;
 
 		var ticksPerFrame = 3;
-		var flameVisual = VisualAnimation.fromNameTicksToHoldFrameAndFramesRepeating
+		var flameVisual = VisualAnimation.fromNameTicksToHoldFramesAndFramesRepeating
 		(
 			"Flame", // name
 			[ ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame ],

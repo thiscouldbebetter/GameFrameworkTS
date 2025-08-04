@@ -15,6 +15,14 @@ export class JournalEntry
 		this.body = body;
 	}
 
+	static fromTickTitleAndBody
+	(
+		tickRecorded: number, title: string, body: string
+	): JournalEntry
+	{
+		return new JournalEntry(tickRecorded, title, body);
+	}
+
 	timeRecordedAsStringH_M_S(universe: Universe): string
 	{
 		return universe.timerHelper.ticksToStringH_M_S(this.tickRecorded)

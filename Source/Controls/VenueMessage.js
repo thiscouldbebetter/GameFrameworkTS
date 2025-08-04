@@ -25,6 +25,9 @@ var ThisCouldBeBetter;
             static fromMessageAndAcknowledge(messageToShow, acknowledge) {
                 return new VenueMessage(messageToShow, acknowledge, null, null, null);
             }
+            static fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly) {
+                return new VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly);
+            }
             static fromText(text) {
                 return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text));
             }

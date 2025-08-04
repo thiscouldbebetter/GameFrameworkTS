@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this.socketDefnsByName =
                     GameFramework.ArrayHelper.addLookupsByName(this.socketDefns);
             }
+            static fromNameAndSocketDefns(name, socketDefns) {
+                return new EquipmentSocketDefnGroup(name, socketDefns);
+            }
             static default() {
                 return new EquipmentSocketDefnGroup("DefaultSocketDefnGroup", [] // socketDefns
                 );

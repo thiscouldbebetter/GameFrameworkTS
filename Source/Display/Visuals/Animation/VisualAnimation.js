@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                     this.ticksToComplete += this.ticksToHoldFrames[f];
                 }
             }
-            static fromNameTicksToHoldFrameAndFramesRepeating(name, ticksToHoldFrames, frames) {
+            static fromNameTicksToHoldFramesAndFramesRepeating(name, ticksToHoldFrames, frames) {
                 return new VisualAnimation(name, ticksToHoldFrames, frames, true);
             }
             static fromTicksToHoldFramesAndFramesRepeating(ticksToHoldFrames, frames) {

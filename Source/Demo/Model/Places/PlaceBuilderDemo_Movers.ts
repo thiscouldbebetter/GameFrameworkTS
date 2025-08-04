@@ -184,9 +184,10 @@ class PlaceBuilderDemo_Movers
 			}
 		};
 
-		var carnivoreActivityDefn = new ActivityDefn("Carnivore", carnivoreActivityPerform);
+		var carnivoreActivityDefn =
+			ActivityDefn.fromNameAndPerform("Carnivore", carnivoreActivityPerform);
 		this.parent.activityDefns.push(carnivoreActivityDefn);
-		var carnivoreActivity = new Activity(carnivoreActivityDefn.name, null);
+		var carnivoreActivity = Activity.fromDefnName(carnivoreActivityDefn.name);
 
 		var carnivoreDie = (uwpe: UniverseWorldPlaceEntities) => // die
 		{
@@ -200,11 +201,11 @@ class PlaceBuilderDemo_Movers
 		var carnivoreCollidable =
 			Collidable.fromCollider(carnivoreCollider);
 
-		var carnivoreEntityDefn = new Entity
+		var carnivoreEntityDefn = Entity.fromNameAndProperties
 		(
 			"Carnivore",
 			[
-				new Actor(carnivoreActivity),
+				Actor.fromActivity(carnivoreActivity),
 				Animatable2.create(),
 				Boundable.fromCollidable(carnivoreCollidable),
 				carnivoreCollidable,
@@ -240,7 +241,7 @@ class PlaceBuilderDemo_Movers
 			(enemyVisual as VisualGroup).children[1] as VisualAnchor;
 		var enemyVisualBodyPolygon = enemyVisualBody.child as VisualPolygon;
 		var enemyVertices = enemyVisualBodyPolygon.verticesAsPath.points;
-		var enemyColliderAsFace = new Face(enemyVertices);
+		var enemyColliderAsFace = Face.fromVertices(enemyVertices);
 		var enemyCollider = Mesh.fromFace
 		(
 			Coords.create(), // center
@@ -250,7 +251,7 @@ class PlaceBuilderDemo_Movers
 
 		var enemyActivityDefn = Enemy.activityDefnBuild();
 		this.parent.activityDefns.push(enemyActivityDefn);
-		var enemyActivity = new Activity(enemyActivityDefn.name, null);
+		var enemyActivity = Activity.fromDefnName(enemyActivityDefn.name);
 
 		var enemyDamageApply = (uwpe: UniverseWorldPlaceEntities, damageToApply: Damage) =>
 		{
@@ -361,14 +362,14 @@ class PlaceBuilderDemo_Movers
 			integrityMax, enemyDamageApply, enemyDie
 		);
 
-		var enemyPerceptor = new Perceptor
+		var enemyPerceptor = Perceptor.fromThresholdsSightAndHearing
 		(
 			1, // sightThreshold
 			1 // hearingThreshold
 		);
 
 		// todo - Remove closures.
-		var enemyEntityPrototype = new Entity
+		var enemyEntityPrototype = Entity.fromNameAndProperties
 		(
 			enemyTypeName + (damageTypeName || "Normal"),
 			[
@@ -408,7 +409,8 @@ class PlaceBuilderDemo_Movers
 				if (targetEntity == null)
 				{
 					var ticksToDelay = 200;
-					targetEntity = new Ephemeral(ticksToDelay, null).toEntity(); // hack
+					targetEntity =
+						Ephemeral.fromTicksToLive(ticksToDelay).toEntity(); // hack
 				}
 
 				var targetEphemeral = Ephemeral.of(targetEntity);
@@ -428,12 +430,12 @@ class PlaceBuilderDemo_Movers
 				var enemyEntityToPlace = enemyEntityPrototype.clone();
 
 				var placeSizeHalf = place.size().clone().half();
-				var directionFromCenter = new Polar
+				var directionFromCenter = Polar.fromAzimuthInTurns
 				(
-					universe.randomizer.fraction(), 1, 0
+					universe.randomizer.fraction()
 				);
 				var offsetFromCenter =
-					directionFromCenter.toCoords(Coords.create()).multiply
+					directionFromCenter.toCoords().multiply
 					(
 						placeSizeHalf
 					).double();
@@ -455,19 +457,19 @@ class PlaceBuilderDemo_Movers
 			}
 		};
 
-		var generatorActivityDefn = new ActivityDefn
+		var generatorActivityDefn = ActivityDefn.fromNameAndPerform
 		(
 			"Generate" + enemyEntityPrototype.name,
 			generatorActivityPerform
 		);
 		this.parent.activityDefns.push(generatorActivityDefn);
-		var generatorActivity = new Activity(generatorActivityDefn.name, null);
+		var generatorActivity = Activity.fromDefnName(generatorActivityDefn.name);
 
-		var enemyGeneratorEntityDefn = new Entity
+		var enemyGeneratorEntityDefn = Entity.fromNameAndProperties
 		(
 			"EnemyGenerator" + enemyEntityPrototype.name,
 			[
-				new Actor(generatorActivity)
+				Actor.fromActivity(generatorActivity)
 			]
 		);
 
@@ -497,7 +499,7 @@ class PlaceBuilderDemo_Movers
 			enemyColor = colors.Yellow;
 		}
 		var visualEyeRadius = this.entityDimension * .75 / 2;
-		var visualBuilder = new VisualBuilder();
+		var visualBuilder = VisualBuilder.Instance();
 		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
 
 		var enemyDimension = this.entityDimension * 2;
@@ -511,7 +513,7 @@ class PlaceBuilderDemo_Movers
 		];
 		enemyVertices.forEach(x => x.multiplyScalar(enemyDimension).half())
 
-		var enemyVisualArm = new VisualPolars
+		var enemyVisualArm = VisualPolars.fromPolarsColorAndLineThickness
 		(
 			[ new Polar(0, enemyDimension, 0) ],
 			enemyColor,
@@ -521,16 +523,15 @@ class PlaceBuilderDemo_Movers
 		var visualEyesBlinkingWithBrows = VisualGroup.fromChildren
 		([
 			visualEyesBlinking,
-			new VisualPath
+			VisualPath.fromPathColorAndThicknessOpen
 			(
-				new Path
+				Path.fromPoints
 				([
 					// todo - Scale.
 					Coords.fromXY(-8, -8), Coords.create(), Coords.fromXY(8, -8)
 				]),
 				colors.GrayDark,
-				3, // lineThickness
-				null
+				3 // lineThickness
 			),
 		]);
 
@@ -542,34 +543,34 @@ class PlaceBuilderDemo_Movers
 			Coords.fromXY(0, -1)
 		];
 
-		var visualEyesWithBrowsDirectional = new VisualDirectional
-		(
-			visualEyesBlinking, // visualForNoDirection
-			offsets.map
+		var visualEyesWithBrowsDirectional =
+			VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections
 			(
-				offset => VisualOffset.fromOffsetAndChild
+				visualEyesBlinking, // visualForNoDirection
+				offsets.map
 				(
-					offset.multiplyScalar(visualEyeRadius),
-					visualEyesBlinkingWithBrows
+					offset => VisualOffset.fromOffsetAndChild
+					(
+						offset.multiplyScalar(visualEyeRadius),
+						visualEyesBlinkingWithBrows
+					)
 				)
-			),
-			null
-		);
+			);
 
-		var visualEffect = new VisualAnchor
+		var visualEffect = VisualAnchor.fromChildAndOrientationToAnchorAt
 		(
-			new VisualDynamic
+			VisualDynamic.fromVisualGet
 			(
 				(uwpe: UniverseWorldPlaceEntities) =>
 					Effectable.of(uwpe.entity).effectsAsVisual()
 			),
-			null, Orientation.Instances().ForwardXDownZ
+			Orientation.Instances().ForwardXDownZ
 		);
 
 		var visualStatusInfo = VisualOffset.fromOffsetAndChild
 		(
 			Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
-			new VisualStack
+			VisualStack.fromSpacingAndChildren
 			(
 				Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
 				[
@@ -578,7 +579,7 @@ class PlaceBuilderDemo_Movers
 			)
 		);
 
-		var visualBody = new VisualAnchor
+		var visualBody = VisualAnchor.fromChildAndOrientationToAnchorAt
 		(
 			VisualPolygon.fromPathAndColorsFillAndBorder
 			(
@@ -586,11 +587,10 @@ class PlaceBuilderDemo_Movers
 				enemyColor,
 				colors.Red // colorBorder
 			),
-			null, // posToAnchorAt
 			Orientation.Instances().ForwardXDownZ.clone()
 		);
 
-		var visualArms = new VisualDirectional
+		var visualArms = VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections
 		(
 			new VisualNone(),
 			[
@@ -605,8 +605,7 @@ class PlaceBuilderDemo_Movers
 						Coords.fromXY(enemyDimension / 4, 0), enemyVisualArm
 					)
 				])
-			],
-			null
+			]
 		);
 
 		var enemyVisual = VisualGroup.fromChildren
@@ -680,7 +679,7 @@ class PlaceBuilderDemo_Movers
 		var speedMax = 1;
 		var sizeTopAsFractionOfBottom = 0;
 		var integrityMax = 20;
-		var entityProjectile = new Entity
+		var entityProjectile = Entity.fromNameAndProperties
 		(
 			"Projectile",
 			[
@@ -755,19 +754,17 @@ class PlaceBuilderDemo_Movers
 		);
 
 		var visualEyeRadius = this.entityDimension * .75 / 2;
-		var visualBuilder = new VisualBuilder();
+		var visualBuilder = VisualBuilder.Instance();
 		var visualEyesBlinking = visualBuilder.eyesBlinking(visualEyeRadius);
 
 		var friendlyVisualNormal = VisualGroup.fromChildren
 		([
-			new VisualEllipse
+			VisualEllipse.fromSemiaxesRotationAndColorFill
 			(
 				friendlyDimension, // semimajorAxis
-				friendlyDimension * .8,
+				friendlyDimension * .8, // semiminorAxis
 				.25, // rotationInTurns
-				friendlyColor,
-				null, // colorBorder
-				false // shouldUseEntityOrientation
+				friendlyColor
 			),
 
 			VisualOffset.fromOffsetAndChild
@@ -779,28 +776,27 @@ class PlaceBuilderDemo_Movers
 			VisualOffset.fromOffsetAndChild
 			(
 				Coords.fromXY(0, friendlyDimension / 3), // offset
-				new VisualArc
+				VisualArc.fromRadiiDirectionAngleSpannedAndColor
 				(
 					friendlyDimension / 2, // radiusOuter
 					0, // radiusInner
 					Coords.fromXY(1, 0), // directionMin
 					.5, // angleSpannedInTurns
-					colors.White,
-					null // todo
+					colors.White
 				)
 			)
 		]);
 
 		var friendlyVisualGroup = VisualGroup.fromChildren
 		([
-			new VisualAnimation
+			VisualAnimation.fromNameTicksToHoldFramesAndFramesRepeating
 			(
 				"Friendly",
 				[ 100, 100 ], // ticksToHoldFrames
 				// children
 				[
 					// todo - Fix blinking.
-					new VisualAnimation
+					VisualAnimation.fromNameTicksToHoldFramesAndFramesRepeating
 					(
 						"Blinking",
 						[ 5 ],// , 5 ], // ticksToHoldFrames
@@ -808,13 +804,11 @@ class PlaceBuilderDemo_Movers
 						(
 							//new VisualNone(),
 							friendlyVisualNormal
-						),
-						null
+						)
 					),
 
 					friendlyVisualNormal
-				],
-				false // isRepeating
+				]
 			)
 		]);
 
@@ -823,9 +817,9 @@ class PlaceBuilderDemo_Movers
 			"Talker", friendlyColor, friendlyVisualGroup
 		);
 
-		var friendlyVisual = new VisualAnchor
+		var friendlyVisual = VisualAnchor.fromChildAndOrientationToAnchorAt
 		(
-			friendlyVisualGroup, null, Orientation.Instances().ForwardXDownZ
+			friendlyVisualGroup, Orientation.Instances().ForwardXDownZ
 		);
 
 		var friendlyActivityPerform = (uwpe: UniverseWorldPlaceEntities) =>
@@ -875,11 +869,11 @@ class PlaceBuilderDemo_Movers
 		};
 
 		var friendlyActivityDefn =
-			new ActivityDefn("Friendly", friendlyActivityPerform);
+			ActivityDefn.fromNameAndPerform("Friendly", friendlyActivityPerform);
 		this.parent.activityDefns.push(friendlyActivityDefn);
-		var friendlyActivity = new Activity(friendlyActivityDefn.name, null);
+		var friendlyActivity = Activity.fromDefnName(friendlyActivityDefn.name);
 
-		var actor = new Actor(friendlyActivity);
+		var actor = Actor.fromActivity(friendlyActivity);
 
 		var itemHolder = ItemHolder.fromItems
 		(
@@ -893,13 +887,11 @@ class PlaceBuilderDemo_Movers
 			]
 		);
 
-		var route = new Route
+		var route = Route.fromNeighborOffsets
 		(
-			Direction.Instances()._ByHeading, // neighborOffsets
-			null, // bounds
-			null, null, null
+			Direction.Instances()._ByHeading
 		);
-		var routable = new Routable(route);
+		var routable = Routable.fromRoute(route);
 
 		var friendlyEntityDefn = Entity.fromNameAndProperties
 		(
@@ -935,7 +927,7 @@ class PlaceBuilderDemo_Movers
 		var grazerCollider = Sphere.fromRadius(grazerDimension);
 
 		var visualEyeRadius = this.entityDimension * .75 / 2;
-		var visualBuilder = new VisualBuilder();
+		var visualBuilder = VisualBuilder.Instance();
 		var visualEyes = visualBuilder.eyesBlinking(visualEyeRadius);
 
 		var voe = (x:number, y: number) =>
@@ -945,7 +937,7 @@ class PlaceBuilderDemo_Movers
 				visualEyes
 			);
 
-		var visualEyesDirectional = new VisualDirectional
+		var visualEyesDirectional = VisualDirectional.fromVisualForNoDirectionAndVisualsForDirections
 		(
 			visualEyes, // visualForNoDirection
 			[
@@ -953,12 +945,11 @@ class PlaceBuilderDemo_Movers
 				voe(0, 1),
 				voe(-1, 0),
 				voe(0, -1)
-			],
-			null
+			]
 		);
 
 		var grazerVisualBodyJuvenile =
-			new VisualEllipse
+			VisualEllipse.fromSemiaxesRotationColorsAndShouldUseEntityOri
 			(
 				grazerDimension * .75, // semimajorAxis
 				grazerDimension * .6,
@@ -973,7 +964,7 @@ class PlaceBuilderDemo_Movers
 		]);
 
 		var grazerVisualBodyAdult =
-			new VisualEllipse
+			VisualEllipse.fromSemiaxesRotationColorsAndShouldUseEntityOri
 			(
 				grazerDimension, // semimajorAxis
 				grazerDimension * .8,
@@ -988,7 +979,7 @@ class PlaceBuilderDemo_Movers
 		]);
 
 		var grazerVisualBodyElder =
-			new VisualEllipse
+			VisualEllipse.fromSemiaxesRotationColorsAndShouldUseEntityOri
 			(
 				grazerDimension, // semimajorAxis
 				grazerDimension * .8,
@@ -1003,7 +994,7 @@ class PlaceBuilderDemo_Movers
 		]);
 
 		var grazerVisualDead =
-			new VisualEllipse
+			VisualEllipse.fromSemiaxesRotationColorsAndShouldUseEntityOri
 			(
 				grazerDimension, // semimajorAxis
 				grazerDimension * .8,
@@ -1013,7 +1004,7 @@ class PlaceBuilderDemo_Movers
 				true // shouldUseEntityOrientation
 			);
 
-		var grazerVisualSelect = new VisualSelect
+		var grazerVisualSelect = VisualSelect.fromChildrenByNameAndSelectChildNames
 		(
 			new Map<string,VisualBase>
 			([
@@ -1116,9 +1107,9 @@ class PlaceBuilderDemo_Movers
 			}
 		};
 
-		var grazerActivityDefn = new ActivityDefn("Grazer", grazerActivityPerform);
+		var grazerActivityDefn = ActivityDefn.fromNameAndPerform("Grazer", grazerActivityPerform);
 		this.parent.activityDefns.push(grazerActivityDefn);
-		var grazerActivity = new Activity(grazerActivityDefn.name, null);
+		var grazerActivity = Activity.fromDefnName(grazerActivityDefn.name);
 
 		var grazerDie = (uwpe: UniverseWorldPlaceEntities) => // die
 		{
@@ -1129,30 +1120,28 @@ class PlaceBuilderDemo_Movers
 			);
 		};
 
-		var grazerPhased = new Phased
+		var grazerPhased = Phased.fromPhases
 		(
-			0, // phaseCurrentIndex
-			0, // ticksOnPhaseCurrent
 			[
-				new Phase
+				Phase.fromNameTicksAndEnter
 				(
 					"Juvenile",
 					500, // durationInTicks
 					(uwpe: UniverseWorldPlaceEntities) => {}
 				),
-				new Phase
+				Phase.fromNameTicksAndEnter
 				(
 					"Adult",
 					2500, // durationInTicks
 					(uwpe: UniverseWorldPlaceEntities) => {}
 				),
-				new Phase
+				Phase.fromNameTicksAndEnter
 				(
 					"Elder",
 					1000, // durationInTicks
 					(uwpe: UniverseWorldPlaceEntities) => {}
 				),
-				new Phase
+				Phase.fromNameTicksAndEnter
 				(
 					"Dead",
 					301, // durationInTicks
@@ -1217,21 +1206,21 @@ class PlaceBuilderDemo_Movers
 		var equipmentUser =
 			this.entityDefnBuildPlayer_EquipmentUser();
 
-		var journal = new Journal
+		var journal = Journal.fromEntries
 		([
-			new JournalEntry
+			JournalEntry.fromTickTitleAndBody
 			(
 				0,
 				"First Entry",
 				"I started a journal.  We'll see how it goes."
 			),
 		]);
-		var journalKeeper = new JournalKeeper(journal);
+		var journalKeeper = JournalKeeper.fromJournal(journal);
 
-		var itemHolder = new ItemHolder
+		var itemHolder = ItemHolder.fromItemsWeightMaxReachRadiusAndRetainZeroes
 		(
 			[
-				new Item("Coin", 100),
+				Item.fromDefnNameAndQuantity("Coin", 100),
 			],
 			100, // weightMax
 			20, // reachRadius
@@ -1240,7 +1229,7 @@ class PlaceBuilderDemo_Movers
 
 		var killable = this.entityDefnBuildPlayer_Killable();
 
-		var starvable = new Starvable
+		var starvable = Starvable.fromSatietyMaxSatietyToLosePerTickAndStarve
 		(
 			100, // satietyMax
 			.001, // satietyToLosePerTick
@@ -1250,7 +1239,7 @@ class PlaceBuilderDemo_Movers
 			}
 		);
 
-		var tirable = new Tirable
+		var tirable = Tirable.fromStaminaMaxRecoveredLostRecoveredAndFallAsleep
 		(
 			100, // staminaMaxAfterSleep
 			.1, // staminaRecoveredPerTick
@@ -1299,7 +1288,7 @@ class PlaceBuilderDemo_Movers
 		);
 		this.parent.activityDefns.push(playerActivityDefn);
 		var playerActivity = Activity.fromDefnName(playerActivityDefn.name);
-		var actor = new Actor(playerActivity);
+		var actor = Actor.fromActivity(playerActivity);
 
 		var playerActivityWaitPerform = (uwpe: UniverseWorldPlaceEntities) =>
 		{
@@ -1345,10 +1334,11 @@ class PlaceBuilderDemo_Movers
 				}
 			}
 		};
-		var playerActivityDefnWait = new ActivityDefn("Wait", playerActivityWaitPerform);
+		var playerActivityDefnWait =
+			ActivityDefn.fromNameAndPerform("Wait", playerActivityWaitPerform);
 		this.parent.activityDefns.push(playerActivityDefnWait);
 
-		var perceptible = new Perceptible
+		var perceptible = Perceptible.fromHidingVisibilityGetAndAudibilityGet
 		(
 			false, // hiding
 			(uwpe: UniverseWorldPlaceEntities) => 150, // visibility
@@ -1359,7 +1349,7 @@ class PlaceBuilderDemo_Movers
 		var drawable = Drawable.fromVisual(playerVisual);
 		var effectable = Effectable.default();
 		var locatable = Locatable.create();
-		var playable = new Playable();
+		var playable = Playable.create();
 		var selector = Selector.default();
 		var skillLearner = SkillLearner.default();
 
@@ -1428,14 +1418,14 @@ class PlaceBuilderDemo_Movers
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{
 				var itemDefnKeyName = "Key";
-				var keysRequired = new Item
+				var keysRequired = Item.fromDefnNameAndQuantity
 				(
 					itemDefnKeyName,
 					(entityOther.propertiesByName.get(Goal.name) as Goal).numberOfKeysToUnlock
 				);
 				if (ItemHolder.of(entityPlayer).hasItem(keysRequired))
 				{
-					var venueMessage = new VenueMessage
+					var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly
 					(
 						DataBinding.fromContext("You win!"),
 						() => // acknowledge
@@ -1473,10 +1463,10 @@ class PlaceBuilderDemo_Movers
 
 	entityBuildDefnPlayer_Constrainable(): Constrainable
 	{
-		var constrainable = new Constrainable
+		var constrainable = Constrainable.fromConstraints
 		([
-			new Constraint_Gravity(Coords.zeroZeroOne()),
-			new Constraint_ContainInHemispace
+			Constraint_Gravity.fromAccelerationPerTick(Coords.zeroZeroOne()),
+			Constraint_ContainInHemispace.fromHemispace
 			(
 				Hemispace.fromPlane
 				(
@@ -1487,11 +1477,11 @@ class PlaceBuilderDemo_Movers
 					)
 				)
 			),
-			new Constraint_Conditional
+			Constraint_Conditional.fromShouldChildApplyAndChild
 			(
 				(uwpe: UniverseWorldPlaceEntities) =>
 					(Locatable.of(uwpe.entity).loc.pos.z >= 0),
-				new Constraint_FrictionXY(.03, .5)
+				Constraint_FrictionXY.fromTargetAndSpeedBelowWhichToStop(.03, .5)
 			),
 		]);
 
@@ -1524,7 +1514,7 @@ class PlaceBuilderDemo_Movers
 				return returnValue;
 			}
 
-		var controllable = new Controllable(toControl);
+		var controllable = Controllable.fromToControl(toControl);
 
 		return controllable;
 	}
@@ -1536,9 +1526,10 @@ class PlaceBuilderDemo_Movers
 			"Consumable"
 		];
 
-		var eqd = (a: string, b: string[]) => new EquipmentSocketDefn(a, b);
+		var eqd = (a: string, b: string[]) =>
+			EquipmentSocketDefn.fromNameAndCategoriesAllowedNames(a, b);
 
-		var equipmentSocketDefnGroup = new EquipmentSocketDefnGroup
+		var equipmentSocketDefnGroup = EquipmentSocketDefnGroup.fromNameAndSocketDefns
 		(
 			"Equippable",
 			[
@@ -1559,7 +1550,8 @@ class PlaceBuilderDemo_Movers
 			]
 		);
 
-		var equipmentUser = new EquipmentUser(equipmentSocketDefnGroup);
+		var equipmentUser =
+			EquipmentUser.fromSocketDefnGroup(equipmentSocketDefnGroup);
 
 		return equipmentUser;
 	}
@@ -1607,7 +1599,7 @@ class PlaceBuilderDemo_Movers
 			(uwpe: UniverseWorldPlaceEntities) => // die
 			{
 				var universe = uwpe.universe;
-				var venueMessage = new VenueMessage
+				var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly
 				(
 					DataBinding.fromContext("You lose!"),
 					() => // acknowledge
@@ -1710,7 +1702,7 @@ class PlaceBuilderDemo_Movers
 	{
 		var headLength = 12; // todo
 
-		var visualBuilder = new VisualBuilder();
+		var visualBuilder = VisualBuilder.Instance();
 		var colors = Color.Instances();
 		var bodyColor = colors.Gray;
 
@@ -1732,7 +1724,7 @@ class PlaceBuilderDemo_Movers
 				headLength
 			);
 
-		var bodyHidable = new VisualSelect
+		var bodyHidable = VisualSelect.fromChildrenByNameAndSelectChildNames
 		(
 			// childrenByName
 			new Map<string, VisualBase>
@@ -1749,26 +1741,24 @@ class PlaceBuilderDemo_Movers
 
 		var shadowWidth = headLength;
 
-		var bodyJumpable = new VisualJump2D
+		var bodyJumpable = VisualJump2D.fromVisualsForBodyAndShadow
 		(
 			bodyHidable,
-			// visualShadow
-			new VisualEllipse
+			VisualEllipse.fromSemiaxesRotationColorsAndShouldUseEntityOri
 			(
 				shadowWidth,
 				shadowWidth / 2, 0,
 				colors.GrayDark,
 				colors.Black,
 				false // shouldUseEntityOrientation
-			),
-			null
+			)
 		);
 
 		var statusBarSize = Coords.fromXY
 		(
 			this.entityDimension * 3, this.entityDimension * 0.8
 		);
-		var healthBar = new VisualBar
+		var healthBar = VisualBar.fromAbbrevSizeColorCurrentThresholdAndMax
 		(
 			"H", // abbreviation
 			statusBarSize,
@@ -1776,12 +1766,9 @@ class PlaceBuilderDemo_Movers
 			DataBinding.fromGet( (c: Entity) => Killable.of(c).integrity ),
 			null, // amountThreshold
 			DataBinding.fromGet( (c: Entity) => Killable.of(c).integrityMax ),
-			1, // fractionBelowWhichToShow
-			null, // colorForBorderAsValueBreakGroup
-			null // text
 		);
 
-		var satietyBar = new VisualBar
+		var satietyBar = VisualBar.fromAbbrevSizeColorCurrentThresholdMaxFractionColorText
 		(
 			"F", // abbreviation
 			statusBarSize,
@@ -1800,14 +1787,14 @@ class PlaceBuilderDemo_Movers
 			null // text
 		);
 
-		var visualEffect = new VisualAnchor
+		var visualEffect = VisualAnchor.fromChildAndOrientationToAnchorAt
 		(
-			new VisualDynamic
+			VisualDynamic.fromVisualGet
 			(
 				(uwpe: UniverseWorldPlaceEntities) =>
 					Effectable.of(uwpe.entity).effectsAsVisual()
 			),
-			null, Orientation.Instances().ForwardXDownZ
+			Orientation.Instances().ForwardXDownZ
 		);
 
 		var visualsForStatusInfo: VisualBase[] =
@@ -1832,7 +1819,7 @@ class PlaceBuilderDemo_Movers
 		var visualStatusInfo = VisualOffset.fromOffsetAndChild
 		(
 			Coords.fromXY(0, 0 - this.entityDimension * 2), // offset
-			new VisualStack
+			VisualStack.fromSpacingAndChildren
 			(
 				Coords.fromXY(0, 0 - this.entityDimension), // childSpacing
 				visualsForStatusInfo

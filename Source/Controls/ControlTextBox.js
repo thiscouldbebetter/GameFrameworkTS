@@ -17,19 +17,21 @@ var ThisCouldBeBetter;
                 this._textMargin = GameFramework.Coords.create();
                 this._textSize = GameFramework.Coords.create();
             }
-            text(value) {
-                if (value != null) {
-                    this._text.set(value);
-                }
+            text() {
                 return this._text.get();
+            }
+            textSet(value) {
+                this._text.set(value);
+                return this;
             }
             // events
             actionHandle(actionNameToHandle, universe) {
-                var text = this.text(null);
+                var text = this.text();
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 if (actionNameToHandle == controlActionNames.ControlCancel
                     || actionNameToHandle == GameFramework.Input.Instances().Backspace.name) {
-                    this.text(text.substr(0, text.length - 1));
+                    text = text.substr(0, text.length - 1);
+                    this.textSet(text);
                     this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
                 }
                 else if (actionNameToHandle == controlActionNames.ControlConfirm) {
@@ -60,7 +62,7 @@ var ThisCouldBeBetter;
                     var textEdited = text.substr(0, this.cursorPos)
                         + charAtCursor
                         + text.substr(this.cursorPos + 1);
-                    this.text(textEdited);
+                    this.textSet(textEdited);
                 }
                 else if (actionNameToHandle.length == 1) {
                     // Printable character.
@@ -69,7 +71,8 @@ var ThisCouldBeBetter;
                         var textEdited = text.substr(0, this.cursorPos)
                             + actionNameToHandle
                             + text.substr(this.cursorPos);
-                        text = this.text(textEdited);
+                        this.textSet(textEdited);
+                        text = this.text();
                         this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
                     }
                 }
@@ -77,7 +80,7 @@ var ThisCouldBeBetter;
             }
             focusGain() {
                 this.isHighlighted = true;
-                this.cursorPos = this.text(null).length;
+                this.cursorPos = this.text().length;
             }
             focusLose() {
                 this.isHighlighted = false;
@@ -104,7 +107,7 @@ var ThisCouldBeBetter;
                 var fontHeightInPixels = this.fontNameAndHeight.heightInPixels;
                 var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
                 var style = this.style(universe);
-                var text = this.text(null);
+                var text = this.text();
                 var textWidth = display.textWidthForFontHeight(text, fontHeightInPixels);
                 var textSize = this._textSize.overwriteWithDimensions(textWidth, fontHeightInPixels, 0);
                 var textMargin = this._textMargin.overwriteWith(this.size).subtract(textSize).half();

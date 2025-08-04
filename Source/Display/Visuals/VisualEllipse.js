@@ -21,6 +21,14 @@ var ThisCouldBeBetter;
             static fromSemiaxesHorizontalAndVerticalAndColorFill(semiaxisHorizontal, semiaxisVertical, colorFill) {
                 return new VisualEllipse(semiaxisHorizontal, semiaxisVertical, null, colorFill, null, null);
             }
+            static fromSemiaxesRotationAndColorFill(semiaxisHorizontal, semiaxisVertical, rotationInTurns, colorFill) {
+                return new VisualEllipse(semiaxisHorizontal, semiaxisVertical, rotationInTurns, colorFill, null, // colorBorder
+                null // shouldUseEntityOrientation
+                );
+            }
+            static fromSemiaxesRotationColorsAndShouldUseEntityOri(semiaxisHorizontal, semiaxisVertical, rotationInTurns, colorFill, colorBorder, shouldUseEntityOrientation) {
+                return new VisualEllipse(semiaxisHorizontal, semiaxisVertical, rotationInTurns, colorFill, colorBorder, shouldUseEntityOrientation);
+            }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.

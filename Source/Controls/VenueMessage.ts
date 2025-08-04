@@ -72,6 +72,18 @@ export class VenueMessage<TContext> implements Venue
 		return new VenueMessage<TContext>(messageToShow, acknowledge, null, null, null);
 	}
 
+	static fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly<TContext>
+	(
+		messageToShow: DataBinding<TContext, string>,
+		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
+		venuePrev: Venue,
+		sizeInPixels: Coords,
+		showMessageOnly: boolean
+	) : VenueMessage<TContext>
+	{
+		return new VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly);
+	}
+
 	static fromText<TContext>(text: string): VenueMessage<TContext>
 	{
 		return VenueMessage.fromMessage<TContext>

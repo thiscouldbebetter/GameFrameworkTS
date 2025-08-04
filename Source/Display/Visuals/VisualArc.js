@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
                 this._drawPos = GameFramework.Coords.create();
                 this._polar = GameFramework.Polar.create();
             }
+            static fromRadiiDirectionAngleSpannedAndColor(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, colorFill) {
+                return new VisualArc(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, colorFill, null);
+            }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.

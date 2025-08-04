@@ -64,6 +64,46 @@ export class VisualEllipse implements Visual<VisualEllipse>
 		)
 	}
 
+	static fromSemiaxesRotationAndColorFill
+	(
+		semiaxisHorizontal: number,
+		semiaxisVertical: number,
+		rotationInTurns: number,
+		colorFill: Color
+	): VisualEllipse
+	{
+		return new VisualEllipse
+		(
+			semiaxisHorizontal,
+			semiaxisVertical,
+			rotationInTurns,
+			colorFill,
+			null, // colorBorder
+			null // shouldUseEntityOrientation
+		);
+	}
+
+	static fromSemiaxesRotationColorsAndShouldUseEntityOri
+	(
+		semiaxisHorizontal: number,
+		semiaxisVertical: number,
+		rotationInTurns: number,
+		colorFill: Color,
+		colorBorder: Color,
+		shouldUseEntityOrientation: boolean
+	): VisualEllipse
+	{
+		return new VisualEllipse
+		(
+			semiaxisHorizontal,
+			semiaxisVertical,
+			rotationInTurns,
+			colorFill,
+			colorBorder,
+			shouldUseEntityOrientation
+		);
+	}
+
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void

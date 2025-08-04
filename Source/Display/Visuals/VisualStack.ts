@@ -17,6 +17,11 @@ export class VisualStack implements Visual<VisualStack>
 		this._posSaved = Coords.create();
 	}
 
+	static fromSpacingAndChildren(childSpacing: Coords, children: VisualBase[]): VisualStack
+	{
+		return new VisualStack(childSpacing, children);
+	}
+
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void

@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(journal) {
                 this.journal = journal;
             }
+            static fromJournal(journal) {
+                return new JournalKeeper(journal);
+            }
             static of(entity) {
                 return entity.propertyByName(JournalKeeper.name);
             }

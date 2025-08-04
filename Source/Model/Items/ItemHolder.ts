@@ -28,6 +28,23 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		this.itemsAdd(items || []);
 	}
 
+	static fromItemsWeightMaxReachRadiusAndRetainZeroes
+	(
+		items: Item[],
+		encumbranceMax: number,
+		reachRadius: number,
+		retainsItemsWithZeroQuantities: boolean
+	): ItemHolder
+	{
+		return new ItemHolder
+		(
+			items,
+			encumbranceMax,
+			reachRadius,
+			retainsItemsWithZeroQuantities
+		);
+	}
+
 	static create(): ItemHolder
 	{
 		return new ItemHolder(null, null, null, null);

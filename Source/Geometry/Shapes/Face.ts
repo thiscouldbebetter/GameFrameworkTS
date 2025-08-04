@@ -17,6 +17,11 @@ export class Face extends ShapeBase
 		this.vertices = vertices;
 	}
 
+	static fromVertices(vertices: Coords[]): Face
+	{
+		return new Face(vertices);
+	}
+
 	box(): BoxAxisAligned
 	{
 		if (this._box == null)

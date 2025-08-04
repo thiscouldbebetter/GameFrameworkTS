@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 // Helper variables.
                 this._orientationSaved = new GameFramework.Orientation(null, null);
             }
+            static fromOrientationAndChild(orientationToAnchorAt, child) {
+                return new VisualAnchorOrientation(orientationToAnchorAt, child);
+            }
             static fromChild(child) {
                 return new VisualAnchorOrientation(GameFramework.Orientation.default(), child);
             }

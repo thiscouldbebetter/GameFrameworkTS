@@ -13,14 +13,22 @@ export class VisualJump2D implements Visual<VisualJump2D>
 	constructor
 	(
 		visualJumper: VisualBase,
-		visualShadow: VisualBase,
-		cameraFactory: () => Camera
+		visualShadow: VisualBase
 	)
 	{
 		this.visualJumper = visualJumper;
 		this.visualShadow = visualShadow;
 
 		this._posSaved = Coords.create();
+	}
+
+	static fromVisualsForBodyAndShadow
+	(
+		visualJumper: VisualBase,
+		visualShadow: VisualBase
+	): VisualJump2D
+	{
+		return new VisualJump2D(visualJumper, visualShadow);
 	}
 
 	// Transformable.
@@ -82,8 +90,8 @@ export class VisualJump2D implements Visual<VisualJump2D>
 	{
 		return new VisualJump2D
 		(
-			this.visualJumper.clone(), this.visualShadow.clone(),
-			this.cameraFactory
+			this.visualJumper.clone(),
+			this.visualShadow.clone()
 		);
 	}
 

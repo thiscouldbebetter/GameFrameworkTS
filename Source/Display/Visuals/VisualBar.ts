@@ -46,6 +46,57 @@ export class VisualBar implements Visual<VisualBar>
 		this._sizeHalf = this.size.clone().half();
 	}
 
+	static fromAbbrevSizeColorCurrentThresholdAndMax
+	(
+		abbreviation: string,
+		size: Coords,
+		color: Color,
+		amountCurrent: DataBinding<Entity, number>,
+		amountThreshold: DataBinding<Entity, number>,
+		amountMax: DataBinding<Entity, number>
+	): VisualBar
+	{
+		return new VisualBar
+		(
+			abbreviation,
+			size,
+			color,
+			amountCurrent,
+			amountThreshold,
+			amountMax,
+			1, // fractionBelowWhichToShow,
+			null, // colorForBorderAsValueBreakGroup,
+			null // text
+		);
+	}
+
+	static fromAbbrevSizeColorCurrentThresholdMaxFractionColorText
+	(
+		abbreviation: string,
+		size: Coords,
+		color: Color,
+		amountCurrent: DataBinding<Entity, number>,
+		amountThreshold: DataBinding<Entity, number>,
+		amountMax: DataBinding<Entity, number>,
+		fractionBelowWhichToShow: number,
+		colorForBorderAsValueBreakGroup: ValueBreakGroup<Color>,
+		text: DataBinding<any, string>
+	): VisualBar
+	{
+		return new VisualBar
+		(
+			abbreviation,
+			size,
+			color,
+			amountCurrent,
+			amountThreshold,
+			amountMax,
+			fractionBelowWhichToShow,
+			colorForBorderAsValueBreakGroup,
+			text
+		);
+	}
+
 	static fromSizeColorAndBindingsForValueAndMax
 	(
 		size: Coords,

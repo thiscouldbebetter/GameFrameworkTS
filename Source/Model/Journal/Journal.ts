@@ -10,6 +10,11 @@ export class Journal
 	{
 		this.entries = entries;
 	}
+
+	static fromEntries(entries: JournalEntry[]): Journal
+	{
+		return new Journal(entries);
+	}
 }
 
 }

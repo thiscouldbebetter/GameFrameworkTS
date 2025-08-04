@@ -5,8 +5,8 @@ namespace ThisCouldBeBetter.GameFramework
 export class Perceptible implements EntityProperty<Perceptible>
 {
 	isHiding: boolean;
-	visibility: (uwpe: UniverseWorldPlaceEntities) => number;
-	audibility: (uwpe: UniverseWorldPlaceEntities) => number;
+	_visibilityGet: (uwpe: UniverseWorldPlaceEntities) => number;
+	_audibilityGet: (uwpe: UniverseWorldPlaceEntities) => number;
 
 	_displacement: Coords;
 	_isHidingPrev: boolean;
@@ -14,16 +14,26 @@ export class Perceptible implements EntityProperty<Perceptible>
 	constructor
 	(
 		isHiding: boolean,
-		visibility: (uwpe: UniverseWorldPlaceEntities) => number,
-		audibility: (uwpe: UniverseWorldPlaceEntities) => number
+		visibilityGet: (uwpe: UniverseWorldPlaceEntities) => number,
+		audibilityGet: (uwpe: UniverseWorldPlaceEntities) => number
 	)
 	{
 		this.isHiding = isHiding;
-		this.visibility = visibility;
-		this.audibility = audibility;
+		this._visibilityGet = visibilityGet;
+		this._audibilityGet = audibilityGet;
 
 		this._displacement = Coords.create();
 		this._isHidingPrev = null;
+	}
+
+	static fromHidingVisibilityGetAndAudibilityGet
+	(
+		isHiding: boolean,
+		visibilityGet: (uwpe: UniverseWorldPlaceEntities) => number,
+		audibilityGet: (uwpe: UniverseWorldPlaceEntities) => number
+	)
+	{
+		return new Perceptible(isHiding, visibilityGet, audibilityGet);
 	}
 
 	static default(): Perceptible
@@ -34,6 +44,11 @@ export class Perceptible implements EntityProperty<Perceptible>
 	static of(entity: Entity): Perceptible
 	{
 		return entity.propertyByName(Perceptible.name) as Perceptible;
+	}
+
+	audibility(uwpe: UniverseWorldPlaceEntities): number
+	{
+		return this._audibilityGet(uwpe);
 	}
 
 	canBeSeen(uwpe: UniverseWorldPlaceEntities): boolean
@@ -82,6 +97,11 @@ export class Perceptible implements EntityProperty<Perceptible>
 		var hearingThreshold = Perceptor.of(entityPerceptor).hearingThreshold;
 		var isInHearing = (audibilityAdjusted >= hearingThreshold);
 		return isInHearing;
+	}
+
+	visibility(uwpe: UniverseWorldPlaceEntities): number
+	{
+		return this._visibilityGet(uwpe);
 	}
 
 	// EntityProperty.

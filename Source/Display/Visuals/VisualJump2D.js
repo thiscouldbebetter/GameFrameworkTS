@@ -4,10 +4,13 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualJump2D {
-            constructor(visualJumper, visualShadow, cameraFactory) {
+            constructor(visualJumper, visualShadow) {
                 this.visualJumper = visualJumper;
                 this.visualShadow = visualShadow;
                 this._posSaved = GameFramework.Coords.create();
+            }
+            static fromVisualsForBodyAndShadow(visualJumper, visualShadow) {
+                return new VisualJump2D(visualJumper, visualShadow);
             }
             // Transformable.
             transform(transformToApply) {
@@ -46,7 +49,7 @@ var ThisCouldBeBetter;
             }
             // Cloneable.
             clone() {
-                return new VisualJump2D(this.visualJumper.clone(), this.visualShadow.clone(), this.cameraFactory);
+                return new VisualJump2D(this.visualJumper.clone(), this.visualShadow.clone());
             }
             overwriteWith(other) {
                 this.visualJumper.overwriteWith(other.visualJumper);

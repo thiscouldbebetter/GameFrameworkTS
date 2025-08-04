@@ -25,6 +25,14 @@ export class VisualPolars implements Visual<VisualPolars>
 		this._toPos = Coords.create();
 	}
 
+	static fromPolarsColorAndLineThickness
+	(
+		polars: Polar[], color: Color, lineThickness: number
+	): VisualPolars
+	{
+		return new VisualPolars(polars, color, lineThickness);
+	}
+
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void

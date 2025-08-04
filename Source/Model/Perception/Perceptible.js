@@ -4,18 +4,24 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Perceptible {
-            constructor(isHiding, visibility, audibility) {
+            constructor(isHiding, visibilityGet, audibilityGet) {
                 this.isHiding = isHiding;
-                this.visibility = visibility;
-                this.audibility = audibility;
+                this._visibilityGet = visibilityGet;
+                this._audibilityGet = audibilityGet;
                 this._displacement = GameFramework.Coords.create();
                 this._isHidingPrev = null;
+            }
+            static fromHidingVisibilityGetAndAudibilityGet(isHiding, visibilityGet, audibilityGet) {
+                return new Perceptible(isHiding, visibilityGet, audibilityGet);
             }
             static default() {
                 return new Perceptible(false, () => 0, () => 0);
             }
             static of(entity) {
                 return entity.propertyByName(Perceptible.name);
+            }
+            audibility(uwpe) {
+                return this._audibilityGet(uwpe);
             }
             canBeSeen(uwpe) {
                 var entityPerceptible = uwpe.entity;
@@ -53,6 +59,9 @@ var ThisCouldBeBetter;
                 var hearingThreshold = GameFramework.Perceptor.of(entityPerceptor).hearingThreshold;
                 var isInHearing = (audibilityAdjusted >= hearingThreshold);
                 return isInHearing;
+            }
+            visibility(uwpe) {
+                return this._visibilityGet(uwpe);
             }
             // EntityProperty.
             finalize(uwpe) { }

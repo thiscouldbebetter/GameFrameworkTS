@@ -16,8 +16,12 @@ export class VisualArc implements Visual<VisualArc>
 
 	constructor
 	(
-		radiusOuter: number, radiusInner: number, directionMin: Coords,
-		angleSpannedInTurns: number, colorFill: Color, colorBorder: Color
+		radiusOuter: number,
+		radiusInner: number,
+		directionMin: Coords,
+		angleSpannedInTurns: number,
+		colorFill: Color,
+		colorBorder: Color
 	)
 	{
 		this.radiusOuter = radiusOuter;
@@ -31,6 +35,22 @@ export class VisualArc implements Visual<VisualArc>
 		this._drawPos = Coords.create();
 		this._polar = Polar.create();
 	}
+
+	static fromRadiiDirectionAngleSpannedAndColor
+	(
+		radiusOuter: number,
+		radiusInner: number,
+		directionMin: Coords,
+		angleSpannedInTurns: number,
+		colorFill: Color
+	): VisualArc
+	{
+		return new VisualArc
+		(
+			radiusOuter, radiusInner, directionMin, angleSpannedInTurns, colorFill, null
+		);
+	}
+
 
 	// Visual.
 

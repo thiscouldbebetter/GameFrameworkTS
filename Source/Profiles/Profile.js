@@ -383,7 +383,7 @@ var ThisCouldBeBetter;
                 var venueControls = universe.venueCurrent();
                 var controlRootAsContainer = venueControls.controlRoot;
                 var textBoxName = controlRootAsContainer.childByName("textBoxName");
-                var profileName = textBoxName.text(null);
+                var profileName = textBoxName.text();
                 if (profileName == "") {
                     return;
                 }

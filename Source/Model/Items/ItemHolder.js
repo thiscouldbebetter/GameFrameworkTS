@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
                 this.retainsItemsWithZeroQuantities = retainsItemsWithZeroQuantities || false;
                 this.itemsAdd(items || []);
             }
+            static fromItemsWeightMaxReachRadiusAndRetainZeroes(items, encumbranceMax, reachRadius, retainsItemsWithZeroQuantities) {
+                return new ItemHolder(items, encumbranceMax, reachRadius, retainsItemsWithZeroQuantities);
+            }
             static create() {
                 return new ItemHolder(null, null, null, null);
             }

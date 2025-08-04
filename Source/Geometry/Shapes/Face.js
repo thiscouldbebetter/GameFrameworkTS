@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 super();
                 this.vertices = vertices;
             }
+            static fromVertices(vertices) {
+                return new Face(vertices);
+            }
             box() {
                 if (this._box == null) {
                     this._box = GameFramework.BoxAxisAligned.create();

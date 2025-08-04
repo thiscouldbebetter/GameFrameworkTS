@@ -42,21 +42,22 @@ export class ControlTextBox<TContext> extends ControlBase
 		this._textSize = Coords.create();
 	}
 
-	text(value: string): string
+	text(): string
 	{
-		if (value != null)
-		{
-			this._text.set(value);
-		}
-
 		return this._text.get();
+	}
+
+	textSet(value: string): ControlTextBox<TContext>
+	{
+		this._text.set(value);
+		return this;
 	}
 
 	// events
 
 	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
-		var text = this.text(null);
+		var text = this.text();
 
 		var controlActionNames = ControlActionNames.Instances();
 		if
@@ -65,7 +66,8 @@ export class ControlTextBox<TContext> extends ControlBase
 			|| actionNameToHandle == Input.Instances().Backspace.name
 		)
 		{
-			this.text(text.substr(0, text.length - 1));
+			text = text.substr(0, text.length - 1);
+			this.textSet(text);
 
 			this.cursorPos = NumberHelper.wrapToRangeMinMax
 			(
@@ -134,7 +136,7 @@ export class ControlTextBox<TContext> extends ControlBase
 				+ charAtCursor
 				+ text.substr(this.cursorPos + 1);
 
-			this.text(textEdited);
+			this.textSet(textEdited);
 		}
 		else if (actionNameToHandle.length == 1)
 		{
@@ -151,7 +153,8 @@ export class ControlTextBox<TContext> extends ControlBase
 						+ actionNameToHandle
 						+ text.substr(this.cursorPos);
 
-				text = this.text(textEdited);
+				this.textSet(textEdited);
+				text = this.text();
 
 				this.cursorPos = NumberHelper.wrapToRangeMinMax
 				(
@@ -166,7 +169,7 @@ export class ControlTextBox<TContext> extends ControlBase
 	focusGain(): void
 	{
 		this.isHighlighted = true;
-		this.cursorPos = this.text(null).length;
+		this.cursorPos = this.text().length;
 	}
 
 	focusLose(): void
@@ -209,7 +212,7 @@ export class ControlTextBox<TContext> extends ControlBase
 			this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
 		var style = this.style(universe);
 
-		var text = this.text(null);
+		var text = this.text();
 		var textWidth =
 			display.textWidthForFontHeight(text, fontHeightInPixels);
 		var textSize =

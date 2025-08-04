@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.sightThreshold = sightThreshold;
                 this.hearingThreshold = hearingThreshold;
             }
+            static fromThresholdsSightAndHearing(sightThreshold, hearingThreshold) {
+                return new Perceptor(sightThreshold, hearingThreshold);
+            }
             static of(entity) {
                 return entity.propertyByName(Perceptor.name);
             }

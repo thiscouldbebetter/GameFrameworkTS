@@ -15,6 +15,9 @@ var ThisCouldBeBetter;
                 returnValue.phaseCurrentSetByName(phaseStartName);
                 return returnValue;
             }
+            static fromPhases(phases) {
+                return new Phased(0, 0, phases);
+            }
             static of(entity) {
                 return entity.propertyByName(Phased.name);
             }
@@ -73,6 +76,9 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.durationInTicks = durationInTicks;
                 this._enter = enter;
+            }
+            static fromNameTicksAndEnter(name, durationInTicks, enter) {
+                return new Phase(name, durationInTicks, enter);
             }
             enter(uwpe) {
                 if (this._enter != null) {

@@ -12,6 +12,15 @@ export class EquipmentSocketDefn //
 		this.name = name;
 		this.categoriesAllowedNames = categoriesAllowedNames;
 	}
+
+	static fromNameAndCategoriesAllowedNames
+	(
+		name: string, categoriesAllowedNames: string[]
+	): EquipmentSocketDefn
+	{
+		return new EquipmentSocketDefn(name, categoriesAllowedNames);
+	}
+
 }
 
 }

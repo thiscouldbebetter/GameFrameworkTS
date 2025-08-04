@@ -13,6 +13,14 @@ export class Constraint_FrictionXY implements Constraint
 		this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
 	}
 
+	static fromTargetAndSpeedBelowWhichToStop
+	(
+		target: number, speedBelowWhichToStop: number
+	): Constraint_FrictionXY
+	{
+		return new Constraint_FrictionXY(target, speedBelowWhichToStop);
+	}
+
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;

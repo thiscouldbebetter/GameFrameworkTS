@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.categoriesAllowedNames = categoriesAllowedNames;
             }
+            static fromNameAndCategoriesAllowedNames(name, categoriesAllowedNames) {
+                return new EquipmentSocketDefn(name, categoriesAllowedNames);
+            }
         }
         GameFramework.EquipmentSocketDefn = EquipmentSocketDefn;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

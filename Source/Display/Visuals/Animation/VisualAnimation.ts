@@ -53,7 +53,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		}
 	}
 
-	static fromNameTicksToHoldFrameAndFramesRepeating
+	static fromNameTicksToHoldFramesAndFramesRepeating
 	(
 		name: string,
 		ticksToHoldFrames: number[],

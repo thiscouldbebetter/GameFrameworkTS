@@ -16,6 +16,11 @@ export class EquipmentSocketDefnGroup
 			ArrayHelper.addLookupsByName(this.socketDefns);
 	}
 
+	static fromNameAndSocketDefns(name: string, socketDefns: EquipmentSocketDefn[]): EquipmentSocketDefnGroup
+	{
+		return new EquipmentSocketDefnGroup(name, socketDefns);
+	}
+
 	static default(): EquipmentSocketDefnGroup
 	{
 		return new EquipmentSocketDefnGroup

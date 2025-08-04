@@ -32,6 +32,25 @@ export class Tirable implements EntityProperty<Tirable>
 		this.staminaMaxRemainingBeforeSleep = this.staminaMaxAfterSleep;
 	}
 
+	static fromStaminaMaxRecoveredLostRecoveredAndFallAsleep
+	(
+		staminaMaxAfterSleep: number,
+		staminaRecoveredPerTick: number,
+		staminaMaxLostPerTick: number,
+		staminaMaxRecoveredPerTickOfSleep: number,
+		fallAsleep: (uwpe: UniverseWorldPlaceEntities) => void
+	): Tirable
+	{
+		return new Tirable
+		(
+			staminaMaxAfterSleep,
+			staminaRecoveredPerTick,
+			staminaMaxLostPerTick,
+			staminaMaxRecoveredPerTickOfSleep,
+			fallAsleep
+		);
+	}
+
 	static default(): Tirable
 	{
 		return new Tirable

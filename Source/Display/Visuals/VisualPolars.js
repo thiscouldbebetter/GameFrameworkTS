@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
                 this._fromPos = GameFramework.Coords.create();
                 this._toPos = GameFramework.Coords.create();
             }
+            static fromPolarsColorAndLineThickness(polars, color, lineThickness) {
+                return new VisualPolars(polars, color, lineThickness);
+            }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.

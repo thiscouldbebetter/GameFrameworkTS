@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             static fromSatietyMax(satietyMax) {
                 return new Starvable(satietyMax, null, null);
             }
+            static fromSatietyMaxSatietyToLosePerTickAndStarve(satietyMax, satietyLostPerTick, starve) {
+                return new Starvable(satietyMax, satietyLostPerTick, starve);
+            }
             static of(entity) {
                 return entity.propertyByName(Starvable.name);
             }

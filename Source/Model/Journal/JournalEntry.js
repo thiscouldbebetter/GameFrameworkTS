@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.title = title;
                 this.body = body;
             }
+            static fromTickTitleAndBody(tickRecorded, title, body) {
+                return new JournalEntry(tickRecorded, title, body);
+            }
             timeRecordedAsStringH_M_S(universe) {
                 return universe.timerHelper.ticksToStringH_M_S(this.tickRecorded);
             }

@@ -4,20 +4,26 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualDynamic {
-            constructor(methodForVisual) {
-                this.methodForVisual = methodForVisual;
+            constructor(visualGet) {
+                this._visualGet = visualGet;
+            }
+            static fromVisualGet(visualGet) {
+                return new VisualDynamic(visualGet);
+            }
+            visualGet(uwpe) {
+                return this._visualGet(uwpe);
             }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.
             }
             initializeIsComplete(uwpe) {
-                var visual = this.methodForVisual.call(this, uwpe);
+                var visual = this.visualGet(uwpe);
                 var visualIsInitialized = visual.initializeIsComplete(uwpe);
                 return visualIsInitialized;
             }
             draw(uwpe, display) {
-                var visual = this.methodForVisual.call(this, uwpe);
+                var visual = this.visualGet(uwpe);
                 visual.draw(uwpe, display);
             }
             // Clonable.

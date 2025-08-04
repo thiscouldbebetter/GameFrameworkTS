@@ -4,11 +4,21 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class VisualDynamic implements Visual<VisualDynamic>
 {
-	methodForVisual: (uwpe: UniverseWorldPlaceEntities) => VisualBase;
+	_visualGet: (uwpe: UniverseWorldPlaceEntities) => VisualBase;
 
-	constructor(methodForVisual: (uwpe: UniverseWorldPlaceEntities) => VisualBase)
+	constructor(visualGet: (uwpe: UniverseWorldPlaceEntities) => VisualBase)
 	{
-		this.methodForVisual = methodForVisual;
+		this._visualGet = visualGet;
+	}
+
+	static fromVisualGet(visualGet: (uwpe: UniverseWorldPlaceEntities) => VisualBase): VisualDynamic
+	{
+		return new VisualDynamic(visualGet);
+	}
+
+	visualGet(uwpe: UniverseWorldPlaceEntities): VisualBase
+	{
+		return this._visualGet(uwpe);
 	}
 
 	// Visual.
@@ -20,14 +30,14 @@ export class VisualDynamic implements Visual<VisualDynamic>
 
 	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
 	{
-		var visual = this.methodForVisual.call(this, uwpe);
+		var visual = this.visualGet(uwpe);
 		var visualIsInitialized = visual.initializeIsComplete(uwpe);
 		return visualIsInitialized;
 	}
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		var visual = this.methodForVisual.call(this, uwpe);
+		var visual = this.visualGet(uwpe);
 		visual.draw(uwpe, display);
 	}
 

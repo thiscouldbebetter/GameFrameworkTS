@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.children = children;
                 this._posSaved = GameFramework.Coords.create();
             }
+            static fromSpacingAndChildren(childSpacing, children) {
+                return new VisualStack(childSpacing, children);
+            }
             // Visual.
             initialize(uwpe) {
                 this.children.forEach(x => x.initialize(uwpe));

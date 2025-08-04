@@ -23,15 +23,19 @@ export class Leaderboard
 	{
 		var textLines = [];
 
-		textLines.push("High Scores:");
+		textLines.push("High Scores");
 		textLines.push("");
+
+		var playerScoresAsTextLines: string[] = [];
 
 		for (var i = 0; i < this.playerScores.length; i++)
 		{
 			var playerScore = this.playerScores[i];
 			var playerScoreAsTextLine = playerScore.toString();
-			textLines.push(playerScoreAsTextLine);
+			playerScoresAsTextLines.push(playerScoreAsTextLine);
 		}
+
+		textLines.push(...playerScoresAsTextLines);
 
 		var newline = "\n";
 		var text = textLines.join(newline);
@@ -58,13 +62,13 @@ export class Leaderboard
 
 class Leaderboard_PlayerScore
 {
-	playerName: string;
+	playerInitials: string;
 	score: number;
 	timeEntered: Date;
 
-	constructor(playerName: string, score: number, timeEntered: Date)
+	constructor(playerInitials: string, score: number, timeEntered: Date)
 	{
-		this.playerName = playerName;
+		this.playerInitials = playerInitials;
 		this.score = score;
 		this.timeEntered = timeEntered || new Date();
 	}
@@ -76,7 +80,10 @@ class Leaderboard_PlayerScore
 
 	toString(): string
 	{
-		return this.playerName + " " + this.score;
+		var scoreLengthMax = 7;
+		var scoreAsString = ("" + this.score).padStart(scoreLengthMax, " ");
+		var returnValue = this.playerInitials + scoreAsString;
+		return returnValue;
 	}
 }
 

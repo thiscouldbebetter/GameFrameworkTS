@@ -11,6 +11,11 @@ export class Routable implements EntityProperty<Routable>
 		this.route = route;
 	}
 
+	static fromRoute(route: Route): Routable
+	{
+		return new Routable(route);
+	}
+
 	// EntityProperty.
 
 	finalize(uwpe: UniverseWorldPlaceEntities): void {}

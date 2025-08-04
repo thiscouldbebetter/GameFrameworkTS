@@ -18,6 +18,15 @@ var ThisCouldBeBetter;
                 this._sizeCurrent = this.size.clone();
                 this._sizeHalf = this.size.clone().half();
             }
+            static fromAbbrevSizeColorCurrentThresholdAndMax(abbreviation, size, color, amountCurrent, amountThreshold, amountMax) {
+                return new VisualBar(abbreviation, size, color, amountCurrent, amountThreshold, amountMax, 1, // fractionBelowWhichToShow,
+                null, // colorForBorderAsValueBreakGroup,
+                null // text
+                );
+            }
+            static fromAbbrevSizeColorCurrentThresholdMaxFractionColorText(abbreviation, size, color, amountCurrent, amountThreshold, amountMax, fractionBelowWhichToShow, colorForBorderAsValueBreakGroup, text) {
+                return new VisualBar(abbreviation, size, color, amountCurrent, amountThreshold, amountMax, fractionBelowWhichToShow, colorForBorderAsValueBreakGroup, text);
+            }
             static fromSizeColorAndBindingsForValueAndMax(size, color, amountCurrent, amountMax) {
                 return new VisualBar(null, // abbreviation
                 size, color, amountCurrent, null, // amountThreshold

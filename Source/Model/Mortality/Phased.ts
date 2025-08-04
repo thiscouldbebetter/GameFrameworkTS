@@ -34,6 +34,11 @@ export class Phased implements EntityProperty<Phased>
 		return returnValue;
 	}
 
+	static fromPhases(phases: Phase[]): Phased
+	{
+		return new Phased(0, 0, phases);
+	}
+
 	static of(entity: Entity): Phased
 	{
 		return entity.propertyByName(Phased.name) as Phased;
@@ -136,6 +141,16 @@ export class Phase
 		this.name = name;
 		this.durationInTicks = durationInTicks;
 		this._enter = enter;
+	}
+
+	static fromNameTicksAndEnter
+	(
+		name: string,
+		durationInTicks: number,
+		enter: (uwpe: UniverseWorldPlaceEntities) => void
+	): Phase
+	{
+		return new Phase(name, durationInTicks, enter);
 	}
 
 	enter(uwpe: UniverseWorldPlaceEntities): void

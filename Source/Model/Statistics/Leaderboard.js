@@ -13,13 +13,15 @@ var ThisCouldBeBetter;
             // Controllable.
             toControl(uwpe) {
                 var textLines = [];
-                textLines.push("High Scores:");
+                textLines.push("High Scores");
                 textLines.push("");
+                var playerScoresAsTextLines = [];
                 for (var i = 0; i < this.playerScores.length; i++) {
                     var playerScore = this.playerScores[i];
                     var playerScoreAsTextLine = playerScore.toString();
-                    textLines.push(playerScoreAsTextLine);
+                    playerScoresAsTextLines.push(playerScoreAsTextLine);
                 }
+                textLines.push(...playerScoresAsTextLines);
                 var newline = "\n";
                 var text = textLines.join(newline);
                 var container = GameFramework.ControlContainer.fromPosSizeAndChildren(GameFramework.Coords.zeroes(), uwpe.universe.display.sizeInPixels, [
@@ -30,8 +32,8 @@ var ThisCouldBeBetter;
         }
         GameFramework.Leaderboard = Leaderboard;
         class Leaderboard_PlayerScore {
-            constructor(playerName, score, timeEntered) {
-                this.playerName = playerName;
+            constructor(playerInitials, score, timeEntered) {
+                this.playerInitials = playerInitials;
                 this.score = score;
                 this.timeEntered = timeEntered || new Date();
             }
@@ -39,7 +41,10 @@ var ThisCouldBeBetter;
                 return new Leaderboard_PlayerScore(playerName, score, null);
             }
             toString() {
-                return this.playerName + " " + this.score;
+                var scoreLengthMax = 7;
+                var scoreAsString = ("" + this.score).padStart(scoreLengthMax, " ");
+                var returnValue = this.playerInitials + scoreAsString;
+                return returnValue;
             }
         }
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

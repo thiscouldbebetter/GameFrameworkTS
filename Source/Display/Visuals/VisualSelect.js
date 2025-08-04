@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.childrenByName = childrenByName;
                 this.selectChildNames = selectChildNames;
             }
+            static fromChildrenByNameAndSelectChildNames(childrenByName, selectChildNames) {
+                return new VisualSelect(childrenByName, selectChildNames);
+            }
             childByName(childName) {
                 return this.childrenByName.get(childName);
             }

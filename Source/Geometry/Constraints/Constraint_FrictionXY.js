@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.target = target;
                 this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
             }
+            static fromTargetAndSpeedBelowWhichToStop(target, speedBelowWhichToStop) {
+                return new Constraint_FrictionXY(target, speedBelowWhichToStop);
+            }
             constrain(uwpe) {
                 var entity = uwpe.entity;
                 var targetFrictionCoefficient = this.target;

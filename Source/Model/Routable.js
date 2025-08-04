@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(route) {
                 this.route = route;
             }
+            static fromRoute(route) {
+                return new Routable(route);
+            }
             // EntityProperty.
             finalize(uwpe) { }
             initialize(uwpe) {

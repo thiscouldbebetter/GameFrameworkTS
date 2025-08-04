@@ -921,7 +921,7 @@ export class Profile
 		var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
 		var textBoxName =
 			controlRootAsContainer.childByName("textBoxName") as ControlTextBox<any>;
-		var profileName = textBoxName.text(null);
+		var profileName = textBoxName.text();
 		if (profileName == "")
 		{
 			return;

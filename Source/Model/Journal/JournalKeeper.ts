@@ -15,6 +15,11 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 		this.journal = journal;
 	}
 
+	static fromJournal(journal: Journal): JournalKeeper
+	{
+		return new JournalKeeper(journal);
+	}
+
 	static of(entity: Entity): JournalKeeper
 	{
 		return entity.propertyByName(JournalKeeper.name) as JournalKeeper;

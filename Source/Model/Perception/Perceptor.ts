@@ -13,6 +13,14 @@ export class Perceptor implements EntityProperty<Perceptor>
 		this.hearingThreshold = hearingThreshold;
 	}
 
+	static fromThresholdsSightAndHearing
+	(
+		sightThreshold: number, hearingThreshold: number
+	): Perceptor
+	{
+		return new Perceptor(sightThreshold, hearingThreshold);
+	}
+
 	static of(entity: Entity): Perceptor
 	{
 		return entity.propertyByName(Perceptor.name) as Perceptor;
