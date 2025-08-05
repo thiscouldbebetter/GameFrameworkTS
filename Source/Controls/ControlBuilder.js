@@ -594,47 +594,61 @@ var ThisCouldBeBetter;
                 var venueNext = universe.controlBuilder.settings(universe, null, universe.venueCurrent()).toVenue();
                 universe.venueTransitionTo(venueNext);
             }
-            slideshow(universe, size, imageNamesAndMessagesForSlides, venueAfterSlideshow) {
+            slideshowFromImageNamesAndMessagePairs(universe, size, secondsPerSlide, venueAfterSlideshow, imageNamesAndMessagePairsForSlides) {
+                if (size == null) {
+                    size = universe.display.sizeDefault();
+                }
+                var visualsForSlides = this.slideshow_VisualsForSlides(size, imageNamesAndMessagePairsForSlides);
+                var slideshow = this.slideshowFromVisuals(universe, size, secondsPerSlide, venueAfterSlideshow, visualsForSlides);
+                return slideshow;
+            }
+            slideshowFromVisuals(universe, size, secondsPerSlide, venueAfterSlideshow, visualsForSlides) {
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var controlsForSlides = [];
-                var skip = () => {
+                var skipToEndOfSlideshow = () => {
                     universe.venueTransitionTo(venueAfterSlideshow);
                 };
-                for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++) {
-                    var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
-                    var imageName = imageNameAndMessage[0];
-                    var message = imageNameAndMessage[1];
-                    var next = () => this.slideshow_NextDefn.bind // Does this work?  Check history if not.
+                var controlsForSlideImagesAndTexts = this.slideshow_ControlsForSlideImagesAndTexts(visualsForSlides);
+                var controlBuilder = this;
+                for (var i = 0; i < controlsForSlideImagesAndTexts.length; i++) {
+                    var controlForSlideImageAndText = controlsForSlideImagesAndTexts[i];
+                    var advanceToSlideNext = () => controlBuilder.slideshow_NextDefn // Does this work?  Check history if not.
                     (universe, controlsForSlides, i + 1, venueAfterSlideshow);
-                    var imageSlide = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageSlide", this._zeroes, this.sizeBase.clone(), // size
-                    GameFramework.DataBinding.fromContext(GameFramework.VisualImageScaled.fromSizeAndChild(this.sizeBase.clone().multiply(scaleMultiplier), // sizeToDrawScaled
-                    GameFramework.VisualImageFromLibrary.fromImageName(imageName))));
-                    var labelSlideText = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(0, this.fontHeightInPixelsBase), // pos
-                    GameFramework.Coords.fromXY(this.sizeBase.x, this.fontHeightInPixelsBase), // size
-                    GameFramework.DataBinding.fromContext(message), this.fontBase);
                     var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, 40), // size
-                    "Next", this.fontBase, next);
+                    "Next", this.fontBase, advanceToSlideNext);
                     var controlActionNames = GameFramework.ControlActionNames.Instances();
                     var actions = [
-                        GameFramework.Action.fromNameAndPerform(controlActionNames.ControlCancel, skip),
-                        GameFramework.Action.fromNameAndPerform(controlActionNames.ControlConfirm, next)
+                        GameFramework.Action.fromNameAndPerform(controlActionNames.ControlCancel, skipToEndOfSlideshow),
+                        GameFramework.Action.fromNameAndPerform(controlActionNames.ControlConfirm, advanceToSlideNext)
                     ];
-                    var containerSlide = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerSlide_" + i, this._zeroes, // pos
-                    this.sizeBase.clone(), // size
-                    // children
-                    [
-                        imageSlide,
-                        labelSlideText,
+                    var containerSlide = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerSlide_" + i, this._zeroes, this.sizeBase.clone(), [
+                        controlForSlideImageAndText,
                         buttonNext
                     ], actions);
+                    if (secondsPerSlide != null) {
+                        var controlTimer = GameFramework.ControlTimer.fromNameSecondsToWaitAndElapsed("Advance to Next Slide Automatically", secondsPerSlide, advanceToSlideNext);
+                        containerSlide.childAdd(controlTimer);
+                    }
                     containerSlide.scalePosAndSize(scaleMultiplier);
                     controlsForSlides.push(containerSlide);
                 }
                 return controlsForSlides[0];
+            }
+            slideshow_ControlsForSlideImagesAndTexts(visualsForSlides) {
+                var controlsForSlideImagesAndTexts = [];
+                for (var i = 0; i < visualsForSlides.length; i++) {
+                    var visualForSlide = visualsForSlides[i];
+                    var controlVisualForSlideImage = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageSlide", this._zeroes, this.sizeBase.clone(), GameFramework.DataBinding.fromContext(visualForSlide));
+                    var containerForSlideImageAndText = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerForSlideImageAndText", this._zeroes, this.sizeBase.clone(), [
+                        controlVisualForSlideImage
+                    ]);
+                    controlsForSlideImagesAndTexts.push(containerForSlideImageAndText);
+                }
+                return controlsForSlideImagesAndTexts;
             }
             slideshow_NextDefn(universe, controlsForSlides, slideIndexNext, venueAfterSlideshow) {
                 var venueNext;
@@ -647,7 +661,32 @@ var ThisCouldBeBetter;
                 }
                 universe.venueTransitionTo(venueNext);
             }
+            slideshow_VisualsForSlides(size, imageNamesAndMessagesForSlides) {
+                var visualsForSlides = [];
+                var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+                for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++) {
+                    var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
+                    var imageName = imageNameAndMessage[0];
+                    var message = imageNameAndMessage[1];
+                    var visualImage = GameFramework.VisualImageFromLibrary.fromImageName(imageName);
+                    var sizeToDrawScaled = this.sizeBase.clone().multiply(scaleMultiplier);
+                    var visualImageScaled = GameFramework.VisualImageScaled.fromSizeAndChild(sizeToDrawScaled, visualImage);
+                    var colors = GameFramework.Color.Instances();
+                    var visualText = GameFramework.VisualText.fromTextImmediateFontAndColorsFillAndBorder(message, this.fontBase, colors.Black, colors.White);
+                    var textPos = GameFramework.Coords.fromXY(0, this.fontHeightInPixelsBase);
+                    var visualTextOffset = GameFramework.VisualOffset.fromOffsetAndChild(textPos, visualText);
+                    var visualImagePlusText = GameFramework.VisualGroup.fromChildren([
+                        visualImageScaled,
+                        visualTextOffset
+                    ]);
+                    visualsForSlides.push(visualImagePlusText);
+                }
+                return visualsForSlides;
+            }
             title(universe, size) {
+                return this.titleForUniverseSizeAndButtonStartShouldBeShown(universe, size, true);
+            }
+            titleForUniverseSizeAndButtonStartShouldBeShown(universe, size, buttonStartShouldBeShown) {
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
@@ -659,20 +698,21 @@ var ThisCouldBeBetter;
                 ]);
                 var imageTitle = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageTitle", this._zeroes.clone(), this.sizeBase.clone(), // size
                 GameFramework.DataBinding.fromContext(visual));
-                var buttonStart = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
-                GameFramework.Coords.fromXY(50, fontHeight * 2), // size
-                "Start", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), () => this.title_Start(universe)).hasBorderSet(false);
+                var controls = [
+                    imageTitle
+                ];
+                if (buttonStartShouldBeShown) {
+                    var buttonStart = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
+                    GameFramework.Coords.fromXY(50, fontHeight * 2), // size
+                    "Start", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), () => this.title_Start(universe)).hasBorderSet(false);
+                    controls.push(buttonStart);
+                }
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 var actions = [
                     GameFramework.Action.fromNameAndPerform(controlActionNames.ControlCancel, () => this.title_Start(universe)),
                     GameFramework.Action.fromNameAndPerform(controlActionNames.ControlConfirm, () => this.title_Start(universe))
                 ];
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerTitle", this._zeroes, this.sizeBase.clone(), 
-                // children
-                [
-                    imageTitle,
-                    buttonStart
-                ], actions);
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerTitle", this._zeroes, this.sizeBase.clone(), controls, actions);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }

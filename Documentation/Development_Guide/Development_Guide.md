@@ -49,6 +49,8 @@ This guide assumes a very basic understanding of programming, ideally with the T
 
 	class Planet extends Entity
 	{
+		horizonHeight: number;
+
 		constructor(size: Coords, horizonHeight: number)
 		{
 			super
@@ -70,6 +72,8 @@ This guide assumes a very basic understanding of programming, ideally with the T
 					)
 				]
 			);
+
+			this.horizonHeight = horizonHeight;
 		}
 
 		static fromSizeAndHorizonHeight
@@ -420,7 +424,7 @@ Note that the actions selected mean that, when accelerating left and right, the 
 
 The sharp-eyed observer will notice that two classes are declared in this file--the Habitat class and the HabitatProperty class.  An instance of HabitatProperty is created and passed into the Habitat constructor's property list.  That HabitatProperty class will make it easier to identify Habitat instances when they're mixed in amongst other Entities.
 
-8.3. Next, we'll create the villain, which we'll call a "Enemy".  Still in the Model directory, create a new file named Enemy.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the enemy has to actually move around and kidnap people and stuff, while all the Habitat has to do is sit there looking vulnerable.
+8.3. Next, we'll create the villain, which we'll call a "Enemy".  Still in the Model directory, create a new file named Enemy.ts, containing the following text.  This class is quite a bit more complex than the previous one, since the enemy has to actually move around and kidnap people and stuff--what some game developers used to call "artificial intelligence"--while all the Habitat has to do is sit there looking vulnerable.
 
 	class Enemy extends Entity
 	{
@@ -486,7 +490,8 @@ The sharp-eyed observer will notice that two classes are declared in this file--
 		static activityDefnPerform(uwpe: UniverseWorldPlaceEntities): void
 		{
 			var universe = uwpe.universe;
-			var place = uwpe.place;
+			var randomizer = universe.randomizer;
+			var place = uwpe.place as PlacePlanet;
 			var entity = uwpe.entity;
 
 			var enemy = entity as Enemy;
@@ -500,27 +505,56 @@ The sharp-eyed observer will notice that two classes are declared in this file--
 			if (targetEntity == null)
 			{
 				var placePlanet = place as PlacePlanet;
-				var habitats = PlacePlanet.habitats();
-				if (habitats.length == 0)
+				var habitats = placePlanet.habitats();
+				var enemies = placePlanet.enemies();
+				var habitatsNotAlreadyCapturedOrTargeted =
+					habitats.filter
+					(
+						h =>
+							(
+								enemies.some
+								(
+									e => EnemyProperty.of(e).habitatCaptured == h
+								) == false
+							)
+							&&
+							(
+								enemies.some
+								(
+									e => Actor.of(e).activity.targetEntity() == h
+								) == false
+							)
+					);
+
+				if (habitatsNotAlreadyCapturedOrTargeted.length == 0)
 				{
-					return; // todo
+					var planet = place.planet();
+					var placeSize = place.size();
+					var placeSizeMinusGround =
+						placeSize.clone().subtract(Coords.fromXY(0, planet.horizonHeight) )
+					var posRandom = Coords.random(randomizer).multiply(placeSizeMinusGround);
+					targetEntity = Entity.fromNameAndProperty
+					(
+						"RandomPoint",
+						Locatable.fromPos(posRandom)
+					);
 				}
 				else
 				{
 					targetEntity = ArrayHelper.random
 					(
-						habitats, universe.randomizer
+						habitatsNotAlreadyCapturedOrTargeted, randomizer
 					);
-					enemyActivity.targetEntitySet(targetEntity);
 				}
 			}
 
+			enemyActivity.targetEntitySet(targetEntity);
+
 			var targetPos = Locatable.of(targetEntity).loc.pos;
 			var displacementToTarget =
-				Enemy
-					.displacement()
-					.overwriteWith(targetPos)
-					.subtract(enemyPos);
+				Enemy.displacement()
+				.overwriteWith(targetPos)
+				.subtract(enemyPos);
 			var distanceToTarget = displacementToTarget.magnitude();
 			var enemyMovable = Movable.of(enemy);
 			var enemyAccelerationPerTick =
@@ -539,9 +573,12 @@ The sharp-eyed observer will notice that two classes are declared in this file--
 			{
 				enemyPos.overwriteWith(targetPos);
 				var enemyProperty = EnemyProperty.of(enemy);
-				if (enemyProperty.habitatCaptured == null)
+				var targetIsHabitat = (targetEntity.constructor.name == Habitat.name);
+
+				if (targetIsHabitat)
 				{
-					enemyProperty.habitatCaptured = targetEntity as Habitat;
+					var targetHabitat = targetEntity as Habitat;
+					enemyProperty.habitatCaptured = targetHabitat;
 
 					var targetConstrainable =
 						Constrainable.of(targetEntity);
@@ -562,23 +599,29 @@ The sharp-eyed observer will notice that two classes are declared in this file--
 					targetConstrainable
 						.constraintAdd(constraintToAddToTarget);
 
-					targetEntity = Entity.fromNameAndProperties
+					targetEntity = Entity.fromNameAndProperty
 					(
 						"EscapePoint",
-						[
-							Locatable.fromPos
+						Locatable.fromPos
+						(
+							enemyPos.clone().addXY
 							(
-								enemyPos.clone().addXY
-								(
-									0, 0 - place.size().y
-								)
+								0, 0 - place.size().y
 							)
-						]
+						)
 					);
 					enemyActivity.targetEntitySet(targetEntity);
 				}
+				else if (enemyPos.y >= 0)
+				{
+					// Choose another random point to wander to.
+
+					enemyActivity.targetEntityClear();
+				}
 				else
 				{
+					// Escape.
+
 					place.entityToRemoveAdd(enemyProperty.habitatCaptured);
 					place.entityToRemoveAdd(enemy);
 				}
@@ -1689,6 +1732,20 @@ Open PlacePlanet.ts and replace the top line of the constructor with the followi
 		.hitsClear();
 
 19.8. Run the build script and refresh the browser, then play through a couple of levels.  After the second level starts, verify that the score hasn't been reset, but the kill counter has been.  After the second level is over, look at the displayed stats to make sure that they all make sense, and that none of the kills, shots, and hits from the first level are still included in the numbers.
+
+
+20. Adding a High Score Leaderboard
+-----------------------------------
+
+20.1. Open Planet.ts and replace the existing "acknowledge" function declared below the "GAME OVER" messgae with the following:
+
+	var leaderboard =
+			Leaderboard.createWithFakeScores();
+	var leaderboardAsVenue = leaderboard.toVenue(uwpe);
+	var venueNext = leaderboardAsVenue;
+	universe.venueTransitionTo(venueNext);
+
+20.2. Run the build script and refresh the browser, then intentioally kill yourself three times by running your ship into an enemy.  Now, after the "GAME OVER" screen, a leaderboard of high scores will be displayed.  Right now, the scores will be fake, they won't be persisted between games, and you won't be allowed to enter your initials even if you've beaten one of the high scores.
 
 
 n. Conclusion

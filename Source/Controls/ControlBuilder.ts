@@ -1390,11 +1390,43 @@ export class ControlBuilder
 		universe.venueTransitionTo(venueNext);
 	}
 
-	slideshow
+	slideshowFromImageNamesAndMessagePairs
 	(
-		universe: Universe, size: Coords,
-		imageNamesAndMessagesForSlides: string[][],
-		venueAfterSlideshow: Venue
+		universe: Universe,
+		size: Coords,
+		secondsPerSlide: number,
+		venueAfterSlideshow: Venue,
+		imageNamesAndMessagePairsForSlides: string[][]
+	): ControlBase
+	{
+		if (size == null)
+		{
+			size = universe.display.sizeDefault();
+		}
+
+		var visualsForSlides =
+			this.slideshow_VisualsForSlides(size, imageNamesAndMessagePairsForSlides);
+
+		var slideshow = this.slideshowFromVisuals
+		(
+			universe,
+			size,
+			secondsPerSlide,
+			venueAfterSlideshow,
+			visualsForSlides
+		);
+
+		return slideshow;
+	}
+
+
+	slideshowFromVisuals
+	(
+		universe: Universe,
+		size: Coords,
+		secondsPerSlide: number,
+		venueAfterSlideshow: Venue,
+		visualsForSlides: VisualBase[]
 	): ControlBase
 	{
 		if (size == null)
@@ -1407,50 +1439,27 @@ export class ControlBuilder
 
 		var controlsForSlides: ControlBase[] = [];
 
-		var skip = () =>
+		var skipToEndOfSlideshow = () =>
 		{
 			universe.venueTransitionTo(venueAfterSlideshow);
 		};
 
-		for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++)
-		{
-			var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
-			var imageName = imageNameAndMessage[0];
-			var message = imageNameAndMessage[1];
+		var controlsForSlideImagesAndTexts =
+			this.slideshow_ControlsForSlideImagesAndTexts(visualsForSlides);
 
-			var next =
+		var controlBuilder = this;
+
+		for (var i = 0; i < controlsForSlideImagesAndTexts.length; i++)
+		{
+			var controlForSlideImageAndText =
+				controlsForSlideImagesAndTexts[i];
+
+			var advanceToSlideNext =
 				() =>
-					this.slideshow_NextDefn.bind // Does this work?  Check history if not.
+					controlBuilder.slideshow_NextDefn // Does this work?  Check history if not.
 					(
 						universe, controlsForSlides, i + 1, venueAfterSlideshow
 					);
-
-			var imageSlide = ControlVisual.fromNamePosSizeAndVisual
-			(
-				"imageSlide",
-				this._zeroes,
-				this.sizeBase.clone(), // size
-				DataBinding.fromContext
-				(
-					VisualImageScaled.fromSizeAndChild
-					(
-						this.sizeBase.clone().multiply(scaleMultiplier), // sizeToDrawScaled
-						VisualImageFromLibrary.fromImageName(imageName)
-					) as VisualBase
-				)
-			);
-
-			var labelSlideText = ControlLabel.fromPosSizeTextFontCenteredHorizontally
-			(
-				Coords.fromXY(0, this.fontHeightInPixelsBase), // pos
-				Coords.fromXY
-				(
-					this.sizeBase.x,
-					this.fontHeightInPixelsBase
-				), // size
-				DataBinding.fromContext(message),
-				this.fontBase
-			);
 
 			var buttonNext = ControlButton.fromPosSizeTextFontClick
 			(
@@ -1458,29 +1467,40 @@ export class ControlBuilder
 				Coords.fromXY(50, 40), // size
 				"Next",
 				this.fontBase,
-				next
+				advanceToSlideNext
 			);
 
 			var controlActionNames = ControlActionNames.Instances();
 			var actions =
 			[
-				Action.fromNameAndPerform(controlActionNames.ControlCancel, skip),
-				Action.fromNameAndPerform(controlActionNames.ControlConfirm, next)
+				Action.fromNameAndPerform(controlActionNames.ControlCancel, skipToEndOfSlideshow),
+				Action.fromNameAndPerform(controlActionNames.ControlConfirm, advanceToSlideNext)
 			];
 
-			var containerSlide = ControlContainer.fromNamePosSizeChildrenAndActions
-			(
-				"containerSlide_" + i,
-				this._zeroes, // pos
-				this.sizeBase.clone(), // size
-				// children
-				[
-					imageSlide,
-					labelSlideText,
-					buttonNext
-				],
-				actions
-			);
+			var containerSlide =
+				ControlContainer.fromNamePosSizeChildrenAndActions
+				(
+					"containerSlide_" + i,
+					this._zeroes,
+					this.sizeBase.clone(),
+					[
+						controlForSlideImageAndText,
+						buttonNext
+					],
+					actions
+				);
+
+			if (secondsPerSlide != null)
+			{
+				var controlTimer = ControlTimer.fromNameSecondsToWaitAndElapsed
+				(
+					"Advance to Next Slide Automatically",
+					secondsPerSlide,
+					advanceToSlideNext
+				);
+
+				containerSlide.childAdd(controlTimer)
+			}
 
 			containerSlide.scalePosAndSize(scaleMultiplier);
 
@@ -1488,6 +1508,42 @@ export class ControlBuilder
 		}
 
 		return controlsForSlides[0];
+	}
+
+	slideshow_ControlsForSlideImagesAndTexts
+	(
+		visualsForSlides: VisualBase[]
+	): ControlBase[]
+	{
+		var controlsForSlideImagesAndTexts: ControlBase[] = [];
+
+		for (var i = 0; i < visualsForSlides.length; i++)
+		{
+			var visualForSlide = visualsForSlides[i];
+
+			var controlVisualForSlideImage = ControlVisual.fromNamePosSizeAndVisual
+			(
+				"imageSlide",
+				this._zeroes,
+				this.sizeBase.clone(),
+				DataBinding.fromContext(visualForSlide)
+			);
+
+			var containerForSlideImageAndText =
+				ControlContainer.fromNamePosSizeAndChildren
+				(
+					"containerForSlideImageAndText",
+					this._zeroes,
+					this.sizeBase.clone(),
+					[
+						controlVisualForSlideImage
+					]
+				);
+
+			controlsForSlideImagesAndTexts.push(containerForSlideImageAndText);
+		}
+
+		return controlsForSlideImagesAndTexts;
 	}
 
 	slideshow_NextDefn
@@ -1511,7 +1567,76 @@ export class ControlBuilder
 		universe.venueTransitionTo(venueNext);
 	}
 
+	slideshow_VisualsForSlides
+	(
+		size: Coords,
+		imageNamesAndMessagesForSlides: string[][]
+	): VisualBase[]
+	{
+		var visualsForSlides: VisualBase[] = [];
+
+		var scaleMultiplier =
+			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
+
+		for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++)
+		{
+ 			var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
+			var imageName = imageNameAndMessage[0];
+			var message = imageNameAndMessage[1];
+
+			var visualImage = VisualImageFromLibrary.fromImageName(imageName);
+
+			var sizeToDrawScaled =
+				this.sizeBase.clone().multiply(scaleMultiplier);
+
+			var visualImageScaled = VisualImageScaled.fromSizeAndChild
+			(
+				sizeToDrawScaled,
+				visualImage
+			) as VisualBase;
+
+			var colors = Color.Instances();
+
+			var visualText = VisualText.fromTextImmediateFontAndColorsFillAndBorder
+			(
+				message,
+				this.fontBase,
+				colors.Black,
+				colors.White
+			);
+
+			var textPos = Coords.fromXY(0, this.fontHeightInPixelsBase);
+
+			var visualTextOffset = VisualOffset.fromOffsetAndChild
+			(
+				textPos,
+				visualText
+			);
+
+			var visualImagePlusText: VisualBase = VisualGroup.fromChildren
+			([
+				visualImageScaled,
+				visualTextOffset
+			]);
+
+			visualsForSlides.push(visualImagePlusText);
+		}
+
+		return visualsForSlides;
+	}
+
 	title(universe: Universe, size: Coords): ControlBase
+	{
+		return this.titleForUniverseSizeAndButtonStartShouldBeShown
+		(
+			universe, size, true
+		);
+	}
+
+	titleForUniverseSizeAndButtonStartShouldBeShown
+	(
+		universe: Universe, size: Coords, buttonStartShouldBeShown: boolean
+	): ControlBase
 	{
 		if (size == null)
 		{
@@ -1540,14 +1665,24 @@ export class ControlBuilder
 			DataBinding.fromContext(visual)
 		);
 
-		var buttonStart = ControlButton.fromPosSizeTextFontClick
-		(
-			Coords.fromXY(75, 120), // pos
-			Coords.fromXY(50, fontHeight * 2), // size
-			"Start",
-			FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
-			() => this.title_Start(universe)
-		).hasBorderSet(false);
+		var controls: ControlBase[] =
+		[
+			imageTitle
+		];
+
+		if (buttonStartShouldBeShown)
+		{
+			var buttonStart = ControlButton.fromPosSizeTextFontClick
+			(
+				Coords.fromXY(75, 120), // pos
+				Coords.fromXY(50, fontHeight * 2), // size
+				"Start",
+				FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
+				() => this.title_Start(universe)
+			).hasBorderSet(false);
+
+			controls.push(buttonStart);
+		}
 
 		var controlActionNames = ControlActionNames.Instances();
 		var actions =
@@ -1569,11 +1704,7 @@ export class ControlBuilder
 			"containerTitle",
 			this._zeroes,
 			this.sizeBase.clone(),
-			// children
-			[
-				imageTitle,
-				buttonStart
-			],
+			controls,
 			actions
 		);
 

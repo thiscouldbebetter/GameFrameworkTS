@@ -71,30 +71,29 @@ export class VenueControls implements Venue
 		var controlActionNames = ControlActionNames.Instances();
 		var inputs = Input.Instances();
 
-		var inactivate = true;
+		var atim = (an: string, ins: string[]) =>
+			ActionToInputsMapping.fromActionNameInputNamesAndOnlyOnce(an, ins, true);
 
-		return new Array<ActionToInputsMapping>
-		(
-			new ActionToInputsMapping
+		var mappings =
+		[
+			atim
 			(
 				controlActionNames.ControlIncrement,
 				ArrayHelper.addMany(
 					[inputs.ArrowDown.name],
 					buildGamepadInputs(inputs.GamepadMoveDown.name)
-				),
-				inactivate
+				)
 			),
-			new ActionToInputsMapping
+			atim
 			(
 				controlActionNames.ControlPrev,
 				ArrayHelper.addMany
 				(
 					[inputs.ArrowLeft.name],
 					buildGamepadInputs(inputs.GamepadMoveLeft.name)
-				),
-				inactivate
+				)
 			),
-			new ActionToInputsMapping
+			atim
 			(
 				controlActionNames.ControlNext,
 				ArrayHelper.addMany
@@ -105,45 +104,48 @@ export class VenueControls implements Venue
 						[inputs.ArrowRight.name, inputs.Tab.name],
 						buildGamepadInputs(inputs.GamepadMoveRight.name)
 					)
-				),
-				inactivate
+				)
 			),
-			new ActionToInputsMapping
+			atim
 			(
 				controlActionNames.ControlDecrement,
 				ArrayHelper.addMany
 				(
 					[inputs.ArrowUp.name],
 					buildGamepadInputs(inputs.GamepadMoveUp.name)
-				),
-				inactivate
+				)
 			),
-			new ActionToInputsMapping
+			atim
 			(
 				controlActionNames.ControlConfirm,
 				ArrayHelper.addMany
 				(
 					[inputs.Enter.name],
 					buildGamepadInputs(inputs.GamepadButton1.name)
-				),
-				inactivate
+				)
 			),
-			new ActionToInputsMapping
+			atim
 			(
 				controlActionNames.ControlCancel,
 				ArrayHelper.addMany
 				(
 					[inputs.Escape.name],
 					buildGamepadInputs(inputs.GamepadButton0.name)
-				),
-				inactivate
+				)
 			)
-		);
+		];
+
+		return mappings;
 	}
 
 	static fromControl(controlRoot: ControlBase): VenueControls
 	{
 		return new VenueControls(controlRoot, false);
+	}
+
+	actionToInputsMappingByInputName(inputName: string): ActionToInputsMapping
+	{
+		return this.actionToInputsMappingsByInputName.get(inputName);
 	}
 
 	draw(universe: Universe)
@@ -203,7 +205,9 @@ export class VenueControls implements Venue
 		var inputPressedName = inputPressed.name;
 
 		var mapping =
-			this.actionToInputsMappingsByInputName.get(inputPressedName);
+			this.actionToInputsMappingByInputName(inputPressedName);
+
+		var scaleFactor = universe.display.scaleFactor();
 
 		if (inputPressedName.startsWith("Mouse") == false)
 		{
@@ -229,42 +233,34 @@ export class VenueControls implements Venue
 		}
 		else if (inputPressedName == inputs.MouseClick.name)
 		{
-			this._mouseClickPos.overwriteWith
-			(
-				inputHelper.mouseClickPos
-			).divide
-			(
-				universe.display.scaleFactor()
-			);
+			var mouseClickPos = this._mouseClickPos;
+
+			mouseClickPos
+				.overwriteWith(inputHelper.mouseClickPos)
+				.divide(scaleFactor);
+
 			var wasClickHandled =
-				this.controlRoot.mouseClick(this._mouseClickPos);
+				this.controlRoot.mouseClick(mouseClickPos);
+
 			if (wasClickHandled)
 			{
-				//inputHelper.inputRemove(inputPressed);
 				inputPressed.isActive = false;
 			}
 		}
 		else if (inputPressedName == inputs.MouseMove.name)
 		{
-			this._mouseMovePos.overwriteWith
-			(
-				inputHelper.mouseMovePos
-			).divide
-			(
-				universe.display.scaleFactor()
-			);
-			this._mouseMovePosPrev.overwriteWith
-			(
-				inputHelper.mouseMovePosPrev
-			).divide
-			(
-				universe.display.scaleFactor()
-			);
+			var mouseMovePos = this._mouseMovePos;
 
-			this.controlRoot.mouseMove
-			(
-				this._mouseMovePos //, this._mouseMovePosPrev
-			);
+			mouseMovePos
+				.overwriteWith(inputHelper.mouseMovePos)
+				.divide(scaleFactor);
+
+			this._mouseMovePosPrev
+				.overwriteWith(inputHelper.mouseMovePosPrev)
+				.divide(scaleFactor);
+
+			this.controlRoot
+				.mouseMove(mouseMovePos);
 		}
 
 	}
