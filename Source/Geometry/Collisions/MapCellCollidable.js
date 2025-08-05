@@ -7,8 +7,8 @@ var ThisCouldBeBetter;
             constructor() {
                 this.isBlocking = false;
             }
-            clone() { throw new Error("todo"); }
-            overwriteWith(other) { throw new Error("todo"); }
+            clone() { throw new Error("Not implemented!"); }
+            overwriteWith(other) { throw new Error("Not implemented!"); }
         }
         GameFramework.MapCellCollidable = MapCellCollidable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

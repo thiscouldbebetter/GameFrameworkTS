@@ -667,7 +667,7 @@ export class ControlBuilder
 
 			returnValue.children.push(buttonResume);
 
-			returnValue.actions.push
+			returnValue.actionAdd
 			(
 				Action.fromNameAndPerform
 				(

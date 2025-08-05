@@ -7,11 +7,9 @@ var ThisCouldBeBetter;
             constructor(name, pos, size, children, actions, actionToInputsMappings) {
                 super(name, pos, size, null);
                 this.children = children;
-                this.actions = (actions || []);
+                this._actions = (actions || []);
                 this._actionToInputsMappings = actionToInputsMappings || [];
-                this._actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this._actionToInputsMappings, x => x.inputNames);
                 this.childrenByName = GameFramework.ArrayHelper.addLookupsByName(this.children);
-                this.actionsByName = GameFramework.ArrayHelper.addLookupsByName(this.actions);
                 for (var i = 0; i < this.children.length; i++) {
                     var child = this.children[i];
                     child.parent = this;
@@ -63,16 +61,16 @@ var ThisCouldBeBetter;
                         childWithFocus = this.childFocusNextInDirection(direction);
                     }
                 }
-                else if (this._actionToInputsMappingsByInputName.has(actionNameToHandle)) {
+                else if (this.actionToInputsMappingsByInputName().has(actionNameToHandle)) {
                     var inputName = actionNameToHandle; // Likely passed from parent as raw input.
-                    var mapping = this._actionToInputsMappingsByInputName.get(inputName);
+                    var mapping = this.actionToInputsMappingByInputName(inputName);
                     var actionName = mapping.actionName;
-                    var action = this.actionsByName.get(actionName);
+                    var action = this.actionByName(actionName);
                     action.performForUniverse(universe);
                     wasActionHandled = true;
                 }
-                else if (this.actionsByName.has(actionNameToHandle)) {
-                    var action = this.actionsByName.get(actionNameToHandle);
+                else if (this.actionsByName().has(actionNameToHandle)) {
+                    var action = this.actionByName(actionNameToHandle);
                     action.performForUniverse(universe);
                     wasActionHandled = true;
                 }
@@ -83,8 +81,53 @@ var ThisCouldBeBetter;
                 }
                 return wasActionHandled;
             }
+            actionAdd(actionToAdd) {
+                var actions = this.actions();
+                actions.push(actionToAdd);
+                this.actionsSet(actions);
+                return this;
+            }
+            actionByName(name) {
+                return this.actionsByName().get(name);
+            }
             actionToInputsMappings() {
                 return this._actionToInputsMappings;
+            }
+            actionToInputsMappingByInputName(inputName) {
+                return this.actionToInputsMappingsByInputName().get(inputName);
+            }
+            actionToInputsMappingsByInputName() {
+                if (this._actionToInputsMappingsByInputName == null) {
+                    this._actionToInputsMappingsByInputName =
+                        new Map();
+                    for (var i = 0; i < this._actionToInputsMappings.length; i++) {
+                        var mapping = this._actionToInputsMappings[i];
+                        for (var j = 0; j < mapping.inputNames.length; j++) {
+                            var inputName = mapping.inputNames[j];
+                            this._actionToInputsMappingsByInputName.set(inputName, mapping);
+                        }
+                    }
+                }
+                return this._actionToInputsMappingsByInputName;
+            }
+            actionToInputsMappingsSet(values) {
+                this._actionToInputsMappings = values;
+                this._actionToInputsMappingsByInputName = null;
+                return this;
+            }
+            actions() {
+                return this._actions;
+            }
+            actionsByName() {
+                if (this._actionsByName == null) {
+                    this._actionsByName = new Map(this._actions.map(x => [x.name, x]));
+                }
+                return this._actionsByName;
+            }
+            actionsSet(values) {
+                this._actions = values;
+                this._actionsByName = null;
+                return this;
             }
             childAdd(childToAdd) {
                 this.children.push(childToAdd);

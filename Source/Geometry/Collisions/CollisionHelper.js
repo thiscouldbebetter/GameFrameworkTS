@@ -1343,7 +1343,7 @@ var ThisCouldBeBetter;
                 return false;
             }
             doesBoxContainMapLocated(box, mapLocated) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesBoxContainMesh(box, mesh) {
                 var meshHasSomeVertexOutsideBox = mesh.vertices().some(x => box.containsPoint(x) == false);
@@ -1376,46 +1376,46 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             doesMapLocatedContainBox(mapLocated, box) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesMapLocatedContainMapLocated(mapLocated0, mapLocated1) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesMapLocatedContainSphere(mapLocated, box) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesMeshContainBox(mesh, box) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesMeshContainSphere(mesh, sphere) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesPointContainPoint(point0, point1) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesShapeContainShapeGroupAll(shape, shapeGroupAll) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesShapeContainShapeGroupAny(shape, shapeGroupAny) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesShapeContainShapeInverse(shape, shapeInverse) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesShapeContainShapeTransformed(shape, shapeTransformed) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesShapeGroupAllContainShape(shapeGroupAll, shape) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesShapeGroupAnyContainShape(shapeGroupAny, shape) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesShapeInverseContainShape(shapeInverse, shape) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesShapeTransformedContainShape(shapeTransformed, shape) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesSphereContainBox(sphere, box) {
                 var sphereCircumscribingBox = GameFramework.Sphere.fromCenterAndRadius(box.center, box.size.magnitude() / 2);
@@ -1426,10 +1426,10 @@ var ThisCouldBeBetter;
                 return false;
             }
             doesSphereContainMapLocated(sphere, mapLocated) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesSphereContainMesh(sphere, mesh) {
-                throw new Error("todo");
+                throw new Error("Not implemented!");
             }
             doesSphereContainSphere(sphere0, sphere1) {
                 return sphere0.containsOther(sphere1);

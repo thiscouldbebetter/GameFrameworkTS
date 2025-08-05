@@ -2256,7 +2256,7 @@ export class CollisionHelper
 
 	doesBoxContainMapLocated(box: BoxAxisAligned, mapLocated: MapLocated): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesBoxContainMesh(box: BoxAxisAligned, mesh: Mesh): boolean
@@ -2310,72 +2310,72 @@ export class CollisionHelper
 
 	doesMapLocatedContainBox(mapLocated: MapLocated, box: BoxAxisAligned): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesMapLocatedContainMapLocated(mapLocated0: MapLocated, mapLocated1: MapLocated): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesMapLocatedContainSphere(mapLocated: MapLocated, box: BoxAxisAligned): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesMeshContainBox(mesh: Mesh, box: BoxAxisAligned): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesMeshContainSphere(mesh: Mesh, sphere: Sphere): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesPointContainPoint(point0: Coords, point1: Coords): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesShapeContainShapeGroupAll(shape: Shape, shapeGroupAll: ShapeGroupAll): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesShapeContainShapeGroupAny(shape: Shape, shapeGroupAny: ShapeGroupAny): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesShapeContainShapeInverse(shape: Shape, shapeInverse: ShapeInverse): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesShapeContainShapeTransformed(shape: Shape, shapeTransformed: ShapeTransformed): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesShapeGroupAllContainShape(shapeGroupAll: ShapeGroupAll, shape: Shape): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesShapeGroupAnyContainShape(shapeGroupAny: ShapeGroupAny, shape: Shape): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesShapeInverseContainShape(shapeInverse: ShapeInverse, shape: Shape): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesShapeTransformedContainShape(shapeTransformed: ShapeTransformed, shape: Shape): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesSphereContainBox(sphere: Sphere, box: BoxAxisAligned): boolean
@@ -2397,12 +2397,12 @@ export class CollisionHelper
 
 	doesSphereContainMapLocated(sphere: Sphere, mapLocated: MapLocated): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesSphereContainMesh(sphere: Sphere, mesh: Mesh): boolean
 	{
-		throw new Error("todo");
+		throw new Error("Not implemented!");
 	}
 
 	doesSphereContainSphere(sphere0: Sphere, sphere1: Sphere): boolean

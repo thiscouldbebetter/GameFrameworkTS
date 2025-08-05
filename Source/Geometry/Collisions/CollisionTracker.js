@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class CollisionTrackerBase {
+        class CollisionTrackerBase extends GameFramework.EntityPropertyBase {
             static fromPlace(uwpe) {
                 var place = uwpe.place;
                 var collisionTrackerAsEntity = place.entityByName(CollisionTrackerBase.name);
@@ -43,16 +43,6 @@ var ThisCouldBeBetter;
             toEntity() {
                 throw new Error("Must be overridden in subclass.");
             }
-            // Clonable.
-            clone() { throw new Error("todo"); }
-            overwriteWith(other) { throw new Error("todo"); }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return CollisionTrackerBase.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.CollisionTrackerBase = CollisionTrackerBase;
         // BruteForce.
@@ -91,15 +81,6 @@ var ThisCouldBeBetter;
             // Clonable.
             clone() { return this; }
             overwriteWith(other) { return this; }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return CollisionTrackerBase.name; }
-            updateForTimerTick(uwpe) {
-                // Do nothing.
-            }
-            // Equatable.
-            equals(other) { return false; } // todo
         }
         GameFramework.CollisionTrackerBruteForce = CollisionTrackerBruteForce;
         // Mapped.
@@ -202,14 +183,12 @@ var ThisCouldBeBetter;
                 // Do nothing.  Handled in entityReset().
             }
             toEntity() {
-                return new GameFramework.Entity(CollisionTrackerBase.name, [this]);
+                return GameFramework.Entity.fromNameAndProperty(CollisionTrackerBase.name, this);
             }
             // Clonable.
             clone() { return this; }
             overwriteWith(other) { return this; }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
             updateForTimerTick(uwpe) {
                 /*
                 var cellsAll = this._cells;
@@ -219,8 +198,6 @@ var ThisCouldBeBetter;
                 });
                 */
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.CollisionTrackerMapped = CollisionTrackerMapped;
         class CollisionTrackerMappedCollidableData {

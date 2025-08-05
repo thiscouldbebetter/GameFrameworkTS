@@ -6,8 +6,8 @@ export class ControlContainer extends ControlBase
 {
 	children: ControlBase[];
 	childrenByName: Map<string, ControlBase>;
-	actions: Action[];
-	actionsByName: Map<string, Action>;
+	_actions: Action[];
+	_actionsByName: Map<string, Action>;
 	_actionToInputsMappings: ActionToInputsMapping[];
 	_actionToInputsMappingsByInputName: Map<string, ActionToInputsMapping>;
 
@@ -34,15 +34,10 @@ export class ControlContainer extends ControlBase
 	{
 		super(name, pos, size, null);
 		this.children = children;
-		this.actions = (actions || []);
+		this._actions = (actions || []);
 		this._actionToInputsMappings = actionToInputsMappings || [];
-		this._actionToInputsMappingsByInputName = ArrayHelper.addLookupsMultiple
-		(
-			this._actionToInputsMappings, x => x.inputNames
-		);
 
 		this.childrenByName = ArrayHelper.addLookupsByName(this.children);
-		this.actionsByName = ArrayHelper.addLookupsByName(this.actions);
 
 		for (var i = 0; i < this.children.length; i++)
 		{
@@ -160,18 +155,18 @@ export class ControlContainer extends ControlBase
 				childWithFocus = this.childFocusNextInDirection(direction);
 			}
 		}
-		else if (this._actionToInputsMappingsByInputName.has(actionNameToHandle))
+		else if (this.actionToInputsMappingsByInputName().has(actionNameToHandle))
 		{
 			var inputName = actionNameToHandle; // Likely passed from parent as raw input.
-			var mapping = this._actionToInputsMappingsByInputName.get(inputName);
+			var mapping = this.actionToInputsMappingByInputName(inputName);
 			var actionName = mapping.actionName;
-			var action = this.actionsByName.get(actionName);
+			var action = this.actionByName(actionName);
 			action.performForUniverse(universe);
 			wasActionHandled = true;
 		}
-		else if (this.actionsByName.has(actionNameToHandle))
+		else if (this.actionsByName().has(actionNameToHandle) )
 		{
-			var action = this.actionsByName.get(actionNameToHandle);
+			var action = this.actionByName(actionNameToHandle);
 			action.performForUniverse(universe);
 			wasActionHandled = true;
 		}
@@ -186,9 +181,75 @@ export class ControlContainer extends ControlBase
 		return wasActionHandled;
 	}
 
+	actionAdd(actionToAdd: Action): ControlContainer
+	{
+		var actions = this.actions();
+		actions.push(actionToAdd);
+		this.actionsSet(actions);
+		return this;
+	}
+
+	actionByName(name: string): Action
+	{
+		return this.actionsByName().get(name);
+	}
+
 	actionToInputsMappings(): ActionToInputsMapping[]
 	{
 		return this._actionToInputsMappings;
+	}
+
+	actionToInputsMappingByInputName(inputName: string): ActionToInputsMapping
+	{
+		return this.actionToInputsMappingsByInputName().get(inputName);
+	}
+
+	actionToInputsMappingsByInputName(): Map<string, ActionToInputsMapping>
+	{
+		if (this._actionToInputsMappingsByInputName == null)
+		{
+			this._actionToInputsMappingsByInputName =
+				new Map<string, ActionToInputsMapping>();
+			for (var i = 0; i < this._actionToInputsMappings.length; i++)
+			{
+				var mapping = this._actionToInputsMappings[i];
+				for (var j = 0; j < mapping.inputNames.length; j++)
+				{
+					var inputName = mapping.inputNames[j];
+					this._actionToInputsMappingsByInputName.set(inputName, mapping);
+				}
+			}
+		}
+
+		return this._actionToInputsMappingsByInputName;
+	}
+
+	actionToInputsMappingsSet(values: ActionToInputsMapping[]): ControlContainer
+	{
+		this._actionToInputsMappings = values;
+		this._actionToInputsMappingsByInputName = null;
+		return this;
+	}
+
+	actions(): Action[]
+	{
+		return this._actions;
+	}
+
+	actionsByName(): Map<string, Action>
+	{
+		if (this._actionsByName == null)
+		{
+			this._actionsByName = new Map(this._actions.map(x => [x.name, x] ) );
+		}
+		return this._actionsByName;
+	}
+
+	actionsSet(values: Action[]): ControlContainer
+	{
+		this._actions = values;
+		this._actionsByName = null;
+		return this;
 	}
 
 	childAdd(childToAdd: ControlBase): void

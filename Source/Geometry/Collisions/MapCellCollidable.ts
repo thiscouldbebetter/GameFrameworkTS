@@ -11,8 +11,8 @@ export class MapCellCollidable implements MapCell
 		this.isBlocking = false;
 	}
 
-	clone(): MapCellCollidable { throw new Error("todo"); }
-	overwriteWith(other: MapCellCollidable): MapCellCollidable { throw new Error("todo"); }
+	clone(): MapCellCollidable { throw new Error("Not implemented!"); }
+	overwriteWith(other: MapCellCollidable): MapCellCollidable { throw new Error("Not implemented!"); }
 }
 
 }

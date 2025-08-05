@@ -21,7 +21,7 @@ export interface CollisionTracker
 	toEntity(): Entity;
 }
 
-export class CollisionTrackerBase implements CollisionTracker, EntityProperty
+export class CollisionTrackerBase extends EntityPropertyBase<CollisionTrackerBase> implements CollisionTracker
 {
 	static fromPlace(uwpe: UniverseWorldPlaceEntities): CollisionTracker
 	{
@@ -89,21 +89,6 @@ export class CollisionTrackerBase implements CollisionTracker, EntityProperty
 	{
 		throw new Error("Must be overridden in subclass.");
 	}
-
-	// Clonable.
-	clone(): CollisionTrackerBase { throw new Error("todo"); }
-	overwriteWith(other: CollisionTrackerBase): CollisionTrackerBase { throw new Error("todo"); }
-
-	// EntityProperty.
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return CollisionTrackerBase.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: CollisionTrackerBase): boolean { return false; } // todo
-
 }
 
 export interface CollisionTrackerCollidableData
@@ -184,23 +169,6 @@ export class CollisionTrackerBruteForce extends CollisionTrackerBase
 	// Clonable.
 	clone(): CollisionTrackerBruteForce { return this; }
 	overwriteWith(other: CollisionTrackerBruteForce): CollisionTrackerBruteForce { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return CollisionTrackerBase.name; }
-
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
-	{
-		// Do nothing.
-	}
-
-	// Equatable.
-
-	equals(other: CollisionTrackerBase): boolean { return false; } // todo
 }
 
 // Mapped.
@@ -391,9 +359,9 @@ export class CollisionTrackerMapped extends CollisionTrackerBase
 
 	toEntity(): Entity
 	{
-		return new Entity
+		return Entity.fromNameAndProperty
 		(
-			CollisionTrackerBase.name, [ this ]
+			CollisionTrackerBase.name, this
 		);
 	}
 
@@ -402,10 +370,6 @@ export class CollisionTrackerMapped extends CollisionTrackerBase
 	overwriteWith(other: CollisionTrackerMapped): CollisionTrackerMapped { return this; }
 
 	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -417,10 +381,6 @@ export class CollisionTrackerMapped extends CollisionTrackerBase
 		});
 		*/
 	}
-
-	// Equatable
-
-	equals(other: CollisionTrackerMapped): boolean { return false; } // todo
 }
 
 export class CollisionTrackerMappedCollidableData implements CollisionTrackerCollidableData

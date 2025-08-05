@@ -277,7 +277,7 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(buttonWidth, buttonHeight), // size
                     "Resume", this.fontBase, () => this.gameAndSettings_Back(universe, venuePrev));
                     returnValue.children.push(buttonResume);
-                    returnValue.actions.push(GameFramework.Action.fromNameAndPerform("Back", () => this.gameAndSettings_Back(universe, venuePrev)));
+                    returnValue.actionAdd(GameFramework.Action.fromNameAndPerform("Back", () => this.gameAndSettings_Back(universe, venuePrev)));
                     returnValue._actionToInputsMappings.push(GameFramework.ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce("Back", GameFramework.Input.Instances().Escape.name, true));
                 }
                 returnValue.scalePosAndSize(scaleMultiplier);
