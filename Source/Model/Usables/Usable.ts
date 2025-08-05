@@ -49,17 +49,6 @@ export class Usable extends EntityPropertyBase<Usable>
 		this._use = other._use;
 		return this;
 	}
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Usable.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Usable): boolean { return false; } // todo
 }
 
 }

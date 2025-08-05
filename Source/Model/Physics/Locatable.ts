@@ -186,7 +186,6 @@ export class Locatable extends EntityPropertyBase<Locatable>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var placeName = (uwpe.place == null ? null : uwpe.place.name);

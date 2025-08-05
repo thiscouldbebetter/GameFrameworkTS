@@ -25,22 +25,6 @@ export class Obstacle extends EntityPropertyBase<Obstacle>
 	{
 		return this;
 	}
-
-	overwriteWith(other: Obstacle): Obstacle
-	{
-		return this;
-	}
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Obstacle.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Obstacle): boolean { return false; } // todo
 }
 
 }

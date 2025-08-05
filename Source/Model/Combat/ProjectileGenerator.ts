@@ -96,18 +96,8 @@ export class ProjectileGenerator
 	}
 
 	// Clonable.
+
 	clone(): ProjectileGenerator { return this; }
-	overwriteWith(other: ProjectileGenerator): ProjectileGenerator { return this; }
-
-	// EntityProperty.
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return ProjectileGenerator.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: ProjectileGenerator): boolean { return false; } // todo
 
 }
 

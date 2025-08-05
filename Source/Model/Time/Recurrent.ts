@@ -35,11 +35,6 @@ export class Recurrent extends EntityPropertyBase<Recurrent>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Recurrent.name; }
-
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.timesRecurredSoFar < this.timesToRecur)
@@ -60,12 +55,6 @@ export class Recurrent extends EntityPropertyBase<Recurrent>
 	{
 		return new Recurrent(this.ticksPerRecurrence, this.timesToRecur, this.recur);
 	}
-
-	overwriteWith(other: Recurrent): Recurrent { return this; }
-
-	// Equatable
-
-	equals(other: Recurrent): boolean { return false; } // todo
 
 }
 

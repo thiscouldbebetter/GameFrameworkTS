@@ -84,14 +84,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 this._entity = uwpe.entity;
             }
-            propertyName() { return Item.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Item = Item;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -16,21 +16,15 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(LoadableProperty.name);
             }
+            // EntityProperty.
             finalize(uwpe) {
                 this.unload(uwpe);
             }
             initialize(uwpe) {
                 this.load(uwpe, null);
             }
-            propertyName() { return LoadableProperty.name; }
-            updateForTimerTick(uwpe) {
-                // Do nothing.
-            }
             // Clonable.
             clone() { return this; }
-            overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
             // Loadable.
             load(uwpe, callback) {
                 if (this.isLoaded == false) {

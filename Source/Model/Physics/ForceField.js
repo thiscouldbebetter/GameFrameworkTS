@@ -34,13 +34,6 @@ var ThisCouldBeBetter;
                 }
                 return this;
             }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return ForceField.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.ForceField = ForceField;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

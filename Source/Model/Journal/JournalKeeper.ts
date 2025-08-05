@@ -28,19 +28,8 @@ export class JournalKeeper extends EntityPropertyBase<JournalKeeper>
 	}
 
 	// Clonable.
+
 	clone(): JournalKeeper { return this; }
-	overwriteWith(other: JournalKeeper): JournalKeeper { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return JournalKeeper.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: JournalKeeper): boolean { return false; } // todo
 
 	// Controls.
 

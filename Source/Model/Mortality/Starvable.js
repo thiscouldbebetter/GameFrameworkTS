@@ -36,9 +36,6 @@ var ThisCouldBeBetter;
                 return (this.satiety <= 0);
             }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Starvable.name; }
             updateForTimerTick(uwpe) {
                 if (this.isStarving()) {
                     this.starve(uwpe);
@@ -54,9 +51,6 @@ var ThisCouldBeBetter;
             clone() {
                 return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
             }
-            overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Starvable = Starvable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

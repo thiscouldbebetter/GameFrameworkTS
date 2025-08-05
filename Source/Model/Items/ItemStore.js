@@ -44,14 +44,6 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() { return this; }
-            overwriteWith(other) { return this; }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return ItemStore.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
             // Controllable.
             toControl(universe, size, entityCustomer, entityStore, venuePrev) {
                 if (size == null) {

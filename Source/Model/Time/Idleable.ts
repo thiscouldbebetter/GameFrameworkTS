@@ -43,17 +43,7 @@ export class Idleable extends EntityPropertyBase<Idleable>
 		return this;
 	}
 
-	overwriteWith(other: Idleable): Idleable
-	{
-		return this;
-	}
-
 	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Idleable.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -70,10 +60,6 @@ export class Idleable extends EntityPropertyBase<Idleable>
 			this.idle(uwpe);
 		}
 	}
-
-	// Equatable
-
-	equals(other: Idleable): boolean { return false; } // todo
 
 }
 

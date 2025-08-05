@@ -62,14 +62,6 @@ var ThisCouldBeBetter;
             clone() {
                 return new Portal(this.destinationPlaceName, this.destinationEntityName, this.velocityToApply == null ? null : this.velocityToApply.clone());
             }
-            overwriteWith(other) { return this; }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Portal.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Portal = Portal;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

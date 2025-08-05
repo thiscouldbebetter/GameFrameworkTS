@@ -371,9 +371,6 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() { return this; }
-            overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.EquipmentUser = EquipmentUser;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

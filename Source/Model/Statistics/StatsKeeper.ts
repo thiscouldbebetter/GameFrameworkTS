@@ -121,32 +121,6 @@ export class StatsKeeper extends EntityPropertyBase<StatsKeeper>
 	{
 		this.statWithNameIncrement(this.StatNameKills);
 	}
-
-	// Clonable.
-
-	clone(): StatsKeeper
-	{
-		throw new Error("todo");
-	}
-
-	overwriteWith(other: StatsKeeper): StatsKeeper
-	{
-		throw new Error("todo");
-	}
-
-	// Equatable
-
-	equals(other: StatsKeeper): boolean { return false; } // todo
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return StatsKeeper.name; }
-
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

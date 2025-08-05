@@ -59,17 +59,6 @@ export class ForceField extends EntityPropertyBase<ForceField>
 		return this;
 	}
 
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return ForceField.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: ForceField): boolean { return false; } // todo
-
 }
 
 }

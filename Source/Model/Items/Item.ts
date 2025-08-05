@@ -137,21 +137,10 @@ export class Item extends EntityPropertyBase<Item>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this._entity = uwpe.entity;
 	}
-
-	propertyName(): string { return Item.name; }
-
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Item): boolean { return false; } // todo
-
 }
 
 }

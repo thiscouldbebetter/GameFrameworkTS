@@ -48,9 +48,6 @@ var ThisCouldBeBetter;
                 this.staminaAdd(0 - amountToSubtract);
             }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Tirable.name; }
             updateForTimerTick(uwpe) {
                 if (this.isExhausted()) {
                     this.fallAsleep(uwpe);
@@ -60,13 +57,10 @@ var ThisCouldBeBetter;
                     this.staminaAdd(this.staminaRecoveredPerTick);
                 }
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new Tirable(this.staminaMaxAfterSleep, this.staminaRecoveredPerTick, this.staminaMaxLostPerTick, this.staminaMaxRecoveredPerTickOfSleep, this._fallAsleep);
             }
-            overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Tirable = Tirable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

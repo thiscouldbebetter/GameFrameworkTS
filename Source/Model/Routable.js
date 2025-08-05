@@ -12,7 +12,6 @@ var ThisCouldBeBetter;
                 return new Routable(route);
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 this.route.bounds =
                     GameFramework.BoxAxisAligned.fromMinAndMax(GameFramework.Coords.create(), uwpe.place.size().clone());
@@ -23,11 +22,6 @@ var ThisCouldBeBetter;
             clone() {
                 return this; // todo
             }
-            overwriteWith(other) {
-                return this; // todo
-            }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Routable = Routable;
         class Route {

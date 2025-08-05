@@ -108,19 +108,6 @@ export class Portal extends EntityPropertyBase<Portal>
 		);
 	}
 
-	overwriteWith(other: Portal): Portal { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Portal.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Portal): boolean { return false; } // todo
-
 }
 
 }

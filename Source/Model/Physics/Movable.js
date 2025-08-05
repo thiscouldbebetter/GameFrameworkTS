@@ -74,7 +74,6 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 var entity = uwpe.entity;
                 var constrainable = GameFramework.Constrainable.of(entity);
@@ -86,10 +85,6 @@ var ThisCouldBeBetter;
                     }
                 }
             }
-            propertyName() { return Movable.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
             // Actions.
             static actionAccelerate_Perform(uwpe, direction, orientationMatchesAcceleration) {
                 var actor = uwpe.entity;

@@ -97,11 +97,10 @@ var ThisCouldBeBetter;
                 return (this.hidden == false);
             }
             // EntityProperty.
-            propertyName() { return Drawable.name; }
             updateForTimerTick(uwpe) {
                 this.draw(uwpe);
             }
-            // cloneable
+            // Clonable.
             clone() {
                 return new Drawable(this.visual, this.renderingOrder, this.hidden, this.sizeInWrappedInstances.clone());
             }
@@ -113,11 +112,6 @@ var ThisCouldBeBetter;
                     .overwriteWith(other.sizeInWrappedInstances);
                 return this;
             }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            // Equatable
-            equals(other) { throw new Error("todo"); }
         }
         GameFramework.Drawable = Drawable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

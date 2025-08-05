@@ -108,11 +108,6 @@ export class Tirable extends EntityPropertyBase<Tirable>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Tirable.name; }
-
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isExhausted())
@@ -126,7 +121,7 @@ export class Tirable extends EntityPropertyBase<Tirable>
 		}
 	}
 
-	// cloneable
+	// Clonable.
 
 	clone(): Tirable
 	{
@@ -139,12 +134,6 @@ export class Tirable extends EntityPropertyBase<Tirable>
 			this._fallAsleep
 		);
 	}
-
-	overwriteWith(other: Tirable): Tirable { return this; }
-
-	// Equatable
-
-	equals(other: Tirable): boolean { return false; } // todo
 
 }
 

@@ -46,13 +46,6 @@ export class Actor extends EntityPropertyBase<Actor>
 		return entity.propertyByName(Actor.name) as Actor;
 	}
 
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Actor.name; }
-
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.activity.perform(uwpe);
@@ -70,10 +63,6 @@ export class Actor extends EntityPropertyBase<Actor>
 		this.activity.overwriteWith(other.activity);
 		return this;
 	}
-
-	// Equatable
-
-	equals(other: Actor): boolean { return false; } // todo
 
 }
 

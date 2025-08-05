@@ -24,11 +24,6 @@ var ThisCouldBeBetter;
                 this.entityRelatedId = other.entityRelatedId;
                 return this;
             }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Relatable.name; }
-            updateForTimerTick(uwpe) { }
             // Equatable.
             equals(other) {
                 var returnValue = this.relationshipName == other.relationshipName

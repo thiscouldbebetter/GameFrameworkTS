@@ -16,9 +16,6 @@ var ThisCouldBeBetter;
                 return entity.propertyByName(Recurrent.name);
             }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Recurrent.name; }
             updateForTimerTick(uwpe) {
                 if (this.timesRecurredSoFar < this.timesToRecur) {
                     this.ticksUntilRecurrence--;
@@ -33,9 +30,6 @@ var ThisCouldBeBetter;
             clone() {
                 return new Recurrent(this.ticksPerRecurrence, this.timesToRecur, this.recur);
             }
-            overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Recurrent = Recurrent;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -108,11 +108,6 @@ export class Perceptible extends EntityPropertyBase<Perceptible>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Perceptible.name; }
-
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.isHiding != this._isHidingPrev)
@@ -143,10 +138,6 @@ export class Perceptible extends EntityPropertyBase<Perceptible>
 		this.audibility = other.audibility;
 		return this;
 	}
-
-	// Equatable
-
-	equals(other: Perceptible): boolean { return false; } // todo
 
 }
 

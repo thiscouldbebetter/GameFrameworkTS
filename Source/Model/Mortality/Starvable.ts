@@ -76,11 +76,6 @@ export class Starvable extends EntityPropertyBase<Starvable>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Starvable.name; }
-
 	updateForTimerTick
 	(
 		uwpe: UniverseWorldPlaceEntities
@@ -106,13 +101,6 @@ export class Starvable extends EntityPropertyBase<Starvable>
 	{
 		return new Starvable(this.satietyMax, this.satietyLostPerTick, this._starve);
 	}
-
-	overwriteWith(other: Starvable): Starvable { return this; }
-
-	// Equatable
-
-	equals(other: Starvable): boolean { return false; } // todo
-
 }
 
 }

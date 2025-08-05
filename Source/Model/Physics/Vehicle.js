@@ -14,11 +14,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() { return this; }
-            overwriteWith(other) { return this; }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Vehicle.name; }
             updateForTimerTick(uwpe) {
                 if (this.entityOccupant != null) {
                     var universe = uwpe.universe;
@@ -71,8 +67,6 @@ var ThisCouldBeBetter;
                     vehicleVel.trimToMagnitudeMax(this.speedMax);
                 }
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Vehicle = Vehicle;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -94,14 +94,10 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.updateForTimerTick(uwpe);
 	}
-
-	propertyName(): string { return Constrainable.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -120,10 +116,6 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 		ArrayHelper.overwriteWith(this.constraints, other.constraints);
 		return this;
 	}
-
-	// Equatable
-
-	equals(other: Constrainable): boolean { return false; } // todo
 
 }
 

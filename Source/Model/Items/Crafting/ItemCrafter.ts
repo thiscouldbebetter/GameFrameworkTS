@@ -448,10 +448,6 @@ export class ItemCrafter extends EntityPropertyBase<ItemCrafter>
 
 	overwriteWith(other: ItemCrafter): ItemCrafter { return this; }
 
-
-	// Equatable
-
-	equals(other: ItemCrafter): boolean { return false; } // todo
 }
 
 }

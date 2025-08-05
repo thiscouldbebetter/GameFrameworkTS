@@ -133,12 +133,10 @@ var ThisCouldBeBetter;
                 return this._control;
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 var place = uwpe.place;
                 place.entityToSpawnAdd(this.entityForCursor);
             }
-            propertyName() { return Selector.name; }
             updateForTimerTick(uwpe) {
                 var cursorPos = GameFramework.Locatable.of(this.entityForCursor).loc.pos;
                 var mousePosAbsolute = this.mouseMovePosAbsoluteGet(uwpe);

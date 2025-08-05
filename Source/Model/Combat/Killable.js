@@ -114,11 +114,9 @@ var ThisCouldBeBetter;
                 this.ticksOfImmunityRemaining = this.ticksOfImmunityInitial;
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 this.ticksOfImmunityRemainingReset();
             }
-            propertyName() { return Killable.name; }
             updateForTimerTick(uwpe) {
                 var immunityIsInEffect = this.immunityIsInEffect();
                 if (immunityIsInEffect) {
@@ -148,8 +146,6 @@ var ThisCouldBeBetter;
                 this.ticksOfImmunityRemaining = other.ticksOfImmunityRemaining;
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Killable = Killable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

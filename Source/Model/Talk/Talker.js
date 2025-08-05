@@ -79,16 +79,6 @@ var ThisCouldBeBetter;
             clone() {
                 return this;
             }
-            overwriteWith(other) {
-                return this;
-            }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Talker.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Talker = Talker;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

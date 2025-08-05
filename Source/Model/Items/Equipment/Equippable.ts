@@ -57,22 +57,6 @@ export class Equippable extends EntityPropertyBase<Equippable>
 		return this;
 	}
 
-	overwriteWith(other: Equippable)
-	{
-		return this;
-	}
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Equippable.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Equippable): boolean { return false; } // todo
-
 }
 
 }

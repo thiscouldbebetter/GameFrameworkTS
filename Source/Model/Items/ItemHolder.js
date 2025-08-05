@@ -291,13 +291,6 @@ var ThisCouldBeBetter;
                 );
                 return tradeValueTotal;
             }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return ItemHolder.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
             // Controllable.
             toControl(universe, size, entityItemHolder, venuePrev, includeTitleAndDoneButton) {
                 this.statusMessageSet("Use, drop, and sort items.");
@@ -514,7 +507,6 @@ var ThisCouldBeBetter;
             clone() {
                 return new ItemHolder(GameFramework.ArrayHelper.clone(this.items), this.encumbranceMax, this.reachRadius, this.retainsItemsWithZeroQuantities);
             }
-            overwriteWith(other) { return this; } // todo
         }
         GameFramework.ItemHolder = ItemHolder;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

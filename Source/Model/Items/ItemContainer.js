@@ -37,14 +37,6 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() { return this; }
-            overwriteWith(other) { return this; }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return ItemContainer.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
             // Controllable.
             toControl(universe, size, entityGetterPutter, entityContainer, venuePrev) {
                 if (size == null) {

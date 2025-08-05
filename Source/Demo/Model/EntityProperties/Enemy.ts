@@ -119,19 +119,4 @@ class Enemy extends EntityPropertyBase<Enemy>
 
 		return enemyActivityDefn;
 	}
-
-	// Clonable.
-	clone(): Enemy { return this; }
-	overwriteWith(other: Enemy): Enemy { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Enemy.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Enemy): boolean { return false; } // todo
 }

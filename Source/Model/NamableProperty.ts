@@ -21,19 +21,6 @@ export class NamableProperty extends EntityPropertyBase<NamableProperty>
 	// Clonable.
 
 	clone(): NamableProperty { return this; }
-
-	overwriteWith(other: NamableProperty): NamableProperty { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return NamableProperty.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable.
-
-	equals(other: NamableProperty) { return false; }
 }
 
 }

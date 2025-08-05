@@ -34,13 +34,6 @@ var ThisCouldBeBetter;
                 this._scoreGet = other._scoreGet;
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Scorable.name; }
-            updateForTimerTick(uwpe) { }
         }
         GameFramework.Scorable = Scorable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

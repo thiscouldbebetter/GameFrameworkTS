@@ -52,9 +52,6 @@ var ThisCouldBeBetter;
                 }
             }
             // EntityProperty.
-            finalize(uwpe) { }
-            propertyName() { return Device.name; }
-            updateForTimerTick(uwpe) { }
             initialize(uwpe) {
                 if (this._initialize != null) {
                     this._initialize(uwpe);
@@ -64,9 +61,6 @@ var ThisCouldBeBetter;
             clone() {
                 return new Device(this.name, this._initialize, this._update, this._canUse, this._use);
             }
-            overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Device = Device;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

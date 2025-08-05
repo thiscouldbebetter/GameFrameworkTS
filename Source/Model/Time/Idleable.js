@@ -25,13 +25,7 @@ var ThisCouldBeBetter;
             clone() {
                 return this;
             }
-            overwriteWith(other) {
-                return this;
-            }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Idleable.name; }
             updateForTimerTick(uwpe) {
                 var world = uwpe.world;
                 var entity = uwpe.entity;
@@ -44,8 +38,6 @@ var ThisCouldBeBetter;
                     this.idle(uwpe);
                 }
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Idleable = Idleable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

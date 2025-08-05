@@ -56,11 +56,6 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Ephemeral.name; }
-
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.ticksToLive--;
@@ -81,12 +76,6 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 	{
 		return new Ephemeral(this.ticksToLive, this.expire);
 	}
-
-	overwriteWith(other: Ephemeral): Ephemeral { return this; }
-
-	// Equatable
-
-	equals(other: Ephemeral): boolean { return false; } // todo
 
 }
 

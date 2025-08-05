@@ -135,23 +135,6 @@ export class Talker extends EntityPropertyBase<Talker>
 	{
 		return this;
 	}
-
-	overwriteWith(other: Talker): Talker
-	{
-		return this;
-	}
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Talker.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Talker): boolean { return false; } // todo
-
 }
 
 }

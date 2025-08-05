@@ -66,19 +66,8 @@ export class ItemContainer extends EntityPropertyBase<ItemContainer>
 	}
 
 	// Clonable.
+
 	clone(): ItemContainer { return this; }
-	overwriteWith(other: ItemContainer): ItemContainer { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return ItemContainer.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: ItemContainer): boolean { return false; } // todo
 
 	// Controllable.
 

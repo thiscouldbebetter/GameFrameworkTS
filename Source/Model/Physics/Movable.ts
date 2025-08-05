@@ -145,8 +145,6 @@ export class Movable extends EntityPropertyBase<Movable>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;
@@ -163,13 +161,6 @@ export class Movable extends EntityPropertyBase<Movable>
 			}
 		}
 	}
-
-	propertyName(): string { return Movable.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Movable): boolean { return false; } // todo
 
 	// Actions.
 

@@ -568,8 +568,8 @@ export class ItemBarterer extends EntityPropertyBase<ItemBarterer>
 	}
 
 	// Clonable.
+
 	clone(): ItemBarterer { return this; }
-	overwriteWith(other: ItemBarterer): ItemBarterer { return this; }
 
 }
 

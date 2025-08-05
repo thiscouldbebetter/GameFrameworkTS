@@ -209,8 +209,6 @@ var ThisCouldBeBetter;
                 return new ItemCrafter(GameFramework.ArrayHelper.clone(this.recipesAvailable));
             }
             overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.ItemCrafter = ItemCrafter;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

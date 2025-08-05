@@ -108,10 +108,6 @@ export class Device extends EntityPropertyBase<Device>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Device.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this._initialize != null)
@@ -133,12 +129,6 @@ export class Device extends EntityPropertyBase<Device>
 			this._use
 		);
 	}
-
-	overwriteWith(other: Device): Device { return this; }
-
-	// Equatable
-
-	equals(other: Device): boolean { return false; } // todo
 
 }
 

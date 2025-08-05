@@ -45,15 +45,10 @@ export class Effectable extends EntityPropertyBase<Effectable>
 	}
 
 	// Clonable.
+
 	clone(): Effectable { return this; }
-	overwriteWith(other: Effectable): Effectable { return this; }
 
 	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Effectable.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -64,10 +59,6 @@ export class Effectable extends EntityPropertyBase<Effectable>
 		}
 		this.effects = this.effects.filter(x => x.isDone() == false);
 	}
-
-	// Equatable
-
-	equals(other: Effectable): boolean { return false; } // todo
 }
 
 }

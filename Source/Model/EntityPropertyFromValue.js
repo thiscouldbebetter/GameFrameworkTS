@@ -22,11 +22,6 @@ var ThisCouldBeBetter;
                 this.value = other.value;
                 return this;
             }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return EntityPropertyFromValue.name; }
-            updateForTimerTick(uwpe) { }
             // Equatable
             equals(other) {
                 return this.value == other.value;

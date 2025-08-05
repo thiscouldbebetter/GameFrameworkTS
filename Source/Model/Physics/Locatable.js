@@ -101,7 +101,6 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 var placeName = (uwpe.place == null ? null : uwpe.place.name);
                 this.loc.placeNameSet(placeName);

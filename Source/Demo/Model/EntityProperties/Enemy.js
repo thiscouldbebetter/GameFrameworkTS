@@ -62,14 +62,4 @@ class Enemy extends EntityPropertyBase {
         var enemyActivityDefn = new ActivityDefn("Enemy", enemyActivityPerform);
         return enemyActivityDefn;
     }
-    // Clonable.
-    clone() { return this; }
-    overwriteWith(other) { return this; }
-    // EntityProperty.
-    finalize(uwpe) { }
-    initialize(uwpe) { }
-    propertyName() { return Enemy.name; }
-    updateForTimerTick(uwpe) { }
-    // Equatable
-    equals(other) { return false; } // todo
 }

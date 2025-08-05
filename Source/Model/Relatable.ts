@@ -42,13 +42,6 @@ export class Relatable extends EntityPropertyBase<Relatable>
 		return this;
 	}
 
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Relatable.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
 	// Equatable.
 
 	equals(other: Relatable)

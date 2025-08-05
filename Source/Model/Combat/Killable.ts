@@ -254,14 +254,10 @@ export class Killable extends EntityPropertyBase<Killable>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.ticksOfImmunityRemainingReset();
 	}
-
-	propertyName(): string { return Killable.name; }
 
 	updateForTimerTick
 	(
@@ -313,10 +309,6 @@ export class Killable extends EntityPropertyBase<Killable>
 
 		return this;
 	}
-
-	// Equatable
-
-	equals(other: Killable): boolean { return false; } // todo
 }
 
 }

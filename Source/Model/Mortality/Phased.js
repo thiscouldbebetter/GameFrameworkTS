@@ -40,14 +40,12 @@ var ThisCouldBeBetter;
                 return this;
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 for (var i = 0; i <= this.phaseCurrentIndex; i++) {
                     var phase = this.phases[i];
                     phase.enter(uwpe);
                 }
             }
-            propertyName() { return Phased.name; }
             updateForTimerTick(uwpe) {
                 this.ticksOnPhaseCurrent++;
                 var phaseCurrent = this.phaseCurrent();
@@ -68,8 +66,6 @@ var ThisCouldBeBetter;
                 this.ticksOnPhaseCurrent = other.ticksOnPhaseCurrent;
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Phased = Phased;
         class Phase {

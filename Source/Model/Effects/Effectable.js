@@ -28,11 +28,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() { return this; }
-            overwriteWith(other) { return this; }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Effectable.name; }
             updateForTimerTick(uwpe) {
                 for (var i = 0; i < this.effects.length; i++) {
                     var effect = this.effects[i];
@@ -40,8 +36,6 @@ var ThisCouldBeBetter;
                 }
                 this.effects = this.effects.filter(x => x.isDone() == false);
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Effectable = Effectable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

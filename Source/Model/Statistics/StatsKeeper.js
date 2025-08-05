@@ -71,20 +71,6 @@ var ThisCouldBeBetter;
             killsIncrement() {
                 this.statWithNameIncrement(this.StatNameKills);
             }
-            // Clonable.
-            clone() {
-                throw new Error("todo");
-            }
-            overwriteWith(other) {
-                throw new Error("todo");
-            }
-            // Equatable
-            equals(other) { return false; } // todo
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return StatsKeeper.name; }
-            updateForTimerTick(uwpe) { }
         }
         GameFramework.StatsKeeper = StatsKeeper;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -352,7 +352,6 @@ var ThisCouldBeBetter;
                 return (this._entitiesAlreadyCollidedWith.indexOf(entityOther) >= 0);
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 var entity = uwpe.entity;
                 // If this isn't done at initialization, then the colliders
@@ -364,7 +363,6 @@ var ThisCouldBeBetter;
                     this.collisionsFindAndHandle(uwpe);
                 }
             }
-            propertyName() { return Collidable.name; }
             updateForTimerTick(uwpe) {
                 var entity = uwpe.entity;
                 var entityIsStationary = this.isEntityStationary(entity);
@@ -382,9 +380,6 @@ var ThisCouldBeBetter;
             clone() {
                 return new Collidable(this.canCollideAgainWithoutSeparating, this.exemptFromCollisionEffectsOfOther, this.ticksToWaitBetweenCollisions, this.colliderAtRest.clone(), this.collidesOnlyWithEntitiesHavingPropertiesNamed, this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision);
             }
-            overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Collidable = Collidable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

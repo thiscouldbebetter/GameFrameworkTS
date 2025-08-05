@@ -306,15 +306,11 @@ export class Selector extends EntityPropertyBase<Selector>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void{}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var place = uwpe.place;
 		place.entityToSpawnAdd(this.entityForCursor);
 	}
-
-	propertyName(): string { return Selector.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{

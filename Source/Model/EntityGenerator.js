@@ -39,9 +39,6 @@ var ThisCouldBeBetter;
                 return GameFramework.Entity.fromNameAndProperties(EntityGenerator.name, [this]);
             }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return EntityGenerator.name; }
             updateForTimerTick(uwpe) {
                 if (this.exhausted()) {
                     return;
@@ -117,8 +114,6 @@ var ThisCouldBeBetter;
                 this.entitySpeedAsRange.overwriteWith(other.entitySpeedAsRange);
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.EntityGenerator = EntityGenerator;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

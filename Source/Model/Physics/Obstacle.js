@@ -19,16 +19,6 @@ var ThisCouldBeBetter;
             clone() {
                 return this;
             }
-            overwriteWith(other) {
-                return this;
-            }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Obstacle.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Obstacle = Obstacle;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

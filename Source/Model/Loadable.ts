@@ -32,6 +32,8 @@ export class LoadableProperty
 		return entity.propertyByName(LoadableProperty.name) as LoadableProperty;
 	}
 
+	// EntityProperty.
+
 	finalize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.unload(uwpe);
@@ -42,19 +44,9 @@ export class LoadableProperty
 		this.load(uwpe, null);
 	}
 
-	propertyName(): string { return LoadableProperty.name; }
-
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
-	{
-		// Do nothing.
-	}
-
 	// Clonable.
-	clone(): LoadableProperty { return this; }
-	overwriteWith(other: LoadableProperty): LoadableProperty { return this; }
 
-	// Equatable
-	equals(other: LoadableProperty): boolean { return false; } // todo
+	clone(): LoadableProperty { return this; }
 
 	// Loadable.
 	load

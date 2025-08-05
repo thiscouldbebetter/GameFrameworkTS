@@ -27,15 +27,10 @@ export class Vehicle extends EntityPropertyBase<Vehicle>
 	}
 
 	// Clonable.
+
 	clone(): Vehicle { return this; }
-	overwriteWith(other: Vehicle): Vehicle { return this; }
 
 	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Vehicle.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -127,11 +122,6 @@ export class Vehicle extends EntityPropertyBase<Vehicle>
 			);
 		}
 	}
-
-	// Equatable
-
-	equals(other: Vehicle): boolean { return false; } // todo
-
 }
 
 }

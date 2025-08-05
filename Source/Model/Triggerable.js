@@ -15,15 +15,7 @@ var ThisCouldBeBetter;
             clone() {
                 return new Triggerable(this.triggers.map(x => x.clone()));
             }
-            overwriteWith(other) {
-                return this; // todo
-            }
-            // Equatable
-            equals(other) { return false; } // todo
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Triggerable.name; }
             updateForTimerTick(uwpe) {
                 for (var i = 0; i < this.triggers.length; i++) {
                     var trigger = this.triggers[i];

@@ -20,8 +20,6 @@ export class Routable extends EntityPropertyBase<Routable>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.route.bounds =
@@ -41,15 +39,6 @@ export class Routable extends EntityPropertyBase<Routable>
 	{
 		return this; // todo
 	}
-
-	overwriteWith(other: Routable): Routable
-	{
-		return this; // todo
-	}
-
-	// Equatable
-
-	equals(other: Routable): boolean { return false; } // todo
 
 }
 

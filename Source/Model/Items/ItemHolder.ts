@@ -534,19 +534,6 @@ export class ItemHolder extends EntityPropertyBase<ItemHolder>
 		return tradeValueTotal;
 	}
 
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return ItemHolder.name; }
-
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: ItemHolder): boolean { return false; } // todo
-
 	// Controllable.
 
 	toControl
@@ -1034,8 +1021,6 @@ export class ItemHolder extends EntityPropertyBase<ItemHolder>
 			this.retainsItemsWithZeroQuantities
 		);
 	}
-
-	overwriteWith(other: ItemHolder): ItemHolder { return this; } // todo
 
 }
 

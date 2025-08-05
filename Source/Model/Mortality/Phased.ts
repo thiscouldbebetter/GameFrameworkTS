@@ -73,8 +73,6 @@ export class Phased extends EntityPropertyBase<Phased>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		for (var i = 0; i <= this.phaseCurrentIndex; i++)
@@ -83,8 +81,6 @@ export class Phased extends EntityPropertyBase<Phased>
 			phase.enter(uwpe);
 		}
 	}
-
-	propertyName(): string { return Phased.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities)
 	{
@@ -120,10 +116,6 @@ export class Phased extends EntityPropertyBase<Phased>
 		this.ticksOnPhaseCurrent = other.ticksOnPhaseCurrent;
 		return this;
 	}
-
-	// Equatable
-
-	equals(other: Phased): boolean { return false; } // todo
 
 }
 

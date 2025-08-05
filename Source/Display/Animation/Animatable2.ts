@@ -96,10 +96,7 @@ export class Animatable2 extends EntityPropertyBase<Animatable2>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Animatable2.name; }
+	clone(): Animatable2 { return this; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -123,22 +120,6 @@ export class Animatable2 extends EntityPropertyBase<Animatable2>
 			transform.transform(this.transformableTransformed);
 		}
 	}
-
-	// Clonable.
-
-	clone(): Animatable2
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Animatable2): Animatable2
-	{
-		return this; // todo
-	}
-
-	// Equatable
-
-	equals(other: Animatable2): boolean { return false; } // todo
 }
 
 }

@@ -716,8 +716,6 @@ export class Collidable extends EntityPropertyBase<Collidable>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;
@@ -733,8 +731,6 @@ export class Collidable extends EntityPropertyBase<Collidable>
 			this.collisionsFindAndHandle(uwpe);
 		}
 	}
-
-	propertyName(): string { return Collidable.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -768,12 +764,6 @@ export class Collidable extends EntityPropertyBase<Collidable>
 			this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision
 		);
 	}
-
-	overwriteWith(other: Collidable): Collidable { return this; }
-
-	// Equatable
-
-	equals(other: Collidable): boolean { return false; } // todo
 
 }
 

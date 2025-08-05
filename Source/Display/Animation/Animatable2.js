@@ -50,9 +50,7 @@ var ThisCouldBeBetter;
                 this.transformableTransformed.overwriteWith(this.transformableAtRest);
             }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Animatable2.name; }
+            clone() { return this; }
             updateForTimerTick(uwpe) {
                 var world = uwpe.world;
                 var animationDefnsRunning = this.animationDefnsRunning();
@@ -65,15 +63,6 @@ var ThisCouldBeBetter;
                     transform.transform(this.transformableTransformed);
                 }
             }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
-            }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Animatable2 = Animatable2;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

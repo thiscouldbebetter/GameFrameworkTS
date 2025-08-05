@@ -65,9 +65,6 @@ var ThisCouldBeBetter;
                 return this._visibilityGet(uwpe);
             }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Perceptible.name; }
             updateForTimerTick(uwpe) {
                 if (this.isHiding != this._isHidingPrev) {
                     this._isHidingPrev = this.isHiding;
@@ -89,8 +86,6 @@ var ThisCouldBeBetter;
                 this.audibility = other.audibility;
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Perceptible = Perceptible;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

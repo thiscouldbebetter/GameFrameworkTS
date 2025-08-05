@@ -516,18 +516,6 @@ export class Playable extends EntityPropertyBase<Playable>
 	// Clonable.
 
 	clone(): Playable { return this; }
-	overwriteWith(other: Playable): Playable { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Playable.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Playable): boolean { return false; } // todo
 }
 
 }

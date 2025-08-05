@@ -25,22 +25,7 @@ export class Triggerable extends EntityPropertyBase<Triggerable>
 		return new Triggerable(this.triggers.map(x => x.clone() ) );
 	}
 
-	overwriteWith(other: Triggerable): Triggerable
-	{
-		return this; // todo
-	}
-
-	// Equatable
-
-	equals(other: Triggerable): boolean { return false; } // todo
-
 	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Triggerable.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{

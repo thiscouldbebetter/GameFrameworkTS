@@ -187,20 +187,9 @@ export class ItemDefn extends EntityPropertyBase<ItemDefn>
 		}
 	}
 
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return ItemDefn.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: ItemDefn): boolean { return false; } // todo
-
 	// Clonable.
+
 	clone(): ItemDefn { return this; }
-	overwriteWith(other: ItemDefn): ItemDefn { return this; }
 
 }
 

@@ -255,18 +255,6 @@ var ThisCouldBeBetter;
                 var constrainable = GameFramework.Constrainable.fromConstraint(constraintMultiple);
                 return constrainable;
             }
-            // Clonable.
-            clone() { return this; }
-            overwriteWith(other) { return this; }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Camera.name; }
-            updateForTimerTick(uwpe) {
-                // Do nothing.  Rendering is done in Place.draw().
-            }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Camera = Camera;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

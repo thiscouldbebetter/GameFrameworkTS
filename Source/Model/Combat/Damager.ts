@@ -64,22 +64,15 @@ export class Damager extends EntityPropertyBase<Damager>
 	}
 
 	// Clonable.
+
 	clone(): Damager { return this; }
-	overwriteWith(other: Damager): Damager { return this; }
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Damager.name; }
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.ticksUntilCanAttempt--;
 	}
-
-	// Equatable
-
-	equals(other: Damager): boolean { return false; } // todo
 }
 
 }

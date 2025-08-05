@@ -75,16 +75,8 @@ var ThisCouldBeBetter;
                     this._use(uwpe);
                 }
             }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return ItemDefn.name; }
-            updateForTimerTick(uwpe) { }
-            // Equatable
-            equals(other) { return false; } // todo
             // Clonable.
             clone() { return this; }
-            overwriteWith(other) { return this; }
         }
         GameFramework.ItemDefn = ItemDefn;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

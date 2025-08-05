@@ -85,19 +85,8 @@ export class ItemStore extends EntityPropertyBase<ItemStore>
 	}
 
 	// Clonable.
+
 	clone(): ItemStore { return this; }
-	overwriteWith(other: ItemStore): ItemStore { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return ItemStore.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: ItemStore): boolean { return false; } // todo
 
 	// Controllable.
 

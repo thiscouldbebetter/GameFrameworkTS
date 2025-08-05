@@ -173,14 +173,12 @@ export class Drawable extends EntityPropertyBase<Drawable>
 
 	// EntityProperty.
 
-	propertyName(): string { return Drawable.name; }
-
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.draw(uwpe);
 	}
 
-	// cloneable
+	// Clonable.
 
 	clone(): Drawable
 	{
@@ -202,16 +200,6 @@ export class Drawable extends EntityPropertyBase<Drawable>
 			.overwriteWith(other.sizeInWrappedInstances);
 		return this;
 	}
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Drawable): boolean { throw new Error("todo"); }
-
 }
 
 }

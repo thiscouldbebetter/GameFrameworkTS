@@ -53,18 +53,6 @@ export class Selectable extends EntityPropertyBase<Selectable>
 		this._deselect = other._deselect;
 		return this;
 	}
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Selectable.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Selectable): boolean { return false; } // todo
-
 }
 
 }

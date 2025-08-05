@@ -26,10 +26,6 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(Actor.name);
             }
-            // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Actor.name; }
             updateForTimerTick(uwpe) {
                 this.activity.perform(uwpe);
             }
@@ -41,8 +37,6 @@ var ThisCouldBeBetter;
                 this.activity.overwriteWith(other.activity);
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Actor = Actor;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

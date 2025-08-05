@@ -23,11 +23,9 @@ var ThisCouldBeBetter;
                 return entity.propertyByName(Boundable.name);
             }
             // EntityProperty.
-            finalize(uwpe) { }
             initialize(uwpe) {
                 this.updateForTimerTick(uwpe);
             }
-            propertyName() { return Boundable.name; }
             updateForTimerTick(uwpe) {
                 var e = uwpe.entity;
                 this.bounds.overwriteWith(this._boundsAtRest);
@@ -43,8 +41,6 @@ var ThisCouldBeBetter;
                 this.bounds.overwriteWith(other.bounds);
                 return this;
             }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Boundable = Boundable;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

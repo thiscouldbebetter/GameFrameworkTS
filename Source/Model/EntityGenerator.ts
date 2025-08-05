@@ -92,11 +92,6 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return EntityGenerator.name; }
-
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		if (this.exhausted() )
@@ -225,10 +220,6 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 		this.entitySpeedAsRange.overwriteWith(other.entitySpeedAsRange);
 		return this;
 	}
-
-	// Equatable
-
-	equals(other: EntityGenerator): boolean { return false; } // todo
 
 }
 

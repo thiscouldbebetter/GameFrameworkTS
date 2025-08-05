@@ -26,9 +26,6 @@ var ThisCouldBeBetter;
             }
             toEntity() { return new GameFramework.Entity(Ephemeral.name, [this]); }
             // EntityProperty.
-            finalize(uwpe) { }
-            initialize(uwpe) { }
-            propertyName() { return Ephemeral.name; }
             updateForTimerTick(uwpe) {
                 this.ticksToLive--;
                 if (this.ticksToLive <= 0) {
@@ -43,9 +40,6 @@ var ThisCouldBeBetter;
             clone() {
                 return new Ephemeral(this.ticksToLive, this.expire);
             }
-            overwriteWith(other) { return this; }
-            // Equatable
-            equals(other) { return false; } // todo
         }
         GameFramework.Ephemeral = Ephemeral;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

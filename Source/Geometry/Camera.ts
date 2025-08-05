@@ -512,26 +512,6 @@ export class Camera extends EntityPropertyBase<Camera>
 		return constrainable;
 	}
 
-	// Clonable.
-	clone(): Camera { return this; }
-	overwriteWith(other: Camera): Camera { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Camera.name; }
-
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
-	{
-		// Do nothing.  Rendering is done in Place.draw().
-	}
-
-	// Equatable
-
-	equals(other: Camera): boolean { return false; } // todo
-
 }
 
 }

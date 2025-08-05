@@ -46,14 +46,10 @@ export class Boundable<TBounds extends Shape> extends EntityPropertyBase<Boundab
 
 	// EntityProperty.
 
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.updateForTimerTick(uwpe);
 	}
-
-	propertyName(): string { return Boundable.name; }
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -77,9 +73,6 @@ export class Boundable<TBounds extends Shape> extends EntityPropertyBase<Boundab
 		return this;
 	}
 
-	// Equatable
-
-	equals(other: Boundable<TBounds>): boolean { return false; } // todo
 
 }
 

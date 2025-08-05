@@ -58,20 +58,6 @@ export class Scorable extends EntityPropertyBase<Scorable>
 		this._scoreGet = other._scoreGet;
 		return this;
 	}
-
-	// Equatable
-
-	equals(other: Scorable): boolean { return false; } // todo
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-
-	propertyName(): string { return Scorable.name; }
-
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 }
 
 }

@@ -713,12 +713,8 @@ export class EquipmentUser extends EntityPropertyBase<EquipmentUser>
 	}
 
 	// Clonable.
+
 	clone(): EquipmentUser { return this; }
-	overwriteWith(other: EquipmentUser): EquipmentUser { return this; }
-
-	// Equatable
-
-	equals(other: EquipmentUser): boolean { return false; } // todo
 
 }
 

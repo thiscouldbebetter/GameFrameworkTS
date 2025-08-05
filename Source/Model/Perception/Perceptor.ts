@@ -29,19 +29,8 @@ export class Perceptor extends EntityPropertyBase<Perceptor>
 	}
 
 	// Clonable.
+
 	clone(): Perceptor { return this; }
-	overwriteWith(other: Perceptor): Perceptor { return this; }
-
-	// EntityProperty.
-
-	finalize(uwpe: UniverseWorldPlaceEntities): void {}
-	initialize(uwpe: UniverseWorldPlaceEntities): void {}
-	propertyName(): string { return Perceptor.name; }
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
-
-	// Equatable
-
-	equals(other: Perceptor): boolean { return false; } // todo
 
 }
 
