@@ -410,45 +410,11 @@ Note that the actions selected mean that, when accelerating left and right, the 
 		}
 	}
 
-	class HabitatProperty implements EntityProperty<HabitatProperty>
+	class HabitatProperty extends EntityPropertyBase<HabitatProperty>
 	{
 		static create(): HabitatProperty
 		{
 			return new HabitatProperty();
-		}
-
-		// Clonable.
-
-		clone(): HabitatProperty
-		{
-			throw new Error("Not implemented!");
-		}
-
-		overwriteWith(other: HabitatProperty): HabitatProperty
-		{
-			throw new Error("Not implemented!");
-		}
-
-		// EntityProperty.
-
-		equals(other: HabitatProperty): boolean
-		{
-			return (this == other);
-		}
-
-		finalize(): void
-		{
-			// Do nothing.
-		}
-
-		initialize(): void
-		{
-			// Do nothing.
-		}
-
-		propertyName(): string
-		{
-			return HabitatProperty.name;
 		}
 	}
 
@@ -651,7 +617,7 @@ The sharp-eyed observer will notice that two classes are declared in this file--
 		}
 	}
 
-	class EnemyProperty implements EntityProperty<EnemyProperty>
+	class EnemyProperty extends EntityPropertyBase<EnemyProperty>
 	{
 		habitatCaptured: Habitat;
 
@@ -669,42 +635,8 @@ The sharp-eyed observer will notice that two classes are declared in this file--
 
 		clone(): EnemyProperty
 		{
-			return new EnemyProperty();
-		}
-
-		overwriteWith(other: EnemyProperty): EnemyProperty
-		{
-			this.habitatCaptured = other.habitatCaptured;
 			return this;
 		}
-
-		// EntityProperty.
-
-		equals(other: EnemyProperty): boolean
-		{
-			return (this.habitatCaptured == other.habitatCaptured);
-		}
-
-		finalize(uwpe: UniverseWorldPlaceEntities): void
-		{
-			// Do nothing.
-		}
-
-		initialize(uwpe: UniverseWorldPlaceEntities): void
-		{
-			// Do nothing.
-		}
-
-		propertyName(): string
-		{
-			return EnemyProperty.name;
-		}
-
-		updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
-		{
-			// Do nothing.
-		}
-
 	}
 
 8.4. The Enemy class uses the Actor property, and defines its very own ActivityDefn to use with it, so we need to register that ActivityDefn with the WorldDefn.  Open WorldGame.ts, locate the .defnBuild() method, and add the new activity definition in the proper place, adjusting commas as necessary:
