@@ -1,10 +1,12 @@
 
-class Enemy implements EntityProperty<Enemy>
+class Enemy extends EntityPropertyBase<Enemy>
 {
 	weapon: Weapon;
 
 	constructor(weapon: Weapon)
 	{
+		super();
+
 		this.weapon = weapon;
 	}
 

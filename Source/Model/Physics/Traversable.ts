@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Traversable implements EntityProperty<Traversable>
+export class Traversable extends EntityPropertyBase<Traversable>
 {
 	isBlocking: boolean
 
 	constructor(isBlocking: boolean)
 	{
+		super();
+
 		this.isBlocking = isBlocking;
 	}
 

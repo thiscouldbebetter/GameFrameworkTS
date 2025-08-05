@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Relatable {
+        class Relatable extends GameFramework.EntityPropertyBase {
             constructor(relationshipName, entityRelatedId) {
+                super();
                 this.relationshipName = relationshipName;
                 this.entityRelatedId = entityRelatedId;
             }

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemStore implements EntityProperty<ItemStore>
+export class ItemStore extends EntityPropertyBase<ItemStore>
 {
 	itemDefnNameCurrency: string;
 
@@ -10,6 +10,8 @@ export class ItemStore implements EntityProperty<ItemStore>
 
 	constructor(itemDefnNameCurrency: string)
 	{
+		super();
+
 		this.itemDefnNameCurrency = itemDefnNameCurrency;
 		this.statusMessage = "-";
 	}

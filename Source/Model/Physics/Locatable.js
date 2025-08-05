@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Locatable {
+        class Locatable extends GameFramework.EntityPropertyBase {
             constructor(loc) {
+                super();
                 this.loc = loc || GameFramework.Disposition.create();
             }
             static create() {

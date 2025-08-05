@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class StatsKeeper {
+        class StatsKeeper extends GameFramework.EntityPropertyBase {
             constructor() {
+                super();
                 // Common stats.
                 this.StatNameScore = "Score";
                 this.StatNameHits = "Hits";

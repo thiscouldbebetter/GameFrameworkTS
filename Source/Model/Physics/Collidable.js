@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Collidable {
+        class Collidable extends GameFramework.EntityPropertyBase {
             constructor(canCollideAgainWithoutSeparating, exemptFromCollisionEffectsOfOther, ticksToWaitBetweenCollisions, colliderAtRest, collidesOnlyWithEntitiesHavingPropertiesNamed, collideEntitiesForUniverseWorldPlaceEntitiesAndCollision) {
+                super();
                 this.canCollideAgainWithoutSeparating =
                     canCollideAgainWithoutSeparating || false;
                 this.exemptFromCollisionEffectsOfOther =

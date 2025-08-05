@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class EntityGenerator implements EntityProperty<EntityGenerator>
+export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 {
 	entityToGenerate: Entity;
 	ticksPerGenerationAsRange: RangeExtent;
@@ -27,6 +27,8 @@ export class EntityGenerator implements EntityProperty<EntityGenerator>
 		entitySpeedAsRange: RangeExtent
 	)
 	{
+		super();
+
 		this.entityToGenerate = entityToGenerate;
 		this.ticksPerGenerationAsRange =
 			ticksPerGenerationAsRange || RangeExtent.fromNumber(100);

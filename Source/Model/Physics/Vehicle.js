@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Vehicle {
+        class Vehicle extends GameFramework.EntityPropertyBase {
             constructor(accelerationPerTick, speedMax, steeringAngleInTurns) {
+                super();
                 this.accelerationPerTick = accelerationPerTick;
                 this.speedMax = speedMax;
                 this.steeringAngleInTurns = steeringAngleInTurns;

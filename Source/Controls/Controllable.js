@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Controllable {
+        class Controllable extends GameFramework.EntityPropertyBase {
             constructor(toControl) {
+                super();
                 this.toControl = toControl;
             }
             static fromToControl(toControl) {

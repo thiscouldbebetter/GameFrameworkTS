@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class EntityGenerator {
+        class EntityGenerator extends GameFramework.EntityPropertyBase {
             constructor(entityToGenerate, ticksPerGenerationAsRange, entitiesPerGenerationAsRange, entitiesGeneratedMaxConcurrent, entitiesGeneratedMaxAllTime, entityPositionRangeAsBox, entitySpeedAsRange) {
+                super();
                 this.entityToGenerate = entityToGenerate;
                 this.ticksPerGenerationAsRange =
                     ticksPerGenerationAsRange || GameFramework.RangeExtent.fromNumber(100);

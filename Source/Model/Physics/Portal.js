@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Portal {
+        class Portal extends GameFramework.EntityPropertyBase {
             constructor(destinationPlaceName, destinationEntityName, velocityToApply) {
+                super();
                 this.destinationPlaceName = destinationPlaceName;
                 this.destinationEntityName = destinationEntityName;
                 this.velocityToApply = velocityToApply || GameFramework.Coords.zeroes();

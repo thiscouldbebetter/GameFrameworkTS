@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Recurrent {
+        class Recurrent extends GameFramework.EntityPropertyBase {
             constructor(ticksPerRecurrence, timesToRecur, recur) {
+                super();
                 this.ticksPerRecurrence = ticksPerRecurrence;
                 this.timesToRecur = timesToRecur;
                 this.recur = recur;

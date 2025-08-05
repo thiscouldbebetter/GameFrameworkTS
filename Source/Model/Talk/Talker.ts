@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Talker implements EntityProperty<Talker>
+export class Talker extends EntityPropertyBase<Talker>
 {
 	conversationDefnName: string;
 	quit: () => void;
@@ -17,6 +17,8 @@ export class Talker implements EntityProperty<Talker>
 		toControl: (cr: ConversationRun, size: Coords, universe: Universe) => ControlBase
 	)
 	{
+		super();
+
 		this.conversationDefnName = conversationDefnName;
 		this.quit = quit;
 		this._toControl = toControl;

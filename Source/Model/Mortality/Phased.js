@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Phased {
+        class Phased extends GameFramework.EntityPropertyBase {
             constructor(phaseCurrentIndex, ticksOnPhaseCurrent, phases) {
+                super();
                 this.phaseCurrentIndex = phaseCurrentIndex || 0;
                 this.ticksOnPhaseCurrent = ticksOnPhaseCurrent || 0;
                 this.phases = phases;

@@ -3,12 +3,14 @@ namespace ThisCouldBeBetter.GameFramework
 {
 
 export class EntityPropertyFromValue<TValue>
-	implements EntityProperty<EntityPropertyFromValue<TValue>>
+	extends EntityPropertyBase<EntityPropertyFromValue<TValue>>
 {
 	value: TValue;
 
 	constructor(value: TValue)
 	{
+		super();
+
 		this.value = value;
 	}
 

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Armor {
+        class Armor extends GameFramework.EntityPropertyBase {
             constructor(damageMultiplier) {
+                super();
                 this.damageMultiplier = damageMultiplier;
             }
             // Clonable.

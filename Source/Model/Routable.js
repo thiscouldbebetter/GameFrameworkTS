@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Routable {
+        class Routable extends GameFramework.EntityPropertyBase {
             constructor(route) {
+                super();
                 this.route = route;
             }
             static fromRoute(route) {

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Collidable implements EntityProperty<Collidable>
+export class Collidable extends EntityPropertyBase<Collidable>
 {
 	canCollideAgainWithoutSeparating: boolean;
 	exemptFromCollisionEffectsOfOther: boolean;
@@ -35,6 +35,8 @@ export class Collidable implements EntityProperty<Collidable>
 			(uwpe: UniverseWorldPlaceEntities, c: Collision) => void
 	)
 	{
+		super();
+
 		this.canCollideAgainWithoutSeparating =
 			canCollideAgainWithoutSeparating || false;
 		this.exemptFromCollisionEffectsOfOther =

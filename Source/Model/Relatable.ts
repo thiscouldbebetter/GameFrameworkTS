@@ -2,13 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Relatable implements EntityProperty<Relatable>
+export class Relatable extends EntityPropertyBase<Relatable>
 {
 	relationshipName: string;
 	entityRelatedId: number;
 
 	constructor(relationshipName: string, entityRelatedId: number)
 	{
+		super();
+
 		this.relationshipName = relationshipName;
 		this.entityRelatedId = entityRelatedId;
 	}

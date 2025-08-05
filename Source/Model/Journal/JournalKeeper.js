@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class JournalKeeper {
+        class JournalKeeper extends GameFramework.EntityPropertyBase {
             constructor(journal) {
+                super();
                 this.journal = journal;
             }
             static fromJournal(journal) {

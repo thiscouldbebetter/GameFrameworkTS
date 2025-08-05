@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemBarterer implements EntityProperty<ItemBarterer>
+export class ItemBarterer extends EntityPropertyBase<ItemBarterer>
 {
 	itemHolderCustomerOffer: ItemHolder;
 	itemHolderStoreOffer: ItemHolder;
@@ -14,6 +14,8 @@ export class ItemBarterer implements EntityProperty<ItemBarterer>
 
 	constructor()
 	{
+		super();
+
 		this.itemHolderCustomerOffer = ItemHolder.create();
 		this.itemHolderStoreOffer = ItemHolder.create();
 		this.statusMessage = "Choose items to trade and click the 'Offer' button.";

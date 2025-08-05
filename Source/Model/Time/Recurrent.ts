@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Recurrent implements EntityProperty<Recurrent>
+export class Recurrent extends EntityPropertyBase<Recurrent>
 {
 	ticksPerRecurrence: number;
 	timesToRecur: number;
@@ -18,6 +18,8 @@ export class Recurrent implements EntityProperty<Recurrent>
 		recur: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
+		super();
+
 		this.ticksPerRecurrence = ticksPerRecurrence;
 		this.timesToRecur = timesToRecur;
 		this.recur = recur;

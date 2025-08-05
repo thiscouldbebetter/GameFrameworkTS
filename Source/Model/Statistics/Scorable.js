@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Scorable {
+        class Scorable extends GameFramework.EntityPropertyBase {
             constructor(scoreGet) {
+                super();
                 this._scoreGet = scoreGet;
             }
             static create() {

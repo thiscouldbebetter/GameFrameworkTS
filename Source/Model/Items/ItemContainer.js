@@ -3,7 +3,10 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemContainer {
+        class ItemContainer extends GameFramework.EntityPropertyBase {
+            constructor() {
+                super();
+            }
             static create() {
                 return new ItemContainer();
             }

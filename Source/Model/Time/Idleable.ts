@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Idleable implements EntityProperty<Idleable>
+export class Idleable extends EntityPropertyBase<Idleable>
 {
 	ticksUntilIdle: number;
 	_idle: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -11,6 +11,8 @@ export class Idleable implements EntityProperty<Idleable>
 
 	constructor(ticksUntilIdle: number, idle: (uwpe: UniverseWorldPlaceEntities) => void)
 	{
+		super();
+
 		this.ticksUntilIdle = ticksUntilIdle;
 		this._idle = idle;
 		this.tickLastActionPerformed = 0;

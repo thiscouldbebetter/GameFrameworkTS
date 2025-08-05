@@ -1,6 +1,7 @@
 "use strict";
-class Goal {
+class Goal extends EntityPropertyBase {
     constructor(numberOfKeysToUnlock) {
+        super();
         this.numberOfKeysToUnlock = numberOfKeysToUnlock;
     }
     // Clonable.

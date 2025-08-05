@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class SkillLearner implements EntityProperty<SkillLearner>
+export class SkillLearner extends EntityPropertyBase<SkillLearner>
 {
 	skillBeingLearnedName: string;
 	learningAccumulated: number;
@@ -18,6 +18,8 @@ export class SkillLearner implements EntityProperty<SkillLearner>
 		skillsKnownNames: string[]
 	)
 	{
+		super();
+
 		this.skillBeingLearnedName = skillBeingLearnedName;
 		this.learningAccumulated = learningAccumulated || 0;
 		this.skillsKnownNames = skillsKnownNames || [];

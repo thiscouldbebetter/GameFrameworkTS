@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ForceField {
+        class ForceField extends GameFramework.EntityPropertyBase {
             constructor(accelerationToApply, velocityToApply) {
+                super();
                 this.accelerationToApply = accelerationToApply;
                 this.velocityToApply = velocityToApply;
             }

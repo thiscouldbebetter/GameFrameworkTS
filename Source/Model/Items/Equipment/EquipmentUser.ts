@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class EquipmentUser implements EntityProperty<EquipmentUser>
+export class EquipmentUser extends EntityPropertyBase<EquipmentUser>
 {
 	socketGroup: EquipmentSocketGroup;
 	socketDefnGroup: EquipmentSocketDefnGroup;
@@ -13,6 +13,8 @@ export class EquipmentUser implements EntityProperty<EquipmentUser>
 
 	constructor(socketDefnGroup: EquipmentSocketDefnGroup)
 	{
+		super();
+
 		this.socketGroup = new EquipmentSocketGroup(socketDefnGroup);
 	}
 

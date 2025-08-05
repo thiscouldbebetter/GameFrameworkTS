@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Ephemeral implements EntityProperty<Ephemeral>
+export class Ephemeral extends EntityPropertyBase<Ephemeral>
 {
 	ticksToLive: number;
 	expire: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -13,6 +13,8 @@ export class Ephemeral implements EntityProperty<Ephemeral>
 		expire: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
+		super();
+
 		this.ticksToLive = ticksToLive || 100;
 		this.expire = expire;
 	}

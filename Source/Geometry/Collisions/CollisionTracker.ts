@@ -21,7 +21,7 @@ export interface CollisionTracker
 	toEntity(): Entity;
 }
 
-export class CollisionTrackerBase implements CollisionTracker, EntityProperty<CollisionTrackerBase>
+export class CollisionTrackerBase implements CollisionTracker, EntityProperty
 {
 	static fromPlace(uwpe: UniverseWorldPlaceEntities): CollisionTracker
 	{
@@ -113,7 +113,7 @@ export interface CollisionTrackerCollidableData
 
 // BruteForce.
 
-export class CollisionTrackerBruteForce extends CollisionTrackerBase implements EntityProperty<CollisionTrackerBruteForce>
+export class CollisionTrackerBruteForce extends CollisionTrackerBase
 {
 	constructor()
 	{
@@ -205,7 +205,7 @@ export class CollisionTrackerBruteForce extends CollisionTrackerBase implements 
 
 // Mapped.
 
-export class CollisionTrackerMapped extends CollisionTrackerBase implements EntityProperty<CollisionTrackerMapped>
+export class CollisionTrackerMapped extends CollisionTrackerBase
 {
 	collisionMap: MapOfCells<CollisionTrackerMappedMapCell>;
 

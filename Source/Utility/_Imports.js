@@ -6,6 +6,7 @@ var DiceRoll = gf.DiceRoll;
 var IDHelper = gf.IDHelper;
 var PlatformHelper = gf.PlatformHelper;
 var Randomizer = gf.Randomizer;
+var RandomizerLCG = gf.RandomizerLCG;
 var RandomizerSystem = gf.RandomizerSystem;
 var Reference = gf.Reference;
 var Stack = gf.Stack;

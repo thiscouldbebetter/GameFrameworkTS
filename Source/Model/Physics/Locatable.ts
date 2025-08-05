@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Locatable implements EntityProperty<Locatable>
+export class Locatable extends EntityPropertyBase<Locatable>
 {
 	loc: Disposition;
 
 	constructor(loc: Disposition)
 	{
+		super();
+
 		this.loc = loc || Disposition.create();
 	}
 

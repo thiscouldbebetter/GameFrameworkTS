@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Animatable2 {
+        class Animatable2 extends GameFramework.EntityPropertyBase {
             constructor(animationDefnGroup, transformableAtRest, transformableTransformed) {
+                super();
                 this.animationDefnGroup = animationDefnGroup;
                 this.transformableAtRest = transformableAtRest;
                 this.transformableTransformed = transformableTransformed;

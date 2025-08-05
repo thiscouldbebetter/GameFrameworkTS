@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constrainable implements EntityProperty<Constrainable>
+export class Constrainable extends EntityPropertyBase<Constrainable>
 {
 	constraints: Constraint[];
 
@@ -10,6 +10,8 @@ export class Constrainable implements EntityProperty<Constrainable>
 
 	constructor(constraints: Constraint[])
 	{
+		super();
+
 		this.constraints = constraints || [];
 		this._constraintsByClassName =
 			ArrayHelper.addLookups(this.constraints, x => x.constructor.name);

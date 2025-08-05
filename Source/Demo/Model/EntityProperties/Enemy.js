@@ -1,6 +1,7 @@
 "use strict";
-class Enemy {
+class Enemy extends EntityPropertyBase {
     constructor(weapon) {
+        super();
         this.weapon = weapon;
     }
     static of(entity) {

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Selector implements EntityProperty<Selector>
+export class Selector extends EntityPropertyBase<Selector>
 {
 	cursorDimension: number;
 	_entitySelect: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -21,6 +21,8 @@ export class Selector implements EntityProperty<Selector>
 		entityDeselect: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
+		super();
+
 		this.cursorDimension = cursorDimension;
 		this._entitySelect = entitySelect;
 		this._entityDeselect = entityDeselect;

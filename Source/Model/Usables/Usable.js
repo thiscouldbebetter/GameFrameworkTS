@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Usable {
+        class Usable extends GameFramework.EntityPropertyBase {
             constructor(use) {
+                super();
                 this._use = use;
                 this.isDisabled = false;
             }

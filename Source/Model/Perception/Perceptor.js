@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Perceptor {
+        class Perceptor extends GameFramework.EntityPropertyBase {
             constructor(sightThreshold, hearingThreshold) {
+                super();
                 this.sightThreshold = sightThreshold;
                 this.hearingThreshold = hearingThreshold;
             }

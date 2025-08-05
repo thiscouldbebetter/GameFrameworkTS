@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Phased implements EntityProperty<Phased>
+export class Phased extends EntityPropertyBase<Phased>
 {
 	phaseCurrentIndex: number;
 	ticksOnPhaseCurrent: number;
@@ -17,6 +17,8 @@ export class Phased implements EntityProperty<Phased>
 		phases: Phase[]
 	)
 	{
+		super();
+
 		this.phaseCurrentIndex = phaseCurrentIndex || 0;
 		this.ticksOnPhaseCurrent = ticksOnPhaseCurrent || 0;
 		this.phases = phases;

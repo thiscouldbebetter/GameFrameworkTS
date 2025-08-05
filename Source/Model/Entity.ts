@@ -6,10 +6,10 @@ export class Entity implements Clonable<Entity>
 {
 	id: number;
 	name: string;
-	properties: EntityPropertyBase[];
-	propertiesByName: Map<string, EntityPropertyBase>;
+	properties: EntityProperty[];
+	propertiesByName: Map<string, EntityProperty>;
 
-	constructor(name: string, properties: EntityPropertyBase[])
+	constructor(name: string, properties: EntityProperty[])
 	{
 		this.id = IDHelper.Instance().idNext();
 		this.name = name || "_" + this.id;
@@ -28,18 +28,18 @@ export class Entity implements Clonable<Entity>
 	static fromNameAndProperties
 	(
 		name: string,
-		properties: EntityPropertyBase[]
+		properties: EntityProperty[]
 	): Entity
 	{
 		return new Entity(name, properties);
 	}
 
-	static fromNameAndProperty(name: string, property: EntityPropertyBase): Entity
+	static fromNameAndProperty(name: string, property: EntityProperty): Entity
 	{
 		return new Entity(name, [ property ] );
 	}
 
-	static fromProperty(property: EntityPropertyBase): Entity
+	static fromProperty(property: EntityProperty): Entity
 	{
 		return new Entity(null, [ property ] );
 	}
@@ -80,14 +80,14 @@ export class Entity implements Clonable<Entity>
 		return this;
 	}
 
-	propertyAdd(propertyToAdd: EntityPropertyBase): Entity
+	propertyAdd(propertyToAdd: EntityProperty): Entity
 	{
 		return this.propertyAddForPlace(propertyToAdd, null);
 	}
 
 	propertyAddForPlace
 	(
-		propertyToAdd: EntityPropertyBase, place: Place
+		propertyToAdd: EntityProperty, place: Place
 	): Entity
 	{
 		this.properties.push(propertyToAdd);
@@ -109,14 +109,14 @@ export class Entity implements Clonable<Entity>
 		return this;
 	}
 
-	propertyByName(name: string): EntityPropertyBase
+	propertyByName(name: string): EntityProperty
 	{
 		return this.propertiesByName.get(name);
 	}
 
 	propertyRemoveForPlace
 	(
-		propertyToRemove: EntityPropertyBase, place: Place
+		propertyToRemove: EntityProperty, place: Place
 	): Entity
 	{
 		ArrayHelper.remove(this.properties, propertyToRemove);
@@ -151,7 +151,7 @@ export class Entity implements Clonable<Entity>
 	clone(): Entity
 	{
 		var nameCloned = this.name; // + IDHelper.Instance().idNext();
-		var propertiesCloned = new Array<EntityPropertyBase>();
+		var propertiesCloned = new Array<EntityProperty>();
 		for (var i = 0; i < this.properties.length; i++)
 		{
 			var property = this.properties[i];
@@ -160,7 +160,7 @@ export class Entity implements Clonable<Entity>
 			(
 				propertyAsAny.clone == null ?
 				propertyAsAny : propertyAsAny.clone()
-			) as EntityPropertyBase;
+			) as EntityProperty;
 			propertiesCloned.push(propertyCloned);
 		}
 		var returnValue = new Entity
@@ -179,13 +179,24 @@ export class Entity implements Clonable<Entity>
 
 	equals(other: Entity): boolean
 	{
-		var areAllPropertiesEqual =
-			ArrayHelper.areEqual(this.properties, other.properties);
+		/*
+		var areAllPropertiesEqualSoFar = true;
+
+		var thisProperties = this.properties;
+		for (var i = 0; i < thisProperties.length; i++)
+		{
+			var thisProperty = thisProperties[i] as EntityPropertyBase;
+			var propertyName = thisProperty.propertyName();
+			var otherProperty = other.propertyByName(propertyName) as EntityPropertyBase;
+			var propertiesAreEqual = thisProperty.equals(otherProperty);
+		}
 
 		var areEntitiesEqual =
-			(this.name == other.name && areAllPropertiesEqual);
+			(this.name == other.name && areAllPropertiesEqualSoFar);
 
 		return areEntitiesEqual;
+		*/
+		throw new Error("todo");
 	}
 }
 

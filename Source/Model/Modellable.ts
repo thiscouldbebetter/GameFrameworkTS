@@ -2,15 +2,19 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface ModellableBase extends EntityPropertyBase
+/*
+export interface ModellableBase extends EntityPropertyBase<ModellableBase>
 {}
+*/
 
-export class Modellable<TModel> implements EntityProperty<Modellable<TModel>>
+export class Modellable<TModel> extends EntityPropertyBase<Modellable<TModel>>
 {
 	model: TModel;
 
 	constructor(model: TModel)
 	{
+		super();
+
 		this.model = model;
 	}
 

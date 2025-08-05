@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Triggerable implements EntityProperty<Triggerable>
+export class Triggerable extends EntityPropertyBase<Triggerable>
 {
 	triggers: Trigger[];
 
 	constructor(triggers: Trigger[])
 	{
+		super();
+
 		this.triggers = triggers;
 	}
 

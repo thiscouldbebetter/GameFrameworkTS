@@ -2,13 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface BoundableBase extends EntityPropertyBase
+export interface BoundableBase extends EntityProperty
 {
 	bounds: Shape;
 }
 
-export class Boundable<TBounds extends Shape>
-	implements BoundableBase, EntityProperty<Boundable<TBounds>>
+export class Boundable<TBounds extends Shape> extends EntityPropertyBase<Boundable<TBounds>>
+	implements BoundableBase
 {
 	bounds: TBounds;
 
@@ -17,6 +17,8 @@ export class Boundable<TBounds extends Shape>
 
 	constructor(bounds: TBounds)
 	{
+		super();
+
 		this.bounds = bounds.clone() as TBounds;
 
 		this._boundsAtRest = this.bounds.clone();

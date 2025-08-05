@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Triggerable {
+        class Triggerable extends GameFramework.EntityPropertyBase {
             constructor(triggers) {
+                super();
                 this.triggers = triggers;
             }
             static fromTriggers(triggers) {

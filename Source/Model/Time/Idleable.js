@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Idleable {
+        class Idleable extends GameFramework.EntityPropertyBase {
             constructor(ticksUntilIdle, idle) {
+                super();
                 this.ticksUntilIdle = ticksUntilIdle;
                 this._idle = idle;
                 this.tickLastActionPerformed = 0;

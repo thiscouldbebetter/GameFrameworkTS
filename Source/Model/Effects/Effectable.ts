@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Effectable implements EntityProperty<Effectable>
+export class Effectable extends EntityPropertyBase<Effectable>
 {
 	effects: Effect[];
 
 	constructor(effects: Effect[])
 	{
+		super();
+
 		this.effects = effects || new Array<Effect>();
 	}
 

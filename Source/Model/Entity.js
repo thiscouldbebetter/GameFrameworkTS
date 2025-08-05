@@ -106,9 +106,24 @@ var ThisCouldBeBetter;
             }
             // Equatable.
             equals(other) {
-                var areAllPropertiesEqual = GameFramework.ArrayHelper.areEqual(this.properties, other.properties);
-                var areEntitiesEqual = (this.name == other.name && areAllPropertiesEqual);
+                /*
+                var areAllPropertiesEqualSoFar = true;
+        
+                var thisProperties = this.properties;
+                for (var i = 0; i < thisProperties.length; i++)
+                {
+                    var thisProperty = thisProperties[i] as EntityPropertyBase;
+                    var propertyName = thisProperty.propertyName();
+                    var otherProperty = other.propertyByName(propertyName) as EntityPropertyBase;
+                    var propertiesAreEqual = thisProperty.equals(otherProperty);
+                }
+        
+                var areEntitiesEqual =
+                    (this.name == other.name && areAllPropertiesEqualSoFar);
+        
                 return areEntitiesEqual;
+                */
+                throw new Error("todo");
             }
         }
         GameFramework.Entity = Entity;

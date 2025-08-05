@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Armor implements EntityProperty<Armor>
+export class Armor extends EntityPropertyBase<Armor>
 {
 	damageMultiplier: number;
 
 	constructor(damageMultiplier: number)
 	{
+		super();
+
 		this.damageMultiplier = damageMultiplier;
 	}
 

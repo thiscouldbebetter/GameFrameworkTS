@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Controllable implements EntityProperty<Controllable>
+export class Controllable extends EntityPropertyBase<Controllable>
 {
 	_toControl:
 	(
@@ -21,6 +21,8 @@ export class Controllable implements EntityProperty<Controllable>
 		) => ControlBase
 	)
 	{
+		super();
+
 		this.toControl = toControl;
 	}
 

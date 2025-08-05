@@ -2,9 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemContainer implements EntityProperty<ItemContainer>
+export class ItemContainer extends EntityPropertyBase<ItemContainer>
 {
 	statusMessage: string;
+
+	constructor()
+	{
+		super();
+	}
 
 	static create(): ItemContainer
 	{

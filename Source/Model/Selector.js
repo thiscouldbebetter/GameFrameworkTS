@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Selector {
+        class Selector extends GameFramework.EntityPropertyBase {
             constructor(cursorDimension, entitySelect, entityDeselect) {
+                super();
                 this.cursorDimension = cursorDimension;
                 this._entitySelect = entitySelect;
                 this._entityDeselect = entityDeselect;

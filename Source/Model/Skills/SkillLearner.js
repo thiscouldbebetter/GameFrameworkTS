@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class SkillLearner {
+        class SkillLearner extends GameFramework.EntityPropertyBase {
             constructor(skillBeingLearnedName, learningAccumulated, skillsKnownNames) {
+                super();
                 this.skillBeingLearnedName = skillBeingLearnedName;
                 this.learningAccumulated = learningAccumulated || 0;
                 this.skillsKnownNames = skillsKnownNames || [];

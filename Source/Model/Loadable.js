@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class LoadableProperty {
+        class LoadableProperty extends GameFramework.EntityPropertyBase {
             constructor(load, unload) {
+                super();
                 this.isLoaded = false;
                 this._load = load;
                 this._unload = unload;

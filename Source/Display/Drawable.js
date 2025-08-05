@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Drawable {
+        class Drawable extends GameFramework.EntityPropertyBase {
             constructor(visual, renderingOrder, hidden, sizeInWrappedInstances) {
+                super();
                 this.visual = visual;
                 this.renderingOrder = renderingOrder || 0;
                 this.hidden = hidden || false;

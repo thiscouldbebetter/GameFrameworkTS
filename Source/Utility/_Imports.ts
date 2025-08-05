@@ -12,6 +12,7 @@ import Loadable = gf.Loadable;
 import Namable = gf.Namable;
 import PlatformHelper = gf.PlatformHelper;
 import Randomizer = gf.Randomizer;
+import RandomizerLCG = gf.RandomizerLCG;
 import RandomizerSystem = gf.RandomizerSystem;
 import Reference = gf.Reference;
 import Stack = gf.Stack;

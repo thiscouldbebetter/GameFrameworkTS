@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Animatable2 implements EntityProperty<Animatable2>
+export class Animatable2 extends EntityPropertyBase<Animatable2>
 {
 	animationDefnGroup: AnimationDefnGroup;
 	transformableAtRest: TransformableBase;
@@ -16,6 +16,8 @@ export class Animatable2 implements EntityProperty<Animatable2>
 		transformableTransformed: TransformableBase
 	)
 	{
+		super();
+
 		this.animationDefnGroup = animationDefnGroup;
 		this.transformableAtRest = transformableAtRest;
 		this.transformableTransformed = transformableTransformed;

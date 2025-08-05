@@ -3,6 +3,7 @@
 var Entity = gf.Entity;
 var EntityBuilder = gf.EntityBuilder;
 var EntityGenerator = gf.EntityGenerator;
+var EntityPropertyBase = gf.EntityPropertyBase;
 var EntityPropertyFromValue = gf.EntityPropertyFromValue;
 var LoadableProperty = gf.LoadableProperty;
 var NamableProperty = gf.NamableProperty;

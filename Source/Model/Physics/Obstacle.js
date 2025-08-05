@@ -3,7 +3,10 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Obstacle {
+        class Obstacle extends GameFramework.EntityPropertyBase {
+            constructor() {
+                super();
+            }
             collide(uwpe) {
                 var u = uwpe.universe;
                 var e = uwpe.entity;

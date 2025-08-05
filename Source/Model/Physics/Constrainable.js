@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constrainable {
+        class Constrainable extends GameFramework.EntityPropertyBase {
             constructor(constraints) {
+                super();
                 this.constraints = constraints || [];
                 this._constraintsByClassName =
                     GameFramework.ArrayHelper.addLookups(this.constraints, x => x.constructor.name);

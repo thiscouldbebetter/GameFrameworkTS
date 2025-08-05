@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Movable implements EntityProperty<Movable>
+export class Movable extends EntityPropertyBase<Movable>
 {
 	_accelerationPerTick: (uwpe: UniverseWorldPlaceEntities) => number;
 	_speedMax: (uwpe: UniverseWorldPlaceEntities) => number;
@@ -15,6 +15,8 @@ export class Movable implements EntityProperty<Movable>
 		canAccelerate: (uwpe: UniverseWorldPlaceEntities) => boolean,
 	)
 	{
+		super();
+
 		this._accelerationPerTick =
 			accelerationPerTick == null
 			? (uwpe2: UniverseWorldPlaceEntities) => .1

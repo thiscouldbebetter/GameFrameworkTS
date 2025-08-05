@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemCrafter {
+        class ItemCrafter extends GameFramework.EntityPropertyBase {
             constructor(recipesAvailable) {
+                super();
                 this.recipesAvailable = recipesAvailable || [];
                 this.itemHolderStaged = GameFramework.ItemHolder.create();
                 this.recipeAvailableSelected = null;

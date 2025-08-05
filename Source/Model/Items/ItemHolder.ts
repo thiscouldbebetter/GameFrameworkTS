@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemHolder implements EntityProperty<ItemHolder>
+export class ItemHolder extends EntityPropertyBase<ItemHolder>
 {
 	items: Item[];
 	encumbranceMax: number;
@@ -20,6 +20,8 @@ export class ItemHolder implements EntityProperty<ItemHolder>
 		retainsItemsWithZeroQuantities: boolean
 	)
 	{
+		super();
+
 		this.items = items || [];
 		this.encumbranceMax = encumbranceMax;
 		this.reachRadius = reachRadius || 20;

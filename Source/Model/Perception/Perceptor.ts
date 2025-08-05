@@ -2,13 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Perceptor implements EntityProperty<Perceptor>
+export class Perceptor extends EntityPropertyBase<Perceptor>
 {
 	sightThreshold: number;
 	hearingThreshold: number;
 
 	constructor(sightThreshold: number, hearingThreshold: number)
 	{
+		super();
+
 		this.sightThreshold = sightThreshold;
 		this.hearingThreshold = hearingThreshold;
 	}

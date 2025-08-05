@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Effectable {
+        class Effectable extends GameFramework.EntityPropertyBase {
             constructor(effects) {
+                super();
                 this.effects = effects || new Array();
             }
             static create() {

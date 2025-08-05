@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Equippable implements EntityProperty<Equippable>
+export class Equippable extends EntityPropertyBase<Equippable>
 {
 	_equip: (uwpe: UniverseWorldPlaceEntities) => void;
 	_unequip: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -15,6 +15,8 @@ export class Equippable implements EntityProperty<Equippable>
 		unequip: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
+		super();
+
 		this._equip = equip;
 		this._unequip = unequip;
 		this.isEquipped = false;

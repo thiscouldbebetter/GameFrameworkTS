@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Actor {
+        class Actor extends GameFramework.EntityPropertyBase {
             constructor(activity) {
+                super();
                 this.activity = activity;
                 this.actions = [];
             }

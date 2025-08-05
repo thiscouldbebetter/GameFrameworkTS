@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Movable {
+        class Movable extends GameFramework.EntityPropertyBase {
             constructor(accelerationPerTick, speedMax, canAccelerate) {
+                super();
                 this._accelerationPerTick =
                     accelerationPerTick == null
                         ? (uwpe2) => .1

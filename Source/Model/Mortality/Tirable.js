@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Tirable {
+        class Tirable extends GameFramework.EntityPropertyBase {
             constructor(staminaMaxAfterSleep, staminaRecoveredPerTick, staminaMaxLostPerTick, staminaMaxRecoveredPerTickOfSleep, fallAsleep) {
+                super();
                 this.staminaMaxAfterSleep = staminaMaxAfterSleep;
                 this.staminaRecoveredPerTick = staminaRecoveredPerTick;
                 this.staminaMaxLostPerTick = staminaMaxLostPerTick;

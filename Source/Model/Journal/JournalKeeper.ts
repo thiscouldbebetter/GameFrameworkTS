@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class JournalKeeper implements EntityProperty<JournalKeeper>
+export class JournalKeeper extends EntityPropertyBase<JournalKeeper>
 {
 	journal: Journal;
 
@@ -12,6 +12,8 @@ export class JournalKeeper implements EntityProperty<JournalKeeper>
 
 	constructor(journal: Journal)
 	{
+		super();
+
 		this.journal = journal;
 	}
 

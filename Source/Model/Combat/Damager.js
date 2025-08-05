@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Damager {
+        class Damager extends GameFramework.EntityPropertyBase {
             constructor(damagePerHit, ticksPerAttempt, chanceOfHitPerAttempt) {
+                super();
                 this.damagePerHit = damagePerHit;
                 this.ticksPerAttempt = ticksPerAttempt || 20;
                 this.chanceOfHitPerAttempt = chanceOfHitPerAttempt || 1;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Selectable implements EntityProperty<Selectable>
+export class Selectable extends EntityPropertyBase<Selectable>
 {
 	_select: (uwpe: UniverseWorldPlaceEntities) => void;
 	_deselect: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -13,6 +13,8 @@ export class Selectable implements EntityProperty<Selectable>
 		deselect: (uwpe: UniverseWorldPlaceEntities) => void,
 	)
 	{
+		super();
+
 		this._select = select;
 		this._deselect = deselect;
 	}

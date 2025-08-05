@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Scorable implements EntityProperty<Scorable>
+export class Scorable extends EntityPropertyBase<Scorable>
 {
 	_scoreGet: (uwpe: UniverseWorldPlaceEntities) => number;
 
 	constructor(scoreGet: (uwpe: UniverseWorldPlaceEntities) => number)
 	{
+		super();
+
 		this._scoreGet = scoreGet;
 	}
 

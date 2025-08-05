@@ -2,13 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ForceField implements EntityProperty<ForceField>
+export class ForceField extends EntityPropertyBase<ForceField>
 {
 	accelerationToApply: Coords;
 	velocityToApply: Coords;
 
 	constructor(accelerationToApply: Coords, velocityToApply: Coords)
 	{
+		super();
+
 		this.accelerationToApply = accelerationToApply;
 		this.velocityToApply = velocityToApply;
 	}

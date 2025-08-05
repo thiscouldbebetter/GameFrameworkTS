@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Audible implements EntityProperty<Audible>
+export class Audible extends EntityPropertyBase<Audible>
 {
 	hasBeenHeard: boolean;
 
 	constructor()
 	{
+		super();
+
 		this.hasBeenHeard = false;
 	}
 

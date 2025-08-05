@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Killable implements EntityProperty<Killable>
+export class Killable extends EntityPropertyBase<Killable>
 {
 	ticksOfImmunityInitial: number;
 	integrityMax: number;
@@ -29,6 +29,8 @@ export class Killable implements EntityProperty<Killable>
 		livesInReserve: number
 	)
 	{
+		super();
+
 		this.ticksOfImmunityInitial = ticksOfImmunityInitial || 0;
 		this.integrityMax = integrityMax || 1;
 		this._damageApply = damageApply;

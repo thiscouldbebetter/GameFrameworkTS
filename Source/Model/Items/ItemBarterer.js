@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemBarterer {
+        class ItemBarterer extends GameFramework.EntityPropertyBase {
             constructor() {
+                super();
                 this.itemHolderCustomerOffer = GameFramework.ItemHolder.create();
                 this.itemHolderStoreOffer = GameFramework.ItemHolder.create();
                 this.statusMessage = "Choose items to trade and click the 'Offer' button.";

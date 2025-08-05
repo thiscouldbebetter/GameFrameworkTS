@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Usable implements EntityProperty<Usable>
+export class Usable extends EntityPropertyBase<Usable>
 {
 	_use: (uwpe: UniverseWorldPlaceEntities) => void;
 
@@ -10,6 +10,8 @@ export class Usable implements EntityProperty<Usable>
 
 	constructor(use: (uwpe: UniverseWorldPlaceEntities) => void)
 	{
+		super();
+
 		this._use = use;
 
 		this.isDisabled = false;

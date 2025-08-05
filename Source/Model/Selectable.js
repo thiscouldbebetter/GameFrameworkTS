@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Selectable {
+        class Selectable extends GameFramework.EntityPropertyBase {
             constructor(select, deselect) {
+                super();
                 this._select = select;
                 this._deselect = deselect;
             }

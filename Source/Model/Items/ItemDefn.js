@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemDefn {
+        class ItemDefn extends GameFramework.EntityPropertyBase {
             constructor(name, appearance, description, encumbrance, tradeValue, stackSizeMax, categoryNames, use, visual, toEntity) {
+                super();
                 this.name = name;
                 this.appearance = appearance || name;
                 this.description = description;

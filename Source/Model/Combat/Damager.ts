@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Damager implements EntityProperty<Damager>
+export class Damager extends EntityPropertyBase<Damager>
 {
 	damagePerHit: Damage;
 	ticksPerAttempt: number
@@ -17,6 +17,8 @@ export class Damager implements EntityProperty<Damager>
 		chanceOfHitPerAttempt: number
 	)
 	{
+		super();
+
 		this.damagePerHit = damagePerHit;
 		this.ticksPerAttempt = ticksPerAttempt || 20;
 		this.chanceOfHitPerAttempt = chanceOfHitPerAttempt || 1;

@@ -2,8 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Playable implements EntityProperty<Playable>
+export class Playable extends EntityPropertyBase<Playable>
 {
+	constructor()
+	{
+		super();
+	}
+
 	static create(): Playable
 	{
 		return new Playable();

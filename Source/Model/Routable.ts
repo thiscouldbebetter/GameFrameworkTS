@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Routable implements EntityProperty<Routable>
+export class Routable extends EntityPropertyBase<Routable>
 {
 	route: Route;
 
 	constructor(route: Route)
 	{
+		super();
+
 		this.route = route;
 	}
 

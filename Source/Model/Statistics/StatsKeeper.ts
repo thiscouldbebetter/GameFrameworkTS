@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class StatsKeeper implements EntityProperty<StatsKeeper>
+export class StatsKeeper extends EntityPropertyBase<StatsKeeper>
 {
 	_statValuesByName: Map<string, number>;
 
 	constructor()
 	{
+		super();
+
 		this._statValuesByName = new Map<string, number>();
 	}
 

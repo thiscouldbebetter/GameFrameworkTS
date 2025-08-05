@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Actor implements EntityProperty<Actor>
+export class Actor extends EntityPropertyBase<Actor>
 {
 	activity: Activity;
 
@@ -10,6 +10,8 @@ export class Actor implements EntityProperty<Actor>
 
 	constructor(activity: Activity)
 	{
+		super();
+
 		this.activity = activity;
 		this.actions = [];
 	}

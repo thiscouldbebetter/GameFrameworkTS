@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Camera {
+        class Camera extends GameFramework.EntityPropertyBase {
             constructor(viewSize, focalLength, loc, entitiesInViewSort) {
+                super();
                 this.viewSize = viewSize;
                 this.focalLength = focalLength;
                 this.loc = loc;

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemStore {
+        class ItemStore extends GameFramework.EntityPropertyBase {
             constructor(itemDefnNameCurrency) {
+                super();
                 this.itemDefnNameCurrency = itemDefnNameCurrency;
                 this.statusMessage = "-";
             }

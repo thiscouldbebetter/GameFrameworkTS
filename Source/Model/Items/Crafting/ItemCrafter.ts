@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemCrafter implements EntityProperty<ItemCrafter>
+export class ItemCrafter extends EntityPropertyBase<ItemCrafter>
 {
 	recipesAvailable: CraftingRecipe[];
 
@@ -15,6 +15,8 @@ export class ItemCrafter implements EntityProperty<ItemCrafter>
 
 	constructor(recipesAvailable: CraftingRecipe[])
 	{
+		super();
+
 		this.recipesAvailable = recipesAvailable || [];
 
 		this.itemHolderStaged = ItemHolder.create();

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Device {
+        class Device extends GameFramework.EntityPropertyBase {
             constructor(name, initialize, update, canUse, use) {
+                super();
                 this.name = name;
                 this._initialize = initialize;
                 this._update = update;

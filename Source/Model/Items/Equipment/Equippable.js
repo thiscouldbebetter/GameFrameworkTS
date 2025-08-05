@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Equippable {
+        class Equippable extends GameFramework.EntityPropertyBase {
             constructor(equip, unequip) {
+                super();
                 this._equip = equip;
                 this._unequip = unequip;
                 this.isEquipped = false;

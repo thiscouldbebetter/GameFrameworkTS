@@ -3,8 +3,13 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Modellable {
+        /*
+        export interface ModellableBase extends EntityPropertyBase<ModellableBase>
+        {}
+        */
+        class Modellable extends GameFramework.EntityPropertyBase {
             constructor(model) {
+                super();
                 this.model = model;
             }
             // Clonable.

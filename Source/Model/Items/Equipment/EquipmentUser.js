@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class EquipmentUser {
+        class EquipmentUser extends GameFramework.EntityPropertyBase {
             constructor(socketDefnGroup) {
+                super();
                 this.socketGroup = new GameFramework.EquipmentSocketGroup(socketDefnGroup);
             }
             static default() {

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Killable {
+        class Killable extends GameFramework.EntityPropertyBase {
             constructor(ticksOfImmunityInitial, integrityMax, damageApply, die, livesInReserve) {
+                super();
                 this.ticksOfImmunityInitial = ticksOfImmunityInitial || 0;
                 this.integrityMax = integrityMax || 1;
                 this._damageApply = damageApply;

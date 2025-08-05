@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class EntityPropertyFromValue {
+        class EntityPropertyFromValue extends GameFramework.EntityPropertyBase {
             constructor(value) {
+                super();
                 this.value = value;
             }
             static entityFromValue(value) {

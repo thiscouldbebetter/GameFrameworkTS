@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Ephemeral {
+        class Ephemeral extends GameFramework.EntityPropertyBase {
             constructor(ticksToLive, expire) {
+                super();
                 this.ticksToLive = ticksToLive || 100;
                 this.expire = expire;
             }

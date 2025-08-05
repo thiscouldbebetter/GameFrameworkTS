@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Portal implements EntityProperty<Portal>
+export class Portal extends EntityPropertyBase<Portal>
 {
 	destinationPlaceName: string;
 	destinationEntityName: string;
@@ -14,6 +14,8 @@ export class Portal implements EntityProperty<Portal>
 		velocityToApply: Coords
 	)
 	{
+		super();
+
 		this.destinationPlaceName = destinationPlaceName;
 		this.destinationEntityName = destinationEntityName;
 		this.velocityToApply = velocityToApply || Coords.zeroes();

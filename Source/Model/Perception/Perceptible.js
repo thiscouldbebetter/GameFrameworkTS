@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Perceptible {
+        class Perceptible extends GameFramework.EntityPropertyBase {
             constructor(isHiding, visibilityGet, audibilityGet) {
+                super();
                 this.isHiding = isHiding;
                 this._visibilityGet = visibilityGet;
                 this._audibilityGet = audibilityGet;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Item implements EntityProperty<Item>
+export class Item extends EntityPropertyBase<Item>
 {
 	defnName: string;
 	quantity: number;
@@ -11,6 +11,8 @@ export class Item implements EntityProperty<Item>
 
 	constructor(defnName: string, quantity: number)
 	{
+		super();
+
 		this.defnName = defnName;
 		this.quantity = (quantity == null) ? 1 : quantity;
 	}

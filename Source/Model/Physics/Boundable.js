@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Boundable {
+        class Boundable extends GameFramework.EntityPropertyBase {
             constructor(bounds) {
+                super();
                 this.bounds = bounds.clone();
                 this._boundsAtRest = this.bounds.clone();
                 this._transformLocate = GameFramework.Transform_Locate.create();

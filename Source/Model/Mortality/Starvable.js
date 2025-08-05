@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Starvable {
+        class Starvable extends GameFramework.EntityPropertyBase {
             constructor(satietyMax, satietyLostPerTick, starve) {
+                super();
                 this.satietyMax = satietyMax;
                 this.satietyLostPerTick = satietyLostPerTick || 1;
                 this._starve = starve;

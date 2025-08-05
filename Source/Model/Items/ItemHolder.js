@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ItemHolder {
+        class ItemHolder extends GameFramework.EntityPropertyBase {
             constructor(items, encumbranceMax, reachRadius, retainsItemsWithZeroQuantities) {
+                super();
                 this.items = items || [];
                 this.encumbranceMax = encumbranceMax;
                 this.reachRadius = reachRadius || 20;

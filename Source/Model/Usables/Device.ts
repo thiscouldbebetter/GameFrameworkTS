@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Device implements EntityProperty<Device>
+export class Device extends EntityPropertyBase<Device>
 {
 	name: string;
 	_initialize: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -22,6 +22,8 @@ export class Device implements EntityProperty<Device>
 		use: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
+		super();
+
 		this.name = name;
 		this._initialize = initialize;
 		this._update = update;

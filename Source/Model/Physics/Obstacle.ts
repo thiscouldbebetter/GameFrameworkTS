@@ -2,8 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Obstacle implements EntityProperty<Obstacle>
+export class Obstacle extends EntityPropertyBase<Obstacle>
 {
+	constructor()
+	{
+		super();
+	}
+
 	collide(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var u = uwpe.universe;

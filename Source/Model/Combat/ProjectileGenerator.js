@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ProjectileGenerator {
+        class ProjectileGenerator extends GameFramework.EntityPropertyBase {
             constructor(name, fire, generations) {
+                super();
                 this.name = name;
                 this._fire = fire || ProjectileGenerator.fireDefault;
                 this.generations = generations;

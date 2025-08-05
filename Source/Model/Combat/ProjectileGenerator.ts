@@ -2,7 +2,7 @@ namespace ThisCouldBeBetter.GameFramework
 {
 
 export class ProjectileGenerator
-	implements EntityProperty<ProjectileGenerator>
+	extends EntityPropertyBase<ProjectileGenerator>
 {
 	name: string;
 	_fire: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -15,6 +15,8 @@ export class ProjectileGenerator
 		generations: ProjectileGeneration[]
 	)
 	{
+		super();
+
 		this.name = name;
 		this._fire = fire || ProjectileGenerator.fireDefault;
 		this.generations = generations;

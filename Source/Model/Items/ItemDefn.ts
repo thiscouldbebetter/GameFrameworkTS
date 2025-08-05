@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class ItemDefn implements EntityProperty<ItemDefn>
+export class ItemDefn extends EntityPropertyBase<ItemDefn>
 {
 	name: string;
 	appearance: string;
@@ -29,6 +29,8 @@ export class ItemDefn implements EntityProperty<ItemDefn>
 		toEntity: (uwpe: UniverseWorldPlaceEntities, i: Item) => Entity
 	)
 	{
+		super();
+
 		this.name = name;
 
 		this.appearance = appearance || name;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Drawable implements EntityProperty<Drawable>
+export class Drawable extends EntityPropertyBase<Drawable>
 {
 	visual: VisualBase;
 	renderingOrder: number;
@@ -22,6 +22,8 @@ export class Drawable implements EntityProperty<Drawable>
 		sizeInWrappedInstances: Coords
 	)
 	{
+		super();
+
 		this.visual = visual;
 		this.renderingOrder = renderingOrder || 0;
 		this.hidden = hidden || false;

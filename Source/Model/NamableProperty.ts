@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class NamableProperty implements EntityProperty<NamableProperty>
+export class NamableProperty extends EntityPropertyBase<NamableProperty>
 {
 	name: string;
 
 	constructor(name: string)
 	{
+		super();
+
 		this.name = name;
 	}
 

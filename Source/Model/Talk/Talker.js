@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Talker {
+        class Talker extends GameFramework.EntityPropertyBase {
             constructor(conversationDefnName, quit, toControl) {
+                super();
                 this.conversationDefnName = conversationDefnName;
                 this.quit = quit;
                 this._toControl = toControl;

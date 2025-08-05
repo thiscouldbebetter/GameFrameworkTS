@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Traversable {
+        class Traversable extends GameFramework.EntityPropertyBase {
             constructor(isBlocking) {
+                super();
                 this.isBlocking = isBlocking;
             }
             static of(entity) {
