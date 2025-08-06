@@ -457,14 +457,17 @@ var ThisCouldBeBetter;
                 universe.venueTransitionTo(venueNext);
             }
             producer(universe, size) {
+                return this.producerWithImageAndSoundNames(universe, size, "Titles_Producer", "Music_Producer");
+            }
+            producerWithImageAndSoundNames(universe, size, imageName, soundName) {
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var fontHeight = this.fontHeightInPixelsBase;
                 var visual = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualImageScaled.fromSizeAndChild(size, new GameFramework.VisualImageFromLibrary("Titles_Producer")),
-                    GameFramework.VisualSound.fromSoundNameAndRepeat("Music_Producer", false) // repeat
+                    GameFramework.VisualImageScaled.fromSizeAndChild(size, GameFramework.VisualImageFromLibrary.fromImageName(imageName)),
+                    GameFramework.VisualSound.fromSoundNameAndRepeat(soundName, false) // repeat
                 ]);
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 var imageProducer = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageProducer", this._zeroes.clone(), this.sizeBase.clone(), // size

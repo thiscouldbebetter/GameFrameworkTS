@@ -12,13 +12,7 @@ class Game
 
 	start(): void
 	{
-		var mediaFilePaths = this.mediaFilePathsBuild();
-
-		var mediaLibrary =
-			MediaLibrary.fromContentDirectoryPathAndMediaFilePaths
-			(
-				this.contentDirectoryPath, mediaFilePaths
-			);
+		var mediaLibrary = this.mediaLibraryBuild()
 
 		var worldCreator = WorldCreator.fromWorldCreate
 		(
@@ -34,7 +28,19 @@ class Game
 		universe.initializeAndStart();
 	}
 
-	mediaFilePathsBuild(): string[]
+	mediaLibraryBuild() : MediaLibrary
+	{
+		var mediaFilePaths = this.mediaLibraryBuild_FilePaths();
+
+		var mediaLibrary = MediaLibrary.fromContentDirectoryPathAndMediaFilePaths
+		(
+			this.contentDirectoryPath, mediaFilePaths
+		);
+
+		return mediaLibrary;
+	}
+
+	mediaLibraryBuild_FilePaths(): string[]
 	{
 		var contentDirectoryPath = this.contentDirectoryPath;
 

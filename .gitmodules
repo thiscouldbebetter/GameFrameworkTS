@@ -1,3 +1,6 @@
 [submodule "Source/Media/Audio/MusicTracker"]
 	path = Source/Media/Audio/MusicTracker
 	url = https://github.com/thiscouldbebetter/MusicTracker
+[submodule "Source/Media/Audio/SoundEffectSynthesizer"]
+	path = Source/Media/Audio/SoundEffectSynthesizer
+	url = https://github.com/thiscouldbebetter/SoundEffectSynthesizer

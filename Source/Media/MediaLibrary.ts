@@ -215,6 +215,11 @@ export class MediaLibrary
 		return returnValue;
 	}
 
+	static loadOrUnloadCallbackIgnore(loadable: Loadable): void
+	{
+		// Do nothing.
+	}
+
 	// Instance methods.
 
 	areAllItemsLoaded(): boolean
@@ -290,7 +295,7 @@ export class MediaLibrary
 				.get(collectionName)
 				.get(itemName);
 
-		itemToLoad.load(null, null);
+		itemToLoad.load(null, MediaLibrary.loadOrUnloadCallbackIgnore);
 
 		this.timerHandle = setInterval
 		(
@@ -323,7 +328,7 @@ export class MediaLibrary
 		callback: () => void
 	): void
 	{
-		itemsToLoad.forEach(x => x.load(null, null));
+		itemsToLoad.forEach(x => x.load(null, MediaLibrary.loadOrUnloadCallbackIgnore));
 		this.timerHandle = setInterval
 		(
 			this.waitForItemsToLoad_TimerTick.bind(this, itemsToLoad, callback),
@@ -348,30 +353,38 @@ export class MediaLibrary
 
 	// accessors
 
-	imagesAdd(images: Image2[]): void
+	imageAdd(image: Image2): MediaLibrary
 	{
-		for (var i = 0; i < images.length; i++)
+		if (this.imagesByName.has(image.name) == false)
 		{
-			var image = images[i];
-			if (this.imagesByName.get(image.name) == null)
-			{
-				this.images.push(image);
-				this.imagesByName.set(image.name, image);
-			}
+			this.images.push(image);
+			this.imagesByName.set(image.name, image);
 		}
+
+		return this;
 	}
 
-	soundsAdd(sounds: Sound[]): void
+	imagesAdd(images: Image2[]): MediaLibrary
 	{
-		for (var i = 0; i < sounds.length; i++)
+		images.forEach(x => this.imageAdd(x) );
+		return this;
+	}
+
+	soundAdd(sound: Sound): MediaLibrary
+	{
+		if (this.soundsByName.has(sound.name) == false)
 		{
-			var sound = sounds[i];
-			if (this.soundsByName.get(sound.name) == null)
-			{
-				this.sounds.push(sound);
-				this.soundsByName.set(sound.name, sound);
-			}
+			this.sounds.push(sound);
+			this.soundsByName.set(sound.name, sound);
 		}
+
+		return this;
+	}
+
+	soundsAdd(sounds: Sound[]): MediaLibrary
+	{
+		sounds.forEach(x => this.soundAdd(x) );
+		return this;
 	}
 
 	fontGetByName(name: string): Font

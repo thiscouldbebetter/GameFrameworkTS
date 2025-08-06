@@ -1096,6 +1096,20 @@ export class ControlBuilder
 
 	producer(universe: Universe, size: Coords): ControlBase
 	{
+		return this.producerWithImageAndSoundNames
+		(
+			universe, size, "Titles_Producer", "Music_Producer"
+		);
+	}
+
+	producerWithImageAndSoundNames
+	(
+		universe: Universe,
+		size: Coords,
+		imageName: string,
+		soundName: string
+	): ControlBase
+	{
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
@@ -1110,9 +1124,9 @@ export class ControlBuilder
 		([
 			VisualImageScaled.fromSizeAndChild
 			(
-				size, new VisualImageFromLibrary("Titles_Producer")
+				size, VisualImageFromLibrary.fromImageName(imageName)
 			),
-			VisualSound.fromSoundNameAndRepeat("Music_Producer", false) // repeat
+			VisualSound.fromSoundNameAndRepeat(soundName, false) // repeat
 		]);
 
 		var controlActionNames = ControlActionNames.Instances();

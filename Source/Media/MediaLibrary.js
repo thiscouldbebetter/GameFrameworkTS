@@ -119,6 +119,9 @@ var ThisCouldBeBetter;
                 var returnValue = new MediaLibrary(contentPath, images, sounds, videos, fonts, textStrings);
                 return returnValue;
             }
+            static loadOrUnloadCallbackIgnore(loadable) {
+                // Do nothing.
+            }
             // Instance methods.
             areAllItemsLoaded() {
                 var areAllItemsLoadedSoFar = true;
@@ -164,7 +167,7 @@ var ThisCouldBeBetter;
                 var itemToLoad = this.collectionsByName
                     .get(collectionName)
                     .get(itemName);
-                itemToLoad.load(null, null);
+                itemToLoad.load(null, MediaLibrary.loadOrUnloadCallbackIgnore);
                 this.timerHandle = setInterval(this.waitForItemToLoad_TimerTick.bind(this, itemToLoad, callback), 100 // milliseconds
                 );
             }
@@ -179,7 +182,7 @@ var ThisCouldBeBetter;
                 this.waitForItemsToLoad(itemsToLoad, callback);
             }
             waitForItemsToLoad(itemsToLoad, callback) {
-                itemsToLoad.forEach(x => x.load(null, null));
+                itemsToLoad.forEach(x => x.load(null, MediaLibrary.loadOrUnloadCallbackIgnore));
                 this.timerHandle = setInterval(this.waitForItemsToLoad_TimerTick.bind(this, itemsToLoad, callback), this.millisecondsPerCheckToSeeIfItemLoaded);
             }
             waitForItemsToLoad_TimerTick(itemsToLoad, callback) {
@@ -190,23 +193,27 @@ var ThisCouldBeBetter;
                 }
             }
             // accessors
-            imagesAdd(images) {
-                for (var i = 0; i < images.length; i++) {
-                    var image = images[i];
-                    if (this.imagesByName.get(image.name) == null) {
-                        this.images.push(image);
-                        this.imagesByName.set(image.name, image);
-                    }
+            imageAdd(image) {
+                if (this.imagesByName.has(image.name) == false) {
+                    this.images.push(image);
+                    this.imagesByName.set(image.name, image);
                 }
+                return this;
+            }
+            imagesAdd(images) {
+                images.forEach(x => this.imageAdd(x));
+                return this;
+            }
+            soundAdd(sound) {
+                if (this.soundsByName.has(sound.name) == false) {
+                    this.sounds.push(sound);
+                    this.soundsByName.set(sound.name, sound);
+                }
+                return this;
             }
             soundsAdd(sounds) {
-                for (var i = 0; i < sounds.length; i++) {
-                    var sound = sounds[i];
-                    if (this.soundsByName.get(sound.name) == null) {
-                        this.sounds.push(sound);
-                        this.soundsByName.set(sound.name, sound);
-                    }
-                }
+                sounds.forEach(x => this.soundAdd(x));
+                return this;
             }
             fontGetByName(name) {
                 var returnFont = this.fontsByName.get(name);
