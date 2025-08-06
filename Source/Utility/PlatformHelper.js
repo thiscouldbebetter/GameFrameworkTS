@@ -4,6 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class PlatformHelper {
+            // This class is meant to encapsulate interactions with the DOM ("Domain Object Model").
+            static create() {
+                return new PlatformHelper();
+            }
             platformableAdd(platformable) {
                 var platformableAsDomElement = platformable.toDomElement(this);
                 if (platformableAsDomElement != null) {

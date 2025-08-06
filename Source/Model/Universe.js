@@ -17,16 +17,16 @@ var ThisCouldBeBetter;
                     worldCreator
                         ||
                             GameFramework.WorldCreator.fromWorldCreate(() => GameFramework.World.default());
-                this.collisionHelper = new GameFramework.CollisionHelper();
-                this.displayRecorder = new GameFramework.DisplayRecorder(1, // ticksPerFrame
+                this.collisionHelper = GameFramework.CollisionHelper.create();
+                this.displayRecorder = GameFramework.DisplayRecorder.fromTicksPerFrameBufferSizeInFramesAndIsCircular(1, // ticksPerFrame
                 100, // bufferSizeInFrames - 5 seconds at 20 fps.
                 true // isCircular
                 );
-                this.entityBuilder = new GameFramework.EntityBuilder();
+                this.entityBuilder = GameFramework.EntityBuilder.Instance();
                 this.idHelper = GameFramework.IDHelper.Instance();
-                this.platformHelper = new GameFramework.PlatformHelper();
-                this.randomizer = new GameFramework.RandomizerSystem();
-                this.serializer = new GameFramework.Serializer();
+                this.platformHelper = GameFramework.PlatformHelper.create();
+                this.randomizer = GameFramework.RandomizerSystem.Instance();
+                this.serializer = GameFramework.Serializer.Instance();
                 this.venueStack = new GameFramework.Stack();
                 this._venueNext = null;
                 var debugSettingsAsString = GameFramework.URLParser.fromWindow().queryStringParameterByName("debug");
@@ -79,7 +79,7 @@ var ThisCouldBeBetter;
             // Instance methods.
             initialize(callback) {
                 this.platformHelper.initialize(this);
-                this.storageHelper = new GameFramework.StorageHelper(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
+                this.storageHelper = GameFramework.StorageHelper.fromPrefixSerializerAndCompressor(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
                 this.display.initialize(this);
                 this.platformHelper.platformableAdd(this.display);
                 this.soundHelper.initialize(this.mediaLibrary.sounds);

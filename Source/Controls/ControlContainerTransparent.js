@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
             actionToInputsMappings() {
                 return this.containerInner.actionToInputsMappings();
             }
+            childAdd(childToAdd) {
+                this.containerInner.childAdd(childToAdd);
+            }
             childWithFocus() {
                 return this.containerInner.childWithFocus();
             }

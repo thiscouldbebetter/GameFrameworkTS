@@ -62,18 +62,18 @@ export class Universe
 				() => World.default(),
 			);
 
-		this.collisionHelper = new CollisionHelper();
-		this.displayRecorder = new DisplayRecorder
+		this.collisionHelper = CollisionHelper.create();
+		this.displayRecorder = DisplayRecorder.fromTicksPerFrameBufferSizeInFramesAndIsCircular
 		(
 			1, // ticksPerFrame
 			100, // bufferSizeInFrames - 5 seconds at 20 fps.
 			true // isCircular
 		);
-		this.entityBuilder = new EntityBuilder();
+		this.entityBuilder = EntityBuilder.Instance();
 		this.idHelper = IDHelper.Instance();
-		this.platformHelper = new PlatformHelper();
-		this.randomizer = new RandomizerSystem();
-		this.serializer = new Serializer();
+		this.platformHelper = PlatformHelper.create();
+		this.randomizer = RandomizerSystem.Instance();
+		this.serializer = Serializer.Instance();
 
 		this.venueStack = new Stack<Venue>();
 		this._venueNext = null;
@@ -196,7 +196,7 @@ export class Universe
 	initialize(callback: (u: Universe) => void): void
 	{
 		this.platformHelper.initialize(this);
-		this.storageHelper = new StorageHelper
+		this.storageHelper = StorageHelper.fromPrefixSerializerAndCompressor
 		(
 			StringHelper.replaceAll(this.name, " ", "_") + "_",
 			this.serializer,

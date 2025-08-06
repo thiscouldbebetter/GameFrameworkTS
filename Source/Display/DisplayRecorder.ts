@@ -15,7 +15,9 @@ export class DisplayRecorder
 
 	constructor
 	(
-		ticksPerFrame: number, bufferSizeInFrames: number, isCircular: boolean
+		ticksPerFrame: number,
+		bufferSizeInFrames: number,
+		isCircular: boolean
 	)
 	{
 		this.ticksPerFrame = ticksPerFrame;
@@ -26,6 +28,16 @@ export class DisplayRecorder
 		this.isRecording = false;
 
 		this.shouldDownload = false;
+	}
+
+	static fromTicksPerFrameBufferSizeInFramesAndIsCircular
+	(
+		ticksPerFrame: number,
+		bufferSizeInFrames: number,
+		isCircular: boolean
+	): DisplayRecorder
+	{
+		return new DisplayRecorder(ticksPerFrame, bufferSizeInFrames, isCircular);
 	}
 
 	static actionStartStop(): Action

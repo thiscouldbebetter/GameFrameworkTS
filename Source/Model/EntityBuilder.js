@@ -4,6 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class EntityBuilder {
+            static Instance() {
+                if (this._instance == null) {
+                    this._instance = new EntityBuilder();
+                }
+                return this._instance;
+            }
             explosion(pos, radius, soundName, ticksToLive, ephemeralExpire) {
                 var explosionEntity = GameFramework.Entity.fromNameAndProperties("Explosion", [
                     GameFramework.Audible.create(),

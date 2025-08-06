@@ -5,7 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class ControlTextBox<TContext> extends ControlBase
 {
 	_text: DataBinding<TContext, string>;
-	numberOfCharsMax: number;
+	charsMax: number;
 	_isEnabled: DataBinding<TContext,boolean>;
 
 	cursorPos: number;
@@ -23,13 +23,16 @@ export class ControlTextBox<TContext> extends ControlBase
 		size: Coords,
 		text: DataBinding<TContext,string>,
 		fontNameAndHeight: FontNameAndHeight,
-		numberOfCharsMax: number,
+		charsMax: number,
 		isEnabled: DataBinding<TContext,boolean>
 	)
 	{
+		fontNameAndHeight = fontNameAndHeight || FontNameAndHeight.default();
+
 		super(name, pos, size, fontNameAndHeight);
+
 		this._text = text;
-		this.numberOfCharsMax = numberOfCharsMax;
+		this.charsMax = charsMax;
 		this._isEnabled = isEnabled;
 
 		this.cursorPos = null;
@@ -40,6 +43,61 @@ export class ControlTextBox<TContext> extends ControlBase
 		this._drawLoc = Disposition.fromPos(this._drawPos);
 		this._textMargin = Coords.create();
 		this._textSize = Coords.create();
+	}
+
+	static fromNamePosSizeAndText<TContext>
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		text: DataBinding<TContext,string>
+	)
+	{
+		return new ControlTextBox
+		(
+			name, pos, size, text,
+			null, null, null
+		);
+	}
+
+	static fromNamePosSizeTextFontCharsMaxAndIsEnabled<TContext>
+	(
+		name: string,
+		pos: Coords,
+		size: Coords,
+		text: DataBinding<TContext,string>,
+		fontNameAndHeight: FontNameAndHeight,
+		charsMax: number,
+		isEnabled: DataBinding<TContext,boolean>
+	)
+	{
+		return new ControlTextBox<TContext>
+		(
+			name, pos, size, text, fontNameAndHeight, charsMax, isEnabled
+		);
+	}
+
+	static fromPosSizeAndTextImmediate
+	(
+		pos: Coords,
+		size: Coords,
+		textImmediate: string
+	)
+	{
+		var name = ControlTextBox.name + textImmediate;
+		var textAsBinding = DataBinding.fromContext<string>(textImmediate);
+		return new ControlTextBox<string>
+		(
+			name,
+			pos, size, textAsBinding,
+			null, null, null
+		);
+	}
+
+	charsMaxSet(value: number): ControlTextBox<TContext>
+	{
+		this.charsMax = value;
+		return this;
 	}
 
 	text(): string
@@ -144,8 +202,8 @@ export class ControlTextBox<TContext> extends ControlBase
 
 			if
 			(
-				this.numberOfCharsMax == null
-				|| text.length < this.numberOfCharsMax
+				this.charsMax == null
+				|| text.length < this.charsMax
 			)
 			{
 				var textEdited =
@@ -180,7 +238,7 @@ export class ControlTextBox<TContext> extends ControlBase
 
 	isEnabled(): boolean
 	{
-		return this._isEnabled.get();
+		return this._isEnabled == null ? true : this._isEnabled.get();
 	}
 
 	mouseClick(mouseClickPos: Coords): boolean

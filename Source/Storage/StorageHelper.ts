@@ -8,7 +8,12 @@ export class StorageHelper
 	serializer: Serializer;
 	compressor: CompressorLZW;
 
-	constructor(propertyNamePrefix: string, serializer: Serializer, compressor: CompressorLZW)
+	constructor
+	(
+		propertyNamePrefix: string,
+		serializer: Serializer,
+		compressor: CompressorLZW
+	)
 	{
 		this.propertyNamePrefix = propertyNamePrefix;
 		if (this.propertyNamePrefix == null)
@@ -18,6 +23,21 @@ export class StorageHelper
 
 		this.serializer = serializer;
 		this.compressor = compressor;
+	}
+
+	static fromPrefixSerializerAndCompressor
+	(
+		propertyNamePrefix: string,
+		serializer: Serializer,
+		compressor: CompressorLZW
+	): StorageHelper
+	{
+		return new StorageHelper
+		(
+			propertyNamePrefix,
+			serializer,
+			compressor
+		);
 	}
 
 	delete(propertyName: string): void

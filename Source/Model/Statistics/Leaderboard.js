@@ -4,15 +4,18 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Leaderboard {
-            constructor(playerScores) {
+            constructor(playerScoresCount, playerScores) {
+                this.playerScoresCount = playerScoresCount || 10;
                 this.playerScores = playerScores || [];
+                this.playerScoreBeingEntered = null;
+                this.cursorOffsetInChars = 0;
             }
             static create() {
-                return new Leaderboard(null);
+                return new Leaderboard(null, null);
             }
             static createWithFakeScores() {
                 var ps = (n, s) => Leaderboard_PlayerScore.fromPlayerNameAndScore(n, s);
-                return new Leaderboard([
+                var playerScoresFake = [
                     ps("AAA", 100000),
                     ps("BBB", 50000),
                     ps("CCC", 20000),
@@ -23,7 +26,30 @@ var ThisCouldBeBetter;
                     ps("HHH", 500),
                     ps("III", 200),
                     ps("JJJ", 100)
-                ]);
+                ];
+                return new Leaderboard(playerScoresFake.length, playerScoresFake);
+            }
+            static fromStorageHelper(storageHelper) {
+                var leaderboard = storageHelper.load(Leaderboard.name);
+                if (leaderboard == null) {
+                    leaderboard = Leaderboard.createWithFakeScores();
+                    storageHelper.save(Leaderboard.name, leaderboard);
+                }
+                return leaderboard;
+            }
+            scoreInsert(scoreToInsert) {
+                this.playerScoreBeingEntered = null;
+                for (var i = 0; i < this.playerScores.length; i++) {
+                    var playerScoreExisting = this.playerScores[i].score;
+                    if (scoreToInsert > playerScoreExisting) {
+                        var playerScoreToInsert = Leaderboard_PlayerScore.fromScore(scoreToInsert);
+                        this.playerScores.splice(i, 0, playerScoreToInsert);
+                        this.playerScores.length = this.playerScoresCount;
+                        this.playerScoreBeingEntered = playerScoreToInsert;
+                        this.cursorOffsetInChars = 0;
+                        break;
+                    }
+                }
             }
             // Controllable.
             toControl(uwpe) {
@@ -45,6 +71,18 @@ var ThisCouldBeBetter;
                 var controlBuilder = universe.controlBuilder;
                 var controlLeaderboard = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => { this.toControl_Finished(universe); }, true, // showMessageOnly
                 fontNameAndHeight);
+                /*
+                var fontHeight = fontNameAndHeight.heightInPixels;
+        
+                var controlTextBox =
+                    ControlTextBox.fromPosSizeAndTextImmediate
+                    (
+                        Coords.fromXY(0, 0),
+                        Coords.fromXY(100, fontHeight * 2),
+                        ""
+                    ).charsMaxSet(3);
+                controlLeaderboard.childAdd(controlTextBox);
+                */
                 return controlLeaderboard;
             }
             toControl_Finished(universe) {
@@ -65,6 +103,9 @@ var ThisCouldBeBetter;
             }
             static fromPlayerNameAndScore(playerName, score) {
                 return new Leaderboard_PlayerScore(playerName, score, null);
+            }
+            static fromScore(score) {
+                return new Leaderboard_PlayerScore("---", score, null);
             }
             toString() {
                 var scoreLengthMax = 9;

@@ -254,6 +254,7 @@ export class ControlContainer extends ControlBase
 
 	childAdd(childToAdd: ControlBase): void
 	{
+		childToAdd.parent = this;
 		this.children.push(childToAdd);
 		this.childrenByName.set(childToAdd.name, childToAdd);
 	}

@@ -4,10 +4,11 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlTextBox extends GameFramework.ControlBase {
-            constructor(name, pos, size, text, fontNameAndHeight, numberOfCharsMax, isEnabled) {
+            constructor(name, pos, size, text, fontNameAndHeight, charsMax, isEnabled) {
+                fontNameAndHeight = fontNameAndHeight || GameFramework.FontNameAndHeight.default();
                 super(name, pos, size, fontNameAndHeight);
                 this._text = text;
-                this.numberOfCharsMax = numberOfCharsMax;
+                this.charsMax = charsMax;
                 this._isEnabled = isEnabled;
                 this.cursorPos = null;
                 // Helper variables.
@@ -16,6 +17,21 @@ var ThisCouldBeBetter;
                 this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
                 this._textMargin = GameFramework.Coords.create();
                 this._textSize = GameFramework.Coords.create();
+            }
+            static fromNamePosSizeAndText(name, pos, size, text) {
+                return new ControlTextBox(name, pos, size, text, null, null, null);
+            }
+            static fromNamePosSizeTextFontCharsMaxAndIsEnabled(name, pos, size, text, fontNameAndHeight, charsMax, isEnabled) {
+                return new ControlTextBox(name, pos, size, text, fontNameAndHeight, charsMax, isEnabled);
+            }
+            static fromPosSizeAndTextImmediate(pos, size, textImmediate) {
+                var name = ControlTextBox.name + textImmediate;
+                var textAsBinding = GameFramework.DataBinding.fromContext(textImmediate);
+                return new ControlTextBox(name, pos, size, textAsBinding, null, null, null);
+            }
+            charsMaxSet(value) {
+                this.charsMax = value;
+                return this;
             }
             text() {
                 return this._text.get();
@@ -66,8 +82,8 @@ var ThisCouldBeBetter;
                 }
                 else if (actionNameToHandle.length == 1) {
                     // Printable character.
-                    if (this.numberOfCharsMax == null
-                        || text.length < this.numberOfCharsMax) {
+                    if (this.charsMax == null
+                        || text.length < this.charsMax) {
                         var textEdited = text.substr(0, this.cursorPos)
                             + actionNameToHandle
                             + text.substr(this.cursorPos);
@@ -87,7 +103,7 @@ var ThisCouldBeBetter;
                 this.cursorPos = null;
             }
             isEnabled() {
-                return this._isEnabled.get();
+                return this._isEnabled == null ? true : this._isEnabled.get();
             }
             mouseClick(mouseClickPos) {
                 var parent = this.parent;

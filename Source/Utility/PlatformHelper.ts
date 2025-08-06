@@ -6,6 +6,11 @@ export class PlatformHelper
 {
 	// This class is meant to encapsulate interactions with the DOM ("Domain Object Model").
 
+	static create(): PlatformHelper
+	{
+		return new PlatformHelper();
+	}
+
 	divMain: HTMLDivElement;
 
 	platformableAdd(platformable: Platformable): void

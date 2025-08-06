@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
                 this.isRecording = false;
                 this.shouldDownload = false;
             }
+            static fromTicksPerFrameBufferSizeInFramesAndIsCircular(ticksPerFrame, bufferSizeInFrames, isCircular) {
+                return new DisplayRecorder(ticksPerFrame, bufferSizeInFrames, isCircular);
+            }
             static actionStartStop() {
                 return new GameFramework.Action("Recording Start/Stop", DisplayRecorder.actionStartStopPerform);
             }

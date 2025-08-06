@@ -4,6 +4,16 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class EntityBuilder
 {
+	static _instance: EntityBuilder;
+	static Instance(): EntityBuilder
+	{
+		if (this._instance == null)
+		{
+			this._instance = new EntityBuilder();
+		}
+		return this._instance;
+	}
+
 	explosion
 	(
 		pos: Coords,

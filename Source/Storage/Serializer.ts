@@ -4,7 +4,17 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Serializer
 {
-	deserialize(stringToDeserialize: string)
+	static _instance: Serializer;
+	static Instance(): Serializer
+	{
+		if (this._instance == null)
+		{
+			this._instance = new Serializer();
+		}
+		return this._instance;
+	}
+
+	deserialize(stringToDeserialize: string): any
 	{
 		var nodeRoot = JSON.parse(stringToDeserialize);
 		var typeNames = nodeRoot["typeNames"];
@@ -15,7 +25,7 @@ export class Serializer
 		return returnValue;
 	}
 
-	serialize<T>(objectToSerialize: T, prettyPrint: boolean)
+	serialize<T>(objectToSerialize: T, prettyPrint: boolean): string
 	{
 		var nodeRoot: any = new SerializerNode(objectToSerialize);
 
@@ -34,12 +44,12 @@ export class Serializer
 		return nodeRootSerialized;
 	}
 
-	serializeWithFormatting<T>(objectToSerialize: T)
+	serializeWithFormatting<T>(objectToSerialize: T): string
 	{
 		return this.serialize(objectToSerialize, true);
 	}
 
-	serializeWithoutFormatting<T>(objectToSerialize: T)
+	serializeWithoutFormatting<T>(objectToSerialize: T): string
 	{
 		return this.serialize(objectToSerialize, false);
 	}

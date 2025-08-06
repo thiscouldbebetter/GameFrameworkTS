@@ -5,16 +5,28 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Leaderboard
 {
+	playerScoresCount: number;
 	playerScores: Leaderboard_PlayerScore[];
 
-	constructor(playerScores: Leaderboard_PlayerScore[])
+	playerScoreBeingEntered: Leaderboard_PlayerScore;
+	cursorOffsetInChars: number;
+
+	constructor
+	(
+		playerScoresCount: number,
+		playerScores: Leaderboard_PlayerScore[]
+	)
 	{
+		this.playerScoresCount = playerScoresCount || 10;
 		this.playerScores = playerScores || [];
+
+		this.playerScoreBeingEntered = null;
+		this.cursorOffsetInChars = 0;
 	}
 
 	static create(): Leaderboard
 	{
-		return new Leaderboard(null);
+		return new Leaderboard(null, null);
 	}
 
 	static createWithFakeScores(): Leaderboard
@@ -22,8 +34,8 @@ export class Leaderboard
 		var ps = (n: string, s: number) =>
 			Leaderboard_PlayerScore.fromPlayerNameAndScore(n, s);
 
-		return new Leaderboard
-		([
+		var playerScoresFake =
+		[
 			ps("AAA", 100000),
 			ps("BBB", 50000),
 			ps("CCC", 20000),
@@ -34,7 +46,42 @@ export class Leaderboard
 			ps("HHH", 500),
 			ps("III", 200),
 			ps("JJJ", 100)
-		]);
+		];
+
+		return new Leaderboard(playerScoresFake.length, playerScoresFake);
+	}
+
+	static fromStorageHelper(storageHelper: StorageHelper): Leaderboard
+	{
+		var leaderboard = storageHelper.load<Leaderboard>(Leaderboard.name);
+
+		if (leaderboard == null)
+		{
+			leaderboard = Leaderboard.createWithFakeScores();
+			storageHelper.save<Leaderboard>(Leaderboard.name, leaderboard);
+		}
+
+		return leaderboard;
+	}
+
+	scoreInsert(scoreToInsert: number): void
+	{
+		this.playerScoreBeingEntered = null;
+
+		for (var i = 0; i < this.playerScores.length; i++)
+		{
+			var playerScoreExisting = this.playerScores[i].score;
+			if (scoreToInsert > playerScoreExisting)
+			{
+				var playerScoreToInsert =
+					Leaderboard_PlayerScore.fromScore(scoreToInsert);
+				this.playerScores.splice(i, 0, playerScoreToInsert);
+				this.playerScores.length = this.playerScoresCount;
+				this.playerScoreBeingEntered = playerScoreToInsert;
+				this.cursorOffsetInChars = 0;
+				break;
+			}
+		}
 	}
 
 	// Controllable.
@@ -75,6 +122,19 @@ export class Leaderboard
 			fontNameAndHeight
 		);
 
+		/*
+		var fontHeight = fontNameAndHeight.heightInPixels;
+
+		var controlTextBox =
+			ControlTextBox.fromPosSizeAndTextImmediate
+			(
+				Coords.fromXY(0, 0),
+				Coords.fromXY(100, fontHeight * 2),
+				""
+			).charsMaxSet(3);
+		controlLeaderboard.childAdd(controlTextBox);
+		*/
+
 		return controlLeaderboard;
 	}
 
@@ -113,6 +173,11 @@ class Leaderboard_PlayerScore
 	static fromPlayerNameAndScore(playerName: string, score: number): Leaderboard_PlayerScore
 	{
 		return new Leaderboard_PlayerScore(playerName, score, null);
+	}
+
+	static fromScore(score: number): Leaderboard_PlayerScore
+	{
+		return new Leaderboard_PlayerScore("---", score, null);
 	}
 
 	toString(): string

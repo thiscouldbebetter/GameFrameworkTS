@@ -27,6 +27,9 @@ var ThisCouldBeBetter;
                 this._vel = GameFramework.Coords.create();
                 this._vel2 = GameFramework.Coords.create();
             }
+            static create() {
+                return new CollisionHelper();
+            }
             // constructor helpers
             collisionFindLookupBuild() {
                 var lookupOfLookups = new Map();

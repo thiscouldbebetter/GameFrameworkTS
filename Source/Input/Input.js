@@ -67,6 +67,32 @@ var ThisCouldBeBetter;
                 this.x = i("x");
                 this.y = i("y");
                 this.z = i("z");
+                this.A = i("A");
+                this.B = i("B");
+                this.C = i("C");
+                this.D = i("D");
+                this.E = i("E");
+                this.F = i("F");
+                this.G = i("G");
+                this.H = i("H");
+                this.I = i("I");
+                this.J = i("J");
+                this.K = i("K");
+                this.L = i("L");
+                this.M = i("M");
+                this.N = i("N");
+                this.O = i("O");
+                this.P = i("P");
+                this.Q = i("Q");
+                this.R = i("R");
+                this.S = i("S");
+                this.T = i("T");
+                this.U = i("U");
+                this.V = i("V");
+                this.W = i("W");
+                this.X = i("X");
+                this.Y = i("Y");
+                this.Z = i("Z");
                 this.ArrowDown = i("ArrowDown");
                 this.ArrowLeft = i("ArrowLeft");
                 this.ArrowRight = i("ArrowRight");
@@ -128,6 +154,32 @@ var ThisCouldBeBetter;
                         this.x,
                         this.y,
                         this.z,
+                        this.A,
+                        this.B,
+                        this.C,
+                        this.D,
+                        this.E,
+                        this.F,
+                        this.G,
+                        this.H,
+                        this.I,
+                        this.J,
+                        this.K,
+                        this.L,
+                        this.M,
+                        this.N,
+                        this.O,
+                        this.P,
+                        this.Q,
+                        this.R,
+                        this.S,
+                        this.T,
+                        this.U,
+                        this.V,
+                        this.W,
+                        this.X,
+                        this.Y,
+                        this.Z,
                         this.ArrowDown,
                         this.ArrowLeft,
                         this.ArrowRight,

@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
                 this.serializer = serializer;
                 this.compressor = compressor;
             }
+            static fromPrefixSerializerAndCompressor(propertyNamePrefix, serializer, compressor) {
+                return new StorageHelper(propertyNamePrefix, serializer, compressor);
+            }
             delete(propertyName) {
                 var propertyNamePrefixed = this.propertyNamePrefix + propertyName;
                 localStorage.removeItem(propertyNamePrefixed);

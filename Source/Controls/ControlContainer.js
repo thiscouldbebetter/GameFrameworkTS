@@ -130,6 +130,7 @@ var ThisCouldBeBetter;
                 return this;
             }
             childAdd(childToAdd) {
+                childToAdd.parent = this;
                 this.children.push(childToAdd);
                 this.childrenByName.set(childToAdd.name, childToAdd);
             }

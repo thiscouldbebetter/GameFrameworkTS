@@ -35,6 +35,11 @@ export class ControlContainerTransparent extends ControlBase
 		return this.containerInner.actionToInputsMappings();
 	}
 
+	childAdd(childToAdd: ControlBase): void
+	{
+		this.containerInner.childAdd(childToAdd);
+	}
+
 	childWithFocus(): ControlBase
 	{
 		return this.containerInner.childWithFocus();

@@ -4,6 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Serializer {
+            static Instance() {
+                if (this._instance == null) {
+                    this._instance = new Serializer();
+                }
+                return this._instance;
+            }
             deserialize(stringToDeserialize) {
                 var nodeRoot = JSON.parse(stringToDeserialize);
                 var typeNames = nodeRoot["typeNames"];

@@ -50,6 +50,11 @@ export class CollisionHelper
 		this._vel2 = Coords.create();
 	}
 
+	static create(): CollisionHelper
+	{
+		return new CollisionHelper();
+	}
+
 	// constructor helpers
 
 	collisionFindLookupBuild(): Map<string, Map<string, any> >
