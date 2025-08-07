@@ -178,6 +178,55 @@ export class VisualBuilder
 		return skullAndBonesCrossed;
 	}
 
+	crystal(dimension: number, colorCrystal: Color, colorHighlight: Color): VisualBase
+	{
+		var crystalOutline = VisualPolygon.fromPathAndColorsFillAndBorder
+		(
+			Path.fromPoints
+			([
+				Coords.fromXY(1, 0),
+				Coords.fromXY(0, 1),
+				Coords.fromXY(-1, 0),
+				Coords.fromXY(0, -1)
+			]).transform
+			(
+				Transform_Scale.fromScaleFactor
+				(
+					dimension / 2
+				)
+			),
+			colorCrystal,
+			colorHighlight
+		);
+
+		var crystalCenter = VisualPolygon.fromPathAndColorFill
+		(
+			Path.fromPoints
+			([
+				Coords.fromXY(1, 0),
+				Coords.fromXY(0, 1),
+				Coords.fromXY(-1, 0),
+				Coords.fromXY(0, -1)
+			]).transform
+			(
+				Transform_Scale.fromScaleFactor
+				(
+					dimension / 4
+				)
+			),
+			colorHighlight
+		)
+
+		var crystal = VisualGroup.fromChildren
+		([
+			crystalOutline,
+			crystalCenter
+		]);
+
+		return crystal;
+
+	}
+
 	directionalAnimationsFromTiledImage
 	(
 		visualImageSource: VisualImage,
@@ -1229,6 +1278,12 @@ export class VisualBuilder
 		return visual;
 	}
 
+	rhombusOfColor(color: Color): VisualBase
+	{
+		var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
+		return rhombus;
+	}
+
 	starburstWithPointsRatioRadiusAndColor
 	(
 		numberOfPoints: number,
@@ -1304,7 +1359,7 @@ export class VisualBuilder
 		return sunVisual;
 	}
 
-	triangleIsocelesOfSizeAndColorPointingRight(size: Coords, color: Color): VisualBase
+	triangleIsocelesOfColorPointingRight(color: Color): VisualBase
 	{
 		var vertices =
 		[
@@ -1312,8 +1367,6 @@ export class VisualBuilder
 			Coords.fromXY(1, 0),
 			Coords.fromXY(0, 0.5)
 		];
-
-		vertices.forEach(x => x.multiply(size) );
 
 		var visual = VisualPolygon.fromVerticesAndColorFill
 		(

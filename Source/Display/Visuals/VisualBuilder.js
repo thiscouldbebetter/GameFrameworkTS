@@ -80,6 +80,25 @@ var ThisCouldBeBetter;
                 ]);
                 return skullAndBonesCrossed;
             }
+            crystal(dimension, colorCrystal, colorHighlight) {
+                var crystalOutline = GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(GameFramework.Path.fromPoints([
+                    GameFramework.Coords.fromXY(1, 0),
+                    GameFramework.Coords.fromXY(0, 1),
+                    GameFramework.Coords.fromXY(-1, 0),
+                    GameFramework.Coords.fromXY(0, -1)
+                ]).transform(GameFramework.Transform_Scale.fromScaleFactor(dimension / 2)), colorCrystal, colorHighlight);
+                var crystalCenter = GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
+                    GameFramework.Coords.fromXY(1, 0),
+                    GameFramework.Coords.fromXY(0, 1),
+                    GameFramework.Coords.fromXY(-1, 0),
+                    GameFramework.Coords.fromXY(0, -1)
+                ]).transform(GameFramework.Transform_Scale.fromScaleFactor(dimension / 4)), colorHighlight);
+                var crystal = GameFramework.VisualGroup.fromChildren([
+                    crystalOutline,
+                    crystalCenter
+                ]);
+                return crystal;
+            }
             directionalAnimationsFromTiledImage(visualImageSource, imageSource, imageSourceSizeInTiles, tileSizeToDraw) {
                 var imageSourceSizeInPixels = imageSource.sizeInPixels;
                 var tileSizeInPixels = imageSourceSizeInPixels.clone().divide(imageSourceSizeInTiles);
@@ -468,6 +487,10 @@ var ThisCouldBeBetter;
                 ]);
                 return visual;
             }
+            rhombusOfColor(color) {
+                var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
+                return rhombus;
+            }
             starburstWithPointsRatioRadiusAndColor(numberOfPoints, radiusInnerAsFractionOfOuter, radiusOuter, color) {
                 var name = "StarburstWith" + numberOfPoints + "Points";
                 var path = GameFramework.PathBuilder.Instance().star(numberOfPoints, radiusInnerAsFractionOfOuter);
@@ -493,13 +516,12 @@ var ThisCouldBeBetter;
                 ]);
                 return sunVisual;
             }
-            triangleIsocelesOfSizeAndColorPointingRight(size, color) {
+            triangleIsocelesOfColorPointingRight(color) {
                 var vertices = [
                     GameFramework.Coords.fromXY(0, -0.5),
                     GameFramework.Coords.fromXY(1, 0),
                     GameFramework.Coords.fromXY(0, 0.5)
                 ];
-                vertices.forEach(x => x.multiply(size));
                 var visual = GameFramework.VisualPolygon.fromVerticesAndColorFill(vertices, color);
                 return visual;
             }
