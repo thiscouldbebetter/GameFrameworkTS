@@ -11,7 +11,6 @@ var ThisCouldBeBetter;
                 this._update = update;
                 this._canUse = canUse;
                 this._use = use;
-                this.tickLastUsed = 0 - this.ticksToCharge;
             }
             static fromEntity(entity) {
                 return entity.propertyByName(Device.name);
@@ -21,6 +20,9 @@ var ThisCouldBeBetter;
             }
             static fromNameTicksToChargeAndUse(name, ticksToCharge, use) {
                 return Device.fromNameCanUseAndUse(name, (uwpe) => Device.canUseAfterTicksToCharge(uwpe, ticksToCharge), use);
+            }
+            static fromTicksToChargeAndUse(ticksToCharge, use) {
+                return Device.fromNameTicksToChargeAndUse(null, ticksToCharge, use);
             }
             static of(entity) {
                 return entity.propertyByName(Device.name);
@@ -33,7 +35,10 @@ var ThisCouldBeBetter;
                 var device = Device.fromEntity(entityDevice);
                 var world = uwpe.world;
                 var tickCurrent = world.timerTicksSoFar;
-                var ticksSinceUsed = tickCurrent - device.tickLastUsed;
+                var tickLastUsed = device.tickLastUsed;
+                var ticksSinceUsed = (tickLastUsed == null)
+                    ? ticksToCharge
+                    : tickCurrent - tickLastUsed;
                 var haveEnoughTicksPassedToCharge = (ticksSinceUsed >= ticksToCharge);
                 return haveEnoughTicksPassedToCharge;
             }

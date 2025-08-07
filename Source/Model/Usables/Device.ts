@@ -11,7 +11,6 @@ export class Device extends EntityPropertyBase<Device>
 	_use: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	tickLastUsed: number;
-	ticksToCharge: number;
 
 	constructor
 	(
@@ -29,8 +28,6 @@ export class Device extends EntityPropertyBase<Device>
 		this._update = update;
 		this._canUse = canUse;
 		this._use = use;
-
-		this.tickLastUsed = 0 - this.ticksToCharge;
 	}
 
 	static fromEntity(entity: Entity): Device
@@ -64,6 +61,15 @@ export class Device extends EntityPropertyBase<Device>
 		);
 	}
 
+	static fromTicksToChargeAndUse
+	(
+		ticksToCharge: number,
+		use:  (uwpe: UniverseWorldPlaceEntities) => void
+	)
+	{
+		return Device.fromNameTicksToChargeAndUse(null, ticksToCharge, use);
+	}
+
 	static of(entity: Entity): Device
 	{
 		return entity.propertyByName(Device.name) as Device;
@@ -80,7 +86,11 @@ export class Device extends EntityPropertyBase<Device>
 		var device = Device.fromEntity(entityDevice);
 		var world = uwpe.world;
 		var tickCurrent = world.timerTicksSoFar;
-		var ticksSinceUsed = tickCurrent - device.tickLastUsed;
+		var tickLastUsed = device.tickLastUsed;
+		var ticksSinceUsed =
+			(tickLastUsed == null)
+			? ticksToCharge
+			: tickCurrent - tickLastUsed;
 		var haveEnoughTicksPassedToCharge =
 			(ticksSinceUsed >= ticksToCharge);
 		return haveEnoughTicksPassedToCharge;

@@ -5,14 +5,32 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class ProjectileGeneration {
             constructor(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, projectileEntityInitialize) {
-                this.radius = radius;
-                this.distanceInitial = distanceInitial;
-                this.speed = speed;
-                this.ticksToLive = ticksToLive;
+                this.radius = radius || 2;
+                this.distanceInitial = distanceInitial || 3;
+                this.speed = speed || 4;
+                this.ticksToLive = ticksToLive || 20;
                 this._hit = hit;
-                this.damage = damage;
-                this.visual = visual;
+                this.damage = damage || GameFramework.Damage.fromAmount(1);
+                ;
+                this.visual =
+                    visual ||
+                        GameFramework.VisualGroup.fromChildren([
+                            GameFramework.VisualSound.fromSoundName("Effects_Blip"),
+                            GameFramework.VisualCircle.fromRadiusAndColorFill(this.radius, GameFramework.Color.Instances().Yellow)
+                        ]);
                 this._projectileEntityInitialize = projectileEntityInitialize;
+            }
+            static default() {
+                var generation = new ProjectileGeneration(null, //radius
+                null, // distanceInitial
+                null, // speed
+                null, // ticksToLive
+                null, // hit
+                null, // damage,
+                null, // visual,
+                null // init
+                );
+                return generation;
             }
             static fromRadiusDistanceSpeedTicksHitDamageAndVisual(radius, distanceInitial, speed, ticksToLive, hit, damage, visual) {
                 return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, null // projectileEntityInitialize

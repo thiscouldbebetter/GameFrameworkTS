@@ -22,6 +22,22 @@ export class ProjectileGenerator
 		this.generations = generations;
 	}
 
+	static default(): ProjectileGenerator
+	{
+		var projectileGeneration = ProjectileGeneration.default();
+
+		var projectileGenerator = ProjectileGenerator.fromNameFireAndGenerations
+		(
+			ProjectileGenerator.name,
+			ProjectileGenerator.fireDefault,
+			[
+				projectileGeneration
+			]
+		);
+
+		return projectileGenerator;
+	}
+
 	static fromNameAndGenerations
 	(
 		name: string,

@@ -24,14 +24,41 @@ export class ProjectileGeneration
 		projectileEntityInitialize: (entity: Entity) => void
 	)
 	{
-		this.radius = radius;
-		this.distanceInitial = distanceInitial;
-		this.speed = speed;
-		this.ticksToLive = ticksToLive;
+		this.radius = radius || 2;
+		this.distanceInitial = distanceInitial || 3;
+		this.speed = speed || 4;
+		this.ticksToLive = ticksToLive || 20;
 		this._hit = hit;
-		this.damage = damage;
-		this.visual = visual;
+		this.damage = damage || Damage.fromAmount(1);;
+		this.visual =
+			visual ||
+			VisualGroup.fromChildren
+			([
+				VisualSound.fromSoundName("Effects_Blip"),
+
+				VisualCircle.fromRadiusAndColorFill
+				(
+					this.radius, Color.Instances().Yellow
+				)
+			]);
 		this._projectileEntityInitialize = projectileEntityInitialize;
+	}
+
+	static default(): ProjectileGeneration
+	{
+		var generation = new ProjectileGeneration
+		(
+			null, //radius
+			null, // distanceInitial
+			null, // speed
+			null, // ticksToLive
+			null, // hit
+			null, // damage,
+			null, // visual,
+			null // init
+		);
+
+		return generation;
 	}
 
 	static fromRadiusDistanceSpeedTicksHitDamageAndVisual

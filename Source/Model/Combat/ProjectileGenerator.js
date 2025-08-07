@@ -10,6 +10,13 @@ var ThisCouldBeBetter;
                 this._fire = fire || ProjectileGenerator.fireDefault;
                 this.generations = generations;
             }
+            static default() {
+                var projectileGeneration = GameFramework.ProjectileGeneration.default();
+                var projectileGenerator = ProjectileGenerator.fromNameFireAndGenerations(ProjectileGenerator.name, ProjectileGenerator.fireDefault, [
+                    projectileGeneration
+                ]);
+                return projectileGenerator;
+            }
             static fromNameAndGenerations(name, generations) {
                 return new ProjectileGenerator(name, null, generations);
             }
