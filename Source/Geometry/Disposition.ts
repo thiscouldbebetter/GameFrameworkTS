@@ -14,6 +14,9 @@ export class Disposition
 	spin: Rotation;
 	timeOffsetInTicks: number;
 
+	_accelDirection: Coords;
+	_velDirection: Coords;
+
 	constructor
 	(
 		pos: Coords,
@@ -38,6 +41,9 @@ export class Disposition
 		this.spin = new Rotation(this.orientation.down, new Reference(0));
 
 		this.timeOffsetInTicks = 0;
+
+		this._accelDirection = Coords.create();
+		this._velDirection = Coords.create();
 	}
 
 	static create(): Disposition
@@ -99,6 +105,11 @@ export class Disposition
 		return new Disposition(pos, orientation, placeName);
 	}
 
+	accelDirection(): Coords
+	{
+		return this._accelDirection.overwriteWith(this.accel).normalize();
+	}
+
 	clear(): Disposition
 	{
 		this.pos.clear();
@@ -138,6 +149,11 @@ export class Disposition
 	{
 		this._placeName = value;
 		return this;
+	}
+
+	velDirection(): Coords
+	{
+		return this._velDirection.overwriteWith(this.vel).normalize();
 	}
 
 	velSet(value: Coords): Disposition

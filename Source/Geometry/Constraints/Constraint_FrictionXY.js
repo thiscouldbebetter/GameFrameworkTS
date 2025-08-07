@@ -4,16 +4,16 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Constraint_FrictionXY {
-            constructor(target, speedBelowWhichToStop) {
-                this.target = target;
+            constructor(frictionCofficient, speedBelowWhichToStop) {
+                this.frictionCofficient = frictionCofficient;
                 this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
             }
-            static fromTargetAndSpeedBelowWhichToStop(target, speedBelowWhichToStop) {
-                return new Constraint_FrictionXY(target, speedBelowWhichToStop);
+            static fromCoefficientAndSpeedBelowWhichToStop(frictionCofficient, speedBelowWhichToStop) {
+                return new Constraint_FrictionXY(frictionCofficient, speedBelowWhichToStop);
             }
             constrain(uwpe) {
                 var entity = uwpe.entity;
-                var targetFrictionCoefficient = this.target;
+                var targetFrictionCoefficient = this.frictionCofficient;
                 var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var entityVel = entityLoc.vel;
                 var entityVelZSaved = entityVel.z;

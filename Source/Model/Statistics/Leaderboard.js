@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 return new Leaderboard(null, null);
             }
             static createWithFakeScores() {
-                var ps = (n, s) => Leaderboard_PlayerScore.fromPlayerNameAndScore(n, s);
+                var ps = (n, s) => LeaderboardPlayerScore.fromPlayerNameAndScore(n, s);
                 var playerScoresFake = [
                     ps("AAA", 100000),
                     ps("BBB", 50000),
@@ -42,7 +42,7 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < this.playerScores.length; i++) {
                     var playerScoreExisting = this.playerScores[i].score;
                     if (scoreToInsert > playerScoreExisting) {
-                        var playerScoreToInsert = Leaderboard_PlayerScore.fromScore(scoreToInsert);
+                        var playerScoreToInsert = LeaderboardPlayerScore.fromScore(scoreToInsert);
                         this.playerScores.splice(i, 0, playerScoreToInsert);
                         this.playerScores.length = this.playerScoresCount;
                         this.playerScoreBeingEntered = playerScoreToInsert;
@@ -95,17 +95,17 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.Leaderboard = Leaderboard;
-        class Leaderboard_PlayerScore {
+        class LeaderboardPlayerScore {
             constructor(playerInitials, score, timeEntered) {
                 this.playerInitials = playerInitials;
                 this.score = score;
                 this.timeEntered = timeEntered || new Date();
             }
             static fromPlayerNameAndScore(playerName, score) {
-                return new Leaderboard_PlayerScore(playerName, score, null);
+                return new LeaderboardPlayerScore(playerName, score, null);
             }
             static fromScore(score) {
-                return new Leaderboard_PlayerScore("---", score, null);
+                return new LeaderboardPlayerScore("---", score, null);
             }
             toString() {
                 var scoreLengthMax = 9;
@@ -114,5 +114,6 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
         }
+        GameFramework.LeaderboardPlayerScore = LeaderboardPlayerScore;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

@@ -46,6 +46,11 @@ var ThisCouldBeBetter;
                 this.name = nameToSet;
                 return this;
             }
+            propertiesClear() {
+                this.properties.length = 0;
+                this.propertiesByName.clear();
+                return this;
+            }
             propertyAdd(propertyToAdd) {
                 return this.propertyAddForPlace(propertyToAdd, null);
             }
@@ -74,6 +79,11 @@ var ThisCouldBeBetter;
                     var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
                     GameFramework.ArrayHelper.remove(entitiesWithProperty, this);
                 }
+                return this;
+            }
+            propertyWithNameRemoveForPlace(propertyToRemoveName, place) {
+                var propertyToRemove = this.propertyByName(propertyToRemoveName);
+                this.propertyRemoveForPlace(propertyToRemove, place);
                 return this;
             }
             updateForTimerTick(uwpe) {

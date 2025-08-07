@@ -196,12 +196,20 @@ export class Universe
 	initialize(callback: (u: Universe) => void): void
 	{
 		this.platformHelper.initialize(this);
+
 		this.storageHelper = StorageHelper.fromPrefixSerializerAndCompressor
 		(
 			StringHelper.replaceAll(this.name, " ", "_") + "_",
 			this.serializer,
 			new CompressorLZW()
 		);
+
+		if (this.debugSettings.localStorageClear() )
+		{
+			// Useful when the structure of previously stored data changes.
+			this.storageHelper.deleteAll();
+			alert("Local storage cleared!");
+		}
 
 		this.display.initialize(this);
 		this.platformHelper.platformableAdd(this.display);

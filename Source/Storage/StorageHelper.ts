@@ -52,10 +52,11 @@ export class StorageHelper
 	{
 		var keysAll = Object.keys(localStorage);
 		var keysWithPrefix = keysAll.filter(x => x.startsWith(this.propertyNamePrefix));
-		for (var key in keysWithPrefix)
+		for (var i = 0; i < keysWithPrefix.length; i++)
 		{
-			var itemToDelete = localStorage.getItem(key);
-			localStorage.removeItem(itemToDelete);
+			var key = keysWithPrefix[i];
+			//var itemToDelete = localStorage.getItem(key);
+			localStorage.removeItem(key);
 		}
 	}
 

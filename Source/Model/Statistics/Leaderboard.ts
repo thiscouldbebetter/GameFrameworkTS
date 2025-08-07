@@ -6,15 +6,15 @@ namespace ThisCouldBeBetter.GameFramework
 export class Leaderboard
 {
 	playerScoresCount: number;
-	playerScores: Leaderboard_PlayerScore[];
+	playerScores: LeaderboardPlayerScore[];
 
-	playerScoreBeingEntered: Leaderboard_PlayerScore;
+	playerScoreBeingEntered: LeaderboardPlayerScore;
 	cursorOffsetInChars: number;
 
 	constructor
 	(
 		playerScoresCount: number,
-		playerScores: Leaderboard_PlayerScore[]
+		playerScores: LeaderboardPlayerScore[]
 	)
 	{
 		this.playerScoresCount = playerScoresCount || 10;
@@ -32,7 +32,7 @@ export class Leaderboard
 	static createWithFakeScores(): Leaderboard
 	{
 		var ps = (n: string, s: number) =>
-			Leaderboard_PlayerScore.fromPlayerNameAndScore(n, s);
+			LeaderboardPlayerScore.fromPlayerNameAndScore(n, s);
 
 		var playerScoresFake =
 		[
@@ -74,7 +74,7 @@ export class Leaderboard
 			if (scoreToInsert > playerScoreExisting)
 			{
 				var playerScoreToInsert =
-					Leaderboard_PlayerScore.fromScore(scoreToInsert);
+					LeaderboardPlayerScore.fromScore(scoreToInsert);
 				this.playerScores.splice(i, 0, playerScoreToInsert);
 				this.playerScores.length = this.playerScoresCount;
 				this.playerScoreBeingEntered = playerScoreToInsert;
@@ -157,7 +157,7 @@ export class Leaderboard
 	}
 }
 
-class Leaderboard_PlayerScore
+export class LeaderboardPlayerScore
 {
 	playerInitials: string;
 	score: number;
@@ -170,14 +170,17 @@ class Leaderboard_PlayerScore
 		this.timeEntered = timeEntered || new Date();
 	}
 
-	static fromPlayerNameAndScore(playerName: string, score: number): Leaderboard_PlayerScore
+	static fromPlayerNameAndScore
+	(
+		playerName: string, score: number
+	): LeaderboardPlayerScore
 	{
-		return new Leaderboard_PlayerScore(playerName, score, null);
+		return new LeaderboardPlayerScore(playerName, score, null);
 	}
 
-	static fromScore(score: number): Leaderboard_PlayerScore
+	static fromScore(score: number): LeaderboardPlayerScore
 	{
-		return new Leaderboard_PlayerScore("---", score, null);
+		return new LeaderboardPlayerScore("---", score, null);
 	}
 
 	toString(): string

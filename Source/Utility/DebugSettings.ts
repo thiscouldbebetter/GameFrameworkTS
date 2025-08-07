@@ -47,6 +47,11 @@ export class DebugSettings
 		return (this.settingValueByName("DrawColliders") != null);
 	}
 
+	localStorageClear(): boolean
+	{
+		return (this.settingValueByName("LocalStorageClear") != null);
+	}
+
 	skipOpening(): boolean
 	{
 		return (this.settingValueByName("SkipOpening") != null);

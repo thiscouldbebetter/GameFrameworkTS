@@ -89,6 +89,7 @@ var Skill = gf.Skill;
 var SkillLearner = gf.SkillLearner;
 // Model - Statistics.
 var Leaderboard = gf.Leaderboard;
+var LeaderboardPlayerScore = gf.LeaderboardPlayerScore;
 var Scorable = gf.Scorable;
 var StatsKeeper = gf.StatsKeeper;
 // Model - Talk.

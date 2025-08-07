@@ -109,6 +109,7 @@ import SkillLearner = gf.SkillLearner;
 
 // Model - Statistics.
 import Leaderboard = gf.Leaderboard;
+import LeaderboardPlayerScore = gf.LeaderboardPlayerScore;
 import Scorable = gf.Scorable;
 import StatsKeeper = gf.StatsKeeper;
 

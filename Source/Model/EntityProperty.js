@@ -8,9 +8,9 @@ var ThisCouldBeBetter;
             initialize(uwpe) { }
             propertyName() { return this.constructor.name; }
             updateForTimerTick(uwpe) { }
-            clone() { throw new Error("todo"); }
-            overwriteWith(other) { throw new Error("todo"); }
-            equals(other) { throw new Error("todo"); }
+            clone() { throw new Error("Must be implemented on subclass!"); }
+            overwriteWith(other) { throw new Error("Must be implemented on subclass!"); }
+            equals(other) { throw new Error("Must be implemented on subclass!"); }
         }
         GameFramework.EntityPropertyBase = EntityPropertyBase;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

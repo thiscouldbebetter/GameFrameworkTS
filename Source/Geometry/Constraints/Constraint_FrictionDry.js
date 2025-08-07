@@ -4,12 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Constraint_FrictionDry {
-            constructor(target) {
-                this.target = target;
+            constructor(frictionCoefficient) {
+                this.frictionCoefficient = frictionCoefficient;
             }
             constrain(uwpe) {
                 var entity = uwpe.entity;
-                var targetFrictionCoefficient = this.target;
+                var targetFrictionCoefficient = this.frictionCoefficient;
                 var frictionMagnitude = targetFrictionCoefficient;
                 var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var entityVel = entityLoc.vel;

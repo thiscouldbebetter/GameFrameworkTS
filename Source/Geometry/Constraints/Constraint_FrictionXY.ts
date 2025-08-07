@@ -4,28 +4,28 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_FrictionXY implements Constraint
 {
-	target: number;
+	frictionCofficient: number;
 	speedBelowWhichToStop: number;
 
-	constructor(target: number, speedBelowWhichToStop: number)
+	constructor(frictionCofficient: number, speedBelowWhichToStop: number)
 	{
-		this.target = target;
+		this.frictionCofficient = frictionCofficient;
 		this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
 	}
 
-	static fromTargetAndSpeedBelowWhichToStop
+	static fromCoefficientAndSpeedBelowWhichToStop
 	(
-		target: number, speedBelowWhichToStop: number
+		frictionCofficient: number, speedBelowWhichToStop: number
 	): Constraint_FrictionXY
 	{
-		return new Constraint_FrictionXY(target, speedBelowWhichToStop);
+		return new Constraint_FrictionXY(frictionCofficient, speedBelowWhichToStop);
 	}
 
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;
 
-		var targetFrictionCoefficient = this.target;
+		var targetFrictionCoefficient = this.frictionCofficient;
 		var entityLoc = Locatable.of(entity).loc;
 		var entityVel = entityLoc.vel;
 		var entityVelZSaved = entityVel.z;

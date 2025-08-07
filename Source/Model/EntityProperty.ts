@@ -17,9 +17,9 @@ export class EntityPropertyBase<T extends EntityProperty> implements EntityPrope
 	propertyName(): string { return this.constructor.name; }
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void {}
 
-	clone(): T { throw new Error("todo"); }
-	overwriteWith(other: T): T { throw new Error("todo"); }
-	equals(other: T): boolean { throw new Error("todo"); }
+	clone(): T { throw new Error("Must be implemented on subclass!"); }
+	overwriteWith(other: T): T { throw new Error("Must be implemented on subclass!"); }
+	equals(other: T): boolean { throw new Error("Must be implemented on subclass!"); }
 }
 
 }

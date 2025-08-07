@@ -4,23 +4,29 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Movable extends EntityPropertyBase<Movable>
 {
-	_accelerationPerTick: (uwpe: UniverseWorldPlaceEntities) => number;
-	_speedMax: (uwpe: UniverseWorldPlaceEntities) => number;
-	_canAccelerate: (uwpe: UniverseWorldPlaceEntities) => boolean;
+	_accelerationPerTickInDirection:
+		(uwpe: UniverseWorldPlaceEntities, direction: Coords) => number;
+	_speedMax:
+		(uwpe: UniverseWorldPlaceEntities) => number;
+	_canAccelerateInDirection:
+		(uwpe: UniverseWorldPlaceEntities, direction: Coords) => boolean;
 
 	constructor
 	(
-		accelerationPerTick: (uwpe: UniverseWorldPlaceEntities) => number,
-		speedMax: (uwpe: UniverseWorldPlaceEntities) => number,
-		canAccelerate: (uwpe: UniverseWorldPlaceEntities) => boolean,
+		accelerationPerTickInDirection:
+			(uwpe: UniverseWorldPlaceEntities, direction: Coords) => number,
+		speedMax:
+			(uwpe: UniverseWorldPlaceEntities) => number,
+		canAccelerateInDirection:
+			(uwpe: UniverseWorldPlaceEntities, direction: Coords) => boolean,
 	)
 	{
 		super();
 
-		this._accelerationPerTick =
-			accelerationPerTick == null
-			? (uwpe2: UniverseWorldPlaceEntities) => .1
-			: accelerationPerTick;
+		this._accelerationPerTickInDirection =
+			accelerationPerTickInDirection == null
+			? (uwpe2: UniverseWorldPlaceEntities, direction: Coords) => .1
+			: accelerationPerTickInDirection;
 
 		this._speedMax =
 		(
@@ -28,7 +34,8 @@ export class Movable extends EntityPropertyBase<Movable>
 			? (uwpe2: UniverseWorldPlaceEntities) => 3
 			: speedMax
 		);
-		this._canAccelerate = canAccelerate;
+
+		this._canAccelerateInDirection = canAccelerateInDirection;
 	}
 
 	static default(): Movable
@@ -41,7 +48,7 @@ export class Movable extends EntityPropertyBase<Movable>
 		return place.entitiesByPropertyName(Movable.name);
 	}
 
-	static fromAccelerationAndSpeedMax
+	static fromAccelerationPerTickAndSpeedMax
 	(
 		accelerationPerTick: number,
 		speedMax: number
@@ -49,9 +56,41 @@ export class Movable extends EntityPropertyBase<Movable>
 	{
 		return new Movable
 		(
-			(uwpe: UniverseWorldPlaceEntities) => accelerationPerTick,
+			(uwpe: UniverseWorldPlaceEntities, direction: Coords) => accelerationPerTick,
 			(uwpe: UniverseWorldPlaceEntities) => speedMax,
 			null
+		);
+	}
+
+	static fromAccelerationPerTickInDirectionAndSpeedMax
+	(
+		accelerationPerTickInDirection:
+			(uwpe: UniverseWorldPlaceEntities, direction: Coords) => number,
+		speedMax: number
+	): Movable
+	{
+		return new Movable
+		(
+			accelerationPerTickInDirection,
+			(uwpe: UniverseWorldPlaceEntities) => speedMax,
+			null
+		);
+	}
+
+	static fromAccelerationPerTickInDirectionSpeedMaxAndCanAccelerateInDirection
+	(
+		accelerationPerTickInDirection:
+			(uwpe: UniverseWorldPlaceEntities, direction: Coords) => number,
+		speedMax: number,
+		canAccelerateInDirection:
+			(uwpe: UniverseWorldPlaceEntities, direction: Coords) => boolean,
+	): Movable
+	{
+		return new Movable
+		(
+			accelerationPerTickInDirection,
+			(uwpe: UniverseWorldPlaceEntities) => speedMax,
+			canAccelerateInDirection
 		);
 	}
 
@@ -69,9 +108,13 @@ export class Movable extends EntityPropertyBase<Movable>
 		return entity.propertyByName(Movable.name) as Movable;
 	}
 
-	accelerationPerTick(uwpe: UniverseWorldPlaceEntities): number
+	accelerationPerTickInDirection
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		direction: Coords
+	): number
 	{
-		return this._accelerationPerTick(uwpe);
+		return this._accelerationPerTickInDirection(uwpe, direction);
 	}
 
 	accelerateAndFaceForwardIfAble(uwpe: UniverseWorldPlaceEntities): void
@@ -89,10 +132,14 @@ export class Movable extends EntityPropertyBase<Movable>
 	{
 		var entity = uwpe.entity;
 		var entityLoc = Locatable.of(entity).loc;
-		var canAccelerate = this.canAccelerate(uwpe);
+		var canAccelerate =
+			this.canAccelerateInDirection(uwpe, directionToAccelerateIn);
 		if (canAccelerate)
 		{
-			var accel = this.accelerationPerTick(uwpe);
+			var accel = this.accelerationPerTickInDirection
+			(
+				uwpe, directionToAccelerateIn
+			);
 
 			entityLoc
 				.accel
@@ -106,16 +153,53 @@ export class Movable extends EntityPropertyBase<Movable>
 		}
 	}
 
-	canAccelerate(uwpe: UniverseWorldPlaceEntities): boolean
+	canAccelerateInDirection
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		direction: Coords
+	): boolean
 	{
 		var returnValue =
 		(
-			this._canAccelerate == null
+			this._canAccelerateInDirection == null
 			? true
-			: this._canAccelerate(uwpe)
+			: this._canAccelerateInDirection(uwpe, direction)
 		);
 
 		return returnValue;
+	}
+
+	moveInDirectionIfAble
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		directionToMoveIn: Coords,
+		orientationMatchesMoveDirection: boolean
+	): void
+	{
+		var entity = uwpe.entity;
+		var entityLoc = Locatable.of(entity).loc;
+		var canMove = this.canAccelerateInDirection(uwpe, directionToMoveIn); // hack
+		if (canMove)
+		{
+			var speed = this.accelerationPerTickInDirection
+			(
+				uwpe, directionToMoveIn
+			); // hack
+
+			var displacement =
+				directionToMoveIn
+					.clone()
+					.multiplyScalar(speed);
+
+			entityLoc
+				.pos
+				.add(displacement);
+
+			if (orientationMatchesMoveDirection)
+			{
+				entityLoc.orientation.forwardSet(directionToMoveIn);
+			}
+		}
 	}
 
 	speedMax(uwpe: UniverseWorldPlaceEntities): number
@@ -129,17 +213,17 @@ export class Movable extends EntityPropertyBase<Movable>
 	{
 		return new Movable
 		(
-			this._accelerationPerTick,
+			this._accelerationPerTickInDirection,
 			this._speedMax,
-			this._canAccelerate
+			this._canAccelerateInDirection
 		);
 	}
 
 	overwriteWith(other: Movable): Movable
 	{
-		this.accelerationPerTick = other.accelerationPerTick;
-		this.speedMax = other.speedMax;
-		this._canAccelerate = other._canAccelerate;
+		this._accelerationPerTickInDirection = other._accelerationPerTickInDirection;
+		this._speedMax = other._speedMax;
+		this._canAccelerateInDirection = other._canAccelerateInDirection;
 		return this;
 	}
 
@@ -299,6 +383,51 @@ export class Movable extends EntityPropertyBase<Movable>
 		);
 	}
 
+	static actionMove_Perform
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		direction: Coords,
+		orientationMatchesMoveDirection: boolean
+	): void
+	{
+		var actor = uwpe.entity;
+		var movable = Movable.of(actor);
+		movable.moveInDirectionIfAble
+		(
+			uwpe, direction, orientationMatchesMoveDirection
+		);
+	}
+
+	static actionMoveWithoutFacingDown(): Action
+	{
+		return Action.fromNameAndPerform
+		(
+			"Move Down",
+			uwpe =>
+				this.actionMove_Perform
+				(
+					uwpe,
+					Coords.Instances().ZeroOneZero,
+					false // orientationMatchesMove
+				)
+		);
+	}
+
+	static actionMoveWithoutFacingUp(): Action
+	{
+		return Action.fromNameAndPerform
+		(
+			"Accelerate Up",
+			uwpe =>
+				this.actionMove_Perform
+				(
+					uwpe,
+					Coords.Instances().ZeroMinusOneZero,
+					false // orientationMatchesMove
+				)
+		);
+	}
+
 	// Activities.
 
 	static activityDefnWanderBuild(): ActivityDefn
@@ -339,7 +468,16 @@ export class Movable extends EntityPropertyBase<Movable>
 		var movable = Movable.of(entityActor);
 		var actorLocatable = Locatable.of(entityActor);
 		var targetLocatable = Locatable.of(targetEntity);
-		var accelerationPerTick = movable.accelerationPerTick(uwpe);
+		var actorPos = actorLocatable.pos();
+		var targetPos = targetLocatable.pos();
+		var displacementFromActorToTarget =
+			targetPos
+				.clone()
+				.subtract(actorPos);
+		var directionToTarget =
+			displacementFromActorToTarget.normalize();
+		var accelerationPerTick =
+			movable.accelerationPerTickInDirection(uwpe, directionToTarget);
 		var speedMax = movable.speedMax(uwpe);
 		var distanceToTarget =
 			actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance

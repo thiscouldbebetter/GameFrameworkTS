@@ -80,6 +80,13 @@ export class Entity implements Clonable<Entity>
 		return this;
 	}
 
+	propertiesClear(): Entity
+	{
+		this.properties.length = 0;
+		this.propertiesByName.clear();
+		return this;
+	}
+
 	propertyAdd(propertyToAdd: EntityProperty): Entity
 	{
 		return this.propertyAddForPlace(propertyToAdd, null);
@@ -127,6 +134,13 @@ export class Entity implements Clonable<Entity>
 			var entitiesWithProperty = place.entitiesByPropertyName(propertyName);
 			ArrayHelper.remove(entitiesWithProperty, this);
 		}
+		return this;
+	}
+
+	propertyWithNameRemoveForPlace(propertyToRemoveName: string, place: Place): Entity
+	{
+		var propertyToRemove = this.propertyByName(propertyToRemoveName);
+		this.propertyRemoveForPlace(propertyToRemove, place);
 		return this;
 	}
 

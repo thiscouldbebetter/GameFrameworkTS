@@ -4,18 +4,18 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Constraint_FrictionDry implements Constraint
 {
-	target: number;
+	frictionCoefficient: number;
 
-	constructor(target: number)
+	constructor(frictionCoefficient: number)
 	{
-		this.target = target;
+		this.frictionCoefficient = frictionCoefficient;
 	}
 
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;
 
-		var targetFrictionCoefficient = this.target;
+		var targetFrictionCoefficient = this.frictionCoefficient;
 		var frictionMagnitude = targetFrictionCoefficient;
 		var entityLoc = Locatable.of(entity).loc;
 		var entityVel = entityLoc.vel;

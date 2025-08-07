@@ -4,17 +4,17 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Movable extends GameFramework.EntityPropertyBase {
-            constructor(accelerationPerTick, speedMax, canAccelerate) {
+            constructor(accelerationPerTickInDirection, speedMax, canAccelerateInDirection) {
                 super();
-                this._accelerationPerTick =
-                    accelerationPerTick == null
-                        ? (uwpe2) => .1
-                        : accelerationPerTick;
+                this._accelerationPerTickInDirection =
+                    accelerationPerTickInDirection == null
+                        ? (uwpe2, direction) => .1
+                        : accelerationPerTickInDirection;
                 this._speedMax =
                     (speedMax == null
                         ? (uwpe2) => 3
                         : speedMax);
-                this._canAccelerate = canAccelerate;
+                this._canAccelerateInDirection = canAccelerateInDirection;
             }
             static default() {
                 return new Movable(null, null, null);
@@ -22,8 +22,14 @@ var ThisCouldBeBetter;
             static entitiesFromPlace(place) {
                 return place.entitiesByPropertyName(Movable.name);
             }
-            static fromAccelerationAndSpeedMax(accelerationPerTick, speedMax) {
-                return new Movable((uwpe) => accelerationPerTick, (uwpe) => speedMax, null);
+            static fromAccelerationPerTickAndSpeedMax(accelerationPerTick, speedMax) {
+                return new Movable((uwpe, direction) => accelerationPerTick, (uwpe) => speedMax, null);
+            }
+            static fromAccelerationPerTickInDirectionAndSpeedMax(accelerationPerTickInDirection, speedMax) {
+                return new Movable(accelerationPerTickInDirection, (uwpe) => speedMax, null);
+            }
+            static fromAccelerationPerTickInDirectionSpeedMaxAndCanAccelerateInDirection(accelerationPerTickInDirection, speedMax, canAccelerateInDirection) {
+                return new Movable(accelerationPerTickInDirection, (uwpe) => speedMax, canAccelerateInDirection);
             }
             static fromSpeedMax(speedMax) {
                 var speedMaxGet = (uwpe) => speedMax;
@@ -32,8 +38,8 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(Movable.name);
             }
-            accelerationPerTick(uwpe) {
-                return this._accelerationPerTick(uwpe);
+            accelerationPerTickInDirection(uwpe, direction) {
+                return this._accelerationPerTickInDirection(uwpe, direction);
             }
             accelerateAndFaceForwardIfAble(uwpe) {
                 var forward = GameFramework.Locatable.of(uwpe.entity).loc.orientation.forward;
@@ -42,9 +48,9 @@ var ThisCouldBeBetter;
             accelerateInDirectionIfAble(uwpe, directionToAccelerateIn, orientationMatchesAcceleration) {
                 var entity = uwpe.entity;
                 var entityLoc = GameFramework.Locatable.of(entity).loc;
-                var canAccelerate = this.canAccelerate(uwpe);
+                var canAccelerate = this.canAccelerateInDirection(uwpe, directionToAccelerateIn);
                 if (canAccelerate) {
-                    var accel = this.accelerationPerTick(uwpe);
+                    var accel = this.accelerationPerTickInDirection(uwpe, directionToAccelerateIn);
                     entityLoc
                         .accel
                         .overwriteWith(directionToAccelerateIn)
@@ -54,23 +60,40 @@ var ThisCouldBeBetter;
                     }
                 }
             }
-            canAccelerate(uwpe) {
-                var returnValue = (this._canAccelerate == null
+            canAccelerateInDirection(uwpe, direction) {
+                var returnValue = (this._canAccelerateInDirection == null
                     ? true
-                    : this._canAccelerate(uwpe));
+                    : this._canAccelerateInDirection(uwpe, direction));
                 return returnValue;
+            }
+            moveInDirectionIfAble(uwpe, directionToMoveIn, orientationMatchesMoveDirection) {
+                var entity = uwpe.entity;
+                var entityLoc = GameFramework.Locatable.of(entity).loc;
+                var canMove = this.canAccelerateInDirection(uwpe, directionToMoveIn); // hack
+                if (canMove) {
+                    var speed = this.accelerationPerTickInDirection(uwpe, directionToMoveIn); // hack
+                    var displacement = directionToMoveIn
+                        .clone()
+                        .multiplyScalar(speed);
+                    entityLoc
+                        .pos
+                        .add(displacement);
+                    if (orientationMatchesMoveDirection) {
+                        entityLoc.orientation.forwardSet(directionToMoveIn);
+                    }
+                }
             }
             speedMax(uwpe) {
                 return this._speedMax(uwpe);
             }
             // Clonable.
             clone() {
-                return new Movable(this._accelerationPerTick, this._speedMax, this._canAccelerate);
+                return new Movable(this._accelerationPerTickInDirection, this._speedMax, this._canAccelerateInDirection);
             }
             overwriteWith(other) {
-                this.accelerationPerTick = other.accelerationPerTick;
-                this.speedMax = other.speedMax;
-                this._canAccelerate = other._canAccelerate;
+                this._accelerationPerTickInDirection = other._accelerationPerTickInDirection;
+                this._speedMax = other._speedMax;
+                this._canAccelerateInDirection = other._canAccelerateInDirection;
                 return this;
             }
             // EntityProperty.
@@ -123,6 +146,19 @@ var ThisCouldBeBetter;
                 return GameFramework.Action.fromNameAndPerform("Accelerate Up", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero, false // orientationMatchesAcceleration
                 ));
             }
+            static actionMove_Perform(uwpe, direction, orientationMatchesMoveDirection) {
+                var actor = uwpe.entity;
+                var movable = Movable.of(actor);
+                movable.moveInDirectionIfAble(uwpe, direction, orientationMatchesMoveDirection);
+            }
+            static actionMoveWithoutFacingDown() {
+                return GameFramework.Action.fromNameAndPerform("Move Down", uwpe => this.actionMove_Perform(uwpe, GameFramework.Coords.Instances().ZeroOneZero, false // orientationMatchesMove
+                ));
+            }
+            static actionMoveWithoutFacingUp() {
+                return GameFramework.Action.fromNameAndPerform("Accelerate Up", uwpe => this.actionMove_Perform(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero, false // orientationMatchesMove
+                ));
+            }
             // Activities.
             static activityDefnWanderBuild() {
                 var returnValue = GameFramework.ActivityDefn.fromNameAndPerform("Wander", uwpe => this.activityDefnWander_Perform(uwpe));
@@ -143,7 +179,13 @@ var ThisCouldBeBetter;
                 var movable = Movable.of(entityActor);
                 var actorLocatable = GameFramework.Locatable.of(entityActor);
                 var targetLocatable = GameFramework.Locatable.of(targetEntity);
-                var accelerationPerTick = movable.accelerationPerTick(uwpe);
+                var actorPos = actorLocatable.pos();
+                var targetPos = targetLocatable.pos();
+                var displacementFromActorToTarget = targetPos
+                    .clone()
+                    .subtract(actorPos);
+                var directionToTarget = displacementFromActorToTarget.normalize();
+                var accelerationPerTick = movable.accelerationPerTickInDirection(uwpe, directionToTarget);
                 var speedMax = movable.speedMax(uwpe);
                 var distanceToTarget = actorLocatable.approachOtherWithAccelerationAndSpeedMaxAndReturnDistance(targetLocatable, accelerationPerTick, speedMax);
                 if (distanceToTarget < speedMax) {

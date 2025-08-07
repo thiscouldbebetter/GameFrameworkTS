@@ -16,6 +16,8 @@ var ThisCouldBeBetter;
                 this.force = GameFramework.Coords.create();
                 this.spin = new GameFramework.Rotation(this.orientation.down, new GameFramework.Reference(0));
                 this.timeOffsetInTicks = 0;
+                this._accelDirection = GameFramework.Coords.create();
+                this._velDirection = GameFramework.Coords.create();
             }
             static create() {
                 return new Disposition(GameFramework.Coords.create(), GameFramework.Orientation.default(), null);
@@ -46,6 +48,9 @@ var ThisCouldBeBetter;
             static fromPosOrientationAndPlaceName(pos, orientation, placeName) {
                 return new Disposition(pos, orientation, placeName);
             }
+            accelDirection() {
+                return this._accelDirection.overwriteWith(this.accel).normalize();
+            }
             clear() {
                 this.pos.clear();
                 this.vel.clear();
@@ -71,6 +76,9 @@ var ThisCouldBeBetter;
             placeNameSet(value) {
                 this._placeName = value;
                 return this;
+            }
+            velDirection() {
+                return this._velDirection.overwriteWith(this.vel).normalize();
             }
             velSet(value) {
                 this.vel.overwriteWith(value);

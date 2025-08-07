@@ -1251,10 +1251,10 @@ class PlaceBuilderDemo_Movers
 			}
 		);
 
-		var movable = Movable.fromAccelerationAndSpeedMax
+		var movable = Movable.fromAccelerationPerTickAndSpeedMax
 		(
-			0.5, // accelerationPerTick
-			1 // speedMax
+			0.5,
+			1
 		);
 
 		var itemCrafter = ItemCrafter.fromRecipesAvailable

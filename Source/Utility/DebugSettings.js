@@ -28,6 +28,9 @@ var ThisCouldBeBetter;
             drawColliders() {
                 return (this.settingValueByName("DrawColliders") != null);
             }
+            localStorageClear() {
+                return (this.settingValueByName("LocalStorageClear") != null);
+            }
             skipOpening() {
                 return (this.settingValueByName("SkipOpening") != null);
             }

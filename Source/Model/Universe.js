@@ -80,6 +80,11 @@ var ThisCouldBeBetter;
             initialize(callback) {
                 this.platformHelper.initialize(this);
                 this.storageHelper = GameFramework.StorageHelper.fromPrefixSerializerAndCompressor(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
+                if (this.debugSettings.localStorageClear()) {
+                    // Useful when the structure of previously stored data changes.
+                    this.storageHelper.deleteAll();
+                    alert("Local storage cleared!");
+                }
                 this.display.initialize(this);
                 this.platformHelper.platformableAdd(this.display);
                 this.soundHelper.initialize(this.mediaLibrary.sounds);
