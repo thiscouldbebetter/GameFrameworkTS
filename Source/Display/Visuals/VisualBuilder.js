@@ -493,6 +493,16 @@ var ThisCouldBeBetter;
                 ]);
                 return sunVisual;
             }
+            triangleIsocelesOfSizeAndColorPointingRight(size, color) {
+                var vertices = [
+                    GameFramework.Coords.fromXY(0, -0.5),
+                    GameFramework.Coords.fromXY(1, 0),
+                    GameFramework.Coords.fromXY(0, 0.5)
+                ];
+                vertices.forEach(x => x.multiply(size));
+                var visual = GameFramework.VisualPolygon.fromVerticesAndColorFill(vertices, color);
+                return visual;
+            }
         }
         GameFramework.VisualBuilder = VisualBuilder;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

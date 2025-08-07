@@ -1303,6 +1303,25 @@ export class VisualBuilder
 
 		return sunVisual;
 	}
+
+	triangleIsocelesOfSizeAndColorPointingRight(size: Coords, color: Color): VisualBase
+	{
+		var vertices =
+		[
+			Coords.fromXY(0, -0.5),
+			Coords.fromXY(1, 0),
+			Coords.fromXY(0, 0.5)
+		];
+
+		vertices.forEach(x => x.multiply(size) );
+
+		var visual = VisualPolygon.fromVerticesAndColorFill
+		(
+			vertices, color
+		);
+
+		return visual;
+	}
 }
 
 }
