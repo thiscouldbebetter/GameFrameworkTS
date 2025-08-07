@@ -72,6 +72,7 @@ var Transform_Locate = gf.Transform_Locate;
 var Transform_Multiple = gf.Transform_Multiple;
 var Transform_Orient = gf.Transform_Orient;
 var Transform_Rotate2D = gf.Transform_Rotate2D;
+var Transform_RotateLeft = gf.Transform_RotateLeft;
 var Transform_RotateRight = gf.Transform_RotateRight;
 var Transform_Scale = gf.Transform_Scale;
 var Transform_Translate = gf.Transform_Translate;

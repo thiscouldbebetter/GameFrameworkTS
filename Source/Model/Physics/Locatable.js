@@ -7,6 +7,7 @@ var ThisCouldBeBetter;
             constructor(loc) {
                 super();
                 this.loc = loc || GameFramework.Disposition.create();
+                this.locPrev = this.loc.clone();
             }
             static create() {
                 return new Locatable(null);
@@ -84,6 +85,7 @@ var ThisCouldBeBetter;
             propertyName() { return Locatable.name; }
             updateForTimerTick(uwpe) {
                 var loc = this.loc;
+                this.locPrev.overwriteWith(loc);
                 loc.vel.add(loc.accel);
                 loc.accel.clear();
                 loc.pos.add(loc.vel);

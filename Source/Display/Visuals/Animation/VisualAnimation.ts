@@ -223,19 +223,33 @@ export class VisualAnimation implements Visual<VisualAnimation>
 
 	clone(): VisualAnimation
 	{
-		return this; // todo
+		return new VisualAnimation
+		(
+			this.name,
+			this.ticksToHoldFrames.map(x => x),
+			this.frames.map(x => x.clone() ),
+			this.isRepeating
+		)
 	}
 
 	overwriteWith(other: VisualAnimation): VisualAnimation
 	{
-		return this; // todo
+		this.name = other.name;
+		for (var i = 0; i < this.ticksToHoldFrames.length; i++)
+		{
+			this.ticksToHoldFrames[i] = other.ticksToHoldFrames[i];
+			this.frames[i].overwriteWith(other.frames[i]);
+		}
+		this.isRepeating = other.isRepeating;
+		return this;
 	}
 
 	// Transformable.
 
 	transform(transformToApply: TransformBase): VisualAnimation
 	{
-		return this; // todo
+		this.frames.forEach(x => x.transform(transformToApply) );
+		return this;
 	}
 }
 

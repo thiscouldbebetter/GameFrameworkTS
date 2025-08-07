@@ -442,13 +442,14 @@ var ThisCouldBeBetter;
                     .clone()
                     .transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, .8, 1)));
                 var flameVisualStaticLarge = flameVisualStatic.clone().transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, 1.2, 1)));
+                var flameVisualStaticCloned = flameVisualStatic.clone();
                 var ticksPerFrame = 3;
                 var flameVisual = GameFramework.VisualAnimation.fromNameTicksToHoldFramesAndFramesRepeating("Flame", // name
                 [ticksPerFrame, ticksPerFrame, ticksPerFrame, ticksPerFrame], [
                     flameVisualStaticSmall,
                     flameVisualStatic,
                     flameVisualStaticLarge,
-                    flameVisualStatic
+                    flameVisualStaticCloned
                 ]);
                 return flameVisual;
             }

@@ -84,12 +84,13 @@ var ThisCouldBeBetter;
                 this.vel.overwriteWith(value);
                 return this;
             }
-            // cloneable
+            // Clonable.
             clone() {
                 var returnValue = new Disposition(this.pos.clone(), this.orientation.clone(), this.placeName());
                 returnValue.vel = this.vel.clone();
                 returnValue.accel = this.accel.clone();
                 returnValue.force = this.force.clone();
+                returnValue.spin = this.spin.clone();
                 returnValue.timeOffsetInTicks = this.timeOffsetInTicks;
                 return returnValue;
             }
@@ -101,6 +102,8 @@ var ThisCouldBeBetter;
                 this.vel.overwriteWith(other.vel);
                 this.accel.overwriteWith(other.accel);
                 this.force.overwriteWith(other.force);
+                this.spin.overwriteWith(other.spin);
+                this.timeOffsetInTicks = other.timeOffsetInTicks;
                 return this;
             }
             // strings

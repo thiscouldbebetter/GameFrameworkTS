@@ -44,7 +44,9 @@ var ThisCouldBeBetter;
             }
             // Transformable.
             transform(transformToApply) {
-                return this; // todo
+                transformToApply.transformCoords(this.offset);
+                this.child.transform(transformToApply);
+                return this;
             }
         }
         GameFramework.VisualOffset = VisualOffset;

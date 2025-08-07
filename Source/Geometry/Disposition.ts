@@ -162,7 +162,7 @@ export class Disposition
 		return this;
 	}
 
-	// cloneable
+	// Clonable.
 
 	clone(): Disposition
 	{
@@ -176,6 +176,7 @@ export class Disposition
 		returnValue.vel = this.vel.clone();
 		returnValue.accel = this.accel.clone();
 		returnValue.force = this.force.clone();
+		returnValue.spin = this.spin.clone();
 		returnValue.timeOffsetInTicks = this.timeOffsetInTicks;
 
 		return returnValue;
@@ -190,6 +191,8 @@ export class Disposition
 		this.vel.overwriteWith(other.vel);
 		this.accel.overwriteWith(other.accel);
 		this.force.overwriteWith(other.force);
+		this.spin.overwriteWith(other.spin);
+		this.timeOffsetInTicks = other.timeOffsetInTicks;
 		return this;
 	}
 

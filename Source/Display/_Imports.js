@@ -21,6 +21,7 @@ var VisualEllipse = gf.VisualEllipse;
 var VisualErase = gf.VisualErase;
 var VisualFan = gf.VisualFan;
 var VisualGroup = gf.VisualGroup;
+var VisualHidable = gf.VisualHidable;
 var VisualImageFromLibrary = gf.VisualImageFromLibrary;
 var VisualImageImmediate = gf.VisualImageImmediate;
 var VisualImageScaled = gf.VisualImageScaled;

@@ -1182,6 +1182,8 @@ export class VisualBuilder
 			)
 		) as VisualGroup;
 
+		var flameVisualStaticCloned = flameVisualStatic.clone();
+
 		var ticksPerFrame = 3;
 		var flameVisual = VisualAnimation.fromNameTicksToHoldFramesAndFramesRepeating
 		(
@@ -1191,7 +1193,7 @@ export class VisualBuilder
 				flameVisualStaticSmall,
 				flameVisualStatic,
 				flameVisualStaticLarge,
-				flameVisualStatic
+				flameVisualStaticCloned
 			]
 		);
 

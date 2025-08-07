@@ -5,12 +5,15 @@ namespace ThisCouldBeBetter.GameFramework
 export class Locatable extends EntityPropertyBase<Locatable>
 {
 	loc: Disposition;
+	locPrev: Disposition;
 
 	constructor(loc: Disposition)
 	{
 		super();
 
 		this.loc = loc || Disposition.create();
+
+		this.locPrev = this.loc.clone();
 	}
 
 	static create(): Locatable
@@ -159,6 +162,8 @@ export class Locatable extends EntityPropertyBase<Locatable>
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var loc = this.loc;
+
+		this.locPrev.overwriteWith(loc);
 
 		loc.vel.add(loc.accel);
 		loc.accel.clear();

@@ -84,7 +84,9 @@ export class VisualOffset implements Visual<VisualOffset>
 
 	transform(transformToApply: TransformBase): VisualOffset
 	{
-		return this; // todo
+		transformToApply.transformCoords(this.offset);
+		this.child.transform(transformToApply);
+		return this;
 	}
 }
 

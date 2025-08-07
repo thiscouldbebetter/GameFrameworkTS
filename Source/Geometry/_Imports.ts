@@ -88,6 +88,7 @@ import Transform_Locate = gf.Transform_Locate;
 import Transform_Multiple = gf.Transform_Multiple;
 import Transform_Orient = gf.Transform_Orient;
 import Transform_Rotate2D = gf.Transform_Rotate2D;
+import Transform_RotateLeft = gf.Transform_RotateLeft;
 import Transform_RotateRight = gf.Transform_RotateRight;
 import Transform_Scale = gf.Transform_Scale;
 import Transform_Translate = gf.Transform_Translate;

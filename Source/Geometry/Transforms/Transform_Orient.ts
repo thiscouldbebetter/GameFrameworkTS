@@ -15,6 +15,18 @@ export class Transform_Orient implements Transform<Transform_Orient>
 		this._components = [ Coords.create(), Coords.create(), Coords.create() ];
 	}
 
+	static fromOrientation(orientation: Orientation): Transform_Orient
+	{
+		return new Transform_Orient(orientation);
+	}
+
+	static fromOrientationForward(orientationForward: Coords): Transform_Orient
+	{
+		return new Transform_Orient(Orientation.fromForward(orientationForward) );
+	}
+
+	// Clonable.
+
 	clone(): Transform_Orient
 	{
 		return new Transform_Orient(this.orientation.clone());
@@ -25,6 +37,8 @@ export class Transform_Orient implements Transform<Transform_Orient>
 		this.orientation.overwriteWith(other.orientation);
 		return this;
 	}
+
+	// Transform.
 
 	transform(transformable: TransformableBase): TransformableBase
 	{

@@ -25,6 +25,7 @@ import VisualEllipse = gf.VisualEllipse;
 import VisualErase = gf.VisualErase;
 import VisualFan = gf.VisualFan;
 import VisualGroup = gf.VisualGroup;
+import VisualHidable = gf.VisualHidable;
 import VisualImage = gf.VisualImage;
 import VisualImageFromLibrary = gf.VisualImageFromLibrary;
 import VisualImageImmediate = gf.VisualImageImmediate;

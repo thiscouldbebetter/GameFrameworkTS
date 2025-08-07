@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Rotation
+export class Rotation implements Clonable<Rotation>
 {
 	axis: Coords;
 	angleInTurnsRef: Reference<number>;
@@ -34,6 +34,20 @@ export class Rotation
 	transformOrientation(orientation: Orientation): Orientation
 	{
 		return orientation.forwardSet(this.transformCoords(orientation.forward));
+	}
+
+	// Clonable.
+
+	clone(): Rotation
+	{
+		return new Rotation(this.axis.clone(), this.angleInTurnsRef.clone() );
+	}
+
+	overwriteWith(other: Rotation): Rotation
+	{
+		this.axis.overwriteWith(other.axis);
+		this.angleInTurnsRef.overwriteWith(other.angleInTurnsRef);
+		return this;
 	}
 }
 
