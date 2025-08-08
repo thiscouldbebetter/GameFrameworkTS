@@ -165,6 +165,15 @@ export class ProjectileGeneration
 		}
 	}
 
+	range(): number
+	{
+		var range =
+			this.distanceInitial
+			+ this.speed * this.ticksToLive;
+
+		return range;
+	}
+
 	toEntityFromEntityFiring(entityFiring: Entity): Entity
 	{
 		var shooterLoc = Locatable.of(entityFiring).loc;

@@ -63,6 +63,11 @@ var ThisCouldBeBetter;
                     this._projectileEntityInitialize(entity);
                 }
             }
+            range() {
+                var range = this.distanceInitial
+                    + this.speed * this.ticksToLive;
+                return range;
+            }
             toEntityFromEntityFiring(entityFiring) {
                 var shooterLoc = GameFramework.Locatable.of(entityFiring).loc;
                 var shooterPos = shooterLoc.pos;

@@ -102,6 +102,12 @@ export class ProjectileGenerator
 		this._fire(uwpe);
 	}
 
+	range(): number
+	{
+		var generation0Range = this.generations[0].range();
+		return generation0Range;
+	}
+
 	toEntitiesFromEntityFiring(entityFiring: Entity): Entity[]
 	{
 		var returnValues = this.generations.map

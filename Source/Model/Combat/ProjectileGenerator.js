@@ -44,6 +44,10 @@ var ThisCouldBeBetter;
             fire(uwpe) {
                 this._fire(uwpe);
             }
+            range() {
+                var generation0Range = this.generations[0].range();
+                return generation0Range;
+            }
             toEntitiesFromEntityFiring(entityFiring) {
                 var returnValues = this.generations.map(x => x.toEntityFromEntityFiring(entityFiring));
                 return returnValues;
