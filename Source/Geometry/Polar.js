@@ -24,8 +24,8 @@ var ThisCouldBeBetter;
             static fromRadius(radius) {
                 return new Polar(0, radius, 0);
             }
-            static random2D() {
-                return new Polar(Math.random(), Math.random(), 0);
+            static random2D(randomizer) {
+                return new Polar(randomizer.fraction(), randomizer.fraction(), 0);
             }
             // instance methods
             addToAzimuthInTurns(turnsToAdd) {

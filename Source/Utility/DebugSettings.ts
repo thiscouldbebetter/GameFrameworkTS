@@ -44,18 +44,50 @@ export class DebugSettings
 
 	drawColliders(): boolean
 	{
-		return (this.settingValueByName("DrawColliders") != null);
+		return (this.settingValueByName(DebugSettings_Names.Instance().DrawColliders) != null);
 	}
 
 	localStorageClear(): boolean
 	{
-		return (this.settingValueByName("LocalStorageClear") != null);
+		return (this.settingValueByName(DebugSettings_Names.Instance().LocalStorageClear) != null);
+	}
+
+	placeToStartAt(): string
+	{
+		return (this.settingValueByName(DebugSettings_Names.Instance().PlaceToStartAt) );
 	}
 
 	skipOpening(): boolean
 	{
-		return (this.settingValueByName("SkipOpening") != null);
+		return (this.settingValueByName(DebugSettings_Names.Instance().SkipOpening) != null);
 	}
 }
+
+export class DebugSettings_Names
+{
+	DrawColliders: string;
+	LocalStorageClear: string;
+	PlaceToStartAt: string;
+	SkipOpening: string;
+
+	constructor()
+	{
+		this.DrawColliders = "DrawColliders";
+		this.LocalStorageClear = "LocalStorageClear";
+		this.PlaceToStartAt = "PlaceToStartAt";
+		this.SkipOpening = "SkipOpening";
+	}
+
+	static _instance: DebugSettings_Names;
+	static Instance(): DebugSettings_Names
+	{
+		if (this._instance == null)
+		{
+			this._instance = new DebugSettings_Names();
+		}
+		return this._instance;
+	}
+}
+
 
 }

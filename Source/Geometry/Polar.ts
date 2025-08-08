@@ -40,9 +40,9 @@ export class Polar
 		return new Polar(0, radius, 0);
 	}
 
-	static random2D(): Polar
+	static random2D(randomizer: Randomizer): Polar
 	{
-		return new Polar(Math.random(), Math.random(), 0);
+		return new Polar(randomizer.fraction(), randomizer.fraction(), 0);
 	}
 
 	// constants

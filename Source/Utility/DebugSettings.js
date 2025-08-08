@@ -26,15 +26,33 @@ var ThisCouldBeBetter;
             }
             // Particular settings.
             drawColliders() {
-                return (this.settingValueByName("DrawColliders") != null);
+                return (this.settingValueByName(DebugSettings_Names.Instance().DrawColliders) != null);
             }
             localStorageClear() {
-                return (this.settingValueByName("LocalStorageClear") != null);
+                return (this.settingValueByName(DebugSettings_Names.Instance().LocalStorageClear) != null);
+            }
+            placeToStartAt() {
+                return (this.settingValueByName(DebugSettings_Names.Instance().PlaceToStartAt));
             }
             skipOpening() {
-                return (this.settingValueByName("SkipOpening") != null);
+                return (this.settingValueByName(DebugSettings_Names.Instance().SkipOpening) != null);
             }
         }
         GameFramework.DebugSettings = DebugSettings;
+        class DebugSettings_Names {
+            constructor() {
+                this.DrawColliders = "DrawColliders";
+                this.LocalStorageClear = "LocalStorageClear";
+                this.PlaceToStartAt = "PlaceToStartAt";
+                this.SkipOpening = "SkipOpening";
+            }
+            static Instance() {
+                if (this._instance == null) {
+                    this._instance = new DebugSettings_Names();
+                }
+                return this._instance;
+            }
+        }
+        GameFramework.DebugSettings_Names = DebugSettings_Names;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));
