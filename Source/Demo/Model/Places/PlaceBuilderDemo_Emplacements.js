@@ -104,20 +104,9 @@ class PlaceBuilderDemo_Emplacements {
         var campfireName = "Campfire";
         var colors = Color.Instances();
         var campfireColor = colors.Orange;
-        var flameVisual = VisualBuilder.Instance().flame(this.entityDimension);
-        var smokePuffVisual = VisualCircle.fromRadiusAndColorFill(entityDimensionHalf, colors.GrayLight);
-        var smokeVisual = new VisualParticles("Smoke", null, // ticksToGenerate
-        1 / 3, // particlesPerTick
-        () => 50, // particleTicksToLiveGet
-        // particleVelocityGet
-        () => Coords.fromXY(.33, -1.5).add(Coords.fromXY(Math.random() - 0.5, 0)), new Transform_Dynamic((transformable) => {
-            var transformableAsVisualCircle = transformable;
-            transformableAsVisualCircle.radius *= 1.02;
-            var color = transformableAsVisualCircle.colorFill.clone();
-            color.alphaSet(color.alpha() * .95);
-            transformableAsVisualCircle.colorFill = color;
-            return transformable;
-        }), smokePuffVisual);
+        var visualBuilder = VisualBuilder.Instance();
+        var flameVisual = visualBuilder.flame(this.entityDimension);
+        var smokeVisual = visualBuilder.smoke(entityDimensionHalf);
         var itemLogVisual = this.parent.itemDefnsByName.get("Log").visual;
         var itemLogVisualMinusText = itemLogVisual.clone();
         if (this.parent.visualsHaveText) {

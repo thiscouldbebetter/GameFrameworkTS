@@ -14,6 +14,14 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(Audible.name);
             }
+            hasBeenHeardClear() {
+                this.hasBeenHeard = false;
+                return this;
+            }
+            hasBeenHeardSet(value) {
+                this.hasBeenHeard = value;
+                return this;
+            }
         }
         GameFramework.Audible = Audible;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

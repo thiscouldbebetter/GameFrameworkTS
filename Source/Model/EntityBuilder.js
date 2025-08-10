@@ -11,11 +11,15 @@ var ThisCouldBeBetter;
                 return this._instance;
             }
             explosion(pos, radius, soundName, ticksToLive, ephemeralExpire) {
+                var visualBuilder = GameFramework.VisualBuilder.Instance();
+                var visualExplosion = 
+                //visualBuilder.explosionStarburstOfRadius(radius);
+                visualBuilder.explosionSparks(radius * 10, radius / 5, 25, 30); // explosionRadius, sparkRadius, sparkCount, sparkTicksToLive
                 var explosionEntity = GameFramework.Entity.fromNameAndProperties("Explosion", [
                     GameFramework.Audible.create(),
                     GameFramework.Drawable.fromVisual(GameFramework.VisualGroup.fromChildren([
                         GameFramework.VisualSound.fromSoundName(soundName),
-                        GameFramework.VisualBuilder.Instance().explosionStarburstOfRadius(radius)
+                        visualExplosion
                     ])),
                     GameFramework.Ephemeral.fromTicksAndExpire(ticksToLive, ephemeralExpire),
                     GameFramework.Locatable.fromPos(pos)

@@ -37,7 +37,7 @@ var ThisCouldBeBetter;
                         var sound = soundHelper.soundWithName(universe, this.soundToPlayName);
                         var volume = soundHelper.effectVolume; // todo
                         sound.play(universe, volume);
-                        audible.hasBeenHeard = true;
+                        audible.hasBeenHeardSet(true);
                     }
                 }
             }

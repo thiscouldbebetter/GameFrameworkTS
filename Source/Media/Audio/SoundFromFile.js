@@ -28,7 +28,12 @@ var ThisCouldBeBetter;
                 audio.volume = volume;
                 audio.currentTime = this.offsetInSeconds;
                 audio.preload = "auto";
-                audio.play();
+                try {
+                    audio.play();
+                }
+                catch (ex) {
+                    console.log("Audio exception: " + ex);
+                }
             }
             reset() {
                 this.offsetInSeconds = 0;

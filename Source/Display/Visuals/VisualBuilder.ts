@@ -309,6 +309,61 @@ export class VisualBuilder
 		);
 	}
 
+	explosionSparks
+	(
+		explosionRadius: number,
+		sparkRadius: number,
+		sparkCount: number,
+		ticksToLive: number
+	): VisualBase
+	{
+		var colors = Color.Instances();
+
+		var particleVisual = VisualCircle.fromRadiusAndColorFill
+		(
+			sparkRadius, colors.Yellow
+		);
+
+		var particleSpeed = 5;
+
+		var randomizer = new RandomizerSystem();
+
+		var particleVelocityGet =
+			() =>
+				Polar
+					.random2D(randomizer)
+					.toCoords()
+					.multiplyScalar(particleSpeed);
+
+		var transform =
+			new Transform_Dynamic
+			(
+				(transformable: TransformableBase) =>
+				{
+					var transformableAsVisualCircle =
+						transformable as VisualCircle;
+					transformableAsVisualCircle.radius *= 1.02;
+					var color = transformableAsVisualCircle.colorFill.clone();
+					color.alphaSet(color.alpha() * .95);
+					transformableAsVisualCircle.colorFill = color;
+					return transformable;
+				}
+			);
+
+		var explosionVisual = new VisualParticles
+		(
+			"Explosion",
+			1, // ticksToGenerate
+			sparkCount, // particlesPerTick
+			() => ticksToLive, // particleTicksToLiveGet
+			particleVelocityGet,
+			transform,
+			particleVisual
+		);
+
+		return explosionVisual;
+	}
+
 	explosionStarburstOfRadius(radius: number): VisualBase
 	{
 		var colors = Color.Instances();
@@ -1282,6 +1337,47 @@ export class VisualBuilder
 	{
 		var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
 		return rhombus;
+	}
+
+	smoke(puffRadius: number): VisualBase
+	{
+		var colors = Color.Instances();
+
+		var smokePuffVisual = VisualCircle.fromRadiusAndColorFill
+		(
+			puffRadius, colors.GrayLight
+		);
+
+		var particleVelocityGet =
+			() => Coords.fromXY(.33, -1.5).add(Coords.fromXY(Math.random() - 0.5, 0) );
+
+		var transform =
+			new Transform_Dynamic
+			(
+				(transformable: TransformableBase) =>
+				{
+					var transformableAsVisualCircle =
+						transformable as VisualCircle;
+					transformableAsVisualCircle.radius *= 1.02;
+					var color = transformableAsVisualCircle.colorFill.clone();
+					color.alphaSet(color.alpha() * .95);
+					transformableAsVisualCircle.colorFill = color;
+					return transformable;
+				}
+			);
+
+		var smokeVisual = new VisualParticles
+		(
+			"Smoke",
+			null, // ticksToGenerate
+			1 / 3, // particlesPerTick
+			() => 50, // particleTicksToLiveGet
+			particleVelocityGet,
+			transform,
+			smokePuffVisual
+		);
+
+		return smokeVisual;
 	}
 
 	starburstWithPointsRatioRadiusAndColor

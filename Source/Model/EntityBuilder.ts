@@ -23,6 +23,11 @@ export class EntityBuilder
 		ephemeralExpire: (uwpe: UniverseWorldPlaceEntities) => void
 	): Entity
 	{
+		var visualBuilder = VisualBuilder.Instance();
+		var visualExplosion =
+			//visualBuilder.explosionStarburstOfRadius(radius);
+			visualBuilder.explosionSparks(radius * 10, radius / 5, 25, 30); // explosionRadius, sparkRadius, sparkCount, sparkTicksToLive
+
 		var explosionEntity = Entity.fromNameAndProperties
 		(
 			"Explosion",
@@ -34,7 +39,7 @@ export class EntityBuilder
 					VisualGroup.fromChildren
 					([
 						VisualSound.fromSoundName(soundName),
-						VisualBuilder.Instance().explosionStarburstOfRadius(radius)
+						visualExplosion
 					])
 				),
 

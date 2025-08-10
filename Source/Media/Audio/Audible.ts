@@ -23,6 +23,18 @@ export class Audible extends EntityPropertyBase<Audible>
 		return entity.propertyByName(Audible.name) as Audible;
 	}
 
+	hasBeenHeardClear(): Audible
+	{
+		this.hasBeenHeard = false;
+		return this;
+	}
+
+	hasBeenHeardSet(value: boolean): Audible
+	{
+		this.hasBeenHeard = value;
+		return this;
+	}
+
 }
 
 }

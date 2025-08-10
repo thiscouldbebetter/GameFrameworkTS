@@ -9,8 +9,6 @@ export class VisualSound implements Visual<VisualSound>
 	soundToPlayName: string;
 	repeats: boolean;
 
-	hasBeenStarted: boolean;
-
 	constructor(soundToPlayName: string, repeats: boolean)
 	{
 		this.soundToPlayName = soundToPlayName;
@@ -64,7 +62,7 @@ export class VisualSound implements Visual<VisualSound>
 					soundHelper.soundWithName(universe, this.soundToPlayName);
 				var volume = soundHelper.effectVolume; // todo
 				sound.play(universe, volume);
-				audible.hasBeenHeard = true;
+				audible.hasBeenHeardSet(true);
 			}
 		}
 	}

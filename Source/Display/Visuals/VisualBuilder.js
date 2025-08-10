@@ -129,6 +129,29 @@ var ThisCouldBeBetter;
                 ];
                 return GameFramework.VisualGroup.fromNameAndChildren("ExplosionSimple", visuals);
             }
+            explosionSparks(explosionRadius, sparkRadius, sparkCount, ticksToLive) {
+                var colors = GameFramework.Color.Instances();
+                var particleVisual = GameFramework.VisualCircle.fromRadiusAndColorFill(sparkRadius, colors.Yellow);
+                var particleSpeed = 5;
+                var randomizer = new GameFramework.RandomizerSystem();
+                var particleVelocityGet = () => GameFramework.Polar
+                    .random2D(randomizer)
+                    .toCoords()
+                    .multiplyScalar(particleSpeed);
+                var transform = new GameFramework.Transform_Dynamic((transformable) => {
+                    var transformableAsVisualCircle = transformable;
+                    transformableAsVisualCircle.radius *= 1.02;
+                    var color = transformableAsVisualCircle.colorFill.clone();
+                    color.alphaSet(color.alpha() * .95);
+                    transformableAsVisualCircle.colorFill = color;
+                    return transformable;
+                });
+                var explosionVisual = new GameFramework.VisualParticles("Explosion", 1, // ticksToGenerate
+                sparkCount, // particlesPerTick
+                () => ticksToLive, // particleTicksToLiveGet
+                particleVelocityGet, transform, particleVisual);
+                return explosionVisual;
+            }
             explosionStarburstOfRadius(radius) {
                 var colors = GameFramework.Color.Instances();
                 var numberOfPoints = 12;
@@ -490,6 +513,24 @@ var ThisCouldBeBetter;
             rhombusOfColor(color) {
                 var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
                 return rhombus;
+            }
+            smoke(puffRadius) {
+                var colors = GameFramework.Color.Instances();
+                var smokePuffVisual = GameFramework.VisualCircle.fromRadiusAndColorFill(puffRadius, colors.GrayLight);
+                var particleVelocityGet = () => GameFramework.Coords.fromXY(.33, -1.5).add(GameFramework.Coords.fromXY(Math.random() - 0.5, 0));
+                var transform = new GameFramework.Transform_Dynamic((transformable) => {
+                    var transformableAsVisualCircle = transformable;
+                    transformableAsVisualCircle.radius *= 1.02;
+                    var color = transformableAsVisualCircle.colorFill.clone();
+                    color.alphaSet(color.alpha() * .95);
+                    transformableAsVisualCircle.colorFill = color;
+                    return transformable;
+                });
+                var smokeVisual = new GameFramework.VisualParticles("Smoke", null, // ticksToGenerate
+                1 / 3, // particlesPerTick
+                () => 50, // particleTicksToLiveGet
+                particleVelocityGet, transform, smokePuffVisual);
+                return smokeVisual;
             }
             starburstWithPointsRatioRadiusAndColor(numberOfPoints, radiusInnerAsFractionOfOuter, radiusOuter, color) {
                 var name = "StarburstWith" + numberOfPoints + "Points";

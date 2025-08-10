@@ -46,7 +46,14 @@ export class SoundFromFile implements Sound
 		audio.volume = volume;
 		audio.currentTime = this.offsetInSeconds;
 		audio.preload = "auto";
-		audio.play();
+		try
+		{
+			audio.play();
+		}
+		catch (ex)
+		{
+			console.log("Audio exception: " + ex);
+		}
 	}
 
 	reset(): void
