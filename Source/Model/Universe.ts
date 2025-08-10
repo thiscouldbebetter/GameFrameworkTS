@@ -132,15 +132,16 @@ export class Universe
 		return universe;
 	}
 
-	static fromMediaLibraryAndWorldCreator
+	static fromNameMediaLibraryAndWorldCreator
 	(
+		name: string,
 		mediaLibrary: MediaLibrary,
 		worldCreator: WorldCreator
 	): Universe
 	{
 		var universe = Universe.create
 		(
-			null, // name
+			name,
 			null, // version
 			null, // timerHelper
 			null, // display

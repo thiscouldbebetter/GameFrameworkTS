@@ -19,8 +19,9 @@ class Game
 			() => new WorldGame(this.name)
 		);
 
-		var universe = Universe.fromMediaLibraryAndWorldCreator
+		var universe = Universe.fromNameMediaLibraryAndWorldCreator
 		(
+			"Untitled",
 			mediaLibrary,
 			worldCreator
 		);

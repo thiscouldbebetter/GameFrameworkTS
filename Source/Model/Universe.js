@@ -50,9 +50,8 @@ var ThisCouldBeBetter;
                 );
                 return universe;
             }
-            static fromMediaLibraryAndWorldCreator(mediaLibrary, worldCreator) {
-                var universe = Universe.create(null, // name
-                null, // version
+            static fromNameMediaLibraryAndWorldCreator(name, mediaLibrary, worldCreator) {
+                var universe = Universe.create(name, null, // version
                 null, // timerHelper
                 null, // display
                 null, // soundHelper,
