@@ -622,9 +622,7 @@ class PlaceBuilderDemo_Movers {
          {
             // todo
         });
-        var movable = Movable.fromAccelerationAndSpeedMax(0.5, // accelerationPerTick
-        1 // speedMax
-        );
+        var movable = Movable.fromAccelerationPerTickAndSpeedMax(0.5, 1);
         var itemCrafter = ItemCrafter.fromRecipesAvailable([
             CraftingRecipe.fromItemsInAndItemOut([
                 Item.fromDefnNameAndQuantity("Iron Ore", 3),
@@ -751,7 +749,7 @@ class PlaceBuilderDemo_Movers {
         var constrainable = Constrainable.fromConstraints([
             Constraint_Gravity.fromAccelerationPerTick(Coords.zeroZeroOne()),
             Constraint_ContainInHemispace.fromHemispace(Hemispace.fromPlane(Plane.fromNormalAndDistanceFromOrigin(Coords.zeroZeroOne(), 0))),
-            Constraint_Conditional.fromShouldChildApplyAndChild((uwpe) => (Locatable.of(uwpe.entity).loc.pos.z >= 0), Constraint_FrictionXY.fromTargetAndSpeedBelowWhichToStop(.03, .5)),
+            Constraint_Conditional.fromShouldChildApplyAndChild((uwpe) => (Locatable.of(uwpe.entity).loc.pos.z >= 0), Constraint_FrictionXY.fromCoefficientAndSpeedBelowWhichToStop(.03, .5)),
         ]);
         return constrainable;
     }

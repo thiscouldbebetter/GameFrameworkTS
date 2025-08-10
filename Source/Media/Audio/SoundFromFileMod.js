@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 // todo
             }
             play(universe, volume) {
-                this._soundInner.play(() => { }); // todo
+                this._soundInner.play(); // todo - Use .playThenCallCallback()?
             }
             seek(offsetInSeconds) {
                 // todo

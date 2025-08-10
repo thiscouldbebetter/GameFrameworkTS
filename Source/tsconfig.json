@@ -60,7 +60,9 @@
 
 	"exclude" :
 	[
-		"Stub/Source/Imports.ts", // Is this even a real directory?
-		"Media/Text/BinaryFileToImageTranscoder/Source/Imports.ts",
+		"Media/Audio/MusicTracker/Source/_Imports.ts",
+		"Media/Audio/MusicTracker/Source/FileFormats/WavFileViewer/Source/_Imports.ts",
+		"Media/Audio/SoundEffectSynthesizer/Source/_Imports.ts",
+
 	]
 }

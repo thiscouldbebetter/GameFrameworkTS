@@ -12,7 +12,7 @@ export class SoundFromFileMod implements Sound
 	_binaryFileInner: BinaryFile;
 	_binaryFileInnerLoadTimer: any;
 
-	_soundInner: ThisCouldBeBetter.MusicTracker.Sound;
+	_soundInner: WavFileViewer.Sound;
 
 	constructor(name: string, sourceFilePath: string)
 	{
@@ -31,7 +31,7 @@ export class SoundFromFileMod implements Sound
 
 	play(universe: Universe, volume: number): void
 	{
-		this._soundInner.play(() => {}); // todo
+		this._soundInner.play(); // todo - Use .playThenCallCallback()?
 	}
 
 	seek(offsetInSeconds: number): void

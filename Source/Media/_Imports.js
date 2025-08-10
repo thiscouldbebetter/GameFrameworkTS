@@ -15,3 +15,12 @@ var SoundFromFile = gf.SoundFromFile;
 var SoundFromSoundEffectSynthesizerSequence = gf.SoundFromSoundEffectSynthesizerSequence;
 var SoundHelperLive = gf.SoundHelperLive;
 var VisualSound = gf.VisualSound;
+// SoundEffectSynthesizer.
+var ses = ThisCouldBeBetter.SoundEffectSynthesizer;
+var SoundSequence = ses.SoundSequence;
+var SoundSequenceVoice = ses.SoundSequenceVoice;
+// WavFileViewer.
+var wfv = ThisCouldBeBetter.WavFileViewer;
+var SoundFromWavFile = wfv.SoundFromWavFile;
+var WavFile = wfv.WavFile;
+var WavFileSamplingInfo = wfv.WavFileSamplingInfo;

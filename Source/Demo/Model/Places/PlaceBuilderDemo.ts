@@ -2207,9 +2207,8 @@ class PlaceBuilderDemo // Main.
 			var entityDevice = uwpe.entity2;
 
 			var device = Device.of(entityDevice);
-			var tickCurrent = w.timerTicksSoFar;
-			var ticksSinceUsed = tickCurrent - device.tickLastUsed;
-			if (ticksSinceUsed < device.ticksToCharge)
+			var deviceCanBeUsed = device.canUse(uwpe);
+			if (deviceCanBeUsed)
 			{
 				return;
 			}
@@ -2228,6 +2227,7 @@ class PlaceBuilderDemo // Main.
 				uwpe
 			);
 
+			var tickCurrent = w.timerTicksSoFar;
 			device.tickLastUsed = tickCurrent;
 
 			var userLoc = Locatable.of(entityUser).loc;

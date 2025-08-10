@@ -582,7 +582,7 @@ class PlaceBuilderDemo_Items
 		var itemCrystalColor = colors.Cyan;
 		var visualBuilder = VisualBuilder.Instance();
 		var itemCrystalVisual =
-			visualBuilder.crystal(this.entityDimension, itemCrystalColor, colors.White);
+			visualBuilder.crystal(this.entityDimension, itemCrystalColor, colors.White) as VisualGroup;
 		if (this.parent.visualsHaveText)
 		{
 			itemCrystalVisual.children.push

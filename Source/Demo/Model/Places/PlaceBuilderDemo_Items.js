@@ -251,20 +251,8 @@ class PlaceBuilderDemo_Items {
         var itemCrystalName = "Crystal";
         var colors = Color.Instances();
         var itemCrystalColor = colors.Cyan;
-        var itemCrystalVisual = VisualGroup.fromChildren([
-            VisualPolygon.fromPathAndColorsFillAndBorder(Path.fromPoints([
-                Coords.fromXY(1, 0),
-                Coords.fromXY(0, 1),
-                Coords.fromXY(-1, 0),
-                Coords.fromXY(0, -1)
-            ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension / 2))), itemCrystalColor, colors.White),
-            VisualPolygon.fromPathAndColorFill(Path.fromPoints([
-                Coords.fromXY(1, 0),
-                Coords.fromXY(0, 1),
-                Coords.fromXY(-1, 0),
-                Coords.fromXY(0, -1)
-            ]).transform(new Transform_Scale(Coords.ones().multiplyScalar(this.entityDimension / 4))), colors.White)
-        ]);
+        var visualBuilder = VisualBuilder.Instance();
+        var itemCrystalVisual = visualBuilder.crystal(this.entityDimension, itemCrystalColor, colors.White);
         if (this.parent.visualsHaveText) {
             itemCrystalVisual.children.push(VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension), VisualText.fromTextImmediateFontAndColor(itemCrystalName, this.font, itemCrystalColor)));
         }

@@ -1481,7 +1481,7 @@ class PlaceBuilderDemo_Movers
 			(
 				(uwpe: UniverseWorldPlaceEntities) =>
 					(Locatable.of(uwpe.entity).loc.pos.z >= 0),
-				Constraint_FrictionXY.fromTargetAndSpeedBelowWhichToStop(.03, .5)
+				Constraint_FrictionXY.fromCoefficientAndSpeedBelowWhichToStop(.03, .5)
 			),
 		]);
 
