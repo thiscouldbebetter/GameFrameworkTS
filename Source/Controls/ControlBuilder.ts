@@ -1098,7 +1098,7 @@ export class ControlBuilder
 	{
 		return this.producerWithImageAndSoundNames
 		(
-			universe, size, "Titles_Producer", "Music_Producer"
+			universe, size, "Titles_Producer", "Effects_Producer"
 		);
 	}
 

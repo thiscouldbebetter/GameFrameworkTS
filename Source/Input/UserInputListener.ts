@@ -64,18 +64,12 @@ export class UserInputListener extends Entity
 
 	static visualBuild(): VisualBase
 	{
-		var returnValue = new VisualSelect
+		var visualNone = VisualNone.Instance;
+
+		var returnValue = VisualSelect.fromSelectChildToShowAndChildren
 		(
-			// childrenByNames
-			new Map<string, VisualBase>
-			([
-				[ "None", new VisualNone() ]
-			]),
-			// selectChildNames
-			(uwpe: UniverseWorldPlaceEntities, d: Display) =>
-			{
-				return [ "None" ];
-			}
+			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => visualNone,
+			[ visualNone ]
 		);
 
 		return returnValue;

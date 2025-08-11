@@ -492,16 +492,18 @@ class PlaceBuilderDemo_Movers {
         grazerDimension * .8, 0, // rotationInTurns
         colors.GrayLight, null, true // shouldUseEntityOrientation
         );
-        var grazerVisualSelect = VisualSelect.fromChildrenByNameAndSelectChildNames(new Map([
-            ["Juvenile", grazerVisualJuvenile],
-            ["Adult", grazerVisualAdult],
-            ["Elder", grazerVisualElder],
-            ["Dead", grazerVisualDead] // todo
-        ]), (uwpe) => {
+        var grazerVisualSelect = VisualSelect.fromSelectChildToShowAndChildren((uwpe, visualSelect) => {
             var phased = Phased.of(uwpe.entity);
             var phase = phased.phaseCurrent();
-            return [phase.name];
-        });
+            var childToShowIndex = phase.index;
+            var childToShow = visualSelect.children[childToShowIndex];
+            return childToShow;
+        }, [
+            grazerVisualJuvenile,
+            grazerVisualAdult,
+            grazerVisualElder,
+            grazerVisualDead
+        ]);
         var grazerVisual = VisualGroup.fromChildren([
             grazerVisualSelect
         ]);
@@ -884,16 +886,15 @@ class PlaceBuilderDemo_Movers {
         var bodyNormal = visualBuilder.figureWithNameColorAndDefaultProportions("BodyNormal", bodyColor, headLength);
         var bodyColorHidden = Color.Instances().Black;
         var bodyHidden = visualBuilder.figureWithNameColorAndDefaultProportions("BodyHidden", bodyColorHidden, headLength);
-        var bodyHidable = VisualSelect.fromChildrenByNameAndSelectChildNames(
-        // childrenByName
-        new Map([
-            ["Normal", bodyNormal],
-            ["Hidden", bodyHidden]
-        ]), (uwpe, d) => // selectChildNames
-         {
+        var bodyHidable = VisualSelect.fromSelectChildToShowAndChildren((uwpe, visualSelect) => {
             var e = uwpe.entity;
-            return [(Perceptible.of(e).isHiding ? "Hidden" : "Normal")];
-        });
+            var childToShowIndex = Perceptible.of(e).isHiding ? 1 : 0;
+            var childToShow = visualSelect.children[childToShowIndex];
+            return childToShow;
+        }, [
+            bodyNormal,
+            bodyHidden
+        ]);
         var shadowWidth = headLength;
         var bodyJumpable = VisualJump2D.fromVisualsForBodyAndShadow(bodyHidable, VisualEllipse.fromSemiaxesRotationColorsAndShouldUseEntityOri(shadowWidth, shadowWidth / 2, 0, colors.GrayDark, colors.Black, false // shouldUseEntityOrientation
         ));

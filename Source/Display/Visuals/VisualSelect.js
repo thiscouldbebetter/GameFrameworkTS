@@ -4,38 +4,28 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualSelect {
-            constructor(childrenByName, selectChildNames) {
-                this.childrenByName = childrenByName;
-                this.selectChildNames = selectChildNames;
+            constructor(selectChildToShow, children) {
+                this._selectChildToShow = selectChildToShow;
+                this.children = children;
             }
-            static fromChildrenByNameAndSelectChildNames(childrenByName, selectChildNames) {
-                return new VisualSelect(childrenByName, selectChildNames);
+            static fromSelectChildToShowAndChildren(selectChildToShow, children) {
+                return new VisualSelect(selectChildToShow, children);
             }
-            childByName(childName) {
-                return this.childrenByName.get(childName);
+            selectChildToShow(uwpe, visualSelect) {
+                return this._selectChildToShow(uwpe, visualSelect);
             }
             // Visual.
             initialize(uwpe) {
-                for (var childName in this.childrenByName) {
-                    var child = this.childrenByName.get(childName);
-                    child.initialize(uwpe);
-                }
+                this.children.forEach(x => x.initialize(uwpe));
             }
             initializeIsComplete(uwpe) {
-                var childrenAreAllInitializedSoFar = true;
-                for (var childName in this.childrenByName) {
-                    var child = this.childrenByName.get(childName);
-                    var childIsInitialized = child.initializeIsComplete(uwpe);
-                    if (childIsInitialized == false) {
-                        childrenAreAllInitializedSoFar = false;
-                    }
-                }
-                return childrenAreAllInitializedSoFar;
+                var atLeastOneChildIsNotInitialized = this.children.some(x => x.initializeIsComplete(uwpe) == false);
+                var childrenAreAllInitialized = (atLeastOneChildIsNotInitialized == false);
+                return childrenAreAllInitialized;
             }
             draw(uwpe, display) {
-                var childrenToSelectNames = this.selectChildNames(uwpe, display);
-                var childrenSelected = childrenToSelectNames.map(childToSelectName => this.childByName(childToSelectName));
-                childrenSelected.forEach(childSelected => childSelected.draw(uwpe, display));
+                var childToShow = this.selectChildToShow(uwpe, this);
+                childToShow.draw(uwpe, display);
             }
             // Clonable.
             clone() {

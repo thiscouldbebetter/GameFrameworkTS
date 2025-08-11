@@ -79,10 +79,10 @@ class Game
 			effect("Chirp-Reversed.wav"),
 			effect("Clank.wav"),
 			effect("Pluck.wav"),
+			effect("Producer.wav"),
 			effect("Slap.wav"),
 
 			music("_Default.mp3"),
-			music("Producer.wav"),
 			music("Title.mp3"),
 
 			video("Movie.webm"),

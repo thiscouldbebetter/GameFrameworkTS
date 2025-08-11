@@ -71,14 +71,14 @@ export class VisualAnimation implements Visual<VisualAnimation>
 
 	static fromTicksToHoldFramesAndFramesRepeating
 	(
-		ticksToHoldFrames: number[],
+		ticksToHoldFrames: number,
 		frames: VisualBase[]
 	): VisualAnimation
 	{
 		return new VisualAnimation
 		(
 			null, // name
-			ticksToHoldFrames,
+			[ ticksToHoldFrames ],
 			frames,
 			true // isRepeating
 		);

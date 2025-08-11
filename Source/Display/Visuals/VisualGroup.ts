@@ -4,27 +4,16 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class VisualGroup implements Visual<VisualGroup>
 {
-	name: string;
 	children: VisualBase[];
 
-	constructor(name: string, children: VisualBase[])
+	constructor(children: VisualBase[])
 	{
-		this.name = name;
 		this.children = children;
 	}
 
 	static fromChildren(children: VisualBase[]): VisualGroup
 	{
-		return new VisualGroup(null, children);
-	}
-
-	static fromNameAndChildren
-	(
-		name: string,
-		children: VisualBase[]
-	): VisualGroup
-	{
-		return new VisualGroup(name, children);
+		return new VisualGroup(children);
 	}
 
 	childAdd(childToAdd: VisualBase): VisualGroup
@@ -60,7 +49,7 @@ export class VisualGroup implements Visual<VisualGroup>
 
 	clone(): VisualGroup
 	{
-		return new VisualGroup(this.name, ArrayHelper.clone(this.children) );
+		return new VisualGroup(ArrayHelper.clone(this.children) );
 	}
 
 	overwriteWith(other: VisualGroup): VisualGroup

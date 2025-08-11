@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
             }
             static fromTicksToHoldFramesAndFramesRepeating(ticksToHoldFrames, frames) {
                 return new VisualAnimation(null, // name
-                ticksToHoldFrames, frames, true // isRepeating
+                [ticksToHoldFrames], frames, true // isRepeating
                 );
             }
             static fromFrames(frames) {

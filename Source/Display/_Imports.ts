@@ -35,6 +35,7 @@ import VisualJump2D = gf.VisualJump2D;
 import VisualLine = gf.VisualLine;
 import VisualLineStatic = gf.VisualLineStatic;
 import VisualMap = gf.VisualMap;
+import VisualNamed = gf.VisualNamed;
 import VisualNone = gf.VisualNone;
 import VisualOffset = gf.VisualOffset;
 import VisualParticles = gf.VisualParticles;

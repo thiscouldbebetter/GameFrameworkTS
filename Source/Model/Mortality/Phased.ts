@@ -8,8 +8,6 @@ export class Phased extends EntityPropertyBase<Phased>
 	ticksOnPhaseCurrent: number;
 	phases: Phase[];
 
-	phasesByName: Map<string, Phase>;
-
 	constructor
 	(
 		phaseCurrentIndex: number,
@@ -23,7 +21,11 @@ export class Phased extends EntityPropertyBase<Phased>
 		this.ticksOnPhaseCurrent = ticksOnPhaseCurrent || 0;
 		this.phases = phases;
 
-		this.phasesByName = ArrayHelper.addLookupsByName(this.phases);
+		for (var i = 0; i < this.phases.length; i++)
+		{
+			var phase = this.phases[i];
+			phase.index = i;
+		}
 	}
 
 	static fromPhaseStartNameAndPhases
@@ -48,7 +50,7 @@ export class Phased extends EntityPropertyBase<Phased>
 
 	phaseByName(phaseName: string): Phase
 	{
-		return this.phasesByName.get(phaseName);
+		return this.phases.find(x => x.name == phaseName);
 	}
 
 	phaseCurrent(): Phase
@@ -121,20 +123,34 @@ export class Phased extends EntityPropertyBase<Phased>
 
 export class Phase
 {
+	index: number;
 	name: string;
 	durationInTicks: number;
 	_enter: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	constructor
 	(
+		index: number,
 		name: string,
 		durationInTicks: number,
 		enter: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
+		this.index = index;
 		this.name = name;
 		this.durationInTicks = durationInTicks;
 		this._enter = enter;
+	}
+
+	static fromIndexNameTicksAndEnter
+	(
+		index: number,
+		name: string,
+		durationInTicks: number,
+		enter: (uwpe: UniverseWorldPlaceEntities) => void
+	): Phase
+	{
+		return new Phase(index, name, durationInTicks, enter);
 	}
 
 	static fromNameTicksAndEnter
@@ -144,7 +160,7 @@ export class Phase
 		enter: (uwpe: UniverseWorldPlaceEntities) => void
 	): Phase
 	{
-		return new Phase(name, durationInTicks, enter);
+		return new Phase(null, name, durationInTicks, enter);
 	}
 
 	enter(uwpe: UniverseWorldPlaceEntities): void
@@ -159,11 +175,12 @@ export class Phase
 
 	clone(): Phase
 	{
-		return new Phase(this.name, this.durationInTicks, this._enter);
+		return new Phase(this.index, this.name, this.durationInTicks, this._enter);
 	}
 
 	overwriteWith(other: Phase): Phase
 	{
+		this.index = other.index;
 		this.name = other.name;
 		this.durationInTicks = other.durationInTicks;
 		this._enter = other.enter;

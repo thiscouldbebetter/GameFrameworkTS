@@ -1004,21 +1004,22 @@ class PlaceBuilderDemo_Movers
 				true // shouldUseEntityOrientation
 			);
 
-		var grazerVisualSelect = VisualSelect.fromChildrenByNameAndSelectChildNames
+		var grazerVisualSelect = VisualSelect.fromSelectChildToShowAndChildren
 		(
-			new Map<string,VisualBase>
-			([
-				[ "Juvenile", grazerVisualJuvenile ],
-				[ "Adult", grazerVisualAdult ],
-				[ "Elder", grazerVisualElder ],
-				[ "Dead", grazerVisualDead ] // todo
-			]),
-			(uwpe: UniverseWorldPlaceEntities) =>
+			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) =>
 			{
 				var phased = Phased.of(uwpe.entity);
 				var phase = phased.phaseCurrent();
-				return [ phase.name ];
-			}
+				var childToShowIndex = phase.index;
+				var childToShow = visualSelect.children[childToShowIndex];
+				return childToShow;
+			},
+			[
+				grazerVisualJuvenile,
+				grazerVisualAdult,
+				grazerVisualElder,
+				grazerVisualDead
+			]
 		);
 
 		var grazerVisual = VisualGroup.fromChildren
@@ -1724,19 +1725,20 @@ class PlaceBuilderDemo_Movers
 				headLength
 			);
 
-		var bodyHidable = VisualSelect.fromChildrenByNameAndSelectChildNames
+		var bodyHidable = VisualSelect.fromSelectChildToShowAndChildren
 		(
-			// childrenByName
-			new Map<string, VisualBase>
-			([
-				[ "Normal", bodyNormal ],
-				[ "Hidden", bodyHidden ]
-			]),
-			(uwpe: UniverseWorldPlaceEntities, d: Display) => // selectChildNames
+			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) =>
 			{
 				var e = uwpe.entity;
-				return [ (Perceptible.of(e).isHiding ? "Hidden" : "Normal") ];
-			}
+				var childToShowIndex =
+					Perceptible.of(e).isHiding ? 1 : 0;
+				var childToShow = visualSelect.children[childToShowIndex];
+				return childToShow;
+			},
+			[
+				bodyNormal,
+				bodyHidden
+			],
 		);
 
 		var shadowWidth = headLength;

@@ -30,6 +30,7 @@ var VisualJump2D = gf.VisualJump2D;
 var VisualLine = gf.VisualLine;
 var VisualLineStatic = gf.VisualLineStatic;
 var VisualMap = gf.VisualMap;
+var VisualNamed = gf.VisualNamed;
 var VisualNone = gf.VisualNone;
 var VisualOffset = gf.VisualOffset;
 var VisualParticles = gf.VisualParticles;

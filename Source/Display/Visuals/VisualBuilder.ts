@@ -21,9 +21,8 @@ export class VisualBuilder
 		var bullseyeRadius = bullseyeDiameter / 2;
 
 		var colors = Color.Instances();
-		var visual = VisualGroup.fromNameAndChildren
+		var visual = VisualGroup.fromChildren
 		(
-			"ArcheryTarget",
 			[
 				VisualCircle.fromRadiusAndColorFill(radiusOuter, colors.Blue),
 				VisualCircle.fromRadiusAndColorFill(bullseyeDiameter, colors.White),
@@ -80,9 +79,8 @@ export class VisualBuilder
 				visualEpiphysis
 			);
 
-		var visual = VisualGroup.fromNameAndChildren
+		var visual = VisualGroup.fromChildren
 		(
-			"Bone",
 			[
 				visualShaft,
 				visualEpiphysisLeft,
@@ -104,17 +102,15 @@ export class VisualBuilder
 			VisualCircle.fromRadiusAndColorFill(headRadius, boneColor);
 
 		var eyeSocketRadius = headRadius / 2;
-		var eyeSocket = VisualGroup.fromNameAndChildren
+		var eyeSocket = VisualGroup.fromChildren
 		(
-			"EyeSocket",
 			[
 				VisualCircle.fromRadiusAndColorFill(eyeSocketRadius, socketColor)
 			]
 		);
 
-		var eyeSockets = VisualGroup.fromNameAndChildren
+		var eyeSockets = VisualGroup.fromChildren
 		(
-			"EyesSockets",
 			[
 				VisualOffset.fromChildAndOffset
 				(
@@ -127,9 +123,8 @@ export class VisualBuilder
 			]
 		);
 
-		var skull = VisualGroup.fromNameAndChildren
+		var skull = VisualGroup.fromChildren
 		(
-			"Skull",
 			[
 				skullWithoutFeatures,
 				eyeSockets
@@ -302,9 +297,8 @@ export class VisualBuilder
 			)
 		];
 
-		return VisualGroup.fromNameAndChildren
+		return VisualGroup.fromChildren
 		(
-			"ExplosionSimple",
 			visuals
 		);
 	}
@@ -382,9 +376,8 @@ export class VisualBuilder
 				numberOfPoints, radiusInnerOverOuter, radius * .75, colors.Yellow
 			);
 
-		return VisualGroup.fromNameAndChildren
+		return VisualGroup.fromChildren
 		(
-			"Explosion",
 			[
 				starburstOuter,
 				starburstInner
@@ -397,18 +390,16 @@ export class VisualBuilder
 		var visualPupilRadius = visualEyeRadius / 2;
 
 		var colors = Color.Instances();
-		var visualEye = VisualGroup.fromNameAndChildren
+		var visualEye = VisualGroup.fromChildren
 		(
-			"Eye",
 			[
 				VisualCircle.fromRadiusAndColorFill(visualEyeRadius, colors.White),
 				VisualCircle.fromRadiusAndColorFill(visualPupilRadius, colors.Black)
 			]
 		);
 
-		var visualEyes = VisualGroup.fromNameAndChildren
+		var visualEyes = VisualGroup.fromChildren
 		(
-			"EyesBlinking",
 			[
 				VisualOffset.fromChildAndOffset
 				(
@@ -517,9 +508,8 @@ export class VisualBuilder
 				arms
 			);
 
-		var body = VisualGroup.fromNameAndChildren
+		var body = VisualGroup.fromChildren
 		(
-			name,
 			[
 				legs,
 				torsoRaisedAboveLegs,
@@ -598,9 +588,8 @@ export class VisualBuilder
 				);
 
 			var armHoldingWieldable =
-				VisualGroup.fromNameAndChildren
+				VisualGroup.fromChildren
 				(
-					"ArmHoldingWieldable",
 					[
 						arm,
 						wieldableInHand
@@ -691,7 +680,7 @@ export class VisualBuilder
 			[offsetHipLeft, offsetHipRight];
 
 		var ticksPerStep = 2;
-		var ticksPerStepAsArray = [ ticksPerStep, ticksPerStep ];
+		var ticksPerStep = ticksPerStep;
 
 		var visualsLegsFacingDownStandingAndWalking =
 			this.figure_LegsDirectional_StandingAndWalking_Down
@@ -701,7 +690,7 @@ export class VisualBuilder
 				legLength,
 				footLengthHalf,
 				offsetsForHipsLeftAndRight,
-				ticksPerStepAsArray
+				ticksPerStep
 			);
 		var visualLegsFacingDownStanding =
 			visualsLegsFacingDownStandingAndWalking[0];
@@ -716,7 +705,7 @@ export class VisualBuilder
 				legLength,
 				footLengthHalf,
 				offsetsForHipsLeftAndRight,
-				ticksPerStepAsArray
+				ticksPerStep
 			);
 		var visualLegsFacingUpStanding =
 			visualsLegsFacingUpStandingAndWalking[0];
@@ -731,7 +720,7 @@ export class VisualBuilder
 				legLength,
 				footLengthHalf,
 				offsetsForHipsLeftAndRight,
-				ticksPerStepAsArray
+				ticksPerStep
 			);
 		var visualLegsFacingLeftStanding =
 			visualsLegsFacingLeftStandingAndWalking[0];
@@ -746,42 +735,46 @@ export class VisualBuilder
 				legLength,
 				footLengthHalf,
 				offsetsForHipsLeftAndRight,
-				ticksPerStepAsArray
+				ticksPerStep
 			);
 		var visualLegsFacingRightStanding =
 			visualsLegsFacingRightStandingAndWalking[0];
 		var visualLegsFacingRightWalking =
 			visualsLegsFacingRightStandingAndWalking[1];
 
-		var selectChildNames =
-			(uwpe: UniverseWorldPlaceEntities, d: Display) =>
-				this.figure_LegsDirectional_SelectChildNames(uwpe, d);
+		var selectChildToShow =
+			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) =>
+			{
+				var childToShowName =
+					this.figure_LegsDirectional_SelectChildName(uwpe);
+				var childToShow =
+					visualSelect.children.find(x => (x as VisualNamed).name == childToShowName);
+				return childToShow;
+			};
 
-		var visualLegsDirectional = new VisualSelect
+		var visualLegsDirectional = VisualSelect.fromSelectChildToShowAndChildren
 		(
-			// childrenByName
-			new Map<string, VisualBase>
-			([
-				[ "FacingRightStanding", visualLegsFacingRightStanding ],
-				[ "FacingDownStanding", visualLegsFacingDownStanding ],
-				[ "FacingLeftStanding", visualLegsFacingLeftStanding ],
-				[ "FacingUpStanding", visualLegsFacingUpStanding ],
+			selectChildToShow,
+			[
+				VisualNamed.fromNameAndChild("FacingRightStanding", visualLegsFacingRightStanding),
+				VisualNamed.fromNameAndChild("FacingDownStanding", visualLegsFacingDownStanding),
+				VisualNamed.fromNameAndChild("FacingLeftStanding", visualLegsFacingLeftStanding),
+				VisualNamed.fromNameAndChild("FacingUpStanding", visualLegsFacingUpStanding),
 
-				[ "FacingRightWalking", visualLegsFacingRightWalking ],
-				[ "FacingDownWalking", visualLegsFacingDownWalking ],
-				[ "FacingLeftWalking", visualLegsFacingLeftWalking ],
-				[ "FacingUpWalking", visualLegsFacingUpWalking ]
-			]),
-			selectChildNames
+				VisualNamed.fromNameAndChild("FacingRightWalking", visualLegsFacingRightWalking),
+				VisualNamed.fromNameAndChild("FacingDownWalking", visualLegsFacingDownWalking),
+				VisualNamed.fromNameAndChild("FacingLeftWalking", visualLegsFacingLeftWalking),
+				VisualNamed.fromNameAndChild("FacingUpWalking", visualLegsFacingUpWalking)
+			],
 		);
 
 		return visualLegsDirectional;
 	}
 
-	figure_LegsDirectional_SelectChildNames
+	figure_LegsDirectional_SelectChildName
 	(
-		uwpe: UniverseWorldPlaceEntities, d: Display
-	): string[]
+		uwpe: UniverseWorldPlaceEntities
+	): string
 	{
 		var e = uwpe.entity;
 		var entityLoc = Locatable.of(e).loc;
@@ -826,7 +819,7 @@ export class VisualBuilder
 			}
 			childNameToSelect = namesByHeading[headingIndex];
 		}
-		return [ childNameToSelect ];
+		return childNameToSelect;
 	};
 
 	figure_LegsDirectional_StandingAndWalking
@@ -836,7 +829,7 @@ export class VisualBuilder
 		legLength: number,
 		footLengthHalf: number,
 		offsetsForHipsLeftAndRight: Coords[],
-		ticksPerStepAsArray: number[],
+		ticksPerStep: number,
 		toeOffsetsFromAnklesLeftRight: Coords[]
 	): VisualBase[]
 	{
@@ -912,7 +905,7 @@ export class VisualBuilder
 					var visualForLegWalking =
 						VisualAnimation.fromTicksToHoldFramesAndFramesRepeating
 						(
-							ticksPerStepAsArray,
+							ticksPerStep,
 							frames
 						);
 
@@ -943,7 +936,7 @@ export class VisualBuilder
 		legLength: number,
 		footLengthHalf: number,
 		offsetsForLegsLeftAndRight: Coords[],
-		ticksPerStepAsArray: number[]
+		ticksPerStep: number
 	): VisualBase[]
 	{
 		var toeOffsetsFromAnklesLeftRight =
@@ -959,7 +952,7 @@ export class VisualBuilder
 			legLength,
 			footLengthHalf,
 			offsetsForLegsLeftAndRight,
-			ticksPerStepAsArray,
+			ticksPerStep,
 			toeOffsetsFromAnklesLeftRight
 		);
 	}
@@ -971,7 +964,7 @@ export class VisualBuilder
 		legLength: number,
 		footLengthHalf: number,
 		offsetsForLegsLeftAndRight: Coords[],
-		ticksPerStepAsArray: number[]
+		ticksPerStep: number
 	): VisualBase[]
 	{
 		var toeOffsetsFromAnklesLeftRight =
@@ -987,7 +980,7 @@ export class VisualBuilder
 			legLength,
 			footLengthHalf,
 			offsetsForLegsLeftAndRight,
-			ticksPerStepAsArray,
+			ticksPerStep,
 			toeOffsetsFromAnklesLeftRight
 		);
 	}
@@ -999,7 +992,7 @@ export class VisualBuilder
 		legLength: number,
 		footLengthHalf: number,
 		offsetsForLegsLeftAndRight: Coords[],
-		ticksPerStepAsArray: number[]
+		ticksPerStep: number
 	): VisualBase[]
 	{
 		var toeOffsetsFromAnklesLeftRight =
@@ -1015,7 +1008,7 @@ export class VisualBuilder
 			legLength,
 			footLengthHalf,
 			offsetsForLegsLeftAndRight,
-			ticksPerStepAsArray,
+			ticksPerStep,
 			toeOffsetsFromAnklesLeftRight
 		);
 	}
@@ -1027,7 +1020,7 @@ export class VisualBuilder
 		legLength: number,
 		footLengthHalf: number,
 		offsetsForLegsLeftAndRight: Coords[],
-		ticksPerStepAsArray: number[]
+		ticksPerStep: number
 	): VisualBase[]
 	{
 		var toeOffsetsFromAnklesLeftRight =
@@ -1043,7 +1036,7 @@ export class VisualBuilder
 			legLength,
 			footLengthHalf,
 			offsetsForLegsLeftAndRight,
-			ticksPerStepAsArray,
+			ticksPerStep,
 			toeOffsetsFromAnklesLeftRight
 		);
 	}
@@ -1089,9 +1082,8 @@ export class VisualBuilder
 		var headWithoutFeatures =
 			VisualCircle.fromRadiusAndColorFill(headRadius, skinColor);
 
-		var head: VisualBase = VisualGroup.fromNameAndChildren
+		var head: VisualBase = VisualGroup.fromChildren
 		(
-			"Head",
 			[
 				headWithoutFeatures,
 				eyesDirectional
@@ -1388,8 +1380,6 @@ export class VisualBuilder
 		color: Color
 	): VisualBase
 	{
-		var name = "StarburstWith" + numberOfPoints + "Points";
-
 		var path = PathBuilder.Instance().star
 		(
 			numberOfPoints,
@@ -1401,9 +1391,8 @@ export class VisualBuilder
 
 		path.transform(transform);
 
-		var visual = VisualGroup.fromNameAndChildren
+		var visual = VisualGroup.fromChildren
 		(
-			name,
 			[
 				VisualPolygon.fromPathAndColorsFillAndBorder
 				(

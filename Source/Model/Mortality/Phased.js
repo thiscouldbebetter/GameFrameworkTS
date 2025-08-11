@@ -9,7 +9,10 @@ var ThisCouldBeBetter;
                 this.phaseCurrentIndex = phaseCurrentIndex || 0;
                 this.ticksOnPhaseCurrent = ticksOnPhaseCurrent || 0;
                 this.phases = phases;
-                this.phasesByName = GameFramework.ArrayHelper.addLookupsByName(this.phases);
+                for (var i = 0; i < this.phases.length; i++) {
+                    var phase = this.phases[i];
+                    phase.index = i;
+                }
             }
             static fromPhaseStartNameAndPhases(phaseStartName, phases) {
                 var returnValue = new Phased(0, 0, phases);
@@ -23,7 +26,7 @@ var ThisCouldBeBetter;
                 return entity.propertyByName(Phased.name);
             }
             phaseByName(phaseName) {
-                return this.phasesByName.get(phaseName);
+                return this.phases.find(x => x.name == phaseName);
             }
             phaseCurrent() {
                 return this.phases[this.phaseCurrentIndex];
@@ -69,13 +72,17 @@ var ThisCouldBeBetter;
         }
         GameFramework.Phased = Phased;
         class Phase {
-            constructor(name, durationInTicks, enter) {
+            constructor(index, name, durationInTicks, enter) {
+                this.index = index;
                 this.name = name;
                 this.durationInTicks = durationInTicks;
                 this._enter = enter;
             }
+            static fromIndexNameTicksAndEnter(index, name, durationInTicks, enter) {
+                return new Phase(index, name, durationInTicks, enter);
+            }
             static fromNameTicksAndEnter(name, durationInTicks, enter) {
-                return new Phase(name, durationInTicks, enter);
+                return new Phase(null, name, durationInTicks, enter);
             }
             enter(uwpe) {
                 if (this._enter != null) {
@@ -84,9 +91,10 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new Phase(this.name, this.durationInTicks, this._enter);
+                return new Phase(this.index, this.name, this.durationInTicks, this._enter);
             }
             overwriteWith(other) {
+                this.index = other.index;
                 this.name = other.name;
                 this.durationInTicks = other.durationInTicks;
                 this._enter = other.enter;

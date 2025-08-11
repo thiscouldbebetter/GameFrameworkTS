@@ -45,17 +45,17 @@ export class ControlTextBox<TContext> extends ControlBase
 		this._textSize = Coords.create();
 	}
 
-	static fromNamePosSizeAndText<TContext>
+	static fromNamePosSizeAndTextBinding<TContext>
 	(
 		name: string,
 		pos: Coords,
 		size: Coords,
-		text: DataBinding<TContext,string>
+		textBinding: DataBinding<TContext,string>
 	)
 	{
 		return new ControlTextBox
 		(
-			name, pos, size, text,
+			name, pos, size, textBinding,
 			null, null, null
 		);
 	}
@@ -74,6 +74,20 @@ export class ControlTextBox<TContext> extends ControlBase
 		return new ControlTextBox<TContext>
 		(
 			name, pos, size, text, fontNameAndHeight, charsMax, isEnabled
+		);
+	}
+
+	static fromPosSizeAndTextBinding<TContext>
+	(
+		pos: Coords,
+		size: Coords,
+		textBinding: DataBinding<TContext,string>
+	)
+	{
+		return new ControlTextBox
+		(
+			null, pos, size, textBinding,
+			null, null, null
 		);
 	}
 

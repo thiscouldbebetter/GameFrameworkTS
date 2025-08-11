@@ -457,7 +457,7 @@ var ThisCouldBeBetter;
                 universe.venueTransitionTo(venueNext);
             }
             producer(universe, size) {
-                return this.producerWithImageAndSoundNames(universe, size, "Titles_Producer", "Music_Producer");
+                return this.producerWithImageAndSoundNames(universe, size, "Titles_Producer", "Effects_Producer");
             }
             producerWithImageAndSoundNames(universe, size, imageName, soundName) {
                 if (size == null) {

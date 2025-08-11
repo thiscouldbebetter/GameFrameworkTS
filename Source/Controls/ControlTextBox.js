@@ -18,11 +18,14 @@ var ThisCouldBeBetter;
                 this._textMargin = GameFramework.Coords.create();
                 this._textSize = GameFramework.Coords.create();
             }
-            static fromNamePosSizeAndText(name, pos, size, text) {
-                return new ControlTextBox(name, pos, size, text, null, null, null);
+            static fromNamePosSizeAndTextBinding(name, pos, size, textBinding) {
+                return new ControlTextBox(name, pos, size, textBinding, null, null, null);
             }
             static fromNamePosSizeTextFontCharsMaxAndIsEnabled(name, pos, size, text, fontNameAndHeight, charsMax, isEnabled) {
                 return new ControlTextBox(name, pos, size, text, fontNameAndHeight, charsMax, isEnabled);
+            }
+            static fromPosSizeAndTextBinding(pos, size, textBinding) {
+                return new ControlTextBox(null, pos, size, textBinding, null, null, null);
             }
             static fromPosSizeAndTextImmediate(pos, size, textImmediate) {
                 var name = ControlTextBox.name + textImmediate;

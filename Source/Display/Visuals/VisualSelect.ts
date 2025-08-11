@@ -4,76 +4,66 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class VisualSelect implements Visual<VisualSelect>
 {
-	childrenByName: Map<string, VisualBase>;
-	selectChildNames: (uwpe: UniverseWorldPlaceEntities, d: Display) => string[];
+	_selectChildToShow:
+		(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => VisualBase;
+	children: VisualBase[];
 
 	constructor
 	(
-		childrenByName: Map<string, VisualBase>,
-		selectChildNames: (uwpe: UniverseWorldPlaceEntities, d: Display) => string[]
+		selectChildToShow:
+			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => VisualBase,
+		children: VisualBase[]
 	)
 	{
-		this.childrenByName = childrenByName;
-		this.selectChildNames = selectChildNames;
+		this._selectChildToShow = selectChildToShow;
+		this.children = children;
 	}
 
-	static fromChildrenByNameAndSelectChildNames
+	static fromSelectChildToShowAndChildren
 	(
-		childrenByName: Map<string, VisualBase>,
-		selectChildNames: (uwpe: UniverseWorldPlaceEntities, d: Display) => string[]
+		selectChildToShow:
+			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => VisualBase,
+		children: VisualBase[]
 	): VisualSelect
 	{
 		return new VisualSelect
 		(
-			childrenByName, selectChildNames
+			selectChildToShow, children
 		);
 	}
 
-	childByName(childName: string): VisualBase
+	selectChildToShow
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		visualSelect: VisualSelect
+	): VisualBase
 	{
-		return this.childrenByName.get(childName);
+		return this._selectChildToShow(uwpe, visualSelect);
 	}
 
 	// Visual.
 
 	initialize(uwpe: UniverseWorldPlaceEntities): void
 	{
-		for (var childName in this.childrenByName)
-		{
-			var child = this.childrenByName.get(childName);
-			child.initialize(uwpe);
-		}
+		this.children.forEach(x => x.initialize(uwpe) );
 	}
 
 	initializeIsComplete(uwpe: UniverseWorldPlaceEntities): boolean
 	{
-		var childrenAreAllInitializedSoFar = true;
+		var atLeastOneChildIsNotInitialized =
+			this.children.some(x => x.initializeIsComplete(uwpe) == false);
 
-		for (var childName in this.childrenByName)
-		{
-			var child = this.childrenByName.get(childName);
-			var childIsInitialized = child.initializeIsComplete(uwpe);
-			if (childIsInitialized == false)
-			{
-				childrenAreAllInitializedSoFar = false;
-			}
-		}
+		var childrenAreAllInitialized =
+			(atLeastOneChildIsNotInitialized == false);
 
-		return childrenAreAllInitializedSoFar;
+		return childrenAreAllInitialized;
 	}
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		var childrenToSelectNames =
-			this.selectChildNames(uwpe, display);
-		var childrenSelected = childrenToSelectNames.map
-		(
-			childToSelectName => this.childByName(childToSelectName)
-		);
-		childrenSelected.forEach
-		(
-			childSelected => childSelected.draw(uwpe, display)
-		);
+		var childToShow = this.selectChildToShow(uwpe, this);
+
+		childToShow.draw(uwpe, display);
 	}
 
 	// Clonable.

@@ -29,15 +29,8 @@ var ThisCouldBeBetter;
                 }
             }
             static visualBuild() {
-                var returnValue = new GameFramework.VisualSelect(
-                // childrenByNames
-                new Map([
-                    ["None", new GameFramework.VisualNone()]
-                ]), 
-                // selectChildNames
-                (uwpe, d) => {
-                    return ["None"];
-                });
+                var visualNone = GameFramework.VisualNone.Instance;
+                var returnValue = GameFramework.VisualSelect.fromSelectChildToShowAndChildren((uwpe, visualSelect) => visualNone, [visualNone]);
                 return returnValue;
             }
         }

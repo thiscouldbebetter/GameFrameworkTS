@@ -149,6 +149,113 @@ export class Leaderboard
 		);
 	}
 
+	static toControlGetInitials(uwpe: UniverseWorldPlaceEntities): ControlBase
+	{
+		var universe = uwpe.universe;
+
+		 var size = universe.display.sizeDefault().clone();
+
+		var controlBuilder = universe.controlBuilder;
+		var sizeBase = controlBuilder.sizeBase;
+		var scaleMultiplier = size.clone().divide(sizeBase);
+		var fontNameAndHeight = controlBuilder.fontBase;
+		var buttonHeightBase = controlBuilder.buttonHeightBase;
+
+		var controls =
+		[
+			ControlLabel.fromPosSizeTextFontCentered
+			(
+				Coords.fromXY(50, 15), // pos
+				Coords.fromXY(100, 15), // size
+				DataBinding.fromContext("Your Score:"),
+				fontNameAndHeight
+			),
+
+			ControlLabel.fromPosSizeTextFontCentered
+			(
+				Coords.fromXY(50, 35), // pos
+				Coords.fromXY(100, 15), // size
+				DataBinding.fromContext("Enter your initials:"),
+				fontNameAndHeight
+			),
+
+			ControlTextBox.fromNamePosSizeAndTextBinding
+			(
+				"textBoxInitials",
+				Coords.fromXY(50, 50), // pos
+				Coords.fromXY(100, 20), // size
+				DataBinding.fromContextGetAndSet
+				(
+					universe.profile,
+					(c: Profile) => c.name,
+					(c: Profile, v: string) => c.name = v
+				)
+			).charsMaxSet(3),
+
+			ControlButton.fromPosSizeTextFontClick<Profile>
+			(
+				Coords.fromXY(50, 80), // pos
+				Coords.fromXY(45, buttonHeightBase), // size
+				"Submit",
+				fontNameAndHeight,
+				() => this.toControlGetInitials_Submit(uwpe)
+			).isEnabledSet
+			(
+				DataBinding.fromContextAndGet
+				(
+					universe.profile,
+					(c: Profile) => { return c.name.length > 0; }
+				),
+			)
+		];
+
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
+		(
+			"containerProfileNew",
+			Coords.zeroes(), // pos
+			sizeBase.clone(), // size
+			controls
+		);
+
+		returnValue.scalePosAndSize(scaleMultiplier);
+
+		return returnValue;
+	}
+
+	static toControlGetInitials_Submit(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var universe = uwpe.universe;
+
+		var venueControls = universe.venueCurrent() as VenueControls;
+		var controlRootAsContainer = venueControls.controlRoot as ControlContainer;
+		var textBoxName =
+			controlRootAsContainer.childByName("textBoxInitials") as ControlTextBox<any>;
+		var profileName = textBoxName.text();
+		if (profileName == "")
+		{
+			return;
+		}
+
+		var storageHelper = universe.storageHelper;
+
+		var profile = new Profile(profileName, []);
+		var profileNames = storageHelper.load<string[]>(Profile.StorageKeyProfileNames);
+		if (profileNames == null)
+		{
+			profileNames = [];
+		}
+		profileNames.push(profileName);
+		storageHelper.save(Profile.StorageKeyProfileNames, profileNames);
+		storageHelper.save(profileName, profile);
+
+		universe.profileSet(profile);
+		var venueNext: Venue = Profile.toControlSaveStateLoad
+		(
+			universe, null, universe.venueCurrent()
+		).toVenue();
+		universe.venueTransitionTo(venueNext);
+	}
+
 	toVenue(uwpe: UniverseWorldPlaceEntities): Venue
 	{
 		var thisAsControl = this.toControl(uwpe);
