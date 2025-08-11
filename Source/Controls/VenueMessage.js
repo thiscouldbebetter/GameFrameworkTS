@@ -5,6 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class VenueMessage {
             constructor(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly) {
+                // todo - Add a timer?
                 this.messageToShow = messageToShow;
                 this._acknowledge = acknowledge;
                 this.venuePrev = venuePrev;

@@ -21,6 +21,8 @@ export class VenueMessage<TContext> implements Venue
 		showMessageOnly: boolean
 	)
 	{
+		// todo - Add a timer?
+
 		this.messageToShow = messageToShow;
 		this._acknowledge = acknowledge;
 		this.venuePrev = venuePrev;

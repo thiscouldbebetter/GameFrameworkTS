@@ -16,6 +16,7 @@ var ControlSelectOption = gf.ControlSelectOption;
 var ControlStyle = gf.ControlStyle;
 var ControlTextBox = gf.ControlTextBox;
 var ControlTextarea = gf.ControlTextarea;
+var ControlTimer = gf.ControlTimer;
 var ControlVisual = gf.ControlVisual;
 var Controllable = gf.Controllable;
 var DataBinding = gf.DataBinding;

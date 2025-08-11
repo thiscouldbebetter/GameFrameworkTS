@@ -17,6 +17,7 @@ import ControlSelectOption = gf.ControlSelectOption;
 import ControlStyle = gf.ControlStyle;
 import ControlTextBox = gf.ControlTextBox;
 import ControlTextarea = gf.ControlTextarea;
+import ControlTimer = gf.ControlTimer;
 import ControlVisual = gf.ControlVisual;
 import Controllable = gf.Controllable;
 import DataBinding = gf.DataBinding;
