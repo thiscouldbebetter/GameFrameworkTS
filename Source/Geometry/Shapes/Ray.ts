@@ -12,6 +12,12 @@ export class Ray
 		this.vertex = vertex;
 		this.direction = direction;
 	}
+
+	static fromVertexAndDirection(vertex: Coords, direction: Coords): Ray
+	{
+		return new Ray(vertex, direction);
+	}
+
 }
 
 }

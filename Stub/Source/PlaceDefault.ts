@@ -29,19 +29,19 @@ class PlaceDefault extends PlaceBase
 			actionShowMenu
 		];
 
-		var inputNames = Input.Names();
+		var inputs = Input.Instances();
 
 		var actionToInputsMappings =
 		[
 			ActionToInputsMapping.fromActionNameAndInputName
 			(
 				actionDisplayRecorderStartStop.name,
-				inputNames.Tilde
+				inputs.Tilde.name
 			),
 
 			ActionToInputsMapping.fromActionNameAndInputName
 			(
-				actionShowMenu.name, inputNames.Escape
+				actionShowMenu.name, inputs.Escape.name
 			)
 		];
 

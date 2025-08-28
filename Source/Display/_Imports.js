@@ -3,7 +3,9 @@
 var Color = gf.Color;
 var Drawable = gf.Drawable;
 var Display2D = gf.Display2D;
+var DisplayFarToNear = gf.DisplayFarToNear;
 var DisplayRecorder = gf.DisplayRecorder;
+var DisplayTest = gf.DisplayTest;
 var VenueFader = gf.VenueFader;
 var VenueLayered = gf.VenueLayered;
 var VisualAnchor = gf.VisualAnchor;
@@ -11,6 +13,7 @@ var VisualArc = gf.VisualArc;
 var VisualBar = gf.VisualBar;
 var VisualBuffered = gf.VisualBuffered;
 var VisualBuilder = gf.VisualBuilder;
+var VisualCameraProjection = gf.VisualCameraProjection;
 var VisualCircle = gf.VisualCircle;
 var VisualCircleGradient = gf.VisualCircleGradient;
 var VisualCrosshairs = gf.VisualCrosshairs;

@@ -17,9 +17,23 @@ export class ProfileHelper
 		this.profilesMultipleAreAllowed = profilesMultipleAreAllowed || false;
 	}
 
-	static default(): ProfileHelper
+	static maximal(): ProfileHelper
 	{
-		return new ProfileHelper(null, null);
+		return new ProfileHelper(true, true);
+	}
+
+	static minimal(): ProfileHelper
+	{
+		return new ProfileHelper(false, false);
+	}
+
+	static fromGameCanBeSavedAndProfilesMultipleAreAllowed
+	(
+		gameCanBeSaved: boolean,
+		profilesMultipleAreAllowed: boolean
+	): ProfileHelper
+	{
+		return new ProfileHelper(gameCanBeSaved, profilesMultipleAreAllowed);
 	}
 
 	gameCanBeSavedSet(value: boolean): ProfileHelper

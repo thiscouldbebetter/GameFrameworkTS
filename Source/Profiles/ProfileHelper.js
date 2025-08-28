@@ -8,8 +8,14 @@ var ThisCouldBeBetter;
                 this.gameCanBeSaved = gameCanBeSaved || false;
                 this.profilesMultipleAreAllowed = profilesMultipleAreAllowed || false;
             }
-            static default() {
-                return new ProfileHelper(null, null);
+            static maximal() {
+                return new ProfileHelper(true, true);
+            }
+            static minimal() {
+                return new ProfileHelper(false, false);
+            }
+            static fromGameCanBeSavedAndProfilesMultipleAreAllowed(gameCanBeSaved, profilesMultipleAreAllowed) {
+                return new ProfileHelper(gameCanBeSaved, profilesMultipleAreAllowed);
             }
             gameCanBeSavedSet(value) {
                 this.gameCanBeSaved = value;

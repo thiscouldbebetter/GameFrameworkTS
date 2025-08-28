@@ -161,6 +161,7 @@ export class ControlLabel<TContext> extends ControlBase
 			fontNameAndHeight
 		);
 	}
+
 	static fromPosSizeTextFontUncentered<TContext> 
 	(
 		pos: Coords,

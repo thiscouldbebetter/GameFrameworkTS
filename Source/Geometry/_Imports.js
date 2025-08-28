@@ -15,7 +15,6 @@ var CollisionTrackerBase = gf.CollisionTrackerBase;
 var CollisionTrackerMapped = gf.CollisionTrackerMapped;
 var CollisionTrackerMappedMap = gf.CollisionTrackerMappedMap;
 var CollisionTrackerMappedMapCell = gf.CollisionTrackerMappedMapCell;
-// Geometry - Constraints.
 var Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
 var Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
 var Constraint_Conditional = gf.Constraint_Conditional;

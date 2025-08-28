@@ -15,7 +15,7 @@ export interface SoundHelper
 	soundsAllStop(universe: Universe): void;
 }
 
-export class SoundHelperLive
+export class SoundHelperLive implements SoundHelper
 {
 	sounds: Sound[];
 

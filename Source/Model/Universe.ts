@@ -53,7 +53,7 @@ export class Universe
 		this.soundHelper = soundHelper || new SoundHelperLive();
 		this.mediaLibrary = mediaLibrary || MediaLibrary.default();
 		this.controlBuilder = controlBuilder || ControlBuilder.default();
-		this.profileHelper = profileHelper || ProfileHelper.default();
+		this.profileHelper = profileHelper || ProfileHelper.minimal();
 		this.worldCreator =
 			worldCreator
 			||
@@ -169,7 +169,7 @@ export class Universe
 		var soundHelper = new SoundHelperLive();
 		var mediaLibrary = MediaLibrary.fromMediaFilePaths(mediaFilePaths);
 		var controlBuilder = ControlBuilder.default();
-		var profileHelper = ProfileHelper.default();
+		var profileHelper = ProfileHelper.minimal();
 
 		return new Universe
 		(

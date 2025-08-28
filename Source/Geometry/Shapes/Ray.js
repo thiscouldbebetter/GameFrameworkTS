@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.vertex = vertex;
                 this.direction = direction;
             }
+            static fromVertexAndDirection(vertex, direction) {
+                return new Ray(vertex, direction);
+            }
         }
         GameFramework.Ray = Ray;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

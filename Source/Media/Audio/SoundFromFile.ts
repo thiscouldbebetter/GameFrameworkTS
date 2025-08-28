@@ -21,6 +21,14 @@ export class SoundFromFile implements Sound
 		this.offsetInSeconds = 0;
 	}
 
+	static fromNameSourcePathAndIsRepeating
+	(
+		name: string, sourcePath: string, isRepeating: boolean
+	): SoundFromFile
+	{
+		return new SoundFromFile(name, sourcePath, isRepeating);
+	}
+
 	_audioElement: HTMLAudioElement;
 	audioElement(): HTMLAudioElement
 	{

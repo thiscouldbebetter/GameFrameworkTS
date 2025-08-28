@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 this.soundHelper = soundHelper || new GameFramework.SoundHelperLive();
                 this.mediaLibrary = mediaLibrary || GameFramework.MediaLibrary.default();
                 this.controlBuilder = controlBuilder || GameFramework.ControlBuilder.default();
-                this.profileHelper = profileHelper || GameFramework.ProfileHelper.default();
+                this.profileHelper = profileHelper || GameFramework.ProfileHelper.minimal();
                 this.worldCreator =
                     worldCreator
                         ||
@@ -67,7 +67,7 @@ var ThisCouldBeBetter;
                 var soundHelper = new GameFramework.SoundHelperLive();
                 var mediaLibrary = GameFramework.MediaLibrary.fromMediaFilePaths(mediaFilePaths);
                 var controlBuilder = GameFramework.ControlBuilder.default();
-                var profileHelper = GameFramework.ProfileHelper.default();
+                var profileHelper = GameFramework.ProfileHelper.minimal();
                 return new Universe(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, profileHelper, worldCreator);
             }
             static fromWorld(world) {

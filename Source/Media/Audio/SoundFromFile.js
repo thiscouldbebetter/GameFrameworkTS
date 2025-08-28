@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this.isRepeating = isRepeating || false;
                 this.offsetInSeconds = 0;
             }
+            static fromNameSourcePathAndIsRepeating(name, sourcePath, isRepeating) {
+                return new SoundFromFile(name, sourcePath, isRepeating);
+            }
             audioElement() {
                 if (this._audioElement == null) {
                     this._audioElement = new Audio(this.sourcePath);
