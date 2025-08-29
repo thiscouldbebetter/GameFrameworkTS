@@ -166,6 +166,12 @@ export class ControlButton<TContext> extends ControlBase
 		return (this.canBeHeldDown == false); // wasActionHandled
 	}
 
+	canBeHeldDownSet(value: boolean): ControlButton<TContext>
+	{
+		this.canBeHeldDown = value;
+		return this;
+	}
+
 	click(): void
 	{
 		this._click();

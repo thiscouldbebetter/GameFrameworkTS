@@ -41,6 +41,10 @@ var ThisCouldBeBetter;
                 }
                 return (this.canBeHeldDown == false); // wasActionHandled
             }
+            canBeHeldDownSet(value) {
+                this.canBeHeldDown = value;
+                return this;
+            }
             click() {
                 this._click();
             }
