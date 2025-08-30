@@ -346,6 +346,17 @@ export class Universe
 		return this.venueStack.peek();
 	}
 
+	venueCurrentRemove(): void
+	{
+		this.venueStack.pop();
+	}
+
+	venueCurrentReplaceWith(venueToReplaceWith: Venue): void
+	{
+		this.venueCurrentRemove();
+		this.venueNextSet(venueToReplaceWith);
+	}
+
 	venueJumpTo(value: Venue): void
 	{
 		this.venueNextSet(value);
@@ -379,21 +390,18 @@ export class Universe
 		this.venueJumpTo(this.venueStack.popThenPeek());
 	}
 
-	venueCurrentRemove(): void
-	{
-		this.venueStack.pop();
-	}
-
 	venuePrevTransitionTo(): void
 	{
-		this.venueTransitionTo(this.venueStack.popThenPeek());
+		var venuePrev = this.venueStack.popThenPeek();
+		this.venueTransitionTo(venuePrev);
 	}
 
 	venueTransitionTo(venueToTransitionTo: Venue): void
 	{
+		var venueCurrent = this.venueCurrent();
 		var venueNext = this.controlBuilder.venueTransitionalFromTo
 		(
-			this.venueCurrent(), venueToTransitionTo
+			venueCurrent, venueToTransitionTo
 		);
 		this.venueNextSet(venueNext);
 	}

@@ -32,6 +32,10 @@ var ThisCouldBeBetter;
                 disp, null // entitiesInViewSort
                 );
             }
+            static fromViewSizeDispositionAndEntitiesInViewSort(viewSize, disp, entitiesInViewSort) {
+                return new Camera(viewSize, null, // focalLength
+                disp, entitiesInViewSort);
+            }
             static entityFromPlace(place) {
                 return place.entitiesByPropertyName(Camera.name)[0];
             }

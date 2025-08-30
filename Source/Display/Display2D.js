@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                                 GameFramework.Coords.fromXYZ(800, 600, 1),
                                 GameFramework.Coords.fromXYZ(1200, 900, 1),
                                 // Wrap.
-                                GameFramework.Coords.fromXYZ(200, 150, 1),
+                                GameFramework.Coords.fromXYZ(200, 150, 1)
                             ];
                 this._sizeDefault = this.sizesAvailable[0];
                 this.sizeInPixels = this._sizeDefault;

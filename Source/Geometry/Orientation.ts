@@ -28,6 +28,11 @@ export class Orientation
 		return new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1) );
 	}
 
+	static forwardZDownY(): Orientation
+	{
+		return new Orientation(Coords.fromXYZ(0, 0, 1), Coords.fromXYZ(0, 1, 0) );
+	}
+
 	static fromForward(forward: Coords): Orientation
 	{
 		return new Orientation(forward, new Coords(0, 0, 1) ); 

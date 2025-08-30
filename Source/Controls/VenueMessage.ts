@@ -9,6 +9,7 @@ export class VenueMessage<TContext> implements Venue
 	venuePrev: Venue;
 	_sizeInPixels: Coords;
 	showMessageOnly: boolean;
+	secondsToShow: number;
 
 	_venueInner: Venue;
 
@@ -18,16 +19,16 @@ export class VenueMessage<TContext> implements Venue
 		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
 		venuePrev: Venue,
 		sizeInPixels: Coords,
-		showMessageOnly: boolean
+		showMessageOnly: boolean,
+		secondsToShow: number
 	)
 	{
-		// todo - Add a timer?
-
 		this.messageToShow = messageToShow;
 		this._acknowledge = acknowledge;
 		this.venuePrev = venuePrev;
 		this._sizeInPixels = sizeInPixels;
 		this.showMessageOnly = showMessageOnly || false;
+		this.secondsToShow = secondsToShow;
 	}
 
 	static fromMessage<TContext>
@@ -51,7 +52,8 @@ export class VenueMessage<TContext> implements Venue
 			acknowledge,
 			null, // venuePrev
 			sizeInPixels,
-			null // showMessageOnly
+			null, // showMessageOnly
+			null // secondsToShow
 		);
 	}
 
@@ -62,7 +64,11 @@ export class VenueMessage<TContext> implements Venue
 		venuePrev: Venue
 	): VenueMessage<TContext>
 	{
-		return new VenueMessage<TContext>(messageToShow, acknowledge, venuePrev, null, null);
+		return new VenueMessage<TContext>
+		(
+			messageToShow, acknowledge, venuePrev,
+			null, null, null
+		);
 	}
 
 	static fromMessageAndAcknowledge<TContext>
@@ -71,7 +77,7 @@ export class VenueMessage<TContext> implements Venue
 		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void
 	): VenueMessage<TContext>
 	{
-		return new VenueMessage<TContext>(messageToShow, acknowledge, null, null, null);
+		return new VenueMessage<TContext>(messageToShow, acknowledge, null, null, null, null);
 	}
 
 	static fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly<TContext>
@@ -83,7 +89,11 @@ export class VenueMessage<TContext> implements Venue
 		showMessageOnly: boolean
 	) : VenueMessage<TContext>
 	{
-		return new VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly);
+		return new VenueMessage
+		(
+			messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly,
+			null // secondsToShow
+		);
 	}
 
 	static fromText<TContext>(text: string): VenueMessage<TContext>
@@ -175,13 +185,25 @@ export class VenueMessage<TContext> implements Venue
 		this.venueInner(universe).draw(universe);
 	}
 
-	finalize(universe: Universe): void {}
+	finalize(universe: Universe): void
+	{
+		this._venueInner.finalize(universe);
+	}
 
-	finalizeIsComplete(): boolean { return true; }
+	finalizeIsComplete(): boolean
+	{
+		return this._venueInner.finalizeIsComplete();
+	}
 
-	initialize(universe: Universe): void {}
+	initialize(universe: Universe): void
+	{
+		this._venueInner.initialize(universe);
+	}
 
-	initializeIsComplete(): boolean { return true; }
+	initializeIsComplete(universe: Universe): boolean
+	{
+		return this._venueInner.initializeIsComplete(universe);
+	}
 
 	updateForTimerTick(universe: Universe): void
 	{
@@ -220,7 +242,8 @@ export class VenueMessage<TContext> implements Venue
 				this.messageToShow,
 				this.acknowledge.bind(this),
 				this.showMessageOnly,
-				fontNameAndHeight
+				fontNameAndHeight,
+				this.secondsToShow
 			);
 
 			var venuesToLayer = [];

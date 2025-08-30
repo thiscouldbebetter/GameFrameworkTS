@@ -4,14 +4,15 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Leaderboard {
-            constructor(playerScoresCount, playerScores) {
+            constructor(secondsToShow, playerScoresCount, playerScores) {
+                this.secondsToShow = secondsToShow;
                 this.playerScoresCount = playerScoresCount || 10;
                 this.playerScores = playerScores || [];
                 this.playerScoreBeingEntered = null;
                 this.cursorOffsetInChars = 0;
             }
             static create() {
-                return new Leaderboard(null, null);
+                return new Leaderboard(null, null, null);
             }
             static createWithFakeScores() {
                 var ps = (n, s) => LeaderboardPlayerScore.fromPlayerNameAndScore(n, s);
@@ -27,7 +28,7 @@ var ThisCouldBeBetter;
                     ps("III", 200),
                     ps("JJJ", 100)
                 ];
-                return new Leaderboard(playerScoresFake.length, playerScoresFake);
+                return new Leaderboard(30, playerScoresFake.length, playerScoresFake);
             }
             static fromStorageHelper(storageHelper) {
                 var leaderboard = storageHelper.load(Leaderboard.name);
@@ -70,7 +71,7 @@ var ThisCouldBeBetter;
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
                 var controlBuilder = universe.controlBuilder;
                 var controlLeaderboard = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => { this.toControl_Finished(universe); }, true, // showMessageOnly
-                fontNameAndHeight);
+                fontNameAndHeight, this.secondsToShow);
                 /*
                 var fontHeight = fontNameAndHeight.heightInPixels;
         

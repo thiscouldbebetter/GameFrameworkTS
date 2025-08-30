@@ -9,6 +9,8 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.secondsToWait = secondsToWait;
                 this._elapsed = elapsed;
+                this.hasElapsed = false;
+                this.timeStarted = null;
             }
             static fromNameSecondsToWaitAndElapsed(name, secondsToWait, elapsed) {
                 return new ControlTimer(name, secondsToWait, elapsed);
@@ -20,7 +22,7 @@ var ThisCouldBeBetter;
                 this._elapsed(universe);
             }
             initialize(universe) {
-                this.timeStarted = new Date();
+                this.timerStartOrRestart();
             }
             initializeIsComplete(universe) {
                 return true;
@@ -31,13 +33,20 @@ var ThisCouldBeBetter;
             mouseClick(pos) {
                 return false;
             }
+            timerStartOrRestart() {
+                this.timeStarted = new Date();
+            }
+            // Drawing.
             draw(universe, display, drawLoc, style) {
                 // Obviously, this isn't really drawing anything.
-                var now = new Date();
-                var millisecondsSinceStarted = now.getTime() - this.timeStarted.getTime();
-                var secondsSinceStarted = Math.floor(millisecondsSinceStarted / 1000);
-                if (secondsSinceStarted >= this.secondsToWait) {
-                    this.elapsed(universe);
+                if (this.hasElapsed == false) {
+                    var now = new Date();
+                    var millisecondsSinceStarted = now.getTime() - this.timeStarted.getTime();
+                    var secondsSinceStarted = Math.floor(millisecondsSinceStarted / 1000);
+                    if (secondsSinceStarted >= this.secondsToWait) {
+                        this.hasElapsed = true;
+                        this.elapsed(universe);
+                    }
                 }
             }
         }

@@ -8,6 +8,7 @@ export class ControlTimer extends ControlBase
 	secondsToWait: number;
 	_elapsed: (universe: Universe) => void;
 
+	hasElapsed: boolean;
 	timeStarted: Date;
 
 	constructor
@@ -22,6 +23,9 @@ export class ControlTimer extends ControlBase
 		this.name = name;
 		this.secondsToWait = secondsToWait;
 		this._elapsed = elapsed;
+
+		this.hasElapsed = false;
+		this.timeStarted = null;
 	}
 
 	static fromNameSecondsToWaitAndElapsed
@@ -46,7 +50,7 @@ export class ControlTimer extends ControlBase
 
 	initialize(universe: Universe): void
 	{
-		this.timeStarted = new Date();
+		this.timerStartOrRestart();
 	}
 
 	initializeIsComplete(universe: Universe): boolean
@@ -64,6 +68,13 @@ export class ControlTimer extends ControlBase
 		return false;
 	}
 
+	timerStartOrRestart(): void
+	{
+		this.timeStarted = new Date();
+	}
+
+	// Drawing.
+
 	draw
 	(
 		universe: Universe,
@@ -74,14 +85,18 @@ export class ControlTimer extends ControlBase
 	{
 		// Obviously, this isn't really drawing anything.
 
-		var now = new Date();
-		var millisecondsSinceStarted =
-			now.getTime() - this.timeStarted.getTime();
-		var secondsSinceStarted =
-			Math.floor(millisecondsSinceStarted / 1000);
-		if (secondsSinceStarted >= this.secondsToWait)
+		if (this.hasElapsed == false)
 		{
-			this.elapsed(universe);
+			var now = new Date();
+			var millisecondsSinceStarted =
+				now.getTime() - this.timeStarted.getTime();
+			var secondsSinceStarted =
+				Math.floor(millisecondsSinceStarted / 1000);
+			if (secondsSinceStarted >= this.secondsToWait)
+			{
+				this.hasElapsed = true;
+				this.elapsed(universe);
+			}
 		}
 	}
 }

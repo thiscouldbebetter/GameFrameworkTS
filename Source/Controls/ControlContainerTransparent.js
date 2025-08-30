@@ -30,11 +30,17 @@ var ThisCouldBeBetter;
             childrenAtPosAddToList(posToCheck, listToAddTo, addFirstChildOnly) {
                 return this.containerInner.childrenAtPosAddToList(posToCheck, listToAddTo, addFirstChildOnly);
             }
+            finalize(universe) {
+                this.containerInner.finalize(universe);
+            }
             focusGain() {
                 this.containerInner.focusGain();
             }
             focusLose() {
                 this.containerInner.focusLose();
+            }
+            initialize(universe) {
+                this.containerInner.initialize(universe);
             }
             isEnabled() {
                 return this.containerInner.isEnabled();

@@ -41,7 +41,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Controls.
-            choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontNameAndHeight, buttonPosY) {
+            choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontNameAndHeight, buttonPosY, secondsToShow) {
                 size = size || universe.display.sizeDefault();
                 showMessageOnly = showMessageOnly || false;
                 fontNameAndHeight = fontNameAndHeight || this.fontBase;
@@ -58,6 +58,10 @@ var ThisCouldBeBetter;
                 var labelMessageSize = GameFramework.Coords.fromXY(this.sizeBase.x, labelMessageSizeY);
                 var labelMessage = GameFramework.ControlLabel.fromPosSizeTextFontCentered(labelMessagePos, labelMessageSize, message, fontNameAndHeight);
                 var childControls = [labelMessage];
+                if (secondsToShow != null) {
+                    var controlTimer = GameFramework.ControlTimer.fromNameSecondsToWaitAndElapsed("timerAcknowledgeAutomaticallyAfterTimeout", secondsToShow, () => optionFunctions[0]());
+                    childControls.push(controlTimer);
+                }
                 if (showMessageOnly == false) {
                     var buttonWidth = 55;
                     var buttonSize = GameFramework.Coords.fromXY(buttonWidth, fontHeight * 2);
@@ -96,8 +100,8 @@ var ThisCouldBeBetter;
                 }
                 return returnValue;
             }
-            choice5(universe, size, message, optionNames, optionFunctions) {
-                return this.choice(universe, size, message, optionNames, optionFunctions, null, null, null);
+            choiceUniverseSizeMessageOptionNamesAndFunctions(universe, size, message, optionNames, optionFunctions) {
+                return this.choice(universe, size, message, optionNames, optionFunctions, null, null, null, null);
             }
             choiceList(universe, size, message, options, bindingForOptionText, buttonSelectText, select) {
                 // todo - Variable sizes.
@@ -132,10 +136,7 @@ var ThisCouldBeBetter;
                 if (cancel == null) {
                     cancel = () => universe.venuePrevJumpTo();
                 }
-                var returnValue = this.choice(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirm, cancel], null, // showMessageOnly
-                null, // fontHeight
-                null // buttonPosY
-                );
+                var returnValue = this.choiceUniverseSizeMessageOptionNamesAndFunctions(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirm, cancel]);
                 return returnValue;
             }
             confirmAndReturnToVenue(universe, size, message, venuePrev, confirm, cancel) {
@@ -149,10 +150,7 @@ var ThisCouldBeBetter;
                     }
                     universe.venueTransitionTo(venuePrev);
                 };
-                return this.choice(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirmThenReturnToVenuePrev, cancelThenReturnToVenuePrev], null, // showMessageOnly
-                null, // fontHeight
-                null // buttonPosY
-                );
+                return this.choiceUniverseSizeMessageOptionNamesAndFunctions(universe, size, GameFramework.DataBinding.fromContext(message), ["Confirm", "Cancel"], [confirmThenReturnToVenuePrev, cancelThenReturnToVenuePrev]);
             }
             game(universe, size, venuePrev) {
                 if (size == null) {
@@ -404,19 +402,19 @@ var ThisCouldBeBetter;
                 placeDefn.actionToInputsMappingsSave();
                 universe.venueTransitionTo(venuePrev);
             }
-            message(universe, size, message, acknowledge, showMessageOnly, fontNameAndHeight) {
+            message(universe, size, message, acknowledge, showMessageOnly, fontNameAndHeight, secondsToShow) {
                 var optionNames = [];
                 var optionFunctions = [];
                 if (acknowledge != null) {
                     optionNames.push("Acknowledge");
                     optionFunctions.push(acknowledge);
                 }
-                var returnValue = this.choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontNameAndHeight, null // buttonPosY
-                );
+                var returnValue = this.choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontNameAndHeight, null, // buttonPosY
+                secondsToShow);
                 return returnValue;
             }
             message4(universe, size, message, acknowledge) {
-                return this.message(universe, size, message, acknowledge, null, null);
+                return this.message(universe, size, message, acknowledge, null, null, null);
             }
             opening(universe, size) {
                 if (size == null) {

@@ -24,7 +24,7 @@ export class VenueFader implements Venue
 			venueToFadeFrom, venueToFadeTo
 		];
 
-		this.millisecondsPerFade = (millisecondsPerFade == null ? 250 : millisecondsPerFade);
+		this.millisecondsPerFade = millisecondsPerFade || 250;
 
 		if (venueToFadeFrom == venueToFadeTo)
 		{
@@ -125,8 +125,7 @@ export class VenueFader implements Venue
 			{
 				fractionOfFadeCompleted = 1;
 				var venueNext = this.venueCurrent();
-				universe.venueNextSet(venueNext);
-				universe.venueCurrentRemove();
+				universe.venueCurrentReplaceWith(venueNext);
 			}
 
 			alphaOfFadeColor = 1 - fractionOfFadeCompleted;
