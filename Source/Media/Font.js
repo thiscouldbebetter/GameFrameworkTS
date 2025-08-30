@@ -10,6 +10,9 @@ var ThisCouldBeBetter;
                 this.isLoaded = false;
                 //this.load();
             }
+            static fromNameAndSourcePath(name, sourcePath) {
+                return new Font(name, sourcePath);
+            }
             id() {
                 return Font.name + this.name;
             }

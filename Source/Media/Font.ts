@@ -17,6 +17,14 @@ export class Font implements MediaItemBase
 		//this.load();
 	}
 
+	static fromNameAndSourcePath
+	(
+		name: string, sourcePath: string
+	): Font
+	{
+		return new Font(name, sourcePath);
+	}
+
 	id(): string
 	{
 		return Font.name + this.name;

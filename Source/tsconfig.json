@@ -63,6 +63,6 @@
 		"Media/Audio/MusicTracker/Source/_Imports.ts",
 		"Media/Audio/MusicTracker/Source/FileFormats/WavFileViewer/Source/_Imports.ts",
 		"Media/Audio/SoundEffectSynthesizer/Source/_Imports.ts",
-		"Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/_Imports.ts"
+		"Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/" // Source/_Imports.ts"
 	]
 }

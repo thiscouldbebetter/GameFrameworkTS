@@ -27,6 +27,11 @@ export class FontNameAndHeight implements Clonable<FontNameAndHeight>, Equatable
 		return new FontNameAndHeight(null, heightInPixels);
 	}
 
+	static fromNameAndHeightInPixels(name: string, heightInPixels: number): FontNameAndHeight
+	{
+		return new FontNameAndHeight(name, heightInPixels);
+	}
+
 	font(universe: Universe): Font
 	{
 		return universe.mediaLibrary.fontGetByName(this.name);

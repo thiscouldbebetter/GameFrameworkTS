@@ -40,6 +40,10 @@ class UiEventHandlerVc // "VC" = "VisualCreator".
 		{
 			visualAsFunction = this.visualDemoCreateRectangle;
 		}
+		else if (demoName == "Text")
+		{
+			visualAsFunction = this.visualDemoCreateText;
+		}
 		else
 		{
 			visualAsFunction =
@@ -170,4 +174,22 @@ class UiEventHandlerVc // "VC" = "VisualCreator".
 	{
 		return VisualRectangle.fromSize(Coords.fromXY(40, 30) );
 	}
+
+	static visualDemoCreateText()
+	{
+		var text = "The quick brown fox jumps over the lazy dog.";
+		var font = Font.fromNameAndSourcePath("Font", "../../Content/Fonts/Font.ttf");
+		font.load();
+		var fontNameAndHeight =
+			FontNameAndHeight.fromNameAndHeightInPixels(font.name, 10);
+		var color = Color.Instances().White;
+		var visualText = VisualText.fromTextImmediateFontAndColor
+		(
+			text,
+			fontNameAndHeight,
+			color
+		);
+		return visualText;
+	}
+
 }
