@@ -61,6 +61,11 @@ export class ControlContainerTransparent extends ControlBase
 		);
 	}
 
+	finalize(universe: Universe): void
+	{
+		this.containerInner.finalize(universe);
+	}
+
 	focusGain(): void
 	{
 		this.containerInner.focusGain();
@@ -69,6 +74,11 @@ export class ControlContainerTransparent extends ControlBase
 	focusLose(): void
 	{
 		this.containerInner.focusLose();
+	}
+
+	initialize(universe: Universe): void
+	{
+		this.containerInner.initialize(universe);
 	}
 
 	isEnabled(): boolean

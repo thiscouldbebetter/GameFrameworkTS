@@ -4,30 +4,32 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VenueMessage {
-            constructor(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly) {
-                // todo - Add a timer?
+            constructor(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly, secondsToShow) {
                 this.messageToShow = messageToShow;
                 this._acknowledge = acknowledge;
                 this.venuePrev = venuePrev;
                 this._sizeInPixels = sizeInPixels;
                 this.showMessageOnly = showMessageOnly || false;
+                this.secondsToShow = secondsToShow;
             }
             static fromMessage(message) {
                 return VenueMessage.fromMessageAndAcknowledge(message, null);
             }
             static fromMessageAcknowledgeAndSize(messageToShow, acknowledge, sizeInPixels) {
                 return new VenueMessage(messageToShow, acknowledge, null, // venuePrev
-                sizeInPixels, null // showMessageOnly
+                sizeInPixels, null, // showMessageOnly
+                null // secondsToShow
                 );
             }
             static fromMessageAcknowledgeAndVenuePrev(messageToShow, acknowledge, venuePrev) {
-                return new VenueMessage(messageToShow, acknowledge, venuePrev, null, null);
+                return new VenueMessage(messageToShow, acknowledge, venuePrev, null, null, null);
             }
             static fromMessageAndAcknowledge(messageToShow, acknowledge) {
-                return new VenueMessage(messageToShow, acknowledge, null, null, null);
+                return new VenueMessage(messageToShow, acknowledge, null, null, null, null);
             }
             static fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly) {
-                return new VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly);
+                return new VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly, null // secondsToShow
+                );
             }
             static fromText(text) {
                 return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text));
@@ -58,10 +60,18 @@ var ThisCouldBeBetter;
             draw(universe) {
                 this.venueInner(universe).draw(universe);
             }
-            finalize(universe) { }
-            finalizeIsComplete() { return true; }
-            initialize(universe) { }
-            initializeIsComplete() { return true; }
+            finalize(universe) {
+                this._venueInner.finalize(universe);
+            }
+            finalizeIsComplete() {
+                return this._venueInner.finalizeIsComplete();
+            }
+            initialize(universe) {
+                this._venueInner.initialize(universe);
+            }
+            initializeIsComplete(universe) {
+                return this._venueInner.initializeIsComplete(universe);
+            }
             updateForTimerTick(universe) {
                 var venueInner = this.venueInner(universe);
                 venueInner.updateForTimerTick(universe);
@@ -80,7 +90,7 @@ var ThisCouldBeBetter;
                 if (this._venueInner == null) {
                     var sizeInPixels = this.sizeInPixels(universe);
                     var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
-                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge.bind(this), this.showMessageOnly, fontNameAndHeight);
+                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge.bind(this), this.showMessageOnly, fontNameAndHeight, this.secondsToShow);
                     var venuesToLayer = [];
                     if (this.venuePrev != null) {
                         venuesToLayer.push(this.venuePrev);

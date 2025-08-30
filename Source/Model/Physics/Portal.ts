@@ -57,7 +57,8 @@ export class Portal extends EntityPropertyBase<Portal>
 			acknowledge,
 			venueCurrent, // venuePrev
 			messageBoxSize,
-			true // showMessageOnly
+			true, // showMessageOnly
+			3 // secondsToShow
 		);
 		universe.venueTransitionTo(venueMessage);
 	}

@@ -162,6 +162,13 @@ var ThisCouldBeBetter;
             venueCurrent() {
                 return this.venueStack.peek();
             }
+            venueCurrentRemove() {
+                this.venueStack.pop();
+            }
+            venueCurrentReplaceWith(venueToReplaceWith) {
+                this.venueCurrentRemove();
+                this.venueNextSet(venueToReplaceWith);
+            }
             venueJumpTo(value) {
                 this.venueNextSet(value);
             }
@@ -183,14 +190,13 @@ var ThisCouldBeBetter;
             venuePrevJumpTo() {
                 this.venueJumpTo(this.venueStack.popThenPeek());
             }
-            venueCurrentRemove() {
-                this.venueStack.pop();
-            }
             venuePrevTransitionTo() {
-                this.venueTransitionTo(this.venueStack.popThenPeek());
+                var venuePrev = this.venueStack.popThenPeek();
+                this.venueTransitionTo(venuePrev);
             }
             venueTransitionTo(venueToTransitionTo) {
-                var venueNext = this.controlBuilder.venueTransitionalFromTo(this.venueCurrent(), venueToTransitionTo);
+                var venueCurrent = this.venueCurrent();
+                var venueNext = this.controlBuilder.venueTransitionalFromTo(venueCurrent, venueToTransitionTo);
                 this.venueNextSet(venueNext);
             }
             w() {

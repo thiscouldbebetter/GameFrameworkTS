@@ -29,7 +29,7 @@ var ThisCouldBeBetter;
                 return new Disposition(pos, orientation, null);
             }
             static fromOrientation(orientation) {
-                return new Disposition(GameFramework.Coords.create(), orientation, null);
+                return new Disposition(GameFramework.Coords.zeroes(), orientation, null);
             }
             static fromPos(pos) {
                 return new Disposition(pos, GameFramework.Orientation.default(), null);

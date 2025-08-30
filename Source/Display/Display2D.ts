@@ -40,7 +40,7 @@ export class Display2D implements Display
 				Coords.fromXYZ(800, 600, 1),
 				Coords.fromXYZ(1200, 900, 1),
 				// Wrap.
-				Coords.fromXYZ(200, 150, 1),
+				Coords.fromXYZ(200, 150, 1)
 			];
 		this._sizeDefault = this.sizesAvailable[0];
 		this.sizeInPixels = this._sizeDefault;

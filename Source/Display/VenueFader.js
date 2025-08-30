@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                     [
                         venueToFadeFrom, venueToFadeTo
                     ];
-                this.millisecondsPerFade = (millisecondsPerFade == null ? 250 : millisecondsPerFade);
+                this.millisecondsPerFade = millisecondsPerFade || 250;
                 if (venueToFadeFrom == venueToFadeTo) {
                     this.venueIndexCurrent = 1;
                     this.millisecondsPerFade *= 2;
@@ -75,8 +75,7 @@ var ThisCouldBeBetter;
                     if (fractionOfFadeCompleted > 1) {
                         fractionOfFadeCompleted = 1;
                         var venueNext = this.venueCurrent();
-                        universe.venueNextSet(venueNext);
-                        universe.venueCurrentRemove();
+                        universe.venueCurrentReplaceWith(venueNext);
                     }
                     alphaOfFadeColor = 1 - fractionOfFadeCompleted;
                 }

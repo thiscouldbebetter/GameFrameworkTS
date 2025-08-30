@@ -66,7 +66,7 @@ export class Disposition
 
 	static fromOrientation(orientation: Orientation): Disposition
 	{
-		return new Disposition(Coords.create(), orientation, null);
+		return new Disposition(Coords.zeroes(), orientation, null);
 	}
 
 	static fromPos(pos: Coords): Disposition

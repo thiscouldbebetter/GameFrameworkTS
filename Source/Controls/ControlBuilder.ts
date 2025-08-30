@@ -87,7 +87,8 @@ export class ControlBuilder
 		optionFunctions: Array<()=>void>,
 		showMessageOnly: boolean,
 		fontNameAndHeight: FontNameAndHeight,
-		buttonPosY: number
+		buttonPosY: number,
+		secondsToShow: number
 	): ControlBase
 	{
 		size = size || universe.display.sizeDefault();
@@ -108,7 +109,7 @@ export class ControlBuilder
 
 		var labelMessageSizeY = Math.round
 		(
-			this.sizeBase.y * (numberOfOptions == 0 ? 1 : (2/3) )
+			this.sizeBase.y * (numberOfOptions == 0 ? 1 : (2 / 3) )
 		);
 
 		buttonPosY = buttonPosY || Math.round
@@ -128,6 +129,18 @@ export class ControlBuilder
 		);
 
 		var childControls: ControlBase[] = [ labelMessage ];
+
+		if (secondsToShow != null)
+		{
+			var controlTimer = ControlTimer.fromNameSecondsToWaitAndElapsed
+			(
+				"timerAcknowledgeAutomaticallyAfterTimeout",
+				secondsToShow,
+				() => optionFunctions[0]()
+			);
+
+			childControls.push(controlTimer);
+		}
 
 		if (showMessageOnly == false)
 		{
@@ -202,7 +215,7 @@ export class ControlBuilder
 		return returnValue;
 	}
 
-	choice5
+	choiceUniverseSizeMessageOptionNamesAndFunctions
 	(
 		universe: Universe,
 		size: Coords,
@@ -214,7 +227,8 @@ export class ControlBuilder
 		return this.choice
 		(
 			universe, size, message, optionNames,
-			optionFunctions, null, null, null
+			optionFunctions,
+			null, null, null, null
 		);
 	}
 
@@ -328,16 +342,13 @@ export class ControlBuilder
 			cancel = () => universe.venuePrevJumpTo();
 		}
 
-		var returnValue = this.choice
+		var returnValue = this.choiceUniverseSizeMessageOptionNamesAndFunctions
 		(
 			universe,
 			size,
 			DataBinding.fromContext(message),
 			["Confirm", "Cancel"],
-			[confirm, cancel],
-			null, // showMessageOnly
-			null, // fontHeight
-			null // buttonPosY
+			[confirm, cancel]
 		);
 
 		return returnValue;
@@ -368,16 +379,13 @@ export class ControlBuilder
 			universe.venueTransitionTo(venuePrev);
 		}
 
-		return this.choice
+		return this.choiceUniverseSizeMessageOptionNamesAndFunctions
 		(
 			universe,
 			size,
 			DataBinding.fromContext(message),
 			["Confirm", "Cancel"],
-			[confirmThenReturnToVenuePrev, cancelThenReturnToVenuePrev],
-			null, // showMessageOnly
-			null, // fontHeight
-			null // buttonPosY
+			[confirmThenReturnToVenuePrev, cancelThenReturnToVenuePrev]
 		);
 	}
 
@@ -980,7 +988,8 @@ export class ControlBuilder
 		message: DataBinding<any, string>,
 		acknowledge: () => void,
 		showMessageOnly: boolean,
-		fontNameAndHeight: FontNameAndHeight
+		fontNameAndHeight: FontNameAndHeight,
+		secondsToShow: number
 	): ControlBase
 	{
 		var optionNames = [];
@@ -1001,7 +1010,8 @@ export class ControlBuilder
 			optionFunctions,
 			showMessageOnly,
 			fontNameAndHeight,
-			null // buttonPosY
+			null, // buttonPosY
+			secondsToShow
 		);
 
 		return returnValue;
@@ -1015,7 +1025,7 @@ export class ControlBuilder
 		acknowledge: () => void
 	)
 	{
-		return this.message(universe, size, message, acknowledge, null, null);
+		return this.message(universe, size, message, acknowledge, null, null, null);
 	}
 
 	opening(universe: Universe, size: Coords): ControlBase

@@ -5,6 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Leaderboard
 {
+	secondsToShow: number
 	playerScoresCount: number;
 	playerScores: LeaderboardPlayerScore[];
 
@@ -13,10 +14,12 @@ export class Leaderboard
 
 	constructor
 	(
+		secondsToShow: number,
 		playerScoresCount: number,
 		playerScores: LeaderboardPlayerScore[]
 	)
 	{
+		this.secondsToShow = secondsToShow;
 		this.playerScoresCount = playerScoresCount || 10;
 		this.playerScores = playerScores || [];
 
@@ -26,7 +29,7 @@ export class Leaderboard
 
 	static create(): Leaderboard
 	{
-		return new Leaderboard(null, null);
+		return new Leaderboard(null, null, null);
 	}
 
 	static createWithFakeScores(): Leaderboard
@@ -48,7 +51,7 @@ export class Leaderboard
 			ps("JJJ", 100)
 		];
 
-		return new Leaderboard(playerScoresFake.length, playerScoresFake);
+		return new Leaderboard(30, playerScoresFake.length, playerScoresFake);
 	}
 
 	static fromStorageHelper(storageHelper: StorageHelper): Leaderboard
@@ -119,7 +122,8 @@ export class Leaderboard
 			DataBinding.fromContext(text),
 			() => { this.toControl_Finished(universe) },
 			true, // showMessageOnly
-			fontNameAndHeight
+			fontNameAndHeight,
+			this.secondsToShow
 		);
 
 		/*
