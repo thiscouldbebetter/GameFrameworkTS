@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_OrientTowardEntityWithName {
+        class Constraint_OrientTowardEntityWithName extends GameFramework.ConstraintBase {
             constructor(targetEntityName) {
+                super();
                 this.targetEntityName = targetEntityName;
             }
             static fromTargetEntityName(targetEntityName) {
@@ -27,13 +28,6 @@ var ThisCouldBeBetter;
                         .normalize();
                     constrainableOri.forwardSet(constrainableForward);
                 }
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_OrientTowardEntityWithName = Constraint_OrientTowardEntityWithName;

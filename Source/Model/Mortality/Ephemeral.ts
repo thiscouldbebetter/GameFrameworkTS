@@ -5,7 +5,7 @@ namespace ThisCouldBeBetter.GameFramework
 export class Ephemeral extends EntityPropertyBase<Ephemeral>
 {
 	ticksToLive: number;
-	expire: (uwpe: UniverseWorldPlaceEntities) => void;
+	_expire: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	constructor
 	(
@@ -16,7 +16,7 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 		super();
 
 		this.ticksToLive = ticksToLive || 100;
-		this.expire = expire;
+		this._expire = expire;
 	}
 
 	static default(): Ephemeral
@@ -52,6 +52,19 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 		return entity.propertyByName(Ephemeral.name) as Ephemeral;
 	}
 
+	expire(uwpe: UniverseWorldPlaceEntities): void
+	{
+		if (this._expire != null)
+		{
+			this._expire(uwpe);
+		}
+	}
+
+	isExpired(): boolean
+	{
+		return (this.ticksToLive < 0);
+	}
+
 	toEntity(): Entity { return new Entity(Ephemeral.name, [ this ] ); }
 
 	// EntityProperty.
@@ -59,14 +72,12 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
 		this.ticksToLive--;
-		if (this.ticksToLive <= 0)
+		var isExpired = this.isExpired();
+		if (isExpired)
 		{
 			var entityEphemeral = uwpe.entity;
 			uwpe.place.entityToRemoveAdd(entityEphemeral);
-			if (this.expire != null)
-			{
-				this.expire(uwpe);
-			}
+			this.expire(uwpe);
 		}
 	}
 

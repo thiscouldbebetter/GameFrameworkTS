@@ -2,11 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_Movable implements Constraint
+export class Constraint_Movable extends ConstraintBase
 {
 	static create(): Constraint_Movable
 	{
-		return new Constraint_Movable();
+		return new Constraint_Movable().nameSet(Constraint_Movable.name);
 	}
 
 	constrain(uwpe: UniverseWorldPlaceEntities): void
@@ -23,18 +23,6 @@ export class Constraint_Movable implements Constraint
 				.normalize()
 				.multiplyScalar(speedMax);
 		}
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 }
 

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_Gravity {
+        class Constraint_Gravity extends GameFramework.ConstraintBase {
             constructor(accelerationPerTick) {
+                super();
                 this.accelerationPerTick = accelerationPerTick;
             }
             static fromAccelerationPerTick(accelerationPerTick) {
@@ -14,13 +15,6 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var loc = GameFramework.Locatable.of(entity).loc;
                 loc.accel.add(this.accelerationPerTick);
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_Gravity = Constraint_Gravity;

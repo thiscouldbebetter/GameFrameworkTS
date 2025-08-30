@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_Dynamic {
+        class Constraint_Dynamic extends GameFramework.ConstraintBase {
             constructor(constrain) {
+                super();
                 this._constrain = constrain;
             }
             static fromConstrain(constrain) {
@@ -12,13 +13,6 @@ var ThisCouldBeBetter;
             }
             constrain(uwpe) {
                 this._constrain(uwpe);
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_Dynamic = Constraint_Dynamic;

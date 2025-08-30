@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_OrientationRound {
+        class Constraint_OrientationRound extends GameFramework.ConstraintBase {
             constructor(headingsCount) {
+                super();
                 this.headingsCount = headingsCount;
             }
             static fromHeadingsCount(headingsCount) {
@@ -22,13 +23,6 @@ var ThisCouldBeBetter;
                 constrainableOri
                     .forwardSet(headingAsCoords)
                     .normalize();
-            }
-            // Clonable.
-            clone() {
-                throw new Error("Not yet implemented!");
-            }
-            overwriteWith(other) {
-                throw new Error("Not yet implemented!");
             }
         }
         GameFramework.Constraint_OrientationRound = Constraint_OrientationRound;

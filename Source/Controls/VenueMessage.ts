@@ -197,12 +197,14 @@ export class VenueMessage<TContext> implements Venue
 
 	initialize(universe: Universe): void
 	{
-		this._venueInner.initialize(universe);
+		var venueInner = this.venueInner(universe);
+		venueInner.initialize(universe);
 	}
 
 	initializeIsComplete(universe: Universe): boolean
 	{
-		return this._venueInner.initializeIsComplete(universe);
+		var venueInner = this.venueInner(universe);
+		return venueInner.initializeIsComplete(universe);
 	}
 
 	updateForTimerTick(universe: Universe): void

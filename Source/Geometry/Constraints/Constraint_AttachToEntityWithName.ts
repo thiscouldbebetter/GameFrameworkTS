@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_AttachToEntityWithName implements Constraint
+export class Constraint_AttachToEntityWithName extends ConstraintBase
 {
 	targetEntityName: string;
 
 	constructor(targetEntityName: string)
 	{
+		super();
+
 		this.targetEntityName = targetEntityName;
 	}
 
@@ -33,19 +35,6 @@ export class Constraint_AttachToEntityWithName implements Constraint
 			entityPos.overwriteWith(targetPos);
 		}
 	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
-	}
-
 }
 
 }

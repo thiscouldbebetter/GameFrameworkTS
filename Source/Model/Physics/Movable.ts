@@ -236,7 +236,7 @@ export class Movable extends EntityPropertyBase<Movable>
 		if (constrainable != null)
 		{
 			var constraintMovable =
-				constrainable.constraintByClassName(Constraint_Movable.name);
+				constrainable.constraintByName(Constraint_Movable.name);
 
 			if (constraintMovable == null)
 			{

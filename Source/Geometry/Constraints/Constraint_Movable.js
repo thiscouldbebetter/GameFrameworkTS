@@ -3,9 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_Movable {
+        class Constraint_Movable extends GameFramework.ConstraintBase {
             static create() {
-                return new Constraint_Movable();
+                return new Constraint_Movable().nameSet(Constraint_Movable.name);
             }
             constrain(uwpe) {
                 var entity = uwpe.entity;
@@ -19,13 +19,6 @@ var ThisCouldBeBetter;
                         .normalize()
                         .multiplyScalar(speedMax);
                 }
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_Movable = Constraint_Movable;

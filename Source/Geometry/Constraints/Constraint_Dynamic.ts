@@ -2,13 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_Dynamic implements Constraint
+export class Constraint_Dynamic extends ConstraintBase
 {
 	_constrain:
 		(uwpe: UniverseWorldPlaceEntities) => void;
 
 	constructor(constrain: (uwpe: UniverseWorldPlaceEntities) => void)
 	{
+		super();
+
 		this._constrain = constrain;
 	}
 
@@ -24,19 +26,6 @@ export class Constraint_Dynamic implements Constraint
 	{
 		this._constrain(uwpe);
 	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
-	}
-
 }
 
 }

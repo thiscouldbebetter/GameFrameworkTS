@@ -2,13 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_ContainInHemispace implements Constraint
+export class Constraint_ContainInHemispace extends ConstraintBase
 {
 	hemispaceToContainWithin: Hemispace;
 	_coordsTemp: Coords;
 
 	constructor(hemispaceToContainWithin: Hemispace)
 	{
+		super();
+
 		this.hemispaceToContainWithin = hemispaceToContainWithin;
 
 		this._coordsTemp = Coords.create();
@@ -41,13 +43,9 @@ export class Constraint_ContainInHemispace implements Constraint
 			var planeNormal = plane.normal;
 			pos.subtract
 			(
-				this._coordsTemp.overwriteWith
-				(
-					planeNormal
-				).multiplyScalar
-				(
-					distanceOfPointAbovePlane
-				)
+				this._coordsTemp
+					.overwriteWith(planeNormal)
+					.multiplyScalar(distanceOfPointAbovePlane)
 			);
 
 			var vel = loc.vel;
@@ -56,13 +54,9 @@ export class Constraint_ContainInHemispace implements Constraint
 			{
 				vel.subtract
 				(
-					this._coordsTemp.overwriteWith
-					(
-						planeNormal
-					).multiplyScalar
-					(
-						speedAlongNormal
-					)
+					this._coordsTemp.
+						overwriteWith(planeNormal)
+						.multiplyScalar(speedAlongNormal)
 				);
 			}
 
@@ -72,28 +66,12 @@ export class Constraint_ContainInHemispace implements Constraint
 			{
 				accel.subtract
 				(
-					this._coordsTemp.overwriteWith
-					(
-						planeNormal
-					).multiplyScalar
-					(
-						accelerationAlongNormal
-					)
+					this._coordsTemp
+						.overwriteWith(planeNormal)
+						.multiplyScalar(accelerationAlongNormal)
 				);
 			}
 		}
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 
 }

@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(ticksToLive, expire) {
                 super();
                 this.ticksToLive = ticksToLive || 100;
-                this.expire = expire;
+                this._expire = expire;
             }
             static default() {
                 return Ephemeral.fromTicksToLive(100);
@@ -24,16 +24,23 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(Ephemeral.name);
             }
+            expire(uwpe) {
+                if (this._expire != null) {
+                    this._expire(uwpe);
+                }
+            }
+            isExpired() {
+                return (this.ticksToLive < 0);
+            }
             toEntity() { return new GameFramework.Entity(Ephemeral.name, [this]); }
             // EntityProperty.
             updateForTimerTick(uwpe) {
                 this.ticksToLive--;
-                if (this.ticksToLive <= 0) {
+                var isExpired = this.isExpired();
+                if (isExpired) {
                     var entityEphemeral = uwpe.entity;
                     uwpe.place.entityToRemoveAdd(entityEphemeral);
-                    if (this.expire != null) {
-                        this.expire(uwpe);
-                    }
+                    this.expire(uwpe);
                 }
             }
             // Clonable.

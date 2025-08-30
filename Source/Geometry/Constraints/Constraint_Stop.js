@@ -3,20 +3,12 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_Stop {
-            constructor() { }
+        class Constraint_Stop extends GameFramework.ConstraintBase {
             constrain(uwpe) {
                 var entity = uwpe.entity;
                 var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var entityVel = entityLoc.vel;
                 entityVel.clear();
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_Stop = Constraint_Stop;

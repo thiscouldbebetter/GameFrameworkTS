@@ -7,8 +7,6 @@ var ThisCouldBeBetter;
             constructor(constraints) {
                 super();
                 this.constraints = constraints || [];
-                this._constraintsByClassName =
-                    GameFramework.ArrayHelper.addLookups(this.constraints, x => x.constructor.name);
             }
             static create() {
                 return new Constrainable([]);
@@ -24,7 +22,6 @@ var ThisCouldBeBetter;
             }
             clear() {
                 this.constraints.length = 0;
-                this._constraintsByClassName.clear();
                 return this;
             }
             constrain(uwpe) {
@@ -38,21 +35,19 @@ var ThisCouldBeBetter;
             }
             constraintAdd(constraintToAdd) {
                 this.constraints.push(constraintToAdd);
-                this._constraintsByClassName.set(constraintToAdd.constructor.name, constraintToAdd);
                 return this;
             }
-            constraintByClassName(constraintClassName) {
-                return this._constraintsByClassName.get(constraintClassName);
+            constraintByName(constraintName) {
+                var constraint = this.constraints.find(x => x.name == constraintName);
+                return constraint;
             }
             constraintRemove(constraintToRemove) {
                 var constraintIndex = this.constraints.indexOf(constraintToRemove);
                 this.constraints.splice(constraintIndex, 1);
-                var constraintClassName = constraintToRemove.constructor.name;
-                this._constraintsByClassName.delete(constraintClassName);
                 return this;
             }
-            constraintRemoveFinal() {
-                var constraintToRemove = this.constraints[this.constraints.length - 1];
+            constraintRemoveByName(constraintToRemoveName) {
+                var constraintToRemove = this.constraints.find(x => x.name == constraintToRemoveName);
                 return this.constraintRemove(constraintToRemove);
             }
             // EntityProperty.

@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_OrientationRound implements Constraint
+export class Constraint_OrientationRound extends ConstraintBase
 {
 	headingsCount: number
 
 	constructor(headingsCount: number)
 	{
+		super();
+
 		this.headingsCount = headingsCount;
 	}
 
@@ -38,18 +40,6 @@ export class Constraint_OrientationRound implements Constraint
 		constrainableOri
 			.forwardSet(headingAsCoords)
 			.normalize();
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		throw new Error("Not yet implemented!");
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		throw new Error("Not yet implemented!");
 	}
 }
 

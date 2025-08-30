@@ -27,8 +27,18 @@ var ThisCouldBeBetter;
                     this.ticksToComplete += this.ticksToHoldFrames[f];
                 }
             }
+            static fromNameTicksToHoldFramesAndFramesNonRepeating(name, ticksToHoldFrames, frames) {
+                return new VisualAnimation(name, ticksToHoldFrames, frames, false // repeating
+                );
+            }
             static fromNameTicksToHoldFramesAndFramesRepeating(name, ticksToHoldFrames, frames) {
-                return new VisualAnimation(name, ticksToHoldFrames, frames, true);
+                return new VisualAnimation(name, ticksToHoldFrames, frames, true // repeating
+                );
+            }
+            static fromTicksToHoldFramesAndFramesNonRepeating(ticksToHoldFrames, frames) {
+                return new VisualAnimation(null, // name
+                [ticksToHoldFrames], frames, false // isRepeating
+                );
             }
             static fromTicksToHoldFramesAndFramesRepeating(ticksToHoldFrames, frames) {
                 return new VisualAnimation(null, // name

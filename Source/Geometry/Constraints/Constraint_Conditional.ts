@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_Conditional implements Constraint
+export class Constraint_Conditional extends ConstraintBase
 {
 	_shouldChildApply: (uwpe: UniverseWorldPlaceEntities) => boolean;
 	child: Constraint;
@@ -13,6 +13,8 @@ export class Constraint_Conditional implements Constraint
 		child: Constraint
 	)
 	{
+		super();
+
 		this._shouldChildApply = shouldChildApply;
 		this.child = child;
 	}
@@ -38,18 +40,6 @@ export class Constraint_Conditional implements Constraint
 	shouldChildApply(uwpe: UniverseWorldPlaceEntities): boolean
 	{
 		return this._shouldChildApply(uwpe);
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 }
 

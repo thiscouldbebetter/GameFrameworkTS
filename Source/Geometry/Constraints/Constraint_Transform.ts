@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_Transform implements Constraint
+export class Constraint_Transform extends ConstraintBase
 {
 	transformToApply: TransformBase;
 
 	constructor(transformToApply: TransformBase)
 	{
+		super();
+
 		this.transformToApply = transformToApply;
 	}
 
@@ -20,18 +22,6 @@ export class Constraint_Transform implements Constraint
 	{
 		var constrainablePos = Locatable.of(uwpe.entity).loc.pos;
 		this.transformToApply.transformCoords(constrainablePos);
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 }
 

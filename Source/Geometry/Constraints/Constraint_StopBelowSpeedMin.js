@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_StopBelowSpeedMin {
+        class Constraint_StopBelowSpeedMin extends GameFramework.ConstraintBase {
             constructor(target) {
+                super();
                 this.target = target;
             }
             constrain(uwpe) {
@@ -15,13 +16,6 @@ var ThisCouldBeBetter;
                 if (speed < targetSpeedMin) {
                     entityVel.clear();
                 }
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_StopBelowSpeedMin = Constraint_StopBelowSpeedMin;

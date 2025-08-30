@@ -2,13 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_FrictionXY implements Constraint
+export class Constraint_FrictionXY extends ConstraintBase
 {
 	frictionCofficient: number;
 	speedBelowWhichToStop: number;
 
 	constructor(frictionCofficient: number, speedBelowWhichToStop: number)
 	{
+		super();
+
 		this.frictionCofficient = frictionCofficient;
 		this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
 	}
@@ -44,18 +46,6 @@ export class Constraint_FrictionXY implements Constraint
 			);
 		}
 		entityVel.z = entityVelZSaved;
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 
 }

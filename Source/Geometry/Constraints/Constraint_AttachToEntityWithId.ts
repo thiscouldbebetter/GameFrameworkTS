@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_AttachToEntityWithId implements Constraint
+export class Constraint_AttachToEntityWithId extends ConstraintBase
 {
 	targetEntityId: number;
 
 	constructor(targetEntityId: number)
 	{
+		super();
+
 		this.targetEntityId = targetEntityId;
 	}
 
@@ -30,19 +32,6 @@ export class Constraint_AttachToEntityWithId implements Constraint
 			Locatable.of(uwpe.entity).loc.pos.overwriteWith(targetPos);
 		}
 	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
-	}
-
 }
 
 }

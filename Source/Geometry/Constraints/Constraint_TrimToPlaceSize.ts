@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_TrimToPlaceSize implements Constraint
+export class Constraint_TrimToPlaceSize extends ConstraintBase
 {
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
@@ -43,19 +43,6 @@ export class Constraint_TrimToPlaceSize implements Constraint
 
 		entityPos.trimToRangeMax(placeSize);
 	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
-	}
-
 }
 
 }

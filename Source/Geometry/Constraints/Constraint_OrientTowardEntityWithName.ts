@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_OrientTowardEntityWithName implements Constraint
+export class Constraint_OrientTowardEntityWithName extends ConstraintBase
 {
 	targetEntityName: string;
 
 	constructor(targetEntityName: string)
 	{
+		super();
+
 		this.targetEntityName = targetEntityName;
 	}
 
@@ -43,18 +45,6 @@ export class Constraint_OrientTowardEntityWithName implements Constraint
 
 			constrainableOri.forwardSet(constrainableForward);
 		}
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 }
 

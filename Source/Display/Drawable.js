@@ -78,6 +78,10 @@ var ThisCouldBeBetter;
                 this.hidden = true;
                 return this;
             }
+            renderingOrderSet(value) {
+                this.renderingOrder = value;
+                return this;
+            }
             show() {
                 this.hidden = false;
                 return this;

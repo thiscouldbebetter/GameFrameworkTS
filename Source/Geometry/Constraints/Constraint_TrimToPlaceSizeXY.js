@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_TrimToPlaceSizeXY {
+        class Constraint_TrimToPlaceSizeXY extends GameFramework.ConstraintBase {
             constrain(uwpe) {
                 var entityLoc = GameFramework.Locatable.of(uwpe.entity).loc;
                 var entityPos = entityLoc.pos;
@@ -23,13 +23,6 @@ var ThisCouldBeBetter;
                     entityVel.y = 0;
                 }
                 entityPos.trimToRangeMaxXY(placeSize);
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_TrimToPlaceSizeXY = Constraint_TrimToPlaceSizeXY;

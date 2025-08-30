@@ -1,12 +1,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_Gravity implements Constraint
+export class Constraint_Gravity extends ConstraintBase
 {
 	accelerationPerTick: Coords;
 
 	constructor(accelerationPerTick: Coords)
 	{
+		super();
+
 		this.accelerationPerTick = accelerationPerTick;
 	}
 
@@ -23,18 +25,6 @@ export class Constraint_Gravity implements Constraint
 		var entity = uwpe.entity;
 		var loc = Locatable.of(entity).loc;
 		loc.accel.add(this.accelerationPerTick);
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 }
 

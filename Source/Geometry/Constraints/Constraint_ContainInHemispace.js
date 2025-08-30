@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_ContainInHemispace {
+        class Constraint_ContainInHemispace extends GameFramework.ConstraintBase {
             constructor(hemispaceToContainWithin) {
+                super();
                 this.hemispaceToContainWithin = hemispaceToContainWithin;
                 this._coordsTemp = GameFramework.Coords.create();
             }
@@ -23,25 +24,24 @@ var ThisCouldBeBetter;
                 var areCoordsOutsideHemispace = (distanceOfPointAbovePlane > 0);
                 if (areCoordsOutsideHemispace) {
                     var planeNormal = plane.normal;
-                    pos.subtract(this._coordsTemp.overwriteWith(planeNormal).multiplyScalar(distanceOfPointAbovePlane));
+                    pos.subtract(this._coordsTemp
+                        .overwriteWith(planeNormal)
+                        .multiplyScalar(distanceOfPointAbovePlane));
                     var vel = loc.vel;
                     var speedAlongNormal = vel.dotProduct(planeNormal);
                     if (speedAlongNormal > 0) {
-                        vel.subtract(this._coordsTemp.overwriteWith(planeNormal).multiplyScalar(speedAlongNormal));
+                        vel.subtract(this._coordsTemp.
+                            overwriteWith(planeNormal)
+                            .multiplyScalar(speedAlongNormal));
                     }
                     var accel = loc.accel;
                     var accelerationAlongNormal = accel.dotProduct(planeNormal);
                     if (accelerationAlongNormal > 0) {
-                        accel.subtract(this._coordsTemp.overwriteWith(planeNormal).multiplyScalar(accelerationAlongNormal));
+                        accel.subtract(this._coordsTemp
+                            .overwriteWith(planeNormal)
+                            .multiplyScalar(accelerationAlongNormal));
                     }
                 }
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_ContainInHemispace = Constraint_ContainInHemispace;

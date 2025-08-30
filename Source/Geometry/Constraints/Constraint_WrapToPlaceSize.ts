@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_WrapToPlaceSize implements Constraint
+export class Constraint_WrapToPlaceSize extends ConstraintBase
 {
 	static create(): Constraint_WrapToPlaceSize
 	{
@@ -17,18 +17,6 @@ export class Constraint_WrapToPlaceSize implements Constraint
 		var entityLoc = Locatable.of(entity).loc;
 		var placeSize = place.size();
 		entityLoc.pos.wrapToRangeMax(placeSize);
-	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 
 }

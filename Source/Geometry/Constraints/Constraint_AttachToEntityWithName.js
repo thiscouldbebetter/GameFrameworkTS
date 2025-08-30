@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_AttachToEntityWithName {
+        class Constraint_AttachToEntityWithName extends GameFramework.ConstraintBase {
             constructor(targetEntityName) {
+                super();
                 this.targetEntityName = targetEntityName;
             }
             static fromTargetEntityName(targetEntityName) {
@@ -20,13 +21,6 @@ var ThisCouldBeBetter;
                     var entityPos = entityLocatable.loc.pos;
                     entityPos.overwriteWith(targetPos);
                 }
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_AttachToEntityWithName = Constraint_AttachToEntityWithName;

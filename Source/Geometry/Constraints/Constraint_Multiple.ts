@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_Multiple implements Constraint
+export class Constraint_Multiple extends ConstraintBase
 {
 	children: Constraint[];
 
 	constructor(children: Constraint[])
 	{
+		super();
+
 		this.children = children;
 	}
 
@@ -26,11 +28,6 @@ export class Constraint_Multiple implements Constraint
 	clone(): Constraint
 	{
 		return new Constraint_Multiple(this.children.map(x => x.clone()))
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
 	}
 }
 

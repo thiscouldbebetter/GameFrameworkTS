@@ -6,15 +6,11 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 {
 	constraints: Constraint[];
 
-	private _constraintsByClassName: Map<string,Constraint>;
-
 	constructor(constraints: Constraint[])
 	{
 		super();
 
 		this.constraints = constraints || [];
-		this._constraintsByClassName =
-			ArrayHelper.addLookups(this.constraints, x => x.constructor.name);
 	}
 
 	static create(): Constrainable
@@ -40,7 +36,6 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 	clear(): Constrainable
 	{
 		this.constraints.length = 0;
-		this._constraintsByClassName.clear();
 		return this;
 	}
 
@@ -59,17 +54,17 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 	constraintAdd(constraintToAdd: Constraint): Constrainable
 	{
 		this.constraints.push(constraintToAdd);
-		this._constraintsByClassName.set
-		(
-			constraintToAdd.constructor.name, constraintToAdd
-		);
 		return this;
 	}
 
-	constraintByClassName(constraintClassName: string): Constraint
+	constraintByName(constraintName: string): Constraint
 	{
-		return this._constraintsByClassName.get(constraintClassName);
+		var constraint =
+			this.constraints.find(x => x.name == constraintName);
+
+		return constraint;
 	}
+
 
 	constraintRemove
 	(
@@ -79,16 +74,14 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 		var constraintIndex =
 			this.constraints.indexOf(constraintToRemove);
 		this.constraints.splice(constraintIndex, 1);
-		var constraintClassName =
-			constraintToRemove.constructor.name;
-		this._constraintsByClassName.delete(constraintClassName);
 		return this;
 	}
 
-	constraintRemoveFinal(): Constrainable
+	constraintRemoveByName(constraintToRemoveName: string): Constrainable
 	{
 		var constraintToRemove =
-			this.constraints[this.constraints.length - 1];
+			this.constraints.find(x => x.name == constraintToRemoveName);
+
 		return this.constraintRemove(constraintToRemove);
 	}
 

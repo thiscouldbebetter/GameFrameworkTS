@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_FrictionDry implements Constraint
+export class Constraint_FrictionDry extends ConstraintBase
 {
 	frictionCoefficient: number;
 
 	constructor(frictionCoefficient: number)
 	{
+		super();
+
 		this.frictionCoefficient = frictionCoefficient;
 	}
 
@@ -33,19 +35,6 @@ export class Constraint_FrictionDry implements Constraint
 			);
 		}
 	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
-	}
-
 }
 
 }

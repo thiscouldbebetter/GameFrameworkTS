@@ -21,6 +21,8 @@ import CollisionTrackerMappedMapCell = gf.CollisionTrackerMappedMapCell;
 
 // Geometry - Constraints.
 import Constraint = gf.Constraint;
+import ConstraintBase = gf.ConstraintBase;
+
 import Constraint_AttachToEntityWithId = gf.Constraint_AttachToEntityWithId;
 import Constraint_AttachToEntityWithName = gf.Constraint_AttachToEntityWithName;
 import Constraint_Conditional = gf.Constraint_Conditional;

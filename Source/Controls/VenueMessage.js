@@ -67,10 +67,12 @@ var ThisCouldBeBetter;
                 return this._venueInner.finalizeIsComplete();
             }
             initialize(universe) {
-                this._venueInner.initialize(universe);
+                var venueInner = this.venueInner(universe);
+                venueInner.initialize(universe);
             }
             initializeIsComplete(universe) {
-                return this._venueInner.initializeIsComplete(universe);
+                var venueInner = this.venueInner(universe);
+                return venueInner.initializeIsComplete(universe);
             }
             updateForTimerTick(universe) {
                 var venueInner = this.venueInner(universe);

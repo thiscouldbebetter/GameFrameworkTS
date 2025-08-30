@@ -2,11 +2,8 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_Stop implements Constraint
+export class Constraint_Stop extends ConstraintBase
 {
-	constructor()
-	{}
-
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entity = uwpe.entity;
@@ -15,19 +12,6 @@ export class Constraint_Stop implements Constraint
 		var entityVel = entityLoc.vel;
 		entityVel.clear();
 	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
-	}
-
 }
 
 }

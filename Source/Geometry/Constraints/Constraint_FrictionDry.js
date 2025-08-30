@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_FrictionDry {
+        class Constraint_FrictionDry extends GameFramework.ConstraintBase {
             constructor(frictionCoefficient) {
+                super();
                 this.frictionCoefficient = frictionCoefficient;
             }
             constrain(uwpe) {
@@ -21,13 +22,6 @@ var ThisCouldBeBetter;
                     var entityDirection = entityVel.clone().normalize();
                     entityVel.add(entityDirection.multiplyScalar(-frictionMagnitude));
                 }
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_FrictionDry = Constraint_FrictionDry;

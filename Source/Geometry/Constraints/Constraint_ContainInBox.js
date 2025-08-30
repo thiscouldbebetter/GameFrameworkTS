@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_ContainInBox {
+        class Constraint_ContainInBox extends GameFramework.ConstraintBase {
             constructor(boxToContainWithin) {
+                super();
                 this.boxToContainWithin = boxToContainWithin;
             }
             static fromBox(boxToContainWithin) {
@@ -13,13 +14,6 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 var constrainablePos = GameFramework.Locatable.of(uwpe.entity).loc.pos;
                 this.boxToContainWithin.trimCoords(constrainablePos);
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_ContainInBox = Constraint_ContainInBox;

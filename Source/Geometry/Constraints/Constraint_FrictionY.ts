@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_FrictionY implements Constraint
+export class Constraint_FrictionY extends ConstraintBase
 {
 	frictionCofficient: number;
 
 	constructor(frictionCofficient: number)
 	{
+		super();
+
 		this.frictionCofficient = frictionCofficient;
 	}
 
@@ -25,19 +27,6 @@ export class Constraint_FrictionY implements Constraint
 		var accelerationToApply = 0 - vel.y * fraction;
 		accel.y += accelerationToApply;
 	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
-	}
-
 }
 
 }

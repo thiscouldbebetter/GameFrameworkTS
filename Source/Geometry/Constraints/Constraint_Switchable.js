@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_Switchable {
+        class Constraint_Switchable extends GameFramework.ConstraintBase {
             constructor(isActive, child) {
+                super();
                 this.isActive = isActive;
                 this.child = child;
             }

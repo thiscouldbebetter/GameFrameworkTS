@@ -53,6 +53,22 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		}
 	}
 
+	static fromNameTicksToHoldFramesAndFramesNonRepeating
+	(
+		name: string,
+		ticksToHoldFrames: number[],
+		frames: VisualBase[]
+	): VisualAnimation
+	{
+		return new VisualAnimation
+		(
+			name,
+			ticksToHoldFrames,
+			frames,
+			false // repeating
+		);
+	}
+
 	static fromNameTicksToHoldFramesAndFramesRepeating
 	(
 		name: string,
@@ -65,7 +81,22 @@ export class VisualAnimation implements Visual<VisualAnimation>
 			name,
 			ticksToHoldFrames,
 			frames,
-			true
+			true // repeating
+		);
+	}
+
+	static fromTicksToHoldFramesAndFramesNonRepeating
+	(
+		ticksToHoldFrames: number,
+		frames: VisualBase[]
+	): VisualAnimation
+	{
+		return new VisualAnimation
+		(
+			null, // name
+			[ ticksToHoldFrames ],
+			frames,
+			false // isRepeating
 		);
 	}
 

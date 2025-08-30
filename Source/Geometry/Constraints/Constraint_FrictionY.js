@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_FrictionY {
+        class Constraint_FrictionY extends GameFramework.ConstraintBase {
             constructor(frictionCofficient) {
+                super();
                 this.frictionCofficient = frictionCofficient;
             }
             static fromCoefficient(frictionCofficient) {
@@ -17,13 +18,6 @@ var ThisCouldBeBetter;
                 var fraction = 0.1;
                 var accelerationToApply = 0 - vel.y * fraction;
                 accel.y += accelerationToApply;
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_FrictionY = Constraint_FrictionY;

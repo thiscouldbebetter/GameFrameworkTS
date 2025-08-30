@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_ContainInBox implements Constraint
+export class Constraint_ContainInBox extends ConstraintBase
 {
 	boxToContainWithin: BoxAxisAligned;
 
 	constructor(boxToContainWithin: BoxAxisAligned)
 	{
+		super();
+
 		this.boxToContainWithin = boxToContainWithin;
 	}
 
@@ -21,19 +23,6 @@ export class Constraint_ContainInBox implements Constraint
 		var constrainablePos =Locatable.of(uwpe.entity).loc.pos;
 		this.boxToContainWithin.trimCoords(constrainablePos);
 	}
-
-	// Clonable.
-
-	clone(): Constraint
-	{
-		return this; // todo
-	}
-
-	overwriteWith(other: Constraint): Constraint
-	{
-		return this; // todo
-	}
-
 }
 
 }

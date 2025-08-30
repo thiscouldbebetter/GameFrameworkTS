@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_WrapToPlaceSizeX {
+        class Constraint_WrapToPlaceSizeX extends GameFramework.ConstraintBase {
             static create() {
                 return new Constraint_WrapToPlaceSizeX();
             }
@@ -14,13 +14,6 @@ var ThisCouldBeBetter;
                 var entityLoc = GameFramework.Locatable.of(entity).loc;
                 var entityPos = entityLoc.pos;
                 entityPos.x = GameFramework.NumberHelper.wrapToRangeMax(entityPos.x, placeSize.x);
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_WrapToPlaceSizeX = Constraint_WrapToPlaceSizeX;

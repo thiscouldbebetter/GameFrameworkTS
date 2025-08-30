@@ -101,7 +101,7 @@ var ThisCouldBeBetter;
                 var entity = uwpe.entity;
                 var constrainable = GameFramework.Constrainable.of(entity);
                 if (constrainable != null) {
-                    var constraintMovable = constrainable.constraintByClassName(GameFramework.Constraint_Movable.name);
+                    var constraintMovable = constrainable.constraintByName(GameFramework.Constraint_Movable.name);
                     if (constraintMovable == null) {
                         constraintMovable = GameFramework.Constraint_Movable.create();
                         constrainable.constraintAdd(constraintMovable);

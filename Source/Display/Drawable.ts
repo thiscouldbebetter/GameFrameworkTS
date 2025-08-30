@@ -144,6 +144,12 @@ export class Drawable extends EntityPropertyBase<Drawable>
 		return this;
 	}
 
+	renderingOrderSet(value: number): Drawable
+	{
+		this.renderingOrder = value;
+		return this;
+	}
+
 	show(): Drawable
 	{
 		this.hidden = false;

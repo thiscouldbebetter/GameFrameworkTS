@@ -2,13 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class Constraint_Switchable implements Constraint
+export class Constraint_Switchable extends ConstraintBase
 {
 	isActive: boolean;
 	child: Constraint;
 
 	constructor(isActive: boolean, child: Constraint)
 	{
+		super();
+
 		this.isActive = isActive;
 		this.child = child;
 	}

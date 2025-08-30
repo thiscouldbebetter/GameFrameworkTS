@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class Constraint_FrictionXY {
+        class Constraint_FrictionXY extends GameFramework.ConstraintBase {
             constructor(frictionCofficient, speedBelowWhichToStop) {
+                super();
                 this.frictionCofficient = frictionCofficient;
                 this.speedBelowWhichToStop = speedBelowWhichToStop || 0;
             }
@@ -27,13 +28,6 @@ var ThisCouldBeBetter;
                     entityVel.add(entityVel.clone().multiplyScalar(-frictionMagnitude));
                 }
                 entityVel.z = entityVelZSaved;
-            }
-            // Clonable.
-            clone() {
-                return this; // todo
-            }
-            overwriteWith(other) {
-                return this; // todo
             }
         }
         GameFramework.Constraint_FrictionXY = Constraint_FrictionXY;
