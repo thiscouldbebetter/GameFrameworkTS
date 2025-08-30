@@ -536,7 +536,10 @@ var ThisCouldBeBetter;
             }
             starburstWithPointsRatioRadiusAndColor(numberOfPoints, radiusInnerAsFractionOfOuter, radiusOuter, color) {
                 var path = GameFramework.PathBuilder.Instance().star(numberOfPoints, radiusInnerAsFractionOfOuter);
-                var transform = GameFramework.Transform_Scale.fromScaleFactor(radiusOuter);
+                var transform = GameFramework.Transform_Multiple.fromChildren([
+                    GameFramework.Transform_RotateLeft.fromQuarterTurnsToRotate(1),
+                    GameFramework.Transform_Scale.fromScaleFactor(radiusOuter),
+                ]);
                 path.transform(transform);
                 var visual = GameFramework.VisualGroup.fromChildren([
                     GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(path, color, // colorFill

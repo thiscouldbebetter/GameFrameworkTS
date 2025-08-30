@@ -1386,8 +1386,11 @@ export class VisualBuilder
 			radiusInnerAsFractionOfOuter
 		);
 
-		var transform =
-			Transform_Scale.fromScaleFactor(radiusOuter);
+		var transform = Transform_Multiple.fromChildren
+		([
+			Transform_RotateLeft.fromQuarterTurnsToRotate(1),
+			Transform_Scale.fromScaleFactor(radiusOuter),
+		]);
 
 		path.transform(transform);
 
