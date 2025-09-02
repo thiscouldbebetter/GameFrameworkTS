@@ -7,7 +7,7 @@ export class SoundFromFileMod implements Sound
 	name: string;
 	sourceFilePath: string;
 
-	isRepeating: boolean;
+	timesToPlay: number;
 
 	_binaryFileInner: BinaryFile;
 	_binaryFileInnerLoadTimer: any;

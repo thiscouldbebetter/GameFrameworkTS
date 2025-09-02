@@ -6,7 +6,7 @@ export class SoundFromLibrary implements Sound
 {
 	name: string;
 
-	isRepeating: boolean; // todo
+	timesToPlay: number; // todo
 
 	_soundInner: Sound;
 

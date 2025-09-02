@@ -4,21 +4,25 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class SoundFromFile {
-            constructor(name, sourcePath, isRepeating) {
+            constructor(name, sourcePath, timesToPlay) {
                 this.name = name;
                 this.sourcePath = sourcePath;
-                this.isRepeating = isRepeating || false;
+                this.timesToPlay = timesToPlay || 1;
                 this.offsetInSeconds = 0;
+                //this.timesPlayedSoFar = 0;
             }
-            static fromNameSourcePathAndIsRepeating(name, sourcePath, isRepeating) {
-                return new SoundFromFile(name, sourcePath, isRepeating);
+            static fromNameSourcePathAndIsRepeating(name, sourcePath, timesToPlay) {
+                return new SoundFromFile(name, sourcePath, timesToPlay);
             }
             audioElement() {
                 if (this._audioElement == null) {
                     this._audioElement = new Audio(this.sourcePath);
-                    this._audioElement.loop = this.isRepeating;
+                    this._audioElement.loop = this.isRepeating();
                 }
                 return this._audioElement;
+            }
+            isRepeating() {
+                return (this.timesToPlay == Number.POSITIVE_INFINITY);
             }
             pause(universe) {
                 var audio = this.audioElement();

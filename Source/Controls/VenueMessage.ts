@@ -213,6 +213,12 @@ export class VenueMessage<TContext> implements Venue
 		venueInner.updateForTimerTick(universe);
 	}
 
+	secondsToShowSet(value: number): VenueMessage<TContext>
+	{
+		this.secondsToShow = value;
+		return this;
+	}
+
 	showMessageOnlySet(value: boolean): VenueMessage<TContext>
 	{
 		this.showMessageOnly = value;

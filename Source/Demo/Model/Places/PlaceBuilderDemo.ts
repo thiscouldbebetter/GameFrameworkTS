@@ -2150,7 +2150,7 @@ class PlaceBuilderDemo // Main.
 			"BombExplosion",
 			[
 				collidable,
-				Damager.fromDamagePerHit(Damage.fromAmount(20)),
+				Damager.fromDamagePerHit(Damage.fromAmount(20) ),
 				Drawable.fromVisual(explosionVisual),
 				Ephemeral.fromTicksToLive(8),
 				Locatable.of(entityDying)

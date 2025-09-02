@@ -50,25 +50,28 @@ var ThisCouldBeBetter;
             }
             damageApply(uwpe, damageToApply) {
                 if (damageToApply == null) {
-                    return 0;
+                    // Do nothing.
                 }
+                else if (this.immunityIsInEffect()) {
+                    // Do nothing.
+                }
+                else if (this._damageApply == null) {
+                    this.damageApply_Default(uwpe, damageToApply);
+                }
+                else {
+                    this._damageApply(uwpe, damageToApply);
+                }
+            }
+            damageApply_Default(uwpe, damageToApply) {
                 var universe = uwpe.universe;
                 var entityDamager = uwpe.entity;
                 var entityKillable = uwpe.entity2;
-                var damageApplied;
-                if (this._damageApply == null) {
-                    var randomizer = universe.randomizer;
-                    damageApplied =
-                        (damageToApply == null
-                            ? GameFramework.Damager.of(entityDamager).damagePerHit.amount(randomizer)
-                            : damageToApply.amount(randomizer));
-                    var killable = Killable.of(entityKillable);
-                    killable.integritySubtract(damageApplied);
-                }
-                else {
-                    damageApplied = this._damageApply(uwpe, damageToApply);
-                }
-                return damageApplied;
+                var randomizer = universe.randomizer;
+                var damageApplied = damageToApply == null
+                    ? GameFramework.Damager.of(entityDamager).damagePerHit.amount(randomizer)
+                    : damageToApply.amount(randomizer);
+                var killable = Killable.of(entityKillable);
+                killable.integritySubtract(damageApplied);
             }
             deathIsIgnoredSet(value) {
                 this.deathIsIgnored = value;

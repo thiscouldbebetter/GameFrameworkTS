@@ -9,8 +9,7 @@ export class Leaderboard
 	playerScoresCount: number;
 	playerScores: LeaderboardPlayerScore[];
 
-	playerScoreBeingEntered: LeaderboardPlayerScore;
-	cursorOffsetInChars: number;
+	scoreBeingEntered: number;
 
 	constructor
 	(
@@ -23,8 +22,7 @@ export class Leaderboard
 		this.playerScoresCount = playerScoresCount || 10;
 		this.playerScores = playerScores || [];
 
-		this.playerScoreBeingEntered = null;
-		this.cursorOffsetInChars = 0;
+		this.scoreBeingEntered = null;
 	}
 
 	static create(): Leaderboard
@@ -67,21 +65,18 @@ export class Leaderboard
 		return leaderboard;
 	}
 
-	scoreInsert(scoreToInsert: number): void
+	scoreBeingEnteredSet(value: number): void
 	{
-		this.playerScoreBeingEntered = null;
-
 		for (var i = 0; i < this.playerScores.length; i++)
 		{
 			var playerScoreExisting = this.playerScores[i].score;
-			if (scoreToInsert > playerScoreExisting)
+			if (value > playerScoreExisting)
 			{
+				this.scoreBeingEntered = value;
 				var playerScoreToInsert =
-					LeaderboardPlayerScore.fromScore(scoreToInsert);
+					LeaderboardPlayerScore.fromScore(value);
 				this.playerScores.splice(i, 0, playerScoreToInsert);
 				this.playerScores.length = this.playerScoresCount;
-				this.playerScoreBeingEntered = playerScoreToInsert;
-				this.cursorOffsetInChars = 0;
 				break;
 			}
 		}
@@ -90,6 +85,57 @@ export class Leaderboard
 	// Controllable.
 
 	toControl(uwpe: UniverseWorldPlaceEntities): ControlBase
+	{
+		var control =
+			this.scoreBeingEntered == null
+			? this.toControl_ScoresAllShow(uwpe)
+			: this.toControl_PlayerIntialsEnter(uwpe);
+
+		return control;
+	}
+
+	toControl_PlayerIntialsEnter(uwpe: UniverseWorldPlaceEntities): ControlBase
+	{
+		var textAsLines =
+		[
+			"You score is among ",
+			"the top " + this.playerScoresCount, " of all time!",
+			" ",
+			"Enter your initials:",
+			" ",
+			"todo"
+		];
+
+		var text = textAsLines.join("\n");
+
+		var universe = uwpe.universe;
+		var controlBuilder = universe.controlBuilder;
+		var sizeInPixels = universe.display.sizeInPixels;
+		var fontNameAndHeight = FontNameAndHeight.default();
+
+		var control = controlBuilder.message
+		(
+			universe,
+			sizeInPixels,
+			DataBinding.fromContext(text),
+			() => { this.toControl_PlayerInitialsEnter_Finished(uwpe) }, // acknowledge
+			true, // showMessageOnly
+			fontNameAndHeight,
+			this.secondsToShow
+		);
+
+		return control;
+	}
+
+	toControl_PlayerInitialsEnter_Finished(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var control = this.toControl_ScoresAllShow(uwpe);
+		var venueNext = control.toVenue();
+		var universe = uwpe.universe;
+		universe.venueTransitionTo(venueNext);
+	}
+
+	toControl_ScoresAllShow(uwpe: UniverseWorldPlaceEntities): ControlBase
 	{
 		var textLines = [];
 
@@ -120,29 +166,16 @@ export class Leaderboard
 			universe,
 			sizeInPixels,
 			DataBinding.fromContext(text),
-			() => { this.toControl_Finished(universe) },
+			() => { this.toControl_ScoresAllShow_Finished(universe) },
 			true, // showMessageOnly
 			fontNameAndHeight,
 			this.secondsToShow
 		);
 
-		/*
-		var fontHeight = fontNameAndHeight.heightInPixels;
-
-		var controlTextBox =
-			ControlTextBox.fromPosSizeAndTextImmediate
-			(
-				Coords.fromXY(0, 0),
-				Coords.fromXY(100, fontHeight * 2),
-				""
-			).charsMaxSet(3);
-		controlLeaderboard.childAdd(controlTextBox);
-		*/
-
 		return controlLeaderboard;
 	}
 
-	toControl_Finished(universe: Universe): void
+	toControl_ScoresAllShow_Finished(universe: Universe): void
 	{
 		universe.venueTransitionTo
 		(

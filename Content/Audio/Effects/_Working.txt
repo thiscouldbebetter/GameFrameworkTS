@@ -6,9 +6,9 @@ Sources
 
 Code		Name
 ---------	----
-Audacity	Audacity
+Audacity	Audacity.
 Sample		A recording of a real-world sound effect.
-TCBB SFXS	This Could Be Better Sound Effect Synthesizer
+TCBB SFXS	This Could Be Better Sound Effect Synthesizer.
 
 
 Effects
@@ -23,6 +23,7 @@ Buzz			Audacity?		20Hz square wave.
 Chirp			Audacity		Select "Generate - Chirp" from menu, choose 440-1320 Hz, fade.
 Chirp-Reverse	Audacity		Reverse of previous.
 Clank			Sample			A metallic clank rather like a cowbell.
-Slap			TCBB SFXS		Noise, 1760Hz, fading.
+Organ			Audacity		Generated 1 second of Risset Drum plus Vocoder effect.
 Pluck			Audacity		Select "Generate - Pluck" from the menu.
+Slap			TCBB SFXS		Noise, 1760Hz, fading.
 

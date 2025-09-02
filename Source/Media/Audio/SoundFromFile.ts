@@ -8,25 +8,26 @@ export class SoundFromFile implements Sound
 	sourcePath: string;
 
 	offsetInSeconds: number;
-	isRepeating: boolean;
+	timesToPlay: number;
 
 	domElement: HTMLAudioElement;
 
-	constructor(name: string, sourcePath: string, isRepeating: boolean)
+	constructor(name: string, sourcePath: string, timesToPlay: number)
 	{
 		this.name = name;
 		this.sourcePath = sourcePath;
-		this.isRepeating = isRepeating || false;
+		this.timesToPlay = timesToPlay || 1;
 
 		this.offsetInSeconds = 0;
+		//this.timesPlayedSoFar = 0;
 	}
 
 	static fromNameSourcePathAndIsRepeating
 	(
-		name: string, sourcePath: string, isRepeating: boolean
+		name: string, sourcePath: string, timesToPlay: number
 	): SoundFromFile
 	{
-		return new SoundFromFile(name, sourcePath, isRepeating);
+		return new SoundFromFile(name, sourcePath, timesToPlay);
 	}
 
 	_audioElement: HTMLAudioElement;
@@ -35,9 +36,14 @@ export class SoundFromFile implements Sound
 		if (this._audioElement == null)
 		{
 			this._audioElement = new Audio(this.sourcePath);
-			this._audioElement.loop = this.isRepeating;
+			this._audioElement.loop = this.isRepeating();
 		}
 		return this._audioElement;
+	}
+
+	isRepeating(): boolean
+	{
+		return (this.timesToPlay == Number.POSITIVE_INFINITY);
 	}
 
 	pause(universe: Universe): void

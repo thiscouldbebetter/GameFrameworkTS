@@ -8,8 +8,7 @@ var ThisCouldBeBetter;
                 this.secondsToShow = secondsToShow;
                 this.playerScoresCount = playerScoresCount || 10;
                 this.playerScores = playerScores || [];
-                this.playerScoreBeingEntered = null;
-                this.cursorOffsetInChars = 0;
+                this.scoreBeingEntered = null;
             }
             static create() {
                 return new Leaderboard(null, null, null);
@@ -38,22 +37,51 @@ var ThisCouldBeBetter;
                 }
                 return leaderboard;
             }
-            scoreInsert(scoreToInsert) {
-                this.playerScoreBeingEntered = null;
+            scoreBeingEnteredSet(value) {
                 for (var i = 0; i < this.playerScores.length; i++) {
                     var playerScoreExisting = this.playerScores[i].score;
-                    if (scoreToInsert > playerScoreExisting) {
-                        var playerScoreToInsert = LeaderboardPlayerScore.fromScore(scoreToInsert);
+                    if (value > playerScoreExisting) {
+                        this.scoreBeingEntered = value;
+                        var playerScoreToInsert = LeaderboardPlayerScore.fromScore(value);
                         this.playerScores.splice(i, 0, playerScoreToInsert);
                         this.playerScores.length = this.playerScoresCount;
-                        this.playerScoreBeingEntered = playerScoreToInsert;
-                        this.cursorOffsetInChars = 0;
                         break;
                     }
                 }
             }
             // Controllable.
             toControl(uwpe) {
+                var control = this.scoreBeingEntered == null
+                    ? this.toControl_ScoresAllShow(uwpe)
+                    : this.toControl_PlayerIntialsEnter(uwpe);
+                return control;
+            }
+            toControl_PlayerIntialsEnter(uwpe) {
+                var textAsLines = [
+                    "You score is among ",
+                    "the top " + this.playerScoresCount, " of all time!",
+                    " ",
+                    "Enter your initials:",
+                    " ",
+                    "todo"
+                ];
+                var text = textAsLines.join("\n");
+                var universe = uwpe.universe;
+                var controlBuilder = universe.controlBuilder;
+                var sizeInPixels = universe.display.sizeInPixels;
+                var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
+                var control = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => { this.toControl_PlayerInitialsEnter_Finished(uwpe); }, // acknowledge
+                true, // showMessageOnly
+                fontNameAndHeight, this.secondsToShow);
+                return control;
+            }
+            toControl_PlayerInitialsEnter_Finished(uwpe) {
+                var control = this.toControl_ScoresAllShow(uwpe);
+                var venueNext = control.toVenue();
+                var universe = uwpe.universe;
+                universe.venueTransitionTo(venueNext);
+            }
+            toControl_ScoresAllShow(uwpe) {
                 var textLines = [];
                 textLines.push("High Scores");
                 textLines.push("-----------");
@@ -70,23 +98,11 @@ var ThisCouldBeBetter;
                 var sizeInPixels = universe.display.sizeInPixels;
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
                 var controlBuilder = universe.controlBuilder;
-                var controlLeaderboard = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => { this.toControl_Finished(universe); }, true, // showMessageOnly
+                var controlLeaderboard = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => { this.toControl_ScoresAllShow_Finished(universe); }, true, // showMessageOnly
                 fontNameAndHeight, this.secondsToShow);
-                /*
-                var fontHeight = fontNameAndHeight.heightInPixels;
-        
-                var controlTextBox =
-                    ControlTextBox.fromPosSizeAndTextImmediate
-                    (
-                        Coords.fromXY(0, 0),
-                        Coords.fromXY(100, fontHeight * 2),
-                        ""
-                    ).charsMaxSet(3);
-                controlLeaderboard.childAdd(controlTextBox);
-                */
                 return controlLeaderboard;
             }
-            toControl_Finished(universe) {
+            toControl_ScoresAllShow_Finished(universe) {
                 universe.venueTransitionTo(universe.controlBuilder.title(universe, universe.display.sizeInPixels).toVenue());
             }
             static toControlGetInitials(uwpe) {

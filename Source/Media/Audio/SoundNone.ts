@@ -6,7 +6,7 @@ export class SoundNone implements Sound
 {
 	name: string;
 
-	isRepeating: boolean;
+	timesToPlay: number;
 	pause(universe: Universe): void {}
 	play(universe: Universe, volume: number): void {}
 	seek(offsetInSeconds: number): void {}

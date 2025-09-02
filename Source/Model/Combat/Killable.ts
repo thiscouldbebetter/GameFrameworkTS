@@ -145,37 +145,44 @@ export class Killable extends EntityPropertyBase<Killable>
 	damageApply
 	(
 		uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
-	): number
+	): void
 	{
 		if (damageToApply == null)
 		{
-			return 0;
+			// Do nothing.
 		}
+		else if (this.immunityIsInEffect() )
+		{
+			// Do nothing.
+		}
+		else if (this._damageApply == null)
+		{
+			this.damageApply_Default(uwpe, damageToApply);
+		}
+		else
+		{
+			this._damageApply(uwpe, damageToApply);
+		}
+	}
 
+	damageApply_Default
+	(
+		uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
+	)
+	{
 		var universe = uwpe.universe;
 		var entityDamager = uwpe.entity;
 		var entityKillable = uwpe.entity2;
 
-		var damageApplied;
-		if (this._damageApply == null)
-		{
-			var randomizer = universe.randomizer;
+		var randomizer = universe.randomizer;
 
-			damageApplied =
-			(
-				damageToApply == null
-				? Damager.of(entityDamager).damagePerHit.amount(randomizer)
-				: damageToApply.amount(randomizer)
-			);
+		var damageApplied =
+			damageToApply == null
+			? Damager.of(entityDamager).damagePerHit.amount(randomizer)
+			: damageToApply.amount(randomizer);
 
-			var killable = Killable.of(entityKillable);
-			killable.integritySubtract(damageApplied);
-		}
-		else
-		{
-			damageApplied = this._damageApply(uwpe, damageToApply);
-		}
-		return damageApplied;
+		var killable = Killable.of(entityKillable);
+		killable.integritySubtract(damageApplied);
 	}
 
 	deathIsIgnoredSet(value: boolean): Killable

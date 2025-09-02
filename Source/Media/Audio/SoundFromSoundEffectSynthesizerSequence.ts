@@ -44,7 +44,7 @@ export class SoundFromSoundEffectSynthesizerSequence implements Sound
 
 	// Sound.
 
-	isRepeating: boolean;
+	timesToPlay: number;
 
 	pause(universe: Universe): void { throw new Error("Not yet implemented!"); }
 

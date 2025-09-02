@@ -76,7 +76,7 @@ var ThisCouldBeBetter;
                     var mediaObject = new mediaType(fileStem, filePath);
                     if (fileExtension == "mp3") {
                         // hack
-                        mediaObject.isRepeating = true;
+                        mediaObject.timesToPlay = Number.POSITIVE_INFINITY;
                     }
                     mediaArray.push(mediaObject);
                 }

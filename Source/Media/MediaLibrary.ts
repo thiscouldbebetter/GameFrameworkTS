@@ -141,7 +141,7 @@ export class MediaLibrary
 			if (fileExtension == "mp3")
 			{
 				// hack
-				(mediaObject as Sound).isRepeating = true;
+				(mediaObject as Sound).timesToPlay = Number.POSITIVE_INFINITY;
 			}
 			mediaArray.push(mediaObject);
 		}

@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export interface Sound extends MediaItemBase
 {
-	isRepeating: boolean;
+	timesToPlay: number;
 	pause(universe: Universe): void;
 	play(universe: Universe, volume: number): void;
 	seek(offsetInSeconds: number): void;

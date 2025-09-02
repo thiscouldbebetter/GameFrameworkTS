@@ -78,6 +78,10 @@ var ThisCouldBeBetter;
                 var venueInner = this.venueInner(universe);
                 venueInner.updateForTimerTick(universe);
             }
+            secondsToShowSet(value) {
+                this.secondsToShow = value;
+                return this;
+            }
             showMessageOnlySet(value) {
                 this.showMessageOnly = value;
                 return this;
