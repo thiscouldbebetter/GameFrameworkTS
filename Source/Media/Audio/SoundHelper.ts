@@ -10,7 +10,7 @@ export interface SoundHelper
 	musicVolume: number;
 	//reset(): void;
 	soundPlaybackForMusic: SoundPlayback;
-	soundPlaybackCreateFromSoundAndRegister(sound: Sound): SoundPlayback;
+	soundPlaybackCreateFromSound(sound: Sound): SoundPlayback;
 	soundPlaybackRegister(soundPlayback: SoundPlayback): void;
 	soundPlaybacksAllStop(universe: Universe): void;
 }
@@ -73,10 +73,13 @@ export class SoundHelperLive implements SoundHelper
 
 	soundPlaybackRegister(soundPlayback: SoundPlayback): void
 	{
-		this.soundPlaybacks.push(soundPlayback);
+		if (this.soundPlaybacks.indexOf(soundPlayback) == -1)
+		{
+			this.soundPlaybacks.push(soundPlayback);
+		}
 	}
 
-	soundPlaybackCreateFromSoundAndRegister(sound: Sound): SoundPlayback
+	soundPlaybackCreateFromSound(sound: Sound): SoundPlayback
 	{
 		var soundPlayback = SoundPlayback.fromSound(sound);
 		this.soundPlaybackRegister(soundPlayback);

@@ -26,11 +26,6 @@ export class Audible extends EntityPropertyBase<Audible>
 		this.soundPlayback = value;
 		return this;
 	}
-
-	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
-	{
-		this.soundPlayback.startIfNotStartedAlready(uwpe.universe);
-	}
 }
 
 }

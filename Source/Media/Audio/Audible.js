@@ -17,9 +17,6 @@ var ThisCouldBeBetter;
                 this.soundPlayback = value;
                 return this;
             }
-            updateForTimerTick(uwpe) {
-                this.soundPlayback.startIfNotStartedAlready(uwpe.universe);
-            }
         }
         GameFramework.Audible = Audible;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

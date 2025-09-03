@@ -724,7 +724,7 @@ class PlaceBuilderDemo_Movers {
                 var mediaLibrary = universe.mediaLibrary;
                 var sound = mediaLibrary.soundGetByName("Effects_Clang");
                 var soundPlayback = soundHelper
-                    .soundPlaybackCreateFromSoundAndRegister(sound)
+                    .soundPlaybackCreateFromSound(sound)
                     .volumeAsFractionSet(soundHelper.effectVolume);
                 soundPlayback.startIfNotStartedAlready(universe);
             }

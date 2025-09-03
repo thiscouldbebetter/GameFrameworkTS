@@ -8,7 +8,9 @@ export class SoundPlayback
 	volumeAsFraction: number;
 	timesToPlay: number;
 
-	isStarted: boolean;
+	hasBeenStarted: boolean;
+	hasBeenFinished: boolean;
+	isPaused: boolean;
 	offsetInSeconds: number;
 	timesPlayedSoFar: number;
 
@@ -18,9 +20,7 @@ export class SoundPlayback
 		this.volumeAsFraction = volumeAsFraction || 1;
 		this.timesToPlay = timesToPlay || 1;
 
-		this.isStarted = false;
-		this.offsetInSeconds = 0;
-		this.timesPlayedSoFar = 0;
+		this.reset();
 	}
 
 	static fromSound(sound: Sound): SoundPlayback
@@ -36,27 +36,59 @@ export class SoundPlayback
 		return new SoundPlayback(sound, timesToPlay, volumeAsFraction);
 	}
 
+	pause(universe: Universe): void
+	{
+		this.isPaused = true;
+		var audioElement = this.domElement(universe);
+		audioElement.pause();
+		this.offsetInSeconds = audioElement.currentTime;
+	}
+
 	repeatsForever(): SoundPlayback
 	{
 		this.timesToPlay = Number.POSITIVE_INFINITY;
 		return this;
 	}
 
+	reset(): SoundPlayback
+	{
+		this.hasBeenStarted = false;
+		this.hasBeenFinished = false;
+		this.isPaused = false;
+		this.offsetInSeconds = 0;
+		this.timesPlayedSoFar = 0;
+		return this;
+	}
+
 	startIfNotStartedAlready(universe: Universe): void
 	{
-		if (this.isStarted == false)
+		universe.soundHelper.soundPlaybackRegister(this);
+
+		var domElement = this.domElement(universe);
+
+		if (this.hasBeenStarted == false)
 		{
-			this.isStarted = true;
+			this.hasBeenStarted = true;
+			this.hasBeenFinished = false;
 			this.timesPlayedSoFar = 0;
-			var domElement = this.domElement(universe);
+			if (this.timesToPlay > 1)
+			{
+				domElement.loop = true;
+			}
+			domElement.play();
+		}
+		else if (this.isPaused)
+		{
+			this.isPaused = false;
 			domElement.play();
 		}
 	}
 
 	stop(universe: Universe): void
 	{
-		this.isStarted = false;
-		this.domElement(universe).muted = true;
+		this.hasBeenFinished = true;
+		var audioElement = this.domElement(universe);
+		audioElement.pause();
 	}
 
 	volumeAsFractionSet(value: number): SoundPlayback
@@ -87,14 +119,20 @@ export class SoundPlayback
 		if (this._domElementAudio == null)
 		{
 			this._domElementAudio = this.sound.domElement(universe);
-			this._domElementAudio.onended = this.toDomElement_Ended;
+			this._domElementAudio.onended =
+				() => this.toDomElement_Ended(universe);
+			this._domElementAudio.currentTime = this.offsetInSeconds;
 		}
 		return this._domElementAudio;
 	}
 
-	toDomElement_Ended(event: any): void
+	toDomElement_Ended(universe: Universe): void
 	{
-		console.log("ended");
+		this.timesPlayedSoFar++;
+		if (this.timesPlayedSoFar >= this.timesToPlay)
+		{
+			this.stop(universe);
+		}
 	}
 
 }

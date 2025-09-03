@@ -25,16 +25,17 @@ var ThisCouldBeBetter;
                 return true; // todo
             }
             draw(uwpe, display) {
-                var universe = uwpe.universe;
                 var entity = uwpe.entity;
                 var audible = GameFramework.Audible.of(entity);
                 if (audible == null) {
                     throw new Error("The entity has no Audible property!");
                 }
                 else {
-                    var soundHelper = universe.soundHelper;
-                    soundHelper.soundPlaybackRegister(this.soundPlayback);
-                    audible.soundPlaybackSet(this.soundPlayback);
+                    if (audible.soundPlayback == null) {
+                        var soundPlayback = this.soundPlayback.clone();
+                        audible.soundPlaybackSet(soundPlayback);
+                        soundPlayback.startIfNotStartedAlready(uwpe.universe);
+                    }
                 }
             }
             // Clonable.

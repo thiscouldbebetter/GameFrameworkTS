@@ -39,9 +39,11 @@ var ThisCouldBeBetter;
                 return this._audioContext;
             }
             soundPlaybackRegister(soundPlayback) {
-                this.soundPlaybacks.push(soundPlayback);
+                if (this.soundPlaybacks.indexOf(soundPlayback) == -1) {
+                    this.soundPlaybacks.push(soundPlayback);
+                }
             }
-            soundPlaybackCreateFromSoundAndRegister(sound) {
+            soundPlaybackCreateFromSound(sound) {
                 var soundPlayback = GameFramework.SoundPlayback.fromSound(sound);
                 this.soundPlaybackRegister(soundPlayback);
                 return soundPlayback;

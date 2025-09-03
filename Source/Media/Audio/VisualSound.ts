@@ -41,7 +41,6 @@ export class VisualSound implements Visual<VisualSound>
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		var universe = uwpe.universe;
 		var entity = uwpe.entity;
 
 		var audible = Audible.of(entity);
@@ -51,9 +50,12 @@ export class VisualSound implements Visual<VisualSound>
 		}
 		else
 		{
-			var soundHelper = universe.soundHelper;
-			soundHelper.soundPlaybackRegister(this.soundPlayback);
-			audible.soundPlaybackSet(this.soundPlayback);
+			if (audible.soundPlayback == null)
+			{
+				var soundPlayback = this.soundPlayback.clone();
+				audible.soundPlaybackSet(soundPlayback);
+				soundPlayback.startIfNotStartedAlready(uwpe.universe);
+			}
 		}
 	}
 
