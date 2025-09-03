@@ -18,6 +18,7 @@ import SoundFromFile = gf.SoundFromFile;
 import SoundFromSoundEffectSynthesizerSequence = gf.SoundFromSoundEffectSynthesizerSequence;
 import SoundHelper = gf.SoundHelper;
 import SoundHelperLive = gf.SoundHelperLive;
+import SoundPlayback = gf.SoundPlayback;
 import VisualSound = gf.VisualSound;
 
 // SoundEffectSynthesizer.

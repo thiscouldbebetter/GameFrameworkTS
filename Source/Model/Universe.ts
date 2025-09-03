@@ -215,7 +215,7 @@ export class Universe
 		this.display.initialize(this);
 		this.platformHelper.platformableAdd(this.display);
 
-		this.soundHelper.initialize(this.mediaLibrary.sounds);
+		//this.soundHelper.initialize(this.mediaLibrary.sounds);
 		this.videoHelper = new VideoHelper(this.mediaLibrary.videos);
 
 		var venueInitial: Venue = null;
@@ -269,7 +269,7 @@ export class Universe
 	reset(): void
 	{
 		// hack
-		this.soundHelper.reset();
+		//this.soundHelper.reset();
 	}
 
 	saveFileNameStem(): string

@@ -14,6 +14,7 @@ var Audible = gf.Audible;
 var SoundFromFile = gf.SoundFromFile;
 var SoundFromSoundEffectSynthesizerSequence = gf.SoundFromSoundEffectSynthesizerSequence;
 var SoundHelperLive = gf.SoundHelperLive;
+var SoundPlayback = gf.SoundPlayback;
 var VisualSound = gf.VisualSound;
 // SoundEffectSynthesizer.
 var ses = ThisCouldBeBetter.SoundEffectSynthesizer;

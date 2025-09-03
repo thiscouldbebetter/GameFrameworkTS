@@ -158,16 +158,21 @@ export class PlaceDefn
 		{
 			var universe = uwpe.universe;
 			var soundHelper = universe.soundHelper;
-			var soundForMusicAlreadyPlaying = soundHelper.soundForMusic;
+			var soundPlaybackForMusicAlreadyPlaying = soundHelper.soundPlaybackForMusic;
 			if
 			(
-				soundForMusicAlreadyPlaying != null
-				&& soundForMusicAlreadyPlaying.name != this.soundForMusicName
+				soundPlaybackForMusicAlreadyPlaying != null
+				&& soundPlaybackForMusicAlreadyPlaying.sound.name != this.soundForMusicName
 			)
 			{
-				soundForMusicAlreadyPlaying.stop(universe);
-				var sound = soundHelper.soundWithName(universe, this.soundForMusicName);
-				sound.play(universe, universe.soundHelper.effectVolume);
+				soundPlaybackForMusicAlreadyPlaying.stop(universe);
+				var mediaLibrary = universe.mediaLibrary;
+				var sound = mediaLibrary.soundGetByName(this.soundForMusicName);
+				var soundPlayback =
+					SoundPlayback
+						.fromSound(sound)
+						.volumeAsFractionSet(universe.soundHelper.effectVolume);
+				soundPlayback.startIfNotStartedAlready(universe);
 			}
 		}
 

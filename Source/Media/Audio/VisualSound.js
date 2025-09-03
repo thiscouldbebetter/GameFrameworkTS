@@ -4,18 +4,18 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VisualSound {
-            constructor(soundToPlayName, repeats) {
-                this.soundToPlayName = soundToPlayName;
-                this.repeats = repeats;
-            }
-            static default() {
-                return new VisualSound("Effects__Default", false); // repeats
+            constructor(soundPlayback) {
+                this.soundPlayback = soundPlayback;
             }
             static fromSoundName(soundName) {
-                return new VisualSound(soundName, false); // repeats
+                var sound = GameFramework.SoundFromLibrary.fromName(soundName);
+                var soundPlayback = GameFramework.SoundPlayback.fromSound(sound);
+                return new VisualSound(soundPlayback);
             }
-            static fromSoundNameAndRepeat(soundName, repeats) {
-                return new VisualSound(soundName, repeats);
+            static fromSoundNameRepeating(soundName) {
+                var sound = GameFramework.SoundFromLibrary.fromName(soundName);
+                var soundPlayback = GameFramework.SoundPlayback.fromSound(sound).repeatsForever();
+                return new VisualSound(soundPlayback);
             }
             // Visual.
             initialize(uwpe) {
@@ -27,27 +27,22 @@ var ThisCouldBeBetter;
             draw(uwpe, display) {
                 var universe = uwpe.universe;
                 var entity = uwpe.entity;
-                var soundHelper = universe.soundHelper;
                 var audible = GameFramework.Audible.of(entity);
                 if (audible == null) {
                     throw new Error("The entity has no Audible property!");
                 }
                 else {
-                    if (audible.hasBeenHeard == false) {
-                        var sound = soundHelper.soundWithName(universe, this.soundToPlayName);
-                        var volume = soundHelper.effectVolume; // todo
-                        sound.play(universe, volume);
-                        audible.hasBeenHeardSet(true);
-                    }
+                    var soundHelper = universe.soundHelper;
+                    soundHelper.soundPlaybackRegister(this.soundPlayback);
+                    audible.soundPlaybackSet(this.soundPlayback);
                 }
             }
             // Clonable.
             clone() {
-                return new VisualSound(this.soundToPlayName, this.repeats);
+                return new VisualSound(this.soundPlayback.clone());
             }
             overwriteWith(other) {
-                this.soundToPlayName = other.soundToPlayName;
-                this.repeats = other.repeats;
+                this.soundPlayback.overwriteWith(other.soundPlayback);
                 return this;
             }
             // Transformable.

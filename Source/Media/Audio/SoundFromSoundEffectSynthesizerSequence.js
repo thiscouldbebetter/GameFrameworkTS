@@ -19,13 +19,9 @@ var ThisCouldBeBetter;
             unload(uwpe) {
                 return this;
             }
-            pause(universe) { throw new Error("Not yet implemented!"); }
-            play(universe, volume) {
-                this.soundSequence.play();
-            }
-            seek(offsetInSeconds) { throw new Error("Not yet implemented!"); }
-            stop(universe) {
-                this.soundSequence.stop();
+            // Sound.
+            domElement() {
+                throw new Error("todo");
             }
         }
         GameFramework.SoundFromSoundEffectSynthesizerSequence = SoundFromSoundEffectSynthesizerSequence;

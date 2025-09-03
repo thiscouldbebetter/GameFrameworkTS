@@ -6,7 +6,6 @@ var ThisCouldBeBetter;
         class Audible extends GameFramework.EntityPropertyBase {
             constructor() {
                 super();
-                this.hasBeenHeard = false;
             }
             static create() {
                 return new Audible();
@@ -14,13 +13,12 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(Audible.name);
             }
-            hasBeenHeardClear() {
-                this.hasBeenHeard = false;
+            soundPlaybackSet(value) {
+                this.soundPlayback = value;
                 return this;
             }
-            hasBeenHeardSet(value) {
-                this.hasBeenHeard = value;
-                return this;
+            updateForTimerTick(uwpe) {
+                this.soundPlayback.startIfNotStartedAlready(uwpe.universe);
             }
         }
         GameFramework.Audible = Audible;

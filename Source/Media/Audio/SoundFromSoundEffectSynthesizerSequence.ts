@@ -44,6 +44,12 @@ export class SoundFromSoundEffectSynthesizerSequence implements Sound
 
 	// Sound.
 
+	domElement(): HTMLAudioElement
+	{
+		throw new Error("todo");
+	}
+
+	/*
 	timesToPlay: number;
 
 	pause(universe: Universe): void { throw new Error("Not yet implemented!"); }
@@ -59,7 +65,8 @@ export class SoundFromSoundEffectSynthesizerSequence implements Sound
 	{
 		this.soundSequence.stop();
 	}
-
+	*/
+	
 }
 
 }

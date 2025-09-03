@@ -7,23 +7,20 @@ export interface SoundHelper
 	audioContext(): AudioContext;
 	controlSelectOptionsVolume(): ControlSelectOption<number>[];
 	effectVolume: number;
-	initialize(sounds: Sound[]): void;
 	musicVolume: number;
-	reset(): void;
-	soundForMusic: Sound;
-	soundWithName(universe: Universe, soundName: string): Sound;
-	soundsAllStop(universe: Universe): void;
+	//reset(): void;
+	soundPlaybackForMusic: SoundPlayback;
+	soundPlaybackCreateFromSoundAndRegister(sound: Sound): SoundPlayback;
+	soundPlaybackRegister(soundPlayback: SoundPlayback): void;
+	soundPlaybacksAllStop(universe: Universe): void;
 }
 
 export class SoundHelperLive implements SoundHelper
 {
-	sounds: Sound[];
-
-	soundsByName: Map<string, Sound>;
-
 	effectVolume: number;
 	musicVolume: number;
-	soundForMusic: Sound;
+	soundPlaybacks: SoundPlayback[];
+	soundPlaybackForMusic: SoundPlayback;
 	_audioContext: AudioContext;
 
 	_controlSelectOptionsVolume: ControlSelectOption<number>[];
@@ -33,7 +30,8 @@ export class SoundHelperLive implements SoundHelper
 		this.effectVolume = 1;
 		this.musicVolume = 1;
 
-		this.soundForMusic = null;
+		this.soundPlaybacks = [];
+		this.soundPlaybackForMusic = null;
 	}
 
 	controlSelectOptionsVolume(): ControlSelectOption<number>[]
@@ -73,29 +71,21 @@ export class SoundHelperLive implements SoundHelper
 		return this._audioContext;
 	}
 
-	initialize(sounds: Sound[]): void
+	soundPlaybackRegister(soundPlayback: SoundPlayback): void
 	{
-		this.sounds = sounds;
-		this.soundsByName = ArrayHelper.addLookupsByName(this.sounds);
+		this.soundPlaybacks.push(soundPlayback);
 	}
 
-	reset(): void
+	soundPlaybackCreateFromSoundAndRegister(sound: Sound): SoundPlayback
 	{
-		for (var i = 0; i < this.sounds.length; i++)
-		{
-			var sound = this.sounds[i];
-			sound.seek(0);
-		}
+		var soundPlayback = SoundPlayback.fromSound(sound);
+		this.soundPlaybackRegister(soundPlayback);
+		return soundPlayback;
 	}
 
-	soundWithName(universe: Universe, name: string): Sound
+	soundPlaybacksAllStop(universe: Universe): void
 	{
-		return this.soundsByName.get(name);
-	}
-
-	soundsAllStop(universe: Universe): void
-	{
-		this.sounds.forEach(x => x.stop(universe));
+		this.soundPlaybacks.forEach(x => x.stop(universe) );
 	}
 }
 

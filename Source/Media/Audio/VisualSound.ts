@@ -6,28 +6,25 @@ export class VisualSound implements Visual<VisualSound>
 {
 	// Yes, obviously sounds aren't really visual.
 
-	soundToPlayName: string;
-	repeats: boolean;
+	soundPlayback: SoundPlayback;
 
-	constructor(soundToPlayName: string, repeats: boolean)
+	constructor(soundPlayback: SoundPlayback)
 	{
-		this.soundToPlayName = soundToPlayName;
-		this.repeats = repeats;
-	}
-
-	static default(): VisualSound
-	{
-		return new VisualSound("Effects__Default", false); // repeats
+		this.soundPlayback = soundPlayback;
 	}
 
 	static fromSoundName(soundName: string): VisualSound
 	{
-		return new VisualSound(soundName, false); // repeats
+		var sound = SoundFromLibrary.fromName(soundName);
+		var soundPlayback = SoundPlayback.fromSound(sound);
+		return new VisualSound(soundPlayback);
 	}
 
-	static fromSoundNameAndRepeat(soundName: string, repeats: boolean): VisualSound
+	static fromSoundNameRepeating(soundName: string): VisualSound
 	{
-		return new VisualSound(soundName, repeats);
+		var sound = SoundFromLibrary.fromName(soundName);
+		var soundPlayback = SoundPlayback.fromSound(sound).repeatsForever();
+		return new VisualSound(soundPlayback);
 	}
 
 	// Visual.
@@ -47,8 +44,6 @@ export class VisualSound implements Visual<VisualSound>
 		var universe = uwpe.universe;
 		var entity = uwpe.entity;
 
-		var soundHelper = universe.soundHelper;
-
 		var audible = Audible.of(entity);
 		if (audible == null)
 		{
@@ -56,14 +51,9 @@ export class VisualSound implements Visual<VisualSound>
 		}
 		else
 		{
-			if (audible.hasBeenHeard == false)
-			{
-				var sound =
-					soundHelper.soundWithName(universe, this.soundToPlayName);
-				var volume = soundHelper.effectVolume; // todo
-				sound.play(universe, volume);
-				audible.hasBeenHeardSet(true);
-			}
+			var soundHelper = universe.soundHelper;
+			soundHelper.soundPlaybackRegister(this.soundPlayback);
+			audible.soundPlaybackSet(this.soundPlayback);
 		}
 	}
 
@@ -71,13 +61,12 @@ export class VisualSound implements Visual<VisualSound>
 
 	clone(): VisualSound
 	{
-		return new VisualSound(this.soundToPlayName, this.repeats);
+		return new VisualSound(this.soundPlayback.clone() );
 	}
 
 	overwriteWith(other: VisualSound): VisualSound
 	{
-		this.soundToPlayName = other.soundToPlayName;
-		this.repeats = other.repeats;
+		this.soundPlayback.overwriteWith(other.soundPlayback);
 		return this;
 	}
 

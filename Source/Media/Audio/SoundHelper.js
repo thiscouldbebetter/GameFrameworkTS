@@ -7,7 +7,8 @@ var ThisCouldBeBetter;
             constructor() {
                 this.effectVolume = 1;
                 this.musicVolume = 1;
-                this.soundForMusic = null;
+                this.soundPlaybacks = [];
+                this.soundPlaybackForMusic = null;
             }
             controlSelectOptionsVolume() {
                 var cso = (a, b) => new GameFramework.ControlSelectOption(a, b);
@@ -37,21 +38,16 @@ var ThisCouldBeBetter;
                 }
                 return this._audioContext;
             }
-            initialize(sounds) {
-                this.sounds = sounds;
-                this.soundsByName = GameFramework.ArrayHelper.addLookupsByName(this.sounds);
+            soundPlaybackRegister(soundPlayback) {
+                this.soundPlaybacks.push(soundPlayback);
             }
-            reset() {
-                for (var i = 0; i < this.sounds.length; i++) {
-                    var sound = this.sounds[i];
-                    sound.seek(0);
-                }
+            soundPlaybackCreateFromSoundAndRegister(sound) {
+                var soundPlayback = GameFramework.SoundPlayback.fromSound(sound);
+                this.soundPlaybackRegister(soundPlayback);
+                return soundPlayback;
             }
-            soundWithName(universe, name) {
-                return this.soundsByName.get(name);
-            }
-            soundsAllStop(universe) {
-                this.sounds.forEach(x => x.stop(universe));
+            soundPlaybacksAllStop(universe) {
+                this.soundPlaybacks.forEach(x => x.stop(universe));
             }
         }
         GameFramework.SoundHelperLive = SoundHelperLive;

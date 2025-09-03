@@ -74,10 +74,6 @@ var ThisCouldBeBetter;
                     var fileStemAndExtension = fileName.split(".");
                     var fileStem = fileStemAndExtension[0];
                     var mediaObject = new mediaType(fileStem, filePath);
-                    if (fileExtension == "mp3") {
-                        // hack
-                        mediaObject.timesToPlay = Number.POSITIVE_INFINITY;
-                    }
                     mediaArray.push(mediaObject);
                 }
                 var returnValue = new MediaLibrary(contentDirectoryPath, images, sounds, videos, fonts, textStrings);

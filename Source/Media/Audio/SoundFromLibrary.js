@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(name) {
                 this.name = name;
             }
+            static fromName(name) {
+                return new SoundFromLibrary(name);
+            }
             soundInner(universe) {
                 if (this._soundInner == null) {
                     var mediaLibrary = universe.mediaLibrary;
@@ -16,17 +19,9 @@ var ThisCouldBeBetter;
                 return this._soundInner;
             }
             // Sound implementation.
-            pause(universe) {
-                this.soundInner(universe).pause(universe);
-            }
-            play(universe, volume) {
-                this.soundInner(universe).play(universe, volume);
-            }
-            seek(offsetInSeconds) {
-                this.soundInner(null).seek(offsetInSeconds);
-            }
-            stop(universe) {
-                this.soundInner(universe).stop(universe);
+            domElement(universe) {
+                var soundInner = this.soundInner(universe);
+                return soundInner.domElement(universe);
             }
             load(uwpe, callback) {
                 this.soundInner(uwpe.universe).load(uwpe, callback);

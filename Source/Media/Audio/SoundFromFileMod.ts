@@ -24,6 +24,7 @@ export class SoundFromFileMod implements Sound
 
 	// Sound implementation.
 
+	/*
 	pause(universe: Universe): void
 	{
 		// todo
@@ -45,6 +46,12 @@ export class SoundFromFileMod implements Sound
 		{
 			this._soundInner.stop(); // todo
 		}
+	}
+	*/
+
+	domElement(): HTMLAudioElement
+	{
+		throw new Error("todo");
 	}
 
 	// Loadable.

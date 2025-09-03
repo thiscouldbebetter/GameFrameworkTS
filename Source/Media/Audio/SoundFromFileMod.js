@@ -10,19 +10,32 @@ var ThisCouldBeBetter;
                 this.isLoaded = false;
             }
             // Sound implementation.
-            pause(universe) {
+            /*
+            pause(universe: Universe): void
+            {
                 // todo
             }
-            play(universe, volume) {
+        
+            play(universe: Universe, volume: number): void
+            {
                 this._soundInner.play(); // todo - Use .playThenCallCallback()?
             }
-            seek(offsetInSeconds) {
+        
+            seek(offsetInSeconds: number): void
+            {
                 // todo
             }
-            stop(universe) {
-                if (this._soundInner != null) {
+        
+            stop(universe: Universe): void
+            {
+                if (this._soundInner != null)
+                {
                     this._soundInner.stop(); // todo
                 }
+            }
+            */
+            domElement() {
+                throw new Error("todo");
             }
             load(uwpe) {
                 this._binaryFileInner =

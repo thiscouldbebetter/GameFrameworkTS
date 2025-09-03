@@ -450,7 +450,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             opening_GoToVenueNext(universe, size) {
-                universe.soundHelper.soundsAllStop(universe);
+                universe.soundHelper.soundPlaybacksAllStop(universe);
                 var venueNext = this.producer(universe, size).toVenue();
                 universe.venueTransitionTo(venueNext);
             }
@@ -465,7 +465,7 @@ var ThisCouldBeBetter;
                 var fontHeight = this.fontHeightInPixelsBase;
                 var visual = GameFramework.VisualGroup.fromChildren([
                     GameFramework.VisualImageScaled.fromSizeAndChild(size, GameFramework.VisualImageFromLibrary.fromImageName(imageName)),
-                    GameFramework.VisualSound.fromSoundNameAndRepeat(soundName, false) // repeat
+                    GameFramework.VisualSound.fromSoundName(soundName)
                 ]);
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 var imageProducer = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageProducer", this._zeroes.clone(), this.sizeBase.clone(), // size
@@ -490,7 +490,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             producer_GoToVenueNext(universe, size) {
-                universe.soundHelper.soundsAllStop(universe);
+                universe.soundHelper.soundPlaybacksAllStop(universe);
                 var venueTitle = this.title(universe, size).toVenue();
                 universe.venueTransitionTo(venueTitle);
             }
@@ -695,7 +695,7 @@ var ThisCouldBeBetter;
                 var fontHeight = this.fontHeightInPixelsBase;
                 var visual = GameFramework.VisualGroup.fromChildren([
                     GameFramework.VisualImageScaled.fromSizeAndChild(size, GameFramework.VisualImageFromLibrary.fromImageName("Titles_Title")),
-                    GameFramework.VisualSound.fromSoundNameAndRepeat("Music_Title", true)
+                    GameFramework.VisualSound.fromSoundNameRepeating("Music_Title")
                 ]);
                 var imageTitle = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageTitle", this._zeroes.clone(), this.sizeBase.clone(), // size
                 GameFramework.DataBinding.fromContext(visual));
@@ -718,7 +718,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             title_Start(universe) {
-                universe.soundHelper.soundsAllStop(universe);
+                universe.soundHelper.soundPlaybacksAllStop(universe);
                 var venueNext;
                 if (universe.profileHelper.profilesMultipleAreAllowed) {
                     var venueMessage = GameFramework.VenueMessage.fromTextNoButtons("Loading profiles...");

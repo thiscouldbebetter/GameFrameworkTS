@@ -4,13 +4,11 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Audible extends EntityPropertyBase<Audible>
 {
-	hasBeenHeard: boolean;
+	soundPlayback: SoundPlayback;
 
 	constructor()
 	{
 		super();
-
-		this.hasBeenHeard = false;
 	}
 
 	static create(): Audible
@@ -23,18 +21,16 @@ export class Audible extends EntityPropertyBase<Audible>
 		return entity.propertyByName(Audible.name) as Audible;
 	}
 
-	hasBeenHeardClear(): Audible
+	soundPlaybackSet(value: SoundPlayback): Audible
 	{
-		this.hasBeenHeard = false;
+		this.soundPlayback = value;
 		return this;
 	}
 
-	hasBeenHeardSet(value: boolean): Audible
+	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.hasBeenHeard = value;
-		return this;
+		this.soundPlayback.startIfNotStartedAlready(uwpe.universe);
 	}
-
 }
 
 }

@@ -65,12 +65,16 @@ var ThisCouldBeBetter;
                 if (this.soundForMusicName != null) {
                     var universe = uwpe.universe;
                     var soundHelper = universe.soundHelper;
-                    var soundForMusicAlreadyPlaying = soundHelper.soundForMusic;
-                    if (soundForMusicAlreadyPlaying != null
-                        && soundForMusicAlreadyPlaying.name != this.soundForMusicName) {
-                        soundForMusicAlreadyPlaying.stop(universe);
-                        var sound = soundHelper.soundWithName(universe, this.soundForMusicName);
-                        sound.play(universe, universe.soundHelper.effectVolume);
+                    var soundPlaybackForMusicAlreadyPlaying = soundHelper.soundPlaybackForMusic;
+                    if (soundPlaybackForMusicAlreadyPlaying != null
+                        && soundPlaybackForMusicAlreadyPlaying.sound.name != this.soundForMusicName) {
+                        soundPlaybackForMusicAlreadyPlaying.stop(universe);
+                        var mediaLibrary = universe.mediaLibrary;
+                        var sound = mediaLibrary.soundGetByName(this.soundForMusicName);
+                        var soundPlayback = GameFramework.SoundPlayback
+                            .fromSound(sound)
+                            .volumeAsFractionSet(universe.soundHelper.effectVolume);
+                        soundPlayback.startIfNotStartedAlready(universe);
                     }
                 }
                 if (this._placeInitialize != null) {

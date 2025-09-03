@@ -86,7 +86,7 @@ var ThisCouldBeBetter;
                 }
                 this.display.initialize(this);
                 this.platformHelper.platformableAdd(this.display);
-                this.soundHelper.initialize(this.mediaLibrary.sounds);
+                //this.soundHelper.initialize(this.mediaLibrary.sounds);
                 this.videoHelper = new GameFramework.VideoHelper(this.mediaLibrary.videos);
                 var venueInitial = null;
                 if (this.debugSettings.skipOpening()) {
@@ -114,7 +114,7 @@ var ThisCouldBeBetter;
             }
             reset() {
                 // hack
-                this.soundHelper.reset();
+                //this.soundHelper.reset();
             }
             saveFileNameStem() {
                 var now = GameFramework.DateTime.now();

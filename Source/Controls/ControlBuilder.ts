@@ -1098,7 +1098,7 @@ export class ControlBuilder
 
 	opening_GoToVenueNext(universe: Universe, size: Coords): void
 	{
-		universe.soundHelper.soundsAllStop(universe);
+		universe.soundHelper.soundPlaybacksAllStop(universe);
 
 		var venueNext = this.producer(universe, size).toVenue();
 		universe.venueTransitionTo(venueNext);
@@ -1136,7 +1136,7 @@ export class ControlBuilder
 			(
 				size, VisualImageFromLibrary.fromImageName(imageName)
 			),
-			VisualSound.fromSoundNameAndRepeat(soundName, false) // repeat
+			VisualSound.fromSoundName(soundName)
 		]);
 
 		var controlActionNames = ControlActionNames.Instances();
@@ -1186,7 +1186,7 @@ export class ControlBuilder
 
 	producer_GoToVenueNext(universe: Universe, size: Coords): void
 	{
-		universe.soundHelper.soundsAllStop(universe);
+		universe.soundHelper.soundPlaybacksAllStop(universe);
 
 		var venueTitle = this.title(universe, size).toVenue();
 		universe.venueTransitionTo(venueTitle);
@@ -1678,7 +1678,7 @@ export class ControlBuilder
 			(
 				size, VisualImageFromLibrary.fromImageName("Titles_Title")
 			),
-			VisualSound.fromSoundNameAndRepeat("Music_Title", true)
+			VisualSound.fromSoundNameRepeating("Music_Title")
 		]);
 
 		var imageTitle = ControlVisual.fromNamePosSizeAndVisual
@@ -1739,7 +1739,7 @@ export class ControlBuilder
 
 	title_Start(universe: Universe): void
 	{
-		universe.soundHelper.soundsAllStop(universe);
+		universe.soundHelper.soundPlaybacksAllStop(universe);
 
 		var venueNext: Venue;
 

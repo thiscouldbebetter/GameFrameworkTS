@@ -138,11 +138,6 @@ export class MediaLibrary
 			var fileStem = fileStemAndExtension[0];
 
 			var mediaObject = new mediaType(fileStem, filePath);
-			if (fileExtension == "mp3")
-			{
-				// hack
-				(mediaObject as Sound).timesToPlay = Number.POSITIVE_INFINITY;
-			}
 			mediaArray.push(mediaObject);
 		}
 

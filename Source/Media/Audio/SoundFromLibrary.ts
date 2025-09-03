@@ -6,13 +6,16 @@ export class SoundFromLibrary implements Sound
 {
 	name: string;
 
-	timesToPlay: number; // todo
-
 	_soundInner: Sound;
 
 	constructor(name: string)
 	{
 		this.name = name;
+	}
+
+	static fromName(name: string)
+	{
+		return new SoundFromLibrary(name);
 	}
 
 	soundInner(universe: Universe): Sound
@@ -29,24 +32,10 @@ export class SoundFromLibrary implements Sound
 
 	// Sound implementation.
 
-	pause(universe: Universe): void
+	domElement(universe: Universe): HTMLAudioElement
 	{
-		this.soundInner(universe).pause(universe);
-	}
-
-	play(universe: Universe, volume: number): void
-	{
-		this.soundInner(universe).play(universe, volume);
-	}
-
-	seek(offsetInSeconds: number): void
-	{
-		this.soundInner(null).seek(offsetInSeconds);
-	}
-
-	stop(universe: Universe): void
-	{
-		this.soundInner(universe).stop(universe);
+		var soundInner = this.soundInner(universe);
+		return soundInner.domElement(universe);
 	}
 
 	// Loadable.
