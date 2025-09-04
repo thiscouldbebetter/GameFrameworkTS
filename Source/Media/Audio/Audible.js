@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(Audible.name);
             }
+            soundPlaybackClear() {
+                return this.soundPlaybackSet(null);
+            }
             soundPlaybackSet(value) {
                 this.soundPlayback = value;
                 return this;

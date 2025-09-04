@@ -1419,7 +1419,7 @@ class PlaceBuilderDemo_Movers
 					soundHelper
 						.soundPlaybackCreateFromSound(sound)
 						.volumeAsFractionSet(soundHelper.effectVolume);
-				soundPlayback.startIfNotStartedAlready(universe);
+				soundPlayback.startIfNotStartedYet(uwpe);
 			}
 			else if (entityOther.propertiesByName.get(Goal.name) != null)
 			{

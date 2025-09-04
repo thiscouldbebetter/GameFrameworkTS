@@ -32,6 +32,11 @@ export class VisualSelect implements Visual<VisualSelect>
 		);
 	}
 
+	childByIndex(childIndex: number): VisualBase
+	{
+		return this.children[childIndex];
+	}
+
 	selectChildToShow
 	(
 		uwpe: UniverseWorldPlaceEntities,

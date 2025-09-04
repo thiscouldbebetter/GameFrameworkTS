@@ -6,13 +6,6 @@ export class SoundNone implements Sound
 {
 	name: string;
 
-	/*
-	timesToPlay: number;
-	pause(universe: Universe): void {}
-	play(universe: Universe, volume: number): void {}
-	seek(offsetInSeconds: number): void {}
-	stop(universe: Universe): void {}
-	*/
 	domElement(): HTMLAudioElement { return new Audio(); }
 
 	// Loadable.

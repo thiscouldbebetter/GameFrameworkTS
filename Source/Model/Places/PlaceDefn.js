@@ -68,13 +68,13 @@ var ThisCouldBeBetter;
                     var soundPlaybackForMusicAlreadyPlaying = soundHelper.soundPlaybackForMusic;
                     if (soundPlaybackForMusicAlreadyPlaying != null
                         && soundPlaybackForMusicAlreadyPlaying.sound.name != this.soundForMusicName) {
-                        soundPlaybackForMusicAlreadyPlaying.stop(universe);
+                        soundPlaybackForMusicAlreadyPlaying.stop(uwpe);
                         var mediaLibrary = universe.mediaLibrary;
                         var sound = mediaLibrary.soundGetByName(this.soundForMusicName);
                         var soundPlayback = GameFramework.SoundPlayback
                             .fromSound(sound)
                             .volumeAsFractionSet(universe.soundHelper.effectVolume);
-                        soundPlayback.startIfNotStartedAlready(universe);
+                        soundPlayback.startIfNotStartedYet(uwpe);
                     }
                 }
                 if (this._placeInitialize != null) {

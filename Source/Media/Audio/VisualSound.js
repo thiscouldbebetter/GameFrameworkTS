@@ -9,13 +9,16 @@ var ThisCouldBeBetter;
             }
             static fromSoundName(soundName) {
                 var sound = GameFramework.SoundFromLibrary.fromName(soundName);
-                var soundPlayback = GameFramework.SoundPlayback.fromSound(sound);
+                var soundPlayback = GameFramework.SoundPlayback.fromSoundAndCallbackForStop(sound, this.soundPlaybackCallbackForStop);
                 return new VisualSound(soundPlayback);
             }
             static fromSoundNameRepeating(soundName) {
                 var sound = GameFramework.SoundFromLibrary.fromName(soundName);
                 var soundPlayback = GameFramework.SoundPlayback.fromSound(sound).repeatsForever();
                 return new VisualSound(soundPlayback);
+            }
+            static silence() {
+                return new VisualSound(null);
             }
             // Visual.
             initialize(uwpe) {
@@ -32,11 +35,27 @@ var ThisCouldBeBetter;
                 }
                 else {
                     if (audible.soundPlayback == null) {
-                        var soundPlayback = this.soundPlayback.clone();
-                        audible.soundPlaybackSet(soundPlayback);
-                        soundPlayback.startIfNotStartedAlready(uwpe.universe);
+                        if (this.soundPlayback != null) {
+                            var soundPlayback = this.soundPlayback.clone();
+                            audible.soundPlaybackSet(soundPlayback);
+                            soundPlayback.startIfNotStartedYet(uwpe);
+                        }
+                    }
+                    else {
+                        if (this.soundPlayback == null) {
+                            // Silence the previous sound.
+                            audible.soundPlaybackClear();
+                        }
                     }
                 }
+            }
+            static soundPlaybackCallbackForStop(uwpe) {
+                // This may result in the sound being played continuously while the VisualSound is being drawn.
+                /*
+                var entity = uwpe.entity;
+                var audible = Audible.of(entity);
+                audible.soundPlaybackClear();
+                */
             }
             // Clonable.
             clone() {

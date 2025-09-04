@@ -16,7 +16,12 @@ export class VisualSound implements Visual<VisualSound>
 	static fromSoundName(soundName: string): VisualSound
 	{
 		var sound = SoundFromLibrary.fromName(soundName);
-		var soundPlayback = SoundPlayback.fromSound(sound);
+		var soundPlayback =
+			SoundPlayback.fromSoundAndCallbackForStop
+			(
+				sound,
+				this.soundPlaybackCallbackForStop
+			);
 		return new VisualSound(soundPlayback);
 	}
 
@@ -25,6 +30,11 @@ export class VisualSound implements Visual<VisualSound>
 		var sound = SoundFromLibrary.fromName(soundName);
 		var soundPlayback = SoundPlayback.fromSound(sound).repeatsForever();
 		return new VisualSound(soundPlayback);
+	}
+
+	static silence(): VisualSound
+	{
+		return new VisualSound(null);
 	}
 
 	// Visual.
@@ -52,11 +62,32 @@ export class VisualSound implements Visual<VisualSound>
 		{
 			if (audible.soundPlayback == null)
 			{
-				var soundPlayback = this.soundPlayback.clone();
-				audible.soundPlaybackSet(soundPlayback);
-				soundPlayback.startIfNotStartedAlready(uwpe.universe);
+				if (this.soundPlayback != null)
+				{
+					var soundPlayback = this.soundPlayback.clone();
+					audible.soundPlaybackSet(soundPlayback);
+					soundPlayback.startIfNotStartedYet(uwpe);
+				}
+			}
+			else
+			{
+				if (this.soundPlayback == null)
+				{
+					// Silence the previous sound.
+					audible.soundPlaybackClear();
+				}
 			}
 		}
+	}
+
+	static soundPlaybackCallbackForStop(uwpe: UniverseWorldPlaceEntities): void
+	{
+		// This may result in the sound being played continuously while the VisualSound is being drawn.
+		/*
+		var entity = uwpe.entity;
+		var audible = Audible.of(entity);
+		audible.soundPlaybackClear();
+		*/
 	}
 
 	// Clonable.

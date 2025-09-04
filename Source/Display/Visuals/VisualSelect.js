@@ -11,6 +11,9 @@ var ThisCouldBeBetter;
             static fromSelectChildToShowAndChildren(selectChildToShow, children) {
                 return new VisualSelect(selectChildToShow, children);
             }
+            childByIndex(childIndex) {
+                return this.children[childIndex];
+            }
             selectChildToShow(uwpe, visualSelect) {
                 return this._selectChildToShow(uwpe, visualSelect);
             }

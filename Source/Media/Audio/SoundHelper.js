@@ -49,7 +49,8 @@ var ThisCouldBeBetter;
                 return soundPlayback;
             }
             soundPlaybacksAllStop(universe) {
-                this.soundPlaybacks.forEach(x => x.stop(universe));
+                var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe);
+                this.soundPlaybacks.forEach(x => x.stop(uwpe));
             }
         }
         GameFramework.SoundHelperLive = SoundHelperLive;

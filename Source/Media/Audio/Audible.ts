@@ -21,6 +21,11 @@ export class Audible extends EntityPropertyBase<Audible>
 		return entity.propertyByName(Audible.name) as Audible;
 	}
 
+	soundPlaybackClear(): Audible
+	{
+		return this.soundPlaybackSet(null);
+	}
+
 	soundPlaybackSet(value: SoundPlayback): Audible
 	{
 		this.soundPlayback = value;

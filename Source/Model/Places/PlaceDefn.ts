@@ -165,14 +165,14 @@ export class PlaceDefn
 				&& soundPlaybackForMusicAlreadyPlaying.sound.name != this.soundForMusicName
 			)
 			{
-				soundPlaybackForMusicAlreadyPlaying.stop(universe);
+				soundPlaybackForMusicAlreadyPlaying.stop(uwpe);
 				var mediaLibrary = universe.mediaLibrary;
 				var sound = mediaLibrary.soundGetByName(this.soundForMusicName);
 				var soundPlayback =
 					SoundPlayback
 						.fromSound(sound)
 						.volumeAsFractionSet(universe.soundHelper.effectVolume);
-				soundPlayback.startIfNotStartedAlready(universe);
+				soundPlayback.startIfNotStartedYet(uwpe);
 			}
 		}
 

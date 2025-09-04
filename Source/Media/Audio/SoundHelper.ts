@@ -88,7 +88,8 @@ export class SoundHelperLive implements SoundHelper
 
 	soundPlaybacksAllStop(universe: Universe): void
 	{
-		this.soundPlaybacks.forEach(x => x.stop(universe) );
+		var uwpe = UniverseWorldPlaceEntities.fromUniverse(universe);
+		this.soundPlaybacks.forEach(x => x.stop(uwpe) );
 	}
 }
 
