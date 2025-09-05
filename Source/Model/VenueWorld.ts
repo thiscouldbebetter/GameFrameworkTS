@@ -34,9 +34,11 @@ export class VenueWorld implements Venue
 		);
 		this.world.initialize(uwpe);
 
+		var worldAsControl = this.world.toControl(universe);
+
 		this.venueControls = new VenueControls
 		(
-			this.world.toControl(universe),
+			worldAsControl,
 			true // ignoreKeyboardAndGamepadInputs
 		);
 	}

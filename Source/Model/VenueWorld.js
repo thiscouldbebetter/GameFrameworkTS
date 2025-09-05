@@ -17,7 +17,8 @@ var ThisCouldBeBetter;
                 universe.worldSet(this.world);
                 var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseAndWorld(universe, this.world);
                 this.world.initialize(uwpe);
-                this.venueControls = new GameFramework.VenueControls(this.world.toControl(universe), true // ignoreKeyboardAndGamepadInputs
+                var worldAsControl = this.world.toControl(universe);
+                this.venueControls = new GameFramework.VenueControls(worldAsControl, true // ignoreKeyboardAndGamepadInputs
                 );
             }
             initializeIsComplete() { return true; }

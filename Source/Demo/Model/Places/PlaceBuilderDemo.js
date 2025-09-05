@@ -1424,7 +1424,7 @@ class PlaceBuilderDemo // Main.
         return itemFruitEntityDefn;
     }
     entityDefnBuildGenerator(entityDefnToGenerate) {
-        var generator = EntityGenerator.fromEntityTicksBatchMaxesAndPosBox(entityDefnToGenerate, 1200, // ticksPerGeneration
+        var generator = EntityGenerator.fromNameEntityTicksBatchMaxesAndPosBox(EntityGenerator.name, entityDefnToGenerate, 1200, // ticksPerGeneration
         1, // entitiesPerGeneration
         1, // entitiesGeneratedMaxConcurrent
         null, // entitiesGeneratedMaxAllTime

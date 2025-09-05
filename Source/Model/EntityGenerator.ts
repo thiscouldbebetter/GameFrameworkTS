@@ -4,6 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 {
+	name: string;
 	entityToGenerate: Entity;
 	ticksPerGenerationAsRange: RangeExtent;
 	entitiesPerGenerationAsRange: RangeExtent;
@@ -18,6 +19,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 
 	constructor
 	(
+		name: string,
 		entityToGenerate: Entity,
 		ticksPerGenerationAsRange: RangeExtent,
 		entitiesPerGenerationAsRange: RangeExtent,
@@ -29,6 +31,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 	{
 		super();
 
+		this.name = name;
 		this.entityToGenerate = entityToGenerate;
 		this.ticksPerGenerationAsRange =
 			ticksPerGenerationAsRange || RangeExtent.fromNumber(100);
@@ -48,8 +51,9 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 		this.ticksUntilNextGeneration = 0;
 	}
 
-	static fromEntityTicksBatchMaxesAndPosBox
+	static fromNameEntityTicksBatchMaxesAndPosBox
 	(
+		name: string,
 		entityToGenerate: Entity,
 		ticksPerGeneration: number,
 		entitiesPerGeneration: number,
@@ -60,6 +64,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 	{
 		return new EntityGenerator
 		(
+			name,
 			entityToGenerate,
 			RangeExtent.fromNumber(ticksPerGeneration),
 			RangeExtent.fromNumber(entitiesPerGeneration),
@@ -87,7 +92,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 
 	toEntity(): Entity
 	{
-		return Entity.fromNameAndProperties(EntityGenerator.name, [ this ] );
+		return Entity.fromNameAndProperties(this.name, [ this ] );
 	}
 
 	// EntityProperty.
@@ -193,6 +198,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 	{
 		return new EntityGenerator
 		(
+			this.name,
 			this.entityToGenerate,
 			this.ticksPerGenerationAsRange.clone(),
 			this.entitiesPerGenerationAsRange.clone(),

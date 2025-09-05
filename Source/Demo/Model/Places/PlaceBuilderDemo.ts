@@ -2647,8 +2647,9 @@ class PlaceBuilderDemo // Main.
 
 	entityDefnBuildGenerator(entityDefnToGenerate: Entity): Entity
 	{
-		var generator = EntityGenerator.fromEntityTicksBatchMaxesAndPosBox
+		var generator = EntityGenerator.fromNameEntityTicksBatchMaxesAndPosBox
 		(
+			EntityGenerator.name,
 			entityDefnToGenerate,
 			1200, // ticksPerGeneration
 			1, // entitiesPerGeneration

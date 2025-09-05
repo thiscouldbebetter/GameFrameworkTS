@@ -42,6 +42,11 @@ export class DebugSettings
 
 	// Particular settings.
 
+	difficultyEasy(): boolean
+	{
+		return (this.settingValueByName(DebugSettings_Names.Instance().DifficultyEasy) != null)
+	}
+
 	drawColliders(): boolean
 	{
 		return (this.settingValueByName(DebugSettings_Names.Instance().DrawColliders) != null);
@@ -65,6 +70,7 @@ export class DebugSettings
 
 export class DebugSettings_Names
 {
+	DifficultyEasy: string;
 	DrawColliders: string;
 	LocalStorageClear: string;
 	PlaceToStartAt: string;
@@ -72,6 +78,7 @@ export class DebugSettings_Names
 
 	constructor()
 	{
+		this.DifficultyEasy = "DifficultyEasy";
 		this.DrawColliders = "DrawColliders";
 		this.LocalStorageClear = "LocalStorageClear";
 		this.PlaceToStartAt = "PlaceToStartAt";

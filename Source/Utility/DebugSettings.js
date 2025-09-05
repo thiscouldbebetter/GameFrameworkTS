@@ -25,6 +25,9 @@ var ThisCouldBeBetter;
                 return this.settingValuesByName.get(name);
             }
             // Particular settings.
+            difficultyEasy() {
+                return (this.settingValueByName(DebugSettings_Names.Instance().DifficultyEasy) != null);
+            }
             drawColliders() {
                 return (this.settingValueByName(DebugSettings_Names.Instance().DrawColliders) != null);
             }
@@ -41,6 +44,7 @@ var ThisCouldBeBetter;
         GameFramework.DebugSettings = DebugSettings;
         class DebugSettings_Names {
             constructor() {
+                this.DifficultyEasy = "DifficultyEasy";
                 this.DrawColliders = "DrawColliders";
                 this.LocalStorageClear = "LocalStorageClear";
                 this.PlaceToStartAt = "PlaceToStartAt";
