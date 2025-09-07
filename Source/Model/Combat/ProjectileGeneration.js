@@ -54,9 +54,32 @@ var ThisCouldBeBetter;
                 );
             }
             hit(uwpe) {
-                if (this._hit != null) {
-                    this._hit(uwpe);
+                var entityProjectile = uwpe.entity;
+                var entityTarget = uwpe.entity2;
+                var projectileKillable = GameFramework.Killable.of(entityProjectile);
+                var targetKillable = GameFramework.Killable.of(entityTarget);
+                var projectileIsAlive = projectileKillable != null
+                    && projectileKillable.isAlive();
+                if (targetKillable != null && projectileIsAlive) {
+                    if (this._hit == null) {
+                        ProjectileGeneration.hit_DamageTargetAndDestroySelf(uwpe);
+                    }
+                    else {
+                        this._hit(uwpe);
+                    }
                 }
+            }
+            static hit_DamageTargetAndDestroySelf(uwpe) {
+                var entityProjectile = uwpe.entity;
+                var entityTarget = uwpe.entity2;
+                var projectileKillable = GameFramework.Killable.of(entityProjectile);
+                var targetKillable = GameFramework.Killable.of(entityTarget);
+                var projectileDamager = GameFramework.Damager.of(entityProjectile);
+                if (projectileDamager != null) {
+                    var damageToApply = projectileDamager.damagePerHit;
+                    targetKillable.damageApply(uwpe, damageToApply);
+                }
+                projectileKillable.kill();
             }
             projectileEntityInitialize(entity) {
                 if (this._projectileEntityInitialize != null) {
@@ -129,17 +152,7 @@ var ThisCouldBeBetter;
                 var entityOther = uwpe.entity2;
                 var entityProjectileRelatable = GameFramework.Relatable.of(entityProjectile);
                 if (entityProjectileRelatable.entityRelatedId != entityOther.id) {
-                    var targetKillable = GameFramework.Killable.of(entityOther);
-                    if (targetKillable != null) {
-                        var projectileKillable = GameFramework.Killable.of(entityProjectile);
-                        var projectileIsAlive = projectileKillable.isAlive();
-                        if (projectileIsAlive) {
-                            this.hit(uwpe);
-                            var damageToApply = GameFramework.Damager.of(entityProjectile).damagePerHit;
-                            targetKillable.damageApply(uwpe, damageToApply);
-                            projectileKillable.kill();
-                        }
-                    }
+                    this.hit(uwpe);
                 }
             }
         }

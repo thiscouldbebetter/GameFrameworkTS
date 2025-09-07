@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class ItemHolder extends GameFramework.EntityPropertyBase {
             constructor(items, encumbranceMax, reachRadius, retainsItemsWithZeroQuantities) {
                 super();
-                this.items = items || [];
+                this.items = [];
                 this.encumbranceMax = encumbranceMax;
                 this.reachRadius = reachRadius || 20;
                 this.retainsItemsWithZeroQuantities = retainsItemsWithZeroQuantities || false;
@@ -21,11 +21,14 @@ var ThisCouldBeBetter;
             static default() {
                 return ItemHolder.create();
             }
-            static fromItems(items) {
-                return new ItemHolder(items, null, null, null);
-            }
             static fromEncumbranceMax(encumbranceMax) {
                 return new ItemHolder(null, encumbranceMax, null, null);
+            }
+            static fromItem(item) {
+                return new ItemHolder([item], null, null, null);
+            }
+            static fromItems(items) {
+                return new ItemHolder(items, null, null, null);
             }
             static of(entity) {
                 return entity.propertyByName(ItemHolder.name);

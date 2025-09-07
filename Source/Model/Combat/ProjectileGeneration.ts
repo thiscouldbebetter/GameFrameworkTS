@@ -151,10 +151,45 @@ export class ProjectileGeneration
 
 	hit(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this._hit != null)
+		var entityProjectile = uwpe.entity;
+		var entityTarget = uwpe.entity2;
+
+		var projectileKillable = Killable.of(entityProjectile);
+		var targetKillable = Killable.of(entityTarget);
+
+		var projectileIsAlive =
+			projectileKillable != null
+			&& projectileKillable.isAlive();
+
+		if (targetKillable != null && projectileIsAlive)
 		{
-			this._hit(uwpe);
+			if (this._hit == null)
+			{
+				ProjectileGeneration.hit_DamageTargetAndDestroySelf(uwpe);
+			}
+			else
+			{
+				this._hit(uwpe);
+			}
 		}
+	}
+
+	static hit_DamageTargetAndDestroySelf(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var entityProjectile = uwpe.entity;
+		var entityTarget = uwpe.entity2;
+
+		var projectileKillable = Killable.of(entityProjectile);
+		var targetKillable = Killable.of(entityTarget);
+
+		var projectileDamager = Damager.of(entityProjectile);
+		if (projectileDamager != null)
+		{
+			var damageToApply = projectileDamager.damagePerHit;
+			targetKillable.damageApply(uwpe, damageToApply);
+		}
+
+		projectileKillable.kill();
 	}
 
 	projectileEntityInitialize(entity: Entity): void
@@ -269,21 +304,7 @@ export class ProjectileGeneration
 
 		if (entityProjectileRelatable.entityRelatedId != entityOther.id)
 		{
-			var targetKillable = Killable.of(entityOther);
-			if (targetKillable != null)
-			{
-				var projectileKillable = Killable.of(entityProjectile);
-				var projectileIsAlive = projectileKillable.isAlive();
-				if (projectileIsAlive)
-				{
-					this.hit(uwpe);
-
-					var damageToApply = Damager.of(entityProjectile).damagePerHit;
-					targetKillable.damageApply(uwpe, damageToApply);
-
-					projectileKillable.kill();
-				}
-			}
+			this.hit(uwpe);
 		}
 	}
 }

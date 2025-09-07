@@ -40,6 +40,20 @@ var ThisCouldBeBetter;
             playerCannotDie() {
                 return (this.settingValueByName(DebugSettings_Names.Instance().PlayerCannotDie) != null);
             }
+            playerIntegrity() {
+                var settingName = DebugSettings_Names.Instance().PlayerIntegrity;
+                var playerIntegrityAsString = this.settingValueByName(settingName);
+                var playerIntegrity = parseFloat(playerIntegrityAsString);
+                playerIntegrity = isNaN(playerIntegrity) ? null : playerIntegrity;
+                return playerIntegrity;
+            }
+            playerLives() {
+                var settingName = DebugSettings_Names.Instance().PlayerLives;
+                var playerLivesAsString = this.settingValueByName(settingName);
+                var playerLives = parseInt(playerLivesAsString);
+                playerLives = isNaN(playerLives) ? null : playerLives;
+                return playerLives;
+            }
             skipOpening() {
                 return (this.settingValueByName(DebugSettings_Names.Instance().SkipOpening) != null);
             }
@@ -52,6 +66,8 @@ var ThisCouldBeBetter;
                 this.LocalStorageClear = "LocalStorageClear";
                 this.PlaceToStartAtName = "PlaceToStartAtName";
                 this.PlayerCannotDie = "PlayerCannotDie";
+                this.PlayerIntegrity = "PlayerIntegrity";
+                this.PlayerLives = "PlayerLives";
                 this.SkipOpening = "SkipOpening";
             }
             static Instance() {

@@ -64,6 +64,24 @@ export class DebugSettings
 		return (this.settingValueByName(DebugSettings_Names.Instance().PlayerCannotDie) != null);
 	}
 
+	playerIntegrity(): number
+	{
+		var settingName = DebugSettings_Names.Instance().PlayerIntegrity;
+		var playerIntegrityAsString = this.settingValueByName(settingName);
+		var playerIntegrity = parseFloat(playerIntegrityAsString);
+		playerIntegrity = isNaN(playerIntegrity) ? null : playerIntegrity;
+		return playerIntegrity;
+	}
+
+	playerLives(): number
+	{
+		var settingName = DebugSettings_Names.Instance().PlayerLives;
+		var playerLivesAsString = this.settingValueByName(settingName);
+		var playerLives = parseInt(playerLivesAsString);
+		playerLives = isNaN(playerLives) ? null : playerLives;
+		return playerLives;
+	}
+
 	skipOpening(): boolean
 	{
 		return (this.settingValueByName(DebugSettings_Names.Instance().SkipOpening) != null);
@@ -77,6 +95,8 @@ export class DebugSettings_Names
 	LocalStorageClear: string;
 	PlaceToStartAtName: string;
 	PlayerCannotDie: string;
+	PlayerIntegrity: string;
+	PlayerLives: string;
 	SkipOpening: string;
 
 	constructor()
@@ -86,6 +106,8 @@ export class DebugSettings_Names
 		this.LocalStorageClear = "LocalStorageClear";
 		this.PlaceToStartAtName = "PlaceToStartAtName";
 		this.PlayerCannotDie = "PlayerCannotDie";
+		this.PlayerIntegrity = "PlayerIntegrity";
+		this.PlayerLives = "PlayerLives";
 		this.SkipOpening = "SkipOpening";
 	}
 

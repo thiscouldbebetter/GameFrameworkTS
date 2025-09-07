@@ -1447,6 +1447,67 @@ export class VisualBuilder
 		return sunVisual;
 	}
 
+	hazardTrefoilRadiation(radius: number): VisualBase
+	{
+		var colors = Color.Instances();
+
+		var visualBackground = VisualCircle.fromRadiusAndColorFill
+		(
+			radius, colors.Yellow
+		);
+
+		var centralDotRadius = radius * 0.2;
+		var sextantRadiusOuter = radius * 0.9;
+		var sextantRadiusInner = radius * 0.4;
+		var sextantAngleSpannedInTurns = 1 / 6;
+
+		var colorOfDotAndSextants = colors.Black;
+
+		var visualDotCentral = VisualCircle.fromRadiusAndColorFill
+		(
+			centralDotRadius, colorOfDotAndSextants
+		);
+
+		var visualSextantTop = VisualArc.fromRadiiDirectionAngleSpannedAndColor
+		(
+			sextantRadiusOuter,
+			sextantRadiusInner,
+			Polar.fromAzimuthInTurns(2/3).toCoords(),
+			sextantAngleSpannedInTurns,
+			colorOfDotAndSextants
+		);
+
+		var visualSextantLowerLeft = VisualArc.fromRadiiDirectionAngleSpannedAndColor
+		(
+			sextantRadiusOuter,
+			sextantRadiusInner,
+			Polar.fromAzimuthInTurns(1/3).toCoords(),
+			sextantAngleSpannedInTurns,
+			colorOfDotAndSextants
+		);
+
+		var visualSextantLowerRight = VisualArc.fromRadiiDirectionAngleSpannedAndColor
+		(
+			sextantRadiusOuter,
+			sextantRadiusInner,
+			Polar.fromAzimuthInTurns(0).toCoords(),
+			sextantAngleSpannedInTurns,
+			colorOfDotAndSextants
+		);
+
+		var visualTrefoil = VisualGroup.fromChildren
+		([
+			visualBackground,
+			visualDotCentral,
+			visualSextantTop,
+			visualSextantLowerLeft,
+			visualSextantLowerRight
+		]);
+
+		return visualTrefoil;
+	}
+
+
 	triangleIsocelesOfColorPointingRight(color: Color): VisualBase
 	{
 		var vertices =

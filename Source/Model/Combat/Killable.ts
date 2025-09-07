@@ -217,6 +217,12 @@ export class Killable extends EntityPropertyBase<Killable>
 		return this.integrity + "/" + this.integrityMax;
 	}
 
+	integrityMaxSet(value: number): Killable
+	{
+		this.integrityMax = value;
+		return this;
+	}
+
 	integritySet(value: number): Killable
 	{
 		this.integrity = value;
@@ -246,6 +252,12 @@ export class Killable extends EntityPropertyBase<Killable>
 	kill(): void
 	{
 		this.integritySet(0);
+	}
+
+	livesInReserveSet(value: number): Killable
+	{
+		this.livesInReserve = value;
+		return this;
 	}
 
 	ticksOfImmunityInitialSet(value: number): Killable

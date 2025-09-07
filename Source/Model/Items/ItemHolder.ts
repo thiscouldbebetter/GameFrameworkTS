@@ -22,7 +22,7 @@ export class ItemHolder extends EntityPropertyBase<ItemHolder>
 	{
 		super();
 
-		this.items = items || [];
+		this.items = [];
 		this.encumbranceMax = encumbranceMax;
 		this.reachRadius = reachRadius || 20;
 		this.retainsItemsWithZeroQuantities = retainsItemsWithZeroQuantities || false;
@@ -57,14 +57,19 @@ export class ItemHolder extends EntityPropertyBase<ItemHolder>
 		return ItemHolder.create();
 	}
 
-	static fromItems(items: Item[]): ItemHolder
-	{
-		return new ItemHolder(items, null, null, null);
-	}
-
 	static fromEncumbranceMax(encumbranceMax: number): ItemHolder
 	{
 		return new ItemHolder(null, encumbranceMax, null, null);
+	}
+
+	static fromItem(item: Item): ItemHolder
+	{
+		return new ItemHolder( [ item ], null, null, null);
+	}
+
+	static fromItems(items: Item[]): ItemHolder
+	{
+		return new ItemHolder(items, null, null, null);
 	}
 
 	static of(entity: Entity): ItemHolder

@@ -90,6 +90,10 @@ var ThisCouldBeBetter;
             integrityCurrentOverMax() {
                 return this.integrity + "/" + this.integrityMax;
             }
+            integrityMaxSet(value) {
+                this.integrityMax = value;
+                return this;
+            }
             integritySet(value) {
                 this.integrity = value;
                 return this;
@@ -108,6 +112,10 @@ var ThisCouldBeBetter;
             }
             kill() {
                 this.integritySet(0);
+            }
+            livesInReserveSet(value) {
+                this.livesInReserve = value;
+                return this;
             }
             ticksOfImmunityInitialSet(value) {
                 this.ticksOfImmunityInitial = value;

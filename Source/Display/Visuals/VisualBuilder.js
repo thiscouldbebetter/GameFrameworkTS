@@ -561,6 +561,27 @@ var ThisCouldBeBetter;
                 ]);
                 return sunVisual;
             }
+            hazardTrefoilRadiation(radius) {
+                var colors = GameFramework.Color.Instances();
+                var visualBackground = GameFramework.VisualCircle.fromRadiusAndColorFill(radius, colors.Yellow);
+                var centralDotRadius = radius * 0.2;
+                var sextantRadiusOuter = radius * 0.9;
+                var sextantRadiusInner = radius * 0.4;
+                var sextantAngleSpannedInTurns = 1 / 6;
+                var colorOfDotAndSextants = colors.Black;
+                var visualDotCentral = GameFramework.VisualCircle.fromRadiusAndColorFill(centralDotRadius, colorOfDotAndSextants);
+                var visualSextantTop = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, GameFramework.Polar.fromAzimuthInTurns(2 / 3).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
+                var visualSextantLowerLeft = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, GameFramework.Polar.fromAzimuthInTurns(1 / 3).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
+                var visualSextantLowerRight = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, GameFramework.Polar.fromAzimuthInTurns(0).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
+                var visualTrefoil = GameFramework.VisualGroup.fromChildren([
+                    visualBackground,
+                    visualDotCentral,
+                    visualSextantTop,
+                    visualSextantLowerLeft,
+                    visualSextantLowerRight
+                ]);
+                return visualTrefoil;
+            }
             triangleIsocelesOfColorPointingRight(color) {
                 var vertices = [
                     GameFramework.Coords.fromXY(0, -0.5),
