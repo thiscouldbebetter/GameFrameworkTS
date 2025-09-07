@@ -34,8 +34,11 @@ var ThisCouldBeBetter;
             localStorageClear() {
                 return (this.settingValueByName(DebugSettings_Names.Instance().LocalStorageClear) != null);
             }
-            placeToStartAt() {
-                return (this.settingValueByName(DebugSettings_Names.Instance().PlaceToStartAt));
+            placeToStartAtName() {
+                return (this.settingValueByName(DebugSettings_Names.Instance().PlaceToStartAtName));
+            }
+            playerCannotDie() {
+                return (this.settingValueByName(DebugSettings_Names.Instance().PlayerCannotDie) != null);
             }
             skipOpening() {
                 return (this.settingValueByName(DebugSettings_Names.Instance().SkipOpening) != null);
@@ -47,7 +50,8 @@ var ThisCouldBeBetter;
                 this.DifficultyEasy = "DifficultyEasy";
                 this.DrawColliders = "DrawColliders";
                 this.LocalStorageClear = "LocalStorageClear";
-                this.PlaceToStartAt = "PlaceToStartAt";
+                this.PlaceToStartAtName = "PlaceToStartAtName";
+                this.PlayerCannotDie = "PlayerCannotDie";
                 this.SkipOpening = "SkipOpening";
             }
             static Instance() {

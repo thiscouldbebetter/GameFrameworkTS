@@ -6,10 +6,7 @@ export class DebugSettings
 {
 	settingValuesByName: Map<string, string>;
 
-	constructor
-	(
-		settingValuesByName: Map<string, string>
-	)
+	constructor(settingValuesByName: Map<string, string>)
 	{
 		this.settingValuesByName = settingValuesByName;
 	}
@@ -57,9 +54,14 @@ export class DebugSettings
 		return (this.settingValueByName(DebugSettings_Names.Instance().LocalStorageClear) != null);
 	}
 
-	placeToStartAt(): string
+	placeToStartAtName(): string
 	{
-		return (this.settingValueByName(DebugSettings_Names.Instance().PlaceToStartAt) );
+		return (this.settingValueByName(DebugSettings_Names.Instance().PlaceToStartAtName) );
+	}
+
+	playerCannotDie(): boolean
+	{
+		return (this.settingValueByName(DebugSettings_Names.Instance().PlayerCannotDie) != null);
 	}
 
 	skipOpening(): boolean
@@ -73,7 +75,8 @@ export class DebugSettings_Names
 	DifficultyEasy: string;
 	DrawColliders: string;
 	LocalStorageClear: string;
-	PlaceToStartAt: string;
+	PlaceToStartAtName: string;
+	PlayerCannotDie: string;
 	SkipOpening: string;
 
 	constructor()
@@ -81,7 +84,8 @@ export class DebugSettings_Names
 		this.DifficultyEasy = "DifficultyEasy";
 		this.DrawColliders = "DrawColliders";
 		this.LocalStorageClear = "LocalStorageClear";
-		this.PlaceToStartAt = "PlaceToStartAt";
+		this.PlaceToStartAtName = "PlaceToStartAtName";
+		this.PlayerCannotDie = "PlayerCannotDie";
 		this.SkipOpening = "SkipOpening";
 	}
 
