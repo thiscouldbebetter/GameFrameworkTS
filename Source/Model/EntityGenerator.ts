@@ -48,7 +48,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 
 		this.entitiesGeneratedAllTimeCount = 0;
 		this.entitiesGeneratedActive = new Array<Entity>();
-		this.ticksUntilNextGeneration = 0;
+		this.ticksUntilNextGeneration = null;
 	}
 
 	static fromNameEntityTicksBatchMaxesAndPosBox
@@ -82,7 +82,11 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 
 	exhausted(): boolean
 	{
-		return (this.entitiesGeneratedAllTimeCount >= this.entitiesGeneratedMaxAllTime);
+		var isExhausted =
+			this.entitiesGeneratedMaxAllTime != null
+			&& this.entitiesGeneratedAllTimeCount >= this.entitiesGeneratedMaxAllTime;
+
+		return isExhausted;
 	}
 
 	saturated(): boolean

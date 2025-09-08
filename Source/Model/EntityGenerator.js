@@ -22,7 +22,7 @@ var ThisCouldBeBetter;
                     entitySpeedAsRange || GameFramework.RangeExtent.fromNumber(0);
                 this.entitiesGeneratedAllTimeCount = 0;
                 this.entitiesGeneratedActive = new Array();
-                this.ticksUntilNextGeneration = 0;
+                this.ticksUntilNextGeneration = null;
             }
             static fromNameEntityTicksBatchMaxesAndPosBox(name, entityToGenerate, ticksPerGeneration, entitiesPerGeneration, entitiesGeneratedMaxConcurrent, entitiesGeneratedMaxAllTime, entityPositionRangeAsBox) {
                 return new EntityGenerator(name, entityToGenerate, GameFramework.RangeExtent.fromNumber(ticksPerGeneration), GameFramework.RangeExtent.fromNumber(entitiesPerGeneration), entitiesGeneratedMaxConcurrent, entitiesGeneratedMaxAllTime, entityPositionRangeAsBox, null);
@@ -31,7 +31,9 @@ var ThisCouldBeBetter;
                 return entity.propertyByName(EntityGenerator.name);
             }
             exhausted() {
-                return (this.entitiesGeneratedAllTimeCount >= this.entitiesGeneratedMaxAllTime);
+                var isExhausted = this.entitiesGeneratedMaxAllTime != null
+                    && this.entitiesGeneratedAllTimeCount >= this.entitiesGeneratedMaxAllTime;
+                return isExhausted;
             }
             saturated() {
                 return (this.entitiesGeneratedActive.length >= this.entitiesGeneratedMaxConcurrent);
