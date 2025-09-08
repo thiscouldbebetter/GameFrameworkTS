@@ -58,6 +58,12 @@ export class Polar
 		return this;
 	}
 
+	azimuthInTurnsSet(value: number): Polar
+	{
+		this.azimuthInTurns = value;
+		return this;
+	}
+
 	fromCoords(coordsToConvert: Coords): Polar
 	{
 		this.azimuthInTurns =

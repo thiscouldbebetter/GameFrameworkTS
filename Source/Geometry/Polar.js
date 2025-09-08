@@ -32,6 +32,10 @@ var ThisCouldBeBetter;
                 this.azimuthInTurns += turnsToAdd;
                 return this;
             }
+            azimuthInTurnsSet(value) {
+                this.azimuthInTurns = value;
+                return this;
+            }
             fromCoords(coordsToConvert) {
                 this.azimuthInTurns =
                     Math.atan2(coordsToConvert.y, coordsToConvert.x)
