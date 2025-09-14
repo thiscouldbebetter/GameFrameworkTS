@@ -151,9 +151,13 @@ export class Leaderboard
 
 	toControl_PlayerInitialsEnter_Finished(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var universe = uwpe.universe;
+
+		var storageHelper = universe.storageHelper;
+		storageHelper.save(Leaderboard.name, this);
+
 		var control = this.toControl_ScoresAllShow(uwpe);
 		var venueNext = control.toVenue();
-		var universe = uwpe.universe;
 		universe.venueTransitionTo(venueNext);
 	}
 
@@ -244,9 +248,10 @@ export class LeaderboardPlayerScore
 
 	toString(): string
 	{
+		var playerInitialsPadded = this.playerInitials.padEnd(3, " ");
 		var scoreLengthMax = 9;
 		var scoreAsString = ("" + this.score).padStart(scoreLengthMax, " ");
-		var returnValue = this.playerInitials + scoreAsString;
+		var returnValue = playerInitialsPadded + scoreAsString;
 		return returnValue;
 	}
 }
