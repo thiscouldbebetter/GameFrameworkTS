@@ -58,7 +58,7 @@ var ThisCouldBeBetter;
                 var put = () => {
                     itemContainer.transfer(world, entityGetterPutter, entityContainer, "Put");
                 };
-                var returnValue = new GameFramework.ControlContainer("containerTransfer", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("containerTransfer", GameFramework.Coords.create(), // pos
                 size.clone(), 
                 // children
                 [
@@ -97,7 +97,7 @@ var ThisCouldBeBetter;
                     GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Done", font, back // click
                     )
-                ], [new GameFramework.Action("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true)]);
+                ], [GameFramework.Action.fromNameAndPerform("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true)]);
                 return returnValue;
             }
         }

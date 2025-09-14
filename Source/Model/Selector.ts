@@ -262,7 +262,7 @@ export class Selector extends EntityPropertyBase<Selector>
 
 		var labelSize = Coords.fromXY(size.x, fontHeightInPixels);
 
-		var selectionAsContainer = new ControlContainer
+		var selectionAsContainer = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"visualPlayerSelection",
 			pos,
@@ -292,8 +292,7 @@ export class Selector extends EntityPropertyBase<Selector>
 					),
 					font
 				)
-			],
-			null, null
+			]
 		);
 
 		var controlSelection =

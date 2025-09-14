@@ -14,6 +14,7 @@ export class ControlContainer extends ControlBase
 	childrenContainingPos: ControlBase[];
 	childrenContainingPosPrev: ControlBase[];
 	indexOfChildWithFocus: number;
+	indexOfChildWithFocusCannotBeNull: boolean;
 
 	_childMax: Coords;
 	_drawPos: Coords;
@@ -27,12 +28,16 @@ export class ControlContainer extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
+		indexOfChildWithFocusCannotBeNull: boolean,
 		children: ControlBase[],
 		actions: Action[],
 		actionToInputsMappings: ActionToInputsMapping[]
 	)
 	{
 		super(name, pos, size, null);
+
+		this.indexOfChildWithFocusCannotBeNull =
+			indexOfChildWithFocusCannotBeNull || false;
 		this.children = children;
 		this._actions = (actions || []);
 		this._actionToInputsMappings = actionToInputsMappings || [];
@@ -45,7 +50,11 @@ export class ControlContainer extends ControlBase
 			child.parent = this;
 		}
 
-		this.indexOfChildWithFocus = null;
+		this.indexOfChildWithFocusSet(null);
+		if (this.indexOfChildWithFocusCannotBeNull)
+		{
+			this.childFocusNextInDirection(1);
+		}
 		this.childrenContainingPos = [];
 		this.childrenContainingPosPrev = [];
 
@@ -68,7 +77,7 @@ export class ControlContainer extends ControlBase
 	{
 		return new ControlContainer
 		(
-			name, pos, size, children, null, null
+			name, pos, size, null, children, null, null
 		);
 	}
 
@@ -83,7 +92,7 @@ export class ControlContainer extends ControlBase
 	{
 		return new ControlContainer
 		(
-			name, pos, size, children, actions, null
+			name, pos, size, null, children, actions, null
 		);
 	}
 
@@ -99,7 +108,7 @@ export class ControlContainer extends ControlBase
 	{
 		return new ControlContainer
 		(
-			name, pos, size, children, actions, actionToInputsMappings
+			name, pos, size, null, children, actions, actionToInputsMappings
 		);
 	}
 
@@ -112,7 +121,7 @@ export class ControlContainer extends ControlBase
 	{
 		return new ControlContainer
 		(
-			ControlContainer.name, pos, size, children, null, null
+			ControlContainer.name, pos, size, null, children, null, null
 		);
 	}
 
@@ -149,7 +158,7 @@ export class ControlContainer extends ControlBase
 					childWithFocus = this.childFocusNextInDirection(direction);
 				}
 			}
-			else
+			else if (childWithFocus.actionHandle(actionNameToHandle, universe) == false)
 			{
 				childWithFocus.focusLose();
 				childWithFocus = this.childFocusNextInDirection(direction);
@@ -252,11 +261,12 @@ export class ControlContainer extends ControlBase
 		return this;
 	}
 
-	childAdd(childToAdd: ControlBase): void
+	childAdd(childToAdd: ControlBase): ControlContainer
 	{
 		childToAdd.parent = this;
 		this.children.push(childToAdd);
 		this.childrenByName.set(childToAdd.name, childToAdd);
+		return this;
 	}
 
 	childByName(childName: string): ControlBase
@@ -274,9 +284,9 @@ export class ControlContainer extends ControlBase
 			for (var i = iStart; i != iEnd; i += direction)
 			{
 				var child = this.children[i];
-				if (child.isEnabled())
+				if (child.isEnabled() )
 				{
-					this.indexOfChildWithFocus = i;
+					this.indexOfChildWithFocusSet(i);
 					break;
 				}
 			}
@@ -285,28 +295,33 @@ export class ControlContainer extends ControlBase
 		{
 			while (true)
 			{
-				this.indexOfChildWithFocus += direction;
+				this.indexOfChildWithFocusSet(this.indexOfChildWithFocus + direction);
 
 				var isChildNextInRange = NumberHelper.isInRangeMinMax
 				(
 					this.indexOfChildWithFocus, 0, this.children.length - 1
 				);
 
-				if (isChildNextInRange == false)
-				{
-					this.indexOfChildWithFocus = null;
-					break;
-				}
-				else
+				if (isChildNextInRange)
 				{
 					var child = this.children[this.indexOfChildWithFocus];
-					if(child.isEnabled() )
+					if (child.isEnabled() )
 					{
 						break;
 					}
 				}
+				else
+				{
+					this.indexOfChildWithFocusSet(null);
 
-			} // end while (true)
+					if (this.indexOfChildWithFocusCannotBeNull)
+					{
+						this.childFocusNextInDirection(direction);
+					}
+
+					break;
+				}
+			}
 
 		} // end if
 
@@ -400,7 +415,7 @@ export class ControlContainer extends ControlBase
 
 	focusGain(): void
 	{
-		this.indexOfChildWithFocus = null;
+		this.indexOfChildWithFocusSet(null);
 		var childWithFocus = this.childFocusNextInDirection(1);
 		if (childWithFocus != null)
 		{
@@ -414,8 +429,27 @@ export class ControlContainer extends ControlBase
 		if (childWithFocus != null)
 		{
 			childWithFocus.focusLose();
-			this.indexOfChildWithFocus = null;
+			this.indexOfChildWithFocusSet(null);
 		}
+	}
+
+	indexOfChildWithFocusCannotBeNullSet(value: boolean): ControlContainer
+	{
+		this.indexOfChildWithFocusCannotBeNull = value;
+		if (this.indexOfChildWithFocusCannotBeNull)
+		{
+			if (this.indexOfChildWithFocus == null)
+			{
+				this.childFocusNextInDirection(1);
+			}
+		}
+		return this;
+	}
+
+	indexOfChildWithFocusSet(value: number): ControlContainer
+	{
+		this.indexOfChildWithFocus = value;
+		return this;
 	}
 
 	mouseClick(mouseClickPos: Coords): boolean

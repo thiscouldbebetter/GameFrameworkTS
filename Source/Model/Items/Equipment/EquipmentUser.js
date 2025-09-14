@@ -319,7 +319,7 @@ var ThisCouldBeBetter;
                     atim(textEquipItemSelectedInQuickSlot + "8", inputs._8.name),
                     atim(textEquipItemSelectedInQuickSlot + "9", inputs._9.name)
                 ];
-                var returnValue = new GameFramework.ControlContainer("Equip", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("Equip", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 containerChildControls, containerActions, mappings);
                 if (includeTitleAndDoneButton) {

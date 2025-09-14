@@ -110,7 +110,7 @@ export class ItemContainer extends EntityPropertyBase<ItemContainer>
 			itemContainer.transfer(world, entityGetterPutter, entityContainer, "Put");
 		};
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"containerTransfer",
 			Coords.create(), // pos
@@ -237,7 +237,7 @@ export class ItemContainer extends EntityPropertyBase<ItemContainer>
 				)
 			],
 
-			[ new Action("Back", back) ],
+			[ Action.fromNameAndPerform("Back", back) ],
 
 			[ new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true ) ],
 

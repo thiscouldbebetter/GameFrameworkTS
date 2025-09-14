@@ -183,8 +183,10 @@ export class ControlNumber<TContext> extends ControlBase
 	{
 		var parent = this.parent;
 		var parentAsContainer = parent as ControlContainer;
-		parentAsContainer.indexOfChildWithFocus =
-			parentAsContainer.children.indexOf(this);
+		parentAsContainer.indexOfChildWithFocusSet
+		(
+			parentAsContainer.children.indexOf(this)
+		);
 		this.isHighlighted = true;
 		return true;
 	}

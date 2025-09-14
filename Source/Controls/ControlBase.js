@@ -45,6 +45,11 @@ var ThisCouldBeBetter;
             draw(u, d, drawLoc, style) { }
             finalize(u) { }
             finalizeIsComplete() { return true; }
+            fontHeightInPixelsSet(value) {
+                this.fontNameAndHeight =
+                    this.fontNameAndHeight.clone().heightInPixelsSet(value);
+                return this;
+            }
             initialize(u) { }
             initializeIsComplete(u) { return true; }
             isEnabled() { return true; }

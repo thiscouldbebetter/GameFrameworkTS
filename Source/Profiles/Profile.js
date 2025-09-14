@@ -10,9 +10,7 @@ var ThisCouldBeBetter;
                 this.saveStateNameSelected = null;
             }
             static anonymous() {
-                var now = GameFramework.DateTime.now();
-                var nowAsString = now.toStringMMDD_HHMM_SS();
-                var profileName = "Anon-" + nowAsString;
+                var profileName = "";
                 var profile = new Profile(profileName, []);
                 return profile;
             }
@@ -156,9 +154,9 @@ var ThisCouldBeBetter;
                     labelTimeSavedHMS,
                     buttonBack
                 ];
-                var returnValue = new GameFramework.ControlContainer("containerSaveStates", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerSaveStates", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
-                childControls, null, null);
+                childControls);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }

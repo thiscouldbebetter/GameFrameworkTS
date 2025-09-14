@@ -604,7 +604,7 @@ export class EquipmentUser extends EntityPropertyBase<EquipmentUser>
 			atim(textEquipItemSelectedInQuickSlot + "9", inputs._9.name)
 		];
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"Equip",
 			Coords.create(), // pos

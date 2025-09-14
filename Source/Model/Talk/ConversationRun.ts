@@ -836,7 +836,7 @@ export class ConversationRun
 			childControls.push(containerButtons);
 		}
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"containerConversation",
 			Coords.create(), // pos

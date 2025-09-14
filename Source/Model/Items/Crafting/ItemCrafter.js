@@ -116,7 +116,7 @@ var ThisCouldBeBetter;
                         crafter.recipesQueued.push(crafter.recipeAvailableSelected);
                     }
                 };
-                var returnValue = new GameFramework.ControlContainer("Craft", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("Craft", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
                 [
@@ -183,7 +183,7 @@ var ThisCouldBeBetter;
                     fontSmall)
                 ], // end children
                 [
-                    new GameFramework.Action("Back", back),
+                    GameFramework.Action.fromNameAndPerform("Back", back),
                 ], [
                     new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true),
                 ]);

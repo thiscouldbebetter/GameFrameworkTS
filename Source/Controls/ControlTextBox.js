@@ -45,43 +45,65 @@ var ThisCouldBeBetter;
             }
             // events
             actionHandle(actionNameToHandle, universe) {
+                var wasActionHandled = true;
                 var text = this.text();
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 if (actionNameToHandle == controlActionNames.ControlCancel
                     || actionNameToHandle == GameFramework.Input.Instances().Backspace.name) {
-                    text = text.substr(0, text.length - 1);
-                    this.textSet(text);
-                    this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
+                    if (text.length > 0) {
+                        text = text.substr(0, text.length - 1);
+                        this.textSet(text);
+                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
+                    }
                 }
-                else if (actionNameToHandle == controlActionNames.ControlConfirm) {
-                    this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
+                else if (actionNameToHandle == controlActionNames.ControlPrev) {
+                    if (this.cursorPos == 0) {
+                        wasActionHandled = false;
+                    }
+                    else {
+                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
+                    }
+                }
+                else if (actionNameToHandle == controlActionNames.ControlNext
+                    || actionNameToHandle == controlActionNames.ControlConfirm) {
+                    if (this.cursorPos >= text.length) {
+                        wasActionHandled = false;
+                    }
+                    else if (text.length >= this.charsMax) {
+                        wasActionHandled = false;
+                    }
+                    else {
+                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
+                    }
                 }
                 else if (actionNameToHandle == controlActionNames.ControlIncrement
                     || actionNameToHandle == controlActionNames.ControlDecrement) {
-                    // This is a bit counterintuitive.
-                    var direction = (actionNameToHandle == controlActionNames.ControlIncrement
-                        ? -1
-                        : 1);
-                    var charCodeAtCursor = (this.cursorPos < text.length
-                        ? text.charCodeAt(this.cursorPos)
-                        : "A".charCodeAt(0) - 1);
-                    if (charCodeAtCursor == "Z".charCodeAt(0)
-                        && direction == 1) {
-                        charCodeAtCursor = "a".charCodeAt(0);
+                    if (this.cursorPos < this.charsMax) {
+                        // This is a bit counterintuitive.
+                        var direction = (actionNameToHandle == controlActionNames.ControlIncrement
+                            ? -1
+                            : 1);
+                        var charCodeAtCursor = (this.cursorPos < text.length
+                            ? text.charCodeAt(this.cursorPos)
+                            : "A".charCodeAt(0) - 1);
+                        if (charCodeAtCursor == "Z".charCodeAt(0)
+                            && direction == 1) {
+                            charCodeAtCursor = "a".charCodeAt(0);
+                        }
+                        else if (charCodeAtCursor == "a".charCodeAt(0)
+                            && direction == -1) {
+                            charCodeAtCursor = "Z".charCodeAt(0);
+                        }
+                        else {
+                            charCodeAtCursor = charCodeAtCursor + direction;
+                        }
+                        charCodeAtCursor = GameFramework.NumberHelper.wrapToRangeMinMax(charCodeAtCursor, "A".charCodeAt(0), "z".charCodeAt(0) + 1);
+                        var charAtCursor = String.fromCharCode(charCodeAtCursor);
+                        var textEdited = text.substr(0, this.cursorPos)
+                            + charAtCursor
+                            + text.substr(this.cursorPos + 1);
+                        this.textSet(textEdited);
                     }
-                    else if (charCodeAtCursor == "a".charCodeAt(0)
-                        && direction == -1) {
-                        charCodeAtCursor = "Z".charCodeAt(0);
-                    }
-                    else {
-                        charCodeAtCursor = charCodeAtCursor + direction;
-                    }
-                    charCodeAtCursor = GameFramework.NumberHelper.wrapToRangeMinMax(charCodeAtCursor, "A".charCodeAt(0), "z".charCodeAt(0) + 1);
-                    var charAtCursor = String.fromCharCode(charCodeAtCursor);
-                    var textEdited = text.substr(0, this.cursorPos)
-                        + charAtCursor
-                        + text.substr(this.cursorPos + 1);
-                    this.textSet(textEdited);
                 }
                 else if (actionNameToHandle.length == 1) {
                     // Printable character.
@@ -95,7 +117,7 @@ var ThisCouldBeBetter;
                         this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
                     }
                 }
-                return true; // wasActionHandled
+                return wasActionHandled;
             }
             focusGain() {
                 this.isHighlighted = true;
@@ -111,8 +133,7 @@ var ThisCouldBeBetter;
             mouseClick(mouseClickPos) {
                 var parent = this.parent;
                 var parentAsContainer = parent;
-                parentAsContainer.indexOfChildWithFocus =
-                    parentAsContainer.children.indexOf(this);
+                parentAsContainer.indexOfChildWithFocusSet(parentAsContainer.children.indexOf(this));
                 this.isHighlighted = true;
                 return true;
             }

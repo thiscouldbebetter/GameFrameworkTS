@@ -4,8 +4,10 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlContainer extends GameFramework.ControlBase {
-            constructor(name, pos, size, children, actions, actionToInputsMappings) {
+            constructor(name, pos, size, indexOfChildWithFocusCannotBeNull, children, actions, actionToInputsMappings) {
                 super(name, pos, size, null);
+                this.indexOfChildWithFocusCannotBeNull =
+                    indexOfChildWithFocusCannotBeNull || false;
                 this.children = children;
                 this._actions = (actions || []);
                 this._actionToInputsMappings = actionToInputsMappings || [];
@@ -14,7 +16,10 @@ var ThisCouldBeBetter;
                     var child = this.children[i];
                     child.parent = this;
                 }
-                this.indexOfChildWithFocus = null;
+                this.indexOfChildWithFocusSet(null);
+                if (this.indexOfChildWithFocusCannotBeNull) {
+                    this.childFocusNextInDirection(1);
+                }
                 this.childrenContainingPos = [];
                 this.childrenContainingPosPrev = [];
                 // Helper variables.
@@ -26,16 +31,16 @@ var ThisCouldBeBetter;
                 this._posToCheck = GameFramework.Coords.create();
             }
             static fromNamePosSizeAndChildren(name, pos, size, children) {
-                return new ControlContainer(name, pos, size, children, null, null);
+                return new ControlContainer(name, pos, size, null, children, null, null);
             }
             static fromNamePosSizeChildrenAndActions(name, pos, size, children, actions) {
-                return new ControlContainer(name, pos, size, children, actions, null);
+                return new ControlContainer(name, pos, size, null, children, actions, null);
             }
             static fromNamePosSizeChildrenActionsAndMappings(name, pos, size, children, actions, actionToInputsMappings) {
-                return new ControlContainer(name, pos, size, children, actions, actionToInputsMappings);
+                return new ControlContainer(name, pos, size, null, children, actions, actionToInputsMappings);
             }
             static fromPosSizeAndChildren(pos, size, children) {
-                return new ControlContainer(ControlContainer.name, pos, size, children, null, null);
+                return new ControlContainer(ControlContainer.name, pos, size, null, children, null, null);
             }
             // instance methods
             // actions
@@ -56,7 +61,7 @@ var ThisCouldBeBetter;
                             childWithFocus = this.childFocusNextInDirection(direction);
                         }
                     }
-                    else {
+                    else if (childWithFocus.actionHandle(actionNameToHandle, universe) == false) {
                         childWithFocus.focusLose();
                         childWithFocus = this.childFocusNextInDirection(direction);
                     }
@@ -133,6 +138,7 @@ var ThisCouldBeBetter;
                 childToAdd.parent = this;
                 this.children.push(childToAdd);
                 this.childrenByName.set(childToAdd.name, childToAdd);
+                return this;
             }
             childByName(childName) {
                 return this.childrenByName.get(childName);
@@ -144,26 +150,29 @@ var ThisCouldBeBetter;
                     for (var i = iStart; i != iEnd; i += direction) {
                         var child = this.children[i];
                         if (child.isEnabled()) {
-                            this.indexOfChildWithFocus = i;
+                            this.indexOfChildWithFocusSet(i);
                             break;
                         }
                     }
                 }
                 else {
                     while (true) {
-                        this.indexOfChildWithFocus += direction;
+                        this.indexOfChildWithFocusSet(this.indexOfChildWithFocus + direction);
                         var isChildNextInRange = GameFramework.NumberHelper.isInRangeMinMax(this.indexOfChildWithFocus, 0, this.children.length - 1);
-                        if (isChildNextInRange == false) {
-                            this.indexOfChildWithFocus = null;
-                            break;
-                        }
-                        else {
+                        if (isChildNextInRange) {
                             var child = this.children[this.indexOfChildWithFocus];
                             if (child.isEnabled()) {
                                 break;
                             }
                         }
-                    } // end while (true)
+                        else {
+                            this.indexOfChildWithFocusSet(null);
+                            if (this.indexOfChildWithFocusCannotBeNull) {
+                                this.childFocusNextInDirection(direction);
+                            }
+                            break;
+                        }
+                    }
                 } // end if
                 var returnValue = this.childWithFocus();
                 if (returnValue != null) {
@@ -206,7 +215,7 @@ var ThisCouldBeBetter;
                 return this.childrenLayOutWithSpacingAlongDimension(spacing, 1);
             }
             focusGain() {
-                this.indexOfChildWithFocus = null;
+                this.indexOfChildWithFocusSet(null);
                 var childWithFocus = this.childFocusNextInDirection(1);
                 if (childWithFocus != null) {
                     childWithFocus.focusGain();
@@ -216,8 +225,21 @@ var ThisCouldBeBetter;
                 var childWithFocus = this.childWithFocus();
                 if (childWithFocus != null) {
                     childWithFocus.focusLose();
-                    this.indexOfChildWithFocus = null;
+                    this.indexOfChildWithFocusSet(null);
                 }
+            }
+            indexOfChildWithFocusCannotBeNullSet(value) {
+                this.indexOfChildWithFocusCannotBeNull = value;
+                if (this.indexOfChildWithFocusCannotBeNull) {
+                    if (this.indexOfChildWithFocus == null) {
+                        this.childFocusNextInDirection(1);
+                    }
+                }
+                return this;
+            }
+            indexOfChildWithFocusSet(value) {
+                this.indexOfChildWithFocus = value;
+                return this;
             }
             mouseClick(mouseClickPos) {
                 mouseClickPos = this._mouseClickPos.overwriteWith(mouseClickPos).subtract(this.pos);

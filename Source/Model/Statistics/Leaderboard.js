@@ -41,9 +41,9 @@ var ThisCouldBeBetter;
                 for (var i = 0; i < this.playerScores.length; i++) {
                     var playerScoreExisting = this.playerScores[i].score;
                     if (value > playerScoreExisting) {
-                        this.scoreBeingEntered = value;
-                        var playerScoreToInsert = LeaderboardPlayerScore.fromScore(value);
-                        this.playerScores.splice(i, 0, playerScoreToInsert);
+                        this.scoreBeingEntered =
+                            LeaderboardPlayerScore.fromScore(value);
+                        this.playerScores.splice(i, 0, this.scoreBeingEntered);
                         this.playerScores.length = this.playerScoresCount;
                         break;
                     }
@@ -58,22 +58,32 @@ var ThisCouldBeBetter;
             }
             toControl_PlayerIntialsEnter(uwpe) {
                 var textAsLines = [
-                    "You score is among ",
-                    "the top " + this.playerScoresCount, " of all time!",
+                    "Your score is among ",
+                    "the top " + this.playerScoresCount,
+                    "of all time!",
                     " ",
                     "Enter your initials:",
                     " ",
-                    "todo"
+                    " ",
+                    " "
                 ];
                 var text = textAsLines.join("\n");
                 var universe = uwpe.universe;
                 var controlBuilder = universe.controlBuilder;
                 var sizeInPixels = universe.display.sizeInPixels;
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
-                var control = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => { this.toControl_PlayerInitialsEnter_Finished(uwpe); }, // acknowledge
+                var controlRoot = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => this.toControl_PlayerInitialsEnter_Finished(uwpe), // acknowledge
                 true, // showMessageOnly
                 fontNameAndHeight, this.secondsToShow);
-                return control;
+                controlRoot.containerInner.indexOfChildWithFocusCannotBeNullSet(true);
+                var textBoxInitials = GameFramework.ControlTextBox.fromNamePosSizeAndTextBinding("textBoxInitials", GameFramework.Coords.fromXY(150, 200), // pos
+                GameFramework.Coords.fromXY(100, 40), // size
+                GameFramework.DataBinding.fromContextGetAndSet(this.scoreBeingEntered, (c) => c.playerInitials, (c, v) => c.playerInitials = v)).charsMaxSet(3);
+                textBoxInitials.fontHeightInPixelsSet(fontNameAndHeight.heightInPixels * 2);
+                controlRoot
+                    .childAdd(textBoxInitials)
+                    .childFocusNextInDirection(1);
+                return controlRoot;
             }
             toControl_PlayerInitialsEnter_Finished(uwpe) {
                 var control = this.toControl_ScoresAllShow(uwpe);
@@ -105,56 +115,6 @@ var ThisCouldBeBetter;
             toControl_ScoresAllShow_Finished(universe) {
                 universe.venueTransitionTo(universe.controlBuilder.title(universe, universe.display.sizeInPixels).toVenue());
             }
-            static toControlGetInitials(uwpe) {
-                var universe = uwpe.universe;
-                var size = universe.display.sizeDefault().clone();
-                var controlBuilder = universe.controlBuilder;
-                var sizeBase = controlBuilder.sizeBase;
-                var scaleMultiplier = size.clone().divide(sizeBase);
-                var fontNameAndHeight = controlBuilder.fontBase;
-                var buttonHeightBase = controlBuilder.buttonHeightBase;
-                var controls = [
-                    GameFramework.ControlLabel.fromPosSizeTextFontCentered(GameFramework.Coords.fromXY(50, 15), // pos
-                    GameFramework.Coords.fromXY(100, 15), // size
-                    GameFramework.DataBinding.fromContext("Your Score:"), fontNameAndHeight),
-                    GameFramework.ControlLabel.fromPosSizeTextFontCentered(GameFramework.Coords.fromXY(50, 35), // pos
-                    GameFramework.Coords.fromXY(100, 15), // size
-                    GameFramework.DataBinding.fromContext("Enter your initials:"), fontNameAndHeight),
-                    GameFramework.ControlTextBox.fromNamePosSizeAndTextBinding("textBoxInitials", GameFramework.Coords.fromXY(50, 50), // pos
-                    GameFramework.Coords.fromXY(100, 20), // size
-                    GameFramework.DataBinding.fromContextGetAndSet(universe.profile, (c) => c.name, (c, v) => c.name = v)).charsMaxSet(3),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(50, 80), // pos
-                    GameFramework.Coords.fromXY(45, buttonHeightBase), // size
-                    "Submit", fontNameAndHeight, () => this.toControlGetInitials_Submit(uwpe)).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => { return c.name.length > 0; }))
-                ];
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerProfileNew", GameFramework.Coords.zeroes(), // pos
-                sizeBase.clone(), // size
-                controls);
-                returnValue.scalePosAndSize(scaleMultiplier);
-                return returnValue;
-            }
-            static toControlGetInitials_Submit(uwpe) {
-                var universe = uwpe.universe;
-                var venueControls = universe.venueCurrent();
-                var controlRootAsContainer = venueControls.controlRoot;
-                var textBoxName = controlRootAsContainer.childByName("textBoxInitials");
-                var profileName = textBoxName.text();
-                if (profileName == "") {
-                    return;
-                }
-                var storageHelper = universe.storageHelper;
-                var profile = new GameFramework.Profile(profileName, []);
-                var profileNames = storageHelper.load(GameFramework.Profile.StorageKeyProfileNames);
-                if (profileNames == null) {
-                    profileNames = [];
-                }
-                profileNames.push(profileName);
-                storageHelper.save(GameFramework.Profile.StorageKeyProfileNames, profileNames);
-                storageHelper.save(profileName, profile);
-                universe.profileSet(profile);
-                var venueNext = GameFramework.Profile.toControlSaveStateLoad(universe, null, universe.venueCurrent()).toVenue();
-                universe.venueTransitionTo(venueNext);
-            }
             toVenue(uwpe) {
                 var thisAsControl = this.toControl(uwpe);
                 var thisAsVenue = thisAsControl.toVenue();
@@ -172,7 +132,7 @@ var ThisCouldBeBetter;
                 return new LeaderboardPlayerScore(playerName, score, null);
             }
             static fromScore(score) {
-                return new LeaderboardPlayerScore("---", score, null);
+                return new LeaderboardPlayerScore("", score, null);
             }
             toString() {
                 var scoreLengthMax = 9;

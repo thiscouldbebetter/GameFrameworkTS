@@ -374,17 +374,16 @@ class PlaceBuilderDemo_Items
 			back // click
 		);
 		var controlActionNames = ControlActionNames.Instances();
-		var container = new ControlContainer
+		var container = ControlContainer.fromNamePosSizeChildrenAndActions
 		(
 			"containerBook",
 			Coords.create(),
 			size.clone(),
 			[ textarea, button ], // children
 			[
-				new Action( controlActionNames.ControlCancel, back ),
-				new Action( controlActionNames.ControlConfirm, back )
-			],
-			null
+				Action.fromNameAndPerform(controlActionNames.ControlCancel, back),
+				Action.fromNameAndPerform(controlActionNames.ControlConfirm, back)
+			]
 		);
 
 		var venueNext = container.toVenue();

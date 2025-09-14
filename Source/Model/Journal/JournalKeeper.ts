@@ -333,14 +333,14 @@ export class JournalKeeper extends EntityPropertyBase<JournalKeeper>
 			)
 		];
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"Notes",
 			Coords.create(), // pos
 			sizeBase.clone(), // size
 			childControls,
 			[
-				new Action("Back", back),
+				Action.fromNameAndPerform("Back", back),
 			],
 
 			[

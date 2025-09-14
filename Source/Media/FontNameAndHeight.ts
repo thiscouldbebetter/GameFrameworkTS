@@ -37,11 +37,16 @@ export class FontNameAndHeight implements Clonable<FontNameAndHeight>, Equatable
 		return universe.mediaLibrary.fontGetByName(this.name);
 	}
 
+	heightInPixelsSet(value: number): FontNameAndHeight
+	{
+		this.heightInPixels = value;
+		return this;
+	}
+
 	toStringSystemFont(): string
 	{
 		return this.heightInPixels + "px " + this.name;
 	}
-
 
 	// Clonable.
 

@@ -434,7 +434,7 @@ var ThisCouldBeBetter;
                     atim("Item8", inputs._8.name),
                     atim("Item9", inputs._9.name),
                 ];
-                var returnValue = new GameFramework.ControlContainer("Items", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("Items", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 childControls, actions, mappings);
                 if (includeTitleAndDoneButton) {

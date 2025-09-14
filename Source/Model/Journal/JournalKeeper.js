@@ -135,10 +135,10 @@ var ThisCouldBeBetter;
                     }), // text
                     fontSmall)
                 ];
-                var returnValue = new GameFramework.ControlContainer("Notes", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("Notes", GameFramework.Coords.create(), // pos
                 sizeBase.clone(), // size
                 childControls, [
-                    new GameFramework.Action("Back", back),
+                    GameFramework.Action.fromNameAndPerform("Back", back),
                 ], [
                     new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true),
                 ]);

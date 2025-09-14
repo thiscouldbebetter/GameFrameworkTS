@@ -20,6 +20,7 @@ var ThisCouldBeBetter;
             }
             childAdd(childToAdd) {
                 this.containerInner.childAdd(childToAdd);
+                return this;
             }
             childWithFocus() {
                 return this.containerInner.childWithFocus();

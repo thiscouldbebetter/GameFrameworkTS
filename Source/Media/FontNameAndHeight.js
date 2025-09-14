@@ -20,6 +20,10 @@ var ThisCouldBeBetter;
             font(universe) {
                 return universe.mediaLibrary.fontGetByName(this.name);
             }
+            heightInPixelsSet(value) {
+                this.heightInPixels = value;
+                return this;
+            }
             toStringSystemFont() {
                 return this.heightInPixels + "px " + this.name;
             }

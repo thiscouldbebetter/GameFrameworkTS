@@ -881,7 +881,7 @@ export class ItemHolder extends EntityPropertyBase<ItemHolder>
 			atim("Item9", inputs._9.name),
 		]
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"Items",
 			Coords.create(), // pos

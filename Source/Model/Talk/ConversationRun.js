@@ -382,7 +382,7 @@ var ThisCouldBeBetter;
                     var containerButtons = containerButtonsInner.toControlContainerTransparent();
                     childControls.push(containerButtons);
                 }
-                var returnValue = new GameFramework.ControlContainer("containerConversation", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("containerConversation", GameFramework.Coords.create(), // pos
                 size, childControls, actions, actionToInputsMappings);
                 returnValue.focusGain();
                 return returnValue;

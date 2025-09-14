@@ -194,7 +194,7 @@ export class ItemCrafter extends EntityPropertyBase<ItemCrafter>
 			}
 		};
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"Craft",
 			Coords.create(), // pos
@@ -390,7 +390,7 @@ export class ItemCrafter extends EntityPropertyBase<ItemCrafter>
 			], // end children
 
 			[
-				new Action("Back", back),
+				Action.fromNameAndPerform("Back", back),
 			],
 
 			[

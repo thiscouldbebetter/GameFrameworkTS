@@ -20,9 +20,7 @@ export class Profile
 
 	static anonymous(): Profile
 	{
-		var now = DateTime.now();
-		var nowAsString = now.toStringMMDD_HHMM_SS();
-		var profileName = "Anon-" + nowAsString;
+		var profileName = "";
 		var profile = new Profile(profileName, []);
 		return profile;
 	}
@@ -407,13 +405,12 @@ export class Profile
 			buttonBack
 		];
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeAndChildren
 		(
 			"containerSaveStates",
 			Coords.create(), // pos
 			sizeBase.clone(), // size
-			childControls,
-			null, null
+			childControls
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);

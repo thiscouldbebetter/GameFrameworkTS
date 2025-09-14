@@ -252,7 +252,7 @@ export class ItemStore extends EntityPropertyBase<ItemStore>
 			back // click
 		);
 
-		var returnValue = new ControlContainer
+		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"containerTransfer",
 			Coords.create(), // pos
@@ -269,7 +269,7 @@ export class ItemStore extends EntityPropertyBase<ItemStore>
 				buttonDone
 			],
 
-			[ new Action("Back", back) ],
+			[ Action.fromNameAndPerform("Back", back) ],
 
 			[ new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true ) ],
 
