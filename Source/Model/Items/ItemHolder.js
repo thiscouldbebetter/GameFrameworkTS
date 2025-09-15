@@ -200,17 +200,6 @@ var ThisCouldBeBetter;
                 }
                 return itemSplitted;
             }
-            itemTransferTo(item, other) {
-                other.itemAdd(item);
-                GameFramework.ArrayHelper.remove(this.items, item);
-                if (this.itemSelected == item) {
-                    this.itemSelected = null;
-                }
-            }
-            itemTransferSingleTo(item, other) {
-                var itemSingle = this.itemSplit(item, 1);
-                this.itemTransferTo(itemSingle, other);
-            }
             itemSubtract(itemToSubtract) {
                 this.itemSubtractDefnNameAndQuantity(itemToSubtract.defnName, itemToSubtract.quantity);
             }
@@ -235,6 +224,17 @@ var ThisCouldBeBetter;
                         }
                     }
                 }
+            }
+            itemTransferTo(item, other) {
+                other.itemAdd(item);
+                GameFramework.ArrayHelper.remove(this.items, item);
+                if (this.itemSelected == item) {
+                    this.itemSelected = null;
+                }
+            }
+            itemTransferSingleTo(item, other) {
+                var itemSingle = this.itemSplit(item, 1);
+                this.itemTransferTo(itemSingle, other);
             }
             itemsAdd(itemsToAdd) {
                 itemsToAdd.forEach((x) => this.itemAdd(x));

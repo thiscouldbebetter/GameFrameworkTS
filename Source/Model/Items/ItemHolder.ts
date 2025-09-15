@@ -382,22 +382,6 @@ export class ItemHolder extends EntityPropertyBase<ItemHolder>
 		return itemSplitted;
 	}
 
-	itemTransferTo(item: Item, other: ItemHolder): void
-	{
-		other.itemAdd(item);
-		ArrayHelper.remove(this.items, item);
-		if (this.itemSelected == item)
-		{
-			this.itemSelected = null;
-		}
-	}
-
-	itemTransferSingleTo(item: Item, other: ItemHolder): void
-	{
-		var itemSingle = this.itemSplit(item, 1);
-		this.itemTransferTo(itemSingle, other);
-	}
-
 	itemSubtract(itemToSubtract: Item): void
 	{
 		this.itemSubtractDefnNameAndQuantity
@@ -439,6 +423,22 @@ export class ItemHolder extends EntityPropertyBase<ItemHolder>
 
 			}
 		}
+	}
+
+	itemTransferTo(item: Item, other: ItemHolder): void
+	{
+		other.itemAdd(item);
+		ArrayHelper.remove(this.items, item);
+		if (this.itemSelected == item)
+		{
+			this.itemSelected = null;
+		}
+	}
+
+	itemTransferSingleTo(item: Item, other: ItemHolder): void
+	{
+		var itemSingle = this.itemSplit(item, 1);
+		this.itemTransferTo(itemSingle, other);
 	}
 
 	itemsAdd(itemsToAdd: Item[]): ItemHolder

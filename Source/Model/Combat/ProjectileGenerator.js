@@ -3,9 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class ProjectileGenerator extends GameFramework.EntityPropertyBase {
+        class ProjectileGenerator {
             constructor(name, fire, generations) {
-                super();
                 this.name = name;
                 this._fire = fire || ProjectileGenerator.fireDefault;
                 this.generations = generations;
@@ -20,24 +19,37 @@ var ThisCouldBeBetter;
             static fromNameAndGenerations(name, generations) {
                 return new ProjectileGenerator(name, null, generations);
             }
+            static fromNameGenerationAndFire(name, generation, fire) {
+                return new ProjectileGenerator(name, fire, [generation]);
+            }
+            static fromNameGenerationsAndFire(name, generations, fire) {
+                return new ProjectileGenerator(name, fire, generations);
+            }
             static fromNameFireAndGenerations(name, fire, generations) {
                 return new ProjectileGenerator(name, fire, generations);
             }
-            static of(entity) {
-                return entity.propertyByName(ProjectileGenerator.name);
+            static actionFire(generatorName) {
+                return GameFramework.Action.fromNameAndPerform(generatorName, (uwpe) => this.actionFire_Perform(generatorName, uwpe));
             }
-            static actionFire() {
-                return GameFramework.Action.fromNameAndPerform("Fire", this.actionFire_Perform);
-            }
-            static actionFire_Perform(uwpe) {
+            static actionFire_Perform(generatorName, uwpe) {
                 var entityFiring = uwpe.entity;
-                var projectileGenerator = ProjectileGenerator.of(entityFiring);
+                var projectileShooter = GameFramework.ProjectileShooter.of(entityFiring);
+                var projectileGenerator = projectileShooter.generatorByName(generatorName);
                 projectileGenerator.fire(uwpe);
             }
             static fireDefault(uwpe) {
                 var place = uwpe.place;
                 var entityShooter = uwpe.entity;
-                var generator = ProjectileGenerator.of(entityShooter);
+                var shooter = GameFramework.ProjectileShooter.of(entityShooter);
+                var generator = shooter.generatorDefault();
+                var shotEntities = generator.toEntitiesFromEntityFiring(entityShooter);
+                place.entitiesToSpawnAdd(shotEntities);
+            }
+            static fireGeneratorByName(generatorName, uwpe) {
+                var place = uwpe.place;
+                var entityShooter = uwpe.entity;
+                var shooter = GameFramework.ProjectileShooter.of(entityShooter);
+                var generator = shooter.generatorByName(generatorName);
                 var shotEntities = generator.toEntitiesFromEntityFiring(entityShooter);
                 place.entitiesToSpawnAdd(shotEntities);
             }
@@ -52,8 +64,6 @@ var ThisCouldBeBetter;
                 var returnValues = this.generations.map(x => x.toEntityFromEntityFiring(entityFiring));
                 return returnValues;
             }
-            // Clonable.
-            clone() { return this; }
         }
         GameFramework.ProjectileGenerator = ProjectileGenerator;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

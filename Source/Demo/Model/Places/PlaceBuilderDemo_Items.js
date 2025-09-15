@@ -166,11 +166,11 @@ class PlaceBuilderDemo_Items {
         var button = ControlButton.from5(Coords.fromXY(size.x / 4, 3 * size.y / 4 + fontHeight), Coords.fromXY(size.x / 2, fontHeight * 2), "Done", fontNameAndHeight, back // click
         );
         var controlActionNames = ControlActionNames.Instances();
-        var container = new ControlContainer("containerBook", Coords.create(), size.clone(), [textarea, button], // children
+        var container = ControlContainer.fromNamePosSizeChildrenAndActions("containerBook", Coords.create(), size.clone(), [textarea, button], // children
         [
-            new Action(controlActionNames.ControlCancel, back),
-            new Action(controlActionNames.ControlConfirm, back)
-        ], null);
+            Action.fromNameAndPerform(controlActionNames.ControlCancel, back),
+            Action.fromNameAndPerform(controlActionNames.ControlConfirm, back)
+        ]);
         var venueNext = container.toVenue();
         universe.venueTransitionTo(venueNext);
         return "";

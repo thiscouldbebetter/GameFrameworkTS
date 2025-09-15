@@ -216,7 +216,7 @@ export class ProjectileGeneration
 		var shooterOri = shooterLoc.orientation;
 		var shooterForward = shooterOri.forward;
 
-		var shotDistance = this.distanceInitial + this.radius;
+		var shotDistance = this.distanceInitial;
 
 		var shotOffset =
 			shooterForward

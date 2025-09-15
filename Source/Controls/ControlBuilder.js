@@ -33,6 +33,15 @@ var ThisCouldBeBetter;
             styleDefault() {
                 return this.styles[0];
             }
+            styleDefaultSet(value) {
+                var styleExisting = this.styles.find(x => x.name == value.name);
+                if (styleExisting != null) {
+                    var styleExistingIndex = this.styles.indexOf(styleExisting);
+                    this.styles.splice(styleExistingIndex, 1);
+                }
+                this.styles.splice(0, 0, value);
+                return this;
+            }
             venueFaderFromTo(vFrom, vTo) {
                 if (vTo.constructor.name == GameFramework.VenueFader.name) {
                     vTo = vTo.venueToFadeTo();

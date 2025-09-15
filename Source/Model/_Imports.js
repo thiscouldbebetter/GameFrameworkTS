@@ -32,6 +32,7 @@ var Damager = gf.Damager;
 var Killable = gf.Killable;
 var ProjectileGeneration = gf.ProjectileGeneration;
 var ProjectileGenerator = gf.ProjectileGenerator;
+var ProjectileShooter = gf.ProjectileShooter;
 var Weapon = gf.Weapon;
 // Model - Effects.
 var Effect = gf.Effect;

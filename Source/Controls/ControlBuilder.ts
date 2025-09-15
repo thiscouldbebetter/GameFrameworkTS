@@ -66,6 +66,18 @@ export class ControlBuilder
 		return this.styles[0];
 	}
 
+	styleDefaultSet(value: ControlStyle): ControlBuilder
+	{
+		var styleExisting = this.styles.find(x => x.name == value.name);
+		if (styleExisting != null)
+		{
+			var styleExistingIndex = this.styles.indexOf(styleExisting);
+			this.styles.splice(styleExistingIndex, 1);
+		}
+		this.styles.splice(0, 0, value);
+		return this;
+	}
+
 	venueFaderFromTo(vFrom: Venue, vTo: Venue): VenueFader
 	{
 		if (vTo.constructor.name == VenueFader.name)

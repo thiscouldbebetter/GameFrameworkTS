@@ -38,6 +38,7 @@ import Damager = gf.Damager;
 import Killable = gf.Killable;
 import ProjectileGeneration = gf.ProjectileGeneration;
 import ProjectileGenerator = gf.ProjectileGenerator;
+import ProjectileShooter = gf.ProjectileShooter;
 import Weapon = gf.Weapon;
 
 // Model - Effects.

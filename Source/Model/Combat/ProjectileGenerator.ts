@@ -2,7 +2,6 @@ namespace ThisCouldBeBetter.GameFramework
 {
 
 export class ProjectileGenerator
-	extends EntityPropertyBase<ProjectileGenerator>
 {
 	name: string;
 	_fire: (uwpe: UniverseWorldPlaceEntities) => void;
@@ -15,8 +14,6 @@ export class ProjectileGenerator
 		generations: ProjectileGeneration[]
 	)
 	{
-		super();
-
 		this.name = name;
 		this._fire = fire || ProjectileGenerator.fireDefault;
 		this.generations = generations;
@@ -50,6 +47,32 @@ export class ProjectileGenerator
 		);
 	}
 
+	static fromNameGenerationAndFire
+	(
+		name: string,
+		generation: ProjectileGeneration,
+		fire: (uwpe: UniverseWorldPlaceEntities) => void
+	): ProjectileGenerator
+	{
+		return new ProjectileGenerator
+		(
+			name, fire, [ generation ]
+		);
+	}
+
+	static fromNameGenerationsAndFire
+	(
+		name: string,
+		generations: ProjectileGeneration[],
+		fire: (uwpe: UniverseWorldPlaceEntities) => void
+	): ProjectileGenerator
+	{
+		return new ProjectileGenerator
+		(
+			name, fire, generations
+		);
+	}
+
 	static fromNameFireAndGenerations
 	(
 		name: string,
@@ -63,25 +86,21 @@ export class ProjectileGenerator
 		);
 	}
 
-	static of(entity: Entity): ProjectileGenerator
-	{
-		return entity.propertyByName(ProjectileGenerator.name) as ProjectileGenerator;
-	}
-
-	static actionFire(): Action
+	static actionFire(generatorName: string): Action
 	{
 		return Action.fromNameAndPerform
 		(
-			"Fire",
-			this.actionFire_Perform
+			generatorName,
+			(uwpe: UniverseWorldPlaceEntities) => this.actionFire_Perform(generatorName, uwpe)
 		)
 	}
 
-	static actionFire_Perform(uwpe: UniverseWorldPlaceEntities): void
+	static actionFire_Perform(generatorName: string, uwpe: UniverseWorldPlaceEntities): void
 	{
 		var entityFiring = uwpe.entity;
-		var projectileGenerator =
-			ProjectileGenerator.of(entityFiring);
+		var projectileShooter =
+			ProjectileShooter.of(entityFiring);
+		var projectileGenerator = projectileShooter.generatorByName(generatorName);
 		projectileGenerator.fire(uwpe);
 	}
 
@@ -90,8 +109,22 @@ export class ProjectileGenerator
 		var place = uwpe.place;
 		var entityShooter = uwpe.entity;
 
-		var generator =
-			ProjectileGenerator.of(entityShooter);
+		var shooter =
+			ProjectileShooter.of(entityShooter);
+		var generator = shooter.generatorDefault();
+		var shotEntities =
+			generator.toEntitiesFromEntityFiring(entityShooter);
+		place.entitiesToSpawnAdd(shotEntities);
+	}
+
+	static fireGeneratorByName(generatorName: string, uwpe: UniverseWorldPlaceEntities): void
+	{
+		var place = uwpe.place;
+		var entityShooter = uwpe.entity;
+
+		var shooter =
+			ProjectileShooter.of(entityShooter);
+		var generator = shooter.generatorByName(generatorName);
 		var shotEntities =
 			generator.toEntitiesFromEntityFiring(entityShooter);
 		place.entitiesToSpawnAdd(shotEntities);
@@ -116,10 +149,6 @@ export class ProjectileGenerator
 		);
 		return returnValues;
 	}
-
-	// Clonable.
-
-	clone(): ProjectileGenerator { return this; }
 
 }
 

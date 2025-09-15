@@ -96,7 +96,7 @@ var ThisCouldBeBetter;
                 var shooterPos = shooterLoc.pos;
                 var shooterOri = shooterLoc.orientation;
                 var shooterForward = shooterOri.forward;
-                var shotDistance = this.distanceInitial + this.radius;
+                var shotDistance = this.distanceInitial;
                 var shotOffset = shooterForward
                     .clone()
                     .multiplyScalar(shotDistance);
