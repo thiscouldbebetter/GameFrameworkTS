@@ -37,7 +37,8 @@ var ThisCouldBeBetter;
                 return MediaLibrary.fromMediaFilePaths([]);
             }
             static fromMediaFilePaths(mediaFilePaths) {
-                return MediaLibrary.fromContentDirectoryPathAndMediaFilePaths("../Content/", mediaFilePaths);
+                var contentDirectoryPath = Configuration.Instance().contentDirectoryPath;
+                return MediaLibrary.fromContentDirectoryPathAndMediaFilePaths(contentDirectoryPath, mediaFilePaths);
             }
             static fromContentDirectoryPathAndMediaFilePaths(contentDirectoryPath, mediaFilePaths) {
                 var images = new Array();

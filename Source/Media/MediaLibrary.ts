@@ -77,9 +77,11 @@ export class MediaLibrary
 
 	static fromMediaFilePaths(mediaFilePaths: string[]): MediaLibrary
 	{
+		var contentDirectoryPath = Configuration.Instance().contentDirectoryPath;
+
 		return MediaLibrary.fromContentDirectoryPathAndMediaFilePaths
 		(
-			"../Content/", mediaFilePaths
+			contentDirectoryPath, mediaFilePaths
 		);
 	}
 
