@@ -39,7 +39,7 @@ class ConstraintTests extends TestFixture {
     attachToEntityWithId() {
         var posBeforeConstraint = this._entityToConstrainLoc.pos.clone();
         var entityToAttachToPos = Coords.create().randomize(this._universe.randomizer);
-        var entityToAttachTo = Entity.fromNameAndProperties("EntityToAttachTo", [Locatable.fromPos(entityToAttachToPos)]);
+        var entityToAttachTo = Entity.fromNameAndProperties("EntityToAttachToById", [Locatable.fromPos(entityToAttachToPos)]);
         var uwpe = new UniverseWorldPlaceEntities(this._universe, this._world, this._place, entityToAttachTo, null);
         this._place.entitySpawn(uwpe);
         var constraint = new Constraint_AttachToEntityWithId(entityToAttachTo.id);
@@ -54,7 +54,7 @@ class ConstraintTests extends TestFixture {
     attachToEntityWithName() {
         var posBeforeConstraint = this._entityToConstrainLoc.pos.clone();
         var entityToAttachToPos = Coords.create().randomize(this._universe.randomizer);
-        var entityToAttachTo = Entity.fromNameAndProperties("EntityToAttachTo", [Locatable.fromPos(entityToAttachToPos)]);
+        var entityToAttachTo = Entity.fromNameAndProperties("EntityToAttachToByName", [Locatable.fromPos(entityToAttachToPos)]);
         var uwpe = new UniverseWorldPlaceEntities(this._universe, this._world, this._place, entityToAttachTo, null);
         this._place.entitySpawn(uwpe);
         var constraint = new Constraint_AttachToEntityWithName(entityToAttachTo.name);

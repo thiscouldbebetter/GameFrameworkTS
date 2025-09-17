@@ -66,7 +66,7 @@ class ConstraintTests extends TestFixture
 			Coords.create().randomize(this._universe.randomizer);
 		var entityToAttachTo = Entity.fromNameAndProperties
 		(
-			"EntityToAttachTo",
+			"EntityToAttachToById",
 			[ Locatable.fromPos(entityToAttachToPos) ]
 		);
 		var uwpe = new UniverseWorldPlaceEntities
@@ -99,7 +99,7 @@ class ConstraintTests extends TestFixture
 			Coords.create().randomize(this._universe.randomizer);
 		var entityToAttachTo = Entity.fromNameAndProperties
 		(
-			"EntityToAttachTo",
+			"EntityToAttachToByName",
 			[ Locatable.fromPos(entityToAttachToPos) ]
 		);
 		var uwpe = new UniverseWorldPlaceEntities
