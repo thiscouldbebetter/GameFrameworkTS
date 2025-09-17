@@ -12,12 +12,22 @@ export class TestSuite
 		this.testFixtures = testFixtures;
 	}
 
+	static fromNameAndTestFixtures(name: string, testFixtures: TestFixture[] ): TestSuite
+	{
+		return new TestSuite(name, testFixtures);
+	}
+
+	static fromTestFixtures(testFixtures: TestFixture[] ): TestSuite
+	{
+		return new TestSuite(TestSuite.name, testFixtures);
+	}
+
 	run(): void
 	{
 		this.write
 		(
-			"Running test suite " + this.name + ", containing "
-			+ this.testFixtures.length + " test fixtures.<br /><br />"
+			"Running test suite '" + this.name + "', containing "
+			+ this.testFixtures.length + " test fixtures."
 		);
 
 		this.testFixtures.forEach(testFixture =>
@@ -28,7 +38,7 @@ export class TestSuite
 		this.write
 		(
 			"All " + this.testFixtures.length
-			+ " test fixtures in suite have been run.<br />"
+			+ " test fixtures in suite '" + this.name + "' have been run."
 		);
 	}
 
@@ -54,10 +64,7 @@ export class TestSuite
 
 	write(messageToWrite: string): void
 	{
-		var d = document;
-		var messageAsDomElement = d.createElement("span");
-		messageAsDomElement.innerHTML = messageToWrite;
-		d.body.appendChild(messageAsDomElement);
+		console.log(messageToWrite);
 	}
 }
 

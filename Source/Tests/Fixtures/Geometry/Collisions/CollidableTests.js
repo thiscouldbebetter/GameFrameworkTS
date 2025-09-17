@@ -46,6 +46,7 @@ class CollidableTests extends TestFixture {
     canCollideWithTypeOfEntity() {
         var collider = Sphere.default();
         var collidable = new Collidable(false, // canCollideAgainWithoutSeparating
+        false, // exempt
         null, // ticksToWaitBetweenCollisions
         collider, [Collidable.name], // entityPropertyNamesToCollideWith
         null // collideEntitiesForUniverseWorldPlaceEntitiesAndCollision:

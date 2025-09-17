@@ -18,7 +18,7 @@ var ThisCouldBeBetter;
                 return new Entity(name, [property]);
             }
             static fromProperty(property) {
-                return new Entity(null, [property]);
+                return new Entity(property.propertyName(), [property]);
             }
             finalize(uwpe) {
                 uwpe.entitySet(this);
@@ -116,24 +116,20 @@ var ThisCouldBeBetter;
             }
             // Equatable.
             equals(other) {
-                /*
                 var areAllPropertiesEqualSoFar = true;
-        
                 var thisProperties = this.properties;
-                for (var i = 0; i < thisProperties.length; i++)
-                {
-                    var thisProperty = thisProperties[i] as EntityPropertyBase;
+                for (var i = 0; i < thisProperties.length; i++) {
+                    var thisProperty = thisProperties[i];
                     var propertyName = thisProperty.propertyName();
-                    var otherProperty = other.propertyByName(propertyName) as EntityPropertyBase;
+                    var otherProperty = other.propertyByName(propertyName);
                     var propertiesAreEqual = thisProperty.equals(otherProperty);
+                    if (propertiesAreEqual == false) {
+                        areAllPropertiesEqualSoFar = false;
+                        break;
+                    }
                 }
-        
-                var areEntitiesEqual =
-                    (this.name == other.name && areAllPropertiesEqualSoFar);
-        
+                var areEntitiesEqual = (this.name == other.name && areAllPropertiesEqualSoFar);
                 return areEntitiesEqual;
-                */
-                throw new Error("todo");
             }
         }
         GameFramework.Entity = Entity;

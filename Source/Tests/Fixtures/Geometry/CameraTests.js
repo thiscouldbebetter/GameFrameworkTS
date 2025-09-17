@@ -49,7 +49,7 @@ class CameraTests extends TestFixture {
         Assert.isTrue(ArrayHelper.areEqual(entitiesToSort, entitiesSorted));
     }
     toEntity() {
-        var cameraAsEntity = this._camera.toEntity();
+        var cameraAsEntity = Entity.fromProperty(this._camera);
         Assert.areStringsEqual(Camera.name, cameraAsEntity.name);
         Assert.isNotNull(Camera.of(cameraAsEntity));
     }

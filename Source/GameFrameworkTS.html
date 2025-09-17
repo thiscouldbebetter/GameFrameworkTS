@@ -8,7 +8,7 @@ for repositories hosted at github.com/thiscouldbebetter,
 so it can be published on thiscouldbebetter.github.io.
 -->
 
-<script type="text/javascript" src="_ImportGameFrameworkNamespace.js"></script>
+<script type="text/javascript" src="_Imports.js"></script>
 
 <script type="text/javascript" src="Helpers/ArrayHelper.js"></script>
 <script type="text/javascript" src="Helpers/ByteHelper.js"></script>
@@ -39,6 +39,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Controls/ControlTabbed.js"></script>
 <script type="text/javascript" src="Controls/ControlTextarea.js"></script>
 <script type="text/javascript" src="Controls/ControlTextBox.js"></script>
+<script type="text/javascript" src="Controls/ControlTimer.js"></script>
 <script type="text/javascript" src="Controls/ControlVisual.js"></script>
 <script type="text/javascript" src="Controls/Controllable.js"></script>
 <script type="text/javascript" src="Controls/DataBinding.js"></script>
@@ -118,12 +119,16 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Geometry/Constraints/Constraint_Conditional.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_ContainInBox.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_ContainInHemispace.js"></script>
+<script type="text/javascript" src="Geometry/Constraints/Constraint_FrictionDry.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_FrictionXY.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_Gravity.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_Movable.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_Multiple.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_OrientTowardEntityWithName.js"></script>
+<script type="text/javascript" src="Geometry/Constraints/Constraint_StopBelowSpeedMin.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_Transform.js"></script>
+<script type="text/javascript" src="Geometry/Constraints/Constraint_TrimToPlaceSize.js"></script>
+<script type="text/javascript" src="Geometry/Constraints/Constraint_WrapToPlaceSize.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_WrapToPlaceSizeX.js"></script>
 <script type="text/javascript" src="Geometry/Constraints/Constraint_WrapToPlaceSizeXTrimY.js"></script>
 
@@ -145,6 +150,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Geometry/Shapes/ShapeGroupAll.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/ShapeGroupAny.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/ShapeInverse.js"></script>
+<script type="text/javascript" src="Geometry/Shapes/ShapeNone.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/ShapeTransformed.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Shell.js"></script>
 <script type="text/javascript" src="Geometry/Shapes/Sphere.js"></script>
@@ -339,7 +345,11 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Storage/_Imports.js"></script>
 
-<script type="text/javascript" src="Tests/Assert.js"></script>
+<script type="text/javascript" src="Testing/Assert.js"></script>
+<script type="text/javascript" src="Testing/TestFixture.js"></script>
+<script type="text/javascript" src="Testing/TestSuite.js"></script>
+
+<script type="text/javascript" src="Testing/_Imports.js"></script>
 
 <script type="text/javascript" src="Utility/Base64Encoder.js"></script>
 <script type="text/javascript" src="Utility/ClonableHelper.js"></script>
@@ -364,6 +374,28 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Utility/_Imports.js"></script>
 
+<!-- Tests. -->
+
+<script type="text/javascript" src="Tests/TestRunner.js"></script>
+
+<script type="text/javascript" src="Tests/Fixtures/Controls/ControlBuilderTests.js"></script>
+
+<script type="text/javascript" src="Tests/Fixtures/Geometry/CameraTests.js"></script>
+
+<script type="text/javascript" src="Tests/Fixtures/Geometry/Collisions/CollidableTests.js"></script>
+<script type="text/javascript" src="Tests/Fixtures/Geometry/Collisions/CollisionHelperTests.js"></script>
+
+<script type="text/javascript" src="Tests/Fixtures/Geometry/Constraints/ConstraintTests.js"></script>
+
+<script type="text/javascript" src="Tests/Fixtures/Geometry/Shapes/ArcTests.js"></script>
+<script type="text/javascript" src="Tests/Fixtures/Geometry/Shapes/BoxAxisAlignedTests.js"></script>
+
+<script type="text/javascript" src="Tests/Fixtures/Storage/Compressor/CompressorLZWTests.js"></script>
+
+<script type="text/javascript" src="Tests/Mocks/MockEnvironment.js"></script>
+
+<!-- Demo. -->
+
 <script type="text/javascript" src="Demo/Model/WorldDemo.js"></script>
 
 <script type="text/javascript" src="Demo/Model/EntityProperties/Enemy.js"></script>
@@ -381,7 +413,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="_BuildRecord.js"></script>
 
 <script type="text/javascript" src="Configuration.js"></script>
-<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript" src="Main.js"></script>
 
 </body>
 </html>

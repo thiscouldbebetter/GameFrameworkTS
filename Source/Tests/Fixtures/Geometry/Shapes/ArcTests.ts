@@ -23,7 +23,7 @@ class ArcTests extends TestFixture
 
 			this.normalAtPos,
 			this.surfacePointNearPos,
-			this.toBox,
+			this.toBoxAxisAligned,
 
 			this.transform
 		];
@@ -62,7 +62,7 @@ class ArcTests extends TestFixture
 		var arc1Center = new Coords(1, 0, 0);
 		var arc1 = Arc.fromShellAndWedge
 		(
-			new Shell(new Sphere(arc1Center, 1.1), .99),
+			new Shell(Sphere.fromRadiusAndCenter(1.1, arc1Center), .99),
 			new Wedge(arc1Center, new Coords(0, 1, 0), .123)
 		);
 
@@ -115,7 +115,7 @@ class ArcTests extends TestFixture
 		var arcAsBox = arc.toBoxAxisAligned(BoxAxisAligned.create());
 
 		var arcAsBoxExpected =
-			Box.fromCenterAndSize(Coords.create(), new Coords(2, 2, 2) );
+			BoxAxisAligned.fromCenterAndSize(Coords.create(), new Coords(2, 2, 2) );
 		Assert.isTrue(arcAsBoxExpected.equals(arcAsBox) );
 	}
 

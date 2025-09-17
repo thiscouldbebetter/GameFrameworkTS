@@ -36,10 +36,12 @@ var ThisCouldBeBetter;
                 return new ControlButton(name, pos, size, GameFramework.DataBinding.fromGet((c) => textAsString), fontNameAndHeight, hasBorder, isEnabled, click, canBeHeldDown);
             }
             actionHandle(actionNameToHandle, universe) {
+                var actionWasHandled = false;
                 if (actionNameToHandle == GameFramework.ControlActionNames.Instances().ControlConfirm) {
                     this.click();
+                    actionWasHandled = (this.canBeHeldDown == false);
                 }
-                return (this.canBeHeldDown == false); // wasActionHandled
+                return actionWasHandled;
             }
             canBeHeldDownSet(value) {
                 this.canBeHeldDown = value;

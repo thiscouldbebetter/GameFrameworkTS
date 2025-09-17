@@ -6,19 +6,19 @@ class CollisionHelperTests extends TestFixture {
         var universe = mockEnvironment.universe;
         this._collisionHelper = universe.collisionHelper;
         // Test colliders.
-        this._boxOfSide1AtOrigin = Box.fromCenterAndSize(Coords.zeroes(), // center
+        this._boxOfSide1AtOrigin = BoxAxisAligned.fromCenterAndSize(Coords.zeroes(), // center
         Coords.ones() // size
         );
-        this._boxOfSide2AtOrigin = Box.fromCenterAndSize(Coords.zeroes(), // center
+        this._boxOfSide2AtOrigin = BoxAxisAligned.fromCenterAndSize(Coords.zeroes(), // center
         Coords.ones().double() // size
         );
-        this._boxOfSide3AtOrigin = Box.fromCenterAndSize(Coords.zeroes(), // center
+        this._boxOfSide3AtOrigin = BoxAxisAligned.fromCenterAndSize(Coords.zeroes(), // center
         Coords.ones().multiplyScalar(3) // size
         );
-        this._boxOfSide1AtX1 = Box.fromCenterAndSize(new Coords(1, 0, 0), // center
+        this._boxOfSide1AtX1 = BoxAxisAligned.fromCenterAndSize(new Coords(1, 0, 0), // center
         Coords.ones() // size
         );
-        this._boxOfSide1AtX2 = Box.fromCenterAndSize(new Coords(2, 0, 0), // origin
+        this._boxOfSide1AtX2 = BoxAxisAligned.fromCenterAndSize(new Coords(2, 0, 0), // origin
         Coords.ones() // size
         );
         this._sphereOfRadius1AtOrigin = Sphere.fromRadiusAndCenter(1, Coords.zeroes() // center
@@ -164,13 +164,13 @@ class CollisionHelperTests extends TestFixture {
     }
     collisionOfEntities() {
         var colliderRadius = 10;
-        var collider = new Sphere(Coords.create(), colliderRadius);
-        var entity0 = new Entity("Entity0", [
+        var collider = Sphere.fromRadiusAndCenter(colliderRadius, Coords.create());
+        var entity0 = Entity.fromNameAndProperties("Entity0", [
             Collidable.fromCollider(collider),
             Locatable.fromPos(Coords.create())
         ]);
         var entity1Pos = Coords.create();
-        var entity1 = new Entity("Entity1", [
+        var entity1 = Entity.fromNameAndProperties("Entity1", [
             Collidable.fromCollider(collider),
             Locatable.fromPos(entity1Pos)
         ]);
@@ -179,8 +179,8 @@ class CollisionHelperTests extends TestFixture {
     }
     collisionOfColliders() {
         var colliderRadius = 10;
-        var collider0 = new Sphere(Coords.create(), colliderRadius);
-        var collider1 = new Sphere(Coords.create(), colliderRadius);
+        var collider0 = Sphere.fromRadiusAndCenter(colliderRadius, Coords.create());
+        var collider1 = Sphere.fromRadiusAndCenter(colliderRadius, Coords.create());
         var collision = this._collisionHelper.collisionOfColliders(collider0, collider1, Collision.create());
         Assert.areEqual(collider0.center, collision.pos);
     }
@@ -553,7 +553,7 @@ class CollisionHelperTests extends TestFixture {
     }
     doesSphereContainBox() {
         var sphere = Sphere.fromRadiusAndCenter(2, Coords.zeroes());
-        var box = Box.fromSizeAndCenter(Coords.ones(), Coords.zeroes());
+        var box = BoxAxisAligned.fromSizeAndCenter(Coords.ones(), Coords.zeroes());
         var doesSphereContainBox = this._collisionHelper.doesSphereContainBox(sphere, box);
         Assert.isTrue(doesSphereContainBox);
     }

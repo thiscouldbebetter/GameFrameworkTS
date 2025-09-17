@@ -158,12 +158,15 @@ export class ControlButton<TContext> extends ControlBase
 
 	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
+		var actionWasHandled = false;
+
 		if (actionNameToHandle == ControlActionNames.Instances().ControlConfirm)
 		{
 			this.click();
+			actionWasHandled = (this.canBeHeldDown == false);
 		}
 
-		return (this.canBeHeldDown == false); // wasActionHandled
+		return actionWasHandled;
 	}
 
 	canBeHeldDownSet(value: boolean): ControlButton<TContext>

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export interface EntityProperty
+export interface EntityProperty extends Equatable<EntityProperty>
 {
 	finalize(uwpe: UniverseWorldPlaceEntities): void;
 	initialize(uwpe: UniverseWorldPlaceEntities): void;

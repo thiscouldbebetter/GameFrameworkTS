@@ -56,6 +56,7 @@ var ShapeContainer = gf.ShapeContainer;
 var ShapeGroupAll = gf.ShapeGroupAll;
 var ShapeGroupAny = gf.ShapeGroupAny;
 var ShapeInverse = gf.ShapeInverse;
+var ShapeNone = gf.ShapeNone;
 var ShapeTransformed = gf.ShapeTransformed;
 var Shell = gf.Shell;
 var Sphere = gf.Sphere;

@@ -28,8 +28,10 @@ export class Constraint_AttachToEntityWithId extends ConstraintBase
 
 		if (targetEntity != null)
 		{
+			var entityToConstrain = uwpe.entity;
+			var entityToConstrainPos = Locatable.of(entityToConstrain).loc.pos
 			var targetPos = Locatable.of(targetEntity).loc.pos;
-			Locatable.of(uwpe.entity).loc.pos.overwriteWith(targetPos);
+			entityToConstrainPos.overwriteWith(targetPos);
 		}
 	}
 }

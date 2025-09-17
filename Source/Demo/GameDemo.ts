@@ -1,14 +1,14 @@
 
 class GameDemo
 {
-	contentDirectoryPath: string;
+	configuration: Configuration;
 
-	constructor(contentDirectoryPath: string)
+	constructor(configuration: Configuration)
 	{
-		this.contentDirectoryPath = contentDirectoryPath;
+		this.configuration = configuration;
 	}
 
-	main(): void
+	start(): void
 	{
 		var ticksPerSecond = 20;
 		var mediaFilePaths = this.mediaFilePathsBuild();
@@ -31,7 +31,7 @@ class GameDemo
 
 	mediaFilePathsBuild(): string[]
 	{
-		var contentDirectoryPath = this.contentDirectoryPath;
+		var contentDirectoryPath = this.configuration.contentDirectoryPath;
 
 		var fontDirectoryPath = contentDirectoryPath + "Fonts/";
 		var imageDirectoryPath = contentDirectoryPath + "Images/";

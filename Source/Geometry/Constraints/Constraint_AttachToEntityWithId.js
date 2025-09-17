@@ -14,8 +14,10 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 var targetEntity = uwpe.place.entityById(this.targetEntityId);
                 if (targetEntity != null) {
+                    var entityToConstrain = uwpe.entity;
+                    var entityToConstrainPos = GameFramework.Locatable.of(entityToConstrain).loc.pos;
                     var targetPos = GameFramework.Locatable.of(targetEntity).loc.pos;
-                    GameFramework.Locatable.of(uwpe.entity).loc.pos.overwriteWith(targetPos);
+                    entityToConstrainPos.overwriteWith(targetPos);
                 }
             }
         }

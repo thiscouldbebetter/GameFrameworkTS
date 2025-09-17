@@ -41,7 +41,7 @@ export class Entity implements Clonable<Entity>
 
 	static fromProperty(property: EntityProperty): Entity
 	{
-		return new Entity(null, [ property ] );
+		return new Entity(property.propertyName(), [ property ] );
 	}
 
 	finalize(uwpe: UniverseWorldPlaceEntities): Entity
@@ -193,24 +193,26 @@ export class Entity implements Clonable<Entity>
 
 	equals(other: Entity): boolean
 	{
-		/*
 		var areAllPropertiesEqualSoFar = true;
 
 		var thisProperties = this.properties;
 		for (var i = 0; i < thisProperties.length; i++)
 		{
-			var thisProperty = thisProperties[i] as EntityPropertyBase;
+			var thisProperty = thisProperties[i] as EntityProperty;
 			var propertyName = thisProperty.propertyName();
-			var otherProperty = other.propertyByName(propertyName) as EntityPropertyBase;
+			var otherProperty = other.propertyByName(propertyName) as EntityProperty;
 			var propertiesAreEqual = thisProperty.equals(otherProperty);
+			if (propertiesAreEqual == false)
+			{
+				areAllPropertiesEqualSoFar = false;
+				break;
+			}
 		}
 
 		var areEntitiesEqual =
 			(this.name == other.name && areAllPropertiesEqualSoFar);
 
 		return areEntitiesEqual;
-		*/
-		throw new Error("todo");
 	}
 }
 

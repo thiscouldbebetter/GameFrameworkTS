@@ -3,11 +3,11 @@ class CollisionHelperTests extends TestFixture
 {
 	_collisionHelper: CollisionHelper;
 
-	_boxOfSide1AtOrigin: Box;
-	_boxOfSide2AtOrigin: Box;
-	_boxOfSide3AtOrigin: Box;
-	_boxOfSide1AtX1: Box;
-	_boxOfSide1AtX2: Box;
+	_boxOfSide1AtOrigin: BoxAxisAligned;
+	_boxOfSide2AtOrigin: BoxAxisAligned;
+	_boxOfSide3AtOrigin: BoxAxisAligned;
+	_boxOfSide1AtX1: BoxAxisAligned;
+	_boxOfSide1AtX2: BoxAxisAligned;
 	_sphereOfRadius1AtOrigin: Sphere
 
 	constructor()
@@ -19,31 +19,31 @@ class CollisionHelperTests extends TestFixture
 
 		// Test colliders.
 
-		this._boxOfSide1AtOrigin = Box.fromCenterAndSize
+		this._boxOfSide1AtOrigin = BoxAxisAligned.fromCenterAndSize
 		(
 			Coords.zeroes(), // center
 			Coords.ones() // size
 		);
 
-		this._boxOfSide2AtOrigin = Box.fromCenterAndSize
+		this._boxOfSide2AtOrigin = BoxAxisAligned.fromCenterAndSize
 		(
 			Coords.zeroes(), // center
 			Coords.ones().double() // size
 		);
 
-		this._boxOfSide3AtOrigin = Box.fromCenterAndSize
+		this._boxOfSide3AtOrigin = BoxAxisAligned.fromCenterAndSize
 		(
 			Coords.zeroes(), // center
 			Coords.ones().multiplyScalar(3) // size
 		);
 
-		this._boxOfSide1AtX1 = Box.fromCenterAndSize
+		this._boxOfSide1AtX1 = BoxAxisAligned.fromCenterAndSize
 		(
 			new Coords(1, 0, 0), // center
 			Coords.ones() // size
 		);
 
-		this._boxOfSide1AtX2 = Box.fromCenterAndSize
+		this._boxOfSide1AtX2 = BoxAxisAligned.fromCenterAndSize
 		(
 			new Coords(2, 0, 0), // origin
 			Coords.ones() // size
@@ -219,8 +219,8 @@ class CollisionHelperTests extends TestFixture
 	collisionOfEntities(): void
 	{
 		var colliderRadius = 10;
-		var collider = new Sphere(Coords.create(), colliderRadius);
-		var entity0 = new Entity
+		var collider = Sphere.fromRadiusAndCenter(colliderRadius, Coords.create() );
+		var entity0 = Entity.fromNameAndProperties
 		(
 			"Entity0",
 			[
@@ -230,7 +230,7 @@ class CollisionHelperTests extends TestFixture
 		);
 
 		var entity1Pos = Coords.create();
-		var entity1 = new Entity
+		var entity1 = Entity.fromNameAndProperties
 		(
 			"Entity1",
 			[
@@ -249,8 +249,8 @@ class CollisionHelperTests extends TestFixture
 	collisionOfColliders(): void
 	{
 		var colliderRadius = 10;
-		var collider0 = new Sphere(Coords.create(), colliderRadius);
-		var collider1 = new Sphere(Coords.create(), colliderRadius);
+		var collider0 = Sphere.fromRadiusAndCenter(colliderRadius, Coords.create() );
+		var collider1 = Sphere.fromRadiusAndCenter(colliderRadius, Coords.create() );
 
 		var collision = this._collisionHelper.collisionOfColliders
 		(
@@ -897,7 +897,7 @@ class CollisionHelperTests extends TestFixture
 	doesSphereContainBox(): void
 	{
 		var sphere = Sphere.fromRadiusAndCenter(2, Coords.zeroes() );
-		var box = Box.fromSizeAndCenter
+		var box = BoxAxisAligned.fromSizeAndCenter
 		(
 			Coords.ones(), Coords.zeroes()
 		);

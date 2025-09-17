@@ -9,11 +9,10 @@ class ArcTests extends TestFixture {
             this.collider,
             this.clone,
             this.overwriteWith,
-            this.coordsGroupToTranslate,
-            this.locate,
+            this.coordsGroupToTransform,
             this.normalAtPos,
             this.surfacePointNearPos,
-            this.toBox,
+            this.toBoxAxisAligned,
             this.transform
         ];
         return tests;
@@ -37,28 +36,19 @@ class ArcTests extends TestFixture {
     overwriteWith() {
         var arc0 = this._arcDefault;
         var arc1Center = new Coords(1, 0, 0);
-        var arc1 = Arc.fromShellAndWedge(new Shell(new Sphere(arc1Center, 1.1), .99), new Wedge(arc1Center, new Coords(0, 1, 0), .123));
+        var arc1 = Arc.fromShellAndWedge(new Shell(Sphere.fromRadiusAndCenter(1.1, arc1Center), .99), new Wedge(arc1Center, new Coords(0, 1, 0), .123));
         Assert.areNotEqual(arc0, arc1);
         arc1.overwriteWith(arc0);
         Assert.areEqual(arc0, arc1);
     }
     // transformable
-    coordsGroupToTranslate() {
+    coordsGroupToTransform() {
         var arc = Arc.default();
         var arcCenter = arc.center();
-        var coordsGroup = arc.coordsGroupToTranslate();
+        var coordsGroup = arc.coordsGroupToTransform();
         Assert.isTrue(coordsGroup[0] == arcCenter);
     }
     // ShapeBase.
-    locate() {
-        var arc = Arc.default();
-        var arcCenter = arc.center();
-        var posToLocateAt = Coords.create().randomize(null);
-        Assert.isFalse(arcCenter.equals(posToLocateAt));
-        var locToApply = Disposition.fromPos(posToLocateAt);
-        arc.locate(locToApply);
-        Assert.isTrue(arcCenter.equals(posToLocateAt));
-    }
     normalAtPos() {
         var arc = this._arcDefault;
         var posToCheck = new Coords(1, 0, 0);
@@ -73,10 +63,10 @@ class ArcTests extends TestFixture {
         var surfacePointNearPosExpected = new Coords(1, 0, 0);
         Assert.isTrue(surfacePointNearPosExpected.equals(surfacePointNearPos));
     }
-    toBox() {
+    toBoxAxisAligned() {
         var arc = this._arcDefault;
-        var arcAsBox = arc.toBox(Box.create());
-        var arcAsBoxExpected = Box.fromCenterAndSize(Coords.create(), new Coords(2, 2, 2));
+        var arcAsBox = arc.toBoxAxisAligned(BoxAxisAligned.create());
+        var arcAsBoxExpected = BoxAxisAligned.fromCenterAndSize(Coords.create(), new Coords(2, 2, 2));
         Assert.isTrue(arcAsBoxExpected.equals(arcAsBox));
     }
     // Transformable.

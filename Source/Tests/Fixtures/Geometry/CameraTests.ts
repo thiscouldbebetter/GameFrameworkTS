@@ -81,7 +81,7 @@ class CameraTests extends TestFixture
 
 	toEntity()
 	{
-		var cameraAsEntity = this._camera.toEntity();
+		var cameraAsEntity = Entity.fromProperty(this._camera);
 		Assert.areStringsEqual(Camera.name, cameraAsEntity.name);
 		Assert.isNotNull(Camera.of(cameraAsEntity));
 	}

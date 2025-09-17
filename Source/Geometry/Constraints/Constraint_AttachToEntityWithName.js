@@ -12,14 +12,12 @@ var ThisCouldBeBetter;
                 return new Constraint_AttachToEntityWithName(targetEntityName);
             }
             constrain(uwpe) {
-                var place = uwpe.place;
-                var entity = uwpe.entity;
-                var targetEntity = place.entityByName(this.targetEntityName);
+                var targetEntity = uwpe.place.entityByName(this.targetEntityName);
                 if (targetEntity != null) {
                     var targetPos = GameFramework.Locatable.of(targetEntity).loc.pos;
-                    var entityLocatable = GameFramework.Locatable.of(entity);
-                    var entityPos = entityLocatable.loc.pos;
-                    entityPos.overwriteWith(targetPos);
+                    var entityToConstrain = uwpe.entity;
+                    var entityToConstrainPos = GameFramework.Locatable.of(entityToConstrain).loc.pos;
+                    entityToConstrainPos.overwriteWith(targetPos);
                 }
             }
         }

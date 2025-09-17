@@ -65,7 +65,8 @@ class ControlBuilderTests extends TestFixture
 			[ () => {}, () => {} ], // optionFunctions
 			true, // showMessageOnly
 			FontNameAndHeight.default(),
-			null // buttonPosY
+			null, // buttonPosY
+			60 // secondsToShow
 		);
 		Assert.isNotNull(controlChoice);
 	}
@@ -166,7 +167,8 @@ class ControlBuilderTests extends TestFixture
 			DataBinding.fromContext("[message]"),
 			() => {}, // acknowledge
 			false, // showMessageOnly
-			FontNameAndHeight.default()
+			FontNameAndHeight.default(),
+			60 // secondsToShow
 		);
 		Assert.isNotNull(controlMessage);
 	}
@@ -194,14 +196,15 @@ class ControlBuilderTests extends TestFixture
 
 	slideshow(): void
 	{
-		var controlSlideshow = this._controlBuilder.slideshow
+		var controlSlideshow = this._controlBuilder.slideshowFromImageNamesAndMessagePairs
 		(
 			this._universe,
 			null, // size
+			60, // secondsPerSlide
+			null, // venueAfterSlideshow
 			[
 				[ "[imageName]", "[message]"]
-			],
-			null // venueAfterSlideshow
+			]
 		)
 		Assert.isNotNull(controlSlideshow);
 	}

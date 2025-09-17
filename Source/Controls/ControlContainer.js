@@ -56,6 +56,7 @@ var ThisCouldBeBetter;
                         childWithFocus = this.childFocusNextInDirection(direction);
                     }
                     else if (childWithFocus.childWithFocus() != null) {
+                        // For nested containers?
                         childWithFocus.actionHandle(actionNameToHandle, universe);
                         if (childWithFocus.childWithFocus() == null) {
                             childWithFocus = this.childFocusNextInDirection(direction);

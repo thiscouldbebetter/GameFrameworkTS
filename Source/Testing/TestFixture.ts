@@ -24,7 +24,7 @@ export class TestFixture
 		this.writeInfo
 		(
 			"Test fixture '" + this.name
-			+ "', containing " + testCount + " tests, running.<br />"
+			+ "', containing " + testCount + " tests, running."
 		);
 
 		var testsPassedCount = 0;
@@ -44,12 +44,8 @@ export class TestFixture
 			}
 			catch (ex)
 			{
-				this.writeError("Test failed: " + test.name + "<br /><br />");
-				this.writeError
-				(
-					ex.stack + "<br />"
-					+ "<br /><br />"
-				);
+				this.writeError("Test failed: " + test.name + ".");
+				this.writeError(ex.stack);
 			}
 		});
 
@@ -70,8 +66,6 @@ export class TestFixture
 
 			this.writeError(results);
 		}
-
-		this.writeInfo("<br /><br />");
 	}
 
 	toDomElement(): HTMLDivElement
@@ -146,14 +140,7 @@ export class TestFixture
 
 	writeMessageInColor(messageToWrite: string, color: string): void
 	{
-		var d = document;
-		var messageAsDomElement = d.createElement("span");
-		if (color != null)
-		{
-			messageAsDomElement.style.color = color;
-		}
-		messageAsDomElement.innerHTML = messageToWrite;
-		d.body.appendChild(messageAsDomElement);
+		console.log("%c" + messageToWrite, "color: " + color);
 	}
 
 	writeError(messageToWrite: string): void
@@ -163,7 +150,7 @@ export class TestFixture
 
 	writeInfo(messageToWrite: string): void
 	{
-		this.writeMessageInColor(messageToWrite, null);
+		this.writeMessageInColor(messageToWrite, "Black");
 	}
 
 }

@@ -66,6 +66,7 @@ import ShapeContainer = gf.ShapeContainer;
 import ShapeGroupAll = gf.ShapeGroupAll;
 import ShapeGroupAny = gf.ShapeGroupAny;
 import ShapeInverse = gf.ShapeInverse;
+import ShapeNone = gf.ShapeNone;
 import ShapeTransformed = gf.ShapeTransformed;
 import Shell = gf.Shell;
 import Sphere = gf.Sphere;

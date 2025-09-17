@@ -13,7 +13,7 @@ class TestRunner {
             new ConstraintTests(),
             // Geometry - Shapes.
             new ArcTests(),
-            new BoxTests(),
+            new BoxAxisAlignedTests(),
             // Storage - CompressorLZW.
             new CompressorLZWTests()
         ]);

@@ -8,14 +8,20 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.testFixtures = testFixtures;
             }
+            static fromNameAndTestFixtures(name, testFixtures) {
+                return new TestSuite(name, testFixtures);
+            }
+            static fromTestFixtures(testFixtures) {
+                return new TestSuite(TestSuite.name, testFixtures);
+            }
             run() {
-                this.write("Running test suite " + this.name + ", containing "
-                    + this.testFixtures.length + " test fixtures.<br /><br />");
+                this.write("Running test suite '" + this.name + "', containing "
+                    + this.testFixtures.length + " test fixtures.");
                 this.testFixtures.forEach(testFixture => {
                     testFixture.run();
                 });
                 this.write("All " + this.testFixtures.length
-                    + " test fixtures in suite have been run.<br />");
+                    + " test fixtures in suite '" + this.name + "' have been run.");
             }
             toDomElement() {
                 var d = document;
@@ -29,10 +35,7 @@ var ThisCouldBeBetter;
                 return testSuiteAsDomElement;
             }
             write(messageToWrite) {
-                var d = document;
-                var messageAsDomElement = d.createElement("span");
-                messageAsDomElement.innerHTML = messageToWrite;
-                d.body.appendChild(messageAsDomElement);
+                console.log(messageToWrite);
             }
         }
         GameFramework.TestSuite = TestSuite;

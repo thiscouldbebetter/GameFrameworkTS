@@ -23,16 +23,15 @@ export class Constraint_AttachToEntityWithName extends ConstraintBase
 
 	constrain(uwpe: UniverseWorldPlaceEntities): void
 	{
-		var place = uwpe.place;
-		var entity = uwpe.entity;
+		var targetEntity =
+			uwpe.place.entityByName(this.targetEntityName);
 
-		var targetEntity = place.entityByName(this.targetEntityName);
 		if (targetEntity != null)
 		{
 			var targetPos = Locatable.of(targetEntity).loc.pos;
-			var entityLocatable = Locatable.of(entity);
-			var entityPos = entityLocatable.loc.pos;
-			entityPos.overwriteWith(targetPos);
+			var entityToConstrain = uwpe.entity;
+			var entityToConstrainPos = Locatable.of(entityToConstrain).loc.pos;
+			entityToConstrainPos.overwriteWith(targetPos);
 		}
 	}
 }

@@ -1,9 +1,9 @@
 
-class BoxTests extends TestFixture
+class BoxAxisAlignedTests extends TestFixture
 {
 	constructor()
 	{
-		super(BoxTests.name);
+		super(BoxAxisAlignedTests.name);
 	}
 
 	tests()
@@ -76,25 +76,25 @@ class BoxTests extends TestFixture
 
 	create(): void
 	{
-		var boxCreated = Box.create();
+		var boxCreated = BoxAxisAligned.create();
 		var boxOfSide0AtOrigin =
-			Box.fromSizeAndCenter(Coords.create(), Coords.create());
+			BoxAxisAligned.fromSizeAndCenter(Coords.create(), Coords.create());
 		Assert.isTrue(boxOfSide0AtOrigin.equals(boxCreated) );
 	}
 
 	default(): void
 	{
-		var boxDefault = Box.default();
+		var boxDefault = BoxAxisAligned.default();
 		var boxOfSide1AtOrigin =
-			Box.fromSizeAndCenter(Coords.ones(), Coords.zeroes());
+			BoxAxisAligned.fromSizeAndCenter(Coords.ones(), Coords.zeroes());
 		Assert.isTrue(boxOfSide1AtOrigin.equals(boxDefault) );
 	}
 
 	fromCenterAndSize(): void
 	{
-		var boxToTest = Box.fromCenterAndSize(Coords.create(), Coords.create());
+		var boxToTest = BoxAxisAligned.fromCenterAndSize(Coords.create(), Coords.create());
 		var boxOfSide0AtOrigin =
-			Box.fromSizeAndCenter(Coords.create(), Coords.create());
+			BoxAxisAligned.fromSizeAndCenter(Coords.create(), Coords.create());
 		Assert.isTrue(boxOfSide0AtOrigin.equals(boxToTest) );
 	}
 
@@ -102,10 +102,10 @@ class BoxTests extends TestFixture
 	{
 		var min = new Coords(-1, -1, -1);
 		var max = Coords.ones();
-		var boxToTest = Box.fromMinAndMax(min, max);
+		var boxToTest = BoxAxisAligned.fromMinAndMax(min, max);
 
 		var boxOfSide2AtOrigin =
-			Box.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
+			BoxAxisAligned.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
 		Assert.isTrue(boxOfSide2AtOrigin.equals(boxToTest) );
 	}
 
@@ -113,20 +113,20 @@ class BoxTests extends TestFixture
 	{
 		var min = new Coords(-1, -1, -1);
 		var size = new Coords(2, 2, 2);
-		var boxToTest = Box.fromMinAndSize(min, size);
+		var boxToTest = BoxAxisAligned.fromMinAndSize(min, size);
 
 		var boxOfSide2AtOrigin =
-			Box.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
+			BoxAxisAligned.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
 		Assert.isTrue(boxOfSide2AtOrigin.equals(boxToTest) );
 	}
 
 	fromSize(): void
 	{
 		var size = Coords.twos();
-		var boxToTest = Box.fromSize(size);
+		var boxToTest = BoxAxisAligned.fromSize(size);
 
 		var boxOfSide2AtOrigin =
-			Box.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
+			BoxAxisAligned.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
 		Assert.isTrue(boxOfSide2AtOrigin.equals(boxToTest) );
 	}
 
@@ -134,10 +134,10 @@ class BoxTests extends TestFixture
 	{
 		var center = Coords.zeroes();
 		var size = Coords.twos();
-		var boxToTest = Box.fromSizeAndCenter(size, center);
+		var boxToTest = BoxAxisAligned.fromSizeAndCenter(size, center);
 
 		var boxOfSide2AtOrigin =
-			Box.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
+			BoxAxisAligned.fromSizeAndCenter(Coords.twos(), Coords.zeroes());
 		Assert.isTrue(boxOfSide2AtOrigin.equals(boxToTest) );
 	}
 
@@ -146,16 +146,16 @@ class BoxTests extends TestFixture
 	doBoxesInSetsOverlap(): void
 	{
 		var boxSize = Coords.ones();
-		var boxOfSide1AtOrigin = Box.fromSizeAndCenter(boxSize, Coords.zeroes() );
-		var boxOfSide1AtXHalf = Box.fromSizeAndCenter(boxSize, new Coords(.5, 0, 0) );
-		var boxOfSide1AtX1 = Box.fromSizeAndCenter(boxSize, new Coords(1, 0, 0) );
+		var boxOfSide1AtOrigin = BoxAxisAligned.fromSizeAndCenter(boxSize, Coords.zeroes() );
+		var boxOfSide1AtXHalf = BoxAxisAligned.fromSizeAndCenter(boxSize, new Coords(.5, 0, 0) );
+		var boxOfSide1AtX1 = BoxAxisAligned.fromSizeAndCenter(boxSize, new Coords(1, 0, 0) );
 
 		var doBoxesOverlap =
-			Box.doBoxesInSetsOverlap( [boxOfSide1AtOrigin], [boxOfSide1AtXHalf] );
+			BoxAxisAligned.doBoxesInSetsOverlap( [boxOfSide1AtOrigin], [boxOfSide1AtXHalf] );
 		Assert.isTrue(doBoxesOverlap);
 
 		doBoxesOverlap =
-			Box.doBoxesInSetsOverlap( [boxOfSide1AtOrigin], [boxOfSide1AtX1] );
+			BoxAxisAligned.doBoxesInSetsOverlap( [boxOfSide1AtOrigin], [boxOfSide1AtX1] );
 		Assert.isFalse(doBoxesOverlap);
 	}
 
@@ -168,17 +168,17 @@ class BoxTests extends TestFixture
 		var pointNegativeOnes = Coords.ones().invert();
 		var points = [ pointOrigin, pointOnes, pointNegativeOnes ];
 
-		var boxFromPoints = Box.create().containPoints(points);
+		var boxFromPoints = BoxAxisAligned.create().containPoints(points);
 
-		var boxOfSize2AtOrigin = Box.fromSize(Coords.twos() );
+		var boxOfSize2AtOrigin = BoxAxisAligned.fromSize(Coords.twos() );
 
 		Assert.isTrue(boxOfSize2AtOrigin.equals(boxFromPoints) );
 	}
 
 	containsOther(): void
 	{
-		var boxContaining = Box.fromSize(Coords.twos() );
-		var boxContained = Box.fromSize(Coords.ones() );
+		var boxContaining = BoxAxisAligned.fromSize(Coords.twos() );
+		var boxContained = BoxAxisAligned.fromSize(Coords.ones() );
 
 		Assert.isTrue(boxContaining.containsOther(boxContained) );
 		Assert.isFalse(boxContained.containsOther(boxContaining) );
@@ -186,7 +186,7 @@ class BoxTests extends TestFixture
 
 	containsPoint(): void
 	{
-		var box = Box.fromSize(Coords.ones());
+		var box = BoxAxisAligned.fromSize(Coords.ones());
 
 		Assert.isTrue(box.containsPoint(Coords.zeroes() ) );
 		Assert.isFalse(box.containsPoint(new Coords(2, 0, 0) ) );
@@ -194,8 +194,8 @@ class BoxTests extends TestFixture
 
 	fromMinAndMax(): void
 	{
-		var boxBefore = Box.fromSize(Coords.ones());
-		var boxOfSize1AtOrigin = Box.fromSize(Coords.ones() );
+		var boxBefore = BoxAxisAligned.fromSize(Coords.ones());
+		var boxOfSize1AtOrigin = BoxAxisAligned.fromSize(Coords.ones() );
 		Assert.isTrue(boxOfSize1AtOrigin.equals(boxBefore) );
 
 		var min = Coords.create().randomize(null);
@@ -208,11 +208,11 @@ class BoxTests extends TestFixture
 	{
 		var twos = Coords.ones().double();
 		var boxOfSize2AtOrigin =
-			Box.fromSizeAndCenter(twos, Coords.zeroes());
+			BoxAxisAligned.fromSizeAndCenter(twos, Coords.zeroes());
 		var boxOfSize2AtOnes =
-			Box.fromSizeAndCenter(twos, Coords.ones());
+			BoxAxisAligned.fromSizeAndCenter(twos, Coords.ones());
 		var boxOfSize2AtNegativeOnes =
-			Box.fromSizeAndCenter(twos, Coords.ones().invert());
+			BoxAxisAligned.fromSizeAndCenter(twos, Coords.ones().invert());
 
 		var boxIntersection =
 			boxOfSize2AtOnes.intersectWith(boxOfSize2AtNegativeOnes)
@@ -231,7 +231,7 @@ class BoxTests extends TestFixture
 		var decimalPlaces = 3;
 		var min = Coords.create().randomize(null).roundToDecimalPlaces(decimalPlaces);
 		var max = Coords.create().randomize(null).add(min).roundToDecimalPlaces(decimalPlaces);
-		var box = Box.fromMinAndMax(min, max);
+		var box = BoxAxisAligned.fromMinAndMax(min, max);
 
 		Assert.isTrue(max.equalsWithinOneBillionth(box.max() ) );
 	}
@@ -241,7 +241,7 @@ class BoxTests extends TestFixture
 		var decimalPlaces = 3;
 		var min = Coords.create().randomize(null).roundToDecimalPlaces(decimalPlaces);
 		var max = Coords.create().randomize(null).add(min).roundToDecimalPlaces(decimalPlaces);
-		var box = Box.fromMinAndMax(min, max);
+		var box = BoxAxisAligned.fromMinAndMax(min, max);
 
 		Assert.isTrue(min.equalsWithinOneBillionth(box.min() ) );
 	}
@@ -249,11 +249,11 @@ class BoxTests extends TestFixture
 	overlapsWith(): void
 	{
 		var ones = Coords.ones();
-		var boxOfSize1AtOrigin = Box.fromSize(ones);
+		var boxOfSize1AtOrigin = BoxAxisAligned.fromSize(ones);
 		var boxOfSize1AtXHalf =
-			Box.fromSizeAndCenter(ones, new Coords(.5, 0, 0) );
+			BoxAxisAligned.fromSizeAndCenter(ones, new Coords(.5, 0, 0) );
 		var boxOfSize1AtX1 =
-			Box.fromSizeAndCenter(ones, new Coords(1, 0, 0) );
+			BoxAxisAligned.fromSizeAndCenter(ones, new Coords(1, 0, 0) );
 
 		var doBoxesOverlap =
 			boxOfSize1AtOrigin.overlapsWith(boxOfSize1AtXHalf);
@@ -267,9 +267,9 @@ class BoxTests extends TestFixture
 	overlapsWithXY(): void
 	{
 		var ones = Coords.ones();
-		var boxOfSize1AtOrigin = Box.fromSize(ones);
+		var boxOfSize1AtOrigin = BoxAxisAligned.fromSize(ones);
 		var boxOfSize1AtXHalfZTen =
-			Box.fromSizeAndCenter(ones, new Coords(.5, 0, 10) );
+			BoxAxisAligned.fromSizeAndCenter(ones, new Coords(.5, 0, 10) );
 
 		var doBoxesOverlap =
 			boxOfSize1AtOrigin.overlapsWithXY(boxOfSize1AtXHalfZTen);
@@ -279,9 +279,9 @@ class BoxTests extends TestFixture
 	overlapsWithOtherInDimension(): void
 	{
 		var ones = Coords.ones();
-		var boxOfSize1AtOrigin = Box.fromSize(ones);
+		var boxOfSize1AtOrigin = BoxAxisAligned.fromSize(ones);
 		var boxOfSize1AtXHalfZTen =
-			Box.fromSizeAndCenter(ones, new Coords(.5, 0, 10) );
+			BoxAxisAligned.fromSizeAndCenter(ones, new Coords(.5, 0, 10) );
 
 		var doBoxesOverlap = boxOfSize1AtOrigin.overlapsWithOtherInDimension
 		(
@@ -313,7 +313,7 @@ class BoxTests extends TestFixture
 		var centerBefore = Coords.zeroes();
 
 		var boxBefore =
-			Box.fromSizeAndCenter(sizeBefore.clone(), centerBefore.clone());
+			BoxAxisAligned.fromSizeAndCenter(sizeBefore.clone(), centerBefore.clone());
 
 		var boxAfter = boxBefore.clone();
 
@@ -324,7 +324,7 @@ class BoxTests extends TestFixture
 
 	rangeForDimension(): void
 	{
-		var box = Box.fromSize(new Coords(1, 2, 3));
+		var box = BoxAxisAligned.fromSize(new Coords(1, 2, 3));
 		var boxSize = box.size;
 
 		var boxRangeX = box.rangeForDimension(0, RangeExtent.create() );
@@ -376,15 +376,15 @@ class BoxTests extends TestFixture
 
 	clone(): void
 	{
-		var boxToClone = Box.create().randomize(null);
+		var boxToClone = BoxAxisAligned.create().randomize(null);
 		var boxCloned = boxToClone.clone();
 		Assert.isTrue(boxToClone.equals(boxCloned) );
 	}
 
 	equals(): void
 	{
-		var box0 = Box.create().randomize(null);
-		var box1 = Box.create().randomize(null);
+		var box0 = BoxAxisAligned.create().randomize(null);
+		var box1 = BoxAxisAligned.create().randomize(null);
 
 		Assert.isFalse(box0.equals(box1) );
 
@@ -395,8 +395,8 @@ class BoxTests extends TestFixture
 
 	overwriteWith(): void
 	{
-		var box0 = Box.create().randomize(null);
-		var box1 = Box.create().randomize(null);
+		var box0 = BoxAxisAligned.create().randomize(null);
+		var box1 = BoxAxisAligned.create().randomize(null);
 
 		Assert.isFalse(box0.equals(box1) );
 
@@ -409,7 +409,7 @@ class BoxTests extends TestFixture
 
 	toString(): void
 	{
-		var boxOfSize1AtOrigin = Box.fromSize(Coords.ones())
+		var boxOfSize1AtOrigin = BoxAxisAligned.fromSize(Coords.ones())
 		var boxAsString = boxOfSize1AtOrigin.toString();
 
 		var boxAsStringExpected = "-0.5x-0.5x-0.5:0.5x0.5x0.5";
@@ -425,7 +425,7 @@ class BoxTests extends TestFixture
 
 	normalAtPos(): void
 	{
-		var boxOfSize2AtOrigin = Box.fromSize(Coords.twos());
+		var boxOfSize2AtOrigin = BoxAxisAligned.fromSize(Coords.twos());
 		var posToCheck = new Coords(1, 0, 0);
 		var normalAtPosToCheck =
 			boxOfSize2AtOrigin.normalAtPos(posToCheck, Coords.create());
@@ -436,7 +436,7 @@ class BoxTests extends TestFixture
 
 	surfacePointNearPos(): void
 	{
-		var boxOfSize2AtOrigin = Box.fromSize(Coords.twos());
+		var boxOfSize2AtOrigin = BoxAxisAligned.fromSize(Coords.twos());
 		var posToCheck = new Coords(1, 0, 0);
 		var surfacePointAtPosToCheck =
 			boxOfSize2AtOrigin.surfacePointNearPos(posToCheck, Coords.create());
@@ -456,20 +456,9 @@ class BoxTests extends TestFixture
 
 	// transformable
 
-	coordsGroupToTransform(): void
-	{
-		var box = Box.create().randomize(null);
-		var boxCenter = box.center;
-
-		var coordsGroupToTransform = box.coordsGroupToTransform();
-
-		Assert.isTrue(coordsGroupToTransform.length == 1);
-		Assert.isTrue(coordsGroupToTransform[0] == boxCenter);
-	}
-
 	transform(): void // transformToApply: Transform): Transformable
 	{
-		var box = Box.create().randomize(null);
+		var box = BoxAxisAligned.create().randomize(null);
 		var boxCenterBeforeTransform = box.center.clone();
 
 		var displacementToTranslate = Coords.create().randomize(null);

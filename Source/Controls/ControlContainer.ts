@@ -152,6 +152,7 @@ export class ControlContainer extends ControlBase
 			}
 			else if (childWithFocus.childWithFocus() != null)
 			{
+				// For nested containers?
 				childWithFocus.actionHandle(actionNameToHandle, universe);
 				if (childWithFocus.childWithFocus() == null)
 				{

@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 var tests = this.tests();
                 var testCount = tests.length;
                 this.writeInfo("Test fixture '" + this.name
-                    + "', containing " + testCount + " tests, running.<br />");
+                    + "', containing " + testCount + " tests, running.");
                 var testsPassedCount = 0;
                 tests.forEach(test => {
                     try {
@@ -24,9 +24,8 @@ var ThisCouldBeBetter;
                         testsPassedCount++;
                     }
                     catch (ex) {
-                        this.writeError("Test failed: " + test.name + "<br /><br />");
-                        this.writeError(ex.stack + "<br />"
-                            + "<br /><br />");
+                        this.writeError("Test failed: " + test.name + ".");
+                        this.writeError(ex.stack);
                     }
                 });
                 var testsFailedCount = tests.length - testsPassedCount;
@@ -39,7 +38,6 @@ var ThisCouldBeBetter;
                         + " tests failed!";
                     this.writeError(results);
                 }
-                this.writeInfo("<br /><br />");
             }
             toDomElement() {
                 var d = document;
@@ -87,19 +85,13 @@ var ThisCouldBeBetter;
                 return testFixtureAsDomElement;
             }
             writeMessageInColor(messageToWrite, color) {
-                var d = document;
-                var messageAsDomElement = d.createElement("span");
-                if (color != null) {
-                    messageAsDomElement.style.color = color;
-                }
-                messageAsDomElement.innerHTML = messageToWrite;
-                d.body.appendChild(messageAsDomElement);
+                console.log("%c" + messageToWrite, "color: " + color);
             }
             writeError(messageToWrite) {
                 this.writeMessageInColor(messageToWrite, "Red");
             }
             writeInfo(messageToWrite) {
-                this.writeMessageInColor(messageToWrite, null);
+                this.writeMessageInColor(messageToWrite, "Black");
             }
         }
         GameFramework.TestFixture = TestFixture;
