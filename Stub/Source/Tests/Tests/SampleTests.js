@@ -1,5 +1,8 @@
 "use strict";
 class SampleTests extends TestFixture {
+    constructor() {
+        super(SampleTests.name);
+    }
     tests() {
         var returnValues = [
             this.alwaysPass
@@ -9,6 +12,6 @@ class SampleTests extends TestFixture {
     alwaysPass() {
         var expected = "todo";
         var actual = "todo";
-        Assert.areEqual(expected, actual);
+        Assert.areStringsEqual(expected, actual);
     }
 }

@@ -1,6 +1,11 @@
 
 class SampleTests extends TestFixture
 {
+	constructor()
+	{
+		super(SampleTests.name);
+	}
+
 	tests(): ( ()=>void )[]
 	{
 		var returnValues =
@@ -15,6 +20,6 @@ class SampleTests extends TestFixture
 	{
 		var expected = "todo";
 		var actual = "todo";
-		Assert.areEqual(expected, actual);
+		Assert.areStringsEqual(expected, actual);
 	}
 }
