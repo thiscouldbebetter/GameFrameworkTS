@@ -2,10 +2,12 @@
 class Configuration
 {
 	contentDirectoryPath: string;
+	displaySizesAvailable: Coords[];
 
 	constructor()
 	{
 		this.contentDirectoryPath = "../Content/";
+		this.displaySizesAvailable = null;
 	}
 
 	static _instance: Configuration;

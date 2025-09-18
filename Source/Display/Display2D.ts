@@ -33,15 +33,8 @@ export class Display2D implements Display
 	{
 		this.sizesAvailable =
 			sizesAvailable
-			||
-			[
-				Coords.fromXYZ(400, 300, 1),
-				Coords.fromXYZ(640, 480, 1),
-				Coords.fromXYZ(800, 600, 1),
-				Coords.fromXYZ(1200, 900, 1),
-				// Wrap.
-				Coords.fromXYZ(200, 150, 1)
-			];
+			|| Configuration.Instance().displaySizesAvailable
+			|| Display2D.sizesDefault();
 		this._sizeDefault = this.sizesAvailable[0];
 		this.sizeInPixels = this._sizeDefault;
 		this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
@@ -105,6 +98,21 @@ export class Display2D implements Display
 	): Display2D
 	{
 		return new Display2D(sizesAvailable, fontNameAndHeight, colorFore, colorBack, null);
+	}
+
+	static sizesDefault(): Coords[]
+	{
+		var sizesAvailableDefault =
+		[
+			Coords.fromXYZ(400, 300, 1),
+			Coords.fromXYZ(640, 480, 1),
+			Coords.fromXYZ(800, 600, 1),
+			Coords.fromXYZ(1200, 900, 1),
+			// Wrap.
+			Coords.fromXYZ(200, 150, 1)
+		];
+
+		return sizesAvailableDefault;
 	}
 
 	// constants

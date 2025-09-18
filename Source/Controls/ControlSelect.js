@@ -26,15 +26,18 @@ var ThisCouldBeBetter;
                 this._sizeHalf = GameFramework.Coords.create();
             }
             actionHandle(actionNameToHandle, universe) {
+                var actionWasHandled = false;
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 if (actionNameToHandle == controlActionNames.ControlDecrement) {
                     this.optionSelectedNextInDirection(-1);
+                    actionWasHandled = true;
                 }
                 else if (actionNameToHandle == controlActionNames.ControlIncrement
                     || actionNameToHandle == controlActionNames.ControlConfirm) {
                     this.optionSelectedNextInDirection(1);
+                    actionWasHandled = true;
                 }
-                return true; // wasActionHandled
+                return actionWasHandled;
             }
             mouseClick(clickPos) {
                 this.optionSelectedNextInDirection(1);

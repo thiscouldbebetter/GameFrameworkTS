@@ -57,10 +57,13 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 
 	actionHandle(actionNameToHandle: string, universe: Universe): boolean
 	{
+		var actionWasHandled = false;
+
 		var controlActionNames = ControlActionNames.Instances();
 		if (actionNameToHandle == controlActionNames.ControlDecrement)
 		{
 			this.optionSelectedNextInDirection(-1);
+			actionWasHandled = true;
 		}
 		else if
 		(
@@ -69,8 +72,10 @@ export class ControlSelect<TContext, TItem, TValue> extends ControlBase
 		)
 		{
 			this.optionSelectedNextInDirection(1);
+			actionWasHandled = true;
 		}
-		return true; // wasActionHandled
+
+		return actionWasHandled;
 	}
 
 	mouseClick(clickPos: Coords): boolean
