@@ -194,6 +194,12 @@ export class Universe
 
 	// Instance methods.
 
+	displaySet(value: Display): Universe
+	{
+		this.display = value;
+		return this;
+	}
+
 	initialize(callback: (u: Universe) => void): void
 	{
 		this.platformHelper.initialize(this);

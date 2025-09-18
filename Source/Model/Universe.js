@@ -76,6 +76,10 @@ var ThisCouldBeBetter;
                 return universe;
             }
             // Instance methods.
+            displaySet(value) {
+                this.display = value;
+                return this;
+            }
             initialize(callback) {
                 this.platformHelper.initialize(this);
                 this.storageHelper = GameFramework.StorageHelper.fromPrefixSerializerAndCompressor(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
