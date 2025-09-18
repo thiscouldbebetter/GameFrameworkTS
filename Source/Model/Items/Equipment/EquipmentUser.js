@@ -285,8 +285,8 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXY(100, 25), // size
                     GameFramework.DataBinding.fromContext("Equipped:"), fontSmall),
                     listEquipped,
-                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(sizeBase.x / 2, 125), // pos
-                    GameFramework.Coords.fromXY(sizeBase.x, 15), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 115), // pos
+                    null, // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontSmall)
                 ];

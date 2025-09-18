@@ -377,8 +377,8 @@ export class ItemCrafter extends EntityPropertyBase<ItemCrafter>
 
 				ControlLabel.fromPosSizeTextFontCenteredHorizontally
 				(
-					Coords.fromXY(100, 125), // pos
-					Coords.fromXY(200, 15), // size
+					Coords.fromXY(150, 115), // pos
+					null, // size
 					DataBinding.fromContextAndGet
 					(
 						this,

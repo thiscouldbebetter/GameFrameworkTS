@@ -129,7 +129,7 @@ var ThisCouldBeBetter;
                     fontSmall, GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.journalEntrySelected != null && c.isJournalEntrySelectedEditable)) // isEnabled
                     ),
                     GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 120), // pos
-                    GameFramework.Coords.fromXY(200, 15), // size
+                    null, // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => {
                         return c.statusMessage;
                     }), // text

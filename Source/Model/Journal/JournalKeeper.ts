@@ -320,7 +320,7 @@ export class JournalKeeper extends EntityPropertyBase<JournalKeeper>
 			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
 				Coords.fromXY(150, 120), // pos
-				Coords.fromXY(200, 15), // size
+				null, // size
 				DataBinding.fromContextAndGet
 				(
 					this,

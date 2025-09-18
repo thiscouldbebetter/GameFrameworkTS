@@ -177,8 +177,8 @@ var ThisCouldBeBetter;
                     fontSmall, new GameFramework.DataBinding(this, (c) => c.recipeQueuedSelected, (c, v) => c.recipeQueuedSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c) // bindingForItemValue
                     ),
-                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(100, 125), // pos
-                    GameFramework.Coords.fromXY(200, 15), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 115), // pos
+                    null, // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontSmall)
                 ], // end children

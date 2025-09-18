@@ -526,8 +526,8 @@ export class EquipmentUser extends EntityPropertyBase<EquipmentUser>
 
 			ControlLabel.fromPosSizeTextFontCenteredHorizontally
 			(
-				Coords.fromXY(sizeBase.x / 2, 125), // pos
-				Coords.fromXY(sizeBase.x, 15), // size
+				Coords.fromXY(150, 115), // pos
+				null, // size
 				DataBinding.fromContextAndGet
 				(
 					this,
