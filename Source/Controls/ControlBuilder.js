@@ -601,8 +601,6 @@ var ThisCouldBeBetter;
                 display.canvas = null; // hack
                 display.initialize(universe);
                 platformHelper.initialize(universe);
-                var venueNext = universe.controlBuilder.settings(universe, null, universe.venueCurrent()).toVenue();
-                universe.venueTransitionTo(venueNext);
             }
             slideshowFromImageNamesAndMessagePairs(universe, size, secondsPerSlide, venueAfterSlideshow, imageNamesAndMessagePairsForSlides) {
                 if (size == null) {

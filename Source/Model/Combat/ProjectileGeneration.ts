@@ -237,8 +237,8 @@ export class ProjectileGeneration
 		var shotAudible = Audible.create();
 
 		// Shots may move so fast that they "pass through" targets
-		// without ever colliding with them, so duplicate the collider
-		// to make sure anything between the before and after points is hit.
+		// without ever colliding with them, so duplicate the collider along the path
+		// to make sure anything between the starting and ending points is hit.
 		var colliderPartBeforeTransform = Sphere.fromRadius(this.radius); 
 		var shotDiameter = this.radius * 2;
 		var colliderPartsCount = this.speed / shotDiameter;
