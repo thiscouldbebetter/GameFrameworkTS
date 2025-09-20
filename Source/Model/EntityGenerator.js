@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class EntityGenerator extends GameFramework.EntityPropertyBase {
-            constructor(name, entityToGenerate, ticksPerGenerationAsRange, entitiesPerGenerationAsRange, entitiesGeneratedMaxConcurrent, entitiesGeneratedMaxAllTime, entityPositionRangeAsBox, entitySpeedAsRange) {
+            constructor(name, entityToGenerate, ticksPerGenerationAsRange, entitiesPerGenerationAsRange, entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox, entitySpeedAsRange) {
                 super();
                 this.name = name;
                 this.entityToGenerate = entityToGenerate;
@@ -12,10 +12,10 @@ var ThisCouldBeBetter;
                     ticksPerGenerationAsRange || GameFramework.RangeExtent.fromNumber(100);
                 this.entitiesPerGenerationAsRange =
                     entitiesPerGenerationAsRange || GameFramework.RangeExtent.fromNumber(1);
-                this.entitiesGeneratedMaxConcurrent =
-                    entitiesGeneratedMaxConcurrent || 1;
-                this.entitiesGeneratedMaxAllTime =
-                    entitiesGeneratedMaxAllTime;
+                this.entitiesToGenerateMaxConcurrent =
+                    entitiesToGenerateMaxConcurrent || 1;
+                this.entitiesToGenerateMaxAllTime =
+                    entitiesToGenerateMaxAllTime;
                 this.entityPositionRangeAsBox =
                     entityPositionRangeAsBox;
                 this.entitySpeedAsRange =
@@ -24,26 +24,35 @@ var ThisCouldBeBetter;
                 this.entitiesGeneratedActive = new Array();
                 this.ticksUntilNextGeneration = null;
             }
-            static fromNameEntityTicksBatchMaxesAndPosBox(name, entityToGenerate, ticksPerGeneration, entitiesPerGeneration, entitiesGeneratedMaxConcurrent, entitiesGeneratedMaxAllTime, entityPositionRangeAsBox) {
-                return new EntityGenerator(name, entityToGenerate, GameFramework.RangeExtent.fromNumber(ticksPerGeneration), GameFramework.RangeExtent.fromNumber(entitiesPerGeneration), entitiesGeneratedMaxConcurrent, entitiesGeneratedMaxAllTime, entityPositionRangeAsBox, null);
+            static fromNameEntityTicksBatchMaxesAndPosBox(name, entityToGenerate, ticksPerGeneration, entitiesPerGeneration, entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox) {
+                return new EntityGenerator(name, entityToGenerate, GameFramework.RangeExtent.fromNumber(ticksPerGeneration), GameFramework.RangeExtent.fromNumber(entitiesPerGeneration), entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox, null);
             }
             static of(entity) {
                 return entity.propertyByName(EntityGenerator.name);
             }
+            activate() {
+                this.inactivated = false;
+            }
+            inactivate() {
+                this.inactivated = true;
+            }
+            exhaust() {
+                this.entitiesToGenerateMaxAllTime = 0;
+            }
             exhausted() {
-                var isExhausted = this.entitiesGeneratedMaxAllTime != null
-                    && this.entitiesGeneratedAllTimeCount >= this.entitiesGeneratedMaxAllTime;
+                var isExhausted = this.entitiesToGenerateMaxAllTime != null
+                    && this.entitiesGeneratedAllTimeCount >= this.entitiesToGenerateMaxAllTime;
                 return isExhausted;
             }
             saturated() {
-                return (this.entitiesGeneratedActive.length >= this.entitiesGeneratedMaxConcurrent);
+                return (this.entitiesGeneratedActive.length >= this.entitiesToGenerateMaxConcurrent);
             }
             toEntity() {
                 return GameFramework.Entity.fromNameAndProperties(this.name, [this]);
             }
             // EntityProperty.
             updateForTimerTick(uwpe) {
-                if (this.exhausted()) {
+                if (this.inactivated || this.exhausted()) {
                     return;
                 }
                 var place = uwpe.place;
@@ -99,7 +108,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new EntityGenerator(this.name, this.entityToGenerate, this.ticksPerGenerationAsRange.clone(), this.entitiesPerGenerationAsRange.clone(), this.entitiesGeneratedMaxConcurrent, this.entitiesGeneratedMaxAllTime, this.entityPositionRangeAsBox == null ? null : this.entityPositionRangeAsBox.clone(), this.entitySpeedAsRange.clone());
+                return new EntityGenerator(this.name, this.entityToGenerate, this.ticksPerGenerationAsRange.clone(), this.entitiesPerGenerationAsRange.clone(), this.entitiesToGenerateMaxConcurrent, this.entitiesToGenerateMaxAllTime, this.entityPositionRangeAsBox == null ? null : this.entityPositionRangeAsBox.clone(), this.entitySpeedAsRange.clone());
             }
             overwriteWith(other) {
                 this.entityToGenerate =
@@ -108,10 +117,10 @@ var ThisCouldBeBetter;
                     .overwriteWith(other.ticksPerGenerationAsRange);
                 this.entitiesPerGenerationAsRange
                     .overwriteWith(other.entitiesPerGenerationAsRange);
-                this.entitiesGeneratedMaxConcurrent =
-                    other.entitiesGeneratedMaxConcurrent;
-                this.entitiesGeneratedMaxAllTime =
-                    other.entitiesGeneratedMaxAllTime;
+                this.entitiesToGenerateMaxConcurrent =
+                    other.entitiesToGenerateMaxConcurrent;
+                this.entitiesToGenerateMaxAllTime =
+                    other.entitiesToGenerateMaxAllTime;
                 this.entityPositionRangeAsBox
                     .overwriteWith(other.entityPositionRangeAsBox);
                 this.entitySpeedAsRange.overwriteWith(other.entitySpeedAsRange);

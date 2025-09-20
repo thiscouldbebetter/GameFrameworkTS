@@ -8,13 +8,14 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 	entityToGenerate: Entity;
 	ticksPerGenerationAsRange: RangeExtent;
 	entitiesPerGenerationAsRange: RangeExtent;
-	entitiesGeneratedMaxConcurrent: number;
-	entitiesGeneratedMaxAllTime: number;
+	entitiesToGenerateMaxConcurrent: number;
+	entitiesToGenerateMaxAllTime: number;
 	entitySpeedAsRange: RangeExtent;
 	entityPositionRangeAsBox: BoxAxisAligned;
 
 	entitiesGeneratedAllTimeCount: number;
 	entitiesGeneratedActive: Entity[];
+	inactivated: boolean;
 	ticksUntilNextGeneration: number
 
 	constructor
@@ -23,8 +24,8 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 		entityToGenerate: Entity,
 		ticksPerGenerationAsRange: RangeExtent,
 		entitiesPerGenerationAsRange: RangeExtent,
-		entitiesGeneratedMaxConcurrent: number,
-		entitiesGeneratedMaxAllTime: number,
+		entitiesToGenerateMaxConcurrent: number,
+		entitiesToGenerateMaxAllTime: number,
 		entityPositionRangeAsBox: BoxAxisAligned,
 		entitySpeedAsRange: RangeExtent
 	)
@@ -37,10 +38,10 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 			ticksPerGenerationAsRange || RangeExtent.fromNumber(100);
 		this.entitiesPerGenerationAsRange =
 			entitiesPerGenerationAsRange || RangeExtent.fromNumber(1);
-		this.entitiesGeneratedMaxConcurrent =
-			entitiesGeneratedMaxConcurrent || 1;
-		this.entitiesGeneratedMaxAllTime =
-			entitiesGeneratedMaxAllTime;
+		this.entitiesToGenerateMaxConcurrent =
+			entitiesToGenerateMaxConcurrent || 1;
+		this.entitiesToGenerateMaxAllTime =
+			entitiesToGenerateMaxAllTime;
 		this.entityPositionRangeAsBox =
 			entityPositionRangeAsBox;
 		this.entitySpeedAsRange =
@@ -57,8 +58,8 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 		entityToGenerate: Entity,
 		ticksPerGeneration: number,
 		entitiesPerGeneration: number,
-		entitiesGeneratedMaxConcurrent: number,
-		entitiesGeneratedMaxAllTime: number,
+		entitiesToGenerateMaxConcurrent: number,
+		entitiesToGenerateMaxAllTime: number,
 		entityPositionRangeAsBox: BoxAxisAligned 
 	): EntityGenerator
 	{
@@ -68,8 +69,8 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 			entityToGenerate,
 			RangeExtent.fromNumber(ticksPerGeneration),
 			RangeExtent.fromNumber(entitiesPerGeneration),
-			entitiesGeneratedMaxConcurrent,
-			entitiesGeneratedMaxAllTime,
+			entitiesToGenerateMaxConcurrent,
+			entitiesToGenerateMaxAllTime,
 			entityPositionRangeAsBox,
 			null
 		);
@@ -80,18 +81,33 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 		return entity.propertyByName(EntityGenerator.name) as EntityGenerator;
 	}
 
+	activate(): void
+	{
+		this.inactivated = false;
+	}
+
+	inactivate(): void
+	{
+		this.inactivated = true;
+	}
+
+	exhaust(): void
+	{
+		this.entitiesToGenerateMaxAllTime = 0;
+	}
+
 	exhausted(): boolean
 	{
 		var isExhausted =
-			this.entitiesGeneratedMaxAllTime != null
-			&& this.entitiesGeneratedAllTimeCount >= this.entitiesGeneratedMaxAllTime;
+			this.entitiesToGenerateMaxAllTime != null
+			&& this.entitiesGeneratedAllTimeCount >= this.entitiesToGenerateMaxAllTime;
 
 		return isExhausted;
 	}
 
 	saturated(): boolean
 	{
-		return (this.entitiesGeneratedActive.length >= this.entitiesGeneratedMaxConcurrent);
+		return (this.entitiesGeneratedActive.length >= this.entitiesToGenerateMaxConcurrent);
 	}
 
 	toEntity(): Entity
@@ -103,7 +119,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this.exhausted() )
+		if (this.inactivated || this.exhausted() )
 		{
 			return;
 		}
@@ -206,8 +222,8 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 			this.entityToGenerate,
 			this.ticksPerGenerationAsRange.clone(),
 			this.entitiesPerGenerationAsRange.clone(),
-			this.entitiesGeneratedMaxConcurrent,
-			this.entitiesGeneratedMaxAllTime,
+			this.entitiesToGenerateMaxConcurrent,
+			this.entitiesToGenerateMaxAllTime,
 			this.entityPositionRangeAsBox == null ? null : this.entityPositionRangeAsBox.clone(),
 			this.entitySpeedAsRange.clone()
 		);
@@ -221,10 +237,10 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 			.overwriteWith(other.ticksPerGenerationAsRange);
 		this.entitiesPerGenerationAsRange
 			.overwriteWith(other.entitiesPerGenerationAsRange);
-		this.entitiesGeneratedMaxConcurrent =
-			other.entitiesGeneratedMaxConcurrent;
-		this.entitiesGeneratedMaxAllTime =
-			other.entitiesGeneratedMaxAllTime;
+		this.entitiesToGenerateMaxConcurrent =
+			other.entitiesToGenerateMaxConcurrent;
+		this.entitiesToGenerateMaxAllTime =
+			other.entitiesToGenerateMaxAllTime;
 		this.entityPositionRangeAsBox
 			.overwriteWith(other.entityPositionRangeAsBox);
 		this.entitySpeedAsRange.overwriteWith(other.entitySpeedAsRange);

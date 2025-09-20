@@ -138,7 +138,7 @@ var ThisCouldBeBetter;
                     .random2D(randomizer)
                     .toCoords()
                     .multiplyScalar(particleSpeed);
-                var transform = new GameFramework.Transform_Dynamic((transformable) => {
+                var transform = GameFramework.Transform_Dynamic.fromTransformTransformable((transformable) => {
                     var transformableAsVisualCircle = transformable;
                     transformableAsVisualCircle.radius *= 1.02;
                     var color = transformableAsVisualCircle.colorFill.clone();
@@ -520,7 +520,7 @@ var ThisCouldBeBetter;
                 var colors = GameFramework.Color.Instances();
                 var smokePuffVisual = GameFramework.VisualCircle.fromRadiusAndColorFill(puffRadius, colors.GrayLight);
                 var particleVelocityGet = () => GameFramework.Coords.fromXY(.33, -1.5).add(GameFramework.Coords.fromXY(Math.random() - 0.5, 0));
-                var transform = new GameFramework.Transform_Dynamic((transformable) => {
+                var transform = GameFramework.Transform_Dynamic.fromTransformTransformable((transformable) => {
                     var transformableAsVisualCircle = transformable;
                     transformableAsVisualCircle.radius *= 1.02;
                     var color = transformableAsVisualCircle.colorFill.clone();

@@ -330,7 +330,7 @@ export class VisualBuilder
 					.multiplyScalar(particleSpeed);
 
 		var transform =
-			new Transform_Dynamic
+			Transform_Dynamic.fromTransformTransformable
 			(
 				(transformable: TransformableBase) =>
 				{
@@ -1344,7 +1344,7 @@ export class VisualBuilder
 			() => Coords.fromXY(.33, -1.5).add(Coords.fromXY(Math.random() - 0.5, 0) );
 
 		var transform =
-			new Transform_Dynamic
+			Transform_Dynamic.fromTransformTransformable
 			(
 				(transformable: TransformableBase) =>
 				{

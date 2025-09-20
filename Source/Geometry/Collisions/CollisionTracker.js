@@ -22,8 +22,10 @@ var ThisCouldBeBetter;
                         }
                     }
                     var collisionTrackerAsEntity = collisionTracker.toEntity();
+                    var uwpeEntityToRestore = uwpe.entity;
                     uwpe.entitySet(collisionTrackerAsEntity);
                     place.entitySpawn(uwpe);
+                    uwpe.entitySet(uwpeEntityToRestore);
                 }
                 var returnValue = collisionTrackerAsEntity.properties[0];
                 return returnValue;

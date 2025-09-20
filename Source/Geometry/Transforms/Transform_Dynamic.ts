@@ -14,6 +14,14 @@ export class Transform_Dynamic implements Transform<Transform_Dynamic>
 		this.transformTransformable = transformTransformable;
 	}
 
+	static fromTransformTransformable
+	(
+		transformTransformable: (t: TransformableBase) => TransformableBase
+	): Transform_Dynamic
+	{
+		return new Transform_Dynamic(transformTransformable);
+	}
+
 	// Clonable.
 
 	clone(): Transform_Dynamic { return this; } // todo

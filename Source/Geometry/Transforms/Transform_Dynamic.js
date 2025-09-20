@@ -7,6 +7,9 @@ var ThisCouldBeBetter;
             constructor(transformTransformable) {
                 this.transformTransformable = transformTransformable;
             }
+            static fromTransformTransformable(transformTransformable) {
+                return new Transform_Dynamic(transformTransformable);
+            }
             // Clonable.
             clone() { return this; } // todo
             overwriteWith(other) {

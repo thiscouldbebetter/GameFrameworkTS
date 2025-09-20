@@ -51,8 +51,10 @@ export class CollisionTrackerBase extends EntityPropertyBase<CollisionTrackerBas
 			}
 
 			var collisionTrackerAsEntity = collisionTracker.toEntity();
+			var uwpeEntityToRestore = uwpe.entity;
 			uwpe.entitySet(collisionTrackerAsEntity);
 			place.entitySpawn(uwpe);
+			uwpe.entitySet(uwpeEntityToRestore);
 		}
 
 		var returnValue =
