@@ -173,6 +173,21 @@ export class Collidable extends EntityPropertyBase<Collidable>
 		);
 	}
 
+	static fromColliderPropertyNamesAndCollide
+	(
+		colliderAtRest: Shape,
+		collidesOnlyWithEntitiesHavingPropertiesNamed: string[],
+		collideEntities: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void
+	): Collidable
+	{
+		return this.fromColliderCollidesOnlyWithEntitiesHavingPropertiesNamedAndCollide
+		(
+			colliderAtRest,
+			collidesOnlyWithEntitiesHavingPropertiesNamed,
+			collideEntities
+		);
+	}
+
 	static fromShape(shapeAtRest: Shape): Collidable
 	{
 		return Collidable.fromColliderAndCollideEntities

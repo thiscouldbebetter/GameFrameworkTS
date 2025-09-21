@@ -7,10 +7,11 @@ export class ProjectileGeneration
 	distanceInitial: number;
 	speed: number;
 	ticksToLive: number;
-	_hit: (uwpe: UniverseWorldPlaceEntities) => void;
+	collideOnlyWithEntitiesHavingPropertiesNamed: string[];
 	damage: Damage;
 	visual: VisualBase;
 	_projectileEntityInitialize: (entity: Entity) => void
+	_hit: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	constructor
 	(
@@ -18,17 +19,20 @@ export class ProjectileGeneration
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
-		hit: (uwpe: UniverseWorldPlaceEntities) => void,
+		collideOnlyWithEntitiesHavingPropertiesNamed: string[],
 		damage: Damage,
 		visual: VisualBase,
-		projectileEntityInitialize: (entity: Entity) => void
+		projectileEntityInitialize: (entity: Entity) => void,
+		hit: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		this.radius = radius || 2;
 		this.distanceInitial = distanceInitial || 3;
 		this.speed = speed || 4;
 		this.ticksToLive = ticksToLive || 20;
-		this._hit = hit;
+		this.collideOnlyWithEntitiesHavingPropertiesNamed =
+			collideOnlyWithEntitiesHavingPropertiesNamed
+			|| [ Collidable.name ]; 
 		this.damage = damage || Damage.fromAmount(1);;
 		this.visual =
 			visual ||
@@ -42,6 +46,7 @@ export class ProjectileGeneration
 				)
 			]);
 		this._projectileEntityInitialize = projectileEntityInitialize;
+		this._hit = hit;
 	}
 
 	static default(): ProjectileGeneration
@@ -52,24 +57,25 @@ export class ProjectileGeneration
 			null, // distanceInitial
 			null, // speed
 			null, // ticksToLive
-			null, // hit
-			null, // damage,
-			null, // visual,
-			null // init
+			null, // propertiesToCollideWithNames
+			null, // damage
+			null, // visual
+			null, // init
+			null // hit
 		);
 
 		return generation;
 	}
 
-	static fromRadiusDistanceSpeedTicksHitDamageAndVisual
+	static fromRadiusDistanceSpeedTicksDamageVisualAndHit
 	(
 		radius: number,
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
-		hit: (uwpe: UniverseWorldPlaceEntities) => void,
 		damage: Damage,
-		visual: VisualBase
+		visual: VisualBase,
+		hit: (uwpe: UniverseWorldPlaceEntities) => void,
 	): ProjectileGeneration
 	{
 		return new ProjectileGeneration
@@ -78,10 +84,11 @@ export class ProjectileGeneration
 			distanceInitial,
 			speed,
 			ticksToLive,
-			hit,
+			null, // propertiesToCollideWithNames
 			damage,
 			visual,
-			null // projectileEntityInitialize
+			null, // projectileEntityInitialize
+			hit
 		);
 	}
 
@@ -102,23 +109,24 @@ export class ProjectileGeneration
 			distanceInitial,
 			speed,
 			ticksToLive,
-			null, // hit
+			null, // propertiesToCollideWithNames
 			damage,
 			visual,
-			projectileEntityInitialize
+			projectileEntityInitialize,
+			null // hit
 		);
 	}
 
-	static fromRadiusDistanceSpeedTicksHitDamageVisualAndInit
+	static fromRadiusDistanceSpeedTicksDamageVisualInitAndHit
 	(
 		radius: number,
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
-		hit: (uwpe: UniverseWorldPlaceEntities) => void,
 		damage: Damage,
 		visual: VisualBase,
-		projectileEntityInitialize: (entity: Entity) => void
+		projectileEntityInitialize: (entity: Entity) => void,
+		hit: (uwpe: UniverseWorldPlaceEntities) => void
 	): ProjectileGeneration
 	{
 		return new ProjectileGeneration
@@ -127,10 +135,11 @@ export class ProjectileGeneration
 			distanceInitial,
 			speed,
 			ticksToLive,
-			hit,
+			null, // propertiesToCollideWithNames
 			damage,
 			visual,
-			projectileEntityInitialize
+			projectileEntityInitialize,
+			hit
 		);
 	}
 
@@ -142,10 +151,11 @@ export class ProjectileGeneration
 			0, // distanceInitial,
 			0, // speed
 			1, // ticksToLive
-			null, // hit
+			null, // propertiesToCollideWithNames
 			null, // damage
 			visual,
-			null // projectileEntityInitialize
+			null, // projectileEntityInitialize
+			null // hit
 		);
 	}
 
@@ -218,57 +228,57 @@ export class ProjectileGeneration
 
 		var shotDistance = this.distanceInitial;
 
-		var shotOffset =
+		var offset =
 			shooterForward
 				.clone()
 				.multiplyScalar(shotDistance);
 
-		var shotPos =
+		var pos =
 			shooterPos
 				.clone()
-				.add(shotOffset);
-		var shotOri = Orientation.fromForward(shooterForward);
+				.add(offset);
+		var ori = Orientation.fromForward(shooterForward);
 
-		var shotLoc = Disposition.fromPosAndOri(shotPos, shotOri);
-		shotLoc.vel
+		var loc = Disposition.fromPosAndOri(pos, ori);
+		loc.vel
 			.overwriteWith(shooterForward)
 			.multiplyScalar(this.speed);
 
-		var shotAudible = Audible.create();
+		var audible = Audible.create();
 
 		// Shots may move so fast that they "pass through" targets
 		// without ever colliding with them, so duplicate the collider along the path
 		// to make sure anything between the starting and ending points is hit.
 		var colliderPartBeforeTransform = Sphere.fromRadius(this.radius); 
-		var shotDiameter = this.radius * 2;
-		var colliderPartsCount = this.speed / shotDiameter;
+		var diameter = this.radius * 2;
+		var colliderPartsCount = this.speed / diameter;
 		var colliderParts: Shape[] = [];
 		for (var i = 0; i < colliderPartsCount; i++)
 		{
 			var displacement =
 				shooterForward
 					.clone()
-					.multiplyScalar(i * shotDiameter);
+					.multiplyScalar(i * diameter);
 			var transform = Transform_Translate.fromDisplacement(displacement);
 			var colliderPart =
 				ShapeTransformed.fromTransformAndChild(transform, colliderPartBeforeTransform);
 			colliderParts.push(colliderPart);
 		}
-		var shotCollider = ShapeGroupAny.fromChildren(colliderParts);
-		var shotCollidable =
-			Collidable.fromColliderPropertyNameAndCollide
+		var collider = ShapeGroupAny.fromChildren(colliderParts);
+		var collidable =
+			Collidable.fromColliderPropertyNamesAndCollide
 			(
-				shotCollider,
-				Collidable.name,
+				collider,
+				this.collideOnlyWithEntitiesHavingPropertiesNamed,
 				(uwpe: UniverseWorldPlaceEntities) => this.collide(uwpe)
 			);
-		var shotDamager = Damager.fromDamagePerHit(this.damage);
-		var shotDrawable = Drawable.fromVisual(this.visual); // hack
-		var shotEphemeral = Ephemeral.fromTicksToLive(this.ticksToLive);
-		var shotKillable = Killable.fromIntegrityMax(1);
-		var shotLocatable = Locatable.fromDisposition(shotLoc);
-		var shotMovable = Movable.fromSpeedMax(this.speed);
-		var shotRelatable =
+		var damager = Damager.fromDamagePerHit(this.damage);
+		var drawable = Drawable.fromVisual(this.visual); // hack
+		var ephemeral = Ephemeral.fromTicksToLive(this.ticksToLive);
+		var killable = Killable.fromIntegrityMax(1);
+		var locatable = Locatable.fromDisposition(loc);
+		var movable = Movable.fromSpeedMax(this.speed);
+		var relatable =
 			Relatable.fromRelationshipNameAndEntityRelatedId
 			(
 				"Originator", entityFiring.id
@@ -278,15 +288,15 @@ export class ProjectileGeneration
 		(
 			entityFiring.name + "_Shot",
 			[
-				shotAudible,
-				shotCollidable,
-				shotDamager,
-				shotDrawable,
-				shotEphemeral,
-				shotKillable,
-				shotLocatable,
-				shotMovable,
-				shotRelatable
+				audible,
+				collidable,
+				damager,
+				drawable,
+				ephemeral,
+				killable,
+				locatable,
+				movable,
+				relatable
 			]
 		);
 
@@ -306,6 +316,14 @@ export class ProjectileGeneration
 		{
 			this.hit(uwpe);
 		}
+	}
+
+	// Accessors.
+
+	collideOnlyWithEntitiesHavingPropertiesNamedSet(values: string[]): ProjectileGeneration
+	{
+		this.collideOnlyWithEntitiesHavingPropertiesNamed = values;
+		return this;
 	}
 }
 

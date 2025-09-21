@@ -100,6 +100,10 @@ var ThisCouldBeBetter;
             visible() {
                 return (this.hidden == false);
             }
+            visualSet(value) {
+                this.visual = value;
+                return this;
+            }
             // EntityProperty.
             updateForTimerTick(uwpe) {
                 this.draw(uwpe);

@@ -8,6 +8,7 @@ var ThisCouldBeBetter;
                 super();
                 this.ticksToLive = ticksToLive || 100;
                 this._expire = expire;
+                this.ticksSoFar = 0;
             }
             static default() {
                 return Ephemeral.fromTicksToLive(100);
@@ -30,17 +31,23 @@ var ThisCouldBeBetter;
                 }
             }
             isExpired() {
-                return (this.ticksToLive < 0);
+                return (this.ticksSoFar >= this.ticksToLive);
+            }
+            reset() {
+                this.ticksSoFar = 0;
+                return this;
             }
             toEntity() { return new GameFramework.Entity(Ephemeral.name, [this]); }
             // EntityProperty.
             updateForTimerTick(uwpe) {
-                this.ticksToLive--;
-                var isExpired = this.isExpired();
-                if (isExpired) {
-                    var entityEphemeral = uwpe.entity;
-                    uwpe.place.entityToRemoveAdd(entityEphemeral);
-                    this.expire(uwpe);
+                if (this.activated()) {
+                    this.ticksSoFar++;
+                    var isExpired = this.isExpired();
+                    if (isExpired) {
+                        var entityEphemeral = uwpe.entity;
+                        uwpe.place.entityToRemoveAdd(entityEphemeral);
+                        this.expire(uwpe);
+                    }
                 }
             }
             // Clonable.

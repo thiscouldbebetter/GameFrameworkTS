@@ -78,13 +78,13 @@ export class VisualParticles implements Visual<VisualParticles>
 				particleLoc.vel.overwriteWith(particleVel);
 				var particleTicksToLive = this.particleTicksToLiveGet();
 
-				var entityParticle = new Entity
+				var entityParticle = Entity.fromNameAndProperties
 				(
 					particleName,
 					[
 						Drawable.fromVisual(this.particleVisual.clone()),
-						new Ephemeral(particleTicksToLive, null),
-						new Locatable(particleLoc)
+						Ephemeral.fromTicksToLive(particleTicksToLive),
+						Locatable.fromDisposition(particleLoc)
 					]
 				);
 
@@ -101,7 +101,8 @@ export class VisualParticles implements Visual<VisualParticles>
 			loc.pos.add(loc.vel);
 
 			var ephemeral = Ephemeral.of(particleEntity);
-			if (ephemeral.ticksToLive <= 0)
+			var ephemeralIsExpired = ephemeral.isExpired();
+			if (ephemeralIsExpired)
 			{
 				ArrayHelper.remove(this.particleEntities, particleEntity);
 			}
@@ -109,8 +110,10 @@ export class VisualParticles implements Visual<VisualParticles>
 			{
 				ephemeral.ticksToLive--;
 				var particleVisual = Drawable.of(particleEntity).visual;
-				particleVisual.draw(
-					uwpeForParticles.entitySet(particleEntity), display
+				particleVisual.draw
+				(
+					uwpeForParticles.entitySet(particleEntity),
+					display
 				);
 				this.transformToApplyEachTick.transform(particleVisual);
 			}

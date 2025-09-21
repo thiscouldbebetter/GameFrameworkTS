@@ -15,7 +15,6 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 
 	entitiesGeneratedAllTimeCount: number;
 	entitiesGeneratedActive: Entity[];
-	inactivated: boolean;
 	ticksUntilNextGeneration: number
 
 	constructor
@@ -79,16 +78,6 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 	static of(entity: Entity): EntityGenerator
 	{
 		return entity.propertyByName(EntityGenerator.name) as EntityGenerator;
-	}
-
-	activate(): void
-	{
-		this.inactivated = false;
-	}
-
-	inactivate(): void
-	{
-		this.inactivated = true;
 	}
 
 	exhaust(): void

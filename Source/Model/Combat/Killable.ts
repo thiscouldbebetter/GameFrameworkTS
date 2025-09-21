@@ -14,13 +14,16 @@ export class Killable extends EntityPropertyBase<Killable>
 	livesInReserve: number;
 
 	deathIsIgnored: boolean; // For debugging.
+	dieHasBeenRun: boolean;
 	integrity: number;
+	removeFromPlaceUponDeath: boolean; // Legacy behavior.
 	ticksOfImmunityRemaining: number;
 
 	constructor
 	(
 		ticksOfImmunityInitial: number,
 		integrityMax: number,
+		removeFromPlaceUponDeath: boolean,
 		damageApply:
 		(
 			uwpe: UniverseWorldPlaceEntities, damageToApply: Damage
@@ -33,12 +36,14 @@ export class Killable extends EntityPropertyBase<Killable>
 
 		this.ticksOfImmunityInitial = ticksOfImmunityInitial || 0;
 		this.integrityMax = integrityMax || 1;
+		this.removeFromPlaceUponDeath = removeFromPlaceUponDeath || true;
 		this._damageApply = damageApply;
 		this._die = die;
 		this.livesInReserve = livesInReserve || 0;
 
 		this.ticksOfImmunityRemaining = this.ticksOfImmunityInitial;
 		this.deathIsIgnored = false;
+		this.dieHasBeenRun = false;
 		this.integritySetToMax();
 	}
 
@@ -47,7 +52,7 @@ export class Killable extends EntityPropertyBase<Killable>
 		die: (uwpe: UniverseWorldPlaceEntities) => void
 	): Killable
 	{
-		return new Killable(null, null, null, die, null);
+		return new Killable(null, null, null, null, die, null);
 	}
 
 	static default(): Killable
@@ -57,7 +62,7 @@ export class Killable extends EntityPropertyBase<Killable>
 
 	static fromIntegrityMax(integrityMax: number): Killable
 	{
-		return new Killable(null, integrityMax, null, null, null);
+		return new Killable(null, integrityMax, null, null, null, null);
 	}
 
 	static fromIntegrityMaxAndDie
@@ -66,7 +71,7 @@ export class Killable extends EntityPropertyBase<Killable>
 		die: (uwpe: UniverseWorldPlaceEntities) => void
 	): Killable
 	{
-		return new Killable(null, integrityMax, null, die, null);
+		return new Killable(null, integrityMax, null, null, die, null);
 	}
 
 	static fromIntegrityMaxDamageApplyAndDie
@@ -79,7 +84,7 @@ export class Killable extends EntityPropertyBase<Killable>
 		die: (uwpe: UniverseWorldPlaceEntities) => void
 	): Killable
 	{
-		return new Killable(null, integrityMax, damageApply, die, null);
+		return new Killable(null, integrityMax, null, damageApply, die, null);
 	}
 
 	static fromTicksOfImmunity
@@ -87,7 +92,7 @@ export class Killable extends EntityPropertyBase<Killable>
 		ticksOfImmunityInitial: number
 	): Killable
 	{
-		return new Killable(ticksOfImmunityInitial, null, null, null, null);
+		return new Killable(ticksOfImmunityInitial, null, null, null, null, null);
 	}
 
 	static fromTicksOfImmunityAndDie
@@ -96,7 +101,7 @@ export class Killable extends EntityPropertyBase<Killable>
 		die: (uwpe: UniverseWorldPlaceEntities) => void
 	): Killable
 	{
-		return new Killable(ticksOfImmunityInitial, null, null, die, null);
+		return new Killable(ticksOfImmunityInitial, null, null, null, die, null);
 	}
 
 	static fromTicksOfImmunityDieAndLives
@@ -106,7 +111,7 @@ export class Killable extends EntityPropertyBase<Killable>
 		livesInReserve: number
 	): Killable
 	{
-		return new Killable(ticksOfImmunityInitial, null, null, die, livesInReserve);
+		return new Killable(ticksOfImmunityInitial, null, null, null, die, livesInReserve);
 	}
 
 	static fromTicksOfImmunityIntegrityMaxAndDie
@@ -116,7 +121,7 @@ export class Killable extends EntityPropertyBase<Killable>
 		die: (uwpe: UniverseWorldPlaceEntities) => void
 	): Killable
 	{
-		return new Killable(ticksOfImmunityInitial, integrityMax, null, die, null);
+		return new Killable(ticksOfImmunityInitial, integrityMax, null, null, die, null);
 	}
 
 	static fromTicksOfImmunityIntegrityMaxDamageApplyDieAndLives
@@ -133,7 +138,7 @@ export class Killable extends EntityPropertyBase<Killable>
 	{
 		return new Killable
 		(
-			ticksOfImmunityInitial, integrityMax, damageApply, die, livesInReserve
+			ticksOfImmunityInitial, integrityMax, null, damageApply, die, livesInReserve
 		);
 	}
 
@@ -193,10 +198,36 @@ export class Killable extends EntityPropertyBase<Killable>
 
 	die(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this._die != null)
+		if (this.dieHasBeenRun == false)
 		{
-			this._die(uwpe);
+			this.dieHasBeenRun = true;
+
+			var entity = uwpe.entity;
+
+			if (this.removeFromPlaceUponDeath)
+			{
+				var place = uwpe.place;
+				place.entityToRemoveAdd(entity);
+			}
+
+			var entityActor = Actor.of(entity);
+			if (entityActor != null)
+			{
+				entityActor.inactivate();
+			}
+
+			if (this._die != null)
+			{
+				this._die(uwpe);
+			}
 		}
+	}
+
+	static die_RemoveEntityKillableFromPlace(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var place = uwpe.place;
+		var entity = uwpe.entity;
+		place.entityToRemoveAdd(entity);
 	}
 
 	integrityAdd(amountToAdd: number): void
@@ -246,7 +277,10 @@ export class Killable extends EntityPropertyBase<Killable>
 
 	isAlive(): boolean
 	{
-		return (this.integrity > 0 || this.deathIsIgnored);
+		var isAlive =
+			this.dieHasBeenRun == false
+			&& (this.integrity > 0 || this.deathIsIgnored);
+		return isAlive;
 	}
 
 	kill(): void
@@ -257,6 +291,20 @@ export class Killable extends EntityPropertyBase<Killable>
 	livesInReserveSet(value: number): Killable
 	{
 		this.livesInReserve = value;
+		return this;
+	}
+
+	removeFromPlaceUponDeathSet(value: boolean): Killable
+	{
+		this.removeFromPlaceUponDeath = value;
+		return this;
+	}
+
+	reset(): Killable
+	{
+		this.integritySetToMax();
+		this.ticksOfImmunityRemainingReset();
+		this.dieHasBeenRun = false;
 		return this;
 	}
 
@@ -293,9 +341,6 @@ export class Killable extends EntityPropertyBase<Killable>
 			var killableIsAlive = this.isAlive();
 			if (killableIsAlive == false)
 			{
-				var place = uwpe.place;
-				var entityKillable = uwpe.entity;
-				place.entityToRemoveAdd(entityKillable);
 				this.die(uwpe);
 			}
 		}
@@ -309,6 +354,7 @@ export class Killable extends EntityPropertyBase<Killable>
 		(
 			this.ticksOfImmunityInitial,
 			this.integrityMax,
+			this.removeFromPlaceUponDeath,
 			this._damageApply,
 			this._die,
 			this.livesInReserve
@@ -319,6 +365,7 @@ export class Killable extends EntityPropertyBase<Killable>
 	{
 		this.ticksOfImmunityInitial = other.ticksOfImmunityInitial;
 		this.integrityMax = other.integrityMax;
+		this.removeFromPlaceUponDeath = other.removeFromPlaceUponDeath;
 		this._damageApply = other._damageApply;
 		this._die = other._die;
 		this.livesInReserve = other.livesInReserve;

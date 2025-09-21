@@ -63,6 +63,9 @@ var ThisCouldBeBetter;
             static fromColliderPropertyNameAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertyNamed, collideEntities) {
                 return Collidable.fromColliderCollidesOnlyWithEntitiesHavingPropertyNamedAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertyNamed, collideEntities);
             }
+            static fromColliderPropertyNamesAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertiesNamed, collideEntities) {
+                return this.fromColliderCollidesOnlyWithEntitiesHavingPropertiesNamedAndCollide(colliderAtRest, collidesOnlyWithEntitiesHavingPropertiesNamed, collideEntities);
+            }
             static fromShape(shapeAtRest) {
                 return Collidable.fromColliderAndCollideEntities(shapeAtRest, null);
             }

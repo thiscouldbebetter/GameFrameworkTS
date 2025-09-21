@@ -78,16 +78,19 @@ export class ControlBase
 	draw(u: Universe, d: Display, drawLoc: Disposition, style: ControlStyle): void {}
 	finalize(u: Universe): void {}
 	finalizeIsComplete(): boolean { return true; }
+
 	fontHeightInPixelsSet(value: number): ControlBase
 	{
 		this.fontNameAndHeight =
 			this.fontNameAndHeight.clone().heightInPixelsSet(value);
 		return this;
 	}
+
 	initialize(u: Universe): void {}
 	initializeIsComplete(u: Universe): boolean { return true; }
 	isEnabled(): boolean { return true; }
 	isVisible(): boolean { return this._isVisible; }
+
 	scalePosAndSize(scaleFactors: Coords): ControlBase
 	{
 		this.pos.multiply(scaleFactors);
@@ -104,6 +107,7 @@ export class ControlBase
 
 		return this;
 	}
+
 	style(universe: Universe)
 	{
 		var returnValue =
@@ -114,6 +118,7 @@ export class ControlBase
 		);
 		return returnValue;
 	}
+
 	toVenue(): VenueControls { return VenueControls.fromControl(this); }
 
 }

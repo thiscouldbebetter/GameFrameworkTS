@@ -305,10 +305,10 @@ export class VisualBuilder
 
 	explosionSparks
 	(
-		explosionRadius: number,
 		sparkRadius: number,
 		sparkCount: number,
-		ticksToLive: number
+		ticksToLive: number,
+		soundName: string
 	): VisualBase
 	{
 		var colors = Color.Instances();
@@ -344,7 +344,7 @@ export class VisualBuilder
 				}
 			);
 
-		var explosionVisual = new VisualParticles
+		var explosionVisual: VisualBase = new VisualParticles
 		(
 			"Explosion",
 			1, // ticksToGenerate
@@ -354,6 +354,16 @@ export class VisualBuilder
 			transform,
 			particleVisual
 		);
+
+		if (soundName != null)
+		{
+			var visualSound = VisualSound.fromSoundName(soundName);
+			explosionVisual = VisualGroup.fromChildren
+			([
+				visualSound,
+				explosionVisual
+			]);
+		}
 
 		return explosionVisual;
 	}
