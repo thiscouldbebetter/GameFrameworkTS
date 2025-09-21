@@ -2,11 +2,11 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualAnimation implements Visual<VisualAnimation>
+export class VisualAnimation extends VisualBase<VisualAnimation>
 {
 	name: string;
 	ticksToHoldFrames: number[];
-	frames: VisualBase[];
+	frames: Visual[];
 	isRepeating: boolean;
 
 	ticksToComplete: number;
@@ -15,10 +15,12 @@ export class VisualAnimation implements Visual<VisualAnimation>
 	(
 		name: string,
 		ticksToHoldFrames: number[],
-		frames: VisualBase[],
+		frames: Visual[],
 		isRepeating: boolean
 	)
 	{
+		super();
+
 		this.name = name;
 		this.ticksToHoldFrames = ticksToHoldFrames || frames.map(x => 1);
 		this.frames = frames;
@@ -57,7 +59,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 	(
 		name: string,
 		ticksToHoldFrames: number[],
-		frames: VisualBase[]
+		frames: Visual[]
 	): VisualAnimation
 	{
 		return new VisualAnimation
@@ -73,7 +75,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 	(
 		name: string,
 		ticksToHoldFrames: number[],
-		frames: VisualBase[]
+		frames: Visual[]
 	): VisualAnimation
 	{
 		return new VisualAnimation
@@ -88,7 +90,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 	static fromTicksToHoldFramesAndFramesNonRepeating
 	(
 		ticksToHoldFrames: number,
-		frames: VisualBase[]
+		frames: Visual[]
 	): VisualAnimation
 	{
 		return new VisualAnimation
@@ -103,7 +105,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 	static fromTicksToHoldFramesAndFramesRepeating
 	(
 		ticksToHoldFrames: number,
-		frames: VisualBase[]
+		frames: Visual[]
 	): VisualAnimation
 	{
 		return new VisualAnimation
@@ -117,7 +119,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 
 	static fromFrames
 	(
-		frames: VisualBase[]
+		frames: Visual[]
 	): VisualAnimation
 	{
 		var name = VisualAnimation.name + frames[0].constructor.name + frames.length;
@@ -126,7 +128,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 
 	static fromFramesRepeating
 	(
-		frames: VisualBase[]
+		frames: Visual[]
 	): VisualAnimation
 	{
 		var name = VisualAnimation.name + frames[0].constructor.name + frames.length;
@@ -135,7 +137,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 
 	static fromNameAndFrames
 	(
-		name: string, frames: VisualBase[]
+		name: string, frames: Visual[]
 	): VisualAnimation
 	{
 		return VisualAnimation.fromNameFramesAndIsRepeating
@@ -147,7 +149,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 	static fromNameFramesAndIsRepeating
 	(
 		name: string,
-		frames: VisualBase[],
+		frames: Visual[],
 		isRepeating: boolean
 	): VisualAnimation
 	{
@@ -163,7 +165,7 @@ export class VisualAnimation implements Visual<VisualAnimation>
 		return returnValue;
 	}
 
-	frameCurrent(world: World, tickStarted: number): VisualBase
+	frameCurrent(world: World, tickStarted: number): Visual
 	{
 		var frameIndexCurrent = this.frameIndexCurrent(world, tickStarted);
 		var frameCurrent = this.frames[frameIndexCurrent];

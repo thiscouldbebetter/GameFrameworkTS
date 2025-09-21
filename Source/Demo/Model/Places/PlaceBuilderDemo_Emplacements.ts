@@ -15,7 +15,7 @@ class PlaceBuilderDemo_Emplacements
 	entityDefnBuildAnvil(): Entity
 	{
 		var anvilName = "Anvil";
-		var anvilVisual: VisualBase = new VisualImageScaled
+		var anvilVisual: Visual = new VisualImageScaled
 		(
 			Coords.fromXY(1, 1).multiplyScalar(this.entityDimension * 2), // sizeScaled
 			new VisualImageFromLibrary(anvilName)
@@ -552,7 +552,7 @@ class PlaceBuilderDemo_Emplacements
 			obstacleMappedCellSource
 		);
 
-		var obstacleMappedVisualLookup = new Map<string, VisualBase>
+		var obstacleMappedVisualLookup = new Map<string, Visual>
 		([
 			[ "Blocking", new VisualRectangle(obstacleMappedCellSize, obstacleColor, null, false) ], // isCentered
 			[ "Open", new VisualNone() ]
@@ -659,7 +659,7 @@ class PlaceBuilderDemo_Emplacements
 	entityDefnBuildPillow(): Entity
 	{
 		var pillowName = "Pillow";
-		var pillowVisual: VisualBase = new VisualImageScaled
+		var pillowVisual: Visual = new VisualImageScaled
 		(
 			Coords.fromXY(1, .75).multiplyScalar(this.entityDimension * 2), // sizeScaled
 			new VisualImageFromLibrary(pillowName)

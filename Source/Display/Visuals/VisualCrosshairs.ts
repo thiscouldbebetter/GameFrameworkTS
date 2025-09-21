@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualCrosshairs implements Visual<VisualCrosshairs>
+export class VisualCrosshairs extends VisualBase<VisualCrosshairs>
 {
 	numberOfLines: number;
 	radiusOuter: number;
@@ -16,6 +16,8 @@ export class VisualCrosshairs implements Visual<VisualCrosshairs>
 		color: Color, lineThickness: number
 	)
 	{
+		super();
+
 		this.numberOfLines = numberOfLines || 4;
 		this.radiusOuter = radiusOuter || 10;
 		this.radiusInner = radiusInner || (this.radiusOuter / 2);

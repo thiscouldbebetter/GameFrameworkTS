@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualHidable {
+        class VisualHidable extends GameFramework.VisualBase {
             constructor(isVisible, child) {
+                super();
                 this._isVisible = isVisible;
                 this.child = child;
             }

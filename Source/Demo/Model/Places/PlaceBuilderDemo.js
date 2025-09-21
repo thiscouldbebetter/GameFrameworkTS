@@ -1276,7 +1276,7 @@ class PlaceBuilderDemo // Main.
     entityDefnBuildCar() {
         var entityDimension = this.entityDimension * .75;
         var defnName = "Car";
-        var frames = new Array();
+        var frames = [];
         var frameSizeScaled = Coords.fromXY(4, 3).multiplyScalar(entityDimension);
         var visualTileset = new VisualImageFromLibrary("Car");
         var tileSizeInPixels = Coords.fromXY(64, 48);

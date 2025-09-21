@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualControl implements Visual<VisualControl>
+export class VisualControl extends VisualBase<VisualControl>
 {
 	controlRoot: ControlBase;
 
@@ -10,6 +10,8 @@ export class VisualControl implements Visual<VisualControl>
 
 	constructor(controlRoot: ControlBase)
 	{
+		super();
+
 		this.controlRoot = controlRoot;
 
 		// Helper variables.

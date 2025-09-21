@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualControl {
+        class VisualControl extends GameFramework.VisualBase {
             constructor(controlRoot) {
+                super();
                 this.controlRoot = controlRoot;
                 // Helper variables.
                 this._drawLoc = new GameFramework.Disposition(GameFramework.Coords.create(), null, null);

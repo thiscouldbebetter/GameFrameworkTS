@@ -33,7 +33,7 @@ export class Effectable extends EntityPropertyBase<Effectable>
 		this.effects.push(effectToAdd);
 	}
 
-	effectsAsVisual(): VisualBase
+	effectsAsVisual(): Visual
 	{
 		var returnValue =
 		(

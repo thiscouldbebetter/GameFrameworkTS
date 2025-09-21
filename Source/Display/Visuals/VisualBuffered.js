@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualBuffered {
+        class VisualBuffered extends GameFramework.VisualBase {
             constructor(size, child) {
+                super();
                 this.size = size;
                 this.child = child;
                 this.displayForBuffer = GameFramework.Display2D.fromSizeAndIsInvisible(this.size, true);

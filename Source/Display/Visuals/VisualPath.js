@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualPath {
+        class VisualPath extends GameFramework.VisualBase {
             constructor(verticesAsPath, color, lineThickness, isClosed) {
+                super();
                 this.verticesAsPath = verticesAsPath;
                 this.color = color;
                 this.lineThickness = lineThickness;

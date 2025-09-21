@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualSound implements Visual<VisualSound>
+export class VisualSound extends VisualBase<VisualSound>
 {
 	// Yes, obviously sounds aren't really visual.
 
@@ -10,6 +10,8 @@ export class VisualSound implements Visual<VisualSound>
 
 	constructor(soundPlayback: SoundPlayback)
 	{
+		super();
+
 		this.soundPlayback = soundPlayback;
 	}
 

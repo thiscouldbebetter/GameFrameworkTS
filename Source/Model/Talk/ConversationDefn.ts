@@ -6,7 +6,7 @@ export class ConversationDefn
 {
 	name: string;
 	contentTextStringName: string;
-	visualPortrait: VisualBase;
+	visualPortrait: Visual;
 	soundMusicName: string;
 	talkNodeDefns: TalkNodeDefn[];
 	talkNodes: TalkNode[];
@@ -18,7 +18,7 @@ export class ConversationDefn
 	(
 		name: string,
 		contentTextStringName: string,
-		visualPortrait: VisualBase,
+		visualPortrait: Visual,
 		soundMusicName: string,
 		talkNodeDefns: TalkNodeDefn[],
 		talkNodes: TalkNode[]

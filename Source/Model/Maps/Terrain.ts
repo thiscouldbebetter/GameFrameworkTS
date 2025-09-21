@@ -8,7 +8,7 @@ export class Terrain
 	code: string;
 	level: number;
 	traversable: Traversable;
-	visual: VisualBase;
+	visual: Visual;
 
 	constructor
 	(
@@ -16,7 +16,7 @@ export class Terrain
 		code: string,
 		level: number,
 		traversable: Traversable,
-		visual: VisualBase
+		visual: Visual
 	)
 	{
 		this.name = name;

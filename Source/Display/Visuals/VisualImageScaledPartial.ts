@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial>
+export class VisualImageScaledPartial extends VisualBase<VisualImageScaledPartial>
 {
 	visualImageToExtractFrom: VisualImage;
 	regionToDrawAsBox: BoxAxisAligned;
@@ -19,6 +19,8 @@ export class VisualImageScaledPartial implements Visual<VisualImageScaledPartial
 		visualImageToExtractFrom: VisualImage
 	)
 	{
+		super();
+
 		this.visualImageToExtractFrom = visualImageToExtractFrom;
 		this.regionToDrawAsBox = regionToDrawAsBox;
 		this.sizeToDraw = sizeToDraw;

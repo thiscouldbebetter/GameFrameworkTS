@@ -2,22 +2,24 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualRotate implements Visual<VisualRotate>
+export class VisualRotate extends VisualBase<VisualRotate>
 {
-	child: VisualBase;
+	child: Visual;
 	_rotationInTurnsGet: (uwpe: UniverseWorldPlaceEntities) => number;
 
 	constructor
 	(
-		child: VisualBase,
+		child: Visual,
 		rotationInTurnsGet: (uwpe: UniverseWorldPlaceEntities) => number
 	)
 	{
+		super();
+
 		this.child = child;
 		this._rotationInTurnsGet = rotationInTurnsGet;
 	}
 
-	static fromChild(child: VisualBase): VisualRotate
+	static fromChild(child: Visual): VisualRotate
 	{
 		return new VisualRotate(child, null);
 	}

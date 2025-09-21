@@ -2,13 +2,15 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualNamed implements Visual<VisualNamed>
+export class VisualNamed extends VisualBase<VisualNamed>
 {
 	name: string;
-	child: VisualBase;
+	child: Visual;
 
-	constructor(name: string, child: VisualBase)
+	constructor(name: string, child: Visual)
 	{
+		super();
+
 		this.name = name;
 		this.child = child;
 	}
@@ -16,7 +18,7 @@ export class VisualNamed implements Visual<VisualNamed>
 	static fromNameAndChild
 	(
 		name: string,
-		child: VisualBase
+		child: Visual
 	): VisualNamed
 	{
 		return new VisualNamed(name, child);

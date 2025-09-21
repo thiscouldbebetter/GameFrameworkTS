@@ -4,7 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ControlVisual extends ControlBase
 {
-	visual: DataBinding<any, VisualBase>;
+	visual: DataBinding<any, Visual>;
 	colorBackground: Color;
 	colorBorder: Color;
 
@@ -17,7 +17,7 @@ export class ControlVisual extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		visual: DataBinding<any, VisualBase>,
+		visual: DataBinding<any, Visual>,
 		colorBackground: Color,
 		colorBorder: Color
 	)
@@ -47,7 +47,7 @@ export class ControlVisual extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		visual: DataBinding<any, VisualBase>
+		visual: DataBinding<any, Visual>
 	)
 	{
 		return new ControlVisual(name, pos, size, visual, null, null);
@@ -58,7 +58,7 @@ export class ControlVisual extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		visual: DataBinding<any, VisualBase>,
+		visual: DataBinding<any, Visual>,
 		colorBackground: Color
 	)
 	{
@@ -68,7 +68,7 @@ export class ControlVisual extends ControlBase
 	static fromPosAndVisual
 	(
 		pos: Coords,
-		visual: DataBinding<any, VisualBase>
+		visual: DataBinding<any, Visual>
 	)
 	{
 		return new ControlVisual(null, pos, null, visual, null, null);
@@ -78,7 +78,7 @@ export class ControlVisual extends ControlBase
 	(
 		pos: Coords,
 		size: Coords,
-		visual: DataBinding<any, VisualBase>
+		visual: DataBinding<any, Visual>
 	)
 	{
 		return new ControlVisual(null, pos, size, visual, null, null);

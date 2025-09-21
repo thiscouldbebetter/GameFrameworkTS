@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualPolygon implements Visual<VisualPolygon>
+export class VisualPolygon extends VisualBase<VisualPolygon>
 {
 	verticesAsPath: Path;
 	colorFill: Color;
@@ -20,6 +20,8 @@ export class VisualPolygon implements Visual<VisualPolygon>
 		shouldUseEntityOrientation: boolean
 	)
 	{
+		super();
+
 		this.verticesAsPath = verticesAsPath;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;

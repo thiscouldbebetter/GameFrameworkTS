@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualEllipse implements Visual<VisualEllipse>
+export class VisualEllipse extends VisualBase<VisualEllipse>
 {
 	semiaxisHorizontal: number;
 	semiaxisVertical: number;
@@ -18,6 +18,8 @@ export class VisualEllipse implements Visual<VisualEllipse>
 		shouldUseEntityOrientation: boolean
 	)
 	{
+		super();
+
 		this.semiaxisHorizontal = semiaxisHorizontal;
 		this.semiaxisVertical = semiaxisVertical;
 		this.rotationInTurns = rotationInTurns || 0;

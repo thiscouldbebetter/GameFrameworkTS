@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualText implements Visual<VisualText>
+export class VisualText extends VisualBase<VisualText>
 {
 	_text: DataBinding<any, string>;
 	colorFill: Color;
@@ -19,6 +19,8 @@ export class VisualText implements Visual<VisualText>
 		colorBorder: Color
 	)
 	{
+		super();
+
 		this._text = text;
 		this.fontNameAndHeight =
 			fontNameAndHeight || FontNameAndHeight.default();

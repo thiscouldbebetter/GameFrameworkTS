@@ -2,10 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualCameraProjection implements Visual<VisualCameraProjection>
+export class VisualCameraProjection extends VisualBase<VisualCameraProjection>
 {
 	cameraGet: (uwpe: UniverseWorldPlaceEntities) => Camera;
-	child: VisualBase;
+	child: Visual;
 
 	_cameraCached: Camera;
 	_posBeforeProjection: Coords;
@@ -14,9 +14,11 @@ export class VisualCameraProjection implements Visual<VisualCameraProjection>
 	constructor
 	(
 		cameraGet: (uwpe: UniverseWorldPlaceEntities) => Camera,
-		child: VisualBase
+		child: Visual
 	)
 	{
+		super();
+
 		this.cameraGet = cameraGet;
 		this.child = child;
 

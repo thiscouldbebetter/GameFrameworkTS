@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualSelect {
+        class VisualSelect extends GameFramework.VisualBase {
             constructor(selectChildToShow, children) {
+                super();
                 this._selectChildToShow = selectChildToShow;
                 this.children = children;
             }

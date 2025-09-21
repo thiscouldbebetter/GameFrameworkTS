@@ -10,6 +10,7 @@ var VenueFader = gf.VenueFader;
 var VenueLayered = gf.VenueLayered;
 var VisualAnchor = gf.VisualAnchor;
 var VisualArc = gf.VisualArc;
+var VisualBase = gf.VisualBase;
 var VisualBar = gf.VisualBar;
 var VisualBuffered = gf.VisualBuffered;
 var VisualBuilder = gf.VisualBuilder;
@@ -47,6 +48,7 @@ var VisualRotate = gf.VisualRotate;
 var VisualSelect = gf.VisualSelect;
 var VisualStack = gf.VisualStack;
 var VisualText = gf.VisualText;
+var VisualWrapped = gf.VisualWrapped;
 // Display - Visuals - Animation.
 var Animatable2 = gf.Animatable2; // Possibly conflicts with a built-in class?
 var VisualAnimation = gf.VisualAnimation;

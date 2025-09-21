@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualArc {
+        class VisualArc extends GameFramework.VisualBase {
             constructor(radiusOuter, radiusInner, directionMin, angleSpannedInTurns, colorFill, colorBorder) {
+                super();
                 this.radiusOuter = radiusOuter;
                 this.radiusInner = radiusInner;
                 this.directionMin = directionMin;

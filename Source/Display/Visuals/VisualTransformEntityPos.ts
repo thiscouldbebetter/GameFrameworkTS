@@ -2,15 +2,17 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualTransformEntityPos implements Visual<VisualTransformEntityPos>
+export class VisualTransformEntityPos extends VisualBase<VisualTransformEntityPos>
 {
 	transformToApply: TransformBase;
-	child: VisualBase;
+	child: Visual;
 
 	private _entityPosSaved: Coords;
 
-	constructor(transformToApply: TransformBase, child: VisualBase)
+	constructor(transformToApply: TransformBase, child: Visual)
 	{
+		super();
+
 		this.transformToApply = transformToApply;
 		this.child = child;
 

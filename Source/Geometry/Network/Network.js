@@ -106,8 +106,9 @@ var ThisCouldBeBetter;
                 return this;
             }
         }
-        class VisualNetwork {
+        class VisualNetwork extends GameFramework.VisualBase {
             constructor(network) {
+                super();
                 this.network = network;
                 this.networkTransformed = this.network.clone();
                 this.transformLocate = new GameFramework.Transform_Locate(null);

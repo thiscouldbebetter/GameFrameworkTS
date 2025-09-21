@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualMap {
+        class VisualMap extends GameFramework.VisualBase {
             constructor(map, visualsByName, cameraGet, shouldConvertToImage) {
+                super();
                 this.map = map;
                 this.visualsByName = visualsByName;
                 this.cameraGet = cameraGet;

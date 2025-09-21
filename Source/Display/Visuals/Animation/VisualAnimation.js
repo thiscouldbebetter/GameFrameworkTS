@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualAnimation {
+        class VisualAnimation extends GameFramework.VisualBase {
             constructor(name, ticksToHoldFrames, frames, isRepeating) {
+                super();
                 this.name = name;
                 this.ticksToHoldFrames = ticksToHoldFrames || frames.map(x => 1);
                 this.frames = frames;

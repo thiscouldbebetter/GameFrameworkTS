@@ -46,7 +46,7 @@ var ThisCouldBeBetter;
             }
             // EntityProperty.
             updateForTimerTick(uwpe) {
-                if (this.inactivated || this.exhausted()) {
+                if (this.inactivated() || this.exhausted()) {
                     return;
                 }
                 var place = uwpe.place;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualParticles implements Visual<VisualParticles>
+export class VisualParticles extends VisualBase<VisualParticles>
 {
 	name: string;
 	ticksToGenerate: number;
@@ -10,7 +10,7 @@ export class VisualParticles implements Visual<VisualParticles>
 	particleTicksToLiveGet: () => number;
 	particleVelocityGet: () => Coords;
 	transformToApplyEachTick: TransformBase;
-	particleVisual: VisualBase;
+	particleVisual: Visual;
 
 	ticksSoFar: number;
 	particleEntities: Entity[];
@@ -23,9 +23,11 @@ export class VisualParticles implements Visual<VisualParticles>
 		particleTicksToLiveGet: () => number,
 		particleVelocityGet: () => Coords,
 		transformToApplyEachTick: TransformBase,
-		particleVisual: VisualBase
+		particleVisual: Visual
 	)
 	{
+		super();
+
 		this.name = name;
 		this.ticksToGenerate = ticksToGenerate;
 		this.particlesPerTick = particlesPerTick;

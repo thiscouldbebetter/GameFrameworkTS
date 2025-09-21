@@ -175,7 +175,7 @@ class NetworkNode
 	}
 }
 
-export class VisualNetwork implements Visual<VisualNetwork>
+export class VisualNetwork extends VisualBase<VisualNetwork>
 {
 	network: Network;
 
@@ -184,6 +184,8 @@ export class VisualNetwork implements Visual<VisualNetwork>
 
 	constructor(network: Network)
 	{
+		super();
+
 		this.network = network;
 
 		this.networkTransformed = this.network.clone();

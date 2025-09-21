@@ -4,22 +4,15 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class Drawable extends EntityPropertyBase<Drawable>
 {
-	visual: VisualBase;
+	visual: Visual;
 	renderingOrder: number;
 	hidden: boolean;
-	sizeInWrappedInstances: Coords;
-
-	_entityPosToRestore: Coords;
-	_sizeInWrappedInstancesHalfRoundedDown: Coords;
-	_wrapOffsetInPixels: Coords;
-	_wrapOffsetInWraps: Coords;
 
 	constructor
 	(
-		visual: VisualBase,
+		visual: Visual,
 		renderingOrder: number,
-		hidden: boolean,
-		sizeInWrappedInstances: Coords
+		hidden: boolean
 	)
 	{
 		super();
@@ -27,12 +20,6 @@ export class Drawable extends EntityPropertyBase<Drawable>
 		this.visual = visual;
 		this.renderingOrder = renderingOrder || 0;
 		this.hidden = hidden || false;
-		this.sizeInWrappedInstances = sizeInWrappedInstances || Coords.ones();
-
-		this._entityPosToRestore = Coords.create();
-		this._sizeInWrappedInstancesHalfRoundedDown = Coords.create();
-		this._wrapOffsetInPixels = Coords.create();
-		this._wrapOffsetInWraps = Coords.create();
 	}
 
 	static default(): Drawable
@@ -49,26 +36,26 @@ export class Drawable extends EntityPropertyBase<Drawable>
 		return place.entitiesByPropertyName(Drawable.name);
 	}
 
-	static fromVisual(visual: VisualBase): Drawable
+	static fromVisual(visual: Visual): Drawable
 	{
-		return new Drawable(visual, null, null, null);
+		return new Drawable(visual, null, null);
 	}
 
 	static fromVisualAndHidden
 	(
-		visual: VisualBase,
+		visual: Visual,
 		hidden: boolean
 	): Drawable
 	{
-		return new Drawable(visual, null, hidden, null);
+		return new Drawable(visual, null, hidden);
 	}
 
 	static fromVisualAndRenderingOrder
 	(
-		visual: VisualBase, renderingOrder: number
+		visual: Visual, renderingOrder: number
 	): Drawable
 	{
-		return new Drawable(visual, renderingOrder, null, null);
+		return new Drawable(visual, renderingOrder, null);
 	}
 
 	static of(entity: Entity): Drawable
@@ -80,55 +67,7 @@ export class Drawable extends EntityPropertyBase<Drawable>
 	{
 		if (this.visible() )
 		{
-			var sizeInWraps = this.sizeInWrappedInstances;
-
-			if (sizeInWraps == null)
-			{
-				this.visual.draw(uwpe, uwpe.universe.display);
-			}
-			else
-			{
-				var sizeInWrapsHalfRoundedDown =
-					this.sizeInWrappedInstancesHalfRoundedDown();
-
-				var place = uwpe.place;
-				var wrapSizeInPixels = place.size();
-
-				var entity = uwpe.entity;
-				var entityPos = Locatable.of(entity).loc.pos;
-
-				var wrapOffsetInWraps = this._wrapOffsetInWraps;
-				var wrapOffsetInPixels = this._wrapOffsetInPixels;
-
-				for (var z = 0; z < sizeInWraps.z; z++)
-				{
-					wrapOffsetInWraps.z =
-						z - sizeInWrapsHalfRoundedDown.z;
-
-					for (var y = 0; y < sizeInWraps.y; y++)
-					{
-						wrapOffsetInWraps.y =
-							y - sizeInWrapsHalfRoundedDown.y;
-
-						for (var x = 0; x < sizeInWraps.x; x++)
-						{
-							wrapOffsetInWraps.x =
-								x - sizeInWrapsHalfRoundedDown.x;
-
-							this._entityPosToRestore.overwriteWith(entityPos);
-
-							wrapOffsetInPixels
-								.overwriteWith(wrapOffsetInWraps)
-								.multiply(wrapSizeInPixels);
-
-							entityPos.add(wrapOffsetInPixels);
-							this.visual.draw(uwpe, uwpe.universe.display);
-
-							entityPos.overwriteWith(this._entityPosToRestore);
-						}
-					}
-				}
-			}
+			this.visual.draw(uwpe, uwpe.universe.display);
 		}
 	}
 
@@ -156,28 +95,12 @@ export class Drawable extends EntityPropertyBase<Drawable>
 		return this;
 	}
 
-	sizeInWrappedInstancesHalfRoundedDown(): Coords
-	{
-		this._sizeInWrappedInstancesHalfRoundedDown
-			.overwriteWith(this.sizeInWrappedInstances)
-			.half()
-			.floor();
-
-		return this._sizeInWrappedInstancesHalfRoundedDown;
-	}
-
-	sizeInWrappedInstancesSet(value: Coords): Drawable
-	{
-		this.sizeInWrappedInstances = value;
-		return this;
-	}
-
 	visible(): boolean
 	{
 		return (this.hidden == false);
 	}
 
-	visualSet(value: VisualBase): Drawable
+	visualSet(value: Visual): Drawable
 	{
 		this.visual = value;
 		return this;
@@ -198,8 +121,7 @@ export class Drawable extends EntityPropertyBase<Drawable>
 		(
 			this.visual,
 			this.renderingOrder,
-			this.hidden,
-			this.sizeInWrappedInstances.clone()
+			this.hidden
 		);
 	}
 
@@ -208,8 +130,6 @@ export class Drawable extends EntityPropertyBase<Drawable>
 		this.visual.overwriteWith(other.visual);
 		this.renderingOrder = other.renderingOrder;
 		this.hidden = other.hidden;
-		this.sizeInWrappedInstances
-			.overwriteWith(other.sizeInWrappedInstances);
 		return this;
 	}
 }

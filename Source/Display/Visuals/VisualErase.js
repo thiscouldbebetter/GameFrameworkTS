@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualErase {
+        class VisualErase extends GameFramework.VisualBase {
             constructor(child) {
+                super();
                 this.child = child;
             }
             // Visual.

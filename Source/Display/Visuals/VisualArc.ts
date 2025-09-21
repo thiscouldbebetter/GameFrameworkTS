@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualArc implements Visual<VisualArc>
+export class VisualArc extends VisualBase<VisualArc>
 {
 	radiusOuter: number;
 	radiusInner: number;
@@ -24,6 +24,8 @@ export class VisualArc implements Visual<VisualArc>
 		colorBorder: Color
 	)
 	{
+		super();
+
 		this.radiusOuter = radiusOuter;
 		this.radiusInner = radiusInner;
 		this.directionMin = directionMin;

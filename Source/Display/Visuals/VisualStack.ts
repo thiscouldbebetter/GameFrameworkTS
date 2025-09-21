@@ -2,22 +2,24 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualStack implements Visual<VisualStack>
+export class VisualStack extends VisualBase<VisualStack>
 {
 	childSpacing: Coords;
-	children: VisualBase[];
+	children: Visual[];
 
 	private _posSaved: Coords;
 
-	constructor(childSpacing: Coords, children: VisualBase[])
+	constructor(childSpacing: Coords, children: Visual[])
 	{
+		super();
+
 		this.childSpacing = childSpacing;
 		this.children = children;
 
 		this._posSaved = Coords.create();
 	}
 
-	static fromSpacingAndChildren(childSpacing: Coords, children: VisualBase[]): VisualStack
+	static fromSpacingAndChildren(childSpacing: Coords, children: Visual[]): VisualStack
 	{
 		return new VisualStack(childSpacing, children);
 	}

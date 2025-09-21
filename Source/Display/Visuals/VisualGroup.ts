@@ -2,21 +2,23 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualGroup implements Visual<VisualGroup>
+export class VisualGroup extends VisualBase<VisualGroup>
 {
-	children: VisualBase[];
+	children: Visual[];
 
-	constructor(children: VisualBase[])
+	constructor(children: Visual[])
 	{
+		super();
+
 		this.children = children;
 	}
 
-	static fromChildren(children: VisualBase[]): VisualGroup
+	static fromChildren(children: Visual[]): VisualGroup
 	{
 		return new VisualGroup(children);
 	}
 
-	childAdd(childToAdd: VisualBase): VisualGroup
+	childAdd(childToAdd: Visual): VisualGroup
 	{
 		this.children.push(childToAdd);
 		return this;

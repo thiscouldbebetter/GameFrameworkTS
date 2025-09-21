@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualMesh {
+        class VisualMesh extends GameFramework.VisualBase {
             constructor(mesh) {
+                super();
                 this.mesh = mesh;
             }
             // Cloneable.

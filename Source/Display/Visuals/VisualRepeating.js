@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualRepeating {
+        class VisualRepeating extends GameFramework.VisualBase {
             constructor(cellSize, viewSize, child, expandViewStartAndEndByCell) {
+                super();
                 this.cellSize = cellSize;
                 this.viewSize = viewSize;
                 this.child = child;

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualPolygonPreoriented implements Visual<VisualPolygonPreoriented>
+export class VisualPolygonPreoriented extends VisualBase<VisualPolygonPreoriented>
 {
 	visualPolygonInner: VisualPolygon
 
@@ -11,6 +11,8 @@ export class VisualPolygonPreoriented implements Visual<VisualPolygonPreoriented
 		visualPolygonInner: VisualPolygon
 	)
 	{
+		super();
+
 		this.visualPolygonInner = visualPolygonInner;
 	}
 

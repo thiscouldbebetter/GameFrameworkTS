@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualAnchorOrientation {
+        class VisualAnchorOrientation extends GameFramework.VisualBase {
             constructor(orientationToAnchorAt, child) {
+                super();
                 this.child = child;
                 this.orientationToAnchorAt = orientationToAnchorAt;
                 // Helper variables.

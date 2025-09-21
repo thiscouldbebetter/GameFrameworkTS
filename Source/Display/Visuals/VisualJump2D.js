@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualJump2D {
+        class VisualJump2D extends GameFramework.VisualBase {
             constructor(visualJumper, visualShadow) {
+                super();
                 this.visualJumper = visualJumper;
                 this.visualShadow = visualShadow;
                 this._posSaved = GameFramework.Coords.create();

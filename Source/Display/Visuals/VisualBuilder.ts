@@ -14,7 +14,7 @@ export class VisualBuilder
 		return VisualBuilder._instance;
 	}
 
-	archeryTarget(radiusOuter: number): VisualBase
+	archeryTarget(radiusOuter: number): Visual
 	{
 		var diameterOuter = radiusOuter * 2;
 		var bullseyeDiameter = diameterOuter / 3;
@@ -37,7 +37,7 @@ export class VisualBuilder
 	(
 		shaftLength: number,
 		shaftThickness: number
-	): VisualBase
+	): Visual
 	{
 		var colors = Color.Instances();
 		var color = colors.White;
@@ -91,7 +91,7 @@ export class VisualBuilder
 		return visual;
 	}
 
-	boneSkull(headRadius: number): VisualBase
+	boneSkull(headRadius: number): Visual
 	{
 		var colors = Color.Instances();
 
@@ -139,7 +139,7 @@ export class VisualBuilder
 		headRadius: number,
 		shaftLength: number,
 		shaftThickness: number
-	): VisualBase
+	): Visual
 	{
 		var skull = this.boneSkull(headRadius);
 		var bone = this.boneLong(shaftLength, shaftThickness);
@@ -173,7 +173,7 @@ export class VisualBuilder
 		return skullAndBonesCrossed;
 	}
 
-	crystal(dimension: number, colorCrystal: Color, colorHighlight: Color): VisualBase
+	crystal(dimension: number, colorCrystal: Color, colorHighlight: Color): Visual
 	{
 		var crystalOutline = VisualPolygon.fromPathAndColorsFillAndBorder
 		(
@@ -228,7 +228,7 @@ export class VisualBuilder
 		imageSource: Image2,
 		imageSourceSizeInTiles: Coords,
 		tileSizeToDraw: Coords
-	): VisualBase
+	): Visual
 	{
 		var imageSourceSizeInPixels = imageSource.sizeInPixels;
 		var tileSizeInPixels =
@@ -286,9 +286,9 @@ export class VisualBuilder
 		return returnValue;
 	}
 
-	explosionCircularOfRadius(radius: number): VisualBase
+	explosionCircularOfRadius(radius: number): Visual
 	{
-		var visuals: VisualBase[] =
+		var visuals: Visual[] =
 		[
 			VisualCircle.fromRadiusAndColorFill
 			(
@@ -309,7 +309,7 @@ export class VisualBuilder
 		sparkCount: number,
 		ticksToLive: number,
 		soundName: string
-	): VisualBase
+	): Visual
 	{
 		var colors = Color.Instances();
 
@@ -344,7 +344,7 @@ export class VisualBuilder
 				}
 			);
 
-		var explosionVisual: VisualBase = new VisualParticles
+		var explosionVisual: Visual = new VisualParticles
 		(
 			"Explosion",
 			1, // ticksToGenerate
@@ -368,7 +368,7 @@ export class VisualBuilder
 		return explosionVisual;
 	}
 
-	explosionStarburstOfRadius(radius: number): VisualBase
+	explosionStarburstOfRadius(radius: number): Visual
 	{
 		var colors = Color.Instances();
 
@@ -395,7 +395,7 @@ export class VisualBuilder
 		);
 	}
 
-	eyesBlinking(visualEyeRadius: number): VisualBase
+	eyesBlinking(visualEyeRadius: number): Visual
 	{
 		var visualPupilRadius = visualEyeRadius / 2;
 
@@ -445,7 +445,7 @@ export class VisualBuilder
 		shouldersWidth: number,
 		torsoLength: number,
 		armLength: number
-	): VisualBase
+	): Visual
 	{
 		// Create body parts.
 
@@ -538,7 +538,7 @@ export class VisualBuilder
 		shoulderHeight: number,
 		armThickness: number,
 		armLength: number
-	): VisualBase
+	): Visual
 	{
 		var wieldable = this.figure_Wieldable();
 
@@ -651,7 +651,7 @@ export class VisualBuilder
 		hipsWidth: number,
 		legThickness: number,
 		legLength: number
-	): VisualBase
+	): Visual
 	{
 		var legs =
 			this.figure_LegsDirectional
@@ -679,7 +679,7 @@ export class VisualBuilder
 		hipsWidth: number,
 		legThickness: number,
 		legLength: number
-	): VisualBase
+	): Visual
 	{
 		var footLength = legLength * 2 / 3;
 		var hipsWidthHalf = hipsWidth / 2;
@@ -841,7 +841,7 @@ export class VisualBuilder
 		offsetsForHipsLeftAndRight: Coords[],
 		ticksPerStep: number,
 		toeOffsetsFromAnklesLeftRight: Coords[]
-	): VisualBase[]
+	): Visual[]
 	{
 		var legLengthHalf = legLength / 2;
 
@@ -902,8 +902,7 @@ export class VisualBuilder
 							legRaiseForStepDisplacement
 						);
 
-					var frames =
-						new Array<VisualBase>(visualForLegAtRest);
+					var frames: Visual[] = [visualForLegAtRest];
 
 					frames.splice
 					(
@@ -930,11 +929,11 @@ export class VisualBuilder
 		var visualLegsWalking =
 			VisualGroup.fromChildren(visualsForLegsWalking);
 
-		var visualsLegsStandingAndWalking = new Array<VisualBase>
-		(
+		var visualsLegsStandingAndWalking: Visual[] =
+		[
 			visualLegsStanding,
 			visualLegsWalking
-		);
+		];
 
 		return visualsLegsStandingAndWalking;
 	}
@@ -947,7 +946,7 @@ export class VisualBuilder
 		footLengthHalf: number,
 		offsetsForLegsLeftAndRight: Coords[],
 		ticksPerStep: number
-	): VisualBase[]
+	): Visual[]
 	{
 		var toeOffsetsFromAnklesLeftRight =
 		[
@@ -975,7 +974,7 @@ export class VisualBuilder
 		footLengthHalf: number,
 		offsetsForLegsLeftAndRight: Coords[],
 		ticksPerStep: number
-	): VisualBase[]
+	): Visual[]
 	{
 		var toeOffsetsFromAnklesLeftRight =
 		[
@@ -1003,7 +1002,7 @@ export class VisualBuilder
 		footLengthHalf: number,
 		offsetsForLegsLeftAndRight: Coords[],
 		ticksPerStep: number
-	): VisualBase[]
+	): Visual[]
 	{
 		var toeOffsetsFromAnklesLeftRight =
 		[
@@ -1031,7 +1030,7 @@ export class VisualBuilder
 		footLengthHalf: number,
 		offsetsForLegsLeftAndRight: Coords[],
 		ticksPerStep: number
-	): VisualBase[]
+	): Visual[]
 	{
 		var toeOffsetsFromAnklesLeftRight =
 		[
@@ -1056,8 +1055,8 @@ export class VisualBuilder
 		headRadius: number,
 		skinColor: Color,
 		eyeRadius: number,
-		eyes: VisualBase
-	): VisualBase
+		eyes: Visual
+	): Visual
 	{
 		eyes = eyes || this.eyesBlinking(eyeRadius);
 
@@ -1092,7 +1091,7 @@ export class VisualBuilder
 		var headWithoutFeatures =
 			VisualCircle.fromRadiusAndColorFill(headRadius, skinColor);
 
-		var head: VisualBase = VisualGroup.fromChildren
+		var head: Visual = VisualGroup.fromChildren
 		(
 			[
 				headWithoutFeatures,
@@ -1117,9 +1116,9 @@ export class VisualBuilder
 		shouldersWidth: number,
 		waistWidthAndHeightAboveHipsIfAny: Coords,
 		hipsWidth: number
-	): VisualBase
+	): Visual
 	{
-		var torso: VisualBase;
+		var torso: Visual;
 
 		if (torsoLength <= 0)
 		{
@@ -1170,13 +1169,13 @@ export class VisualBuilder
 		return torso;
 	}
 
-	figure_Wieldable(): VisualBase
+	figure_Wieldable(): Visual
 	{
 		var wieldable = new VisualDynamic
 		(
 			(uwpe: UniverseWorldPlaceEntities) =>
 			{
-				var returnVisual = VisualNone.Instance;
+				var returnVisual: Visual = VisualNone.Instance;
 
 				var w = uwpe.world;
 				var e = uwpe.entity;
@@ -1241,7 +1240,7 @@ export class VisualBuilder
 		return figure;
 	}
 
-	flame(dimension: number): VisualBase
+	flame(dimension: number): Visual
 	{
 		var dimensionHalf = dimension / 2;
 		var colors = Color.Instances();
@@ -1306,7 +1305,7 @@ export class VisualBuilder
 		return flameVisual;
 	}
 
-	ice(dimension: number): VisualBase
+	ice(dimension: number): Visual
 	{
 		var dimensionHalf = dimension / 2;
 		var color = Color.Instances().Cyan;
@@ -1335,13 +1334,13 @@ export class VisualBuilder
 		return visual;
 	}
 
-	rhombusOfColor(color: Color): VisualBase
+	rhombusOfColor(color: Color): Visual
 	{
 		var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
 		return rhombus;
 	}
 
-	smoke(puffRadius: number): VisualBase
+	smoke(puffRadius: number): Visual
 	{
 		var colors = Color.Instances();
 
@@ -1388,7 +1387,7 @@ export class VisualBuilder
 		radiusInnerAsFractionOfOuter: number,
 		radiusOuter: number,
 		color: Color
-	): VisualBase
+	): Visual
 	{
 		var path = PathBuilder.Instance().star
 		(
@@ -1419,7 +1418,7 @@ export class VisualBuilder
 		return visual;
 	}
 
-	sun(dimension: number): VisualBase
+	sun(dimension: number): Visual
 	{
 		var color = Color.Instances().Yellow;
 		var rayThickness = 1;
@@ -1457,7 +1456,7 @@ export class VisualBuilder
 		return sunVisual;
 	}
 
-	hazardTrefoilRadiation(radius: number): VisualBase
+	hazardTrefoilRadiation(radius: number): Visual
 	{
 		var colors = Color.Instances();
 
@@ -1518,7 +1517,7 @@ export class VisualBuilder
 	}
 
 
-	triangleIsocelesOfColorPointingRight(color: Color): VisualBase
+	triangleIsocelesOfColorPointingRight(color: Color): Visual
 	{
 		var vertices =
 		[

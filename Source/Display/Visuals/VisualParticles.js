@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualParticles {
+        class VisualParticles extends GameFramework.VisualBase {
             constructor(name, ticksToGenerate, particlesPerTick, particleTicksToLiveGet, particleVelocityGet, transformToApplyEachTick, particleVisual) {
+                super();
                 this.name = name;
                 this.ticksToGenerate = ticksToGenerate;
                 this.particlesPerTick = particlesPerTick;

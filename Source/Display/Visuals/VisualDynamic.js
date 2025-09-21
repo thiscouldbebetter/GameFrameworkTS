@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualDynamic {
+        class VisualDynamic extends GameFramework.VisualBase {
             constructor(visualGet) {
+                super();
                 this._visualGet = visualGet;
             }
             static fromVisualGet(visualGet) {

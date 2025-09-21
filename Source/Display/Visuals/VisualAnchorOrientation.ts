@@ -2,9 +2,9 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualAnchorOrientation implements Visual<VisualAnchorOrientation>
+export class VisualAnchorOrientation extends VisualBase<VisualAnchorOrientation>
 {
-	child: VisualBase;
+	child: Visual;
 	orientationToAnchorAt: Orientation;
 
 	_posSaved: Coords;
@@ -13,9 +13,11 @@ export class VisualAnchorOrientation implements Visual<VisualAnchorOrientation>
 	constructor
 	(
 		orientationToAnchorAt: Orientation,
-		child: VisualBase
+		child: Visual
 	)
 	{
+		super();
+
 		this.child = child;
 		this.orientationToAnchorAt = orientationToAnchorAt;
 
@@ -26,7 +28,7 @@ export class VisualAnchorOrientation implements Visual<VisualAnchorOrientation>
 	static fromOrientationAndChild
 	(
 		orientationToAnchorAt: Orientation,
-		child: VisualBase
+		child: Visual
 	): VisualAnchorOrientation
 	{
 		return new VisualAnchorOrientation(orientationToAnchorAt, child);
@@ -34,7 +36,7 @@ export class VisualAnchorOrientation implements Visual<VisualAnchorOrientation>
 
 	static fromChild
 	(
-		child: VisualBase
+		child: Visual
 	): VisualAnchorOrientation
 	{
 		return new VisualAnchorOrientation

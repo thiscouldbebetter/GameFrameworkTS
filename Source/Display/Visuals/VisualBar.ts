@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualBar implements Visual<VisualBar>
+export class VisualBar extends VisualBase<VisualBar>
 {
 	abbreviation: string;
 	size: Coords;
@@ -31,6 +31,8 @@ export class VisualBar implements Visual<VisualBar>
 		text: DataBinding<any, string>
 	)
 	{
+		super();
+
 		this.abbreviation = abbreviation;
 		this.size = size;
 		this.color = color;

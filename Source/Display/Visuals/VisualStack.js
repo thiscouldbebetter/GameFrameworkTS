@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualStack {
+        class VisualStack extends GameFramework.VisualBase {
             constructor(childSpacing, children) {
+                super();
                 this.childSpacing = childSpacing;
                 this.children = children;
                 this._posSaved = GameFramework.Coords.create();

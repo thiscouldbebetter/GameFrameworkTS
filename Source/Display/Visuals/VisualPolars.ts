@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualPolars implements Visual<VisualPolars>
+export class VisualPolars extends VisualBase<VisualPolars>
 {
 	polars: Polar[];
 	color: Color;
@@ -14,6 +14,8 @@ export class VisualPolars implements Visual<VisualPolars>
 
 	constructor(polars: Polar[], color: Color, lineThickness: number)
 	{
+		super();
+
 		this.polars = polars;
 		this.color = color;
 		this.lineThickness = (lineThickness == null ? 1 : lineThickness);

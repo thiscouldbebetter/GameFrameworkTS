@@ -2,9 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualNone implements Visual<VisualNone>
+export class VisualNone extends VisualBase<VisualNone>
 {
 	static Instance: VisualNone = new VisualNone();
+
+	constructor()
+	{
+		super();
+	}
 
 	// Visual.
 

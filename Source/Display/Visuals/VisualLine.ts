@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualLine implements Visual<VisualLine>
+export class VisualLine extends VisualBase<VisualLine>
 {
 	fromPos: Coords;
 	toPos: Coords;
@@ -15,6 +15,8 @@ export class VisualLine implements Visual<VisualLine>
 
 	constructor(fromPos: Coords, toPos: Coords, color: Color, lineThickness: number)
 	{
+		super();
+
 		this.fromPos = fromPos;
 		this.toPos = toPos;
 		this.color = color;

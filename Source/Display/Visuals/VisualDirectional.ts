@@ -2,21 +2,23 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualDirectional implements Visual<VisualDirectional>
+export class VisualDirectional extends VisualBase<VisualDirectional>
 {
-	visualForNoDirection: VisualBase;
-	visualsForDirections: VisualBase[];
+	visualForNoDirection: Visual;
+	visualsForDirections: Visual[];
 	_headingInTurnsGetForEntity: (e: Entity) => number;
 
 	numberOfDirections: number;
 
 	constructor
 	(
-		visualForNoDirection: VisualBase,
-		visualsForDirections: VisualBase[],
+		visualForNoDirection: Visual,
+		visualsForDirections: Visual[],
 		headingInTurnsGetForEntity: (e: Entity) => number
 	)
 	{
+		super();
+
 		this.visualForNoDirection = visualForNoDirection;
 		this.visualsForDirections = visualsForDirections;
 		this._headingInTurnsGetForEntity = headingInTurnsGetForEntity;
@@ -26,8 +28,8 @@ export class VisualDirectional implements Visual<VisualDirectional>
 
 	static fromVisualForNoDirectionAndVisualsForDirections
 	(
-		visualForNoDirection: VisualBase,
-		visualsForDirections: VisualBase[],
+		visualForNoDirection: Visual,
+		visualsForDirections: Visual[],
 	): VisualDirectional
 	{
 		return new VisualDirectional

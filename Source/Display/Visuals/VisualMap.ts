@@ -2,10 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualMap implements Visual<VisualMap>
+export class VisualMap extends VisualBase<VisualMap>
 {
 	map: MapOfCells<any>;
-	visualsByName: Map<string, VisualBase>;
+	visualsByName: Map<string, Visual>;
 	cameraGet: (uwpe: UniverseWorldPlaceEntities)=>Camera;
 	shouldConvertToImage: boolean;
 
@@ -22,11 +22,13 @@ export class VisualMap implements Visual<VisualMap>
 	constructor
 	(
 		map: MapOfCells<any>,
-		visualsByName: Map<string, VisualBase>,
+		visualsByName: Map<string, Visual>,
 		cameraGet: () => Camera,
 		shouldConvertToImage: boolean
 	)
 	{
+		super();
+
 		this.map = map;
 		this.visualsByName = visualsByName;
 		this.cameraGet = cameraGet;

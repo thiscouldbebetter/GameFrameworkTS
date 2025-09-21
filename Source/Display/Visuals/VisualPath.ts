@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualPath implements Visual<VisualPath>
+export class VisualPath extends VisualBase<VisualPath>
 {
 	verticesAsPath: Path;
 	color: Color;
@@ -20,6 +20,8 @@ export class VisualPath implements Visual<VisualPath>
 		isClosed: boolean
 	)
 	{
+		super();
+
 		this.verticesAsPath = verticesAsPath;
 		this.color = color;
 		this.lineThickness = lineThickness;

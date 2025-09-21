@@ -9,7 +9,7 @@ export class ProjectileGeneration
 	ticksToLive: number;
 	collideOnlyWithEntitiesHavingPropertiesNamed: string[];
 	damage: Damage;
-	visual: VisualBase;
+	visual: Visual;
 	_projectileEntityInitialize: (entity: Entity) => void
 	_hit: (uwpe: UniverseWorldPlaceEntities) => void;
 
@@ -21,7 +21,7 @@ export class ProjectileGeneration
 		ticksToLive: number,
 		collideOnlyWithEntitiesHavingPropertiesNamed: string[],
 		damage: Damage,
-		visual: VisualBase,
+		visual: Visual,
 		projectileEntityInitialize: (entity: Entity) => void,
 		hit: (uwpe: UniverseWorldPlaceEntities) => void
 	)
@@ -74,7 +74,7 @@ export class ProjectileGeneration
 		speed: number,
 		ticksToLive: number,
 		damage: Damage,
-		visual: VisualBase,
+		visual: Visual,
 		hit: (uwpe: UniverseWorldPlaceEntities) => void,
 	): ProjectileGeneration
 	{
@@ -99,7 +99,7 @@ export class ProjectileGeneration
 		speed: number,
 		ticksToLive: number,
 		damage: Damage,
-		visual: VisualBase,
+		visual: Visual,
 		projectileEntityInitialize: (entity: Entity) => void
 	): ProjectileGeneration
 	{
@@ -124,7 +124,7 @@ export class ProjectileGeneration
 		speed: number,
 		ticksToLive: number,
 		damage: Damage,
-		visual: VisualBase,
+		visual: Visual,
 		projectileEntityInitialize: (entity: Entity) => void,
 		hit: (uwpe: UniverseWorldPlaceEntities) => void
 	): ProjectileGeneration
@@ -143,7 +143,7 @@ export class ProjectileGeneration
 		);
 	}
 
-	static fromVisual(visual: VisualBase)
+	static fromVisual(visual: Visual)
 	{
 		return new ProjectileGeneration
 		(

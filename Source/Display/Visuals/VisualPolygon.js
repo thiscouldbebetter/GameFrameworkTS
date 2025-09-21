@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualPolygon {
+        class VisualPolygon extends GameFramework.VisualBase {
             constructor(verticesAsPath, colorFill, colorBorder, shouldUseEntityOrientation) {
+                super();
                 this.verticesAsPath = verticesAsPath;
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;

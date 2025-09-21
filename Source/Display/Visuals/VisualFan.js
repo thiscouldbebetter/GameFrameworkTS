@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualFan {
+        class VisualFan extends GameFramework.VisualBase {
             constructor(radius, angleStartInTurns, angleSpannedInTurns, colorFill, colorBorder) {
+                super();
                 this.radius = radius;
                 this.angleStartInTurns = angleStartInTurns;
                 this.angleSpannedInTurns = angleSpannedInTurns;

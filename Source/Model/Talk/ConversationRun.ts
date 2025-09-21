@@ -625,7 +625,7 @@ export class ConversationRun
 			universe.venueTransitionTo(venueNext);
 		};
 
-		var visualPortrait: VisualBase = conversationDefn.visualPortrait;
+		var visualPortrait: Visual = conversationDefn.visualPortrait;
 		if (visualPortrait.constructor.name.startsWith("VisualImage"))
 		{
 			visualPortrait = new VisualImageScaled
@@ -725,7 +725,7 @@ export class ConversationRun
 		var soundMusicName = this.defn.soundMusicName;
 		if (soundMusicName != null)
 		{
-			var visualSound: VisualBase =
+			var visualSound: Visual =
 				VisualSound.fromSoundNameRepeating(soundMusicName);
 
 			var visualMusic = ControlVisual.fromNamePosSizeAndVisual

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualText {
+        class VisualText extends GameFramework.VisualBase {
             constructor(text, fontNameAndHeight, colorFill, colorBorder) {
+                super();
                 this._text = text;
                 this.fontNameAndHeight =
                     fontNameAndHeight || GameFramework.FontNameAndHeight.default();

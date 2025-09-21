@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualNamed {
+        class VisualNamed extends GameFramework.VisualBase {
             constructor(name, child) {
+                super();
                 this.name = name;
                 this.child = child;
             }

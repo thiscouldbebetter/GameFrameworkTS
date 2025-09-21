@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualTransformEntityPos {
+        class VisualTransformEntityPos extends GameFramework.VisualBase {
             constructor(transformToApply, child) {
+                super();
                 this.transformToApply = transformToApply;
                 this.child = child;
                 this._entityPosSaved = GameFramework.Coords.create();

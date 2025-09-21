@@ -275,7 +275,7 @@ export class Profile
 						? null
 						: saveState.imageSnapshot.load(null, null)
 					);
-					var returnValue =
+					var returnValue: Visual =
 					(
 						saveStateImageSnapshot == null || saveStateImageSnapshot.isLoaded == false
 						? new VisualNone()

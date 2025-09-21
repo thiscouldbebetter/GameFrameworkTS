@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualInvisible implements Visual<VisualInvisible>
+export class VisualInvisible extends VisualBase<VisualInvisible>
 {
-	private child: VisualBase;
+	private child: Visual;
 
-	constructor(child: VisualBase)
+	constructor(child: Visual)
 	{
+		super();
+
 		this.child = child;
 	}
 

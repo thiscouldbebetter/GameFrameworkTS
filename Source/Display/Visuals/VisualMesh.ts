@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualMesh implements Visual<VisualMesh>
+export class VisualMesh extends VisualBase<VisualMesh>
 {
 	private mesh: MeshTextured;
 
 	constructor(mesh: MeshTextured)
 	{
+		super();
+
 		this.mesh = mesh;
 	}
 

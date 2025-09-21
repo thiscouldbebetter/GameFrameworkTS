@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualEllipse {
+        class VisualEllipse extends GameFramework.VisualBase {
             constructor(semiaxisHorizontal, semiaxisVertical, rotationInTurns, colorFill, colorBorder, shouldUseEntityOrientation) {
+                super();
                 this.semiaxisHorizontal = semiaxisHorizontal;
                 this.semiaxisVertical = semiaxisVertical;
                 this.rotationInTurns = rotationInTurns || 0;

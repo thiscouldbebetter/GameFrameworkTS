@@ -357,7 +357,7 @@ var ThisCouldBeBetter;
                 var legRaiseForStepDisplacement = GameFramework.Coords.fromXY(0, -1).multiplyScalar(legLengthHalf);
                 var visualsForLegsWalking = visualsForLegsLeftAndRight.map((visualForLegAtRest, i) => {
                     var visualForLegRaised = GameFramework.VisualOffset.fromChildAndOffset(visualForLegAtRest, legRaiseForStepDisplacement);
-                    var frames = new Array(visualForLegAtRest);
+                    var frames = [visualForLegAtRest];
                     frames.splice(i, // indexToInsertAt
                     0, // elementsToRemoveCount
                     visualForLegRaised);
@@ -365,7 +365,10 @@ var ThisCouldBeBetter;
                     return GameFramework.VisualOffset.fromChildAndOffset(visualForLegWalking, offsetsForHipsLeftAndRight[i]);
                 });
                 var visualLegsWalking = GameFramework.VisualGroup.fromChildren(visualsForLegsWalking);
-                var visualsLegsStandingAndWalking = new Array(visualLegsStanding, visualLegsWalking);
+                var visualsLegsStandingAndWalking = [
+                    visualLegsStanding,
+                    visualLegsWalking
+                ];
                 return visualsLegsStandingAndWalking;
             }
             figure_LegsDirectional_StandingAndWalking_Down(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep) {

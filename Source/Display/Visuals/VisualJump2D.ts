@@ -2,20 +2,22 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualJump2D implements Visual<VisualJump2D>
+export class VisualJump2D extends VisualBase<VisualJump2D>
 {
-	visualJumper: VisualBase;
-	visualShadow: VisualBase;
+	visualJumper: Visual;
+	visualShadow: Visual;
 	cameraFactory: () => Camera;
 
 	_posSaved: Coords;
 
 	constructor
 	(
-		visualJumper: VisualBase,
-		visualShadow: VisualBase
+		visualJumper: Visual,
+		visualShadow: Visual
 	)
 	{
+		super();
+
 		this.visualJumper = visualJumper;
 		this.visualShadow = visualShadow;
 
@@ -24,8 +26,8 @@ export class VisualJump2D implements Visual<VisualJump2D>
 
 	static fromVisualsForBodyAndShadow
 	(
-		visualJumper: VisualBase,
-		visualShadow: VisualBase
+		visualJumper: Visual,
+		visualShadow: Visual
 	): VisualJump2D
 	{
 		return new VisualJump2D(visualJumper, visualShadow);

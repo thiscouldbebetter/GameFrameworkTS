@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualRotate {
+        class VisualRotate extends GameFramework.VisualBase {
             constructor(child, rotationInTurnsGet) {
+                super();
                 this.child = child;
                 this._rotationInTurnsGet = rotationInTurnsGet;
             }

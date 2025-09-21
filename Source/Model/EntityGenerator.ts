@@ -108,7 +108,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this.inactivated || this.exhausted() )
+		if (this.inactivated() || this.exhausted() )
 		{
 			return;
 		}

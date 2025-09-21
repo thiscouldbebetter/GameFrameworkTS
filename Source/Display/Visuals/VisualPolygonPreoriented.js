@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualPolygonPreoriented {
+        class VisualPolygonPreoriented extends GameFramework.VisualBase {
             constructor(visualPolygonInner) {
+                super();
                 this.visualPolygonInner = visualPolygonInner;
             }
             static fromPathAndColorsFillAndBorder(verticesAsPath, colorFill, colorBorder) {

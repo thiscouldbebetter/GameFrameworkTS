@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualRectangle {
+        class VisualRectangle extends GameFramework.VisualBase {
             constructor(size, colorFill, colorBorder, isCentered) {
+                super();
                 this.size = size;
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;

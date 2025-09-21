@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualCircle implements Visual<VisualCircle>
+export class VisualCircle extends VisualBase<VisualCircle>
 {
 	radius: number;
 	colorFill: Color;
@@ -17,6 +17,8 @@ export class VisualCircle implements Visual<VisualCircle>
 		borderThickness: number
 	)
 	{
+		super();
+
 		this.radius = radius;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;

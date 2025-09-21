@@ -2,21 +2,23 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualDynamic implements Visual<VisualDynamic>
+export class VisualDynamic extends VisualBase<VisualDynamic>
 {
-	_visualGet: (uwpe: UniverseWorldPlaceEntities) => VisualBase;
+	_visualGet: (uwpe: UniverseWorldPlaceEntities) => Visual;
 
-	constructor(visualGet: (uwpe: UniverseWorldPlaceEntities) => VisualBase)
+	constructor(visualGet: (uwpe: UniverseWorldPlaceEntities) => Visual)
 	{
+		super();
+
 		this._visualGet = visualGet;
 	}
 
-	static fromVisualGet(visualGet: (uwpe: UniverseWorldPlaceEntities) => VisualBase): VisualDynamic
+	static fromVisualGet(visualGet: (uwpe: UniverseWorldPlaceEntities) => Visual): VisualDynamic
 	{
 		return new VisualDynamic(visualGet);
 	}
 
-	visualGet(uwpe: UniverseWorldPlaceEntities): VisualBase
+	visualGet(uwpe: UniverseWorldPlaceEntities): Visual
 	{
 		return this._visualGet(uwpe);
 	}

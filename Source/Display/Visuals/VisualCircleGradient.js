@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualCircleGradient {
+        class VisualCircleGradient extends GameFramework.VisualBase {
             constructor(radius, gradientFill, colorBorder) {
+                super();
                 this.radius = radius;
                 this.gradientFill = gradientFill;
                 this.colorBorder = colorBorder;

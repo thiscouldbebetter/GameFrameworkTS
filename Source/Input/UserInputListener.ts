@@ -62,7 +62,7 @@ export class UserInputListener extends Entity
 		}
 	}
 
-	static visualBuild(): VisualBase
+	static visualBuild(): Visual
 	{
 		var visualNone = VisualNone.Instance;
 

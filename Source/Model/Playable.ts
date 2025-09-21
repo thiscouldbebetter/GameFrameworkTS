@@ -368,7 +368,7 @@ export class Playable extends EntityPropertyBase<Playable>
 
 		var childSpacing = Coords.fromXY(0, playerVisualBarSize.y * 2);
 
-		var playerVisualStatusInfo: VisualBase = VisualGroup.fromChildren
+		var playerVisualStatusInfo: Visual = VisualGroup.fromChildren
 		([
 			playerVisualHealthBarPlusIcon,
 			VisualOffset.fromOffsetAndChild

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualLineStatic implements Visual<VisualLineStatic>
+export class VisualLineStatic extends VisualBase<VisualLineStatic>
 {
 	fromPos: Coords;
 	toPos: Coords;
@@ -21,6 +21,8 @@ export class VisualLineStatic implements Visual<VisualLineStatic>
 		lineThickness: number
 	)
 	{
+		super();
+
 		this.fromPos = fromPos;
 		this.toPos = toPos;
 		this.color = color;

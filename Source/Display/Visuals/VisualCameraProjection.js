@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualCameraProjection {
+        class VisualCameraProjection extends GameFramework.VisualBase {
             constructor(cameraGet, child) {
+                super();
                 this.cameraGet = cameraGet;
                 this.child = child;
                 this._posBeforeProjection = GameFramework.Coords.create();

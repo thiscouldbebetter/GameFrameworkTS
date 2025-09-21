@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualPolars {
+        class VisualPolars extends GameFramework.VisualBase {
             constructor(polars, color, lineThickness) {
+                super();
                 this.polars = polars;
                 this.color = color;
                 this.lineThickness = (lineThickness == null ? 1 : lineThickness);

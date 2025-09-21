@@ -2,16 +2,18 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualOffset implements Visual<VisualOffset>
+export class VisualOffset extends VisualBase<VisualOffset>
 {
 	name: string;
 	offset: Coords;
-	child: VisualBase;
+	child: Visual;
 
 	_posSaved: Coords;
 
-	constructor(name: string, offset: Coords, child: VisualBase)
+	constructor(name: string, offset: Coords, child: Visual)
 	{
+		super();
+
 		this.name = name;
 		this.offset = offset;
 		this.child = child;
@@ -22,7 +24,7 @@ export class VisualOffset implements Visual<VisualOffset>
 
 	static fromChildAndOffset
 	(
-		child: VisualBase, offset: Coords
+		child: Visual, offset: Coords
 	): VisualOffset
 	{
 		return new VisualOffset(null, offset, child);
@@ -32,7 +34,7 @@ export class VisualOffset implements Visual<VisualOffset>
 	(
 		name: string,
 		offset: Coords,
-		child: VisualBase
+		child: Visual
 	): VisualOffset
 	{
 		return new VisualOffset(name, offset, child);
@@ -40,7 +42,7 @@ export class VisualOffset implements Visual<VisualOffset>
 
 	static fromOffsetAndChild
 	(
-		offset: Coords, child: VisualBase
+		offset: Coords, child: Visual
 	): VisualOffset
 	{
 		return new VisualOffset(null, offset, child);

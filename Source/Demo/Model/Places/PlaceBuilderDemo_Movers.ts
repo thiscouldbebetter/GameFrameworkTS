@@ -93,7 +93,7 @@ class PlaceBuilderDemo_Movers
 					(
 						"Blinking",
 						[ 5 ],// , 5 ], // ticksToHoldFrames
-						new Array<VisualBase>
+						new Array<Visual>
 						(
 							//new VisualNone(),
 							carnivoreVisualNormal
@@ -800,7 +800,7 @@ class PlaceBuilderDemo_Movers
 					(
 						"Blinking",
 						[ 5 ],// , 5 ], // ticksToHoldFrames
-						new Array<VisualBase>
+						new Array<Visual>
 						(
 							//new VisualNone(),
 							friendlyVisualNormal
@@ -1704,7 +1704,7 @@ class PlaceBuilderDemo_Movers
 	(
 		entityDefnNamePlayer: string,
 		playerHeadRadius: number
-	): VisualBase
+	): Visual
 	{
 		var headLength = 12; // todo
 
@@ -1804,7 +1804,7 @@ class PlaceBuilderDemo_Movers
 			Orientation.Instances().ForwardXDownZ
 		);
 
-		var visualsForStatusInfo: VisualBase[] =
+		var visualsForStatusInfo: Visual[] =
 		[
 			healthBar,
 			satietyBar,

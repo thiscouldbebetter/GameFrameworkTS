@@ -1052,7 +1052,7 @@ export class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var visual: VisualBase = VisualGroup.fromChildren
+		var visual: Visual = VisualGroup.fromChildren
 		([
 			VisualImageScaled.fromSizeAndChild
 			(
@@ -1142,7 +1142,7 @@ export class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var visual: VisualBase = VisualGroup.fromChildren
+		var visual: Visual = VisualGroup.fromChildren
 		([
 			VisualImageScaled.fromSizeAndChild
 			(
@@ -1456,7 +1456,7 @@ export class ControlBuilder
 		size: Coords,
 		secondsPerSlide: number,
 		venueAfterSlideshow: Venue,
-		visualsForSlides: VisualBase[]
+		visualsForSlides: Visual[]
 	): ControlBase
 	{
 		if (size == null)
@@ -1542,7 +1542,7 @@ export class ControlBuilder
 
 	slideshow_ControlsForSlideImagesAndTexts
 	(
-		visualsForSlides: VisualBase[]
+		visualsForSlides: Visual[]
 	): ControlBase[]
 	{
 		var controlsForSlideImagesAndTexts: ControlBase[] = [];
@@ -1601,9 +1601,9 @@ export class ControlBuilder
 	(
 		size: Coords,
 		imageNamesAndMessagesForSlides: string[][]
-	): VisualBase[]
+	): Visual[]
 	{
-		var visualsForSlides: VisualBase[] = [];
+		var visualsForSlides: Visual[] = [];
 
 		var scaleMultiplier =
 			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
@@ -1623,7 +1623,7 @@ export class ControlBuilder
 			(
 				sizeToDrawScaled,
 				visualImage
-			) as VisualBase;
+			) as Visual;
 
 			var colors = Color.Instances();
 
@@ -1643,7 +1643,7 @@ export class ControlBuilder
 				visualText
 			);
 
-			var visualImagePlusText: VisualBase = VisualGroup.fromChildren
+			var visualImagePlusText: Visual = VisualGroup.fromChildren
 			([
 				visualImageScaled,
 				visualTextOffset
@@ -1678,7 +1678,7 @@ export class ControlBuilder
 
 		var fontHeight = this.fontHeightInPixelsBase;
 
-		var visual: VisualBase = VisualGroup.fromChildren
+		var visual: Visual = VisualGroup.fromChildren
 		([
 			VisualImageScaled.fromSizeAndChild
 			(

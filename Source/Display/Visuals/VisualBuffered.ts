@@ -2,18 +2,20 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualBuffered implements Visual<VisualBuffered>
+export class VisualBuffered extends VisualBase<VisualBuffered>
 {
 	size: Coords;
-	child: VisualBase;
+	child: Visual;
 
 	displayForBuffer: Display2D;
 	sizeHalf: Coords;
 
 	_posSaved: Coords;
 
-	constructor(size: Coords, child: VisualBase)
+	constructor(size: Coords, child: Visual)
 	{
+		super();
+
 		this.size = size;
 		this.child = child;
 

@@ -4,12 +4,12 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class WordBubble
 {
-	visualForPortrait: VisualBase;
+	visualForPortrait: Visual;
 	statements: string[];
 
 	statementIndexCurrent: number;
 
-	constructor(visualForPortrait: VisualBase, statements: string[])
+	constructor(visualForPortrait: Visual, statements: string[])
 	{
 		this.visualForPortrait = visualForPortrait;
 		this.statements = statements;

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualImageScaledPartial {
+        class VisualImageScaledPartial extends GameFramework.VisualBase {
             constructor(regionToDrawAsBox, sizeToDraw, visualImageToExtractFrom) {
+                super();
                 this.visualImageToExtractFrom = visualImageToExtractFrom;
                 this.regionToDrawAsBox = regionToDrawAsBox;
                 this.sizeToDraw = sizeToDraw;

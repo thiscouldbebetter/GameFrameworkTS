@@ -12,7 +12,7 @@ export class ItemDefn extends EntityPropertyBase<ItemDefn>
 	stackSizeMax: number;
 	categoryNames: string[];
 	_use: (uwpe: UniverseWorldPlaceEntities) => void;
-	visual: VisualBase;
+	visual: Visual;
 	_toEntity: (uwpe: UniverseWorldPlaceEntities, i: Item) => Entity;
 
 	constructor
@@ -25,7 +25,7 @@ export class ItemDefn extends EntityPropertyBase<ItemDefn>
 		stackSizeMax: number,
 		categoryNames: string[],
 		use: (uwpe: UniverseWorldPlaceEntities) => void,
-		visual: VisualBase,
+		visual: Visual,
 		toEntity: (uwpe: UniverseWorldPlaceEntities, i: Item) => Entity
 	)
 	{
@@ -90,7 +90,7 @@ export class ItemDefn extends EntityPropertyBase<ItemDefn>
 
 	static fromNameEncumbranceValueAndVisual
 	(
-		name: string, encumbrance: number, tradeValue: number, visual: VisualBase
+		name: string, encumbrance: number, tradeValue: number, visual: Visual
 	): ItemDefn
 	{
 		return new ItemDefn
@@ -106,7 +106,7 @@ export class ItemDefn extends EntityPropertyBase<ItemDefn>
 		tradeValue: number,
 		categoryName: string,
 		use: (uwpe: UniverseWorldPlaceEntities) => void,
-		visual: VisualBase
+		visual: Visual
 	): ItemDefn
 	{
 		return new ItemDefn
@@ -126,7 +126,7 @@ export class ItemDefn extends EntityPropertyBase<ItemDefn>
 		tradeValue: number,
 		categoryNames: string[],
 		use: (uwpe: UniverseWorldPlaceEntities) => void,
-		visual: VisualBase
+		visual: Visual
 	): ItemDefn
 	{
 		return new ItemDefn

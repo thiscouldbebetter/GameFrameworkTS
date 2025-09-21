@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualDirectional {
+        class VisualDirectional extends GameFramework.VisualBase {
             constructor(visualForNoDirection, visualsForDirections, headingInTurnsGetForEntity) {
+                super();
                 this.visualForNoDirection = visualForNoDirection;
                 this.visualsForDirections = visualsForDirections;
                 this._headingInTurnsGetForEntity = headingInTurnsGetForEntity;

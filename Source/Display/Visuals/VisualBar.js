@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualBar {
+        class VisualBar extends GameFramework.VisualBase {
             constructor(abbreviation, size, color, amountCurrent, amountThreshold, amountMax, fractionBelowWhichToShow, colorForBorderAsValueBreakGroup, text) {
+                super();
                 this.abbreviation = abbreviation;
                 this.size = size;
                 this.color = color;

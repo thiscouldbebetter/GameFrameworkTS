@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualLineStatic {
+        class VisualLineStatic extends GameFramework.VisualBase {
             constructor(fromPos, toPos, color, lineThickness) {
+                super();
                 this.fromPos = fromPos;
                 this.toPos = toPos;
                 this.color = color;

@@ -2,15 +2,17 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualTransform implements Visual<VisualTransform>
+export class VisualTransform extends VisualBase<VisualTransform>
 {
 	transformToApply: TransformBase;
-	child: VisualBase;
+	child: Visual;
 
-	_childTransformed: VisualBase;
+	_childTransformed: Visual;
 
-	constructor(transformToApply: TransformBase, child: VisualBase)
+	constructor(transformToApply: TransformBase, child: Visual)
 	{
+		super();
+
 		this.transformToApply = transformToApply;
 		this.child = child;
 
@@ -19,7 +21,7 @@ export class VisualTransform implements Visual<VisualTransform>
 
 	static fromTransformAndChild
 	(
-		transformToApply: TransformBase, child: VisualBase
+		transformToApply: TransformBase, child: Visual
 	): VisualTransform
 	{
 		return new VisualTransform(transformToApply, child);

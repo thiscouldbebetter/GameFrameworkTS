@@ -479,7 +479,7 @@ class PlaceBuilderDemo // Main.
 			Coords.fromXY(0, -1), Coords.fromXY(1, -1)
 		];
 
-		var colorToTerrainVisualByName = (colorName: string): VisualBase =>
+		var colorToTerrainVisualByName = (colorName: string): Visual =>
 		{
 			var color = Color.byName(colorName);
 			var borderWidthAsFraction = .25;
@@ -496,7 +496,7 @@ class PlaceBuilderDemo // Main.
 				Coords.fromXY(.5, borderWidthAsFraction)
 			).ceiling();
 
-			var visualsByName = new Map<string,VisualBase>
+			var visualsByName = new Map<string, Visual>
 			([
 				[ "Center", VisualRectangle.fromSizeAndColorFill(mapCellSize, color) ],
 
@@ -724,7 +724,7 @@ class PlaceBuilderDemo // Main.
 				imageSizeInPixels.clone().half(),
 				tileSizeInPixels
 			);
-			var terrainVisualCenter: VisualBase = new VisualImageScaledPartial
+			var terrainVisualCenter: Visual = new VisualImageScaledPartial
 			(
 				tileCenterBounds,
 				mapCellSize, // sizeToDraw
@@ -750,7 +750,7 @@ class PlaceBuilderDemo // Main.
 					tileOffsetInTilesHalf.clone().multiply(tileSizeInPixelsHalf),
 					tileSizeInPixelsHalf
 				);
-				var terrainVisual: VisualBase = new VisualImageScaledPartial
+				var terrainVisual: Visual = new VisualImageScaledPartial
 				(
 					terrainVisualBounds,
 					mapCellSizeHalf, // sizeToDraw
@@ -1774,7 +1774,7 @@ class PlaceBuilderDemo // Main.
 		return wallThickness;
 	}
 
-	entityBuildRadioMessage(visualForPortrait: VisualBase, message: string)
+	entityBuildRadioMessage(visualForPortrait: Visual, message: string)
 	{
 		return Entity.fromNameAndProperties
 		(
@@ -2383,7 +2383,7 @@ class PlaceBuilderDemo // Main.
 		var entityDimension = this.entityDimension * .75;
 		var defnName = "Car";
 
-		var frames = new Array<VisualBase>();
+		var frames: Visual[] = [];
 		var frameSizeScaled = Coords.fromXY(4, 3).multiplyScalar(entityDimension);
 
 		var visualTileset = new VisualImageFromLibrary("Car");

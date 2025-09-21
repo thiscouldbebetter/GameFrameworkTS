@@ -1548,7 +1548,7 @@ class PlaceBuilderDemo_Items
 		return itemSword;
 	}
 
-	sword_Visual(bladeColor: Color): VisualBase
+	sword_Visual(bladeColor: Color): Visual
 	{
 		var hiltColor = Color.fromFractionsRgb(0, .5, .5);
 

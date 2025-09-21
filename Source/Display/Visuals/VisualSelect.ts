@@ -2,19 +2,21 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualSelect implements Visual<VisualSelect>
+export class VisualSelect extends VisualBase<VisualSelect>
 {
 	_selectChildToShow:
-		(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => VisualBase;
-	children: VisualBase[];
+		(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => Visual;
+	children: Visual[];
 
 	constructor
 	(
 		selectChildToShow:
-			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => VisualBase,
-		children: VisualBase[]
+			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => Visual,
+		children: Visual[]
 	)
 	{
+		super();
+
 		this._selectChildToShow = selectChildToShow;
 		this.children = children;
 	}
@@ -22,8 +24,8 @@ export class VisualSelect implements Visual<VisualSelect>
 	static fromSelectChildToShowAndChildren
 	(
 		selectChildToShow:
-			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => VisualBase,
-		children: VisualBase[]
+			(uwpe: UniverseWorldPlaceEntities, visualSelect: VisualSelect) => Visual,
+		children: Visual[]
 	): VisualSelect
 	{
 		return new VisualSelect
@@ -32,7 +34,7 @@ export class VisualSelect implements Visual<VisualSelect>
 		);
 	}
 
-	childByIndex(childIndex: number): VisualBase
+	childByIndex(childIndex: number): Visual
 	{
 		return this.children[childIndex];
 	}
@@ -41,7 +43,7 @@ export class VisualSelect implements Visual<VisualSelect>
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		visualSelect: VisualSelect
-	): VisualBase
+	): Visual
 	{
 		return this._selectChildToShow(uwpe, visualSelect);
 	}

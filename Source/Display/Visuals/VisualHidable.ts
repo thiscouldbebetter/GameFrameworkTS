@@ -2,17 +2,19 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualHidable implements Visual<VisualHidable>
+export class VisualHidable extends VisualBase<VisualHidable>
 {
 	_isVisible: (uwpe: UniverseWorldPlaceEntities) => boolean;
-	child: VisualBase;
+	child: Visual;
 
 	constructor
 	(
 		isVisible: (uwpe: UniverseWorldPlaceEntities) => boolean,
-		child: VisualBase
+		child: Visual
 	)
 	{
+		super();
+
 		this._isVisible = isVisible;
 		this.child = child;
 	}
@@ -20,7 +22,7 @@ export class VisualHidable implements Visual<VisualHidable>
 	static fromIsVisibleAndChild
 	(
 		isVisible: (uwpe: UniverseWorldPlaceEntities) => boolean,
-		child: VisualBase
+		child: Visual
 	): VisualHidable
 	{
 		return new VisualHidable(isVisible, child);

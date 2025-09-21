@@ -2,21 +2,23 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualDeferred implements Visual<VisualDeferred>
+export class VisualDeferred extends VisualBase<VisualDeferred>
 {
-	_visualGet: (uwpe: UniverseWorldPlaceEntities) => VisualBase;
+	_visualGet: (uwpe: UniverseWorldPlaceEntities) => Visual;
 
-	_visualCached: VisualBase;
+	_visualCached: Visual;
 
 	constructor
 	(
-		visualGet: (uwpe: UniverseWorldPlaceEntities) => VisualBase
+		visualGet: (uwpe: UniverseWorldPlaceEntities) => Visual
 	)
 	{
+		super();
+
 		this._visualGet = visualGet;
 	}
 
-	visualGet(uwpe: UniverseWorldPlaceEntities): VisualBase
+	visualGet(uwpe: UniverseWorldPlaceEntities): Visual
 	{
 		if (this._visualCached == null)
 		{

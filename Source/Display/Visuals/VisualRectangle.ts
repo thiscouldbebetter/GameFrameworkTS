@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualRectangle implements Visual<VisualRectangle>
+export class VisualRectangle extends VisualBase<VisualRectangle>
 {
 	size: Coords;
 	colorFill: Color;
@@ -21,6 +21,8 @@ export class VisualRectangle implements Visual<VisualRectangle>
 		isCentered: boolean
 	)
 	{
+		super();
+
 		this.size = size;
 		this.colorFill = colorFill;
 		this.colorBorder = colorBorder;

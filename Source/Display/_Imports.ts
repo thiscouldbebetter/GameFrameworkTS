@@ -52,6 +52,7 @@ import VisualRotate = gf.VisualRotate;
 import VisualSelect = gf.VisualSelect;
 import VisualStack = gf.VisualStack;
 import VisualText = gf.VisualText;
+import VisualWrapped = gf.VisualWrapped;
 
 // Display - Visuals - Animation.
 import Animatable2 = gf.Animatable2; // Possibly conflicts with a built-in class?

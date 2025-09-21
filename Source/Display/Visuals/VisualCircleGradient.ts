@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualCircleGradient implements Visual<VisualCircleGradient>
+export class VisualCircleGradient extends VisualBase<VisualCircleGradient>
 {
 	radius: number;
 	gradientFill: ValueBreakGroup<Color>;
@@ -15,6 +15,8 @@ export class VisualCircleGradient implements Visual<VisualCircleGradient>
 		colorBorder: Color
 	)
 	{
+		super();
+
 		this.radius = radius;
 		this.gradientFill = gradientFill;
 		this.colorBorder = colorBorder;

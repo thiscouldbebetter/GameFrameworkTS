@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualSound {
+        class VisualSound extends GameFramework.VisualBase {
             constructor(soundPlayback) {
+                super();
                 this.soundPlayback = soundPlayback;
             }
             static fromSoundName(soundName) {

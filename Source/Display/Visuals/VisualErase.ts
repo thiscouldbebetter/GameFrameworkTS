@@ -2,12 +2,14 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualErase implements Visual<VisualErase>
+export class VisualErase extends VisualBase<VisualErase>
 {
-	child: VisualBase;
+	child: Visual;
 
-	constructor(child: VisualBase)
+	constructor(child: Visual)
 	{
+		super();
+
 		this.child = child;
 	}
 

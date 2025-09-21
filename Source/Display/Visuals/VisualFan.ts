@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class VisualFan implements Visual<VisualFan>
+export class VisualFan extends VisualBase<VisualFan>
 {
 	radius: number;
 	angleStartInTurns: number;
@@ -22,6 +22,8 @@ export class VisualFan implements Visual<VisualFan>
 		colorBorder: Color
 	)
 	{
+		super();
+
 		this.radius = radius;
 		this.angleStartInTurns = angleStartInTurns;
 		this.angleSpannedInTurns = angleSpannedInTurns;

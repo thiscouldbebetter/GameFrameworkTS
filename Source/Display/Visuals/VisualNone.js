@@ -3,7 +3,10 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualNone {
+        class VisualNone extends GameFramework.VisualBase {
+            constructor() {
+                super();
+            }
             // Visual.
             initialize(uwpe) {
                 // Do nothing.

@@ -3,8 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class VisualCrosshairs {
+        class VisualCrosshairs extends GameFramework.VisualBase {
             constructor(numberOfLines, radiusOuter, radiusInner, color, lineThickness) {
+                super();
                 this.numberOfLines = numberOfLines || 4;
                 this.radiusOuter = radiusOuter || 10;
                 this.radiusInner = radiusInner || (this.radiusOuter / 2);
