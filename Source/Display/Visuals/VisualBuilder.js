@@ -129,7 +129,7 @@ var ThisCouldBeBetter;
                 ];
                 return GameFramework.VisualGroup.fromChildren(visuals);
             }
-            explosionSparks(explosionRadius, sparkRadius, sparkCount, ticksToLive) {
+            explosionSparks(sparkRadius, sparkCount, ticksToLive, soundName) {
                 var colors = GameFramework.Color.Instances();
                 var particleVisual = GameFramework.VisualCircle.fromRadiusAndColorFill(sparkRadius, colors.Yellow);
                 var particleSpeed = 5;
@@ -150,6 +150,13 @@ var ThisCouldBeBetter;
                 sparkCount, // particlesPerTick
                 () => ticksToLive, // particleTicksToLiveGet
                 particleVelocityGet, transform, particleVisual);
+                if (soundName != null) {
+                    var visualSound = GameFramework.VisualSound.fromSoundName(soundName);
+                    explosionVisual = GameFramework.VisualGroup.fromChildren([
+                        visualSound,
+                        explosionVisual
+                    ]);
+                }
                 return explosionVisual;
             }
             explosionStarburstOfRadius(radius) {

@@ -12,15 +12,13 @@ var ThisCouldBeBetter;
             }
             explosion(pos, radius, soundName, ticksToLive, ephemeralExpire) {
                 var visualBuilder = GameFramework.VisualBuilder.Instance();
-                var visualExplosion = 
-                //visualBuilder.explosionStarburstOfRadius(radius);
-                visualBuilder.explosionSparks(radius * 10, radius / 5, 25, 30); // explosionRadius, sparkRadius, sparkCount, sparkTicksToLive
+                var sparkRadius = radius / 5;
+                var sparkTicksToLive = 30;
+                var visualExplosion = visualBuilder.explosionSparks(sparkRadius, 25, // sparkCount
+                sparkTicksToLive, soundName);
                 var explosionEntity = GameFramework.Entity.fromNameAndProperties("Explosion", [
                     GameFramework.Audible.create(),
-                    GameFramework.Drawable.fromVisual(GameFramework.VisualGroup.fromChildren([
-                        GameFramework.VisualSound.fromSoundName(soundName),
-                        visualExplosion
-                    ])),
+                    GameFramework.Drawable.fromVisual(visualExplosion),
                     GameFramework.Ephemeral.fromTicksAndExpire(ticksToLive, ephemeralExpire),
                     GameFramework.Locatable.fromPos(pos)
                 ]);
@@ -32,11 +30,11 @@ var ThisCouldBeBetter;
                 var visual = GameFramework.VisualText.fromTextImmediateFontAndColor(text, font, color);
                 pos = pos.clone();
                 pos.z--;
-                var messageEntity = new GameFramework.Entity("Message" + text, // name
+                var messageEntity = GameFramework.Entity.fromNameAndProperties("Message" + text, // name
                 [
                     GameFramework.Drawable.fromVisual(visual),
-                    new GameFramework.Ephemeral(ticksToLive, null),
-                    new GameFramework.Locatable(GameFramework.Disposition.fromPos(pos).velSet(new GameFramework.Coords(0, riseSpeed, 0))),
+                    GameFramework.Ephemeral.fromTicksToLive(ticksToLive),
+                    GameFramework.Locatable.fromDisposition(GameFramework.Disposition.fromPos(pos).velSet(new GameFramework.Coords(0, riseSpeed, 0))),
                 ]);
                 return messageEntity;
             }

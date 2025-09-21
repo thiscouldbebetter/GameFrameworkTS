@@ -39,6 +39,21 @@ export class ProjectileShooter
 		return entity.propertyByName(ProjectileShooter.name) as ProjectileShooter;
 	}
 
+	collideOnlyWithEntitiesHavingPropertiesNamedSet(values: string[]): ProjectileShooter
+	{
+		this.generators.forEach
+		(
+			generator =>
+				generator.generations.forEach
+				(
+					generation =>
+						generation.collideOnlyWithEntitiesHavingPropertiesNamedSet(values)
+				)
+		);
+
+		return this;
+	}
+
 	generatorByName(name: string): ProjectileGenerator
 	{
 		return this.generators.find(x => x.name == name);

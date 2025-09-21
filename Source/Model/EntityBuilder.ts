@@ -24,9 +24,16 @@ export class EntityBuilder
 	): Entity
 	{
 		var visualBuilder = VisualBuilder.Instance();
+		var sparkRadius = radius / 5;
+		var sparkTicksToLive = 30;
 		var visualExplosion =
-			//visualBuilder.explosionStarburstOfRadius(radius);
-			visualBuilder.explosionSparks(radius * 10, radius / 5, 25, 30); // explosionRadius, sparkRadius, sparkCount, sparkTicksToLive
+			visualBuilder.explosionSparks
+			(
+				sparkRadius,
+				25, // sparkCount
+				sparkTicksToLive,
+				soundName
+			); 
 
 		var explosionEntity = Entity.fromNameAndProperties
 		(
@@ -36,11 +43,7 @@ export class EntityBuilder
 
 				Drawable.fromVisual
 				(
-					VisualGroup.fromChildren
-					([
-						VisualSound.fromSoundName(soundName),
-						visualExplosion
-					])
+					visualExplosion
 				),
 
 				Ephemeral.fromTicksAndExpire
@@ -72,13 +75,13 @@ export class EntityBuilder
 		pos = pos.clone();
 		pos.z--;
 
-		var messageEntity = new Entity
+		var messageEntity = Entity.fromNameAndProperties
 		(
 			"Message" + text, // name
 			[
 				Drawable.fromVisual(visual),
-				new Ephemeral(ticksToLive, null),
-				new Locatable
+				Ephemeral.fromTicksToLive(ticksToLive),
+				Locatable.fromDisposition
 				(
 					Disposition.fromPos(pos).velSet
 					(

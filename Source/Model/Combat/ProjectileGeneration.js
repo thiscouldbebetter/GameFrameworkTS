@@ -4,12 +4,14 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ProjectileGeneration {
-            constructor(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, projectileEntityInitialize) {
+            constructor(radius, distanceInitial, speed, ticksToLive, collideOnlyWithEntitiesHavingPropertiesNamed, damage, visual, projectileEntityInitialize, hit) {
                 this.radius = radius || 2;
                 this.distanceInitial = distanceInitial || 3;
                 this.speed = speed || 4;
                 this.ticksToLive = ticksToLive || 20;
-                this._hit = hit;
+                this.collideOnlyWithEntitiesHavingPropertiesNamed =
+                    collideOnlyWithEntitiesHavingPropertiesNamed
+                        || [GameFramework.Collidable.name];
                 this.damage = damage || GameFramework.Damage.fromAmount(1);
                 ;
                 this.visual =
@@ -19,38 +21,44 @@ var ThisCouldBeBetter;
                             GameFramework.VisualCircle.fromRadiusAndColorFill(this.radius, GameFramework.Color.Instances().Yellow)
                         ]);
                 this._projectileEntityInitialize = projectileEntityInitialize;
+                this._hit = hit;
             }
             static default() {
                 var generation = new ProjectileGeneration(null, //radius
                 null, // distanceInitial
                 null, // speed
                 null, // ticksToLive
-                null, // hit
-                null, // damage,
-                null, // visual,
-                null // init
+                null, // propertiesToCollideWithNames
+                null, // damage
+                null, // visual
+                null, // init
+                null // hit
                 );
                 return generation;
             }
-            static fromRadiusDistanceSpeedTicksHitDamageAndVisual(radius, distanceInitial, speed, ticksToLive, hit, damage, visual) {
-                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, null // projectileEntityInitialize
-                );
+            static fromRadiusDistanceSpeedTicksDamageVisualAndHit(radius, distanceInitial, speed, ticksToLive, damage, visual, hit) {
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, null, // propertiesToCollideWithNames
+                damage, visual, null, // projectileEntityInitialize
+                hit);
             }
             static fromRadiusDistanceSpeedTicksDamageVisualAndInit(radius, distanceInitial, speed, ticksToLive, damage, visual, projectileEntityInitialize) {
-                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, null, // hit
-                damage, visual, projectileEntityInitialize);
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, null, // propertiesToCollideWithNames
+                damage, visual, projectileEntityInitialize, null // hit
+                );
             }
-            static fromRadiusDistanceSpeedTicksHitDamageVisualAndInit(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, projectileEntityInitialize) {
-                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, hit, damage, visual, projectileEntityInitialize);
+            static fromRadiusDistanceSpeedTicksDamageVisualInitAndHit(radius, distanceInitial, speed, ticksToLive, damage, visual, projectileEntityInitialize, hit) {
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, null, // propertiesToCollideWithNames
+                damage, visual, projectileEntityInitialize, hit);
             }
             static fromVisual(visual) {
                 return new ProjectileGeneration(0, // radius
                 0, // distanceInitial,
                 0, // speed
                 1, // ticksToLive
-                null, // hit
+                null, // propertiesToCollideWithNames
                 null, // damage
-                visual, null // projectileEntityInitialize
+                visual, null, // projectileEntityInitialize
+                null // hit
                 );
             }
             hit(uwpe) {
@@ -97,52 +105,52 @@ var ThisCouldBeBetter;
                 var shooterOri = shooterLoc.orientation;
                 var shooterForward = shooterOri.forward;
                 var shotDistance = this.distanceInitial;
-                var shotOffset = shooterForward
+                var offset = shooterForward
                     .clone()
                     .multiplyScalar(shotDistance);
-                var shotPos = shooterPos
+                var pos = shooterPos
                     .clone()
-                    .add(shotOffset);
-                var shotOri = GameFramework.Orientation.fromForward(shooterForward);
-                var shotLoc = GameFramework.Disposition.fromPosAndOri(shotPos, shotOri);
-                shotLoc.vel
+                    .add(offset);
+                var ori = GameFramework.Orientation.fromForward(shooterForward);
+                var loc = GameFramework.Disposition.fromPosAndOri(pos, ori);
+                loc.vel
                     .overwriteWith(shooterForward)
                     .multiplyScalar(this.speed);
-                var shotAudible = GameFramework.Audible.create();
+                var audible = GameFramework.Audible.create();
                 // Shots may move so fast that they "pass through" targets
                 // without ever colliding with them, so duplicate the collider along the path
                 // to make sure anything between the starting and ending points is hit.
                 var colliderPartBeforeTransform = GameFramework.Sphere.fromRadius(this.radius);
-                var shotDiameter = this.radius * 2;
-                var colliderPartsCount = this.speed / shotDiameter;
+                var diameter = this.radius * 2;
+                var colliderPartsCount = this.speed / diameter;
                 var colliderParts = [];
                 for (var i = 0; i < colliderPartsCount; i++) {
                     var displacement = shooterForward
                         .clone()
-                        .multiplyScalar(i * shotDiameter);
+                        .multiplyScalar(i * diameter);
                     var transform = GameFramework.Transform_Translate.fromDisplacement(displacement);
                     var colliderPart = GameFramework.ShapeTransformed.fromTransformAndChild(transform, colliderPartBeforeTransform);
                     colliderParts.push(colliderPart);
                 }
-                var shotCollider = GameFramework.ShapeGroupAny.fromChildren(colliderParts);
-                var shotCollidable = GameFramework.Collidable.fromColliderPropertyNameAndCollide(shotCollider, GameFramework.Collidable.name, (uwpe) => this.collide(uwpe));
-                var shotDamager = GameFramework.Damager.fromDamagePerHit(this.damage);
-                var shotDrawable = GameFramework.Drawable.fromVisual(this.visual); // hack
-                var shotEphemeral = GameFramework.Ephemeral.fromTicksToLive(this.ticksToLive);
-                var shotKillable = GameFramework.Killable.fromIntegrityMax(1);
-                var shotLocatable = GameFramework.Locatable.fromDisposition(shotLoc);
-                var shotMovable = GameFramework.Movable.fromSpeedMax(this.speed);
-                var shotRelatable = GameFramework.Relatable.fromRelationshipNameAndEntityRelatedId("Originator", entityFiring.id);
+                var collider = GameFramework.ShapeGroupAny.fromChildren(colliderParts);
+                var collidable = GameFramework.Collidable.fromColliderPropertyNamesAndCollide(collider, this.collideOnlyWithEntitiesHavingPropertiesNamed, (uwpe) => this.collide(uwpe));
+                var damager = GameFramework.Damager.fromDamagePerHit(this.damage);
+                var drawable = GameFramework.Drawable.fromVisual(this.visual); // hack
+                var ephemeral = GameFramework.Ephemeral.fromTicksToLive(this.ticksToLive);
+                var killable = GameFramework.Killable.fromIntegrityMax(1);
+                var locatable = GameFramework.Locatable.fromDisposition(loc);
+                var movable = GameFramework.Movable.fromSpeedMax(this.speed);
+                var relatable = GameFramework.Relatable.fromRelationshipNameAndEntityRelatedId("Originator", entityFiring.id);
                 var shotEntity = GameFramework.Entity.fromNameAndProperties(entityFiring.name + "_Shot", [
-                    shotAudible,
-                    shotCollidable,
-                    shotDamager,
-                    shotDrawable,
-                    shotEphemeral,
-                    shotKillable,
-                    shotLocatable,
-                    shotMovable,
-                    shotRelatable
+                    audible,
+                    collidable,
+                    damager,
+                    drawable,
+                    ephemeral,
+                    killable,
+                    locatable,
+                    movable,
+                    relatable
                 ]);
                 this.projectileEntityInitialize(shotEntity);
                 return shotEntity;
@@ -154,6 +162,11 @@ var ThisCouldBeBetter;
                 if (entityProjectileRelatable.entityRelatedId != entityOther.id) {
                     this.hit(uwpe);
                 }
+            }
+            // Accessors.
+            collideOnlyWithEntitiesHavingPropertiesNamedSet(values) {
+                this.collideOnlyWithEntitiesHavingPropertiesNamed = values;
+                return this;
             }
         }
         GameFramework.ProjectileGeneration = ProjectileGeneration;

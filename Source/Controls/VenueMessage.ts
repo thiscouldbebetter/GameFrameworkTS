@@ -229,7 +229,7 @@ export class VenueMessage<TContext> implements Venue
 	{
 		if (this._sizeInPixels == null)
 		{
-			this._sizeInPixels = universe.display.sizeInPixels.clone();
+			this._sizeInPixels = universe.display.sizeDefault().clone();
 		}
 
 		return this._sizeInPixels;

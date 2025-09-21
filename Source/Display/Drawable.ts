@@ -177,6 +177,12 @@ export class Drawable extends EntityPropertyBase<Drawable>
 		return (this.hidden == false);
 	}
 
+	visualSet(value: VisualBase): Drawable
+	{
+		this.visual = value;
+		return this;
+	}
+
 	// EntityProperty.
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void

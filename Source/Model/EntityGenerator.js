@@ -30,12 +30,6 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(EntityGenerator.name);
             }
-            activate() {
-                this.inactivated = false;
-            }
-            inactivate() {
-                this.inactivated = true;
-            }
             exhaust() {
                 this.entitiesToGenerateMaxAllTime = 0;
             }

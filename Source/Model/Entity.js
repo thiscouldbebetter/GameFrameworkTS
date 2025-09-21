@@ -46,6 +46,19 @@ var ThisCouldBeBetter;
                 this.name = nameToSet;
                 return this;
             }
+            propertiesActivateByNames(propertiesToActivateNames) {
+                var propertiesToActivate = propertiesToActivateNames.map(x => this.propertyByName(x));
+                propertiesToActivate.forEach(x => x.activate());
+                return this;
+            }
+            propertiesAllActivate() {
+                this.properties.forEach(x => x.inactivate());
+                return this;
+            }
+            propertiesAllInactivate() {
+                this.properties.forEach(x => x.inactivate());
+                return this;
+            }
             propertiesClear() {
                 this.properties.length = 0;
                 this.propertiesByName.clear();

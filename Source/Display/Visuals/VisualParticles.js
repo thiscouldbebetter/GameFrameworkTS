@@ -40,10 +40,10 @@ var ThisCouldBeBetter;
                         var particleVel = this.particleVelocityGet();
                         particleLoc.vel.overwriteWith(particleVel);
                         var particleTicksToLive = this.particleTicksToLiveGet();
-                        var entityParticle = new GameFramework.Entity(particleName, [
+                        var entityParticle = GameFramework.Entity.fromNameAndProperties(particleName, [
                             GameFramework.Drawable.fromVisual(this.particleVisual.clone()),
-                            new GameFramework.Ephemeral(particleTicksToLive, null),
-                            new GameFramework.Locatable(particleLoc)
+                            GameFramework.Ephemeral.fromTicksToLive(particleTicksToLive),
+                            GameFramework.Locatable.fromDisposition(particleLoc)
                         ]);
                         this.particleEntities.push(entityParticle);
                     }
@@ -54,7 +54,8 @@ var ThisCouldBeBetter;
                     var loc = GameFramework.Locatable.of(particleEntity).loc;
                     loc.pos.add(loc.vel);
                     var ephemeral = GameFramework.Ephemeral.of(particleEntity);
-                    if (ephemeral.ticksToLive <= 0) {
+                    var ephemeralIsExpired = ephemeral.isExpired();
+                    if (ephemeralIsExpired) {
                         GameFramework.ArrayHelper.remove(this.particleEntities, particleEntity);
                     }
                     else {

@@ -80,6 +80,25 @@ export class Entity implements Clonable<Entity>
 		return this;
 	}
 
+	propertiesActivateByNames(propertiesToActivateNames: string[]): Entity
+	{
+		var propertiesToActivate = propertiesToActivateNames.map(x => this.propertyByName(x) );
+		propertiesToActivate.forEach(x => x.activate() );
+		return this;
+	}
+
+	propertiesAllActivate(): Entity
+	{
+		this.properties.forEach(x => x.inactivate() );
+		return this;
+	}
+
+	propertiesAllInactivate(): Entity
+	{
+		this.properties.forEach(x => x.inactivate() );
+		return this;
+	}
+
 	propertiesClear(): Entity
 	{
 		this.properties.length = 0;

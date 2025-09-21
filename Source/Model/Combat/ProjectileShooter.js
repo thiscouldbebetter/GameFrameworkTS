@@ -21,6 +21,10 @@ var ThisCouldBeBetter;
             static of(entity) {
                 return entity.propertyByName(ProjectileShooter.name);
             }
+            collideOnlyWithEntitiesHavingPropertiesNamedSet(values) {
+                this.generators.forEach(generator => generator.generations.forEach(generation => generation.collideOnlyWithEntitiesHavingPropertiesNamedSet(values)));
+                return this;
+            }
             generatorByName(name) {
                 return this.generators.find(x => x.name == name);
             }

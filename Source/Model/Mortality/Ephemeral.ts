@@ -7,6 +7,8 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 	ticksToLive: number;
 	_expire: (uwpe: UniverseWorldPlaceEntities) => void;
 
+	ticksSoFar: number;
+
 	constructor
 	(
 		ticksToLive: number,
@@ -17,6 +19,8 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 
 		this.ticksToLive = ticksToLive || 100;
 		this._expire = expire;
+
+		this.ticksSoFar = 0;
 	}
 
 	static default(): Ephemeral
@@ -62,7 +66,13 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 
 	isExpired(): boolean
 	{
-		return (this.ticksToLive < 0);
+		return (this.ticksSoFar >= this.ticksToLive);
+	}
+
+	reset(): Ephemeral
+	{
+		this.ticksSoFar = 0;
+		return this;
 	}
 
 	toEntity(): Entity { return new Entity(Ephemeral.name, [ this ] ); }
@@ -71,13 +81,16 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		this.ticksToLive--;
-		var isExpired = this.isExpired();
-		if (isExpired)
+		if (this.activated() )
 		{
-			var entityEphemeral = uwpe.entity;
-			uwpe.place.entityToRemoveAdd(entityEphemeral);
-			this.expire(uwpe);
+			this.ticksSoFar++;
+			var isExpired = this.isExpired();
+			if (isExpired)
+			{
+				var entityEphemeral = uwpe.entity;
+				uwpe.place.entityToRemoveAdd(entityEphemeral);
+				this.expire(uwpe);
+			}
 		}
 	}
 
