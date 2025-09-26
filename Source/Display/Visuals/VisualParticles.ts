@@ -12,6 +12,7 @@ export class VisualParticles extends VisualBase<VisualParticles>
 	transformToApplyEachTick: TransformBase;
 	particleVisual: Visual;
 
+	tickLastDrawnOn: number;
 	ticksSoFar: number;
 	particleEntities: Entity[];
 
@@ -36,6 +37,7 @@ export class VisualParticles extends VisualBase<VisualParticles>
 		this.transformToApplyEachTick = transformToApplyEachTick;
 		this.particleVisual = particleVisual;
 
+		this.tickLastDrawnOn = -1;
 		this.ticksSoFar = 0;
 		this.particleEntities = [];
 	}
@@ -54,22 +56,39 @@ export class VisualParticles extends VisualBase<VisualParticles>
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		var particlesAreStillBeingGenerated =
-			this.ticksToGenerate == null
-			|| this.ticksSoFar < this.ticksToGenerate;
+		var tickCurrent = uwpe.world.timerTicksSoFar;
+
+		var particlesHaveNotYetBeenUpdatedThisTick =
+			(this.tickLastDrawnOn < tickCurrent);
+
+		this.tickLastDrawnOn = tickCurrent;
+
+		if (particlesHaveNotYetBeenUpdatedThisTick)
+		{
+			var particlesAreStillBeingGenerated =
+				this.ticksToGenerate == null
+				|| this.ticksSoFar < this.ticksToGenerate;
+
+			if (particlesAreStillBeingGenerated)
+			{
+				this.draw_ParticlesGenerate(uwpe);
+			}
+		}
 
 		var emitterEntity = uwpe.entity;
 
-		if (particlesAreStillBeingGenerated)
+		for (var i = 0; i < this.particleEntities.length; i++)
 		{
-			this.draw_ParticlesGenerate(uwpe);
+			var particleEntity = this.particleEntities[i];
+			this.draw_ParticleUpdateAndDraw
+			(
+				uwpe,
+				display,
+				emitterEntity,
+				particleEntity,
+				particlesHaveNotYetBeenUpdatedThisTick
+			);
 		}
-
-		this.particleEntities.forEach
-		(
-			particleEntity =>
-				this.draw_ParticlesUpdate(uwpe, display, emitterEntity, particleEntity)
-		);
 
 		uwpe.entitySet(emitterEntity);
 	}
@@ -110,10 +129,55 @@ export class VisualParticles extends VisualBase<VisualParticles>
 		}
 
 		this.ticksSoFar++;
-
 	}
 
-	draw_ParticlesUpdate
+	draw_ParticleUpdateAndDraw
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		display: Display,
+		emitterEntity: Entity,
+		particleEntity: Entity,
+		particlesHaveNotYetBeenUpdatedThisTick: boolean
+	): void
+	{
+		var particleShouldBeDrawn = false;
+
+		if (particlesHaveNotYetBeenUpdatedThisTick)
+		{
+			var ephemeral = Ephemeral.of(particleEntity);
+			var ephemeralIsExpired = ephemeral.isExpired();
+			if (ephemeralIsExpired)
+			{
+				ArrayHelper.remove(this.particleEntities, particleEntity);
+			}
+			else
+			{
+				this.draw_ParticleUpdateAndDraw_Move(particleEntity);
+				particleShouldBeDrawn = true;
+			}
+		}
+		else
+		{
+			particleShouldBeDrawn = true;
+		}
+
+		if (particleShouldBeDrawn)
+		{
+			this.draw_ParticleUpdateAndDraw_Draw
+			(
+				uwpe, display, emitterEntity, particleEntity
+			);
+		}
+	}
+
+	draw_ParticleUpdateAndDraw_Move(particleEntity: Entity): void
+	{
+		var particleDispRelativeToEmitter = Locatable.of(particleEntity).loc;
+		var particlePosRelativeToEmitter = particleDispRelativeToEmitter.pos;
+		particlePosRelativeToEmitter.add(particleDispRelativeToEmitter.vel);
+	}
+
+	draw_ParticleUpdateAndDraw_Draw
 	(
 		uwpe: UniverseWorldPlaceEntities,
 		display: Display,
@@ -121,30 +185,20 @@ export class VisualParticles extends VisualBase<VisualParticles>
 		particleEntity: Entity
 	): void
 	{
-		var ephemeral = Ephemeral.of(particleEntity);
-		var ephemeralIsExpired = ephemeral.isExpired();
-		if (ephemeralIsExpired)
-		{
-			ArrayHelper.remove(this.particleEntities, particleEntity);
-		}
-		else
-		{
-			var particleDispRelativeToEmitter = Locatable.of(particleEntity).loc;
-			var particlePosRelativeToEmitter = particleDispRelativeToEmitter.pos;
-			particlePosRelativeToEmitter.add(particleDispRelativeToEmitter.vel);
+		var particleDispRelativeToEmitter = Locatable.of(particleEntity).loc;
+		var particlePosRelativeToEmitter = particleDispRelativeToEmitter.pos;
 
-			var emitterPos = Locatable.of(emitterEntity).loc.pos;
-			var particlePosAbsolute =
-				particlePosRelativeToEmitter.add(emitterPos);
+		var emitterPos = Locatable.of(emitterEntity).loc.pos;
+		var particlePosAbsolute =
+			particlePosRelativeToEmitter.add(emitterPos);
 
-			var particleVisual = Drawable.of(particleEntity).visual;
-			uwpe.entitySet(particleEntity);
-			particleVisual.draw(uwpe, display);
-			this.transformToApplyEachTick.transform(particleVisual);
+		var particleVisual = Drawable.of(particleEntity).visual;
+		uwpe.entitySet(particleEntity);
+		particleVisual.draw(uwpe, display);
+		this.transformToApplyEachTick.transform(particleVisual);
 
-			particlePosRelativeToEmitter =
-				particlePosAbsolute.subtract(emitterPos);
-		}
+		particlePosRelativeToEmitter =
+			particlePosAbsolute.subtract(emitterPos);
 	}
 
 	// Clonable.
