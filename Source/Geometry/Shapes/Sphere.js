@@ -96,6 +96,10 @@ var ThisCouldBeBetter;
                 boxOut.size.overwriteWithDimensions(diameter, diameter, diameter);
                 return boxOut;
             }
+            // Strings.
+            toString() {
+                return Sphere.name + " of radius " + this.radius + " at " + this.center.toString();
+            }
             // Transformable.
             transform(transformToApply) {
                 transformToApply.transformCoords(this.center);

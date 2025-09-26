@@ -54,72 +54,97 @@ export class VisualParticles extends VisualBase<VisualParticles>
 
 	draw(uwpe: UniverseWorldPlaceEntities, display: Display): void
 	{
-		if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null)
+		var particlesAreStillBeingGenerated =
+			this.ticksToGenerate == null
+			|| this.ticksSoFar < this.ticksToGenerate;
+
+		var emitterEntity = uwpe.entity;
+
+		if (particlesAreStillBeingGenerated)
 		{
-			var particleCountThisTick;
-			if (this.particlesPerTick >= 1)
-			{
-				particleCountThisTick = this.particlesPerTick;
-			}
-			else
-			{
-				var ticksPerParticle = 1 / this.particlesPerTick;
-				particleCountThisTick = (this.ticksSoFar % ticksPerParticle == 0 ? 1 : 0);
-			}
-
-			var entity = uwpe.entity;
-
-			for (var i = 0; i < particleCountThisTick; i++)
-			{
-				var entityGeneratingLoc = Locatable.of(entity).loc;
-
-				var particleName =
-					"Particle" + this.name + "-" + this.ticksSoFar + "-" + i;
-				var particleLoc = entityGeneratingLoc.clone();
-				var particleVel = this.particleVelocityGet();
-				particleLoc.vel.overwriteWith(particleVel);
-				var particleTicksToLive = this.particleTicksToLiveGet();
-
-				var entityParticle = Entity.fromNameAndProperties
-				(
-					particleName,
-					[
-						Drawable.fromVisual(this.particleVisual.clone()),
-						Ephemeral.fromTicksToLive(particleTicksToLive),
-						Locatable.fromDisposition(particleLoc)
-					]
-				);
-
-				this.particleEntities.push(entityParticle);
-			}
-
-			this.ticksSoFar++;
+			this.draw_ParticlesGenerate(uwpe);
 		}
 
-		var uwpeForParticles = uwpe.clone();
-		this.particleEntities.forEach(particleEntity => {
+		this.particleEntities.forEach
+		(
+			particleEntity =>
+				this.draw_ParticlesUpdate(uwpe, display, emitterEntity, particleEntity)
+		);
 
-			var loc = Locatable.of(particleEntity).loc;
-			loc.pos.add(loc.vel);
+		uwpe.entitySet(emitterEntity);
+	}
 
-			var ephemeral = Ephemeral.of(particleEntity);
-			var ephemeralIsExpired = ephemeral.isExpired();
-			if (ephemeralIsExpired)
-			{
-				ArrayHelper.remove(this.particleEntities, particleEntity);
-			}
-			else
-			{
-				ephemeral.ticksToLive--;
-				var particleVisual = Drawable.of(particleEntity).visual;
-				particleVisual.draw
-				(
-					uwpeForParticles.entitySet(particleEntity),
-					display
-				);
-				this.transformToApplyEachTick.transform(particleVisual);
-			}
-		});
+	draw_ParticlesGenerate(uwpe: UniverseWorldPlaceEntities): void
+	{
+		var particleCountThisTick;
+		if (this.particlesPerTick >= 1)
+		{
+			particleCountThisTick = this.particlesPerTick;
+		}
+		else
+		{
+			var ticksPerParticle = 1 / this.particlesPerTick;
+			particleCountThisTick = (this.ticksSoFar % ticksPerParticle == 0 ? 1 : 0);
+		}
+
+		for (var i = 0; i < particleCountThisTick; i++)
+		{
+			var particleName =
+				"Particle" + this.name + "-" + this.ticksSoFar + "-" + i;
+			var particleDispRelativeToEmitter = Disposition.create();
+			var particleVel = this.particleVelocityGet();
+			particleDispRelativeToEmitter.vel.overwriteWith(particleVel);
+			var particleTicksToLive = this.particleTicksToLiveGet();
+
+			var entityParticle = Entity.fromNameAndProperties
+			(
+				particleName,
+				[
+					Drawable.fromVisual(this.particleVisual.clone()),
+					Ephemeral.fromTicksToLive(particleTicksToLive),
+					Locatable.fromDisposition(particleDispRelativeToEmitter)
+				]
+			);
+
+			this.particleEntities.push(entityParticle);
+		}
+
+		this.ticksSoFar++;
+
+	}
+
+	draw_ParticlesUpdate
+	(
+		uwpe: UniverseWorldPlaceEntities,
+		display: Display,
+		emitterEntity: Entity,
+		particleEntity: Entity
+	): void
+	{
+		var ephemeral = Ephemeral.of(particleEntity);
+		var ephemeralIsExpired = ephemeral.isExpired();
+		if (ephemeralIsExpired)
+		{
+			ArrayHelper.remove(this.particleEntities, particleEntity);
+		}
+		else
+		{
+			var particleDispRelativeToEmitter = Locatable.of(particleEntity).loc;
+			var particlePosRelativeToEmitter = particleDispRelativeToEmitter.pos;
+			particlePosRelativeToEmitter.add(particleDispRelativeToEmitter.vel);
+
+			var emitterPos = Locatable.of(emitterEntity).loc.pos;
+			var particlePosAbsolute =
+				particlePosRelativeToEmitter.add(emitterPos);
+
+			var particleVisual = Drawable.of(particleEntity).visual;
+			uwpe.entitySet(particleEntity);
+			particleVisual.draw(uwpe, display);
+			this.transformToApplyEachTick.transform(particleVisual);
+
+			particlePosRelativeToEmitter =
+				particlePosAbsolute.subtract(emitterPos);
+		}
 	}
 
 	// Clonable.

@@ -227,9 +227,9 @@ var ThisCouldBeBetter;
                     && this.size.equals(other.size));
                 return returnValue;
             }
-            // string
+            // Strings.
             toString() {
-                return this.min().toString() + ":" + this.max().toString();
+                return BoxAxisAligned.name + " of size " + this.size + " at " + this.center;
             }
             toStringXY() {
                 return this.min().toStringXY() + ":" + this.max().toStringXY();

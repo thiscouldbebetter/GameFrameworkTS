@@ -67,15 +67,13 @@ class WorldDemo extends World
 			//Camera.name,
 		];
 
-		var placeDefnDemo = new PlaceDefn
+		var placeDefnDemo = PlaceDefn.fromNameMusicActionsMappingsAndPropertyNames
 		(
 			"Demo",
 			null, // soundForMusicName
 			actions,
 			actionToInputsMappings,
-			propertyNamesToProcess,
-			null, // placeInitialize
-			null // placeFinalize
+			propertyNamesToProcess
 		);
 		var placeDefns = [ placeDefnDemo ]; // todo
 

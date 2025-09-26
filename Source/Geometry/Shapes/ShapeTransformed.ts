@@ -56,11 +56,21 @@ export class ShapeTransformed extends ShapeBase
 		return this;
 	}
 
-	// Equatable
+	// Equatable.
 
 	equals(other: ShapeTransformed): boolean
 	{
 		return this.child.equals(other.child); // todo - && this.transform.equals(other.transform);
+	}
+
+	// Strings.
+	toString(): string
+	{
+		var returnValue =
+			ShapeTransformed.name
+			+ " with child " + this.child.toString()
+			+ " transformed by " + this.transformToApply.toString();
+		return returnValue;
 	}
 
 	// Transformable.

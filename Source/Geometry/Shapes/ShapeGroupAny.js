@@ -51,6 +51,11 @@ var ThisCouldBeBetter;
                 }
                 return surfacePointOut;
             }
+            // Strings.
+            toString() {
+                var returnValue = ShapeGroupAny.name + " of children " + this.children.map(x => x.toString());
+                return returnValue;
+            }
             // Transformable.
             transform(transformToApply) {
                 this.children.forEach((x) => x.transform(transformToApply));

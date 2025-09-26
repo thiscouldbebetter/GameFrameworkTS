@@ -211,7 +211,7 @@ class PlaceBuilderDemo_Movers {
                 var ticksToDelayRemaining = targetEphemeral.ticksToLive;
                 ticksToDelayRemaining--;
                 if (ticksToDelayRemaining > 0) {
-                    targetEphemeral.ticksToLive--;
+                    targetEphemeral.updateForTimerTick(uwpe);
                     return;
                 }
                 else {
@@ -650,23 +650,17 @@ class PlaceBuilderDemo_Movers {
                     drawable.visual,
                     VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - this.entityDimension * 3), VisualText.fromTextImmediateFontAndColor("Waiting", this.font, Color.Instances().Gray))
                 ]);
-                ticksToWait = 60; // 3 seconds.
-                targetEntity = Ephemeral.fromTicksToLive(ticksToWait).toEntity();
+                var ticksToWait = 60; // 3 seconds.
+                targetEntity = Ephemeral.fromTicksToLiveAndExpire(ticksToWait, (uwpe2) => {
+                    activity.defnName = "Player";
+                    drawable.visual = drawable.visual.children[0];
+                    activity.targetEntityClear();
+                }).toEntity();
                 activity.targetEntitySet(targetEntity);
             }
             else {
                 var targetEphemeral = Ephemeral.of(targetEntity);
-                var ticksToWait = targetEphemeral.ticksToLive;
-                if (ticksToWait > 0) {
-                    ticksToWait--;
-                    targetEphemeral.ticksToLive = ticksToWait;
-                }
-                else {
-                    activity.defnName = "Player";
-                    drawable.visual =
-                        drawable.visual.children[0];
-                    activity.targetEntityClear();
-                }
+                targetEphemeral.updateForTimerTick(uwpe);
             }
         };
         var playerActivityDefnWait = ActivityDefn.fromNameAndPerform("Wait", playerActivityWaitPerform);

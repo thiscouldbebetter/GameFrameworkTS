@@ -81,6 +81,7 @@ var Obstacle = gf.Obstacle;
 var Portal = gf.Portal;
 var Traversable = gf.Traversable;
 var Vehicle = gf.Vehicle;
+var Wrappable = gf.Wrappable;
 var PlaceBase = gf.PlaceBase;
 var PlaceDefn = gf.PlaceDefn;
 var PlaceZoned = gf.PlaceZoned;

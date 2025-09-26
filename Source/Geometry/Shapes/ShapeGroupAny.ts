@@ -89,6 +89,15 @@ export class ShapeGroupAny extends ShapeBase
 		return surfacePointOut;
 	}
 
+	// Strings.
+
+	toString(): string
+	{
+		var returnValue =
+			ShapeGroupAny.name + " of children " + this.children.map(x => x.toString() );
+		return returnValue;
+	}
+
 	// Transformable.
 
 	transform(transformToApply: TransformBase): ShapeGroupAny

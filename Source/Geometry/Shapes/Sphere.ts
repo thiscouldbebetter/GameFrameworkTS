@@ -162,6 +162,13 @@ export class Sphere extends ShapeBase
 		return boxOut;
 	}
 
+	// Strings.
+
+	toString(): string
+	{
+		return Sphere.name + " of radius " + this.radius + " at " + this.center.toString();
+	}
+
 	// Transformable.
 
 	transform(transformToApply: TransformBase): Sphere

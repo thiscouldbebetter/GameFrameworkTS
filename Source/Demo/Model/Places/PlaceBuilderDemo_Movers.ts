@@ -419,7 +419,7 @@ class PlaceBuilderDemo_Movers
 				ticksToDelayRemaining--;
 				if (ticksToDelayRemaining > 0)
 				{
-					targetEphemeral.ticksToLive--;
+					targetEphemeral.updateForTimerTick(uwpe);
 					return;
 				}
 				else
@@ -1313,26 +1313,24 @@ class PlaceBuilderDemo_Movers
 						)
 					)
 				]);
-				ticksToWait = 60; // 3 seconds.
-				targetEntity = Ephemeral.fromTicksToLive(ticksToWait).toEntity();
+				var ticksToWait = 60; // 3 seconds.
+				targetEntity = Ephemeral.fromTicksToLiveAndExpire
+				(
+					ticksToWait,
+					(uwpe2: UniverseWorldPlaceEntities) =>
+					{
+						activity.defnName = "Player";
+						drawable.visual = (drawable.visual as VisualGroup).children[0];
+						activity.targetEntityClear();
+					}
+
+				).toEntity();
 				activity.targetEntitySet(targetEntity);
 			}
 			else
 			{
 				var targetEphemeral = Ephemeral.of(targetEntity);
-				var ticksToWait = targetEphemeral.ticksToLive;
-				if (ticksToWait > 0)
-				{
-					ticksToWait--;
-					targetEphemeral.ticksToLive = ticksToWait;
-				}
-				else
-				{
-					activity.defnName = "Player";
-					drawable.visual =
-						(drawable.visual as VisualGroup).children[0];
-					activity.targetEntityClear();
-				}
+				targetEphemeral.updateForTimerTick(uwpe);
 			}
 		};
 		var playerActivityDefnWait =

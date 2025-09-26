@@ -14,13 +14,19 @@ var ThisCouldBeBetter;
                 this.displacement.overwriteWith(value);
                 return this;
             }
-            // transform
+            // Clonable.
             clone() {
                 return this; // todo
             }
             overwriteWith(other) {
                 return this; // todo
             }
+            // Strings.
+            toString() {
+                var returnValue = Transform_Translate.name + " by " + this.displacement;
+                return returnValue;
+            }
+            // Transform.
             transform(transformable) {
                 return transformable.transform(this);
             }

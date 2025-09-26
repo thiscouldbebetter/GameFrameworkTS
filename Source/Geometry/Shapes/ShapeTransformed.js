@@ -28,9 +28,16 @@ var ThisCouldBeBetter;
                 this.child.overwriteWith(other.child);
                 return this;
             }
-            // Equatable
+            // Equatable.
             equals(other) {
                 return this.child.equals(other.child); // todo - && this.transform.equals(other.transform);
+            }
+            // Strings.
+            toString() {
+                var returnValue = ShapeTransformed.name
+                    + " with child " + this.child.toString()
+                    + " transformed by " + this.transformToApply.toString();
+                return returnValue;
             }
             // Transformable.
             transform(transformToApply) {

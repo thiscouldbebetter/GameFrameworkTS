@@ -24,48 +24,58 @@ var ThisCouldBeBetter;
                 return true; // todo
             }
             draw(uwpe, display) {
-                if (this.ticksSoFar < this.ticksToGenerate || this.ticksToGenerate == null) {
-                    var particleCountThisTick;
-                    if (this.particlesPerTick >= 1) {
-                        particleCountThisTick = this.particlesPerTick;
-                    }
-                    else {
-                        var ticksPerParticle = 1 / this.particlesPerTick;
-                        particleCountThisTick = (this.ticksSoFar % ticksPerParticle == 0 ? 1 : 0);
-                    }
-                    var entity = uwpe.entity;
-                    for (var i = 0; i < particleCountThisTick; i++) {
-                        var entityGeneratingLoc = GameFramework.Locatable.of(entity).loc;
-                        var particleName = "Particle" + this.name + "-" + this.ticksSoFar + "-" + i;
-                        var particleLoc = entityGeneratingLoc.clone();
-                        var particleVel = this.particleVelocityGet();
-                        particleLoc.vel.overwriteWith(particleVel);
-                        var particleTicksToLive = this.particleTicksToLiveGet();
-                        var entityParticle = GameFramework.Entity.fromNameAndProperties(particleName, [
-                            GameFramework.Drawable.fromVisual(this.particleVisual.clone()),
-                            GameFramework.Ephemeral.fromTicksToLive(particleTicksToLive),
-                            GameFramework.Locatable.fromDisposition(particleLoc)
-                        ]);
-                        this.particleEntities.push(entityParticle);
-                    }
-                    this.ticksSoFar++;
+                var particlesAreStillBeingGenerated = this.ticksToGenerate == null
+                    || this.ticksSoFar < this.ticksToGenerate;
+                var emitterEntity = uwpe.entity;
+                if (particlesAreStillBeingGenerated) {
+                    this.draw_ParticlesGenerate(uwpe);
                 }
-                var uwpeForParticles = uwpe.clone();
-                this.particleEntities.forEach(particleEntity => {
-                    var loc = GameFramework.Locatable.of(particleEntity).loc;
-                    loc.pos.add(loc.vel);
-                    var ephemeral = GameFramework.Ephemeral.of(particleEntity);
-                    var ephemeralIsExpired = ephemeral.isExpired();
-                    if (ephemeralIsExpired) {
-                        GameFramework.ArrayHelper.remove(this.particleEntities, particleEntity);
-                    }
-                    else {
-                        ephemeral.ticksToLive--;
-                        var particleVisual = GameFramework.Drawable.of(particleEntity).visual;
-                        particleVisual.draw(uwpeForParticles.entitySet(particleEntity), display);
-                        this.transformToApplyEachTick.transform(particleVisual);
-                    }
-                });
+                this.particleEntities.forEach(particleEntity => this.draw_ParticlesUpdate(uwpe, display, emitterEntity, particleEntity));
+                uwpe.entitySet(emitterEntity);
+            }
+            draw_ParticlesGenerate(uwpe) {
+                var particleCountThisTick;
+                if (this.particlesPerTick >= 1) {
+                    particleCountThisTick = this.particlesPerTick;
+                }
+                else {
+                    var ticksPerParticle = 1 / this.particlesPerTick;
+                    particleCountThisTick = (this.ticksSoFar % ticksPerParticle == 0 ? 1 : 0);
+                }
+                for (var i = 0; i < particleCountThisTick; i++) {
+                    var particleName = "Particle" + this.name + "-" + this.ticksSoFar + "-" + i;
+                    var particleDispRelativeToEmitter = GameFramework.Disposition.create();
+                    var particleVel = this.particleVelocityGet();
+                    particleDispRelativeToEmitter.vel.overwriteWith(particleVel);
+                    var particleTicksToLive = this.particleTicksToLiveGet();
+                    var entityParticle = GameFramework.Entity.fromNameAndProperties(particleName, [
+                        GameFramework.Drawable.fromVisual(this.particleVisual.clone()),
+                        GameFramework.Ephemeral.fromTicksToLive(particleTicksToLive),
+                        GameFramework.Locatable.fromDisposition(particleDispRelativeToEmitter)
+                    ]);
+                    this.particleEntities.push(entityParticle);
+                }
+                this.ticksSoFar++;
+            }
+            draw_ParticlesUpdate(uwpe, display, emitterEntity, particleEntity) {
+                var ephemeral = GameFramework.Ephemeral.of(particleEntity);
+                var ephemeralIsExpired = ephemeral.isExpired();
+                if (ephemeralIsExpired) {
+                    GameFramework.ArrayHelper.remove(this.particleEntities, particleEntity);
+                }
+                else {
+                    var particleDispRelativeToEmitter = GameFramework.Locatable.of(particleEntity).loc;
+                    var particlePosRelativeToEmitter = particleDispRelativeToEmitter.pos;
+                    particlePosRelativeToEmitter.add(particleDispRelativeToEmitter.vel);
+                    var emitterPos = GameFramework.Locatable.of(emitterEntity).loc.pos;
+                    var particlePosAbsolute = particlePosRelativeToEmitter.add(emitterPos);
+                    var particleVisual = GameFramework.Drawable.of(particleEntity).visual;
+                    uwpe.entitySet(particleEntity);
+                    particleVisual.draw(uwpe, display);
+                    this.transformToApplyEachTick.transform(particleVisual);
+                    particlePosRelativeToEmitter =
+                        particlePosAbsolute.subtract(emitterPos);
+                }
             }
             // Clonable.
             clone() {

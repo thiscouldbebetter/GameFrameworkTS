@@ -96,6 +96,7 @@ import Obstacle = gf.Obstacle;
 import Portal = gf.Portal;
 import Traversable = gf.Traversable;
 import Vehicle = gf.Vehicle;
+import Wrappable = gf.Wrappable;
 
 // Model - Places.
 import Place = gf.Place;

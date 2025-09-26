@@ -44,6 +44,7 @@ var ThisCouldBeBetter;
                 var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
                 var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
                 var shapeTransformedName = (typeof GameFramework.ShapeTransformed == notDefined ? null : GameFramework.ShapeTransformed.name);
+                var shapeWrappedName = (typeof GameFramework.ShapeWrapped == notDefined ? null : GameFramework.ShapeWrapped.name);
                 var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
                 if (boxName != null) {
                     lookup = new Map([
@@ -55,6 +56,7 @@ var ThisCouldBeBetter;
                         [shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
                         [shapeTransformedName, this.collisionOfShapeAndShapeTransformed],
+                        [shapeWrappedName, this.collisionOfShapeAndShapeWrapped],
                         [sphereName, this.collisionOfBoxAndSphere]
                     ]);
                     lookupOfLookups.set(boxName, lookup);
@@ -97,6 +99,7 @@ var ThisCouldBeBetter;
                         [meshName, this.collisionOfShapeGroupAnyAndShape],
                         [shapeGroupAnyName, this.collisionOfShapeGroupAnyAndShape],
                         [shapeTransformedName, this.collisionOfShapeGroupAnyAndShape],
+                        [shapeWrappedName, this.collisionOfShapeGroupAnyAndShape],
                         [sphereName, this.collisionOfShapeGroupAnyAndShape]
                     ]);
                     lookupOfLookups.set(shapeGroupAnyName, lookup);
@@ -115,9 +118,20 @@ var ThisCouldBeBetter;
                         [meshName, this.collisionOfShapeTransformedAndShape],
                         [shapeGroupAnyName, this.collisionOfShapeTransformedAndShape],
                         [shapeTransformedName, this.collisionOfShapeTransformedAndShape],
+                        [shapeWrappedName, this.collisionOfShapeTransformedAndShape],
                         [sphereName, this.collisionOfShapeTransformedAndShape]
                     ]);
                     lookupOfLookups.set(shapeTransformedName, lookup);
+                }
+                if (shapeWrappedName != null) {
+                    lookup = new Map([
+                        [boxName, this.collisionOfShapeWrappedAndShape],
+                        [meshName, this.collisionOfShapeWrappedAndShape],
+                        [shapeGroupAnyName, this.collisionOfShapeWrappedAndShape],
+                        [shapeWrappedName, this.collisionOfShapeWrappedAndShape],
+                        [sphereName, this.collisionOfShapeWrappedAndShape]
+                    ]);
+                    lookupOfLookups.set(shapeWrappedName, lookup);
                 }
                 if (sphereName != null) {
                     lookup = new Map([
@@ -128,6 +142,7 @@ var ThisCouldBeBetter;
                         [shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
                         [shapeTransformedName, this.collisionOfShapeAndShapeTransformed],
+                        [shapeWrappedName, this.collisionOfShapeAndShapeWrapped],
                         [sphereName, this.collisionOfSpheres]
                     ]);
                     lookupOfLookups.set(sphereName, lookup);
@@ -149,6 +164,7 @@ var ThisCouldBeBetter;
                 var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
                 var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
                 var shapeTransformedName = (typeof GameFramework.ShapeTransformed == notDefined ? null : GameFramework.ShapeTransformed.name);
+                var shapeWrappedName = (typeof GameFramework.ShapeWrapped == notDefined ? null : GameFramework.ShapeWrapped.name);
                 var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
                 if (boxName != null) {
                     lookup = new Map([
@@ -162,6 +178,7 @@ var ThisCouldBeBetter;
                         [shapeGroupAnyName, this.doBoxAndShapeGroupAnyCollide],
                         [shapeInverseName, this.doBoxAndShapeInverseCollide],
                         [shapeTransformedName, this.doBoxAndShapeTransformedCollide],
+                        [shapeWrappedName, this.doBoxAndShapeWrappedCollide],
                         [sphereName, this.doBoxAndSphereCollide]
                     ]);
                     lookupOfLookups.set(boxName, lookup);
@@ -218,6 +235,7 @@ var ThisCouldBeBetter;
                         [meshName, this.doShapeGroupAnyAndShapeCollide],
                         [shapeGroupAnyName, this.doShapeGroupAnyAndShapeCollide],
                         [shapeTransformedName, this.doShapeGroupAnyAndShapeCollide],
+                        [shapeWrappedName, this.doShapeGroupAnyAndShapeCollide],
                         [sphereName, this.doShapeGroupAnyAndShapeCollide]
                     ]);
                     lookupOfLookups.set(shapeGroupAnyName, lookup);
@@ -235,9 +253,21 @@ var ThisCouldBeBetter;
                         [boxName, this.doShapeTransformedAndShapeCollide],
                         [meshName, this.doShapeTransformedAndShapeCollide],
                         [shapeGroupAnyName, this.doShapeTransformedAndShapeCollide],
+                        [shapeWrappedName, this.doShapeTransformedAndShapeCollide],
                         [sphereName, this.doShapeTransformedAndShapeCollide]
                     ]);
                     lookupOfLookups.set(shapeTransformedName, lookup);
+                }
+                if (shapeWrappedName != null) {
+                    lookup = new Map([
+                        [boxName, this.doShapeWrappedAndShapeCollide],
+                        [meshName, this.doShapeWrappedAndShapeCollide],
+                        [shapeGroupAnyName, this.doShapeWrappedAndShapeCollide],
+                        [shapeTransformedName, this.doShapeWrappedAndShapeCollide],
+                        [shapeWrappedName, this.doShapeWrappedAndShapeCollide],
+                        [sphereName, this.doShapeWrappedAndShapeCollide]
+                    ]);
+                    lookupOfLookups.set(shapeWrappedName, lookup);
                 }
                 if (sphereName != null) {
                     lookup = new Map([
@@ -248,6 +278,7 @@ var ThisCouldBeBetter;
                         [shapeGroupAnyName, this.doShapeAndShapeGroupAnyCollide],
                         [shapeInverseName, this.doShapeAndShapeInverseCollide],
                         [shapeTransformedName, this.doShapeAndShapeTransformedCollide],
+                        [shapeWrappedName, this.doShapeAndShapeWrappedCollide],
                         [sphereName, this.doSphereAndSphereCollide]
                     ]);
                     lookupOfLookups.set(sphereName, lookup);
@@ -873,6 +904,11 @@ var ThisCouldBeBetter;
                 collisionOut = this.collisionOfColliders(shape, shapeTransformedChild, collisionOut);
                 return collisionOut;
             }
+            collisionOfShapeAndShapeWrapped(shape, shapeWrapped, collisionOut) {
+                var shapeWrappedAsShapeGroupAny = shapeWrapped.toShapeGroupAny();
+                collisionOut = this.collisionOfColliders(shape, shapeWrappedAsShapeGroupAny, collisionOut);
+                return collisionOut;
+            }
             collisionOfShapeGroupAllAndShape(shapeGroupAll, shape, collisionOut) {
                 return this.collisionOfShapeAndShapeGroupAll(shape, shapeGroupAll, collisionOut);
             }
@@ -884,6 +920,9 @@ var ThisCouldBeBetter;
             }
             collisionOfShapeTransformedAndShape(shapeTransformed, shape, collisionOut) {
                 return this.collisionOfShapeAndShapeTransformed(shape, shapeTransformed, collisionOut);
+            }
+            collisionOfShapeWrappedAndShape(shapeWrapped, shape, collisionOut) {
+                return this.collisionOfShapeAndShapeWrapped(shape, shapeWrapped, collisionOut);
             }
             collisionOfSphereAndBox(sphere, box, collision, shouldCalculatePos) {
                 return this.collisionOfBoxAndSphere(box, sphere, collision, shouldCalculatePos);
@@ -978,6 +1017,9 @@ var ThisCouldBeBetter;
             }
             doBoxAndShapeTransformedCollide(box, shapeTransformed) {
                 return this.doShapeTransformedAndShapeCollide(shapeTransformed, box);
+            }
+            doBoxAndShapeWrappedCollide(box, shapeWrapped) {
+                return this.doShapeWrappedAndShapeCollide(shapeWrapped, box);
             }
             doBoxAndSphereCollide(box, sphere) {
                 return this.collisionOfBoxAndSphere(box, sphere, this._collision, false).isActive;
@@ -1234,6 +1276,9 @@ var ThisCouldBeBetter;
             doShapeAndShapeTransformedCollide(shape, shapeTransformed) {
                 return this.doShapeTransformedAndShapeCollide(shapeTransformed, shape);
             }
+            doShapeAndShapeWrappedCollide(shape, shapeWrapped) {
+                return this.doShapeWrappedAndShapeCollide(shapeWrapped, shape);
+            }
             doSphereAndBoxCollide(sphere, box) {
                 return this.doBoxAndSphereCollide(box, sphere);
             }
@@ -1337,6 +1382,10 @@ var ThisCouldBeBetter;
             }
             doShapeTransformedAndSphereCollide(shapeTransformed, sphere) {
                 return this.doShapeTransformedAndShapeCollide(shapeTransformed, sphere);
+            }
+            doShapeWrappedAndShapeCollide(shapeWrapped, shapeOther) {
+                var shapeWrappedAsShapeGroupAny = shapeWrapped.toShapeGroupAny();
+                return (this.doCollidersCollide(shapeWrappedAsShapeGroupAny, shapeOther));
             }
             // contains
             doesBoxContainBox(box0, box1) {

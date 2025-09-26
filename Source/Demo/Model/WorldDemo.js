@@ -44,10 +44,8 @@ class WorldDemo extends World {
             Tirable.name,
             //Camera.name,
         ];
-        var placeDefnDemo = new PlaceDefn("Demo", null, // soundForMusicName
-        actions, actionToInputsMappings, propertyNamesToProcess, null, // placeInitialize
-        null // placeFinalize
-        );
+        var placeDefnDemo = PlaceDefn.fromNameMusicActionsMappingsAndPropertyNames("Demo", null, // soundForMusicName
+        actions, actionToInputsMappings, propertyNamesToProcess);
         var placeDefns = [placeDefnDemo]; // todo
         var activityDefns = placeBuilder.activityDefns;
         var itemDefns = placeBuilder.itemDefns;

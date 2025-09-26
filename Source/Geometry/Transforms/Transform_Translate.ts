@@ -22,7 +22,7 @@ export class Transform_Translate implements Transform<Transform_Translate>
 		return this;
 	}
 
-	// transform
+	// Clonable.
 
 	clone(): Transform_Translate
 	{
@@ -33,6 +33,15 @@ export class Transform_Translate implements Transform<Transform_Translate>
 	{
 		return this; // todo
 	}
+
+	// Strings.
+	toString(): string
+	{
+		var returnValue = Transform_Translate.name + " by " + this.displacement;
+		return returnValue;
+	}
+
+	// Transform.
 
 	transform(transformable: TransformableBase): TransformableBase
 	{

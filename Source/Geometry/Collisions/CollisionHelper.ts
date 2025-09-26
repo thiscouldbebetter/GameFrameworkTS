@@ -73,6 +73,7 @@ export class CollisionHelper
 		var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
 		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
 		var shapeTransformedName = (typeof ShapeTransformed == notDefined ? null : ShapeTransformed.name);
+		var shapeWrappedName = (typeof ShapeWrapped == notDefined ? null : ShapeWrapped.name);
 		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
 		if (boxName != null)
@@ -87,6 +88,7 @@ export class CollisionHelper
 				[ shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny ],
 				[ shapeInverseName, this.collisionOfShapeAndShapeInverse ],
 				[ shapeTransformedName, this.collisionOfShapeAndShapeTransformed ],
+				[ shapeWrappedName, this.collisionOfShapeAndShapeWrapped ],
 				[ sphereName, this.collisionOfBoxAndSphere ]
 			]);
 			lookupOfLookups.set(boxName, lookup);
@@ -144,6 +146,7 @@ export class CollisionHelper
 				[ meshName, this.collisionOfShapeGroupAnyAndShape ],
 				[ shapeGroupAnyName, this.collisionOfShapeGroupAnyAndShape ],
 				[ shapeTransformedName, this.collisionOfShapeGroupAnyAndShape ],
+				[ shapeWrappedName, this.collisionOfShapeGroupAnyAndShape ],
 				[ sphereName, this.collisionOfShapeGroupAnyAndShape ]
 			]);
 			lookupOfLookups.set(shapeGroupAnyName, lookup);
@@ -168,9 +171,23 @@ export class CollisionHelper
 				[ meshName, this.collisionOfShapeTransformedAndShape ],
 				[ shapeGroupAnyName, this.collisionOfShapeTransformedAndShape ],
 				[ shapeTransformedName, this.collisionOfShapeTransformedAndShape ],
+				[ shapeWrappedName, this.collisionOfShapeTransformedAndShape ],
 				[ sphereName, this.collisionOfShapeTransformedAndShape ]
 			]);
 			lookupOfLookups.set(shapeTransformedName, lookup);
+		}
+
+		if (shapeWrappedName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.collisionOfShapeWrappedAndShape ],
+				[ meshName, this.collisionOfShapeWrappedAndShape ],
+				[ shapeGroupAnyName, this.collisionOfShapeWrappedAndShape ],
+				[ shapeWrappedName, this.collisionOfShapeWrappedAndShape ],
+				[ sphereName, this.collisionOfShapeWrappedAndShape ]
+			]);
+			lookupOfLookups.set(shapeWrappedName, lookup);
 		}
 
 		if (sphereName != null)
@@ -184,6 +201,7 @@ export class CollisionHelper
 				[ shapeGroupAnyName, this.collisionOfShapeAndShapeGroupAny ],
 				[ shapeInverseName, this.collisionOfShapeAndShapeInverse ],
 				[ shapeTransformedName, this.collisionOfShapeAndShapeTransformed ],
+				[ shapeWrappedName, this.collisionOfShapeAndShapeWrapped ],
 				[ sphereName, this.collisionOfSpheres ]
 			]);
 			lookupOfLookups.set(sphereName, lookup);
@@ -210,6 +228,7 @@ export class CollisionHelper
 		var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
 		var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
 		var shapeTransformedName = (typeof ShapeTransformed == notDefined ? null : ShapeTransformed.name);
+		var shapeWrappedName = (typeof ShapeWrapped == notDefined ? null : ShapeWrapped.name);
 		var sphereName = ( typeof Sphere == notDefined ? null : Sphere.name );
 
 		if (boxName != null)
@@ -226,6 +245,7 @@ export class CollisionHelper
 				[ shapeGroupAnyName, this.doBoxAndShapeGroupAnyCollide ],
 				[ shapeInverseName, this.doBoxAndShapeInverseCollide ],
 				[ shapeTransformedName, this.doBoxAndShapeTransformedCollide ],
+				[ shapeWrappedName, this.doBoxAndShapeWrappedCollide ],
 				[ sphereName, this.doBoxAndSphereCollide ]
 			]);
 			lookupOfLookups.set(boxName, lookup);
@@ -303,6 +323,7 @@ export class CollisionHelper
 				[ meshName, this.doShapeGroupAnyAndShapeCollide ],
 				[ shapeGroupAnyName, this.doShapeGroupAnyAndShapeCollide ],
 				[ shapeTransformedName, this.doShapeGroupAnyAndShapeCollide ],
+				[ shapeWrappedName, this.doShapeGroupAnyAndShapeCollide ],
 				[ sphereName, this.doShapeGroupAnyAndShapeCollide ]
 			]);
 			lookupOfLookups.set(shapeGroupAnyName, lookup);
@@ -326,9 +347,24 @@ export class CollisionHelper
 				[ boxName, this.doShapeTransformedAndShapeCollide ],
 				[ meshName, this.doShapeTransformedAndShapeCollide ],
 				[ shapeGroupAnyName, this.doShapeTransformedAndShapeCollide ],
+				[ shapeWrappedName, this.doShapeTransformedAndShapeCollide ],
 				[ sphereName, this.doShapeTransformedAndShapeCollide ]
 			]);
 			lookupOfLookups.set(shapeTransformedName, lookup);
+		}
+
+		if (shapeWrappedName != null)
+		{
+			lookup = new Map<string, any>
+			([
+				[ boxName, this.doShapeWrappedAndShapeCollide ],
+				[ meshName, this.doShapeWrappedAndShapeCollide ],
+				[ shapeGroupAnyName, this.doShapeWrappedAndShapeCollide ],
+				[ shapeTransformedName, this.doShapeWrappedAndShapeCollide ],
+				[ shapeWrappedName, this.doShapeWrappedAndShapeCollide ],
+				[ sphereName, this.doShapeWrappedAndShapeCollide ]
+			]);
+			lookupOfLookups.set(shapeWrappedName, lookup);
 		}
 
 		if (sphereName != null)
@@ -342,6 +378,7 @@ export class CollisionHelper
 				[ shapeGroupAnyName, this.doShapeAndShapeGroupAnyCollide ],
 				[ shapeInverseName, this.doShapeAndShapeInverseCollide ],
 				[ shapeTransformedName, this.doShapeAndShapeTransformedCollide ],
+				[ shapeWrappedName, this.doShapeAndShapeWrappedCollide ],
 				[ sphereName, this.doSphereAndSphereCollide ]
 			]);
 			lookupOfLookups.set(sphereName, lookup);
@@ -1440,6 +1477,18 @@ export class CollisionHelper
 		return collisionOut;
 	}
 
+	collisionOfShapeAndShapeWrapped
+	(
+		shape: Shape,
+		shapeWrapped: ShapeWrapped, 
+		collisionOut: Collision
+	): Collision
+	{
+		var shapeWrappedAsShapeGroupAny = shapeWrapped.toShapeGroupAny();
+		collisionOut = this.collisionOfColliders(shape, shapeWrappedAsShapeGroupAny, collisionOut);
+		return collisionOut;
+	}
+
 	collisionOfShapeGroupAllAndShape
 	(
 		shapeGroupAll: ShapeGroupAll, shape: Shape, collisionOut: Collision
@@ -1470,6 +1519,14 @@ export class CollisionHelper
 	): Collision
 	{
 		return this.collisionOfShapeAndShapeTransformed(shape, shapeTransformed, collisionOut);
+	}
+
+	collisionOfShapeWrappedAndShape
+	(
+		shapeWrapped: ShapeWrapped, shape: Shape, collisionOut: Collision
+	): Collision
+	{
+		return this.collisionOfShapeAndShapeWrapped(shape, shapeWrapped, collisionOut);
 	}
 
 	collisionOfSphereAndBox(sphere: Sphere, box: BoxAxisAligned, collision: Collision, shouldCalculatePos: boolean): Collision
@@ -1653,6 +1710,11 @@ export class CollisionHelper
 	doBoxAndShapeTransformedCollide(box: BoxAxisAligned, shapeTransformed: ShapeTransformed): boolean
 	{
 		return this.doShapeTransformedAndShapeCollide(shapeTransformed, box);
+	}
+
+	doBoxAndShapeWrappedCollide(box: BoxAxisAligned, shapeWrapped: ShapeWrapped): boolean
+	{
+		return this.doShapeWrappedAndShapeCollide(shapeWrapped, box);
 	}
 
 	doBoxAndSphereCollide(box: BoxAxisAligned, sphere: Sphere): boolean
@@ -2074,6 +2136,11 @@ export class CollisionHelper
 		return this.doShapeTransformedAndShapeCollide(shapeTransformed, shape);
 	}
 
+	doShapeAndShapeWrappedCollide(shape: Shape, shapeWrapped: ShapeWrapped): boolean
+	{
+		return this.doShapeWrappedAndShapeCollide(shapeWrapped, shape);
+	}
+
 	doSphereAndBoxCollide(sphere: Sphere, box: BoxAxisAligned): boolean
 	{
 		return this.doBoxAndSphereCollide(box, sphere);
@@ -2245,6 +2312,13 @@ export class CollisionHelper
 	doShapeTransformedAndSphereCollide(shapeTransformed: ShapeTransformed, sphere: Sphere): boolean
 	{
 		return this.doShapeTransformedAndShapeCollide(shapeTransformed, sphere);
+	}
+
+	doShapeWrappedAndShapeCollide(shapeWrapped: ShapeWrapped, shapeOther: Shape): boolean
+	{
+		var shapeWrappedAsShapeGroupAny =
+			shapeWrapped.toShapeGroupAny();
+		return (this.doCollidersCollide(shapeWrappedAsShapeGroupAny, shapeOther) );
 	}
 
 	// contains
