@@ -128,6 +128,7 @@ var ThisCouldBeBetter;
                         [boxName, this.collisionOfShapeWrappedAndShape],
                         [meshName, this.collisionOfShapeWrappedAndShape],
                         [shapeGroupAnyName, this.collisionOfShapeWrappedAndShape],
+                        [shapeTransformedName, this.collisionOfShapeWrappedAndShape],
                         [shapeWrappedName, this.collisionOfShapeWrappedAndShape],
                         [sphereName, this.collisionOfShapeWrappedAndShape]
                     ]);
