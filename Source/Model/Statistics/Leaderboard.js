@@ -78,7 +78,7 @@ var ThisCouldBeBetter;
                 controlRoot.containerInner.indexOfChildWithFocusCannotBeNullSet(true);
                 var textBoxInitials = GameFramework.ControlTextBox.fromNamePosSizeAndTextBinding("textBoxInitials", GameFramework.Coords.fromXY(150, 200), // pos
                 GameFramework.Coords.fromXY(100, 40), // size
-                GameFramework.DataBinding.fromContextGetAndSet(this.scoreBeingEntered, (c) => c.playerInitials, (c, v) => c.playerInitials = v)).charsMaxSet(3);
+                GameFramework.DataBinding.fromContextGetAndSet(this.scoreBeingEntered, (c) => c.playerInitials, (c, v) => c.playerInitials = v)).charsMaxSet(3).characterSetSet(GameFramework.CharacterSet.Instances().LettersUppercase);
                 textBoxInitials.fontHeightInPixelsSet(fontNameAndHeight.heightInPixels * 2);
                 controlRoot
                     .childAdd(textBoxInitials)

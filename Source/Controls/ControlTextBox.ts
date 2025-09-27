@@ -8,6 +8,8 @@ export class ControlTextBox<TContext> extends ControlBase
 	charsMax: number;
 	_isEnabled: DataBinding<TContext,boolean>;
 
+	characterSet: CharacterSet;
+
 	cursorPos: number;
 
 	_drawPos: Coords;
@@ -21,10 +23,10 @@ export class ControlTextBox<TContext> extends ControlBase
 		name: string,
 		pos: Coords,
 		size: Coords,
-		text: DataBinding<TContext,string>,
+		text: DataBinding<TContext, string>,
 		fontNameAndHeight: FontNameAndHeight,
 		charsMax: number,
-		isEnabled: DataBinding<TContext,boolean>
+		isEnabled: DataBinding<TContext, boolean>
 	)
 	{
 		fontNameAndHeight = fontNameAndHeight || FontNameAndHeight.default();
@@ -34,6 +36,9 @@ export class ControlTextBox<TContext> extends ControlBase
 		this._text = text;
 		this.charsMax = charsMax;
 		this._isEnabled = isEnabled;
+
+		this.characterSet =
+			CharacterSet.Instances().LettersSpaceNumeralsPunctuation;
 
 		this.cursorPos = null;
 
@@ -108,6 +113,12 @@ export class ControlTextBox<TContext> extends ControlBase
 		);
 	}
 
+	characterSetSet(value: CharacterSet): ControlTextBox<TContext>
+	{
+		this.characterSet = value;
+		return this;
+	}
+
 	charsMaxSet(value: number): ControlTextBox<TContext>
 	{
 		this.charsMax = value;
@@ -132,6 +143,7 @@ export class ControlTextBox<TContext> extends ControlBase
 		var wasActionHandled = true;
 
 		var text = this.text();
+		var textLength = text.length;
 
 		var controlActionNames = ControlActionNames.Instances();
 		if
@@ -140,14 +152,14 @@ export class ControlTextBox<TContext> extends ControlBase
 			|| actionNameToHandle == Input.Instances().Backspace.name
 		)
 		{
-			if (text.length > 0)
+			if (textLength > 0)
 			{
-				text = text.substr(0, text.length - 1);
+				text = text.substr(0, textLength - 1);
 				this.textSet(text);
 
 				this.cursorPos = NumberHelper.wrapToRangeMinMax
 				(
-					this.cursorPos - 1, 0, text.length + 1
+					this.cursorPos - 1, 0, textLength + 1
 				);
 			}
 		}
@@ -161,7 +173,7 @@ export class ControlTextBox<TContext> extends ControlBase
 			{
 				this.cursorPos = NumberHelper.wrapToRangeMinMax
 				(
-					this.cursorPos - 1, 0, text.length + 1
+					this.cursorPos - 1, 0, textLength + 1
 				);
 			}
 		}
@@ -171,11 +183,11 @@ export class ControlTextBox<TContext> extends ControlBase
 			|| actionNameToHandle == controlActionNames.ControlConfirm
 		)
 		{
-			if (this.cursorPos >= text.length)
+			if (this.cursorPos >= textLength)
 			{
 				wasActionHandled = false;
 			}
-			else if (text.length >= this.charsMax)
+			else if (textLength >= this.charsMax)
 			{
 				wasActionHandled = false;
 			}
@@ -183,7 +195,7 @@ export class ControlTextBox<TContext> extends ControlBase
 			{
 				this.cursorPos = NumberHelper.wrapToRangeMinMax
 				(
-					this.cursorPos + 1, 0, text.length + 1
+					this.cursorPos + 1, 0, textLength + 1
 				);
 			}
 		}
@@ -203,42 +215,31 @@ export class ControlTextBox<TContext> extends ControlBase
 					: 1
 				);
 
-				var charCodeAtCursor =
-				(
-					this.cursorPos < text.length
-					? text.charCodeAt(this.cursorPos)
-					: "A".charCodeAt(0) - 1
-				);
+				var charSet = this.characterSet;
 
-				if 
-				(
-					charCodeAtCursor == "Z".charCodeAt(0)
-					&& direction == 1
-				)
+				var charAtCursor = text[this.cursorPos];
+
+				if (charAtCursor == null)
 				{
-					charCodeAtCursor = "a".charCodeAt(0);
-				}
-				else if 
-				(
-					charCodeAtCursor == "a".charCodeAt(0)
-					&& direction == -1
-				)
-				{
-					charCodeAtCursor = "Z".charCodeAt(0);
+					charAtCursor =
+						direction > 0
+						? charSet.characterFirst()
+						: charSet.characterLast();
 				}
 				else
 				{
-					charCodeAtCursor = charCodeAtCursor + direction;
+					var charAtCursorIndexWithinSet =
+						charSet.indexOfCharacter(charAtCursor);
+
+					charAtCursorIndexWithinSet = NumberHelper.wrapToRangeMinMax
+					(
+						charAtCursorIndexWithinSet + direction,
+						0,
+						charSet.characterCount()
+					);
+
+					charAtCursor = charSet.characterAtIndex(charAtCursorIndexWithinSet);
 				}
-
-				charCodeAtCursor = NumberHelper.wrapToRangeMinMax
-				(
-					charCodeAtCursor,
-					"A".charCodeAt(0),
-					"z".charCodeAt(0) + 1
-				);
-
-				var charAtCursor = String.fromCharCode(charCodeAtCursor);
 
 				var textEdited = text.substr(0, this.cursorPos)
 					+ charAtCursor
@@ -254,21 +255,27 @@ export class ControlTextBox<TContext> extends ControlBase
 			if
 			(
 				this.charsMax == null
-				|| text.length < this.charsMax
+				|| textLength < this.charsMax
 			)
 			{
-				var textEdited =
-					text.substr(0, this.cursorPos)
-						+ actionNameToHandle
-						+ text.substr(this.cursorPos);
+				var characterTyped = actionNameToHandle;
+				var characterTypedIsAllowed =
+					this.characterSet.containsCharacter(characterTyped);
+				if (characterTypedIsAllowed)
+				{
+					var textEdited =
+						text.substr(0, this.cursorPos)
+							+ characterTyped
+							+ text.substr(this.cursorPos);
 
-				this.textSet(textEdited);
-				text = this.text();
+					this.textSet(textEdited);
+					text = this.text();
 
-				this.cursorPos = NumberHelper.wrapToRangeMinMax
-				(
-					this.cursorPos + 1, 0, text.length + 1
-				);
+					this.cursorPos = NumberHelper.wrapToRangeMinMax
+					(
+						this.cursorPos + 1, 0, textLength + 1
+					);
+				}
 			}
 		}
 

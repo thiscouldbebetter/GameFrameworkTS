@@ -115,6 +115,9 @@ var ThisCouldBeBetter;
             }
             integritySet(value) {
                 this.integrity = value;
+                if (this.integrity > 0) {
+                    this.dieHasBeenRun = false;
+                }
                 return this;
             }
             integritySetToMax() {

@@ -4,7 +4,8 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ControlBuilder {
-            constructor(styles, venueTransitionalFromTo) {
+            constructor(settings, styles, venueTransitionalFromTo) {
+                this.settings = settings || ControlBuilderSettings.default();
                 this.styles = styles || GameFramework.ControlStyle.Instances()._All;
                 this.venueTransitionalFromTo =
                     venueTransitionalFromTo || this.venueFaderFromTo;
@@ -19,13 +20,13 @@ var ThisCouldBeBetter;
                 this._scaleMultiplier = GameFramework.Coords.create();
             }
             static default() {
-                return new ControlBuilder(null, null);
+                return new ControlBuilder(null, null, null);
             }
             static fromStyle(style) {
                 return ControlBuilder.fromStyles([style]);
             }
             static fromStyles(styles) {
-                return new ControlBuilder(styles, null);
+                return new ControlBuilder(null, styles, null);
             }
             styleByName(styleName) {
                 return this.stylesByName.get(styleName);
@@ -294,7 +295,7 @@ var ThisCouldBeBetter;
                 universe.venueTransitionTo(venuePrev);
             }
             gameAndSettings_Settings(universe) {
-                var venueNext = universe.controlBuilder.settings(universe, null, universe.venueCurrent()).toVenue();
+                var venueNext = universe.controlBuilder.settingsForVideoSoundAndInput(universe, null, universe.venueCurrent()).toVenue();
                 universe.venueTransitionTo(venueNext);
             }
             gameAndSettings_TransitionToGameMenu(universe) {
@@ -426,6 +427,7 @@ var ThisCouldBeBetter;
                 return this.message(universe, size, message, acknowledge, null, null, null);
             }
             opening(universe, size) {
+                var buttonNextOmit = this.settings.titleScreensOmitButtons;
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
@@ -441,20 +443,20 @@ var ThisCouldBeBetter;
                 var imageOpening = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageOpening", this._zeroes.clone(), this.sizeBase.clone(), // size
                 GameFramework.DataBinding.fromContext(visual));
                 var goToVenueNext = () => this.opening_GoToVenueNext(universe, size);
-                var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
-                GameFramework.Coords.fromXY(50, fontHeight * 2), // size
-                "Next", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), goToVenueNext).hasBorderSet(false);
+                var children = [imageOpening];
+                if (buttonNextOmit == false) {
+                    var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
+                    GameFramework.Coords.fromXY(50, fontHeight * 2), // size
+                    "Next", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), goToVenueNext).hasBorderSet(false);
+                    children.push(buttonNext);
+                }
                 var actions = [
                     GameFramework.Action.fromNameAndPerform(controlActionNames.ControlCancel, goToVenueNext),
                     GameFramework.Action.fromNameAndPerform(controlActionNames.ControlConfirm, goToVenueNext)
                 ];
                 var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerOpening", this._zeroes, // pos
                 this.sizeBase.clone(), // size
-                // children
-                [
-                    imageOpening,
-                    buttonNext
-                ], actions);
+                children, actions);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
@@ -464,9 +466,10 @@ var ThisCouldBeBetter;
                 universe.venueTransitionTo(venueNext);
             }
             producer(universe, size) {
-                return this.producerWithImageAndSoundNames(universe, size, "Titles_Producer", "Effects_Producer");
+                var buttonNextOmit = this.settings.titleScreensOmitButtons;
+                return this.producerWithImageSoundNamesAndButtonNextOmit(universe, size, "Titles_Producer", "Effects_Producer", buttonNextOmit);
             }
-            producerWithImageAndSoundNames(universe, size, imageName, soundName) {
+            producerWithImageSoundNamesAndButtonNextOmit(universe, size, imageName, soundName, buttonNextOmit) {
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
@@ -480,21 +483,23 @@ var ThisCouldBeBetter;
                 var imageProducer = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageProducer", this._zeroes.clone(), this.sizeBase.clone(), // size
                 GameFramework.DataBinding.fromContext(visual));
                 var goToVenueNext = () => this.producer_GoToVenueNext(universe, size);
-                var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
-                GameFramework.Coords.fromXY(50, fontHeight * 2), // size
-                "Next", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), goToVenueNext // click
-                ).hasBorderSet(false);
                 var actions = [
                     GameFramework.Action.fromNameAndPerform(controlActionNames.ControlCancel, goToVenueNext),
                     GameFramework.Action.fromNameAndPerform(controlActionNames.ControlConfirm, goToVenueNext)
                 ];
+                var children = [
+                    imageProducer
+                ];
+                if (buttonNextOmit == false) {
+                    var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
+                    GameFramework.Coords.fromXY(50, fontHeight * 2), // size
+                    "Next", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), goToVenueNext // click
+                    ).hasBorderSet(false);
+                    children.push(buttonNext);
+                }
                 var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerProducer", this._zeroes, // pos
                 this.sizeBase.clone(), // size
-                // children
-                [
-                    imageProducer,
-                    buttonNext
-                ], actions);
+                children, actions);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
@@ -503,7 +508,7 @@ var ThisCouldBeBetter;
                 var venueTitle = this.title(universe, size).toVenue();
                 universe.venueTransitionTo(venueTitle);
             }
-            settings(universe, size, venuePrev) {
+            settingsForVideoSoundAndInput(universe, size, venuePrev) {
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
@@ -692,9 +697,11 @@ var ThisCouldBeBetter;
                 return visualsForSlides;
             }
             title(universe, size) {
-                return this.titleForUniverseSizeAndButtonStartShouldBeShown(universe, size, true);
+                var buttonStartOmit = this.settings.titleScreensOmitButtons;
+                var flowName = this.settings.titleScreenFlowName;
+                return this.titleForUniverseSizeButtonStartOmitAndFlow(universe, size, buttonStartOmit, flowName);
             }
-            titleForUniverseSizeAndButtonStartShouldBeShown(universe, size, buttonStartShouldBeShown) {
+            titleForUniverseSizeButtonStartOmitAndFlow(universe, size, buttonStartOmit, flowName) {
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
@@ -709,7 +716,7 @@ var ThisCouldBeBetter;
                 var controls = [
                     imageTitle
                 ];
-                if (buttonStartShouldBeShown) {
+                if (buttonStartOmit == false) {
                     var buttonStart = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
                     GameFramework.Coords.fromXY(50, fontHeight * 2), // size
                     "Start", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), () => this.title_Start(universe)).hasBorderSet(false);
@@ -720,8 +727,19 @@ var ThisCouldBeBetter;
                     GameFramework.Action.fromNameAndPerform(controlActionNames.ControlCancel, () => this.title_Start(universe)),
                     GameFramework.Action.fromNameAndPerform(controlActionNames.ControlConfirm, () => this.title_Start(universe))
                 ];
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerTitle", this._zeroes, this.sizeBase.clone(), controls, actions);
-                returnValue.scalePosAndSize(scaleMultiplier);
+                var titleContainer = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerTitle", this._zeroes, this.sizeBase.clone(), controls, actions);
+                titleContainer.scalePosAndSize(scaleMultiplier);
+                var returnValue;
+                if (flowName == null) {
+                    returnValue = titleContainer;
+                }
+                else if (flowName == ControlBuilderSettings.TitleScreenFlowNameArcadeGameAttractMode) {
+                    // todo
+                    returnValue = titleContainer;
+                }
+                else {
+                    throw new Error("Unrecognized flow name: " + flowName + ".");
+                }
                 return returnValue;
             }
             title_Start(universe) {
@@ -938,5 +956,24 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.ControlBuilder = ControlBuilder;
+        class ControlBuilderSettings {
+            constructor(titleScreenFlowName, titleScreensOmitButtons) {
+                this.titleScreenFlowName = titleScreenFlowName;
+                this.titleScreensOmitButtons = titleScreensOmitButtons || false;
+            }
+            static default() {
+                return new ControlBuilderSettings(null, null);
+            }
+            titleScreenFlowNameSet(value) {
+                this.titleScreenFlowName = value;
+                return this;
+            }
+            titleScreensOmitButtonsSet(value) {
+                this.titleScreensOmitButtons = value;
+                return this;
+            }
+        }
+        ControlBuilderSettings.TitleScreenFlowNameArcadeGameAttractMode = "ArcadeGameAttractMode";
+        GameFramework.ControlBuilderSettings = ControlBuilderSettings;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

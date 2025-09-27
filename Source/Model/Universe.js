@@ -86,7 +86,7 @@ var ThisCouldBeBetter;
                 if (this.debugSettings.localStorageClear()) {
                     // Useful when the structure of previously stored data changes.
                     this.storageHelper.deleteAll();
-                    alert("Local storage cleared!");
+                    console.log("Local storage cleared!");
                 }
                 this.display.initialize(this);
                 this.platformHelper.platformableAdd(this.display);

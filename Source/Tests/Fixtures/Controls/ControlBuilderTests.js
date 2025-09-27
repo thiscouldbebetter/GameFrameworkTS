@@ -107,7 +107,7 @@ class ControlBuilderTests extends TestFixture {
         Assert.isNotNull(controlOpening);
     }
     settings() {
-        var controlSettings = this._controlBuilder.settings(this._universe, null, // size
+        var controlSettings = this._controlBuilder.settingsForVideoSoundAndInput(this._universe, null, // size
         null);
         Assert.isNotNull(controlSettings);
     }

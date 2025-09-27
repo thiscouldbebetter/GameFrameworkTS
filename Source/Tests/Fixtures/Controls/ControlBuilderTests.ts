@@ -185,7 +185,7 @@ class ControlBuilderTests extends TestFixture
 
 	settings(): void // universe: Universe, size: Coords, venuePrev: Venue)
 	{
-		var controlSettings = this._controlBuilder.settings
+		var controlSettings = this._controlBuilder.settingsForVideoSoundAndInput
 		(
 			this._universe,
 			null, // size

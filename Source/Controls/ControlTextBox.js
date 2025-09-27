@@ -10,6 +10,8 @@ var ThisCouldBeBetter;
                 this._text = text;
                 this.charsMax = charsMax;
                 this._isEnabled = isEnabled;
+                this.characterSet =
+                    GameFramework.CharacterSet.Instances().LettersSpaceNumeralsPunctuation;
                 this.cursorPos = null;
                 // Helper variables.
                 this._drawPos = GameFramework.Coords.create();
@@ -32,6 +34,10 @@ var ThisCouldBeBetter;
                 var textAsBinding = GameFramework.DataBinding.fromContext(textImmediate);
                 return new ControlTextBox(name, pos, size, textAsBinding, null, null, null);
             }
+            characterSetSet(value) {
+                this.characterSet = value;
+                return this;
+            }
             charsMaxSet(value) {
                 this.charsMax = value;
                 return this;
@@ -47,13 +53,14 @@ var ThisCouldBeBetter;
             actionHandle(actionNameToHandle, universe) {
                 var wasActionHandled = true;
                 var text = this.text();
+                var textLength = text.length;
                 var controlActionNames = GameFramework.ControlActionNames.Instances();
                 if (actionNameToHandle == controlActionNames.ControlCancel
                     || actionNameToHandle == GameFramework.Input.Instances().Backspace.name) {
-                    if (text.length > 0) {
-                        text = text.substr(0, text.length - 1);
+                    if (textLength > 0) {
+                        text = text.substr(0, textLength - 1);
                         this.textSet(text);
-                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
+                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, textLength + 1);
                     }
                 }
                 else if (actionNameToHandle == controlActionNames.ControlPrev) {
@@ -61,19 +68,19 @@ var ThisCouldBeBetter;
                         wasActionHandled = false;
                     }
                     else {
-                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, text.length + 1);
+                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos - 1, 0, textLength + 1);
                     }
                 }
                 else if (actionNameToHandle == controlActionNames.ControlNext
                     || actionNameToHandle == controlActionNames.ControlConfirm) {
-                    if (this.cursorPos >= text.length) {
+                    if (this.cursorPos >= textLength) {
                         wasActionHandled = false;
                     }
-                    else if (text.length >= this.charsMax) {
+                    else if (textLength >= this.charsMax) {
                         wasActionHandled = false;
                     }
                     else {
-                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
+                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, textLength + 1);
                     }
                 }
                 else if (actionNameToHandle == controlActionNames.ControlIncrement
@@ -83,22 +90,19 @@ var ThisCouldBeBetter;
                         var direction = (actionNameToHandle == controlActionNames.ControlIncrement
                             ? -1
                             : 1);
-                        var charCodeAtCursor = (this.cursorPos < text.length
-                            ? text.charCodeAt(this.cursorPos)
-                            : "A".charCodeAt(0) - 1);
-                        if (charCodeAtCursor == "Z".charCodeAt(0)
-                            && direction == 1) {
-                            charCodeAtCursor = "a".charCodeAt(0);
-                        }
-                        else if (charCodeAtCursor == "a".charCodeAt(0)
-                            && direction == -1) {
-                            charCodeAtCursor = "Z".charCodeAt(0);
+                        var charSet = this.characterSet;
+                        var charAtCursor = text[this.cursorPos];
+                        if (charAtCursor == null) {
+                            charAtCursor =
+                                direction > 0
+                                    ? charSet.characterFirst()
+                                    : charSet.characterLast();
                         }
                         else {
-                            charCodeAtCursor = charCodeAtCursor + direction;
+                            var charAtCursorIndexWithinSet = charSet.indexOfCharacter(charAtCursor);
+                            charAtCursorIndexWithinSet = GameFramework.NumberHelper.wrapToRangeMinMax(charAtCursorIndexWithinSet + direction, 0, charSet.characterCount());
+                            charAtCursor = charSet.characterAtIndex(charAtCursorIndexWithinSet);
                         }
-                        charCodeAtCursor = GameFramework.NumberHelper.wrapToRangeMinMax(charCodeAtCursor, "A".charCodeAt(0), "z".charCodeAt(0) + 1);
-                        var charAtCursor = String.fromCharCode(charCodeAtCursor);
                         var textEdited = text.substr(0, this.cursorPos)
                             + charAtCursor
                             + text.substr(this.cursorPos + 1);
@@ -108,13 +112,17 @@ var ThisCouldBeBetter;
                 else if (actionNameToHandle.length == 1) {
                     // Printable character.
                     if (this.charsMax == null
-                        || text.length < this.charsMax) {
-                        var textEdited = text.substr(0, this.cursorPos)
-                            + actionNameToHandle
-                            + text.substr(this.cursorPos);
-                        this.textSet(textEdited);
-                        text = this.text();
-                        this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, text.length + 1);
+                        || textLength < this.charsMax) {
+                        var characterTyped = actionNameToHandle;
+                        var characterTypedIsAllowed = this.characterSet.containsCharacter(characterTyped);
+                        if (characterTypedIsAllowed) {
+                            var textEdited = text.substr(0, this.cursorPos)
+                                + characterTyped
+                                + text.substr(this.cursorPos);
+                            this.textSet(textEdited);
+                            text = this.text();
+                            this.cursorPos = GameFramework.NumberHelper.wrapToRangeMinMax(this.cursorPos + 1, 0, textLength + 1);
+                        }
                     }
                 }
                 return wasActionHandled;

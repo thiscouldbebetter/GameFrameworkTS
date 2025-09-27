@@ -1,5 +1,6 @@
 "use strict";
 // Controls.
+var CharacterSet = gf.CharacterSet;
 var ControlActionNames = gf.ControlActionNames;
 var ControlBase = gf.ControlBase;
 var ControlBuilder = gf.ControlBuilder;

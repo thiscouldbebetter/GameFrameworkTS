@@ -1,6 +1,7 @@
 "use strict";
 
 // Controls.
+import CharacterSet = gf.CharacterSet;
 import ControlActionNames = gf.ControlActionNames;
 import ControlBase = gf.ControlBase;
 import ControlBuilder = gf.ControlBuilder;

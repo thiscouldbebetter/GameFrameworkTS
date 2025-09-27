@@ -4,6 +4,7 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class ControlBuilder
 {
+	settings: ControlBuilderSettings;
 	styles: ControlStyle[];
 	venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue;
 
@@ -19,10 +20,12 @@ export class ControlBuilder
 
 	constructor
 	(
+		settings: ControlBuilderSettings,
 		styles: Array<ControlStyle>,
 		venueTransitionalFromTo: (vFrom: Venue, vTo: Venue) => Venue
 	)
 	{
+		this.settings = settings || ControlBuilderSettings.default();
 		this.styles = styles || ControlStyle.Instances()._All;
 		this.venueTransitionalFromTo =
 			venueTransitionalFromTo || this.venueFaderFromTo;
@@ -43,7 +46,7 @@ export class ControlBuilder
 
 	static default(): ControlBuilder
 	{
-		return new ControlBuilder(null, null);
+		return new ControlBuilder(null, null, null);
 	}
 
 	static fromStyle(style: ControlStyle): ControlBuilder
@@ -53,7 +56,7 @@ export class ControlBuilder
 
 	static fromStyles(styles: ControlStyle[]): ControlBuilder
 	{
-		return new ControlBuilder(styles, null);
+		return new ControlBuilder(null, styles, null);
 	}
 
 	styleByName(styleName: string): ControlStyle
@@ -717,7 +720,7 @@ export class ControlBuilder
 
 	gameAndSettings_Settings(universe: Universe): void
 	{
-		var venueNext = universe.controlBuilder.settings
+		var venueNext = universe.controlBuilder.settingsForVideoSoundAndInput
 		(
 			universe, null, universe.venueCurrent()
 		).toVenue();
@@ -1042,6 +1045,8 @@ export class ControlBuilder
 
 	opening(universe: Universe, size: Coords): ControlBase
 	{
+		var buttonNextOmit = this.settings.titleScreensOmitButtons;
+
 		if (size == null)
 		{
 			size = universe.display.sizeDefault();
@@ -1075,14 +1080,21 @@ export class ControlBuilder
 
 		var goToVenueNext = () => this.opening_GoToVenueNext(universe, size);
 
-		var buttonNext = ControlButton.fromPosSizeTextFontClick
-		(
-			Coords.fromXY(75, 120), // pos
-			Coords.fromXY(50, fontHeight * 2), // size
-			"Next",
-			FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
-			goToVenueNext
-		).hasBorderSet(false);
+		var children: ControlBase[] = [ imageOpening ];
+
+		if (buttonNextOmit == false)
+		{
+			var buttonNext = ControlButton.fromPosSizeTextFontClick
+			(
+				Coords.fromXY(75, 120), // pos
+				Coords.fromXY(50, fontHeight * 2), // size
+				"Next",
+				FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
+				goToVenueNext
+			).hasBorderSet(false);
+
+			children.push(buttonNext);
+		}
 
 		var actions =
 		[
@@ -1095,11 +1107,7 @@ export class ControlBuilder
 			"containerOpening",
 			this._zeroes, // pos
 			this.sizeBase.clone(), // size
-			// children
-			[
-				imageOpening,
-				buttonNext
-			],
+			children,
 			actions
 		);
 
@@ -1118,18 +1126,21 @@ export class ControlBuilder
 
 	producer(universe: Universe, size: Coords): ControlBase
 	{
-		return this.producerWithImageAndSoundNames
+		var buttonNextOmit = this.settings.titleScreensOmitButtons;
+
+		return this.producerWithImageSoundNamesAndButtonNextOmit
 		(
-			universe, size, "Titles_Producer", "Effects_Producer"
+			universe, size, "Titles_Producer", "Effects_Producer", buttonNextOmit
 		);
 	}
 
-	producerWithImageAndSoundNames
+	producerWithImageSoundNamesAndButtonNextOmit
 	(
 		universe: Universe,
 		size: Coords,
 		imageName: string,
-		soundName: string
+		soundName: string,
+		buttonNextOmit: boolean
 	): ControlBase
 	{
 		if (size == null)
@@ -1163,31 +1174,37 @@ export class ControlBuilder
 
 		var goToVenueNext = () => this.producer_GoToVenueNext(universe, size);
 
-		var buttonNext = ControlButton.fromPosSizeTextFontClick
-		(
-			Coords.fromXY(75, 120), // pos
-			Coords.fromXY(50, fontHeight * 2), // size
-			"Next",
-			FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
-			goToVenueNext // click
-		).hasBorderSet(false);
-
 		var actions = 
 		[
 			Action.fromNameAndPerform(controlActionNames.ControlCancel, goToVenueNext ),
 			Action.fromNameAndPerform(controlActionNames.ControlConfirm, goToVenueNext )
 		];
 
+		var children: ControlBase[] =
+		[
+			imageProducer
+		];
+
+		if (buttonNextOmit == false)
+		{
+			var buttonNext = ControlButton.fromPosSizeTextFontClick
+			(
+				Coords.fromXY(75, 120), // pos
+				Coords.fromXY(50, fontHeight * 2), // size
+				"Next",
+				FontNameAndHeight.fromHeightInPixels(fontHeight * 2),
+				goToVenueNext // click
+			).hasBorderSet(false);
+
+			children.push(buttonNext);
+		}
+
 		var returnValue = ControlContainer.fromNamePosSizeChildrenAndActions
 		(
 			"containerProducer",
 			this._zeroes, // pos
 			this.sizeBase.clone(), // size
-			// children
-			[
-				imageProducer,
-				buttonNext
-			],
+			children,
 			actions
 		);
 
@@ -1204,7 +1221,7 @@ export class ControlBuilder
 		universe.venueTransitionTo(venueTitle);
 	}
 
-	settings(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
+	settingsForVideoSoundAndInput(universe: Universe, size: Coords, venuePrev: Venue): ControlBase
 	{
 		if (size == null)
 		{
@@ -1657,15 +1674,21 @@ export class ControlBuilder
 
 	title(universe: Universe, size: Coords): ControlBase
 	{
-		return this.titleForUniverseSizeAndButtonStartShouldBeShown
+		var buttonStartOmit = this.settings.titleScreensOmitButtons;
+		var flowName = this.settings.titleScreenFlowName
+
+		return this.titleForUniverseSizeButtonStartOmitAndFlow
 		(
-			universe, size, true
+			universe, size, buttonStartOmit, flowName
 		);
 	}
 
-	titleForUniverseSizeAndButtonStartShouldBeShown
+	titleForUniverseSizeButtonStartOmitAndFlow
 	(
-		universe: Universe, size: Coords, buttonStartShouldBeShown: boolean
+		universe: Universe,
+		size: Coords,
+		buttonStartOmit: boolean,
+		flowName: string
 	): ControlBase
 	{
 		if (size == null)
@@ -1700,7 +1723,7 @@ export class ControlBuilder
 			imageTitle
 		];
 
-		if (buttonStartShouldBeShown)
+		if (buttonStartOmit == false)
 		{
 			var buttonStart = ControlButton.fromPosSizeTextFontClick
 			(
@@ -1729,7 +1752,7 @@ export class ControlBuilder
 			)
 		];
 
-		var returnValue = ControlContainer.fromNamePosSizeChildrenAndActions
+		var titleContainer = ControlContainer.fromNamePosSizeChildrenAndActions
 		(
 			"containerTitle",
 			this._zeroes,
@@ -1738,7 +1761,23 @@ export class ControlBuilder
 			actions
 		);
 
-		returnValue.scalePosAndSize(scaleMultiplier);
+		titleContainer.scalePosAndSize(scaleMultiplier);
+
+		var returnValue: ControlBase;
+
+		if (flowName == null)
+		{
+			returnValue = titleContainer;
+		}
+		else if (flowName == ControlBuilderSettings.TitleScreenFlowNameArcadeGameAttractMode)
+		{
+			// todo
+			returnValue = titleContainer;
+		}
+		else
+		{
+			throw new Error("Unrecognized flow name: " + flowName + ".");
+		}
 
 		return returnValue;
 	}
@@ -2218,6 +2257,41 @@ export class ControlBuilder
 		universe.venueTransitionTo(venueGame);
 	}
 
+}
+
+export class ControlBuilderSettings
+{
+	titleScreenFlowName: string;
+	titleScreensOmitButtons: boolean;
+
+	static TitleScreenFlowNameArcadeGameAttractMode: string = "ArcadeGameAttractMode";
+
+	constructor
+	(
+		titleScreenFlowName: string,
+		titleScreensOmitButtons: boolean
+	)
+	{
+		this.titleScreenFlowName = titleScreenFlowName;
+		this.titleScreensOmitButtons = titleScreensOmitButtons || false;
+	}
+
+	static default(): ControlBuilderSettings
+	{
+		return new ControlBuilderSettings(null, null);
+	}
+
+	titleScreenFlowNameSet(value: string): ControlBuilderSettings
+	{
+		this.titleScreenFlowName = value;
+		return this;
+	}
+
+	titleScreensOmitButtonsSet(value: boolean): ControlBuilderSettings
+	{
+		this.titleScreensOmitButtons = value;
+		return this;
+	}
 }
 
 }

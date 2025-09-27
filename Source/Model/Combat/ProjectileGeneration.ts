@@ -7,6 +7,7 @@ export class ProjectileGeneration
 	distanceInitial: number;
 	speed: number;
 	ticksToLive: number;
+	integrityMax: number;
 	collideOnlyWithEntitiesHavingPropertiesNamed: string[];
 	damage: Damage;
 	visual: Visual;
@@ -19,6 +20,7 @@ export class ProjectileGeneration
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
+		integrityMax: number,
 		collideOnlyWithEntitiesHavingPropertiesNamed: string[],
 		damage: Damage,
 		visual: Visual,
@@ -30,6 +32,7 @@ export class ProjectileGeneration
 		this.distanceInitial = distanceInitial || 3;
 		this.speed = speed || 4;
 		this.ticksToLive = ticksToLive || 20;
+		this.integrityMax = integrityMax || 1;
 		this.collideOnlyWithEntitiesHavingPropertiesNamed =
 			collideOnlyWithEntitiesHavingPropertiesNamed
 			|| [ Collidable.name ]; 
@@ -57,6 +60,7 @@ export class ProjectileGeneration
 			null, // distanceInitial
 			null, // speed
 			null, // ticksToLive
+			null, // integrityMax
 			null, // propertiesToCollideWithNames
 			null, // damage
 			null, // visual
@@ -67,12 +71,13 @@ export class ProjectileGeneration
 		return generation;
 	}
 
-	static fromRadiusDistanceSpeedTicksDamageVisualAndHit
+	static fromRadiusDistanceSpeedTicksIntegrityDamageVisualAndHit
 	(
 		radius: number,
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
+		integrityMax: number,
 		damage: Damage,
 		visual: Visual,
 		hit: (uwpe: UniverseWorldPlaceEntities) => void,
@@ -84,6 +89,7 @@ export class ProjectileGeneration
 			distanceInitial,
 			speed,
 			ticksToLive,
+			integrityMax,
 			null, // propertiesToCollideWithNames
 			damage,
 			visual,
@@ -92,12 +98,13 @@ export class ProjectileGeneration
 		);
 	}
 
-	static fromRadiusDistanceSpeedTicksDamageVisualAndInit
+	static fromRadiusDistanceSpeedTicksIntegrityDamageVisualAndInit
 	(
 		radius: number,
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
+		integrityMax: number,
 		damage: Damage,
 		visual: Visual,
 		projectileEntityInitialize: (entity: Entity) => void
@@ -109,6 +116,7 @@ export class ProjectileGeneration
 			distanceInitial,
 			speed,
 			ticksToLive,
+			integrityMax,
 			null, // propertiesToCollideWithNames
 			damage,
 			visual,
@@ -117,12 +125,13 @@ export class ProjectileGeneration
 		);
 	}
 
-	static fromRadiusDistanceSpeedTicksDamageVisualInitAndHit
+	static fromRadiusDistanceSpeedTicksIntegrityDamageVisualInitAndHit
 	(
 		radius: number,
 		distanceInitial: number,
 		speed: number,
 		ticksToLive: number,
+		integrityMax: number,
 		damage: Damage,
 		visual: Visual,
 		projectileEntityInitialize: (entity: Entity) => void,
@@ -135,6 +144,7 @@ export class ProjectileGeneration
 			distanceInitial,
 			speed,
 			ticksToLive,
+			integrityMax,
 			null, // propertiesToCollideWithNames
 			damage,
 			visual,
@@ -151,6 +161,7 @@ export class ProjectileGeneration
 			0, // distanceInitial,
 			0, // speed
 			1, // ticksToLive
+			1, // integrityMax
 			null, // propertiesToCollideWithNames
 			null, // damage
 			visual,
@@ -199,7 +210,7 @@ export class ProjectileGeneration
 			targetKillable.damageApply(uwpe, damageToApply);
 		}
 
-		projectileKillable.kill();
+		projectileKillable.integritySubtract(1);
 	}
 
 	projectileEntityInitialize(entity: Entity): void

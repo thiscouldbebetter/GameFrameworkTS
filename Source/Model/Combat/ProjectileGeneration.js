@@ -4,11 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ProjectileGeneration {
-            constructor(radius, distanceInitial, speed, ticksToLive, collideOnlyWithEntitiesHavingPropertiesNamed, damage, visual, projectileEntityInitialize, hit) {
+            constructor(radius, distanceInitial, speed, ticksToLive, integrityMax, collideOnlyWithEntitiesHavingPropertiesNamed, damage, visual, projectileEntityInitialize, hit) {
                 this.radius = radius || 2;
                 this.distanceInitial = distanceInitial || 3;
                 this.speed = speed || 4;
                 this.ticksToLive = ticksToLive || 20;
+                this.integrityMax = integrityMax || 1;
                 this.collideOnlyWithEntitiesHavingPropertiesNamed =
                     collideOnlyWithEntitiesHavingPropertiesNamed
                         || [GameFramework.Collidable.name];
@@ -28,6 +29,7 @@ var ThisCouldBeBetter;
                 null, // distanceInitial
                 null, // speed
                 null, // ticksToLive
+                null, // integrityMax
                 null, // propertiesToCollideWithNames
                 null, // damage
                 null, // visual
@@ -36,18 +38,18 @@ var ThisCouldBeBetter;
                 );
                 return generation;
             }
-            static fromRadiusDistanceSpeedTicksDamageVisualAndHit(radius, distanceInitial, speed, ticksToLive, damage, visual, hit) {
-                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, null, // propertiesToCollideWithNames
+            static fromRadiusDistanceSpeedTicksIntegrityDamageVisualAndHit(radius, distanceInitial, speed, ticksToLive, integrityMax, damage, visual, hit) {
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, integrityMax, null, // propertiesToCollideWithNames
                 damage, visual, null, // projectileEntityInitialize
                 hit);
             }
-            static fromRadiusDistanceSpeedTicksDamageVisualAndInit(radius, distanceInitial, speed, ticksToLive, damage, visual, projectileEntityInitialize) {
-                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, null, // propertiesToCollideWithNames
+            static fromRadiusDistanceSpeedTicksIntegrityDamageVisualAndInit(radius, distanceInitial, speed, ticksToLive, integrityMax, damage, visual, projectileEntityInitialize) {
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, integrityMax, null, // propertiesToCollideWithNames
                 damage, visual, projectileEntityInitialize, null // hit
                 );
             }
-            static fromRadiusDistanceSpeedTicksDamageVisualInitAndHit(radius, distanceInitial, speed, ticksToLive, damage, visual, projectileEntityInitialize, hit) {
-                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, null, // propertiesToCollideWithNames
+            static fromRadiusDistanceSpeedTicksIntegrityDamageVisualInitAndHit(radius, distanceInitial, speed, ticksToLive, integrityMax, damage, visual, projectileEntityInitialize, hit) {
+                return new ProjectileGeneration(radius, distanceInitial, speed, ticksToLive, integrityMax, null, // propertiesToCollideWithNames
                 damage, visual, projectileEntityInitialize, hit);
             }
             static fromVisual(visual) {
@@ -55,6 +57,7 @@ var ThisCouldBeBetter;
                 0, // distanceInitial,
                 0, // speed
                 1, // ticksToLive
+                1, // integrityMax
                 null, // propertiesToCollideWithNames
                 null, // damage
                 visual, null, // projectileEntityInitialize
@@ -87,7 +90,7 @@ var ThisCouldBeBetter;
                     var damageToApply = projectileDamager.damagePerHit;
                     targetKillable.damageApply(uwpe, damageToApply);
                 }
-                projectileKillable.kill();
+                projectileKillable.integritySubtract(1);
             }
             projectileEntityInitialize(entity) {
                 if (this._projectileEntityInitialize != null) {

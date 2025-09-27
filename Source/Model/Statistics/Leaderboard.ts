@@ -138,7 +138,7 @@ export class Leaderboard
 				(c: LeaderboardPlayerScore) => c.playerInitials,
 				(c: LeaderboardPlayerScore, v: string) => c.playerInitials = v
 			)
-		).charsMaxSet(3);
+		).charsMaxSet(3).characterSetSet(CharacterSet.Instances().LettersUppercase);
 
 		textBoxInitials.fontHeightInPixelsSet(fontNameAndHeight.heightInPixels * 2);
 
