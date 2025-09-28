@@ -40,12 +40,14 @@ var ThisCouldBeBetter;
             draw(universe, display, drawLoc, style) {
                 // Obviously, this isn't really drawing anything.
                 if (this.hasElapsed == false) {
-                    var now = new Date();
-                    var millisecondsSinceStarted = now.getTime() - this.timeStarted.getTime();
-                    var secondsSinceStarted = Math.floor(millisecondsSinceStarted / 1000);
-                    if (secondsSinceStarted >= this.secondsToWait) {
-                        this.hasElapsed = true;
-                        this.elapsed(universe);
+                    if (this.timeStarted != null) {
+                        var now = new Date();
+                        var millisecondsSinceStarted = now.getTime() - this.timeStarted.getTime();
+                        var secondsSinceStarted = Math.floor(millisecondsSinceStarted / 1000);
+                        if (secondsSinceStarted >= this.secondsToWait) {
+                            this.hasElapsed = true;
+                            this.elapsed(universe);
+                        }
                     }
                 }
             }

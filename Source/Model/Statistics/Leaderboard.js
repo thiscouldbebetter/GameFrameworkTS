@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                     ps("III", 200),
                     ps("JJJ", 100)
                 ];
-                return new Leaderboard(30, playerScoresFake.length, playerScoresFake);
+                return new Leaderboard(null, playerScoresFake.length, playerScoresFake);
             }
             static fromStorageHelper(storageHelper) {
                 var leaderboard = storageHelper.load(Leaderboard.name);
@@ -36,6 +36,10 @@ var ThisCouldBeBetter;
                     storageHelper.save(Leaderboard.name, leaderboard);
                 }
                 return leaderboard;
+            }
+            secondsToShowSet(value) {
+                this.secondsToShow = value;
+                return this;
             }
             scoreBeingEnteredSet(value) {
                 for (var i = 0; i < this.playerScores.length; i++) {
@@ -96,7 +100,7 @@ var ThisCouldBeBetter;
             toControl_ScoresAllShow(uwpe) {
                 var textLines = [];
                 textLines.push("High Scores");
-                textLines.push("-----------");
+                textLines.push(" ");
                 var playerScoresAsTextLines = [];
                 for (var i = 0; i < this.playerScores.length; i++) {
                     var playerScore = this.playerScores[i];
@@ -115,7 +119,8 @@ var ThisCouldBeBetter;
                 return controlLeaderboard;
             }
             toControl_ScoresAllShow_Finished(universe) {
-                universe.venueTransitionTo(universe.controlBuilder.title(universe, universe.display.sizeInPixels).toVenue());
+                var venueNext = universe.controlBuilder.titleAsVenue(universe, universe.display.sizeInPixels);
+                universe.venueTransitionTo(venueNext);
             }
             toVenue(uwpe) {
                 var thisAsControl = this.toControl(uwpe);

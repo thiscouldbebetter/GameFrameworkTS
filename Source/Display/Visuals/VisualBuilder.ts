@@ -1334,6 +1334,69 @@ export class VisualBuilder
 		return visual;
 	}
 
+	static imagesWithText
+	(
+		universe: Universe,
+		size: Coords,
+		imageNamesAndMessagesForSlides: string[][]
+	): Visual[]
+	{
+		var controlBuilder = universe.controlBuilder;
+
+		var visualsForSlides: Visual[] = [];
+
+		var scaleMultiplier =
+			controlBuilder._scaleMultiplier
+				.overwriteWith(size)
+				.divide(controlBuilder.sizeBase);
+
+		for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++)
+		{
+ 			var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
+			var imageName = imageNameAndMessage[0];
+			var message = imageNameAndMessage[1];
+
+			var visualImage = VisualImageFromLibrary.fromImageName(imageName);
+
+			var sizeToDrawScaled =
+				controlBuilder.sizeBase.clone().multiply(scaleMultiplier);
+
+			var visualImageScaled = VisualImageScaled.fromSizeAndChild
+			(
+				sizeToDrawScaled,
+				visualImage
+			) as Visual;
+
+			var colors = Color.Instances();
+
+			var visualText = VisualText.fromTextImmediateFontAndColorsFillAndBorder
+			(
+				message,
+				controlBuilder.fontBase,
+				colors.Black,
+				colors.White
+			);
+
+			var textPos = Coords.fromXY(0, controlBuilder.fontHeightInPixelsBase);
+
+			var visualTextOffset = VisualOffset.fromOffsetAndChild
+			(
+				textPos,
+				visualText
+			);
+
+			var visualImagePlusText: Visual = VisualGroup.fromChildren
+			([
+				visualImageScaled,
+				visualTextOffset
+			]);
+
+			visualsForSlides.push(visualImagePlusText);
+		}
+
+		return visualsForSlides;
+	}
+
 	rhombusOfColor(color: Color): Visual
 	{
 		var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);

@@ -49,7 +49,7 @@ export class Leaderboard
 			ps("JJJ", 100)
 		];
 
-		return new Leaderboard(30, playerScoresFake.length, playerScoresFake);
+		return new Leaderboard(null, playerScoresFake.length, playerScoresFake);
 	}
 
 	static fromStorageHelper(storageHelper: StorageHelper): Leaderboard
@@ -63,6 +63,12 @@ export class Leaderboard
 		}
 
 		return leaderboard;
+	}
+
+	secondsToShowSet(value: number): Leaderboard
+	{
+		this.secondsToShow = value;
+		return this;
 	}
 
 	scoreBeingEnteredSet(value: number): void
@@ -166,7 +172,7 @@ export class Leaderboard
 		var textLines = [];
 
 		textLines.push("High Scores");
-		textLines.push("-----------");
+		textLines.push(" ");
 
 		var playerScoresAsTextLines: string[] = [];
 
@@ -203,13 +209,11 @@ export class Leaderboard
 
 	toControl_ScoresAllShow_Finished(universe: Universe): void
 	{
-		universe.venueTransitionTo
+		var venueNext = universe.controlBuilder.titleAsVenue
 		(
-			universe.controlBuilder.title
-			(
-				universe, universe.display.sizeInPixels,
-			).toVenue()
+			universe, universe.display.sizeInPixels,
 		);
+		universe.venueTransitionTo(venueNext);
 	}
 
 	toVenue(uwpe: UniverseWorldPlaceEntities): Venue

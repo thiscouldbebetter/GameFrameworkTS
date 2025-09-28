@@ -4,7 +4,7 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class EntityGenerator extends GameFramework.EntityPropertyBase {
-            constructor(name, entityToGenerate, ticksPerGenerationAsRange, entitiesPerGenerationAsRange, entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox, entitySpeedAsRange) {
+            constructor(name, entityToGenerate, ticksPerGenerationAsRange, entitiesPerGenerationAsRange, entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox, entitySpeedAsRange, windDown) {
                 super();
                 this.name = name;
                 this.entityToGenerate = entityToGenerate;
@@ -20,12 +20,16 @@ var ThisCouldBeBetter;
                     entityPositionRangeAsBox;
                 this.entitySpeedAsRange =
                     entitySpeedAsRange || GameFramework.RangeExtent.fromNumber(0);
+                this._windDown = windDown;
                 this.entitiesGeneratedAllTimeCount = 0;
                 this.entitiesGeneratedActive = new Array();
                 this.ticksUntilNextGeneration = null;
+                this.windDownHasBeenRun = false;
             }
             static fromNameEntityTicksBatchMaxesAndPosBox(name, entityToGenerate, ticksPerGeneration, entitiesPerGeneration, entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox) {
-                return new EntityGenerator(name, entityToGenerate, GameFramework.RangeExtent.fromNumber(ticksPerGeneration), GameFramework.RangeExtent.fromNumber(entitiesPerGeneration), entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox, null);
+                return new EntityGenerator(name, entityToGenerate, GameFramework.RangeExtent.fromNumber(ticksPerGeneration), GameFramework.RangeExtent.fromNumber(entitiesPerGeneration), entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox, null, // entitySpeedAsRange
+                null // windDown
+                );
             }
             static of(entity) {
                 return entity.propertyByName(EntityGenerator.name);
@@ -44,9 +48,25 @@ var ThisCouldBeBetter;
             toEntity() {
                 return GameFramework.Entity.fromNameAndProperties(this.name, [this]);
             }
+            windDown(uwpe) {
+                if (this._windDown != null) {
+                    this._windDown.call(this, uwpe);
+                }
+                this.windDownHasBeenRun = true;
+            }
+            windDownSet(value) {
+                this._windDown = value;
+                return this;
+            }
             // EntityProperty.
             updateForTimerTick(uwpe) {
-                if (this.inactivated() || this.exhausted()) {
+                if (this.inactivated()) {
+                    return;
+                }
+                if (this.exhausted()) {
+                    if (this.windDownHasBeenRun == false) {
+                        this.windDown(uwpe);
+                    }
                     return;
                 }
                 var place = uwpe.place;
@@ -102,7 +122,7 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new EntityGenerator(this.name, this.entityToGenerate, this.ticksPerGenerationAsRange.clone(), this.entitiesPerGenerationAsRange.clone(), this.entitiesToGenerateMaxConcurrent, this.entitiesToGenerateMaxAllTime, this.entityPositionRangeAsBox == null ? null : this.entityPositionRangeAsBox.clone(), this.entitySpeedAsRange.clone());
+                return new EntityGenerator(this.name, this.entityToGenerate, this.ticksPerGenerationAsRange.clone(), this.entitiesPerGenerationAsRange.clone(), this.entitiesToGenerateMaxConcurrent, this.entitiesToGenerateMaxAllTime, this.entityPositionRangeAsBox == null ? null : this.entityPositionRangeAsBox.clone(), this.entitySpeedAsRange.clone(), this._windDown);
             }
             overwriteWith(other) {
                 this.entityToGenerate =

@@ -50,7 +50,7 @@ export class MapOfCells<TCell extends Clonable<TCell>>
 	static default(): MapOfCells<MapCellGeneric<string>>
 	{
 		var cells = new Array<MapCellGeneric<string>>();
-		var cellCreate = () => new MapCellGeneric<string>("todo");
+		var cellCreate = () => new MapCellGeneric<string>("todo - MapCellGeneric");
 
 		var cellSource = new MapOfCellsCellSourceArray
 		(

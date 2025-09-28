@@ -157,7 +157,7 @@ export class CollisionTrackerBruteForce extends CollisionTrackerBase
 
 	reset(): void
 	{
-		throw new Error("todo");
+		throw new Error("todo - reset");
 	}
 
 	toEntity(): Entity

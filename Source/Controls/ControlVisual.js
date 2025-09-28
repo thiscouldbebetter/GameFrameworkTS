@@ -19,6 +19,23 @@ var ThisCouldBeBetter;
                 this._entityPosToRestore = GameFramework.Coords.create();
                 this._sizeHalf = GameFramework.Coords.create();
             }
+            static manyFromVisuals(universe, visualsForSlides) {
+                // This was originally taken from what became VenueCarousel,
+                // so the returned controls are actually containers
+                // to which text is expected to be added as well.
+                var controlsForSlideImagesAndTexts = [];
+                var sizeBase = universe.controlBuilder.sizeBase;
+                var zeroes = GameFramework.Coords.Instances().Zeroes;
+                for (var i = 0; i < visualsForSlides.length; i++) {
+                    var visualForSlide = visualsForSlides[i];
+                    var controlVisualForSlideImage = ControlVisual.fromNamePosSizeAndVisual("imageSlide", zeroes, sizeBase.clone(), GameFramework.DataBinding.fromContext(visualForSlide));
+                    var containerForSlideImageAndText = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerForSlideImageAndText", zeroes, sizeBase.clone(), [
+                        controlVisualForSlideImage
+                    ]);
+                    controlsForSlideImagesAndTexts.push(containerForSlideImageAndText);
+                }
+                return controlsForSlideImagesAndTexts;
+            }
             static fromNamePosSizeAndVisual(name, pos, size, visual) {
                 return new ControlVisual(name, pos, size, visual, null, null);
             }

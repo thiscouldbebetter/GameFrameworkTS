@@ -87,15 +87,18 @@ export class ControlTimer extends ControlBase
 
 		if (this.hasElapsed == false)
 		{
-			var now = new Date();
-			var millisecondsSinceStarted =
-				now.getTime() - this.timeStarted.getTime();
-			var secondsSinceStarted =
-				Math.floor(millisecondsSinceStarted / 1000);
-			if (secondsSinceStarted >= this.secondsToWait)
+			if (this.timeStarted != null)
 			{
-				this.hasElapsed = true;
-				this.elapsed(universe);
+				var now = new Date();
+				var millisecondsSinceStarted =
+					now.getTime() - this.timeStarted.getTime();
+				var secondsSinceStarted =
+					Math.floor(millisecondsSinceStarted / 1000);
+				if (secondsSinceStarted >= this.secondsToWait)
+				{
+					this.hasElapsed = true;
+					this.elapsed(universe);
+				}
 			}
 		}
 	}

@@ -12,10 +12,12 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 	entitiesToGenerateMaxAllTime: number;
 	entitySpeedAsRange: RangeExtent;
 	entityPositionRangeAsBox: BoxAxisAligned;
+	_windDown: (uwpe: UniverseWorldPlaceEntities) => void;
 
 	entitiesGeneratedAllTimeCount: number;
 	entitiesGeneratedActive: Entity[];
-	ticksUntilNextGeneration: number
+	ticksUntilNextGeneration: number;
+	windDownHasBeenRun: boolean;
 
 	constructor
 	(
@@ -26,7 +28,8 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 		entitiesToGenerateMaxConcurrent: number,
 		entitiesToGenerateMaxAllTime: number,
 		entityPositionRangeAsBox: BoxAxisAligned,
-		entitySpeedAsRange: RangeExtent
+		entitySpeedAsRange: RangeExtent,
+		windDown: (uwpe: UniverseWorldPlaceEntities) => void
 	)
 	{
 		super();
@@ -45,10 +48,12 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 			entityPositionRangeAsBox;
 		this.entitySpeedAsRange =
 			entitySpeedAsRange || RangeExtent.fromNumber(0);
+		this._windDown = windDown;
 
 		this.entitiesGeneratedAllTimeCount = 0;
 		this.entitiesGeneratedActive = new Array<Entity>();
 		this.ticksUntilNextGeneration = null;
+		this.windDownHasBeenRun = false;
 	}
 
 	static fromNameEntityTicksBatchMaxesAndPosBox
@@ -59,7 +64,7 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 		entitiesPerGeneration: number,
 		entitiesToGenerateMaxConcurrent: number,
 		entitiesToGenerateMaxAllTime: number,
-		entityPositionRangeAsBox: BoxAxisAligned 
+		entityPositionRangeAsBox: BoxAxisAligned
 	): EntityGenerator
 	{
 		return new EntityGenerator
@@ -71,7 +76,8 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 			entitiesToGenerateMaxConcurrent,
 			entitiesToGenerateMaxAllTime,
 			entityPositionRangeAsBox,
-			null
+			null, // entitySpeedAsRange
+			null // windDown
 		);
 	}
 
@@ -104,12 +110,37 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 		return Entity.fromNameAndProperties(this.name, [ this ] );
 	}
 
+	windDown(uwpe: UniverseWorldPlaceEntities): void
+	{
+		if (this._windDown != null)
+		{
+			this._windDown.call(this, uwpe);
+		}
+
+		this.windDownHasBeenRun = true;
+	}
+
+	windDownSet(value: (uwpe: UniverseWorldPlaceEntities) => void): EntityGenerator
+	{
+		this._windDown = value;
+		return this;
+	}
+
 	// EntityProperty.
 
 	updateForTimerTick(uwpe: UniverseWorldPlaceEntities): void
 	{
-		if (this.inactivated() || this.exhausted() )
+		if (this.inactivated() )
 		{
+			return;
+		}
+
+		if (this.exhausted() )
+		{
+			if (this.windDownHasBeenRun == false)
+			{
+				this.windDown(uwpe);
+			}
 			return;
 		}
 
@@ -214,7 +245,8 @@ export class EntityGenerator extends EntityPropertyBase<EntityGenerator>
 			this.entitiesToGenerateMaxConcurrent,
 			this.entitiesToGenerateMaxAllTime,
 			this.entityPositionRangeAsBox == null ? null : this.entityPositionRangeAsBox.clone(),
-			this.entitySpeedAsRange.clone()
+			this.entitySpeedAsRange.clone(),
+			this._windDown
 		);
 	}
 

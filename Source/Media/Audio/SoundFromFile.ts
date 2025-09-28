@@ -35,7 +35,7 @@ export class SoundFromFile implements Sound
 	{
 		return this;
 	}
-	unload(uwpe: UniverseWorldPlaceEntities): Loadable { throw new Error("todo") }
+	unload(uwpe: UniverseWorldPlaceEntities): Loadable { throw new Error("todo - SoundFromFile.unload()") }
 }
 
 }

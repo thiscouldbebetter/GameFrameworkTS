@@ -75,7 +75,7 @@ var ThisCouldBeBetter;
                 // Do nothing.
             }
             reset() {
-                throw new Error("todo");
+                throw new Error("todo - reset");
             }
             toEntity() {
                 return new GameFramework.Entity(CollisionTrackerBase.name, [this]);

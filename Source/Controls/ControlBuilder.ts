@@ -585,7 +585,7 @@ export class ControlBuilder
 	{
 		universe.reset();
 		var venueNext =
-			universe.controlBuilder.title(universe, null).toVenue();
+			universe.controlBuilder.titleAsVenue(universe, null);
 		universe.venueTransitionTo(venueNext);
 	}
 
@@ -1217,7 +1217,7 @@ export class ControlBuilder
 	{
 		universe.soundHelper.soundPlaybacksAllStop(universe);
 
-		var venueTitle = this.title(universe, size).toVenue();
+		var venueTitle = this.titleAsVenue(universe, size);
 		universe.venueTransitionTo(venueTitle);
 	}
 
@@ -1383,32 +1383,37 @@ export class ControlBuilder
 			back // click
 		);
 
+		var children = 
+		[
+			labelMusic,
+			selectMusicVolume,
+			labelSound,
+			selectSoundVolume,
+			labelDisplay,
+			selectDisplaySize,
+			buttonChange,
+			buttonInputs,
+			buttonDone
+		];
+
+		var actions = [ Action.fromNameAndPerform("Back", back) ];
+
+		var mappings =
+		[
+			ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce
+			(
+				"Back", Input.Instances().Escape.name, true
+			)
+		];
+
 		var returnValue = ControlContainer.fromNamePosSizeChildrenActionsAndMappings
 		(
 			"containerSettings",
 			this._zeroes, // pos
 			this.sizeBase.clone(),
-			// children
-			[
-				labelMusic,
-				selectMusicVolume,
-				labelSound,
-				selectSoundVolume,
-				labelDisplay,
-				selectDisplaySize,
-				buttonChange,
-				buttonInputs,
-				buttonDone
-			],
-
-			[ Action.fromNameAndPerform("Back", back) ],
-
-			[
-				ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce
-				(
-					"Back", Input.Instances().Escape.name, true
-				)
-			]
+			children,
+			actions,
+			mappings
 		);
 
 		returnValue.scalePosAndSize(scaleMultiplier);
@@ -1437,258 +1442,64 @@ export class ControlBuilder
 		platformHelper.initialize(universe);
 	}
 
-	slideshowFromImageNamesAndMessagePairs
-	(
-		universe: Universe,
-		size: Coords,
-		secondsPerSlide: number,
-		venueAfterSlideshow: Venue,
-		imageNamesAndMessagePairsForSlides: string[][]
-	): ControlBase
+	titleAsControl(universe: Universe, size: Coords): ControlBase
 	{
-		if (size == null)
-		{
-			size = universe.display.sizeDefault();
-		}
+		var buttonStartOmit = this.settings.titleScreensOmitButtons;
 
-		var visualsForSlides =
-			this.slideshow_VisualsForSlides(size, imageNamesAndMessagePairsForSlides);
-
-		var slideshow = this.slideshowFromVisuals
+		var titleAsContainer = this.titleForUniverseSizeButtonStartOmit
 		(
-			universe,
-			size,
-			secondsPerSlide,
-			venueAfterSlideshow,
-			visualsForSlides
+			universe, size, buttonStartOmit
 		);
 
-		return slideshow;
+		return titleAsContainer;
 	}
 
-
-	slideshowFromVisuals
-	(
-		universe: Universe,
-		size: Coords,
-		secondsPerSlide: number,
-		venueAfterSlideshow: Venue,
-		visualsForSlides: Visual[]
-	): ControlBase
+	titleAsVenue(universe: Universe, size: Coords): Venue
 	{
-		if (size == null)
+		var titleAsControl = this.titleAsControl(universe, size);
+
+		var titleProperAsVenue = titleAsControl.toVenue();
+
+		var titleScreenFlowName = this.settings.titleScreenFlowName;
+
+		var returnVenue: Venue;
+
+		if (titleScreenFlowName == null)
 		{
-			size = universe.display.sizeDefault();
+			returnVenue = titleProperAsVenue;
 		}
-
-		var scaleMultiplier =
-			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
-
-		var controlsForSlides: ControlBase[] = [];
-
-		var skipToEndOfSlideshow = () =>
+		else if (titleScreenFlowName == ControlBuilderSettings.TitleScreenFlowNameArcadeGameAttractMode)
 		{
-			universe.venueTransitionTo(venueAfterSlideshow);
-		};
+			var storageHelper = universe.storageHelper;
+			var leaderboard = Leaderboard.fromStorageHelper(storageHelper);
+			var uwpe = UniverseWorldPlaceEntities.fromUniverse(universe);
+			var leaderboardAsVenue = leaderboard.toVenue(uwpe);
 
-		var controlsForSlideImagesAndTexts =
-			this.slideshow_ControlsForSlideImagesAndTexts(visualsForSlides);
+			var controlBuilder = this;
 
-		var controlBuilder = this;
-
-		for (var i = 0; i < controlsForSlideImagesAndTexts.length; i++)
-		{
-			var controlForSlideImageAndText =
-				controlsForSlideImagesAndTexts[i];
-
-			var advanceToSlideNext =
-				() =>
-					controlBuilder.slideshow_NextDefn // Does this work?  Check history if not.
-					(
-						universe, controlsForSlides, i + 1, venueAfterSlideshow
-					);
-
-			var buttonNext = ControlButton.fromPosSizeTextFontClick
+			returnVenue = VenueCarousel.fromSecondsVenuesForSlidesAndDoneLooping
 			(
-				Coords.fromXY(75, 120), // pos
-				Coords.fromXY(50, 40), // size
-				"Next",
-				this.fontBase,
-				advanceToSlideNext
+				8,
+				[
+					titleProperAsVenue,
+					leaderboardAsVenue
+				],
+				(u: Universe) => controlBuilder.title_Start(u)
 			);
-
-			var controlActionNames = ControlActionNames.Instances();
-			var actions =
-			[
-				Action.fromNameAndPerform(controlActionNames.ControlCancel, skipToEndOfSlideshow),
-				Action.fromNameAndPerform(controlActionNames.ControlConfirm, advanceToSlideNext)
-			];
-
-			var containerSlide =
-				ControlContainer.fromNamePosSizeChildrenAndActions
-				(
-					"containerSlide_" + i,
-					this._zeroes,
-					this.sizeBase.clone(),
-					[
-						controlForSlideImageAndText,
-						buttonNext
-					],
-					actions
-				);
-
-			if (secondsPerSlide != null)
-			{
-				var controlTimer = ControlTimer.fromNameSecondsToWaitAndElapsed
-				(
-					"Advance to Next Slide Automatically",
-					secondsPerSlide,
-					advanceToSlideNext
-				);
-
-				containerSlide.childAdd(controlTimer)
-			}
-
-			containerSlide.scalePosAndSize(scaleMultiplier);
-
-			controlsForSlides.push(containerSlide);
-		}
-
-		return controlsForSlides[0];
-	}
-
-	slideshow_ControlsForSlideImagesAndTexts
-	(
-		visualsForSlides: Visual[]
-	): ControlBase[]
-	{
-		var controlsForSlideImagesAndTexts: ControlBase[] = [];
-
-		for (var i = 0; i < visualsForSlides.length; i++)
-		{
-			var visualForSlide = visualsForSlides[i];
-
-			var controlVisualForSlideImage = ControlVisual.fromNamePosSizeAndVisual
-			(
-				"imageSlide",
-				this._zeroes,
-				this.sizeBase.clone(),
-				DataBinding.fromContext(visualForSlide)
-			);
-
-			var containerForSlideImageAndText =
-				ControlContainer.fromNamePosSizeAndChildren
-				(
-					"containerForSlideImageAndText",
-					this._zeroes,
-					this.sizeBase.clone(),
-					[
-						controlVisualForSlideImage
-					]
-				);
-
-			controlsForSlideImagesAndTexts.push(containerForSlideImageAndText);
-		}
-
-		return controlsForSlideImagesAndTexts;
-	}
-
-	slideshow_NextDefn
-	(
-		universe: Universe,
-		controlsForSlides: ControlBase[],
-		slideIndexNext: number,
-		venueAfterSlideshow: Venue
-	): void
-	{
-		var venueNext;
-		if (slideIndexNext < controlsForSlides.length)
-		{
-			var controlForSlideNext = controlsForSlides[slideIndexNext];
-			venueNext = controlForSlideNext.toVenue();
 		}
 		else
 		{
-			venueNext = venueAfterSlideshow;
-		}
-		universe.venueTransitionTo(venueNext);
-	}
-
-	slideshow_VisualsForSlides
-	(
-		size: Coords,
-		imageNamesAndMessagesForSlides: string[][]
-	): Visual[]
-	{
-		var visualsForSlides: Visual[] = [];
-
-		var scaleMultiplier =
-			this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
-
-		for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++)
-		{
- 			var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
-			var imageName = imageNameAndMessage[0];
-			var message = imageNameAndMessage[1];
-
-			var visualImage = VisualImageFromLibrary.fromImageName(imageName);
-
-			var sizeToDrawScaled =
-				this.sizeBase.clone().multiply(scaleMultiplier);
-
-			var visualImageScaled = VisualImageScaled.fromSizeAndChild
-			(
-				sizeToDrawScaled,
-				visualImage
-			) as Visual;
-
-			var colors = Color.Instances();
-
-			var visualText = VisualText.fromTextImmediateFontAndColorsFillAndBorder
-			(
-				message,
-				this.fontBase,
-				colors.Black,
-				colors.White
-			);
-
-			var textPos = Coords.fromXY(0, this.fontHeightInPixelsBase);
-
-			var visualTextOffset = VisualOffset.fromOffsetAndChild
-			(
-				textPos,
-				visualText
-			);
-
-			var visualImagePlusText: Visual = VisualGroup.fromChildren
-			([
-				visualImageScaled,
-				visualTextOffset
-			]);
-
-			visualsForSlides.push(visualImagePlusText);
+			throw new Error("Unrecognized flow name: " + titleScreenFlowName + ".");
 		}
 
-		return visualsForSlides;
+		return returnVenue;
 	}
 
-	title(universe: Universe, size: Coords): ControlBase
-	{
-		var buttonStartOmit = this.settings.titleScreensOmitButtons;
-		var flowName = this.settings.titleScreenFlowName
-
-		return this.titleForUniverseSizeButtonStartOmitAndFlow
-		(
-			universe, size, buttonStartOmit, flowName
-		);
-	}
-
-	titleForUniverseSizeButtonStartOmitAndFlow
+	titleForUniverseSizeButtonStartOmit
 	(
 		universe: Universe,
 		size: Coords,
-		buttonStartOmit: boolean,
-		flowName: string
+		buttonStartOmit: boolean
 	): ControlBase
 	{
 		if (size == null)
@@ -1763,21 +1574,7 @@ export class ControlBuilder
 
 		titleContainer.scalePosAndSize(scaleMultiplier);
 
-		var returnValue: ControlBase;
-
-		if (flowName == null)
-		{
-			returnValue = titleContainer;
-		}
-		else if (flowName == ControlBuilderSettings.TitleScreenFlowNameArcadeGameAttractMode)
-		{
-			// todo
-			returnValue = titleContainer;
-		}
-		else
-		{
-			throw new Error("Unrecognized flow name: " + flowName + ".");
-		}
+		var returnValue: ControlBase = titleContainer;
 
 		return returnValue;
 	}

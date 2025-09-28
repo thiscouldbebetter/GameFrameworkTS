@@ -18,7 +18,7 @@ var ThisCouldBeBetter;
             load(uwpe, callback) {
                 return this;
             }
-            unload(uwpe) { throw new Error("todo"); }
+            unload(uwpe) { throw new Error("todo - SoundFromFile.unload()"); }
         }
         GameFramework.SoundFromFile = SoundFromFile;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

@@ -240,7 +240,7 @@ var ThisCouldBeBetter;
             ;
             game_Quit_Confirm(universe) {
                 universe.reset();
-                var venueNext = universe.controlBuilder.title(universe, null).toVenue();
+                var venueNext = universe.controlBuilder.titleAsVenue(universe, null);
                 universe.venueTransitionTo(venueNext);
             }
             game_Save(universe, size) {
@@ -505,7 +505,7 @@ var ThisCouldBeBetter;
             }
             producer_GoToVenueNext(universe, size) {
                 universe.soundHelper.soundPlaybacksAllStop(universe);
-                var venueTitle = this.title(universe, size).toVenue();
+                var venueTitle = this.titleAsVenue(universe, size);
                 universe.venueTransitionTo(venueTitle);
             }
             settingsForVideoSoundAndInput(universe, size, venuePrev) {
@@ -573,10 +573,7 @@ var ThisCouldBeBetter;
                 GameFramework.Coords.fromXY(65, buttonHeight), // size
                 "Done", font, back // click
                 );
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("containerSettings", this._zeroes, // pos
-                this.sizeBase.clone(), 
-                // children
-                [
+                var children = [
                     labelMusic,
                     selectMusicVolume,
                     labelSound,
@@ -586,9 +583,13 @@ var ThisCouldBeBetter;
                     buttonChange,
                     buttonInputs,
                     buttonDone
-                ], [GameFramework.Action.fromNameAndPerform("Back", back)], [
+                ];
+                var actions = [GameFramework.Action.fromNameAndPerform("Back", back)];
+                var mappings = [
                     GameFramework.ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce("Back", GameFramework.Input.Instances().Escape.name, true)
-                ]);
+                ];
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("containerSettings", this._zeroes, // pos
+                this.sizeBase.clone(), children, actions, mappings);
                 returnValue.scalePosAndSize(scaleMultiplier);
                 return returnValue;
             }
@@ -607,101 +608,36 @@ var ThisCouldBeBetter;
                 display.initialize(universe);
                 platformHelper.initialize(universe);
             }
-            slideshowFromImageNamesAndMessagePairs(universe, size, secondsPerSlide, venueAfterSlideshow, imageNamesAndMessagePairsForSlides) {
-                if (size == null) {
-                    size = universe.display.sizeDefault();
-                }
-                var visualsForSlides = this.slideshow_VisualsForSlides(size, imageNamesAndMessagePairsForSlides);
-                var slideshow = this.slideshowFromVisuals(universe, size, secondsPerSlide, venueAfterSlideshow, visualsForSlides);
-                return slideshow;
+            titleAsControl(universe, size) {
+                var buttonStartOmit = this.settings.titleScreensOmitButtons;
+                var titleAsContainer = this.titleForUniverseSizeButtonStartOmit(universe, size, buttonStartOmit);
+                return titleAsContainer;
             }
-            slideshowFromVisuals(universe, size, secondsPerSlide, venueAfterSlideshow, visualsForSlides) {
-                if (size == null) {
-                    size = universe.display.sizeDefault();
+            titleAsVenue(universe, size) {
+                var titleAsControl = this.titleAsControl(universe, size);
+                var titleProperAsVenue = titleAsControl.toVenue();
+                var titleScreenFlowName = this.settings.titleScreenFlowName;
+                var returnVenue;
+                if (titleScreenFlowName == null) {
+                    returnVenue = titleProperAsVenue;
                 }
-                var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
-                var controlsForSlides = [];
-                var skipToEndOfSlideshow = () => {
-                    universe.venueTransitionTo(venueAfterSlideshow);
-                };
-                var controlsForSlideImagesAndTexts = this.slideshow_ControlsForSlideImagesAndTexts(visualsForSlides);
-                var controlBuilder = this;
-                for (var i = 0; i < controlsForSlideImagesAndTexts.length; i++) {
-                    var controlForSlideImageAndText = controlsForSlideImagesAndTexts[i];
-                    var advanceToSlideNext = () => controlBuilder.slideshow_NextDefn // Does this work?  Check history if not.
-                    (universe, controlsForSlides, i + 1, venueAfterSlideshow);
-                    var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
-                    GameFramework.Coords.fromXY(50, 40), // size
-                    "Next", this.fontBase, advanceToSlideNext);
-                    var controlActionNames = GameFramework.ControlActionNames.Instances();
-                    var actions = [
-                        GameFramework.Action.fromNameAndPerform(controlActionNames.ControlCancel, skipToEndOfSlideshow),
-                        GameFramework.Action.fromNameAndPerform(controlActionNames.ControlConfirm, advanceToSlideNext)
-                    ];
-                    var containerSlide = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerSlide_" + i, this._zeroes, this.sizeBase.clone(), [
-                        controlForSlideImageAndText,
-                        buttonNext
-                    ], actions);
-                    if (secondsPerSlide != null) {
-                        var controlTimer = GameFramework.ControlTimer.fromNameSecondsToWaitAndElapsed("Advance to Next Slide Automatically", secondsPerSlide, advanceToSlideNext);
-                        containerSlide.childAdd(controlTimer);
-                    }
-                    containerSlide.scalePosAndSize(scaleMultiplier);
-                    controlsForSlides.push(containerSlide);
-                }
-                return controlsForSlides[0];
-            }
-            slideshow_ControlsForSlideImagesAndTexts(visualsForSlides) {
-                var controlsForSlideImagesAndTexts = [];
-                for (var i = 0; i < visualsForSlides.length; i++) {
-                    var visualForSlide = visualsForSlides[i];
-                    var controlVisualForSlideImage = GameFramework.ControlVisual.fromNamePosSizeAndVisual("imageSlide", this._zeroes, this.sizeBase.clone(), GameFramework.DataBinding.fromContext(visualForSlide));
-                    var containerForSlideImageAndText = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerForSlideImageAndText", this._zeroes, this.sizeBase.clone(), [
-                        controlVisualForSlideImage
-                    ]);
-                    controlsForSlideImagesAndTexts.push(containerForSlideImageAndText);
-                }
-                return controlsForSlideImagesAndTexts;
-            }
-            slideshow_NextDefn(universe, controlsForSlides, slideIndexNext, venueAfterSlideshow) {
-                var venueNext;
-                if (slideIndexNext < controlsForSlides.length) {
-                    var controlForSlideNext = controlsForSlides[slideIndexNext];
-                    venueNext = controlForSlideNext.toVenue();
+                else if (titleScreenFlowName == ControlBuilderSettings.TitleScreenFlowNameArcadeGameAttractMode) {
+                    var storageHelper = universe.storageHelper;
+                    var leaderboard = GameFramework.Leaderboard.fromStorageHelper(storageHelper);
+                    var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe);
+                    var leaderboardAsVenue = leaderboard.toVenue(uwpe);
+                    var controlBuilder = this;
+                    returnVenue = GameFramework.VenueCarousel.fromSecondsVenuesForSlidesAndDoneLooping(10, [
+                        titleProperAsVenue,
+                        leaderboardAsVenue
+                    ], (u) => controlBuilder.title_Start(u));
                 }
                 else {
-                    venueNext = venueAfterSlideshow;
+                    throw new Error("Unrecognized flow name: " + titleScreenFlowName + ".");
                 }
-                universe.venueTransitionTo(venueNext);
+                return returnVenue;
             }
-            slideshow_VisualsForSlides(size, imageNamesAndMessagesForSlides) {
-                var visualsForSlides = [];
-                var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
-                for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++) {
-                    var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
-                    var imageName = imageNameAndMessage[0];
-                    var message = imageNameAndMessage[1];
-                    var visualImage = GameFramework.VisualImageFromLibrary.fromImageName(imageName);
-                    var sizeToDrawScaled = this.sizeBase.clone().multiply(scaleMultiplier);
-                    var visualImageScaled = GameFramework.VisualImageScaled.fromSizeAndChild(sizeToDrawScaled, visualImage);
-                    var colors = GameFramework.Color.Instances();
-                    var visualText = GameFramework.VisualText.fromTextImmediateFontAndColorsFillAndBorder(message, this.fontBase, colors.Black, colors.White);
-                    var textPos = GameFramework.Coords.fromXY(0, this.fontHeightInPixelsBase);
-                    var visualTextOffset = GameFramework.VisualOffset.fromOffsetAndChild(textPos, visualText);
-                    var visualImagePlusText = GameFramework.VisualGroup.fromChildren([
-                        visualImageScaled,
-                        visualTextOffset
-                    ]);
-                    visualsForSlides.push(visualImagePlusText);
-                }
-                return visualsForSlides;
-            }
-            title(universe, size) {
-                var buttonStartOmit = this.settings.titleScreensOmitButtons;
-                var flowName = this.settings.titleScreenFlowName;
-                return this.titleForUniverseSizeButtonStartOmitAndFlow(universe, size, buttonStartOmit, flowName);
-            }
-            titleForUniverseSizeButtonStartOmitAndFlow(universe, size, buttonStartOmit, flowName) {
+            titleForUniverseSizeButtonStartOmit(universe, size, buttonStartOmit) {
                 if (size == null) {
                     size = universe.display.sizeDefault();
                 }
@@ -729,17 +665,7 @@ var ThisCouldBeBetter;
                 ];
                 var titleContainer = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerTitle", this._zeroes, this.sizeBase.clone(), controls, actions);
                 titleContainer.scalePosAndSize(scaleMultiplier);
-                var returnValue;
-                if (flowName == null) {
-                    returnValue = titleContainer;
-                }
-                else if (flowName == ControlBuilderSettings.TitleScreenFlowNameArcadeGameAttractMode) {
-                    // todo
-                    returnValue = titleContainer;
-                }
-                else {
-                    throw new Error("Unrecognized flow name: " + flowName + ".");
-                }
+                var returnValue = titleContainer;
                 return returnValue;
             }
             title_Start(universe) {

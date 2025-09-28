@@ -522,6 +522,31 @@ var ThisCouldBeBetter;
                 ]);
                 return visual;
             }
+            static imagesWithText(universe, size, imageNamesAndMessagesForSlides) {
+                var controlBuilder = universe.controlBuilder;
+                var visualsForSlides = [];
+                var scaleMultiplier = controlBuilder._scaleMultiplier
+                    .overwriteWith(size)
+                    .divide(controlBuilder.sizeBase);
+                for (var i = 0; i < imageNamesAndMessagesForSlides.length; i++) {
+                    var imageNameAndMessage = imageNamesAndMessagesForSlides[i];
+                    var imageName = imageNameAndMessage[0];
+                    var message = imageNameAndMessage[1];
+                    var visualImage = GameFramework.VisualImageFromLibrary.fromImageName(imageName);
+                    var sizeToDrawScaled = controlBuilder.sizeBase.clone().multiply(scaleMultiplier);
+                    var visualImageScaled = GameFramework.VisualImageScaled.fromSizeAndChild(sizeToDrawScaled, visualImage);
+                    var colors = GameFramework.Color.Instances();
+                    var visualText = GameFramework.VisualText.fromTextImmediateFontAndColorsFillAndBorder(message, controlBuilder.fontBase, colors.Black, colors.White);
+                    var textPos = GameFramework.Coords.fromXY(0, controlBuilder.fontHeightInPixelsBase);
+                    var visualTextOffset = GameFramework.VisualOffset.fromOffsetAndChild(textPos, visualText);
+                    var visualImagePlusText = GameFramework.VisualGroup.fromChildren([
+                        visualImageScaled,
+                        visualTextOffset
+                    ]);
+                    visualsForSlides.push(visualImagePlusText);
+                }
+                return visualsForSlides;
+            }
             rhombusOfColor(color) {
                 var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
                 return rhombus;

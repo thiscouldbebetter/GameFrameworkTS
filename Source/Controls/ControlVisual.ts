@@ -42,6 +42,50 @@ export class ControlVisual extends ControlBase
 		this._sizeHalf = Coords.create();
 	}
 
+	static manyFromVisuals
+	(
+		universe: Universe,
+		visualsForSlides: Visual[]
+	): ControlBase[]
+	{
+		// This was originally taken from what became VenueCarousel,
+		// so the returned controls are actually containers
+		// to which text is expected to be added as well.
+
+		var controlsForSlideImagesAndTexts: ControlBase[] = [];
+
+		var sizeBase = universe.controlBuilder.sizeBase;
+		var zeroes = Coords.Instances().Zeroes;
+
+		for (var i = 0; i < visualsForSlides.length; i++)
+		{
+			var visualForSlide = visualsForSlides[i];
+
+			var controlVisualForSlideImage = ControlVisual.fromNamePosSizeAndVisual
+			(
+				"imageSlide",
+				zeroes,
+				sizeBase.clone(),
+				DataBinding.fromContext(visualForSlide)
+			);
+
+			var containerForSlideImageAndText =
+				ControlContainer.fromNamePosSizeAndChildren
+				(
+					"containerForSlideImageAndText",
+					zeroes,
+					sizeBase.clone(),
+					[
+						controlVisualForSlideImage
+					]
+				);
+
+			controlsForSlideImagesAndTexts.push(containerForSlideImageAndText);
+		}
+
+		return controlsForSlideImagesAndTexts;
+	}
+
 	static fromNamePosSizeAndVisual
 	(
 		name: string,

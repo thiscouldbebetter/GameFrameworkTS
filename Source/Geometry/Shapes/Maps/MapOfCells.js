@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
             }
             static default() {
                 var cells = new Array();
-                var cellCreate = () => new MapCellGeneric("todo");
+                var cellCreate = () => new MapCellGeneric("todo - MapCellGeneric");
                 var cellSource = new MapOfCellsCellSourceArray(cells, cellCreate);
                 return new MapOfCells(MapOfCells.name, GameFramework.Coords.fromXY(3, 3), // sizeInCells
                 GameFramework.Coords.fromXY(10, 10), // cellSize
