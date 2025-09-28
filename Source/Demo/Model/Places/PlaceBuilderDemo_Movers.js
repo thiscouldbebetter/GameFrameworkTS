@@ -726,13 +726,13 @@ class PlaceBuilderDemo_Movers {
                 var itemDefnKeyName = "Key";
                 var keysRequired = Item.fromDefnNameAndQuantity(itemDefnKeyName, entityOther.propertiesByName.get(Goal.name).numberOfKeysToUnlock);
                 if (ItemHolder.of(entityPlayer).hasItem(keysRequired)) {
-                    var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly(DataBinding.fromContext("You win!"), () => // acknowledge
+                    var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndAcknowledgeButtonSuppressed(DataBinding.fromContext("You win!"), () => // acknowledge
                      {
-                        var venueNext = universe.controlBuilder.title(universe, null).toVenue();
+                        var venueNext = universe.controlBuilder.titleAsVenue(universe, null);
                         universe.venueTransitionTo(venueNext);
                     }, universe.venueCurrent(), // venuePrev
                     universe.display.sizeDefault().clone(), //.half(),
-                    true // showMessageOnly
+                    true // acknowledgeButtonSuppressed
                     );
                     universe.venueTransitionTo(venueMessage);
                 }
@@ -821,9 +821,9 @@ class PlaceBuilderDemo_Movers {
         }, (uwpe) => // die
          {
             var universe = uwpe.universe;
-            var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly(DataBinding.fromContext("You lose!"), () => // acknowledge
+            var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndAcknowledgeButtonSuppressed(DataBinding.fromContext("You lose!"), () => // acknowledge
              {
-                var venueNext = universe.controlBuilder.title(universe, null).toVenue();
+                var venueNext = universe.controlBuilder.titleAsVenue(universe, null);
                 universe.venueTransitionTo(venueNext);
             }, universe.venueCurrent(), // venuePrev
             universe.display.sizeDefault().clone(), //.half(),

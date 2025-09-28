@@ -77,7 +77,8 @@ var ThisCouldBeBetter;
                 var sizeInPixels = universe.display.sizeInPixels;
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
                 var controlRoot = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => this.toControl_PlayerInitialsEnter_Finished(uwpe), // acknowledge
-                true, // showMessageOnly
+                true, // acknowledgeButtonIsSuppressed
+                false, // backgroundIsTransparent
                 fontNameAndHeight, this.secondsToShow);
                 controlRoot.containerInner.indexOfChildWithFocusCannotBeNullSet(true);
                 var textBoxInitials = GameFramework.ControlTextBox.fromNamePosSizeAndTextBinding("textBoxInitials", GameFramework.Coords.fromXY(150, 200), // pos
@@ -114,7 +115,8 @@ var ThisCouldBeBetter;
                 var sizeInPixels = universe.display.sizeInPixels;
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
                 var controlBuilder = universe.controlBuilder;
-                var controlLeaderboard = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => { this.toControl_ScoresAllShow_Finished(universe); }, true, // showMessageOnly
+                var controlLeaderboard = controlBuilder.message(universe, sizeInPixels, GameFramework.DataBinding.fromContext(text), () => { this.toControl_ScoresAllShow_Finished(universe); }, true, // acknowledgeButtonIsSuppressed
+                false, // backgroundIsTransparent
                 fontNameAndHeight, this.secondsToShow);
                 return controlLeaderboard;
             }

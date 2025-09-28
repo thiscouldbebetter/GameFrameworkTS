@@ -126,7 +126,8 @@ export class Leaderboard
 			sizeInPixels,
 			DataBinding.fromContext(text),
 			() => this.toControl_PlayerInitialsEnter_Finished(uwpe), // acknowledge
-			true, // showMessageOnly
+			true, // acknowledgeButtonIsSuppressed
+			false, // backgroundIsTransparent
 			fontNameAndHeight,
 			this.secondsToShow
 		) as ControlContainerTransparent;
@@ -199,7 +200,8 @@ export class Leaderboard
 			sizeInPixels,
 			DataBinding.fromContext(text),
 			() => { this.toControl_ScoresAllShow_Finished(universe) },
-			true, // showMessageOnly
+			true, // acknowledgeButtonIsSuppressed
+			false, // backgroundIsTransparent
 			fontNameAndHeight,
 			this.secondsToShow
 		);

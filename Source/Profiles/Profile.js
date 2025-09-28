@@ -183,9 +183,9 @@ var ThisCouldBeBetter;
             static toControlSaveStateLoadOrSave_LoadFromFile(universe, size, venueToReturnTo) {
                 var venueFileUpload = new GameFramework.VenueFileUpload(null, null);
                 var controlBuilder = universe.controlBuilder;
-                var controlMessageReadyToLoad = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => Profile.toControlSaveStateLoadOrSave_LoadFromFile_Acknowledge(universe, size, venueFileUpload, venueToReturnTo));
+                var controlMessageReadyToLoad = controlBuilder.messageFromUniverseSizeTextAndAcknowledge(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => Profile.toControlSaveStateLoadOrSave_LoadFromFile_Acknowledge(universe, size, venueFileUpload, venueToReturnTo));
                 var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
-                var controlMessageCancelled = controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
+                var controlMessageCancelled = controlBuilder.messageFromUniverseSizeTextAndAcknowledge(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
                  {
                     var control = controlBuilder.game(universe, size, venueToReturnTo);
                     var venueNext = control.toVenue();
@@ -284,7 +284,8 @@ var ThisCouldBeBetter;
                 var message = (errorMessageFromSave == null
                     ? "Game saved successfully."
                     : "Save failed due to errors:\n" + errorMessageFromSave);
-                var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
+                var controlBuilder = universe.controlBuilder;
+                var controlMessage = controlBuilder.messageFromUniverseSizeTextAndAcknowledge(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                  {
                     var venueNext = universe.controlBuilder.game(universe, null, venueToReturnTo).toVenue();
                     universe.venueTransitionTo(venueNext);
@@ -317,7 +318,8 @@ var ThisCouldBeBetter;
                 var fileNameStem = universe.saveFileNameStem();
                 var fileName = fileNameStem + ".json.lzw";
                 new GameFramework.FileHelper().saveBytesToFileWithName(saveStateCompressedAsBytes, fileName);
-                var controlMessage = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
+                var controlBuilder = universe.controlBuilder;
+                var controlMessage = controlBuilder.messageFromUniverseSizeTextAndAcknowledge(universe, size, GameFramework.DataBinding.fromContext(message), () => // acknowledge
                  {
                     var venueNext = universe.controlBuilder.game(universe, null, venueToReturnTo).toVenue();
                     universe.venueTransitionTo(venueNext);

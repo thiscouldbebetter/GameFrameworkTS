@@ -19,7 +19,6 @@ class ControlBuilderTests extends TestFixture {
             this.inputs,
             this.opening,
             this.settings,
-            this.slideshow,
             this.title,
             this.worldDetail,
             this.worldLoad
@@ -41,7 +40,8 @@ class ControlBuilderTests extends TestFixture {
         var controlChoice = this._controlBuilder.choice(this._universe, null, // size,
         DataBinding.fromContext("[message]"), ["[option1]", "[option2]"], // optionNames
         [() => { }, () => { }], // optionFunctions
-        true, // showMessageOnly
+        true, // acknowledgeButtonSuppressed
+        false, // backgroundIsTransparent
         FontNameAndHeight.default(), null, // buttonPosY
         60 // secondsToShow
         );
@@ -96,7 +96,8 @@ class ControlBuilderTests extends TestFixture {
     message() {
         var controlMessage = this._controlBuilder.message(this._universe, null, // size
         DataBinding.fromContext("[message]"), () => { }, // acknowledge
-        false, // showMessageOnly
+        false, // acknowledgeButtonSuppressed
+        false, // backgroundIsTransparent
         FontNameAndHeight.default(), 60 // secondsToShow
         );
         Assert.isNotNull(controlMessage);
@@ -111,17 +112,8 @@ class ControlBuilderTests extends TestFixture {
         null);
         Assert.isNotNull(controlSettings);
     }
-    slideshow() {
-        var controlSlideshow = this._controlBuilder.slideshowFromImageNamesAndMessagePairs(this._universe, null, // size
-        60, // secondsPerSlide
-        null, // venueAfterSlideshow
-        [
-            ["[imageName]", "[message]"]
-        ]);
-        Assert.isNotNull(controlSlideshow);
-    }
     title() {
-        var controlTitle = this._controlBuilder.title(this._universe, null // size
+        var controlTitle = this._controlBuilder.titleAsControl(this._universe, null // size
         );
         Assert.isNotNull(controlTitle);
     }

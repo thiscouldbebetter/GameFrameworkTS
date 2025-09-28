@@ -467,7 +467,7 @@ export class Profile
 		var venueFileUpload = new VenueFileUpload(null, null);
 
 		var controlBuilder = universe.controlBuilder;
-		var controlMessageReadyToLoad = controlBuilder.message4
+		var controlMessageReadyToLoad = controlBuilder.messageFromUniverseSizeTextAndAcknowledge
 		(
 			universe,
 			size,
@@ -481,7 +481,7 @@ export class Profile
 
 		var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
 
-		var controlMessageCancelled = controlBuilder.message4
+		var controlMessageCancelled = controlBuilder.messageFromUniverseSizeTextAndAcknowledge
 		(
 			universe,
 			size,
@@ -676,7 +676,8 @@ export class Profile
 			: "Save failed due to errors:\n" + errorMessageFromSave
 		);
 
-		var controlMessage = universe.controlBuilder.message4
+		var controlBuilder = universe.controlBuilder;
+		var controlMessage = controlBuilder.messageFromUniverseSizeTextAndAcknowledge
 		(
 			universe,
 			size,
@@ -767,7 +768,8 @@ export class Profile
 			saveStateCompressedAsBytes, fileName
 		);
 
-		var controlMessage = universe.controlBuilder.message4
+		var controlBuilder = universe.controlBuilder;
+		var controlMessage = controlBuilder.messageFromUniverseSizeTextAndAcknowledge
 		(
 			universe,
 			size,

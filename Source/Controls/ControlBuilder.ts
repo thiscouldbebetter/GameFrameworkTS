@@ -100,14 +100,16 @@ export class ControlBuilder
 		message: DataBinding<any, string>,
 		optionNames: Array<string>,
 		optionFunctions: Array<()=>void>,
-		showMessageOnly: boolean,
+		optionButtonsAreSuppressed: boolean,
+		backgroundIsTransparent: boolean,
 		fontNameAndHeight: FontNameAndHeight,
 		buttonPosY: number,
 		secondsToShow: number
 	): ControlBase
 	{
 		size = size || universe.display.sizeDefault();
-		showMessageOnly = showMessageOnly || false;
+		optionButtonsAreSuppressed = optionButtonsAreSuppressed || false;
+		backgroundIsTransparent = backgroundIsTransparent || false;
 		fontNameAndHeight = fontNameAndHeight || this.fontBase;
 		var fontHeight = fontNameAndHeight.heightInPixels;
 
@@ -117,7 +119,7 @@ export class ControlBuilder
 
 		var numberOfOptions = optionNames.length;
 
-		if (showMessageOnly && numberOfOptions == 1)
+		if (optionButtonsAreSuppressed && numberOfOptions == 1)
 		{
 			numberOfOptions = 0; // Is a single option really an option?
 		}
@@ -157,7 +159,7 @@ export class ControlBuilder
 			childControls.push(controlTimer);
 		}
 
-		if (showMessageOnly == false)
+		if (optionButtonsAreSuppressed == false)
 		{
 			var buttonWidth = 55;
 			var buttonSize = Coords.fromXY(buttonWidth, fontHeight * 2);
@@ -218,7 +220,7 @@ export class ControlBuilder
 
 		var returnValue: ControlBase = null;
 
-		if (showMessageOnly)
+		if (backgroundIsTransparent)
 		{
 			returnValue = ControlContainerTransparent.fromContainer(controlContainer);
 		}
@@ -243,7 +245,7 @@ export class ControlBuilder
 		(
 			universe, size, message, optionNames,
 			optionFunctions,
-			null, null, null, null
+			null, null, null, null, null
 		);
 	}
 
@@ -996,13 +998,52 @@ export class ControlBuilder
 		universe.venueTransitionTo(venuePrev);
 	}
 
+	instructionPages(universe: Universe, size: Coords, venueAfter: Venue): ControlBase[]
+	{
+		var textInstructions =
+			universe.mediaLibrary.textStringGetByName("Instructions");
+		var instructions = textInstructions.value;
+
+		var pageDelimiter = "\n\n\n";
+		var instructionsAsPages = instructions.split(pageDelimiter);
+
+		var controlBuilder = universe.controlBuilder;
+
+		var controlsForInstructionPages: ControlBase[] = [];
+
+		for (var i = 0; i < instructionsAsPages.length; i++)
+		{
+			var instructionPage = instructionsAsPages[i];
+
+			var controlForInstructionPage = controlBuilder.messageFromUniverseSizeTextAcknowledgeAndSuppressed
+			(
+				universe,
+				size,
+				DataBinding.fromContext(instructionPage),
+				() =>
+				{
+					if (venueAfter != null)
+					{
+						universe.venueTransitionTo(venueAfter);
+					}
+				},
+				true // acknowledgeButtonIsSuppressed
+			);
+
+			controlsForInstructionPages.push(controlForInstructionPage);
+		}
+
+		return controlsForInstructionPages;
+	}
+
 	message
 	(
 		universe: Universe,
 		size: Coords,
 		message: DataBinding<any, string>,
 		acknowledge: () => void,
-		showMessageOnly: boolean,
+		acknowledgeButtonIsSuppressed: boolean,
+		backgroundIsTransparent: boolean,
 		fontNameAndHeight: FontNameAndHeight,
 		secondsToShow: number
 	): ControlBase
@@ -1023,7 +1064,8 @@ export class ControlBuilder
 			message,
 			optionNames,
 			optionFunctions,
-			showMessageOnly,
+			acknowledgeButtonIsSuppressed,
+			backgroundIsTransparent,
 			fontNameAndHeight,
 			null, // buttonPosY
 			secondsToShow
@@ -1032,7 +1074,7 @@ export class ControlBuilder
 		return returnValue;
 	}
 
-	message4
+	messageFromUniverseSizeTextAndAcknowledge
 	(
 		universe: Universe,
 		size: Coords,
@@ -1040,7 +1082,23 @@ export class ControlBuilder
 		acknowledge: () => void
 	)
 	{
-		return this.message(universe, size, message, acknowledge, null, null, null);
+		return this.message(universe, size, message, acknowledge, null, null, null, null);
+	}
+
+	messageFromUniverseSizeTextAcknowledgeAndSuppressed
+	(
+		universe: Universe,
+		size: Coords,
+		message: DataBinding<any, string>,
+		acknowledge: () => void,
+		acknowledgeButtonIsSuppressed: boolean
+	)
+	{
+		return this.message
+		(
+			universe, size, message, acknowledge, acknowledgeButtonIsSuppressed,
+			null, null, null
+		);
 	}
 
 	opening(universe: Universe, size: Coords): ControlBase
@@ -1475,15 +1533,22 @@ export class ControlBuilder
 			var uwpe = UniverseWorldPlaceEntities.fromUniverse(universe);
 			var leaderboardAsVenue = leaderboard.toVenue(uwpe);
 
+			var venuesForSlides: Venue[] = 
+			[
+				titleProperAsVenue,
+				leaderboardAsVenue
+			];
+
 			var controlBuilder = this;
+
+			var instructionPagesAsControls = controlBuilder.instructionPages(universe, size, null);
+
+			instructionPagesAsControls.forEach(x => venuesForSlides.push(x.toVenue() ) );
 
 			returnVenue = VenueCarousel.fromSecondsVenuesForSlidesAndDoneLooping
 			(
 				8,
-				[
-					titleProperAsVenue,
-					leaderboardAsVenue
-				],
+				venuesForSlides,
 				(u: Universe) => controlBuilder.title_Start(u)
 			);
 		}
@@ -1770,22 +1835,11 @@ export class ControlBuilder
 		}
 		else
 		{
-			var textInstructions =
-				universe.mediaLibrary.textStringGetByName("Instructions");
-			var instructions = textInstructions.value;
-			var controlInstructions = universe.controlBuilder.message4
-			(
-				universe,
-				size,
-				DataBinding.fromContext(instructions),
-				() => // acknowledge
-				{
-					universe.venueTransitionTo(venueWorld);
-				}
-			);
+			var instructionPagesAsControls = this.instructionPages(universe, size, venueWorld);
 
-			var venueInstructions =
-				controlInstructions.toVenue();
+			var controlInstructions = instructionPagesAsControls[0]; // hack
+
+			var venueInstructions = controlInstructions.toVenue();
 
 			var venueMovie = VenueVideo.fromVideoNameAndVenueNext
 			(
@@ -1956,8 +2010,10 @@ export class ControlBuilder
 		venueFileUpload: VenueFileUpload
 	): void
 	{
+		var controlBuilder = universe.controlBuilder;
+
 		var controlMessageReadyToLoad =
-			universe.controlBuilder.message4
+			controlBuilder.messageFromUniverseSizeTextAndAcknowledge
 			(
 				universe,
 				size,
@@ -1968,12 +2024,12 @@ export class ControlBuilder
 		var venueMessageReadyToLoad =
 			controlMessageReadyToLoad.toVenue();
 
-		var controlMessageCancelled = universe.controlBuilder.message4
+		var controlMessageCancelled = controlBuilder.messageFromUniverseSizeTextAndAcknowledge
 		(
 			universe,
 			size,
 			DataBinding.fromContext("No file specified."),
-			() => // acknowlege
+			() => // acknowledge
 			{
 				var venueNext = universe.controlBuilder.game
 				(

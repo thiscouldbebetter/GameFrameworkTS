@@ -4,12 +4,13 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class VenueMessage {
-            constructor(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly, secondsToShow) {
+            constructor(messageToShow, acknowledge, venuePrev, sizeInPixels, acknowledgeButtonIsSuppressed, backgroundIsTransparent, secondsToShow) {
                 this.messageToShow = messageToShow;
                 this._acknowledge = acknowledge;
                 this.venuePrev = venuePrev;
                 this._sizeInPixels = sizeInPixels;
-                this.showMessageOnly = showMessageOnly || false;
+                this.acknowledgeButtonIsSuppressed = acknowledgeButtonIsSuppressed || false;
+                this.backgroundIsTransparent = backgroundIsTransparent || false;
                 this.secondsToShow = secondsToShow;
             }
             static fromMessage(message) {
@@ -17,18 +18,20 @@ var ThisCouldBeBetter;
             }
             static fromMessageAcknowledgeAndSize(messageToShow, acknowledge, sizeInPixels) {
                 return new VenueMessage(messageToShow, acknowledge, null, // venuePrev
-                sizeInPixels, null, // showMessageOnly
+                sizeInPixels, null, // acknowledgeButtonIsSuppressed
+                null, // backgroundIsTransparent
                 null // secondsToShow
                 );
             }
             static fromMessageAcknowledgeAndVenuePrev(messageToShow, acknowledge, venuePrev) {
-                return new VenueMessage(messageToShow, acknowledge, venuePrev, null, null, null);
+                return new VenueMessage(messageToShow, acknowledge, venuePrev, null, null, null, null);
             }
             static fromMessageAndAcknowledge(messageToShow, acknowledge) {
-                return new VenueMessage(messageToShow, acknowledge, null, null, null, null);
+                return new VenueMessage(messageToShow, acknowledge, null, null, null, null, null);
             }
-            static fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly) {
-                return new VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly, null // secondsToShow
+            static fromMessageAcknowledgeVenuePrevSizeAndAcknowledgeButtonSuppressed(messageToShow, acknowledge, venuePrev, sizeInPixels, acknowledgeButtonIsSuppressed) {
+                return new VenueMessage(messageToShow, acknowledge, venuePrev, sizeInPixels, acknowledgeButtonIsSuppressed, null, // backgroundIsTransparent
+                null // secondsToShow
                 );
             }
             static fromText(text) {
@@ -38,10 +41,10 @@ var ThisCouldBeBetter;
                 return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge);
             }
             static fromTextAndAcknowledgeNoButtons(text, acknowledge) {
-                return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge).showMessageOnlySet(true);
+                return VenueMessage.fromMessageAndAcknowledge(GameFramework.DataBinding.fromGet((c) => text), acknowledge).acknowledgeButtonIsSuppressedSet(true).backgroundIsTransparentSet(true);
             }
             static fromTextNoButtons(text) {
-                return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text)).showMessageOnlySet(true);
+                return VenueMessage.fromMessage(GameFramework.DataBinding.fromGet((c) => text)).acknowledgeButtonIsSuppressedSet(true).backgroundIsTransparentSet(true);
             }
             static fromTextAcknowledgeAndSize(text, acknowledge, sizeInPixels) {
                 return VenueMessage.fromMessageAcknowledgeAndSize(GameFramework.DataBinding.fromGet((c) => text), acknowledge, sizeInPixels);
@@ -56,6 +59,14 @@ var ThisCouldBeBetter;
                 // in the _acknowledge will be ignored.
                 // var universe = uwpe.universe;
                 // universe.venuePrevJumpTo();
+            }
+            acknowledgeButtonIsSuppressedSet(value) {
+                this.acknowledgeButtonIsSuppressed = value;
+                return this;
+            }
+            backgroundIsTransparentSet(value) {
+                this.backgroundIsTransparent = value;
+                return this;
             }
             draw(universe) {
                 this.venueInner(universe).draw(universe);
@@ -82,10 +93,6 @@ var ThisCouldBeBetter;
                 this.secondsToShow = value;
                 return this;
             }
-            showMessageOnlySet(value) {
-                this.showMessageOnly = value;
-                return this;
-            }
             sizeInPixels(universe) {
                 if (this._sizeInPixels == null) {
                     this._sizeInPixels = universe.display.sizeDefault().clone();
@@ -96,7 +103,7 @@ var ThisCouldBeBetter;
                 if (this._venueInner == null) {
                     var sizeInPixels = this.sizeInPixels(universe);
                     var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
-                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge.bind(this), this.showMessageOnly, fontNameAndHeight, this.secondsToShow);
+                    var controlMessage = universe.controlBuilder.message(universe, sizeInPixels, this.messageToShow, this.acknowledge.bind(this), this.acknowledgeButtonIsSuppressed, this.backgroundIsTransparent, fontNameAndHeight, this.secondsToShow);
                     var venuesToLayer = [];
                     if (this.venuePrev != null) {
                         venuesToLayer.push(this.venuePrev);

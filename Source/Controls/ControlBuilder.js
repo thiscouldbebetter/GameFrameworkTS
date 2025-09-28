@@ -51,15 +51,16 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             // Controls.
-            choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontNameAndHeight, buttonPosY, secondsToShow) {
+            choice(universe, size, message, optionNames, optionFunctions, optionButtonsAreSuppressed, backgroundIsTransparent, fontNameAndHeight, buttonPosY, secondsToShow) {
                 size = size || universe.display.sizeDefault();
-                showMessageOnly = showMessageOnly || false;
+                optionButtonsAreSuppressed = optionButtonsAreSuppressed || false;
+                backgroundIsTransparent = backgroundIsTransparent || false;
                 fontNameAndHeight = fontNameAndHeight || this.fontBase;
                 var fontHeight = fontNameAndHeight.heightInPixels;
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var containerSizeScaled = size.clone().clearZ().divide(scaleMultiplier);
                 var numberOfOptions = optionNames.length;
-                if (showMessageOnly && numberOfOptions == 1) {
+                if (optionButtonsAreSuppressed && numberOfOptions == 1) {
                     numberOfOptions = 0; // Is a single option really an option?
                 }
                 var labelMessageSizeY = Math.round(this.sizeBase.y * (numberOfOptions == 0 ? 1 : (2 / 3)));
@@ -72,7 +73,7 @@ var ThisCouldBeBetter;
                     var controlTimer = GameFramework.ControlTimer.fromNameSecondsToWaitAndElapsed("timerAcknowledgeAutomaticallyAfterTimeout", secondsToShow, () => optionFunctions[0]());
                     childControls.push(controlTimer);
                 }
-                if (showMessageOnly == false) {
+                if (optionButtonsAreSuppressed == false) {
                     var buttonWidth = 55;
                     var buttonSize = GameFramework.Coords.fromXY(buttonWidth, fontHeight * 2);
                     var spaceBetweenButtons = 5;
@@ -102,7 +103,7 @@ var ThisCouldBeBetter;
                 var controlContainer = GameFramework.ControlContainer.fromNamePosSizeChildrenAndActions("containerChoice", containerPosScaled, containerSizeScaled, childControls, actions);
                 controlContainer.scalePosAndSize(scaleMultiplier);
                 var returnValue = null;
-                if (showMessageOnly) {
+                if (backgroundIsTransparent) {
                     returnValue = GameFramework.ControlContainerTransparent.fromContainer(controlContainer);
                 }
                 else {
@@ -111,7 +112,7 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             choiceUniverseSizeMessageOptionNamesAndFunctions(universe, size, message, optionNames, optionFunctions) {
-                return this.choice(universe, size, message, optionNames, optionFunctions, null, null, null, null);
+                return this.choice(universe, size, message, optionNames, optionFunctions, null, null, null, null, null);
             }
             choiceList(universe, size, message, options, bindingForOptionText, buttonSelectText, select) {
                 // todo - Variable sizes.
@@ -412,19 +413,41 @@ var ThisCouldBeBetter;
                 placeDefn.actionToInputsMappingsSave();
                 universe.venueTransitionTo(venuePrev);
             }
-            message(universe, size, message, acknowledge, showMessageOnly, fontNameAndHeight, secondsToShow) {
+            instructionPages(universe, size, venueAfter) {
+                var textInstructions = universe.mediaLibrary.textStringGetByName("Instructions");
+                var instructions = textInstructions.value;
+                var pageDelimiter = "\n\n\n";
+                var instructionsAsPages = instructions.split(pageDelimiter);
+                var controlBuilder = universe.controlBuilder;
+                var controlsForInstructionPages = [];
+                for (var i = 0; i < instructionsAsPages.length; i++) {
+                    var instructionPage = instructionsAsPages[i];
+                    var controlForInstructionPage = controlBuilder.messageFromUniverseSizeTextAcknowledgeAndSuppressed(universe, size, GameFramework.DataBinding.fromContext(instructionPage), () => {
+                        if (venueAfter != null) {
+                            universe.venueTransitionTo(venueAfter);
+                        }
+                    }, true // acknowledgeButtonIsSuppressed
+                    );
+                    controlsForInstructionPages.push(controlForInstructionPage);
+                }
+                return controlsForInstructionPages;
+            }
+            message(universe, size, message, acknowledge, acknowledgeButtonIsSuppressed, backgroundIsTransparent, fontNameAndHeight, secondsToShow) {
                 var optionNames = [];
                 var optionFunctions = [];
                 if (acknowledge != null) {
                     optionNames.push("Acknowledge");
                     optionFunctions.push(acknowledge);
                 }
-                var returnValue = this.choice(universe, size, message, optionNames, optionFunctions, showMessageOnly, fontNameAndHeight, null, // buttonPosY
+                var returnValue = this.choice(universe, size, message, optionNames, optionFunctions, acknowledgeButtonIsSuppressed, backgroundIsTransparent, fontNameAndHeight, null, // buttonPosY
                 secondsToShow);
                 return returnValue;
             }
-            message4(universe, size, message, acknowledge) {
-                return this.message(universe, size, message, acknowledge, null, null, null);
+            messageFromUniverseSizeTextAndAcknowledge(universe, size, message, acknowledge) {
+                return this.message(universe, size, message, acknowledge, null, null, null, null);
+            }
+            messageFromUniverseSizeTextAcknowledgeAndSuppressed(universe, size, message, acknowledge, acknowledgeButtonIsSuppressed) {
+                return this.message(universe, size, message, acknowledge, acknowledgeButtonIsSuppressed, null, null, null);
             }
             opening(universe, size) {
                 var buttonNextOmit = this.settings.titleScreensOmitButtons;
@@ -626,11 +649,14 @@ var ThisCouldBeBetter;
                     var leaderboard = GameFramework.Leaderboard.fromStorageHelper(storageHelper);
                     var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverse(universe);
                     var leaderboardAsVenue = leaderboard.toVenue(uwpe);
-                    var controlBuilder = this;
-                    returnVenue = GameFramework.VenueCarousel.fromSecondsVenuesForSlidesAndDoneLooping(10, [
+                    var venuesForSlides = [
                         titleProperAsVenue,
                         leaderboardAsVenue
-                    ], (u) => controlBuilder.title_Start(u));
+                    ];
+                    var controlBuilder = this;
+                    var instructionPagesAsControls = controlBuilder.instructionPages(universe, size, null);
+                    instructionPagesAsControls.forEach(x => venuesForSlides.push(x.toVenue()));
+                    returnVenue = GameFramework.VenueCarousel.fromSecondsVenuesForSlidesAndDoneLooping(8, venuesForSlides, (u) => controlBuilder.title_Start(u));
                 }
                 else {
                     throw new Error("Unrecognized flow name: " + titleScreenFlowName + ".");
@@ -760,12 +786,8 @@ var ThisCouldBeBetter;
                     venueNext = venueWorld;
                 }
                 else {
-                    var textInstructions = universe.mediaLibrary.textStringGetByName("Instructions");
-                    var instructions = textInstructions.value;
-                    var controlInstructions = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext(instructions), () => // acknowledge
-                     {
-                        universe.venueTransitionTo(venueWorld);
-                    });
+                    var instructionPagesAsControls = this.instructionPages(universe, size, venueWorld);
+                    var controlInstructions = instructionPagesAsControls[0]; // hack
                     var venueInstructions = controlInstructions.toVenue();
                     var venueMovie = GameFramework.VenueVideo.fromVideoNameAndVenueNext("Movie", // videoName
                     venueInstructions // fader implicit
@@ -842,9 +864,10 @@ var ThisCouldBeBetter;
             }
             ;
             worldLoad_LoadFile(universe, size, venueFileUpload) {
-                var controlMessageReadyToLoad = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => this.worldLoad_LoadFile_Acknowledge(universe, size, venueFileUpload));
+                var controlBuilder = universe.controlBuilder;
+                var controlMessageReadyToLoad = controlBuilder.messageFromUniverseSizeTextAndAcknowledge(universe, size, GameFramework.DataBinding.fromContext("Ready to load from file..."), () => this.worldLoad_LoadFile_Acknowledge(universe, size, venueFileUpload));
                 var venueMessageReadyToLoad = controlMessageReadyToLoad.toVenue();
-                var controlMessageCancelled = universe.controlBuilder.message4(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowlege
+                var controlMessageCancelled = controlBuilder.messageFromUniverseSizeTextAndAcknowledge(universe, size, GameFramework.DataBinding.fromContext("No file specified."), () => // acknowledge
                  {
                     var venueNext = universe.controlBuilder.game(universe, size, universe.venueCurrent()).toVenue();
                     universe.venueTransitionTo(venueNext);

@@ -1429,18 +1429,18 @@ class PlaceBuilderDemo_Movers
 				);
 				if (ItemHolder.of(entityPlayer).hasItem(keysRequired))
 				{
-					var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly
+					var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndAcknowledgeButtonSuppressed
 					(
 						DataBinding.fromContext("You win!"),
 						() => // acknowledge
 						{
 							var venueNext =
-								universe.controlBuilder.title(universe, null).toVenue();
+								universe.controlBuilder.titleAsVenue(universe, null);
 							universe.venueTransitionTo(venueNext);
 						},
 						universe.venueCurrent(), // venuePrev
 						universe.display.sizeDefault().clone(),//.half(),
-						true // showMessageOnly
+						true // acknowledgeButtonSuppressed
 					);
 					universe.venueTransitionTo(venueMessage as Venue);
 				}
@@ -1603,13 +1603,13 @@ class PlaceBuilderDemo_Movers
 			(uwpe: UniverseWorldPlaceEntities) => // die
 			{
 				var universe = uwpe.universe;
-				var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly
+				var venueMessage = VenueMessage.fromMessageAcknowledgeVenuePrevSizeAndAcknowledgeButtonSuppressed
 				(
 					DataBinding.fromContext("You lose!"),
 					() => // acknowledge
 					{
 						var venueNext =
-							universe.controlBuilder.title(universe, null).toVenue()
+							universe.controlBuilder.titleAsVenue(universe, null);
 						universe.venueTransitionTo(venueNext);
 					},
 					universe.venueCurrent(), // venuePrev

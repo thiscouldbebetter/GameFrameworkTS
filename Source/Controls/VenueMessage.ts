@@ -8,7 +8,8 @@ export class VenueMessage<TContext> implements Venue
 	_acknowledge: (uwpe: UniverseWorldPlaceEntities) => void;
 	venuePrev: Venue;
 	_sizeInPixels: Coords;
-	showMessageOnly: boolean;
+	acknowledgeButtonIsSuppressed: boolean;
+	backgroundIsTransparent: boolean;
 	secondsToShow: number;
 
 	_venueInner: Venue;
@@ -19,7 +20,8 @@ export class VenueMessage<TContext> implements Venue
 		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
 		venuePrev: Venue,
 		sizeInPixels: Coords,
-		showMessageOnly: boolean,
+		acknowledgeButtonIsSuppressed: boolean,
+		backgroundIsTransparent: boolean,
 		secondsToShow: number
 	)
 	{
@@ -27,7 +29,8 @@ export class VenueMessage<TContext> implements Venue
 		this._acknowledge = acknowledge;
 		this.venuePrev = venuePrev;
 		this._sizeInPixels = sizeInPixels;
-		this.showMessageOnly = showMessageOnly || false;
+		this.acknowledgeButtonIsSuppressed = acknowledgeButtonIsSuppressed || false;
+		this.backgroundIsTransparent = backgroundIsTransparent || false;
 		this.secondsToShow = secondsToShow;
 	}
 
@@ -52,7 +55,8 @@ export class VenueMessage<TContext> implements Venue
 			acknowledge,
 			null, // venuePrev
 			sizeInPixels,
-			null, // showMessageOnly
+			null, // acknowledgeButtonIsSuppressed
+			null, // backgroundIsTransparent
 			null // secondsToShow
 		);
 	}
@@ -67,7 +71,7 @@ export class VenueMessage<TContext> implements Venue
 		return new VenueMessage<TContext>
 		(
 			messageToShow, acknowledge, venuePrev,
-			null, null, null
+			null, null, null, null
 		);
 	}
 
@@ -77,21 +81,25 @@ export class VenueMessage<TContext> implements Venue
 		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void
 	): VenueMessage<TContext>
 	{
-		return new VenueMessage<TContext>(messageToShow, acknowledge, null, null, null, null);
+		return new VenueMessage<TContext>
+		(
+			messageToShow, acknowledge, null, null, null, null, null
+		);
 	}
 
-	static fromMessageAcknowledgeVenuePrevSizeAndShowMessageOnly<TContext>
+	static fromMessageAcknowledgeVenuePrevSizeAndAcknowledgeButtonSuppressed<TContext>
 	(
 		messageToShow: DataBinding<TContext, string>,
 		acknowledge: (uwpe: UniverseWorldPlaceEntities) => void,
 		venuePrev: Venue,
 		sizeInPixels: Coords,
-		showMessageOnly: boolean
+		acknowledgeButtonIsSuppressed: boolean
 	) : VenueMessage<TContext>
 	{
 		return new VenueMessage
 		(
-			messageToShow, acknowledge, venuePrev, sizeInPixels, showMessageOnly,
+			messageToShow, acknowledge, venuePrev, sizeInPixels, acknowledgeButtonIsSuppressed,
+			null, // backgroundIsTransparent
 			null // secondsToShow
 		);
 	}
@@ -127,7 +135,7 @@ export class VenueMessage<TContext> implements Venue
 		(
 			DataBinding.fromGet( (c: TContext) => text ),
 			acknowledge
-		).showMessageOnlySet(true);
+		).acknowledgeButtonIsSuppressedSet(true).backgroundIsTransparentSet(true);
 	}
 
 	static fromTextNoButtons<TContext>(text: string): VenueMessage<TContext>
@@ -135,7 +143,7 @@ export class VenueMessage<TContext> implements Venue
 		return VenueMessage.fromMessage<TContext>
 		(
 			DataBinding.fromGet( (c: TContext) => text )
-		).showMessageOnlySet(true);
+		).acknowledgeButtonIsSuppressedSet(true).backgroundIsTransparentSet(true);
 	}
 
 	static fromTextAcknowledgeAndSize<TContext>
@@ -180,6 +188,18 @@ export class VenueMessage<TContext> implements Venue
 		// universe.venuePrevJumpTo();
 	}
 
+	acknowledgeButtonIsSuppressedSet(value: boolean): VenueMessage<TContext>
+	{
+		this.acknowledgeButtonIsSuppressed = value;
+		return this;
+	}
+
+	backgroundIsTransparentSet(value: boolean): VenueMessage<TContext>
+	{
+		this.backgroundIsTransparent = value;
+		return this;
+	}
+
 	draw(universe: Universe): void
 	{
 		this.venueInner(universe).draw(universe);
@@ -219,12 +239,6 @@ export class VenueMessage<TContext> implements Venue
 		return this;
 	}
 
-	showMessageOnlySet(value: boolean): VenueMessage<TContext>
-	{
-		this.showMessageOnly = value;
-		return this;
-	}
-
 	sizeInPixels(universe: Universe): Coords
 	{
 		if (this._sizeInPixels == null)
@@ -249,7 +263,8 @@ export class VenueMessage<TContext> implements Venue
 				sizeInPixels,
 				this.messageToShow,
 				this.acknowledge.bind(this),
-				this.showMessageOnly,
+				this.acknowledgeButtonIsSuppressed,
+				this.backgroundIsTransparent,
 				fontNameAndHeight,
 				this.secondsToShow
 			);

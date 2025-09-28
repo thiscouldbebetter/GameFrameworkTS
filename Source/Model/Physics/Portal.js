@@ -30,7 +30,8 @@ var ThisCouldBeBetter;
                     universe.venueTransitionTo(venueCurrent);
                 };
                 var venueMessage = new GameFramework.VenueMessage(messageText, acknowledge, venueCurrent, // venuePrev
-                messageBoxSize, true, // showMessageOnly
+                messageBoxSize, true, // acknowledgeButtonIsSuppressed
+                true, // backgroundIsTransparent
                 3 // secondsToShow
                 );
                 universe.venueTransitionTo(venueMessage);
