@@ -16,6 +16,11 @@ export class VisualPolygonPreoriented extends VisualBase<VisualPolygonPreoriente
 		this.visualPolygonInner = visualPolygonInner;
 	}
 
+	static fromVisualPolygonInner(visualPolygonInner: VisualPolygon): VisualPolygonPreoriented
+	{
+		return new VisualPolygonPreoriented(visualPolygonInner);
+	}
+
 	static fromPathAndColorsFillAndBorder
 	(
 		verticesAsPath: Path,

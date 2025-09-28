@@ -1400,6 +1400,10 @@ export class VisualBuilder
 	rhombusOfColor(color: Color): Visual
 	{
 		var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
+
+		var transform = Transform_RotateRight.fromQuarterTurnsToRotate(1);
+		rhombus.transform(transform);
+
 		return rhombus;
 	}
 

@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 super();
                 this.visualPolygonInner = visualPolygonInner;
             }
+            static fromVisualPolygonInner(visualPolygonInner) {
+                return new VisualPolygonPreoriented(visualPolygonInner);
+            }
             static fromPathAndColorsFillAndBorder(verticesAsPath, colorFill, colorBorder) {
                 var visualPolygonInner = GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(verticesAsPath, colorFill, colorBorder).shouldUseEntityOrientationSet(false);
                 return new VisualPolygonPreoriented(visualPolygonInner);

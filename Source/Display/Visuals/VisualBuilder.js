@@ -549,6 +549,8 @@ var ThisCouldBeBetter;
             }
             rhombusOfColor(color) {
                 var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
+                var transform = GameFramework.Transform_RotateRight.fromQuarterTurnsToRotate(1);
+                rhombus.transform(transform);
                 return rhombus;
             }
             smoke(puffRadius) {
