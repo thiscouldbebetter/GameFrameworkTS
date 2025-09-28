@@ -29,8 +29,8 @@ export class ProjectileGeneration
 	)
 	{
 		this.radius = radius || 2;
-		this.distanceInitial = distanceInitial || 3;
-		this.speed = speed || 4;
+		this.distanceInitial = (distanceInitial != null) ? distanceInitial : 3;
+		this.speed = (speed != null) ? speed : 4;
 		this.ticksToLive = ticksToLive || 20;
 		this.integrityMax = integrityMax || 1;
 		this.collideOnlyWithEntitiesHavingPropertiesNamed =
@@ -262,7 +262,7 @@ export class ProjectileGeneration
 		// to make sure anything between the starting and ending points is hit.
 		var colliderPartBeforeTransform = Sphere.fromRadius(this.radius); 
 		var diameter = this.radius * 2;
-		var colliderPartsCount = this.speed / diameter;
+		var colliderPartsCount = (this.speed / diameter) || 1;
 		var colliderParts: Shape[] = [];
 		for (var i = 0; i < colliderPartsCount; i++)
 		{

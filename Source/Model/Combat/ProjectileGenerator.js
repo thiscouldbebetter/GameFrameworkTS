@@ -16,6 +16,12 @@ var ThisCouldBeBetter;
                 ]);
                 return projectileGenerator;
             }
+            static fromGeneration(generation) {
+                return new ProjectileGenerator(ProjectileGenerator.name, null, [generation]);
+            }
+            static fromNameAndGeneration(name, generation) {
+                return new ProjectileGenerator(name, null, [generation]);
+            }
             static fromNameAndGenerations(name, generations) {
                 return new ProjectileGenerator(name, null, generations);
             }

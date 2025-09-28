@@ -6,8 +6,8 @@ var ThisCouldBeBetter;
         class ProjectileGeneration {
             constructor(radius, distanceInitial, speed, ticksToLive, integrityMax, collideOnlyWithEntitiesHavingPropertiesNamed, damage, visual, projectileEntityInitialize, hit) {
                 this.radius = radius || 2;
-                this.distanceInitial = distanceInitial || 3;
-                this.speed = speed || 4;
+                this.distanceInitial = (distanceInitial != null) ? distanceInitial : 3;
+                this.speed = (speed != null) ? speed : 4;
                 this.ticksToLive = ticksToLive || 20;
                 this.integrityMax = integrityMax || 1;
                 this.collideOnlyWithEntitiesHavingPropertiesNamed =
@@ -125,7 +125,7 @@ var ThisCouldBeBetter;
                 // to make sure anything between the starting and ending points is hit.
                 var colliderPartBeforeTransform = GameFramework.Sphere.fromRadius(this.radius);
                 var diameter = this.radius * 2;
-                var colliderPartsCount = this.speed / diameter;
+                var colliderPartsCount = (this.speed / diameter) || 1;
                 var colliderParts = [];
                 for (var i = 0; i < colliderPartsCount; i++) {
                     var displacement = shooterForward

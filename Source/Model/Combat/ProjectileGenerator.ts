@@ -35,6 +35,29 @@ export class ProjectileGenerator
 		return projectileGenerator;
 	}
 
+	static fromGeneration
+	(
+		generation: ProjectileGeneration
+	): ProjectileGenerator
+	{
+		return new ProjectileGenerator
+		(
+			ProjectileGenerator.name, null, [ generation ]
+		);
+	}
+
+	static fromNameAndGeneration
+	(
+		name: string,
+		generation: ProjectileGeneration
+	): ProjectileGenerator
+	{
+		return new ProjectileGenerator
+		(
+			name, null, [ generation ]
+		);
+	}
+
 	static fromNameAndGenerations
 	(
 		name: string,
