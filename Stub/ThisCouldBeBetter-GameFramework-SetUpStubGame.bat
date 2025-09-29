@@ -25,17 +25,8 @@ cd Stub
 git init
 cd Source
 git submodule add https://github.com/thiscouldbebetter/GameFrameworkTS Framework
+git submodule update --init --recursive .
 echo ...done.
-
-
-echo About to get submodules of the Framework submodule...
-cd Framework/Source/
-cd Media/Audio/MusicTracker
-git submodule init
-cd ../../..
-git pull --recurse-submodules
-cd ../..
-echo ..done.
 
 echo About to copy build and run scripts from the framework to '_Scripts'...
 mkdir _Scripts
@@ -48,4 +39,4 @@ echo About to delete the 'create stub' scripts...
 del *.sh *.bat
 echo ...done.
 
-ecoh Script ends.
+echo Script ends.

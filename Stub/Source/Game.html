@@ -8,7 +8,7 @@ for repositories hosted at github.com/thiscouldbebetter,
 so it can be published on thiscouldbebetter.github.io.
 -->
 
-<script type="text/javascript" src="Framework/Source/_ImportGameFrameworkNamespace.js"></script>
+<script type="text/javascript" src="Framework/Source/_Imports.js"></script>
 
 <script type="text/javascript" src="Framework/Source/Helpers/ArrayHelper.js"></script>
 <script type="text/javascript" src="Framework/Source/Helpers/ByteHelper.js"></script>
@@ -39,9 +39,11 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Framework/Source/Controls/ControlTabbed.js"></script>
 <script type="text/javascript" src="Framework/Source/Controls/ControlTextarea.js"></script>
 <script type="text/javascript" src="Framework/Source/Controls/ControlTextBox.js"></script>
+<script type="text/javascript" src="Framework/Source/Controls/ControlTimer.js"></script>
 <script type="text/javascript" src="Framework/Source/Controls/ControlVisual.js"></script>
 <script type="text/javascript" src="Framework/Source/Controls/Controllable.js"></script>
 <script type="text/javascript" src="Framework/Source/Controls/DataBinding.js"></script>
+<script type="text/javascript" src="Framework/Source/Controls/VenueCarousel.js"></script>
 <script type="text/javascript" src="Framework/Source/Controls/VenueControls.js"></script>
 <script type="text/javascript" src="Framework/Source/Controls/VenueMessage.js"></script>
 
@@ -56,6 +58,7 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Framework/Source/Display/Animation/Animatable2.js"></script>
 
+<script type="text/javascript" src="Framework/Source/Display/Visuals/Visual.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/Transform_Colorize.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualAnchor.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualAnchorOrientation.js"></script>
@@ -82,6 +85,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualLine.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualLineStatic.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualMap.js"></script>
+<script type="text/javascript" src="Framework/Source/Display/Visuals/VisualNamed.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualNone.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualOffset.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualParticles.js"></script>
@@ -96,6 +100,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualStack.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualText.js"></script>
 <script type="text/javascript" src="Framework/Source/Display/Visuals/VisualTransform.js"></script>
+<script type="text/javascript" src="Framework/Source/Display/Visuals/VisualWrapped.js"></script>
 
 <script type="text/javascript" src="Framework/Source/Display/Visuals/Animation/VisualAnimation.js"></script>
 
@@ -111,22 +116,29 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Framework/Source/Geometry/RangeExtent.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Rotation.js"></script>
 
+<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_AttachToEntityWithId.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_AttachToEntityWithName.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Conditional.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_ContainInBox.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_ContainInHemispace.js"></script>
+<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_FrictionDry.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_FrictionXY.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Gravity.js"></script>
+<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Movable.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Multiple.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_OrientTowardEntityWithName.js"></script>
-<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_OrientationRound.js"></script><script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_SpeedMaxXY.js"></script>
+<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_StopBelowSpeedMin.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_Transform.js"></script>
-<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_WrapToPlaceSizeX.js"></script> 
-<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_WrapToPlaceSizeXTrimY.js"></script> 
+<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_TrimToPlaceSize.js"></script>
+<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_WrapToPlaceSize.js"></script>
+<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_WrapToPlaceSizeX.js"></script>
+<script type="text/javascript" src="Framework/Source/Geometry/Constraints/Constraint_WrapToPlaceSizeXTrimY.js"></script>
 
 <script type="text/javascript" src="Framework/Source/Geometry/Network/Network.js"></script>
 
+<script type="text/javascript" src="Framework/Source/Geometry/Shapes/Shape.js"></script>
+<script type="text/javascript" src="Framework/Source/Geometry/Shapes/ShapeBase.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/Arc.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/BoxAxisAligned.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/BoxOriented.js"></script>
@@ -135,13 +147,13 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/Face.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/Hemispace.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/Path.js"></script>
-<script type="text/javascript" src="Framework/Source/Geometry/Shapes/PathBuilder.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/Plane.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/Ray.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/ShapeContainer.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/ShapeGroupAll.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/ShapeGroupAny.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/ShapeInverse.js"></script>
+<script type="text/javascript" src="Framework/Source/Geometry/Shapes/ShapeNone.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/ShapeTransformed.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/Shell.js"></script>
 <script type="text/javascript" src="Framework/Source/Geometry/Shapes/Sphere.js"></script>
@@ -191,35 +203,24 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Framework/Source/Media/Audio/Audible.js"></script>
 <script type="text/javascript" src="Framework/Source/Media/Audio/Sound.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/SoundFromAudioContext.js"></script>
 <script type="text/javascript" src="Framework/Source/Media/Audio/SoundFromFile.js"></script>
 <script type="text/javascript" src="Framework/Source/Media/Audio/SoundFromFileMod.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundFromLibrary.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundFromSoundEffectSynthesizerSequence.js"></script>
 <script type="text/javascript" src="Framework/Source/Media/Audio/SoundNone.js"></script>
 <script type="text/javascript" src="Framework/Source/Media/Audio/SoundHelper.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundPlayback.js"></script>
 <script type="text/javascript" src="Framework/Source/Media/Audio/VisualSound.js"></script>
 
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Extensions/ArrayHelper.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Extensions/StringHelper.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/FileFormats/Base64Encoder.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/FileFormats/ByteConverter.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/FileFormats/ByteStreamBigEndian.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/FileFormats/ByteStreamLittleEndian.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/FileFormats/Constants.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/FileFormats/Sound.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/FileFormats/ModFile.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/FileFormats/WavFile.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Model/Instrument.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Model/Octave.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Model/Pitch.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Model/Song.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Model/Note.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Model/Sequence.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Model/Track.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/Model/Tracker.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/SoundSources/SoundSource.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/SoundSources/SoundSourceChild.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/SoundSources/SoundSourceType.js"></script>
-<script type="text/javascript" src="Framework/Source/Media/Audio/MusicTracker/Source/SoundSources/SoundSource_WavFile.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/ByteHandling/Base64Encoder.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/ByteHandling/ByteConverter.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/ByteHandling/ByteStreamLittleEndian.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/WavFile.js"></script>
+
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundEffectSynthesizer/Source/SoundSequence.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundEffectSynthesizer/Source/SoundSequenceNote.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundEffectSynthesizer/Source/SoundSequenceVoice.js"></script>
+<script type="text/javascript" src="Framework/Source/Media/Audio/SoundEffectSynthesizer/Source/_Imports.js"></script>
 
 <script type="text/javascript" src="Framework/Source/Media/Text/TextString.js"></script>
 
@@ -232,8 +233,6 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Framework/Source/Model/Routable.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/Selectable.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/Selector.js"></script>
-<script type="text/javascript" src="Framework/Source/Model/Trigger.js"></script>
-<script type="text/javascript" src="Framework/Source/Model/Triggerable.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/Universe.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/UniverseWorldPlaceEntities.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/VenueWorld.js"></script>
@@ -250,10 +249,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Framework/Source/Model/Combat/Damage.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/Combat/DamageType.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/Combat/Damager.js"></script>
-<script type="text/javascript" src="Framework/Source/Model/Combat/Enemy.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/Combat/Killable.js"></script>
-<script type="text/javascript" src="Framework/Source/Model/Combat/ProjectileGeneration.js"></script>
-<script type="text/javascript" src="Framework/Source/Model/Combat/ProjectileGenerator.js"></script>
 <script type="text/javascript" src="Framework/Source/Model/Combat/Weapon.js"></script>
 
 <script type="text/javascript" src="Framework/Source/Model/Effects/Effect.js"></script>
@@ -362,6 +358,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Framework/Source/Utility/ClonableHelper.js"></script>
 <script type="text/javascript" src="Framework/Source/Utility/DateTime.js"></script>
 <script type="text/javascript" src="Framework/Source/Utility/Debug.js"></script>
+<script type="text/javascript" src="Framework/Source/Utility/DebugSettings.js"></script>
 <script type="text/javascript" src="Framework/Source/Utility/DiceRoll.js"></script>
 <script type="text/javascript" src="Framework/Source/Utility/Equatable.js"></script>
 <script type="text/javascript" src="Framework/Source/Utility/IDHelper.js"></script>
@@ -380,17 +377,9 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Framework/Source/Utility/_Imports.js"></script>
 
-<script type="text/javascript" src="_BuildRecord.js"></script>
-<script type="text/javascript" src="Game.js"></script>
-<script type="text/javascript" src="PlaceDefault.js"></script>
-<script type="text/javascript" src="WorldGame.js"></script>
+<script type="text/javascript" src="Framework/Source/_BuildRecord.js"></script>
 
-<script type="text/javascript" src="Tests/Mocks/MockEnvironment.js"></script>
-
-<script type="text/javascript" src="Tests/Tests/SampleTests.js"></script>
-
-<script type="text/javascript" src="Tests/TestRunner.js"></script>
-
+<script type="text/javascript" src="Configuration.js"></script>
 <script type="text/javascript" src="Main.js"></script>
 
 </body>
