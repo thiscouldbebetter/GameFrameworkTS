@@ -258,10 +258,15 @@ var ThisCouldBeBetter;
             }
             // Controllable.
             toControl(universe, world) {
+                var returnValue = GameFramework.ControlNone.create();
                 var player = GameFramework.Playable.entityFromPlace(this);
-                var playerControllable = GameFramework.Controllable.of(player);
-                var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, world, world.placeCurrent, player, null);
-                var returnValue = playerControllable.toControl(uwpe, null, null);
+                if (player != null) {
+                    var playerControllable = GameFramework.Controllable.of(player);
+                    if (playerControllable != null) {
+                        var uwpe = GameFramework.UniverseWorldPlaceEntities.fromUniverseWorldPlaceAndEntity(universe, world, world.placeCurrent, player);
+                        returnValue = playerControllable.toControl(uwpe, null, null);
+                    }
+                }
                 return returnValue;
             }
             // Equatable.

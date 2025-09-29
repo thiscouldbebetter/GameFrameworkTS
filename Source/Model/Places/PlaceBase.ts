@@ -427,16 +427,26 @@ export class PlaceBase implements Place, Loadable
 
 	toControl(universe: Universe, world: World): ControlBase
 	{
+		var returnValue: ControlBase = ControlNone.create();
+
 		var player = Playable.entityFromPlace(this);
-		var playerControllable = Controllable.of(player);
-		var uwpe = new UniverseWorldPlaceEntities
-		(
-			universe, world, world.placeCurrent, player, null
-		);
-		var returnValue = playerControllable.toControl
-		(
-			uwpe, null, null
-		);
+		if (player != null)
+		{
+			var playerControllable = Controllable.of(player);
+			if (playerControllable != null)
+			{
+				var uwpe = UniverseWorldPlaceEntities.fromUniverseWorldPlaceAndEntity
+				(
+					universe, world, world.placeCurrent, player
+				);
+
+				returnValue = playerControllable.toControl
+				(
+					uwpe, null, null
+				);
+			}
+		}
+
 		return returnValue;
 	}
 

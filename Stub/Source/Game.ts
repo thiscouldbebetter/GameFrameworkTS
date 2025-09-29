@@ -54,7 +54,7 @@ class Game
 		var contentDirectoryPath = this.contentDirectoryPath;
 
 		// Use built-in content from the Framework.
-		contentDirectoryPath = "../Source/Framework/Content/" + contentDirectoryPath;
+		//contentDirectoryPath = "../Source/Framework/Content/" + contentDirectoryPath;
 
 		var fontDirectoryPath = contentDirectoryPath + "Fonts/";
 		var imageDirectoryPath = contentDirectoryPath + "Images/";

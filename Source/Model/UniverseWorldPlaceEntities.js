@@ -26,6 +26,12 @@ var ThisCouldBeBetter;
             static fromUniverseWorldAndPlace(universe, world, place) {
                 return new UniverseWorldPlaceEntities(universe, world, place, null, null);
             }
+            static fromUniverseWorldPlaceAndEntities(universe, world, place, entity, entity2) {
+                return new UniverseWorldPlaceEntities(universe, world, place, entity, entity2);
+            }
+            static fromUniverseWorldPlaceAndEntity(universe, world, place, entity) {
+                return new UniverseWorldPlaceEntities(universe, world, place, entity, null);
+            }
             static fromWorldAndPlace(world, place) {
                 return new UniverseWorldPlaceEntities(null, world, place, null, null);
             }
