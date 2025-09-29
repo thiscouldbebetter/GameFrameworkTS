@@ -1,18 +1,23 @@
 Creating a New Game from Stubs with the This Could Be Better Game Framework
 ===========================================================================
 
-The TypeScript code in this repository represents a template, or "stub", of a game that uses the This Could Be Better Game Framework.  It is intended as the simplest possible starting point for new game development.  For a much more in-depth example of a game, see the Demo directory in the parent directory.
+The TypeScript code in this repository represents a template, or "stub",
+of a game that uses the This Could Be Better Game Framework. 
+It is intended as the simplest possible starting point for new game development.
+For a much more in-depth example of a game, see the Demo directory
+in the parent directory.
 
 
 Setup
 -----
 
-The stub game template is expected to be used to create a game with a particular file structure.  Follow these steps to create a Git repository for a new stub game:
+The stub game template is expected to be used to create a game
+with a particular file structure.  Follow these steps to create
+a Git repository for a new stub game:
 
 * If you have not already done so, make sure that the "git" command is installed.
 * Copy this Stub directory and its contents to any desired directory outside of an existing Git repository.
 * From within the Stub directory, run the command "./Setup-Git-Init_Repo_and_Add_Framework_Submodule.sh" to start a script that converts the new directory into a Git repository and adds the Framework repository to it as a submodule.
-* Delete the file "GameStub-RunsInPlace.html", which exists only to demonstrate the stub game's functionality without actually copying it elsewhere.
 
 
 Building

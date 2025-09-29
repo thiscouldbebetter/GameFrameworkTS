@@ -60,17 +60,33 @@ export class StorageHelper
 		}
 	}
 
+	propertyWithNameReadValue(propertyName: string): string
+	{
+		var propertyNamePrefixed =
+			this.propertyNamePrefix + propertyName;
+
+		var returnValue =
+			localStorage.getItem(propertyNamePrefixed);
+
+		return returnValue;
+	}
+
+	propertyWithNameWriteValue(propertyName: string, valueToSet: string): StorageHelper
+	{
+		var propertyNamePrefixed =
+			this.propertyNamePrefix + propertyName;
+
+		localStorage.setItem(propertyNamePrefixed, valueToSet);
+
+		return this;
+	}
+
 	load<T>(propertyName: string): T
 	{
 		var returnValue;
 
-		var propertyNamePrefixed =
-			this.propertyNamePrefix + propertyName;
-
-		var returnValueAsStringCompressed = localStorage.getItem
-		(
-			propertyNamePrefixed
-		);
+		var returnValueAsStringCompressed =
+			this.propertyWithNameReadValue(propertyName);
 
 		if (returnValueAsStringCompressed == null)
 		{
@@ -82,10 +98,8 @@ export class StorageHelper
 			(
 				returnValueAsStringCompressed
 			);
-			returnValue = this.serializer.deserialize
-			(
-				returnValueDecompressed
-			);
+			returnValue =
+				this.serializer.deserialize(returnValueDecompressed);
 		}
 
 		return returnValue;
@@ -103,14 +117,7 @@ export class StorageHelper
 			valueToSaveSerialized
 		);
 
-		var propertyNamePrefixed =
-			this.propertyNamePrefix + propertyName;
-
-		localStorage.setItem
-		(
-			propertyNamePrefixed,
-			valueToSaveCompressed
-		);
+		this.propertyWithNameWriteValue(propertyName, valueToSaveCompressed);
 	}
 }
 

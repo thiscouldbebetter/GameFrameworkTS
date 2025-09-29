@@ -30,11 +30,14 @@ var ThisCouldBeBetter;
                 return new Leaderboard(null, playerScoresFake.length, playerScoresFake);
             }
             static fromStorageHelper(storageHelper) {
-                var leaderboard = storageHelper.load(Leaderboard.name);
-                if (leaderboard == null) {
+                var propertyName = Leaderboard.name;
+                var leaderboardAsJson = storageHelper.propertyWithNameReadValue(propertyName);
+                if (leaderboardAsJson == null) {
                     leaderboard = Leaderboard.createWithFakeScores();
-                    storageHelper.save(Leaderboard.name, leaderboard);
+                    leaderboardAsJson = leaderboard.toJson();
+                    storageHelper.propertyWithNameWriteValue(propertyName, leaderboardAsJson);
                 }
+                var leaderboard = Leaderboard.fromJson(leaderboardAsJson);
                 return leaderboard;
             }
             secondsToShowSet(value) {
@@ -92,8 +95,9 @@ var ThisCouldBeBetter;
             }
             toControl_PlayerInitialsEnter_Finished(uwpe) {
                 var universe = uwpe.universe;
+                var thisAsJson = this.toJson();
                 var storageHelper = universe.storageHelper;
-                storageHelper.save(Leaderboard.name, this);
+                storageHelper.propertyWithNameWriteValue(Leaderboard.name, thisAsJson);
                 var control = this.toControl_ScoresAllShow(uwpe);
                 var venueNext = control.toVenue();
                 universe.venueTransitionTo(venueNext);
@@ -128,6 +132,20 @@ var ThisCouldBeBetter;
                 var thisAsControl = this.toControl(uwpe);
                 var thisAsVenue = thisAsControl.toVenue();
                 return thisAsVenue;
+            }
+            // Json.
+            static fromJson(leaderboardAsJson) {
+                var leaderboard = JSON.parse(leaderboardAsJson);
+                Object.setPrototypeOf(leaderboard, Leaderboard.prototype);
+                var playerScores = leaderboard.playerScores;
+                for (var i = 0; i < playerScores.length; i++) {
+                    var playerScore = playerScores[i];
+                    Object.setPrototypeOf(playerScore, LeaderboardPlayerScore.prototype);
+                }
+                return leaderboard;
+            }
+            toJson() {
+                return JSON.stringify(this);
             }
         }
         GameFramework.Leaderboard = Leaderboard;

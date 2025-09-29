@@ -10,6 +10,14 @@ class Game
 		this.contentDirectoryPath = contentDirectoryPath;
 	}
 
+	static fromNameAndContentDirectoryPath
+	(
+		name: string, contentDirectoryPath: string
+	): Game
+	{
+		return new Game(name, contentDirectoryPath);
+	}
+
 	start(): void
 	{
 		var mediaLibrary = this.mediaLibraryBuild()

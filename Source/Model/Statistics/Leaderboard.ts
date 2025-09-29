@@ -54,13 +54,19 @@ export class Leaderboard
 
 	static fromStorageHelper(storageHelper: StorageHelper): Leaderboard
 	{
-		var leaderboard = storageHelper.load<Leaderboard>(Leaderboard.name);
+		var propertyName = Leaderboard.name;
 
-		if (leaderboard == null)
+		var leaderboardAsJson =
+			storageHelper.propertyWithNameReadValue(propertyName);
+
+		if (leaderboardAsJson == null)
 		{
 			leaderboard = Leaderboard.createWithFakeScores();
-			storageHelper.save<Leaderboard>(Leaderboard.name, leaderboard);
+			leaderboardAsJson = leaderboard.toJson();
+			storageHelper.propertyWithNameWriteValue(propertyName, leaderboardAsJson);
 		}
+
+		var leaderboard = Leaderboard.fromJson(leaderboardAsJson);
 
 		return leaderboard;
 	}
@@ -160,8 +166,10 @@ export class Leaderboard
 	{
 		var universe = uwpe.universe;
 
+		var thisAsJson = this.toJson();
+
 		var storageHelper = universe.storageHelper;
-		storageHelper.save(Leaderboard.name, this);
+		storageHelper.propertyWithNameWriteValue(Leaderboard.name, thisAsJson);
 
 		var control = this.toControl_ScoresAllShow(uwpe);
 		var venueNext = control.toVenue();
@@ -223,6 +231,29 @@ export class Leaderboard
 		var thisAsControl = this.toControl(uwpe);
 		var thisAsVenue = thisAsControl.toVenue();
 		return thisAsVenue;
+	}
+
+	// Json.
+
+	static fromJson(leaderboardAsJson: string): Leaderboard
+	{
+		var leaderboard = JSON.parse(leaderboardAsJson);
+
+		Object.setPrototypeOf(leaderboard, Leaderboard.prototype);
+
+		var playerScores = leaderboard.playerScores;
+		for (var i = 0; i < playerScores.length; i++)
+		{
+			var playerScore = playerScores[i];
+			Object.setPrototypeOf(playerScore, LeaderboardPlayerScore.prototype);
+		}
+
+		return leaderboard;
+	}
+
+	toJson(): string
+	{
+		return JSON.stringify(this);
 	}
 }
 

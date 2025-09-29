@@ -28,16 +28,26 @@ var ThisCouldBeBetter;
                     localStorage.removeItem(key);
                 }
             }
+            propertyWithNameReadValue(propertyName) {
+                var propertyNamePrefixed = this.propertyNamePrefix + propertyName;
+                var returnValue = localStorage.getItem(propertyNamePrefixed);
+                return returnValue;
+            }
+            propertyWithNameWriteValue(propertyName, valueToSet) {
+                var propertyNamePrefixed = this.propertyNamePrefix + propertyName;
+                localStorage.setItem(propertyNamePrefixed, valueToSet);
+                return this;
+            }
             load(propertyName) {
                 var returnValue;
-                var propertyNamePrefixed = this.propertyNamePrefix + propertyName;
-                var returnValueAsStringCompressed = localStorage.getItem(propertyNamePrefixed);
+                var returnValueAsStringCompressed = this.propertyWithNameReadValue(propertyName);
                 if (returnValueAsStringCompressed == null) {
                     returnValue = null;
                 }
                 else {
                     var returnValueDecompressed = this.compressor.decompressString(returnValueAsStringCompressed);
-                    returnValue = this.serializer.deserialize(returnValueDecompressed);
+                    returnValue =
+                        this.serializer.deserialize(returnValueDecompressed);
                 }
                 return returnValue;
             }
@@ -45,8 +55,7 @@ var ThisCouldBeBetter;
                 var valueToSaveSerialized = this.serializer.serialize(valueToSave, false // pretty-print
                 );
                 var valueToSaveCompressed = this.compressor.compressString(valueToSaveSerialized);
-                var propertyNamePrefixed = this.propertyNamePrefix + propertyName;
-                localStorage.setItem(propertyNamePrefixed, valueToSaveCompressed);
+                this.propertyWithNameWriteValue(propertyName, valueToSaveCompressed);
             }
         }
         GameFramework.StorageHelper = StorageHelper;
