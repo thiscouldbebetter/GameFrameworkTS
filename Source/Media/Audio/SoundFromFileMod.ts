@@ -51,7 +51,7 @@ export class SoundFromFileMod implements Sound
 
 	domElement(): HTMLAudioElement
 	{
-		throw new Error("todo");
+		return this._soundInner.domElement();
 	}
 
 	// Loadable.

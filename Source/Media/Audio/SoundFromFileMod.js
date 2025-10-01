@@ -35,7 +35,7 @@ var ThisCouldBeBetter;
             }
             */
             domElement() {
-                throw new Error("todo");
+                return this._soundInner.domElement();
             }
             load(uwpe) {
                 this._binaryFileInner =

@@ -41,21 +41,24 @@ var ThisCouldBeBetter;
                 return bitStream;
             }
             compressBytes(bytesToCompress) {
-                var byteStreamCompressed = new GameFramework.ByteStreamFromBytes([]);
+                var byteStreamCompressed = new ByteStream([]);
                 var bitStreamCompressed = new GameFramework.BitStream(byteStreamCompressed);
-                this.compressByteStreamToBitStream(new GameFramework.ByteStreamFromBytes(bytesToCompress), bitStreamCompressed);
+                this.compressByteStreamToBitStream(new ByteStream(bytesToCompress), bitStreamCompressed);
                 return byteStreamCompressed.bytes;
             }
             compressString(stringToCompress) {
-                var bitStream = new GameFramework.BitStream(new GameFramework.ByteStreamFromString(""));
-                this.compressByteStreamToBitStream(new GameFramework.ByteStreamFromString(stringToCompress), bitStream);
+                var bitStream = new GameFramework.BitStream(new ByteStream([]));
+                var bytesToCompress = stringToCompress.split("").map(x => x.charCodeAt(0));
+                this.compressByteStreamToBitStream(new ByteStream(bytesToCompress), bitStream);
                 var byteStream = bitStream.byteStream;
-                var returnValue = byteStream.bytesAsString;
+                var returnValueAsBytes = byteStream.bytes;
+                var returnValue = returnValueAsBytes.map(x => String.fromCharCode(x)).join("");
                 return returnValue;
             }
             compressStringToBytes(stringToCompress) {
-                var bitStream = new GameFramework.BitStream(new GameFramework.ByteStreamFromBytes([]));
-                this.compressByteStreamToBitStream(new GameFramework.ByteStreamFromString(stringToCompress), bitStream);
+                var bitStream = new GameFramework.BitStream(new ByteStream([]));
+                var bytesToCompress = stringToCompress.split("").map(x => x.charCodeAt(0));
+                this.compressByteStreamToBitStream(new ByteStream(bytesToCompress), bitStream);
                 var byteStream = bitStream.byteStream;
                 var returnValues = byteStream.bytes;
                 return returnValues;
@@ -115,17 +118,19 @@ var ThisCouldBeBetter;
                 return byteStreamDecompressed;
             }
             decompressBytes(bytesToDecode) {
-                var byteStreamToDecode = new GameFramework.ByteStreamFromBytes(bytesToDecode);
-                var byteStreamDecompressed = new GameFramework.ByteStreamFromBytes([]);
+                var byteStreamToDecode = new ByteStream(bytesToDecode);
+                var byteStreamDecompressed = new ByteStream([]);
                 this.decompressByteStream(byteStreamToDecode, byteStreamDecompressed);
                 var bytesDecompressed = byteStreamDecompressed.bytes;
                 return bytesDecompressed;
             }
             decompressString(stringToDecode) {
-                var byteStreamToDecode = new GameFramework.ByteStreamFromString(stringToDecode);
-                var byteStreamDecompressed = new GameFramework.ByteStreamFromString("");
+                var bytesToDecode = stringToDecode.split("").map(x => x.charCodeAt(0));
+                var byteStreamToDecode = new ByteStream(bytesToDecode);
+                var byteStreamDecompressed = new ByteStream([]);
                 this.decompressByteStream(byteStreamToDecode, byteStreamDecompressed);
-                var stringDecompressed = byteStreamDecompressed.bytesAsString;
+                var bytesDecompressed = byteStreamDecompressed.bytes;
+                var stringDecompressed = bytesDecompressed.map(x => String.fromCharCode(x)).join("");
                 return stringDecompressed;
             }
             initializePatternsBySymbol() {

@@ -21,7 +21,7 @@ export class TarFile
 
 	static fromBytes(fileName: string, bytes: number[]): TarFile
 	{
-		var reader = new ByteStreamFromBytes(bytes);
+		var reader = new ByteStream(bytes);
 
 		var entries = new Array<TarFileEntry>();
 

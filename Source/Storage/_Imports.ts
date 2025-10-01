@@ -7,7 +7,4 @@ import StorageHelper = gf.StorageHelper;
 import VenueFileUpload = gf.VenueFileUpload;
 
 // Storage - Compressor.
-import BitStream = gf.BitStream;
-import ByteStreamFromBytes = gf.ByteStreamFromBytes;
-import ByteStreamFromString = gf.ByteStreamFromString;
 import CompressorLZW = gf.CompressorLZW;

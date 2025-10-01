@@ -60,36 +60,39 @@ export class CompressorLZW
 
 	compressBytes(bytesToCompress: number[])
 	{
-		var byteStreamCompressed = new ByteStreamFromBytes([]);
+		var byteStreamCompressed = new ByteStream([]);
 		var bitStreamCompressed = new BitStream(byteStreamCompressed);
 		this.compressByteStreamToBitStream
 		(
-			new ByteStreamFromBytes(bytesToCompress), bitStreamCompressed
+			new ByteStream(bytesToCompress), bitStreamCompressed
 		);
 		return byteStreamCompressed.bytes;
 	}
 
 	compressString(stringToCompress: string)
 	{
-		var bitStream = new BitStream(new ByteStreamFromString(""));
+		var bitStream = new BitStream(new ByteStream([]));
+		var bytesToCompress = stringToCompress.split("").map(x => x.charCodeAt(0) );
 		this.compressByteStreamToBitStream
 		(
-			new ByteStreamFromString(stringToCompress), bitStream
+			new ByteStream(bytesToCompress), bitStream
 		);
 		var byteStream = bitStream.byteStream;
-		var returnValue = (byteStream as ByteStreamFromString).bytesAsString;
+		var returnValueAsBytes = byteStream.bytes;
+		var returnValue = returnValueAsBytes.map(x => String.fromCharCode(x) ).join("");
 		return returnValue;
 	}
 
 	compressStringToBytes(stringToCompress: string)
 	{
-		var bitStream = new BitStream(new ByteStreamFromBytes([]));
+		var bitStream = new BitStream(new ByteStream([]));
+		var bytesToCompress = stringToCompress.split("").map(x => x.charCodeAt(0) );
 		this.compressByteStreamToBitStream
 		(
-			new ByteStreamFromString(stringToCompress), bitStream
+			new ByteStream(bytesToCompress), bitStream
 		);
 		var byteStream = bitStream.byteStream;
-		var returnValues = (byteStream as ByteStreamFromBytes).bytes;
+		var returnValues = byteStream.bytes;
 		return returnValues;
 	}
 
@@ -168,8 +171,8 @@ export class CompressorLZW
 
 	decompressBytes(bytesToDecode: number[])
 	{
-		var byteStreamToDecode = new ByteStreamFromBytes(bytesToDecode);
-		var byteStreamDecompressed = new ByteStreamFromBytes([]);
+		var byteStreamToDecode = new ByteStream(bytesToDecode);
+		var byteStreamDecompressed = new ByteStream([]);
 		this.decompressByteStream
 		(
 			byteStreamToDecode, byteStreamDecompressed
@@ -181,13 +184,15 @@ export class CompressorLZW
 
 	decompressString(stringToDecode: string)
 	{
-		var byteStreamToDecode = new ByteStreamFromString(stringToDecode);
-		var byteStreamDecompressed = new ByteStreamFromString("");
+		var bytesToDecode = stringToDecode.split("").map(x => x.charCodeAt(0) );
+		var byteStreamToDecode = new ByteStream(bytesToDecode);
+		var byteStreamDecompressed = new ByteStream([]);
 		this.decompressByteStream
 		(
 			byteStreamToDecode, byteStreamDecompressed
 		);
-		var stringDecompressed = byteStreamDecompressed.bytesAsString;
+		var bytesDecompressed = byteStreamDecompressed.bytes;
+		var stringDecompressed = bytesDecompressed.map(x => String.fromCharCode(x) ).join("");
 
 		return stringDecompressed;
 	}

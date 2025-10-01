@@ -132,24 +132,27 @@ export class TarFileEntryHeader
 
 	static fromBytes(bytes: number[]): TarFileEntryHeader
 	{
-		var reader = new ByteStreamFromBytes(bytes);
+		var reader = new ByteStream(bytes);
+		var converter = new ByteConverter();
 
-		var fileName = reader.readStringOfLength(100).trim();
-		var fileMode = reader.readStringOfLength(8);
-		var userIDOfOwner = reader.readStringOfLength(8);
-		var userIDOfGroup = reader.readStringOfLength(8);
-		var fileSizeInBytesAsStringOctal = reader.readStringOfLength(12);
+		var readString = (length: number) => converter.bytesToString(reader.readBytes(length) );
+
+		var fileName = readString(100).trim();
+		var fileMode = readString(8);
+		var userIDOfOwner = readString(8);
+		var userIDOfGroup = readString(8);
+		var fileSizeInBytesAsStringOctal = readString(12);
 		var timeModifiedInUnixFormat = reader.readBytes(12);
-		var checksumAsStringOctal = reader.readStringOfLength(8);
-		var typeFlagValue = reader.readStringOfLength(1);
-		var nameOfLinkedFile = reader.readStringOfLength(100);
-		var uStarIndicator = reader.readStringOfLength(6);
-		var uStarVersion = reader.readStringOfLength(2);
-		var userNameOfOwner = reader.readStringOfLength(32);
-		var groupNameOfOwner = reader.readStringOfLength(32);
-		var deviceNumberMajor = reader.readStringOfLength(8);
-		var deviceNumberMinor = reader.readStringOfLength(8);
-		var filenamePrefix = reader.readStringOfLength(155);
+		var checksumAsStringOctal = readString(8);
+		var typeFlagValue = readString(1);
+		var nameOfLinkedFile = readString(100);
+		var uStarIndicator = readString(6);
+		var uStarVersion = readString(2);
+		var userNameOfOwner = readString(32);
+		var groupNameOfOwner = readString(32);
+		var deviceNumberMajor = readString(8);
+		var deviceNumberMinor = readString(8);
+		var filenamePrefix = readString(155);
 		reader.readBytes(12); // reserved
 
 		var fileSizeInBytes = parseInt
@@ -224,7 +227,7 @@ export class TarFileEntryHeader
 	toBytes(): number[]
 	{
 		var headerAsBytes = new Array<number>();
-		var writer = new ByteStreamFromBytes(headerAsBytes);
+		var writer = new ByteStream(headerAsBytes);
 
 		var fileSizeInBytesAsStringOctal = StringHelper.padStart
 		(
@@ -235,23 +238,27 @@ export class TarFileEntryHeader
 			this.checksum.toString(8) + "\0 ", 8, "0"
 		);
 
-		writer.writeStringPaddedToLength(this.fileName, 100);
-		writer.writeStringPaddedToLength(this.fileMode, 8);
-		writer.writeStringPaddedToLength(this.userIDOfOwner, 8);
-		writer.writeStringPaddedToLength(this.userIDOfGroup, 8);
-		writer.writeStringPaddedToLength(fileSizeInBytesAsStringOctal, 12);
+		var writeStringPaddedToLength =
+			(x: string, length: number) =>
+				writer.writeBytes(x.padEnd(length, " ").split("").map(x => x.charCodeAt(0) ) );
+
+		writeStringPaddedToLength(this.fileName, 100);
+		writeStringPaddedToLength(this.fileMode, 8);
+		writeStringPaddedToLength(this.userIDOfOwner, 8);
+		writeStringPaddedToLength(this.userIDOfGroup, 8);
+		writeStringPaddedToLength(fileSizeInBytesAsStringOctal, 12);
 		writer.writeBytes(this.timeModifiedInUnixFormat);
-		writer.writeStringPaddedToLength(checksumAsStringOctal, 8);
-		writer.writeStringPaddedToLength(this.typeFlag.value, 1);
-		writer.writeStringPaddedToLength(this.nameOfLinkedFile, 100);
-		writer.writeStringPaddedToLength(this.uStarIndicator, 6);
-		writer.writeStringPaddedToLength(this.uStarVersion, 2);
-		writer.writeStringPaddedToLength(this.userNameOfOwner, 32);
-		writer.writeStringPaddedToLength(this.groupNameOfOwner, 32);
-		writer.writeStringPaddedToLength(this.deviceNumberMajor, 8);
-		writer.writeStringPaddedToLength(this.deviceNumberMinor, 8);
-		writer.writeStringPaddedToLength(this.filenamePrefix, 155);
-		writer.writeStringPaddedToLength
+		writeStringPaddedToLength(checksumAsStringOctal, 8);
+		writeStringPaddedToLength(this.typeFlag.value, 1);
+		writeStringPaddedToLength(this.nameOfLinkedFile, 100);
+		writeStringPaddedToLength(this.uStarIndicator, 6);
+		writeStringPaddedToLength(this.uStarVersion, 2);
+		writeStringPaddedToLength(this.userNameOfOwner, 32);
+		writeStringPaddedToLength(this.groupNameOfOwner, 32);
+		writeStringPaddedToLength(this.deviceNumberMajor, 8);
+		writeStringPaddedToLength(this.deviceNumberMinor, 8);
+		writeStringPaddedToLength(this.filenamePrefix, 155);
+		writeStringPaddedToLength
 		(
 			StringHelper.padEnd("", 12, "\0"), 12
 		); // reserved

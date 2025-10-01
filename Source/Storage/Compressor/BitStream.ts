@@ -16,7 +16,7 @@ export class BitStream
 	{
 		if (byteStream == null)
 		{
-			byteStream = new ByteStreamFromBytes([]);
+			byteStream = new ByteStream([]);
 		}
 
 		this.byteStream = byteStream;

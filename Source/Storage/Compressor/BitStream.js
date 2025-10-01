@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class BitStream {
             constructor(byteStream) {
                 if (byteStream == null) {
-                    byteStream = new GameFramework.ByteStreamFromBytes([]);
+                    byteStream = new ByteStream([]);
                 }
                 this.byteStream = byteStream;
                 this.byteOffset = 0;

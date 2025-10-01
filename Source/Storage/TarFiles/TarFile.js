@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
             }
             // static methods
             static fromBytes(fileName, bytes) {
-                var reader = new GameFramework.ByteStreamFromBytes(bytes);
+                var reader = new ByteStream(bytes);
                 var entries = new Array();
                 var chunkSize = TarFile.ChunkSize;
                 var numberOfConsecutiveZeroChunks = 0;
