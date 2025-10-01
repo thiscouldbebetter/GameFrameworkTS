@@ -15,6 +15,7 @@ import VideoHelper = gf.VideoHelper;
 import Audible = gf.Audible;
 import Sound = gf.Sound;
 import SoundFromFile = gf.SoundFromFile;
+import SoundFromFileMod = gf.SoundFromFileMod;
 import SoundFromSoundEffectSynthesizerSequence = gf.SoundFromSoundEffectSynthesizerSequence;
 import SoundHelper = gf.SoundHelper;
 import SoundHelperLive = gf.SoundHelperLive;

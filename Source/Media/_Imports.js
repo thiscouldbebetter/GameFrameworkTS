@@ -12,6 +12,7 @@ var VideoHelper = gf.VideoHelper;
 // Media - Audio.
 var Audible = gf.Audible;
 var SoundFromFile = gf.SoundFromFile;
+var SoundFromFileMod = gf.SoundFromFileMod;
 var SoundFromSoundEffectSynthesizerSequence = gf.SoundFromSoundEffectSynthesizerSequence;
 var SoundHelperLive = gf.SoundHelperLive;
 var SoundPlayback = gf.SoundPlayback;

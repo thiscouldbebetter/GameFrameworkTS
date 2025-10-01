@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 this._pointRandom = GameFramework.Coords.create();
             }
             static default() {
-                return new Sphere(GameFramework.Coords.create(), GameFramework.Coords.fromXYZ(1, 0, 0));
+                return Sphere.fromRadius(1);
             }
             static fromCenterAndPointOnSurface(center, pointOnSurface) {
                 return new Sphere(center, pointOnSurface);

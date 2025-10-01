@@ -101,6 +101,7 @@ var ConversationScope = gf.ConversationScope;
 var TalkNode = gf.TalkNode;
 var TalkNodeDefn = gf.TalkNodeDefn;
 var Talker = gf.Talker;
+var VenueConversationRun = gf.VenueConversationRun;
 var WordBubble = gf.WordBubble;
 // Model - Routable.
 var Routable = gf.Routable;

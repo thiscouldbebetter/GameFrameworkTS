@@ -122,6 +122,7 @@ import ConversationScope = gf.ConversationScope;
 import TalkNode = gf.TalkNode;
 import TalkNodeDefn = gf.TalkNodeDefn;
 import Talker = gf.Talker;
+import VenueConversationRun = gf.VenueConversationRun;
 import WordBubble = gf.WordBubble;
 
 // Model - Routable.
