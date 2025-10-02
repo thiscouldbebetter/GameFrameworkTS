@@ -2,6 +2,10 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
+import bh = ThisCouldBeBetter.BitHandling;
+import ByteConverter = bh.ByteConverter;
+import ByteStream = bh.ByteStream;
+
 export class TarFileEntryHeader
 {
 	fileName: string;

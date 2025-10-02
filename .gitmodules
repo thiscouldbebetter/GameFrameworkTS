@@ -1,6 +1,12 @@
-[submodule "Source/Media/Audio/MusicTracker"]
-	path = Source/Media/Audio/MusicTracker
+[submodule "Source/_Libraries/BitHandling"]
+	path = Source/_Libraries/BitHandling
+	url = https://github.com/thiscouldbebetter/BitHandling
+[submodule "Source/_Libraries/MusicTracker"]
+	path = Source/_Libraries/MusicTracker
 	url = https://github.com/thiscouldbebetter/MusicTracker
-[submodule "Source/Media/Audio/SoundEffectSynthesizer"]
-	path = Source/Media/Audio/SoundEffectSynthesizer
+[submodule "Source/_Libraries/SoundEffectSynthesizer"]
+	path = Source/_Libraries/SoundEffectSynthesizer
 	url = https://github.com/thiscouldbebetter/SoundEffectSynthesizer
+[submodule "Source/_Libraries/WavFileViewer"]
+	path = Source/_Libraries/WavFileViewer
+	url = https://github.com/thiscouldbebetter/WavFileViewer

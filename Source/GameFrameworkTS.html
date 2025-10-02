@@ -8,6 +8,17 @@ for repositories hosted at github.com/thiscouldbebetter,
 so it can be published on thiscouldbebetter.github.io.
 -->
 
+<script type="text/javascript" src="_Libraries/BitHandling/Source/Base64Encoder.js"></script>
+<script type="text/javascript" src="_Libraries/BitHandling/Source/BitStream.js"></script>
+<script type="text/javascript" src="_Libraries/BitHandling/Source/ByteConverter.js"></script>
+<script type="text/javascript" src="_Libraries/BitHandling/Source/ByteStream.js"></script>
+
+<script type="text/javascript" src="_Libraries/SoundEffectSynthesizer/Source/SoundSequence.js"></script>
+<script type="text/javascript" src="_Libraries/SoundEffectSynthesizer/Source/SoundSequenceNote.js"></script>
+<script type="text/javascript" src="_Libraries/SoundEffectSynthesizer/Source/SoundSequenceVoice.js"></script>
+
+<script type="text/javascript" src="_Libraries/WavFileViewer/Source/WavFile.js"></script>
+
 <script type="text/javascript" src="_Imports.js"></script>
 
 <script type="text/javascript" src="Helpers/ArrayHelper.js"></script>
@@ -21,6 +32,7 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Model/Entity.js"></script>
 <script type="text/javascript" src="Model/EntityProperty.js"></script>
 
+<script type="text/javascript" src="Controls/CharacterSet.js"></script>
 <script type="text/javascript" src="Controls/ControlActionNames.js"></script>
 <script type="text/javascript" src="Controls/ControlBase.js"></script>
 <script type="text/javascript" src="Controls/ControlBuilder.js"></script>
@@ -212,16 +224,6 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Media/Audio/SoundPlayback.js"></script>
 <script type="text/javascript" src="Media/Audio/VisualSound.js"></script>
 
-<script type="text/javascript" src="Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/ByteHandling/Base64Encoder.js"></script>
-<script type="text/javascript" src="Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/ByteHandling/ByteConverter.js"></script>
-<script type="text/javascript" src="Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/ByteHandling/ByteStreamLittleEndian.js"></script>
-<script type="text/javascript" src="Media/Audio/SoundEffectSynthesizer/Source/WavFileViewer/Source/WavFile.js"></script>
-
-<script type="text/javascript" src="Media/Audio/SoundEffectSynthesizer/Source/SoundSequence.js"></script>
-<script type="text/javascript" src="Media/Audio/SoundEffectSynthesizer/Source/SoundSequenceNote.js"></script>
-<script type="text/javascript" src="Media/Audio/SoundEffectSynthesizer/Source/SoundSequenceVoice.js"></script>
-<script type="text/javascript" src="Media/Audio/SoundEffectSynthesizer/Source/_Imports.js"></script>
-
 <script type="text/javascript" src="Media/Text/TextString.js"></script>
 
 <script type="text/javascript" src="Media/_Imports.js"></script>
@@ -342,8 +344,6 @@ so it can be published on thiscouldbebetter.github.io.
 <script type="text/javascript" src="Storage/TarFiles/TarFileTypeFlag.js"></script>
 
 <script type="text/javascript" src="Storage/Compressor/BitStream.js"></script>
-<script type="text/javascript" src="Storage/Compressor/ByteStreamFromBytes.js"></script>
-<script type="text/javascript" src="Storage/Compressor/ByteStreamFromString.js"></script>
 <script type="text/javascript" src="Storage/Compressor/CompressorLZW.js"></script>
 
 <script type="text/javascript" src="Storage/_Imports.js"></script>
@@ -354,7 +354,6 @@ so it can be published on thiscouldbebetter.github.io.
 
 <script type="text/javascript" src="Testing/_Imports.js"></script>
 
-<script type="text/javascript" src="Utility/Base64Encoder.js"></script>
 <script type="text/javascript" src="Utility/ClonableHelper.js"></script>
 <script type="text/javascript" src="Utility/DateTime.js"></script>
 <script type="text/javascript" src="Utility/Debug.js"></script>

@@ -3,6 +3,8 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
+        var bh = ThisCouldBeBetter.BitHandling;
+        var ByteStream = bh.ByteStream;
         class TarFile {
             constructor(fileName, entries) {
                 this.fileName = fileName;

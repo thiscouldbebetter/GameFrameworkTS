@@ -257,7 +257,7 @@ class BoxAxisAlignedTests extends TestFixture {
     toString() {
         var boxOfSize1AtOrigin = BoxAxisAligned.fromSize(Coords.ones());
         var boxAsString = boxOfSize1AtOrigin.toString();
-        var boxAsStringExpected = "-0.5x-0.5x-0.5:0.5x0.5x0.5";
+        var boxAsStringExpected = "BoxAxisAligned of size 1x1x1 at 0x0x0";
         Assert.areStringsEqual(boxAsStringExpected, boxAsString);
     }
     // ShapeBase.

@@ -3,6 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
+        var bh = ThisCouldBeBetter.BitHandling;
+        var ByteConverter = bh.ByteConverter;
+        var ByteStream = bh.ByteStream;
         class TarFileEntryHeader {
             constructor(fileName, fileMode, userIDOfOwner, userIDOfGroup, fileSizeInBytes, timeModifiedInUnixFormat, checksum, typeFlag, nameOfLinkedFile, uStarIndicator, uStarVersion, userNameOfOwner, groupNameOfOwner, deviceNumberMajor, deviceNumberMinor, filenamePrefix) {
                 this.fileName = fileName;

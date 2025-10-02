@@ -7,5 +7,4 @@ export interface Sound extends MediaItemBase
 	domElement(universe: Universe): HTMLAudioElement
 }
 
-
 }
