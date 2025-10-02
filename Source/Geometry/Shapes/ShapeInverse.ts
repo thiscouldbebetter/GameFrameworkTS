@@ -49,7 +49,11 @@ export class ShapeInverse extends ShapeBase
 
 	// Transformable.
 
-	transform(transformToApply: TransformBase): ShapeInverse { throw new Error("Not implemented!");  }
+	transform(transformToApply: TransformBase): ShapeInverse
+	{
+		this.child.transform(transformToApply);
+		return this;
+	}
 
 }
 
