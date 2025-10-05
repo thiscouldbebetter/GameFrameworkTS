@@ -216,16 +216,11 @@ export class Selector extends EntityPropertyBase<Selector>
 		{
 			var camera = Camera.of(cameraEntity);
 
-			mousePosAbsolute.divide
-			(
-				uwpe.universe.display.scaleFactor()
-			).add
-			(
-				camera.loc.pos
-			).subtract
-			(
-				camera.viewSizeHalf
-			).clearZ();
+			mousePosAbsolute
+				.divide(uwpe.universe.display.scaleFactor() )
+				.add(camera.loc.pos)
+				.subtract(camera.viewSizeHalf)
+				.clearZ();
 		}
 
 		return mousePosAbsolute;

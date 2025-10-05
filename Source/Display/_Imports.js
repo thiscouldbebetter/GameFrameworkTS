@@ -6,6 +6,7 @@ var Display2D = gf.Display2D;
 var DisplayFarToNear = gf.DisplayFarToNear;
 var DisplayRecorder = gf.DisplayRecorder;
 var DisplayTest = gf.DisplayTest;
+var FaceTextured = gf.FaceTextured;
 var VenueFader = gf.VenueFader;
 var VenueLayered = gf.VenueLayered;
 var VisualAnchor = gf.VisualAnchor;

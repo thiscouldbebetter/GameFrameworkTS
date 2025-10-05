@@ -8,6 +8,7 @@ import Display2D = gf.Display2D;
 import DisplayFarToNear = gf.DisplayFarToNear;
 import DisplayRecorder = gf.DisplayRecorder;
 import DisplayTest = gf.DisplayTest;
+import FaceTextured = gf.FaceTextured;
 import VenueFader = gf.VenueFader;
 import VenueLayered = gf.VenueLayered;
 import Visual = gf.Visual;

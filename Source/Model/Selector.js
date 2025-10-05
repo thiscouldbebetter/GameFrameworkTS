@@ -99,7 +99,11 @@ var ThisCouldBeBetter;
                 var cameraEntity = GameFramework.Camera.entityFromPlace(place);
                 if (cameraEntity != null) {
                     var camera = GameFramework.Camera.of(cameraEntity);
-                    mousePosAbsolute.divide(uwpe.universe.display.scaleFactor()).add(camera.loc.pos).subtract(camera.viewSizeHalf).clearZ();
+                    mousePosAbsolute
+                        .divide(uwpe.universe.display.scaleFactor())
+                        .add(camera.loc.pos)
+                        .subtract(camera.viewSizeHalf)
+                        .clearZ();
                 }
                 return mousePosAbsolute;
             }

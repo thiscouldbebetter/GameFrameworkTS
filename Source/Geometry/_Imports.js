@@ -68,6 +68,7 @@ var MapOfCells = gf.MapOfCells;
 var MapOfCellsCellSourceArray = gf.MapOfCellsCellSourceArray;
 // Geometry - Shapes - Meshes.
 var Mesh = gf.Mesh;
+var MeshBuilder = gf.MeshBuilder;
 var MeshTextured = gf.MeshTextured;
 var Transform_Dynamic = gf.Transform_Dynamic;
 var Transform_Locate = gf.Transform_Locate;

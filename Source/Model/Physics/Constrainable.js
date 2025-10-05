@@ -37,6 +37,10 @@ var ThisCouldBeBetter;
                 this.constraints.push(constraintToAdd);
                 return this;
             }
+            constraintByClassName(constraintClassName) {
+                var constraint = this.constraints.find(x => x.constructor.name == constraintClassName);
+                return constraint;
+            }
             constraintByName(constraintName) {
                 var constraint = this.constraints.find(x => x.name == constraintName);
                 return constraint;

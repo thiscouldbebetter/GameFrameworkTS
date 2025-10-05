@@ -83,6 +83,7 @@ import MapOfCellsCellSourceArray = gf.MapOfCellsCellSourceArray;
 
 // Geometry - Shapes - Meshes.
 import Mesh = gf.Mesh;
+import MeshBuilder = gf.MeshBuilder;
 import MeshTextured = gf.MeshTextured;
 
 // Geometry - Transforms.
