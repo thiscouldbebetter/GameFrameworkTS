@@ -89,6 +89,7 @@ import MeshTextured = gf.MeshTextured;
 // Geometry - Transforms.
 import Transform = gf.Transform;
 import TransformBase = gf.TransformBase;
+import Transform_Camera = gf.Transform_Camera;
 import Transform_Dynamic = gf.Transform_Dynamic;
 import Transform_Locate = gf.Transform_Locate;
 import Transform_Multiple = gf.Transform_Multiple;

@@ -70,6 +70,7 @@ var MapOfCellsCellSourceArray = gf.MapOfCellsCellSourceArray;
 var Mesh = gf.Mesh;
 var MeshBuilder = gf.MeshBuilder;
 var MeshTextured = gf.MeshTextured;
+var Transform_Camera = gf.Transform_Camera;
 var Transform_Dynamic = gf.Transform_Dynamic;
 var Transform_Locate = gf.Transform_Locate;
 var Transform_Multiple = gf.Transform_Multiple;
