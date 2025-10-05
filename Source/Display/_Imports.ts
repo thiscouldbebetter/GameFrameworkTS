@@ -10,6 +10,8 @@ import DisplayFarToNear = gf.DisplayFarToNear;
 import DisplayRecorder = gf.DisplayRecorder;
 import DisplayTest = gf.DisplayTest;
 import FaceTextured = gf.FaceTextured;
+import Material = gf.Material;
+import Texture = gf.Texture;
 import VenueFader = gf.VenueFader;
 import VenueLayered = gf.VenueLayered;
 import Visual = gf.Visual;
@@ -40,6 +42,7 @@ import VisualJump2D = gf.VisualJump2D;
 import VisualLine = gf.VisualLine;
 import VisualLineStatic = gf.VisualLineStatic;
 import VisualMap = gf.VisualMap;
+import VisualMesh = gf.VisualMesh;
 import VisualNamed = gf.VisualNamed;
 import VisualNone = gf.VisualNone;
 import VisualOffset = gf.VisualOffset;
@@ -54,6 +57,7 @@ import VisualRotate = gf.VisualRotate;
 import VisualSelect = gf.VisualSelect;
 import VisualStack = gf.VisualStack;
 import VisualText = gf.VisualText;
+import VisualTransform = gf.VisualTransform;
 import VisualWrapped = gf.VisualWrapped;
 
 // Display - Visuals - Animation.
