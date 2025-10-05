@@ -3,6 +3,7 @@
 var Color = gf.Color;
 var Drawable = gf.Drawable;
 var Display2D = gf.Display2D;
+var Display3D = gf.Display3D;
 var DisplayFarToNear = gf.DisplayFarToNear;
 var DisplayRecorder = gf.DisplayRecorder;
 var DisplayTest = gf.DisplayTest;

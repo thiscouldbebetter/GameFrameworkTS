@@ -5,6 +5,7 @@ import Color = gf.Color;
 import Drawable = gf.Drawable;
 import Display = gf.Display;
 import Display2D = gf.Display2D;
+import Display3D = gf.Display3D;
 import DisplayFarToNear = gf.DisplayFarToNear;
 import DisplayRecorder = gf.DisplayRecorder;
 import DisplayTest = gf.DisplayTest;
