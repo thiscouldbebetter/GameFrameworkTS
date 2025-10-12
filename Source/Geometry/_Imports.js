@@ -66,17 +66,28 @@ var MapCellCollidable = gf.MapCellCollidable;
 var MapLocated = gf.MapLocated;
 var MapOfCells = gf.MapOfCells;
 var MapOfCellsCellSourceArray = gf.MapOfCellsCellSourceArray;
+// Geometry - Shapes - Maze.
+var Maze = gf.Maze;
+var MazeCell = gf.MazeCell;
+var MazeCellNetwork = gf.MazeCellNetwork;
 // Geometry - Shapes - Meshes.
 var Mesh = gf.Mesh;
+var MeshBuilder = gf.MeshBuilder;
 var MeshTextured = gf.MeshTextured;
+var Transform_Camera = gf.Transform_Camera;
 var Transform_Dynamic = gf.Transform_Dynamic;
 var Transform_Locate = gf.Transform_Locate;
 var Transform_Multiple = gf.Transform_Multiple;
 var Transform_None = gf.Transform_None;
 var Transform_Orient = gf.Transform_Orient;
+var Transform_Overwrite = gf.Transform_Overwrite;
 var Transform_Rotate2D = gf.Transform_Rotate2D;
 var Transform_RotateLeft = gf.Transform_RotateLeft;
 var Transform_RotateRight = gf.Transform_RotateRight;
 var Transform_Scale = gf.Transform_Scale;
 var Transform_Translate = gf.Transform_Translate;
 var Transforms = gf.Transforms;
+// Geometry - Transforms - Bones.
+var BoneInfluence = gf.BoneInfluence;
+var SkeletonHelper = gf.SkeletonHelper;
+var Transform_MeshPoseWithSkeleton = gf.Transform_MeshPoseWithSkeleton;

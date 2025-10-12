@@ -57,6 +57,14 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 		return this;
 	}
 
+	constraintByClassName(constraintClassName: string): Constraint
+	{
+		var constraint =
+			this.constraints.find(x => x.constructor.name == constraintClassName);
+
+		return constraint;
+	}
+
 	constraintByName(constraintName: string): Constraint
 	{
 		var constraint =
@@ -64,7 +72,6 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 
 		return constraint;
 	}
-
 
 	constraintRemove
 	(

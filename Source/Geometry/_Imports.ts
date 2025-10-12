@@ -81,18 +81,26 @@ import MapOfCells = gf.MapOfCells;
 import MapOfCellsCellSource = gf.MapOfCellsCellSource;
 import MapOfCellsCellSourceArray = gf.MapOfCellsCellSourceArray;
 
+// Geometry - Shapes - Maze.
+import Maze = gf.Maze;
+import MazeCell = gf.MazeCell;
+import MazeCellNetwork = gf.MazeCellNetwork;
+
 // Geometry - Shapes - Meshes.
 import Mesh = gf.Mesh;
+import MeshBuilder = gf.MeshBuilder;
 import MeshTextured = gf.MeshTextured;
 
 // Geometry - Transforms.
 import Transform = gf.Transform;
 import TransformBase = gf.TransformBase;
+import Transform_Camera = gf.Transform_Camera;
 import Transform_Dynamic = gf.Transform_Dynamic;
 import Transform_Locate = gf.Transform_Locate;
 import Transform_Multiple = gf.Transform_Multiple;
 import Transform_None = gf.Transform_None;
 import Transform_Orient = gf.Transform_Orient;
+import Transform_Overwrite = gf.Transform_Overwrite;
 import Transform_Rotate2D = gf.Transform_Rotate2D;
 import Transform_RotateLeft = gf.Transform_RotateLeft;
 import Transform_RotateRight = gf.Transform_RotateRight;
@@ -101,3 +109,8 @@ import Transform_Translate = gf.Transform_Translate;
 import Transformable = gf.Transformable;
 import TransformableBase = gf.TransformableBase;
 import Transforms = gf.Transforms;
+
+// Geometry - Transforms - Bones.
+import BoneInfluence = gf.BoneInfluence;
+import SkeletonHelper = gf.SkeletonHelper;
+import Transform_MeshPoseWithSkeleton = gf.Transform_MeshPoseWithSkeleton;

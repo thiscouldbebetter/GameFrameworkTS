@@ -21,16 +21,3 @@ import SoundHelper = gf.SoundHelper;
 import SoundHelperLive = gf.SoundHelperLive;
 import SoundPlayback = gf.SoundPlayback;
 import VisualSound = gf.VisualSound;
-
-// SoundEffectSynthesizer.
-
-import ses = ThisCouldBeBetter.SoundEffectSynthesizer;
-import SoundSequence = ses.SoundSequence;
-import SoundSequenceVoice = ses.SoundSequenceVoice;
-
-// WavFileViewer.
-
-import wfv = ThisCouldBeBetter.WavFileViewer;
-import SoundFromWavFile = wfv.SoundFromWavFile;
-import WavFile = wfv.WavFile;
-import WavFileSamplingInfo = wfv.WavFileSamplingInfo;
