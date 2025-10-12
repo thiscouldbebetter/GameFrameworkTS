@@ -76,3 +76,4 @@ On the "Items" tab, it's possible that the "Use" button only fires when clicked 
 When the SwordCold is equipped, it sometimes appears to be held by the midpoint rather than the hilt.
 
 The "Friendly" can walk past the edges of the starting room, flicker, and escape.
+The Friendly's collision box doesn't seem to move from his starting position.
