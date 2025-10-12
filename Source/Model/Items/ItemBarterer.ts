@@ -24,6 +24,11 @@ export class ItemBarterer extends EntityPropertyBase<ItemBarterer>
 		this.patienceMax = 10;
 	}
 
+	static create(): ItemBarterer
+	{
+		return new ItemBarterer();
+	}
+
 	isAnythingBeingOffered(): boolean
 	{
 		var returnValue =
@@ -117,8 +122,11 @@ export class ItemBarterer extends EntityPropertyBase<ItemBarterer>
 
 	toControl
 	(
-		universe: Universe, size: Coords, entityCustomer: Entity,
-		entityStore: Entity, venuePrev: Venue
+		universe: Universe,
+		size: Coords,
+		entityCustomer: Entity,
+		entityStore: Entity,
+		venuePrev: Venue
 	): ControlBase
 	{
 		if (size == null)

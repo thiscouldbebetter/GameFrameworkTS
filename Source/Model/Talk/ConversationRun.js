@@ -151,7 +151,7 @@ var ThisCouldBeBetter;
                 return this.scopeCurrent;
             }
             scriptParse(scriptAsString) {
-                return eval(scriptAsString); // Not possible to catch eval() errors here!
+                return GameFramework.Script.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
             }
             talkNodeAdvance(universe) {
                 this.scopeCurrent.talkNodeAdvance(universe, this);
@@ -223,7 +223,7 @@ var ThisCouldBeBetter;
                 var scriptText = "( (u, cr) => " + variableExpression + ")";
                 try {
                     var scriptToRun = this.scriptParse(scriptText);
-                    var variableValue = scriptToRun(universe, this);
+                    var variableValue = scriptToRun.runWithParams2(universe, this);
                     this.variableSet(variableName, variableValue);
                 }
                 catch (err) {
@@ -238,7 +238,7 @@ var ThisCouldBeBetter;
                 var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
                 var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
                 var scriptToRun = this.scriptParse(scriptToRunAsString);
-                scriptToRun(universe, this);
+                scriptToRun.runWithParams2(universe, this);
             }
             variablesExport(universe, variableLookupExpression) {
                 var variablesByNameToExport = this.variablesByName;
@@ -251,13 +251,13 @@ var ThisCouldBeBetter;
                         .join("\"" + variableValueAsString + "\"");
                     var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
                     var scriptToRun = this.scriptParse(scriptToRunAsString);
-                    scriptToRun(universe, this);
+                    scriptToRun.runWithParams2(universe, this);
                 }
             }
             variablesImport(universe, variableLookupExpression) {
                 var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
                 var scriptToRun = this.scriptParse(scriptText);
-                var variablesByNameToImportFrom = scriptToRun(universe, this);
+                var variablesByNameToImportFrom = scriptToRun.runWithParams2(universe, this);
                 for (var [variableName, variableValue] of variablesByNameToImportFrom) {
                     this.variableSet(variableName, variableValue);
                 }

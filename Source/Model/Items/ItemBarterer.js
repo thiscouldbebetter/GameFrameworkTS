@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
                 this.patience = 10;
                 this.patienceMax = 10;
             }
+            static create() {
+                return new ItemBarterer();
+            }
             isAnythingBeingOffered() {
                 var returnValue = (this.itemHolderCustomerOffer.items.length > 0
                     || this.itemHolderStoreOffer.items.length > 0);

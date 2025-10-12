@@ -257,9 +257,9 @@ export class ConversationRun
 		return this.scopeCurrent;
 	}
 
-	scriptParse(scriptAsString: string): any
+	scriptParse(scriptAsString: string): Script
 	{
-		return eval(scriptAsString); // Not possible to catch eval() errors here!
+		return Script.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
 	}
 
 	talkNodeAdvance(universe: Universe): void
@@ -377,7 +377,7 @@ export class ConversationRun
 		try
 		{
 			var scriptToRun = this.scriptParse(scriptText);
-			var variableValue = scriptToRun(universe, this);
+			var variableValue = scriptToRun.runWithParams2(universe, this);
 			this.variableSet(variableName, variableValue);
 		}
 		catch (err)
@@ -404,7 +404,7 @@ export class ConversationRun
 		var scriptToRunAsString =
 			"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
 		var scriptToRun = this.scriptParse(scriptToRunAsString);
-		scriptToRun(universe, this);
+		scriptToRun.runWithParams2(universe, this);
 	}
 
 	variablesExport
@@ -426,7 +426,7 @@ export class ConversationRun
 			var scriptToRunAsString =
 				"( (u, cr) => { " + scriptExpressionWithValue + "; } )";
 			var scriptToRun = this.scriptParse(scriptToRunAsString);
-			scriptToRun(universe, this);
+			scriptToRun.runWithParams2(universe, this);
 		}
 	}
 
@@ -438,7 +438,7 @@ export class ConversationRun
 	{
 		var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
 		var scriptToRun = this.scriptParse(scriptText);
-		var variablesByNameToImportFrom = scriptToRun(universe, this);
+		var variablesByNameToImportFrom = scriptToRun.runWithParams2(universe, this);
 		for (var [variableName, variableValue] of variablesByNameToImportFrom)
 		{
 			this.variableSet(variableName, variableValue);

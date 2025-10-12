@@ -122,7 +122,7 @@ Game.Tips|Display|Don't touch anything red.
 Game.NeverMind|Display|You were fun.  I'll miss you.
 |Pop||Subject
 Trade|Display|I guess so.  Got anything good?
-|Script|u.venueNextSet(new ItemBarterer().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent).toVenue() )
+|Script|u.venueNextSet(ItemBarterer.create().toControl(u, u.display.sizeInPixels, cr.p, cr.t, u.venueCurrent() ).toVenue() )
 |Display|Well, that was mutually enriching.
 |Goto||Subject
 Quit|Display|Same to you, buddy.

@@ -396,7 +396,9 @@ class TalkNodeDefn_Instances
 		var talkNode = conversationRun.talkNodeCurrent();
 		var variableName = talkNode.content;
 		var variableIncrementAsString = talkNode.next;
-		var variableIncrement = eval(variableIncrementAsString);
+		var variableIncrementAsScript = Script.fromCodeAsString(variableIncrementAsString);
+		var variableIncrement =
+			variableIncrementAsScript.runWithParams2(universe, conversationRun);
 
 		var variableValueBeforeIncrement =
 			conversationRun.variableGetWithDefault(variableName, 0);
@@ -426,7 +428,8 @@ class TalkNodeDefn_Instances
 		var talkNode = conversationRun.talkNodeCurrent();
 		var variableName = talkNode.content;
 		var variableExpression = talkNode.next;
-		var variableValue = eval(variableExpression);
+		var variableScript = Script.fromCodeAsString(variableExpression);
+		var variableValue = variableScript.runWithParams2(universe, conversationRun);
 
 		conversationRun.variableSet(variableName, variableValue);
 
