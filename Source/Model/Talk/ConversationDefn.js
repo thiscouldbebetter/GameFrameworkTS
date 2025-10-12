@@ -197,6 +197,7 @@ var ThisCouldBeBetter;
                 var imagePortraitName;
                 var soundMusicName;
                 var headerLines = header.split(newline);
+                headerLines = headerLines.map(x => x.indexOf("//") > 0 ? x.split("//")[0].trim() : x);
                 for (var i = 0; i < headerLines.length; i++) {
                     var headerLine = headerLines[i];
                     var fieldNameAndValue = headerLine.split("=");
