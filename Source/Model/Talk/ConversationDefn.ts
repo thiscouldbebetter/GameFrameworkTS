@@ -440,8 +440,9 @@ export class ConversationDefn
 
 			if (talkNode.isDisabled != null)
 			{
-				var scriptToRunAsString = "( (u, cr) => " + talkNode.isDisabled + " )";
-				var scriptToRun = eval(scriptToRunAsString);
+				var scriptToRunAsString =
+					"( (u, cr) => " + talkNode.isDisabled + " )";
+				var scriptToRun = Script.fromCodeAsString(scriptToRunAsString);
 
 				talkNode._isEnabled = scriptToRun;
 			}

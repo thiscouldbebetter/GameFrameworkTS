@@ -8,7 +8,7 @@ Subject|Display|What do you want to talk about?
 |Option|Let's talk about science.|Science
 Subject.History|Option|Let's talk about history.|History
 Subject.Random|Option|Say something random.|CoinFlip
-Subject.Carol|Option|We NEED to talk about Carol.|TalkOver|true
+Subject.Carol|Option|We NEED to talk about Carol.|TalkOver|false
 |Option|; drop database conversation_topics;|SQLInjection
 |Option|Say, how do I play this game?|Game
 |Option|Do you want to trade items?|Trade
@@ -34,8 +34,8 @@ History.Recent|Display|If it's recent, is it really history?
 |Prompt
 History.Carol|Display|We are NEVER talking about Carol.
 |Display|I don't want to talk about history anymore.
-|Disable|Subject.History
-|Enable|Subject.Carol"
+|Disable||Subject.History
+|Enable||Subject.Carol
 |Pop||Subject
 History.NeverMind|Display|Fine, you're the one who brought it up.
 |Pop||Subject

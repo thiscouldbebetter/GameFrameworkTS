@@ -8,7 +8,7 @@ export class TalkNode //
 	defnName: string;
 	content: string;
 	next: string;
-	_isEnabled: (u: Universe, cr: ConversationRun) => boolean;
+	_isEnabled: Script;
 
 	constructor
 	(
@@ -16,7 +16,7 @@ export class TalkNode //
 		defnName: string,
 		content: string,
 		next: string,
-		isEnabled: (u: Universe, cr: ConversationRun) => boolean
+		isEnabled: Script
 	)
 	{
 		this.name = name;
@@ -48,11 +48,26 @@ export class TalkNode //
 		return new TalkNode(null, defnName, null, null, null);
 	}
 
+	static fromNameDefnNameContentNextAndEnabled
+	(
+		name: string,
+		defnName: string,
+		content: string,
+		next: string,
+		isEnabled: Script
+	)
+	{
+		return new TalkNode
+		(
+			name, defnName, content, next, isEnabled
+		);
+	}
+
 	// static methods
 
 	static _idNext = 0;
 	static idNext()
-	{
+	{	
 		var returnValue = "_" + TalkNode._idNext;
 		TalkNode._idNext++;
 		return returnValue;
@@ -249,13 +264,13 @@ export class TalkNode //
 
 	disable(): TalkNode
 	{
-		this._isEnabled = () => false;
+		this._isEnabled = Script.fromCodeAsString( "() => false" );
 		return this;
 	}
 
 	enable(): TalkNode
 	{
-		this._isEnabled = () => true;
+		this._isEnabled = Script.fromCodeAsString( "() => true" );
 		return this;
 	}
 
@@ -286,7 +301,7 @@ export class TalkNode //
 		(
 			this._isEnabled == null
 			? true
-			: this._isEnabled(u, cr)
+			: this._isEnabled.runWithParams2(u, cr)
 		);
 
 		return returnValue;
@@ -343,10 +358,11 @@ export class TalkNode //
 		}
 		else
 		{
-			var scriptToRunAsString = "( (u, cr) => " + isEnabledAsText + " )";
+			var scriptToRunAsString =
+				"( (u, cr) => " + isEnabledAsText + " )";
 			try
 			{
-				isEnabled = eval(scriptToRunAsString);
+				isEnabled = Script.fromCodeAsString(scriptToRunAsString);
 			}
 			catch (err)
 			{
@@ -354,12 +370,12 @@ export class TalkNode //
 			}
 		}
 
-		var returnValue = new TalkNode
+		var returnValue = TalkNode.fromNameDefnNameContentNextAndEnabled
 		(
-			fields[0], // name
-			fields[1], // defnName
-			fields[2], // content
-			fields[3], // next
+			fields[0],
+			fields[1],
+			fields[2],
+			fields[3],
 			isEnabled
 		);
 		return returnValue;

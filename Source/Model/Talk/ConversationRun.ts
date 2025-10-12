@@ -67,7 +67,7 @@ export class ConversationRun
 
 	disableTalkNodeWithName(talkNodeToDisableName: string): void
 	{
-		this.enableOrDisable(talkNodeToDisableName, true);
+		this.enableOrDisable(talkNodeToDisableName, false);
 	}
 
 	enable(talkNodeToActivateName: string): void
@@ -77,7 +77,7 @@ export class ConversationRun
 
 	enableTalkNodeWithName(talkNodeToActivateName: string): void
 	{
-		this.enableOrDisable(talkNodeToActivateName, false);
+		this.enableOrDisable(talkNodeToActivateName, true);
 	}
 
 	enableOrDisable
@@ -89,7 +89,8 @@ export class ConversationRun
 		var conversationDefn = this.defn;
 		var talkNodeToSet =
 			conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
-		talkNodeToSet._isEnabled = () => isEnabledValueToSet;
+		talkNodeToSet._isEnabled =
+			Script.fromCodeAsString( "() => " + isEnabledValueToSet);
 	}
 
 	goto(talkNodeNameNext: string, universe: Universe): void

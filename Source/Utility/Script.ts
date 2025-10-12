@@ -42,9 +42,24 @@ export class Script
 	run(uwpe: UniverseWorldPlaceEntities): any
 	{
 		var codeParsed = this.codeAsFunction();
-		var returnValue = codeParsed.run(this, uwpe);
+		var returnValue = codeParsed.call(this, uwpe);
 		return returnValue;
 	}
+
+	runWithParams1(param0: any): any
+	{
+		var codeParsed = this.codeAsFunction();
+		var returnValue = codeParsed.call(this, param0);
+		return returnValue;
+	}
+
+	runWithParams2(param0: any, param1: any): any
+	{
+		var codeParsed = this.codeAsFunction();
+		var returnValue = codeParsed.call(this, param0, param1);
+		return returnValue;
+	}
+
 }
 
 }

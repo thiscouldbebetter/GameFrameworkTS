@@ -262,7 +262,7 @@ var ThisCouldBeBetter;
                     }
                     if (talkNode.isDisabled != null) {
                         var scriptToRunAsString = "( (u, cr) => " + talkNode.isDisabled + " )";
-                        var scriptToRun = eval(scriptToRunAsString);
+                        var scriptToRun = GameFramework.Script.fromCodeAsString(scriptToRunAsString);
                         talkNode._isEnabled = scriptToRun;
                     }
                 }

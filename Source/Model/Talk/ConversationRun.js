@@ -30,18 +30,19 @@ var ThisCouldBeBetter;
                 this.disableTalkNodeWithName(talkNodeToDisableName);
             }
             disableTalkNodeWithName(talkNodeToDisableName) {
-                this.enableOrDisable(talkNodeToDisableName, true);
+                this.enableOrDisable(talkNodeToDisableName, false);
             }
             enable(talkNodeToActivateName) {
                 this.enableTalkNodeWithName(talkNodeToActivateName);
             }
             enableTalkNodeWithName(talkNodeToActivateName) {
-                this.enableOrDisable(talkNodeToActivateName, false);
+                this.enableOrDisable(talkNodeToActivateName, true);
             }
             enableOrDisable(talkNodeToEnableOrDisableName, isEnabledValueToSet) {
                 var conversationDefn = this.defn;
                 var talkNodeToSet = conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
-                talkNodeToSet._isEnabled = () => isEnabledValueToSet;
+                talkNodeToSet._isEnabled =
+                    GameFramework.Script.fromCodeAsString("() => " + isEnabledValueToSet);
             }
             goto(talkNodeNameNext, universe) {
                 this.gotoTalkNodeWithNameForUniverse(talkNodeNameNext, universe);

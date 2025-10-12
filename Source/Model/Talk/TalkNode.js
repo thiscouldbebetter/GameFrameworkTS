@@ -26,6 +26,9 @@ var ThisCouldBeBetter;
             static fromDefnName(defnName) {
                 return new TalkNode(null, defnName, null, null, null);
             }
+            static fromNameDefnNameContentNextAndEnabled(name, defnName, content, next, isEnabled) {
+                return new TalkNode(name, defnName, content, next, isEnabled);
+            }
             static idNext() {
                 var returnValue = "_" + TalkNode._idNext;
                 TalkNode._idNext++;
@@ -118,11 +121,11 @@ var ThisCouldBeBetter;
                 return conversationDefn.talkNodeDefnsByName.get(this.defnName);
             }
             disable() {
-                this._isEnabled = () => false;
+                this._isEnabled = GameFramework.Script.fromCodeAsString("() => false");
                 return this;
             }
             enable() {
-                this._isEnabled = () => true;
+                this._isEnabled = GameFramework.Script.fromCodeAsString("() => true");
                 return this;
             }
             execute(universe, conversationRun, scope) {
@@ -138,7 +141,7 @@ var ThisCouldBeBetter;
             isEnabledForUniverseAndConversationRun(u, cr) {
                 var returnValue = (this._isEnabled == null
                     ? true
-                    : this._isEnabled(u, cr));
+                    : this._isEnabled.runWithParams2(u, cr));
                 return returnValue;
             }
             textForTranscript(conversationRun) {
@@ -171,17 +174,13 @@ var ThisCouldBeBetter;
                 else {
                     var scriptToRunAsString = "( (u, cr) => " + isEnabledAsText + " )";
                     try {
-                        isEnabled = eval(scriptToRunAsString);
+                        isEnabled = GameFramework.Script.fromCodeAsString(scriptToRunAsString);
                     }
                     catch (err) {
                         throw err;
                     }
                 }
-                var returnValue = new TalkNode(fields[0], // name
-                fields[1], // defnName
-                fields[2], // content
-                fields[3], // next
-                isEnabled);
+                var returnValue = TalkNode.fromNameDefnNameContentNextAndEnabled(fields[0], fields[1], fields[2], fields[3], isEnabled);
                 return returnValue;
             }
             toPipeSeparatedValues() {

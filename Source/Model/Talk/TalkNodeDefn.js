@@ -214,8 +214,8 @@ var ThisCouldBeBetter;
             script(universe, conversationRun) {
                 var talkNode = conversationRun.talkNodeCurrent();
                 var scriptToRunAsString = "( (u, cr) => " + talkNode.content + ")";
-                var scriptToRun = eval(scriptToRunAsString);
-                scriptToRun(universe, conversationRun);
+                var scriptToRun = GameFramework.Script.fromCodeAsString(scriptToRunAsString);
+                scriptToRun.runWithParams2(universe, conversationRun);
                 conversationRun.talkNodeGoToNext(universe);
                 conversationRun.talkNodeCurrentExecute(universe); // hack
             }
