@@ -54,7 +54,10 @@ var ThisCouldBeBetter;
             static fromCenterVertexOffsetsAndFaceBuilders(center, vertexOffsets, faceBuilders) {
                 return new Mesh(center, vertexOffsets, faceBuilders);
             }
-            static fromFace(center, faceToExtrude, thickness) {
+            static fromFace(face) {
+                return Mesh.fromCenterFaceToExtrudeAndThickness(GameFramework.Coords.create(), face, 1);
+            }
+            static fromCenterFaceToExtrudeAndThickness(center, faceToExtrude, thickness) {
                 var faceVertices = faceToExtrude.vertices;
                 var numberOfFaceVertices = faceVertices.length;
                 var thicknessHalf = thickness / 2;

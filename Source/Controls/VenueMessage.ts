@@ -180,12 +180,10 @@ export class VenueMessage<TContext> implements Venue
 
 	acknowledge(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var universe = uwpe.universe;
 		this._acknowledge(uwpe);
-
-		// If this happens, any .venueNextSet() call
-		// in the _acknowledge will be ignored.
-		// var universe = uwpe.universe;
-		// universe.venuePrevJumpTo();
+		var venueNext = universe.venueNext() || universe.venuePrev();
+		universe.venueNextSet(venueNext);
 	}
 
 	acknowledgeButtonIsSuppressedSet(value: boolean): VenueMessage<TContext>

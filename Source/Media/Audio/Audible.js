@@ -20,6 +20,10 @@ var ThisCouldBeBetter;
                 this.soundPlayback = value;
                 return this;
             }
+            // Clonable.
+            clone() {
+                return Audible.create();
+            }
         }
         GameFramework.Audible = Audible;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

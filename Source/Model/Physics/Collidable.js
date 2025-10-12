@@ -118,6 +118,10 @@ var ThisCouldBeBetter;
                 var message = "Collision detected: " + collisionAsString;
                 console.log(message);
             }
+            collideEntitiesSet(value) {
+                this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision = value;
+                return this;
+            }
             colliderAtRestSet(value) {
                 this.colliderAtRest = value.clone();
                 this.collider = this.colliderAtRest.clone();

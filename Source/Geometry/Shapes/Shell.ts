@@ -26,7 +26,7 @@ export class Shell extends ShapeBase
 		this._collider = new ShapeGroupAll
 		([
 			this.sphereOuter,
-			new ShapeInverse(new ShapeContainer(this.sphereInner))
+			ShapeInverse.fromChild(ShapeContainer.fromChild(this.sphereInner) )
 		]);
 	}
 

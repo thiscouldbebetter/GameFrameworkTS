@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 this.sphereInner = GameFramework.Sphere.fromCenterAndRadius(this.sphereOuter.center, this.radiusInner);
                 this._collider = new GameFramework.ShapeGroupAll([
                     this.sphereOuter,
-                    new GameFramework.ShapeInverse(new GameFramework.ShapeContainer(this.sphereInner))
+                    GameFramework.ShapeInverse.fromChild(GameFramework.ShapeContainer.fromChild(this.sphereInner))
                 ]);
             }
             static default() {

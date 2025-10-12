@@ -309,6 +309,12 @@ export class Collidable extends EntityPropertyBase<Collidable>
 		console.log(message);
 	}
 
+	collideEntitiesSet(value: (uwpe: UniverseWorldPlaceEntities, c: Collision) => void): Collidable
+	{
+		this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision = value;
+		return this;
+	}
+
 	colliderAtRestSet(value: Shape): Collidable
 	{
 		this.colliderAtRest = value.clone();

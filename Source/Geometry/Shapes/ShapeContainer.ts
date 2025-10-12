@@ -15,6 +15,11 @@ export class ShapeContainer extends ShapeBase
 		this.child = child;
 	}
 
+	static fromChild(child: Shape): ShapeContainer
+	{
+		return new ShapeContainer(child);
+	}
+
 	// Clonable.
 
 	clone(): ShapeContainer

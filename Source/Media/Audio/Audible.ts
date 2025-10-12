@@ -31,6 +31,13 @@ export class Audible extends EntityPropertyBase<Audible>
 		this.soundPlayback = value;
 		return this;
 	}
+
+	// Clonable.
+
+	clone(): Audible
+	{
+		return Audible.create();
+	}
 }
 
 }

@@ -97,7 +97,22 @@ export class Mesh extends ShapeBase
 		return new Mesh(center, vertexOffsets, faceBuilders);
 	}
 
-	static fromFace(center: Coords, faceToExtrude: Face, thickness: number): Mesh
+	static fromFace(face: Face): Mesh
+	{
+		return Mesh.fromCenterFaceToExtrudeAndThickness
+		(
+			Coords.create(),
+			face,
+			1
+		);
+	}
+
+	static fromCenterFaceToExtrudeAndThickness
+	(
+		center: Coords,
+		faceToExtrude: Face,
+		thickness: number
+	): Mesh
 	{
 		var faceVertices = faceToExtrude.vertices;
 		var numberOfFaceVertices = faceVertices.length;

@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 super();
                 this.child = child;
             }
+            static fromChild(child) {
+                return new ShapeInverse(child);
+            }
             // Clonable.
             clone() {
                 return new ShapeInverse(this.child.clone());

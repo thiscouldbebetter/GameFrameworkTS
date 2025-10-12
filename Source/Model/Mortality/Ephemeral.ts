@@ -98,7 +98,7 @@ export class Ephemeral extends EntityPropertyBase<Ephemeral>
 
 	clone(): Ephemeral
 	{
-		return new Ephemeral(this.ticksToLive, this.expire);
+		return new Ephemeral(this.ticksToLive, this._expire);
 	}
 
 }

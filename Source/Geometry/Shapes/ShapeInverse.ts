@@ -13,6 +13,11 @@ export class ShapeInverse extends ShapeBase
 		this.child = child;
 	}
 
+	static fromChild(child: Shape): ShapeInverse
+	{
+		return new ShapeInverse(child);
+	}
+
 	// Clonable.
 
 	clone(): ShapeInverse
