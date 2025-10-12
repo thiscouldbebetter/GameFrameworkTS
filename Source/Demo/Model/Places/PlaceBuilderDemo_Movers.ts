@@ -242,12 +242,8 @@ class PlaceBuilderDemo_Movers
 		var enemyVisualBodyPolygon = enemyVisualBody.child as VisualPolygon;
 		var enemyVertices = enemyVisualBodyPolygon.verticesAsPath.points;
 		var enemyColliderAsFace = Face.fromVertices(enemyVertices);
-		var enemyCollider = Mesh.fromFace
-		(
-			Coords.create(), // center
-			enemyColliderAsFace,
-			1 // thickness
-		);
+		var enemyCollider =
+			Mesh.fromFace(enemyColliderAsFace);
 
 		var enemyActivityDefn = Enemy.activityDefnBuild();
 		this.parent.activityDefns.push(enemyActivityDefn);
