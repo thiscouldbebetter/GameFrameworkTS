@@ -154,6 +154,9 @@ var ThisCouldBeBetter;
                 return this.scopeCurrent;
             }
             scriptParse(scriptAsString) {
+                scriptAsString =
+                    //"( (u, cr) => " + scriptAsString + ")";
+                    "return " + scriptAsString;
                 // return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
                 var returnValue = GameFramework.ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString(["u", "cr"], scriptAsString);
                 return returnValue;
@@ -225,11 +228,8 @@ var ThisCouldBeBetter;
                 return variableValue;
             }
             variableLoad(universe, variableName, variableExpression) {
-                var scriptText = 
-                //"( (u, cr) => " + variableExpression + ")";
-                "return " + variableExpression;
                 try {
-                    var scriptToRun = this.scriptParse(scriptText);
+                    var scriptToRun = this.scriptParse(variableExpression);
                     var variableValue = scriptToRun.runWithParams2(universe, this);
                     this.variableSet(variableName, variableValue);
                 }
@@ -243,8 +243,7 @@ var ThisCouldBeBetter;
             variableStore(universe, variableName, scriptExpression) {
                 var variableValue = this.variableByName(variableName).toString();
                 var scriptExpressionWithValue = scriptExpression.split("$value").join(variableValue);
-                var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-                var scriptToRun = this.scriptParse(scriptToRunAsString);
+                var scriptToRun = this.scriptParse(scriptExpressionWithValue);
                 scriptToRun.runWithParams2(universe, this);
             }
             variablesExport(universe, variableLookupExpression) {
@@ -256,14 +255,12 @@ var ThisCouldBeBetter;
                         .join("\"" + variableName + "\"")
                         .split("$value")
                         .join("\"" + variableValueAsString + "\"");
-                    var scriptToRunAsString = "( (u, cr) => { " + scriptExpressionWithValue + "; } )";
-                    var scriptToRun = this.scriptParse(scriptToRunAsString);
+                    var scriptToRun = this.scriptParse(scriptExpressionWithValue);
                     scriptToRun.runWithParams2(universe, this);
                 }
             }
             variablesImport(universe, variableLookupExpression) {
-                var scriptText = "( (u, cr) => " + variableLookupExpression + ")";
-                var scriptToRun = this.scriptParse(scriptText);
+                var scriptToRun = this.scriptParse(variableLookupExpression);
                 var variablesByNameToImportFrom = scriptToRun.runWithParams2(universe, this);
                 for (var [variableName, variableValue] of variablesByNameToImportFrom) {
                     this.variableSet(variableName, variableValue);

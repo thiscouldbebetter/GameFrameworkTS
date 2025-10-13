@@ -14,6 +14,14 @@ var ThisCouldBeBetter;
                 }
                 return TalkNodeDefn._instances;
             }
+            static scriptParse(scriptAsString) {
+                scriptAsString =
+                    //"( (u, cr) => " + scriptAsString + ")";
+                    "return " + scriptAsString;
+                // return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
+                var returnValue = GameFramework.ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString(["u", "cr"], scriptAsString);
+                return returnValue;
+            }
             // Clonable.
             clone() {
                 return new TalkNodeDefn(this.name, this.execute);
@@ -237,8 +245,7 @@ var ThisCouldBeBetter;
             scriptUsingFunctionConstructor(universe, conversationRun) {
                 var talkNode = conversationRun.talkNodeCurrent();
                 var scriptBodyToRunAsString = talkNode.content;
-                var scriptToRun = GameFramework.ScriptUsingFunctionConstructor
-                    .fromParameterNamesAndCodeAsString(["u", "cr"], scriptBodyToRunAsString);
+                var scriptToRun = TalkNodeDefn.scriptParse(scriptBodyToRunAsString);
                 scriptToRun.runWithParams2(universe, conversationRun);
                 conversationRun.talkNodeGoToNext(universe);
                 conversationRun.talkNodeCurrentExecute(universe); // hack
@@ -280,7 +287,7 @@ var ThisCouldBeBetter;
                 variableExpression;
                 var variableScript = 
                 // ScriptUsingEval.fromCodeAsString(variableAsCode);
-                GameFramework.ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString(["u", "cr"], variableAsCode);
+                TalkNodeDefn.scriptParse(variableAsCode);
                 var variableValue = variableScript.runWithParams2(universe, conversationRun);
                 conversationRun.variableSet(variableName, variableValue);
                 conversationRun.talkNodeAdvance(universe);

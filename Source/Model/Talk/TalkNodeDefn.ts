@@ -29,6 +29,23 @@ export class TalkNodeDefn
 		return TalkNodeDefn._instances;
 	}
 
+	static scriptParse(scriptAsString: string): Script
+	{
+		scriptAsString =
+			//"( (u, cr) => " + scriptAsString + ")";
+			"return " + scriptAsString;
+
+		// return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
+
+		var returnValue =
+			ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString
+			(
+				[ "u", "cr" ],
+				scriptAsString
+			);
+		return returnValue;
+	}
+
 	// Clonable.
 
 	clone(): TalkNodeDefn
@@ -400,13 +417,7 @@ class TalkNodeDefn_Instances
 	{
 		var talkNode = conversationRun.talkNodeCurrent();
 		var scriptBodyToRunAsString = talkNode.content;
-		var scriptToRun =
-			ScriptUsingFunctionConstructor
-				.fromParameterNamesAndCodeAsString
-				(
-					[ "u", "cr" ],
-					scriptBodyToRunAsString
-				);
+		var scriptToRun = TalkNodeDefn.scriptParse(scriptBodyToRunAsString);
 		scriptToRun.runWithParams2(universe, conversationRun);
 		conversationRun.talkNodeGoToNext(universe);
 		conversationRun.talkNodeCurrentExecute(universe); // hack
@@ -470,11 +481,7 @@ class TalkNodeDefn_Instances
 			variableExpression;
 		var variableScript =
 			// ScriptUsingEval.fromCodeAsString(variableAsCode);
-			ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString
-			(
-				[ "u", "cr" ],
-				variableAsCode
-			);
+			TalkNodeDefn.scriptParse(variableAsCode);
 		var variableValue = variableScript.runWithParams2(universe, conversationRun);
 
 		conversationRun.variableSet(variableName, variableValue);
