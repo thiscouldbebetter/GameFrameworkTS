@@ -9,6 +9,7 @@ export class WorldDefn
 	entityDefns: Entity[];
 	itemDefns: ItemDefn[];
 	placeDefns: PlaceDefn[];
+	scripts: Script[];
 	skills: Skill[];
 
 	actionsByName: Map<string, Action>;
@@ -16,6 +17,7 @@ export class WorldDefn
 	entityDefnsByName: Map<string, Entity>;
 	itemDefnsByName: Map<string, ItemDefn>;
 	placeDefnsByName: Map<string, PlaceDefn>;
+	scriptsByName: Map<string, Script>;
 	skillsByName: Map<string, Skill>;
 
 	constructor(defnArrays: unknown[][])
@@ -77,6 +79,16 @@ export class WorldDefn
 				}
 				else if
 				(
+					typeof(Script) != notDefined
+					&& defnTypeName == Script.name
+				)
+				{
+					this.scripts = defns as Array<Script>;
+					this.scriptsByName =
+						ArrayHelper.addLookupsByName(this.scripts);
+				}
+				else if
+				(
 					typeof(Skill) != notDefined
 					&& defnTypeName == Skill.name
 				)
@@ -98,13 +110,14 @@ export class WorldDefn
 		return new WorldDefn([]);
 	}
 
-	static from6 // ActionActivityEntityItemyPlaceAndSkillDefns
+	static from7 // ActionActivityEntityItemyPlaceAndSkillDefns
 	(
 		actions: Action[],
 		activityDefns: ActivityDefn[],
 		entityDefns: Entity[],
 		itemDefns: ItemDefn[],
 		placeDefns: PlaceDefn[],
+		scripts: Script[],
 		skills: Skill[]
 	): WorldDefn
 	{
@@ -115,8 +128,14 @@ export class WorldDefn
 			entityDefns,
 			itemDefns,
 			placeDefns,
+			scripts,
 			skills
 		]);
+	}
+
+	static fromDefnArrays(defnArrays: unknown[][]): WorldDefn
+	{
+		return new WorldDefn(defnArrays);
 	}
 
 	static fromPlaceDefns(placeDefns: PlaceDefn[]): WorldDefn
@@ -179,6 +198,23 @@ export class WorldDefn
 			this.placeDefnsByName == null
 			? null
 			: this.placeDefnsByName.get(defnName);
+
+		return returnValue;
+	}
+
+	scriptAdd(script: Script): WorldDefn
+	{
+		this.scripts.push(script);
+		this.scriptsByName.set(script.name, script);
+		return this;
+	}
+
+	scriptByName(name: string): Script
+	{
+		var returnValue =
+			this.scriptsByName == null
+			? null
+			: this.scriptsByName.get(name);
 
 		return returnValue;
 	}

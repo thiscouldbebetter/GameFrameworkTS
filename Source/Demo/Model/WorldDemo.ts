@@ -1,11 +1,20 @@
 
 class WorldDemo extends World
 {
-	constructor(name: string, dateCreated: DateTime, defn: WorldDefn, places: Place[])
+	constructor
+	(
+		name: string,
+		dateCreated: DateTime,
+		defn: WorldDefn,
+		places: Place[]
+	)
 	{
-		var placesByName = ArrayHelper.addLookupsByName(places);
-		var placeGetByName = (placeName: string) => placesByName.get(placeName);
+		var placesByName =
+			ArrayHelper.addLookupsByName(places);
+		var placeGetByName =
+			(placeName: string) => placesByName.get(placeName);
 		var placeInitialName = places[0].name;
+
 		super
 		(
 			name, dateCreated, defn, placeGetByName, placeInitialName

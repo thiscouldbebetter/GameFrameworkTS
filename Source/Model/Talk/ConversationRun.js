@@ -41,8 +41,11 @@ var ThisCouldBeBetter;
             enableOrDisable(talkNodeToEnableOrDisableName, isEnabledValueToSet) {
                 var conversationDefn = this.defn;
                 var talkNodeToSet = conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
+                var scripts = GameFramework.Script.Instances();
                 talkNodeToSet._isEnabled =
-                    GameFramework.Script.fromCodeAsString("() => " + isEnabledValueToSet);
+                    (isEnabledValueToSet == true)
+                        ? scripts.ReturnTrue
+                        : scripts.ReturnFalse;
             }
             goto(talkNodeNameNext, universe) {
                 this.gotoTalkNodeWithNameForUniverse(talkNodeNameNext, universe);
@@ -151,7 +154,7 @@ var ThisCouldBeBetter;
                 return this.scopeCurrent;
             }
             scriptParse(scriptAsString) {
-                return GameFramework.Script.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
+                return GameFramework.ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
             }
             talkNodeAdvance(universe) {
                 this.scopeCurrent.talkNodeAdvance(universe, this);

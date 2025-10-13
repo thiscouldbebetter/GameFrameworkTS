@@ -89,8 +89,11 @@ export class ConversationRun
 		var conversationDefn = this.defn;
 		var talkNodeToSet =
 			conversationDefn.talkNodesByName.get(talkNodeToEnableOrDisableName);
+		var scripts = Script.Instances();
 		talkNodeToSet._isEnabled =
-			Script.fromCodeAsString( "() => " + isEnabledValueToSet);
+			(isEnabledValueToSet == true)
+			? scripts.ReturnTrue
+			: scripts.ReturnFalse;
 	}
 
 	goto(talkNodeNameNext: string, universe: Universe): void
@@ -259,7 +262,7 @@ export class ConversationRun
 
 	scriptParse(scriptAsString: string): Script
 	{
-		return Script.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
+		return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
 	}
 
 	talkNodeAdvance(universe: Universe): void

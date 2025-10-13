@@ -5,24 +5,123 @@ namespace ThisCouldBeBetter.GameFramework
 export class Script
 {
 	name: string;
+
+	constructor(name: string)
+	{
+		this.name = name;
+	}
+
+	static _instances: Script_Instances;
+	static Instances(): Script_Instances
+	{
+		if (this._instances == null)
+		{
+			this._instances = new Script_Instances();
+		}
+		return this._instances;
+	}
+
+	static byName(name: string): Script
+	{
+		return this.Instances().byName(name);
+	}
+
+	runWithParams0(): any
+	{
+		throw new Error("Must be implemented in subclass!");
+	}
+
+	runWithParams1(param0: any): any
+	{
+		throw new Error("Must be implemented in subclass!");
+	}
+
+	runWithParams2(param0: any, param1: any): any
+	{
+		throw new Error("Must be implemented in subclass!");
+	}
+}
+
+export class Script_Instances
+{
+	_DoNothing: Script;
+
+	ReturnFalse: Script;
+	ReturnTrue: Script;
+
+	_All: Script[];
+
+	constructor()
+	{
+		var sfrn =
+			(n: string, r: any) =>
+				new ScriptFromRunFunction(n, r);
+
+		this._DoNothing = sfrn("DoNothing", () => {} );
+
+		this.ReturnFalse = sfrn("ReturnFalse", () => false);
+		this.ReturnTrue = sfrn("ReturnTrue", () => true);
+
+		this._All =
+		[
+			this._DoNothing,
+			this.ReturnFalse,
+			this.ReturnTrue
+		];
+	}
+
+	byName(name: string): Script
+	{
+		return this._All.find(x => x.name == name);
+	}
+}
+
+export class ScriptFromRunFunction extends Script
+{
+	_run: (a: any, b: any) => any;
+
+	constructor(name: string, run: (a: any, b: any) => any)
+	{
+		super(name);
+		this._run = run;
+	}
+
+	runWithParams0(): any
+	{
+		return this._run(null, null);
+	}
+
+	runWithParams1(param0: any): any
+	{
+		return this._run(param0, null);
+	}
+
+	runWithParams2(param0: any, param1: any): any
+	{
+		return this._run(param0, param1);
+	}
+}
+
+export class ScriptUsingEval extends Script
+{
 	codeAsString: string;
 
 	_codeAsFunction: any;
 
 	constructor(name: string, codeAsString: string)
 	{
-		this.name = name;
+		super(name);
 		this.codeAsString = codeAsString;
 	}
 
 	static fromCodeAsString(codeAsString: string): Script
 	{
-		return new Script(null, codeAsString);
+		return new ScriptUsingEval(null, codeAsString);
 	}
 
-	static fromFunction(codeAsFunction: any): Script
+	static fromFunction(codeAsFunction: any): ScriptUsingEval
 	{
-		var script = new Script(null, null);
+		var script = new ScriptUsingEval(null, null);
 		script._codeAsFunction = codeAsFunction;
 		return script;
 	}
@@ -59,7 +158,6 @@ export class Script
 		var returnValue = codeParsed.call(this, param0, param1);
 		return returnValue;
 	}
-
 }
 
 }

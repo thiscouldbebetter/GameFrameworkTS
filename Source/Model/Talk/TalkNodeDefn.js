@@ -37,7 +37,8 @@ var ThisCouldBeBetter;
                 this.Prompt = tnd("Prompt", this.prompt);
                 this.Push = tnd("Push", this.push);
                 this.Quit = tnd("Quit", this.quit);
-                this.Script = tnd("Script", this.script);
+                this.ScriptFromName = tnd("ScriptFromName", this.scriptFromName);
+                this.ScriptUsingEval = tnd("Script", this.scriptUsingEval);
                 this.Switch = tnd("Switch", this._switch);
                 this.VariableAdd = tnd("VariableAdd", this.variableAdd);
                 this.VariableLoad = tnd("VariableLoad", this.variableLoad);
@@ -61,7 +62,8 @@ var ThisCouldBeBetter;
                         this.Prompt,
                         this.Push,
                         this.Quit,
-                        this.Script,
+                        this.ScriptFromName,
+                        this.ScriptUsingEval,
                         this.Switch,
                         this.VariableAdd,
                         this.VariableLoad,
@@ -211,10 +213,20 @@ var ThisCouldBeBetter;
             quit(universe, conversationRun) {
                 conversationRun.quit(universe);
             }
-            script(universe, conversationRun) {
+            scriptFromName(universe, conversationRun) {
+                var world = universe.world;
+                var worldDefn = world.defn;
+                var talkNode = conversationRun.talkNodeCurrent();
+                var scriptName = talkNode.content;
+                var scriptToRun = worldDefn.scriptByName(scriptName);
+                scriptToRun.runWithParams2(universe, conversationRun);
+                conversationRun.talkNodeGoToNext(universe);
+                conversationRun.talkNodeCurrentExecute(universe); // hack
+            }
+            scriptUsingEval(universe, conversationRun) {
                 var talkNode = conversationRun.talkNodeCurrent();
                 var scriptToRunAsString = "( (u, cr) => " + talkNode.content + ")";
-                var scriptToRun = GameFramework.Script.fromCodeAsString(scriptToRunAsString);
+                var scriptToRun = GameFramework.ScriptUsingEval.fromCodeAsString(scriptToRunAsString);
                 scriptToRun.runWithParams2(universe, conversationRun);
                 conversationRun.talkNodeGoToNext(universe);
                 conversationRun.talkNodeCurrentExecute(universe); // hack
@@ -231,9 +243,9 @@ var ThisCouldBeBetter;
                 var talkNode = conversationRun.talkNodeCurrent();
                 var variableName = talkNode.content;
                 var variableIncrementAsString = talkNode.next;
-                var variableIncrementAsScript = GameFramework.Script.fromCodeAsString(variableIncrementAsString);
-                var variableIncrement = variableIncrementAsScript.runWithParams2(universe, conversationRun);
-                var variableValueBeforeIncrement = conversationRun.variableGetWithDefault(variableName, 0);
+                var variableIncrement = parseFloat(variableIncrementAsString);
+                var variableValueBeforeIncrementAsUnknown = conversationRun.variableGetWithDefault(variableName, 0);
+                var variableValueBeforeIncrement = variableValueBeforeIncrementAsUnknown;
                 var variableValueAfterIncrement = variableValueBeforeIncrement + variableIncrement;
                 conversationRun.variableSet(variableName, variableValueAfterIncrement);
                 conversationRun.talkNodeAdvance(universe);
@@ -251,7 +263,8 @@ var ThisCouldBeBetter;
                 var talkNode = conversationRun.talkNodeCurrent();
                 var variableName = talkNode.content;
                 var variableExpression = talkNode.next;
-                var variableScript = GameFramework.Script.fromCodeAsString(variableExpression);
+                var variableAsCode = "(u, cr) => " + variableExpression;
+                var variableScript = GameFramework.ScriptUsingEval.fromCodeAsString(variableAsCode);
                 var variableValue = variableScript.runWithParams2(universe, conversationRun);
                 conversationRun.variableSet(variableName, variableValue);
                 conversationRun.talkNodeAdvance(universe);

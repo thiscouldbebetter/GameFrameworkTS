@@ -43,9 +43,73 @@ export class TalkNode //
 		this._isEnabled = isEnabled;
 	}
 
-	static fromDefnName(defnName: string): TalkNode
+	static fromDefn(defn: TalkNodeDefn): TalkNode
 	{
-		return new TalkNode(null, defnName, null, null, null);
+		return new TalkNode(null, defn.name, null, null, null);
+	}
+
+	static fromDefnAndContent
+	(
+		defn: TalkNodeDefn,
+		content: string
+	): TalkNode
+	{
+		return new TalkNode
+		(
+			null, defn.name, content, null, null
+		);
+	}
+
+	static fromDefnContentAndNext
+	(
+		defn: TalkNodeDefn,
+		content: string,
+		next: string
+	): TalkNode
+	{
+		return new TalkNode
+		(
+			null, defn.name, content, next, null
+		);
+	}
+
+	static fromNameAndDefn
+	(
+		name: string,
+		defn: TalkNodeDefn,
+	): TalkNode
+	{
+		return new TalkNode
+		(
+			name, defn.name, null, null, null
+		);
+	}
+
+	static fromNameDefnAndContent
+	(
+		name: string,
+		defn: TalkNodeDefn,
+		content: string
+	): TalkNode
+	{
+		return new TalkNode
+		(
+			name, defn.name, content, null, null
+		);
+	}
+
+	static fromNameDefnContentAndNext
+	(
+		name: string,
+		defn: TalkNodeDefn,
+		content: string,
+		next: string
+	): TalkNode
+	{
+		return new TalkNode
+		(
+			name, defn.name, content, next, null
+		);
 	}
 
 	static fromNameDefnNameContentNextAndEnabled
@@ -67,7 +131,7 @@ export class TalkNode //
 
 	static _idNext = 0;
 	static idNext()
-	{	
+	{
 		var returnValue = "_" + TalkNode._idNext;
 		TalkNode._idNext++;
 		return returnValue;
@@ -77,97 +141,93 @@ export class TalkNode //
 
 	static display(name: string, content: string): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromNameDefnAndContent
 		(
 			name,
-			TalkNodeDefn.Instances().Display.name,
-			content,
-			null, // next
-			null // isEnabled
+			TalkNodeDefn.Instances().Display,
+			content
 		);
 	}
 
 	static doNothing(name: string): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromNameAndDefn
 		(
 			name,
-			TalkNodeDefn.Instances().DoNothing.name,
-			null, // content
-			null, // next
-			null // isEnabled
+			TalkNodeDefn.Instances().DoNothing
 		);
 	}
 
 	static option(name: string, content: string, next: string): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromNameDefnContentAndNext
 		(
 			name,
-			TalkNodeDefn.Instances().Option.name,
+			TalkNodeDefn.Instances().Option,
 			content,
-			next,
-			null // isEnabled
+			next
 		);
 	}
 
 	static goto(next: string): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromDefnContentAndNext
 		(
-			null, // name,
-			TalkNodeDefn.Instances().Goto.name,
+			TalkNodeDefn.Instances().Goto,
 			null, // content
-			next,
-			null // isEnabled
+			next
 		);
 	}
 
 	static pop(): TalkNode
 	{
-		return TalkNode.fromDefnName
+		return TalkNode.fromDefn
 		(
-			TalkNodeDefn.Instances().Pop.name,
+			TalkNodeDefn.Instances().Pop,
 		);
 	}
 
 	static prompt(): TalkNode
 	{
-		return TalkNode.fromDefnName
+		return TalkNode.fromDefn
 		(
-			TalkNodeDefn.Instances().Prompt.name,
+			TalkNodeDefn.Instances().Prompt,
 		);
 	}
 
 	static push(next: string): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromDefnContentAndNext
 		(
-			null, // name,
-			TalkNodeDefn.Instances().Push.name,
+			TalkNodeDefn.Instances().Push,
 			null, // content
-			next,
-			null // isEnabled
+			next
 		);
 	}
 
 	static quit(): TalkNode
 	{
-		return TalkNode.fromDefnName
+		return TalkNode.fromDefn
 		(
-			TalkNodeDefn.Instances().Quit.name,
+			TalkNodeDefn.Instances().Quit,
 		);
 	}
 
-	static script(code: string): TalkNode
+	static scriptFromName(name: string): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromDefnAndContent
 		(
-			null, // name,
-			TalkNodeDefn.Instances().Script.name,
-			code,
-			null, // next
-			null // isEnabled
+			TalkNodeDefn.Instances().ScriptFromName,
+			name
+		);
+	}
+
+	static scriptUsingEval(code: string): TalkNode
+	{
+		return TalkNode.fromDefnAndContent
+		(
+			TalkNodeDefn.Instances().ScriptUsingEval,
+			code
 		);
 	}
 
@@ -182,13 +242,11 @@ export class TalkNode //
 			pair => pair.join(":")
 		).join(";");
 
-		return new TalkNode
+		return TalkNode.fromDefnContentAndNext
 		(
-			null, // name,
-			TalkNodeDefn.Instances().Switch.name,
+			TalkNodeDefn.Instances().Switch,
 			variableName, // content
-			next,
-			null // isEnabled
+			next
 		);
 	}
 
@@ -197,13 +255,12 @@ export class TalkNode //
 		name: string, variableName: string, variableExpression: string
 	): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromNameDefnContentAndNext
 		(
 			name,
-			TalkNodeDefn.Instances().VariableLoad.name,
+			TalkNodeDefn.Instances().VariableLoad,
 			variableName, // content
-			variableExpression, // next
-			null // isEnabled
+			variableExpression
 		);
 	}
 
@@ -212,13 +269,11 @@ export class TalkNode //
 		variableName: string, variableValueToSet: string
 	): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromDefnContentAndNext
 		(
-			null, // name,
-			TalkNodeDefn.Instances().VariableSet.name,
-			variableName, // content
-			variableValueToSet, // next
-			null // isEnabled
+			TalkNodeDefn.Instances().VariableSet,
+			variableName,
+			variableValueToSet
 		);
 	}
 
@@ -227,13 +282,12 @@ export class TalkNode //
 		name: string, variableName: string, variableExpression: string
 	): TalkNode
 	{
-		return new TalkNode
+		return TalkNode.fromNameDefnContentAndNext
 		(
 			name,
-			TalkNodeDefn.Instances().VariableStore.name,
-			variableName, // content
-			variableExpression, // next
-			null // isEnabled
+			TalkNodeDefn.Instances().VariableStore,
+			variableName,
+			variableExpression
 		);
 	}
 
@@ -264,13 +318,13 @@ export class TalkNode //
 
 	disable(): TalkNode
 	{
-		this._isEnabled = Script.fromCodeAsString( "() => false" );
+		this._isEnabled = Script.Instances().ReturnFalse;
 		return this;
 	}
 
 	enable(): TalkNode
 	{
-		this._isEnabled = Script.fromCodeAsString( "() => true" );
+		this._isEnabled = Script.Instances().ReturnTrue;
 		return this;
 	}
 
@@ -362,7 +416,7 @@ export class TalkNode //
 				"( (u, cr) => " + isEnabledAsText + " )";
 			try
 			{
-				isEnabled = Script.fromCodeAsString(scriptToRunAsString);
+				isEnabled = ScriptUsingEval.fromCodeAsString(scriptToRunAsString);
 			}
 			catch (err)
 			{

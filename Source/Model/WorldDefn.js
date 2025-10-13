@@ -37,6 +37,12 @@ var ThisCouldBeBetter;
                             this.placeDefnsByName =
                                 GameFramework.ArrayHelper.addLookupsByName(this.placeDefns);
                         }
+                        else if (typeof (GameFramework.Script) != notDefined
+                            && defnTypeName == GameFramework.Script.name) {
+                            this.scripts = defns;
+                            this.scriptsByName =
+                                GameFramework.ArrayHelper.addLookupsByName(this.scripts);
+                        }
                         else if (typeof (GameFramework.Skill) != notDefined
                             && defnTypeName == GameFramework.Skill.name) {
                             this.skills = defns;
@@ -52,16 +58,20 @@ var ThisCouldBeBetter;
             static default() {
                 return new WorldDefn([]);
             }
-            static from6 // ActionActivityEntityItemyPlaceAndSkillDefns
-            (actions, activityDefns, entityDefns, itemDefns, placeDefns, skills) {
+            static from7 // ActionActivityEntityItemyPlaceAndSkillDefns
+            (actions, activityDefns, entityDefns, itemDefns, placeDefns, scripts, skills) {
                 return new WorldDefn([
                     actions,
                     activityDefns,
                     entityDefns,
                     itemDefns,
                     placeDefns,
+                    scripts,
                     skills
                 ]);
+            }
+            static fromDefnArrays(defnArrays) {
+                return new WorldDefn(defnArrays);
             }
             static fromPlaceDefns(placeDefns) {
                 return new WorldDefn([placeDefns]);
@@ -104,6 +114,17 @@ var ThisCouldBeBetter;
                 var returnValue = this.placeDefnsByName == null
                     ? null
                     : this.placeDefnsByName.get(defnName);
+                return returnValue;
+            }
+            scriptAdd(script) {
+                this.scripts.push(script);
+                this.scriptsByName.set(script.name, script);
+                return this;
+            }
+            scriptByName(name) {
+                var returnValue = this.scriptsByName == null
+                    ? null
+                    : this.scriptsByName.get(name);
                 return returnValue;
             }
         }

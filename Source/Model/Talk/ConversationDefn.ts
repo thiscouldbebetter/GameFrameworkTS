@@ -440,9 +440,12 @@ export class ConversationDefn
 
 			if (talkNode.isDisabled != null)
 			{
-				var scriptToRunAsString =
-					"( (u, cr) => " + talkNode.isDisabled + " )";
-				var scriptToRun = Script.fromCodeAsString(scriptToRunAsString);
+				var scripts = Script.Instances();
+
+				var scriptToRun =
+					talkNode.isDisabled
+					? scripts.ReturnFalse
+					: scripts.ReturnTrue;
 
 				talkNode._isEnabled = scriptToRun;
 			}

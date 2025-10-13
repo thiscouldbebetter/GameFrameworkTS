@@ -23,8 +23,23 @@ var ThisCouldBeBetter;
                 this.next = next == "" ? null : next;
                 this._isEnabled = isEnabled;
             }
-            static fromDefnName(defnName) {
-                return new TalkNode(null, defnName, null, null, null);
+            static fromDefn(defn) {
+                return new TalkNode(null, defn.name, null, null, null);
+            }
+            static fromDefnAndContent(defn, content) {
+                return new TalkNode(null, defn.name, content, null, null);
+            }
+            static fromDefnContentAndNext(defn, content, next) {
+                return new TalkNode(null, defn.name, content, next, null);
+            }
+            static fromNameAndDefn(name, defn) {
+                return new TalkNode(name, defn.name, null, null, null);
+            }
+            static fromNameDefnAndContent(name, defn, content) {
+                return new TalkNode(name, defn.name, content, null, null);
+            }
+            static fromNameDefnContentAndNext(name, defn, content, next) {
+                return new TalkNode(name, defn.name, content, next, null);
             }
             static fromNameDefnNameContentNextAndEnabled(name, defnName, content, next, isEnabled) {
                 return new TalkNode(name, defnName, content, next, isEnabled);
@@ -36,73 +51,52 @@ var ThisCouldBeBetter;
             }
             // Types.
             static display(name, content) {
-                return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().Display.name, content, null, // next
-                null // isEnabled
-                );
+                return TalkNode.fromNameDefnAndContent(name, GameFramework.TalkNodeDefn.Instances().Display, content);
             }
             static doNothing(name) {
-                return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().DoNothing.name, null, // content
-                null, // next
-                null // isEnabled
-                );
+                return TalkNode.fromNameAndDefn(name, GameFramework.TalkNodeDefn.Instances().DoNothing);
             }
             static option(name, content, next) {
-                return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().Option.name, content, next, null // isEnabled
-                );
+                return TalkNode.fromNameDefnContentAndNext(name, GameFramework.TalkNodeDefn.Instances().Option, content, next);
             }
             static goto(next) {
-                return new TalkNode(null, // name,
-                GameFramework.TalkNodeDefn.Instances().Goto.name, null, // content
-                next, null // isEnabled
-                );
+                return TalkNode.fromDefnContentAndNext(GameFramework.TalkNodeDefn.Instances().Goto, null, // content
+                next);
             }
             static pop() {
-                return TalkNode.fromDefnName(GameFramework.TalkNodeDefn.Instances().Pop.name);
+                return TalkNode.fromDefn(GameFramework.TalkNodeDefn.Instances().Pop);
             }
             static prompt() {
-                return TalkNode.fromDefnName(GameFramework.TalkNodeDefn.Instances().Prompt.name);
+                return TalkNode.fromDefn(GameFramework.TalkNodeDefn.Instances().Prompt);
             }
             static push(next) {
-                return new TalkNode(null, // name,
-                GameFramework.TalkNodeDefn.Instances().Push.name, null, // content
-                next, null // isEnabled
-                );
+                return TalkNode.fromDefnContentAndNext(GameFramework.TalkNodeDefn.Instances().Push, null, // content
+                next);
             }
             static quit() {
-                return TalkNode.fromDefnName(GameFramework.TalkNodeDefn.Instances().Quit.name);
+                return TalkNode.fromDefn(GameFramework.TalkNodeDefn.Instances().Quit);
             }
-            static script(code) {
-                return new TalkNode(null, // name,
-                GameFramework.TalkNodeDefn.Instances().Script.name, code, null, // next
-                null // isEnabled
-                );
+            static scriptFromName(name) {
+                return TalkNode.fromDefnAndContent(GameFramework.TalkNodeDefn.Instances().ScriptFromName, name);
+            }
+            static scriptUsingEval(code) {
+                return TalkNode.fromDefnAndContent(GameFramework.TalkNodeDefn.Instances().ScriptUsingEval, code);
             }
             static _switch // "switch" is a keyword.
             (variableName, variableValueNodeNextNamePairs) {
                 var next = variableValueNodeNextNamePairs.map(pair => pair.join(":")).join(";");
-                return new TalkNode(null, // name,
-                GameFramework.TalkNodeDefn.Instances().Switch.name, variableName, // content
-                next, null // isEnabled
-                );
+                return TalkNode.fromDefnContentAndNext(GameFramework.TalkNodeDefn.Instances().Switch, variableName, // content
+                next);
             }
             static variableLoad(name, variableName, variableExpression) {
-                return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().VariableLoad.name, variableName, // content
-                variableExpression, // next
-                null // isEnabled
-                );
+                return TalkNode.fromNameDefnContentAndNext(name, GameFramework.TalkNodeDefn.Instances().VariableLoad, variableName, // content
+                variableExpression);
             }
             static variableSet(variableName, variableValueToSet) {
-                return new TalkNode(null, // name,
-                GameFramework.TalkNodeDefn.Instances().VariableSet.name, variableName, // content
-                variableValueToSet, // next
-                null // isEnabled
-                );
+                return TalkNode.fromDefnContentAndNext(GameFramework.TalkNodeDefn.Instances().VariableSet, variableName, variableValueToSet);
             }
             static variableStore(name, variableName, variableExpression) {
-                return new TalkNode(name, GameFramework.TalkNodeDefn.Instances().VariableStore.name, variableName, // content
-                variableExpression, // next
-                null // isEnabled
-                );
+                return TalkNode.fromNameDefnContentAndNext(name, GameFramework.TalkNodeDefn.Instances().VariableStore, variableName, variableExpression);
             }
             // instance methods
             contentVariablesSubstitute(conversationRun) {
@@ -121,11 +115,11 @@ var ThisCouldBeBetter;
                 return conversationDefn.talkNodeDefnsByName.get(this.defnName);
             }
             disable() {
-                this._isEnabled = GameFramework.Script.fromCodeAsString("() => false");
+                this._isEnabled = GameFramework.Script.Instances().ReturnFalse;
                 return this;
             }
             enable() {
-                this._isEnabled = GameFramework.Script.fromCodeAsString("() => true");
+                this._isEnabled = GameFramework.Script.Instances().ReturnTrue;
                 return this;
             }
             execute(universe, conversationRun, scope) {
@@ -174,7 +168,7 @@ var ThisCouldBeBetter;
                 else {
                     var scriptToRunAsString = "( (u, cr) => " + isEnabledAsText + " )";
                     try {
-                        isEnabled = GameFramework.Script.fromCodeAsString(scriptToRunAsString);
+                        isEnabled = GameFramework.ScriptUsingEval.fromCodeAsString(scriptToRunAsString);
                     }
                     catch (err) {
                         throw err;

@@ -57,7 +57,8 @@ class TalkNodeDefn_Instances
 	Prompt: TalkNodeDefn;
 	Push: TalkNodeDefn;
 	Quit: TalkNodeDefn;
-	Script: TalkNodeDefn;
+	ScriptFromName: TalkNodeDefn;
+	ScriptUsingEval: TalkNodeDefn;
 	Switch: TalkNodeDefn;
 	VariableAdd: TalkNodeDefn;
 	VariableLoad: TalkNodeDefn;
@@ -87,7 +88,8 @@ class TalkNodeDefn_Instances
 		this.Prompt 			= tnd("Prompt", this.prompt);
 		this.Push 				= tnd("Push", this.push);
 		this.Quit 				= tnd("Quit", this.quit);
-		this.Script 			= tnd("Script", this.script);
+		this.ScriptFromName 	= tnd("ScriptFromName", this.scriptFromName);
+		this.ScriptUsingEval 	= tnd("Script", this.scriptUsingEval);
 		this.Switch 			= tnd("Switch", this._switch);
 		this.VariableAdd 		= tnd("VariableAdd", this.variableAdd);
 		this.VariableLoad 		= tnd("VariableLoad", this.variableLoad);
@@ -112,7 +114,8 @@ class TalkNodeDefn_Instances
 			this.Prompt,
 			this.Push,
 			this.Quit,
-			this.Script,
+			this.ScriptFromName,
+			this.ScriptUsingEval,
 			this.Switch,
 			this.VariableAdd,
 			this.VariableLoad,
@@ -364,11 +367,23 @@ class TalkNodeDefn_Instances
 		conversationRun.quit(universe);
 	}
 
-	script(universe: Universe, conversationRun: ConversationRun): void
+	scriptFromName(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var world = universe.world;
+		var worldDefn = world.defn;
+		var talkNode = conversationRun.talkNodeCurrent();
+		var scriptName = talkNode.content;
+		var scriptToRun = worldDefn.scriptByName(scriptName);
+		scriptToRun.runWithParams2(universe, conversationRun);
+		conversationRun.talkNodeGoToNext(universe);
+		conversationRun.talkNodeCurrentExecute(universe); // hack
+	}
+
+	scriptUsingEval(universe: Universe, conversationRun: ConversationRun): void
 	{
 		var talkNode = conversationRun.talkNodeCurrent();
 		var scriptToRunAsString = "( (u, cr) => " + talkNode.content + ")";
-		var scriptToRun = Script.fromCodeAsString(scriptToRunAsString);
+		var scriptToRun = ScriptUsingEval.fromCodeAsString(scriptToRunAsString);
 		scriptToRun.runWithParams2(universe, conversationRun);
 		conversationRun.talkNodeGoToNext(universe);
 		conversationRun.talkNodeCurrentExecute(universe); // hack
@@ -396,12 +411,11 @@ class TalkNodeDefn_Instances
 		var talkNode = conversationRun.talkNodeCurrent();
 		var variableName = talkNode.content;
 		var variableIncrementAsString = talkNode.next;
-		var variableIncrementAsScript = Script.fromCodeAsString(variableIncrementAsString);
-		var variableIncrement =
-			variableIncrementAsScript.runWithParams2(universe, conversationRun);
+		var variableIncrement = parseFloat(variableIncrementAsString);
 
-		var variableValueBeforeIncrement =
+		var variableValueBeforeIncrementAsUnknown =
 			conversationRun.variableGetWithDefault(variableName, 0);
+		var variableValueBeforeIncrement = variableValueBeforeIncrementAsUnknown as number;
 		var variableValueAfterIncrement =
 			variableValueBeforeIncrement + variableIncrement;
 
@@ -428,7 +442,8 @@ class TalkNodeDefn_Instances
 		var talkNode = conversationRun.talkNodeCurrent();
 		var variableName = talkNode.content;
 		var variableExpression = talkNode.next;
-		var variableScript = Script.fromCodeAsString(variableExpression);
+		var variableAsCode = "(u, cr) => " + variableExpression;
+		var variableScript = ScriptUsingEval.fromCodeAsString(variableAsCode);
 		var variableValue = variableScript.runWithParams2(universe, conversationRun);
 
 		conversationRun.variableSet(variableName, variableValue);
