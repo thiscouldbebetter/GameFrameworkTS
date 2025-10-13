@@ -59,6 +59,7 @@ class TalkNodeDefn_Instances
 	Quit: TalkNodeDefn;
 	ScriptFromName: TalkNodeDefn;
 	ScriptUsingEval: TalkNodeDefn;
+	ScriptUsingFunctionConstructor: TalkNodeDefn;
 	Switch: TalkNodeDefn;
 	VariableAdd: TalkNodeDefn;
 	VariableLoad: TalkNodeDefn;
@@ -89,7 +90,9 @@ class TalkNodeDefn_Instances
 		this.Push 				= tnd("Push", this.push);
 		this.Quit 				= tnd("Quit", this.quit);
 		this.ScriptFromName 	= tnd("ScriptFromName", this.scriptFromName);
-		this.ScriptUsingEval 	= tnd("Script", this.scriptUsingEval);
+		this.ScriptUsingEval 	= tnd("ScriptUsingEval", this.scriptUsingEval);
+		this.ScriptUsingFunctionConstructor
+			= tnd("Script", this.scriptUsingFunctionConstructor);
 		this.Switch 			= tnd("Switch", this._switch);
 		this.VariableAdd 		= tnd("VariableAdd", this.variableAdd);
 		this.VariableLoad 		= tnd("VariableLoad", this.variableLoad);
@@ -116,6 +119,7 @@ class TalkNodeDefn_Instances
 			this.Quit,
 			this.ScriptFromName,
 			this.ScriptUsingEval,
+			this.ScriptUsingFunctionConstructor,
 			this.Switch,
 			this.VariableAdd,
 			this.VariableLoad,
@@ -389,6 +393,25 @@ class TalkNodeDefn_Instances
 		conversationRun.talkNodeCurrentExecute(universe); // hack
 	}
 
+	scriptUsingFunctionConstructor
+	(
+		universe: Universe, conversationRun: ConversationRun
+	): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var scriptBodyToRunAsString = talkNode.content;
+		var scriptToRun =
+			ScriptUsingFunctionConstructor
+				.fromParameterNamesAndCodeAsString
+				(
+					[ "u", "cr" ],
+					scriptBodyToRunAsString
+				);
+		scriptToRun.runWithParams2(universe, conversationRun);
+		conversationRun.talkNodeGoToNext(universe);
+		conversationRun.talkNodeCurrentExecute(universe); // hack
+	}
+
 	_switch(universe: Universe, conversationRun: ConversationRun): void
 	{
 		var talkNode = conversationRun.talkNodeCurrent();
@@ -442,8 +465,16 @@ class TalkNodeDefn_Instances
 		var talkNode = conversationRun.talkNodeCurrent();
 		var variableName = talkNode.content;
 		var variableExpression = talkNode.next;
-		var variableAsCode = "(u, cr) => " + variableExpression;
-		var variableScript = ScriptUsingEval.fromCodeAsString(variableAsCode);
+		var variableAsCode =
+			// "(u, cr) => " + variableExpression;
+			variableExpression;
+		var variableScript =
+			// ScriptUsingEval.fromCodeAsString(variableAsCode);
+			ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString
+			(
+				[ "u", "cr" ],
+				variableAsCode
+			);
 		var variableValue = variableScript.runWithParams2(universe, conversationRun);
 
 		conversationRun.variableSet(variableName, variableValue);

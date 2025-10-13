@@ -767,10 +767,9 @@ class PlaceBuilderDemo_Emplacements
 		var color = colors.Orange;
 		var visual = VisualGroup.fromChildren
 		([
-			VisualEllipse.fromSemiaxesHorizontalAndVerticalAndColorFill
+			VisualRectangle.fromSizeAndColorFill
 			(
-				this.entityDimension / 2,
-				this.entityDimension / 4,
+				Coords.fromXY(1, 0.5).multiplyScalar(this.entityDimension),
 				colors.YellowOrange
 			),
 			VisualPolygon.fromPathAndColorFill

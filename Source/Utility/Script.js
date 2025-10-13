@@ -83,15 +83,11 @@ var ThisCouldBeBetter;
                 }
                 return this._codeAsFunction;
             }
-            run(uwpe) {
-                var codeParsed = this.codeAsFunction();
-                var returnValue = codeParsed.call(this, uwpe);
-                return returnValue;
+            runWithParams0() {
+                return this.runWithParams2(null, null);
             }
             runWithParams1(param0) {
-                var codeParsed = this.codeAsFunction();
-                var returnValue = codeParsed.call(this, param0);
-                return returnValue;
+                return this.runWithParams2(param0, null);
             }
             runWithParams2(param0, param1) {
                 var codeParsed = this.codeAsFunction();
@@ -100,5 +96,35 @@ var ThisCouldBeBetter;
             }
         }
         GameFramework.ScriptUsingEval = ScriptUsingEval;
+        class ScriptUsingFunctionConstructor extends Script {
+            constructor(name, parameterNames, codeAsString) {
+                super(name);
+                this.parameterNames =
+                    parameterNames || [];
+                this.codeAsString = codeAsString;
+            }
+            static fromParameterNamesAndCodeAsString(parameterNames, codeAsString) {
+                return new ScriptUsingFunctionConstructor(null, parameterNames, codeAsString);
+            }
+            codeAsFunction() {
+                if (this._codeAsFunction == null) {
+                    var codeAsFunction = new Function(this.parameterNames[0] || "param0", this.parameterNames[1] || "param1", this.codeAsString);
+                    this._codeAsFunction = codeAsFunction;
+                }
+                return this._codeAsFunction;
+            }
+            runWithParams0() {
+                return this.runWithParams2(null, null);
+            }
+            runWithParams1(param0) {
+                return this.runWithParams2(param0, null);
+            }
+            runWithParams2(param0, param1) {
+                var codeParsed = this.codeAsFunction();
+                var returnValue = codeParsed.call(this, param0, param1);
+                return returnValue;
+            }
+        }
+        GameFramework.ScriptUsingFunctionConstructor = ScriptUsingFunctionConstructor;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

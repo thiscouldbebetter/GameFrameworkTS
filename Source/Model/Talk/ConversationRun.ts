@@ -262,7 +262,14 @@ export class ConversationRun
 
 	scriptParse(scriptAsString: string): Script
 	{
-		return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
+		// return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
+		var returnValue =
+			ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString
+			(
+				[ "u", "cr" ],
+				scriptAsString
+			);
+		return returnValue;
 	}
 
 	talkNodeAdvance(universe: Universe): void
@@ -376,7 +383,9 @@ export class ConversationRun
 		variableExpression: string
 	): void
 	{
-		var scriptText = "( (u, cr) => " + variableExpression + ")";
+		var scriptText =
+			//"( (u, cr) => " + variableExpression + ")";
+			"return " + variableExpression;
 		try
 		{
 			var scriptToRun = this.scriptParse(scriptText);

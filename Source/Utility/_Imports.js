@@ -12,6 +12,7 @@ var Reference = gf.Reference;
 var Script = gf.Script;
 var ScriptFromRunFunction = gf.ScriptFromRunFunction;
 var ScriptUsingEval = gf.ScriptUsingEval;
+var ScriptUsingFunctionConstructor = gf.ScriptUsingFunctionConstructor;
 var Stack = gf.Stack;
 var TimerHelper = gf.TimerHelper;
 var URLParser = gf.URLParser;

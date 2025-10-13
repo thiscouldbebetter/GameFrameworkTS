@@ -82,6 +82,9 @@ var ThisCouldBeBetter;
             static scriptUsingEval(code) {
                 return TalkNode.fromDefnAndContent(GameFramework.TalkNodeDefn.Instances().ScriptUsingEval, code);
             }
+            static scriptUsingFunctionConstructor(code) {
+                return TalkNode.fromDefnAndContent(GameFramework.TalkNodeDefn.Instances().ScriptUsingFunctionConstructor, code);
+            }
             static _switch // "switch" is a keyword.
             (variableName, variableValueNodeNextNamePairs) {
                 var next = variableValueNodeNextNamePairs.map(pair => pair.join(":")).join(";");

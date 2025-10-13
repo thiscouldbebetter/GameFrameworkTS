@@ -18,6 +18,7 @@ import Reference = gf.Reference;
 import Script = gf.Script;
 import ScriptFromRunFunction = gf.ScriptFromRunFunction;
 import ScriptUsingEval = gf.ScriptUsingEval;
+import ScriptUsingFunctionConstructor = gf.ScriptUsingFunctionConstructor;
 import Stack = gf.Stack;
 import TimerHelper = gf.TimerHelper;
 import Treeable = gf.Treeable;

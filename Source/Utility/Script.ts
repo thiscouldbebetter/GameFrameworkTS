@@ -114,7 +114,7 @@ export class ScriptUsingEval extends Script
 		this.codeAsString = codeAsString;
 	}
 
-	static fromCodeAsString(codeAsString: string): Script
+	static fromCodeAsString(codeAsString: string): ScriptUsingEval
 	{
 		return new ScriptUsingEval(null, codeAsString);
 	}
@@ -138,18 +138,77 @@ export class ScriptUsingEval extends Script
 		return this._codeAsFunction;
 	}
 
-	run(uwpe: UniverseWorldPlaceEntities): any
+	runWithParams0(): any
 	{
-		var codeParsed = this.codeAsFunction();
-		var returnValue = codeParsed.call(this, uwpe);
-		return returnValue;
+		return this.runWithParams2(null, null);
 	}
 
 	runWithParams1(param0: any): any
 	{
+		return this.runWithParams2(param0, null);
+	}
+
+	runWithParams2(param0: any, param1: any): any
+	{
 		var codeParsed = this.codeAsFunction();
-		var returnValue = codeParsed.call(this, param0);
+		var returnValue = codeParsed.call(this, param0, param1);
 		return returnValue;
+	}
+}
+
+export class ScriptUsingFunctionConstructor extends Script
+{
+	parameterNames: string[];
+	codeAsString: string;
+
+	_codeAsFunction: any;
+
+	constructor
+	(
+		name: string,
+		parameterNames: string[],
+		codeAsString: string
+	)
+	{
+		super(name);
+		this.parameterNames =
+			parameterNames || [];
+		this.codeAsString = codeAsString;
+	}
+
+	static fromParameterNamesAndCodeAsString
+	(
+		parameterNames: string[],
+		codeAsString: string
+	): ScriptUsingFunctionConstructor
+	{
+		return new ScriptUsingFunctionConstructor(null, parameterNames, codeAsString);
+	}
+
+	codeAsFunction(): any
+	{
+		if (this._codeAsFunction == null)
+		{
+			var codeAsFunction = new Function
+			(
+				this.parameterNames[0] || "param0",
+				this.parameterNames[1] || "param1",
+				this.codeAsString
+			);
+
+			this._codeAsFunction = codeAsFunction;
+		}
+		return this._codeAsFunction;
+	}
+
+	runWithParams0(): any
+	{
+		return this.runWithParams2(null, null);
+	}
+
+	runWithParams1(param0: any): any
+	{
+		return this.runWithParams2(param0, null);
 	}
 
 	runWithParams2(param0: any, param1: any): any

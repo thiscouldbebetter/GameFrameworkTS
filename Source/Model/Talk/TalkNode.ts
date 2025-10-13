@@ -231,6 +231,15 @@ export class TalkNode //
 		);
 	}
 
+	static scriptUsingFunctionConstructor(code: string): TalkNode
+	{
+		return TalkNode.fromDefnAndContent
+		(
+			TalkNodeDefn.Instances().ScriptUsingFunctionConstructor,
+			code
+		);
+	}
+
 	static _switch // "switch" is a keyword.
 	(
 		variableName: string,

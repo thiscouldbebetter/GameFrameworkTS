@@ -379,7 +379,7 @@ class PlaceBuilderDemo_Emplacements {
         var colors = Color.Instances();
         var color = colors.Orange;
         var visual = VisualGroup.fromChildren([
-            VisualEllipse.fromSemiaxesHorizontalAndVerticalAndColorFill(this.entityDimension / 2, this.entityDimension / 4, colors.YellowOrange),
+            VisualRectangle.fromSizeAndColorFill(Coords.fromXY(1, 0.5).multiplyScalar(this.entityDimension), colors.YellowOrange),
             VisualPolygon.fromPathAndColorFill(Path.fromPoints([
                 Coords.fromXY(-0.5, 0),
                 Coords.fromXY(-0.1, -1.5), // tip left

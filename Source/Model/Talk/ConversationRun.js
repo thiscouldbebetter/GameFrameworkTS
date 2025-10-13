@@ -154,7 +154,9 @@ var ThisCouldBeBetter;
                 return this.scopeCurrent;
             }
             scriptParse(scriptAsString) {
-                return GameFramework.ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
+                // return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
+                var returnValue = GameFramework.ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString(["u", "cr"], scriptAsString);
+                return returnValue;
             }
             talkNodeAdvance(universe) {
                 this.scopeCurrent.talkNodeAdvance(universe, this);
@@ -223,7 +225,9 @@ var ThisCouldBeBetter;
                 return variableValue;
             }
             variableLoad(universe, variableName, variableExpression) {
-                var scriptText = "( (u, cr) => " + variableExpression + ")";
+                var scriptText = 
+                //"( (u, cr) => " + variableExpression + ")";
+                "return " + variableExpression;
                 try {
                     var scriptToRun = this.scriptParse(scriptText);
                     var variableValue = scriptToRun.runWithParams2(universe, this);
