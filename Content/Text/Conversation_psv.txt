@@ -56,7 +56,7 @@ CoinFlip|Push
 CoinFlip.Done|Display|Yeah, that's what I figured.
 |Pop
 SQLInjection|Display|What are you--what's happening to me?
-|Script|alert("ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!")
+|Script|alert('ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!')
 |Goto||Greet
 Game|Push|GameDescription
 GameDescription|Display|Well, it's kind of a moving target.
@@ -111,7 +111,7 @@ Game.Mechanics|Display|Not really.
 Game.GoWithMe|Display|No, I'm pretty comfortable here.
 |Display|But I'll give you a walkie-talkie...
 |Display|...so I can provide valuable insights.
-|Script|(u) => { u.world.placeCurrent.player().itemHolder().itemEntityAdd( new Entity(null, [ new Item("Walkie-Talkie", 1) ] ) ); }
+|Script|(u) => { u.world.placeCurrent.player().itemHolder().itemEntityAdd( new Entity(null, [ new Item('Walkie-Talkie', 1) ] ) ); }
 |Display|[You have received a walkie-talkie.]
 |Disable||Game.GoWithMe.Option
 |Goto||Game.Prompt
