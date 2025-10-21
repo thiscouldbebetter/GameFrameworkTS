@@ -82,7 +82,10 @@ var ThisCouldBeBetter;
                         var error = "one or more nodes have unrecognized types: " + defnNamesUnrecognized.join(", ");
                         errorsSoFar.push(error);
                     }
-                    var nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes = nodes.filter(x => x.defnName.startsWith("Variable") == false // Some node types use the next field to store a script.
+                    var nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes = nodes.filter(x => 
+                    // Some node types use the next field to store a script or multiple node names.
+                    x.defnName.startsWith("Variable") == false
+                        && x.defnName.startsWith("DoNext") == false
                         && x.next != null
                         && nodes.some(y => y.name == x.next) == false);
                     if (nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.length > 0) {

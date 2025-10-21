@@ -62,7 +62,10 @@ class TalkNodeDefn_Instances
 {
 	Disable: TalkNodeDefn;
 	Display: TalkNodeDefn;
+	DoNextInCycle: TalkNodeDefn;
+	DoNextInSequence: TalkNodeDefn;
 	DoNothing: TalkNodeDefn;
+	DoRandomSelection: TalkNodeDefn;
 	Enable: TalkNodeDefn;
 	Goto: TalkNodeDefn;
 	JumpIfFalse: TalkNodeDefn;
@@ -77,6 +80,7 @@ class TalkNodeDefn_Instances
 	ScriptFromName: TalkNodeDefn;
 	ScriptUsingEval: TalkNodeDefn;
 	ScriptUsingFunctionConstructor: TalkNodeDefn;
+	SpeakerSet: TalkNodeDefn;
 	Switch: TalkNodeDefn;
 	VariableAdd: TalkNodeDefn;
 	VariableLoad: TalkNodeDefn;
@@ -94,7 +98,10 @@ class TalkNodeDefn_Instances
 
 		this.Disable 			= tnd("Disable", this.disable);
 		this.Display 			= tnd("Display", this.display);
+		this.DoNextInCycle 		= tnd("DoNextInCycle", this.doNextInCycle);
+		this.DoNextInSequence 	= tnd("DoNextInSequence", this.doNextInSequence);
 		this.DoNothing 			= tnd("DoNothing", this.doNothing);
+		this.DoRandomSelection 	= tnd("DoRandomSelection", this.doRandomSelection);
 		this.Enable 			= tnd("Enable", this.enable);
 		this.Goto 				= tnd("Goto", this.goto);
 		this.JumpIfFalse 		= tnd("JumpIfFalse", this.jumpIfFalse);
@@ -110,6 +117,7 @@ class TalkNodeDefn_Instances
 		this.ScriptUsingEval 	= tnd("ScriptUsingEval", this.scriptUsingEval);
 		this.ScriptUsingFunctionConstructor
 			= tnd("Script", this.scriptUsingFunctionConstructor);
+		this.SpeakerSet 		= tnd("SpeakerSet", this.speakerSet);
 		this.Switch 			= tnd("Switch", this._switch);
 		this.VariableAdd 		= tnd("VariableAdd", this.variableAdd);
 		this.VariableLoad 		= tnd("VariableLoad", this.variableLoad);
@@ -122,7 +130,10 @@ class TalkNodeDefn_Instances
 		[
 			this.Disable,
 			this.Display,
+			this.DoNextInCycle,
+			this.DoNextInSequence,
 			this.DoNothing,
+			this.DoRandomSelection,
 			this.Enable,
 			this.Goto,
 			this.JumpIfFalse,
@@ -137,6 +148,7 @@ class TalkNodeDefn_Instances
 			this.ScriptFromName,
 			this.ScriptUsingEval,
 			this.ScriptUsingFunctionConstructor,
+			this.SpeakerSet,
 			this.Switch,
 			this.VariableAdd,
 			this.VariableLoad,
@@ -207,8 +219,100 @@ class TalkNodeDefn_Instances
 		}
 	}
 
+	doNextInCycle(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+		var talkNodeNextNamesJoined = talkNode.next;
+		const delimiter = ";"
+		var talkNodeNextNames = talkNodeNextNamesJoined.split(delimiter);
+		var talkNodeCount = talkNodeNextNames.length;
+
+		for (var i = 0; i < talkNodeCount; i++)
+		{
+			var talkNodeToDisableName = talkNodeNextNames[i];
+			conversationRun.disableTalkNodeWithName(talkNodeToDisableName);
+		}
+
+		var variableName = talkNode.content ?? talkNodeNextNamesJoined;
+		var indexOfCurrentNodeOfCycle =
+			conversationRun.variableGetWithDefault(variableName, 0) as number;
+
+		var talkNodeNextName = talkNodeNextNames[indexOfCurrentNodeOfCycle];
+		conversationRun.enableTalkNodeWithName(talkNodeNextName);
+
+		indexOfCurrentNodeOfCycle++;
+		if (indexOfCurrentNodeOfCycle >= talkNodeCount)
+		{
+			indexOfCurrentNodeOfCycle = 0;
+		}
+		conversationRun.variableSet(variableName, indexOfCurrentNodeOfCycle);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	doNextInSequence(universe: Universe, conversationRun: ConversationRun): void
+	{
+		// Like .doNextInCycle(), but stays on last node forever after.
+
+		var talkNode = conversationRun.talkNodeCurrent();
+		var talkNodeNextNamesJoined = talkNode.next;
+		const delimiter = ";"
+		var talkNodeNextNames = talkNodeNextNamesJoined.split(delimiter);
+		var talkNodeCount = talkNodeNextNames.length;
+
+		for (var i = 0; i < talkNodeCount; i++)
+		{
+			var talkNodeToDisableName = talkNodeNextNames[i];
+			conversationRun.disableTalkNodeWithName(talkNodeToDisableName);
+		}
+
+		var variableName = talkNode.content ?? talkNodeNextNamesJoined;
+		var indexOfCurrentNodeOfCycle =
+			conversationRun.variableGetWithDefault(variableName, 0) as number;
+
+		var talkNodeNextName = talkNodeNextNames[indexOfCurrentNodeOfCycle];
+		conversationRun.enableTalkNodeWithName(talkNodeNextName);
+
+		indexOfCurrentNodeOfCycle++;
+		if (indexOfCurrentNodeOfCycle >= talkNodeCount)
+		{
+			indexOfCurrentNodeOfCycle = talkNodeCount - 1;
+		}
+		conversationRun.variableSet(variableName, indexOfCurrentNodeOfCycle);
+
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
 	doNothing(universe: Universe, conversationRun: ConversationRun): void
 	{
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	doRandomSelection(universe: Universe, conversationRun: ConversationRun): void
+	{
+		// Like .doNextInCycle() and .doNextInSequence(), but random.
+
+		var talkNode = conversationRun.talkNodeCurrent();
+		var talkNodeNextNamesJoined = talkNode.next;
+		const delimiter = ";"
+		var talkNodeNextNames = talkNodeNextNamesJoined.split(delimiter);
+		var talkNodeCount = talkNodeNextNames.length;
+
+		for (var i = 0; i < talkNodeCount; i++)
+		{
+			var talkNodeToDisableName = talkNodeNextNames[i];
+			conversationRun.disableTalkNodeWithName(talkNodeToDisableName);
+		}
+
+		var randomizer = universe.randomizer;
+		var indexRandom = randomizer.integerLessThan(talkNodeCount);
+
+		var talkNodeNextName = talkNodeNextNames[indexRandom];
+		conversationRun.enableTalkNodeWithName(talkNodeNextName);
+
 		conversationRun.talkNodeAdvance(universe);
 		conversationRun.talkNodeCurrentExecute(universe);
 	}
@@ -244,8 +348,8 @@ class TalkNodeDefn_Instances
 	goto(universe: Universe, conversationRun: ConversationRun): void
 	{
 		var talkNode = conversationRun.talkNodeCurrent();
-		var talkNodeNameNext = talkNode.next;
-		conversationRun.goto(talkNodeNameNext, universe);
+		var talkNodeNextName = talkNode.next;
+		conversationRun.goto(talkNodeNextName, universe);
 	}
 
 	jumpIfFalse(universe: Universe, conversationRun: ConversationRun): void
@@ -366,7 +470,6 @@ class TalkNodeDefn_Instances
 		scope.isPromptingForResponse = true;
 	}
 
-
 	push(universe: Universe, conversationRun: ConversationRun): void
 	{
 		var talkNodeToPushTo = conversationRun.talkNodeNext();
@@ -423,6 +526,13 @@ class TalkNodeDefn_Instances
 		conversationRun.talkNodeCurrentExecute(universe); // hack
 	}
 
+	speakerSet(universe: Universe, conversationRun: ConversationRun): void
+	{
+		// todo - Set the character portrait and possibly the font.
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
 	_switch(universe: Universe, conversationRun: ConversationRun): void
 	{
 		var talkNode = conversationRun.talkNodeCurrent();
@@ -446,6 +556,10 @@ class TalkNodeDefn_Instances
 		var variableName = talkNode.content;
 		var variableIncrementAsString = talkNode.next;
 		var variableIncrement = parseFloat(variableIncrementAsString);
+		if (isNaN(variableIncrement) )
+		{
+			variableIncrement = 1;
+		}
 
 		var variableValueBeforeIncrementAsUnknown =
 			conversationRun.variableGetWithDefault(variableName, 0);

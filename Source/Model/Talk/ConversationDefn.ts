@@ -152,7 +152,9 @@ export class ConversationDefn
 				nodes.filter
 				(
 					x =>
-						x.defnName.startsWith("Variable") == false  // Some node types use the next field to store a script.
+						// Some node types use the next field to store a script or multiple node names.
+						x.defnName.startsWith("Variable") == false  
+						&& x.defnName.startsWith("DoNext") == false
 						&& x.next != null
 						&& nodes.some(y => y.name == x.next) == false
 				);

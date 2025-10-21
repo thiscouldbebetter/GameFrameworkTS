@@ -33,7 +33,10 @@ var ThisCouldBeBetter;
                 var tnd = (n, e) => new TalkNodeDefn(n, e);
                 this.Disable = tnd("Disable", this.disable);
                 this.Display = tnd("Display", this.display);
+                this.DoNextInCycle = tnd("DoNextInCycle", this.doNextInCycle);
+                this.DoNextInSequence = tnd("DoNextInSequence", this.doNextInSequence);
                 this.DoNothing = tnd("DoNothing", this.doNothing);
+                this.DoRandomSelection = tnd("DoRandomSelection", this.doRandomSelection);
                 this.Enable = tnd("Enable", this.enable);
                 this.Goto = tnd("Goto", this.goto);
                 this.JumpIfFalse = tnd("JumpIfFalse", this.jumpIfFalse);
@@ -49,6 +52,7 @@ var ThisCouldBeBetter;
                 this.ScriptUsingEval = tnd("ScriptUsingEval", this.scriptUsingEval);
                 this.ScriptUsingFunctionConstructor
                     = tnd("Script", this.scriptUsingFunctionConstructor);
+                this.SpeakerSet = tnd("SpeakerSet", this.speakerSet);
                 this.Switch = tnd("Switch", this._switch);
                 this.VariableAdd = tnd("VariableAdd", this.variableAdd);
                 this.VariableLoad = tnd("VariableLoad", this.variableLoad);
@@ -60,7 +64,10 @@ var ThisCouldBeBetter;
                     [
                         this.Disable,
                         this.Display,
+                        this.DoNextInCycle,
+                        this.DoNextInSequence,
                         this.DoNothing,
+                        this.DoRandomSelection,
                         this.Enable,
                         this.Goto,
                         this.JumpIfFalse,
@@ -75,6 +82,7 @@ var ThisCouldBeBetter;
                         this.ScriptFromName,
                         this.ScriptUsingEval,
                         this.ScriptUsingFunctionConstructor,
+                        this.SpeakerSet,
                         this.Switch,
                         this.VariableAdd,
                         this.VariableLoad,
@@ -114,7 +122,72 @@ var ThisCouldBeBetter;
                     conversationRun.talkNodesForTranscript.push(nodeForTranscript);
                 }
             }
+            doNextInCycle(universe, conversationRun) {
+                var _a;
+                var talkNode = conversationRun.talkNodeCurrent();
+                var talkNodeNextNamesJoined = talkNode.next;
+                const delimiter = ";";
+                var talkNodeNextNames = talkNodeNextNamesJoined.split(delimiter);
+                var talkNodeCount = talkNodeNextNames.length;
+                for (var i = 0; i < talkNodeCount; i++) {
+                    var talkNodeToDisableName = talkNodeNextNames[i];
+                    conversationRun.disableTalkNodeWithName(talkNodeToDisableName);
+                }
+                var variableName = (_a = talkNode.content) !== null && _a !== void 0 ? _a : talkNodeNextNamesJoined;
+                var indexOfCurrentNodeOfCycle = conversationRun.variableGetWithDefault(variableName, 0);
+                var talkNodeNextName = talkNodeNextNames[indexOfCurrentNodeOfCycle];
+                conversationRun.enableTalkNodeWithName(talkNodeNextName);
+                indexOfCurrentNodeOfCycle++;
+                if (indexOfCurrentNodeOfCycle >= talkNodeCount) {
+                    indexOfCurrentNodeOfCycle = 0;
+                }
+                conversationRun.variableSet(variableName, indexOfCurrentNodeOfCycle);
+                conversationRun.talkNodeAdvance(universe);
+                conversationRun.talkNodeCurrentExecute(universe);
+            }
+            doNextInSequence(universe, conversationRun) {
+                // Like .doNextInCycle(), but stays on last node forever after.
+                var _a;
+                var talkNode = conversationRun.talkNodeCurrent();
+                var talkNodeNextNamesJoined = talkNode.next;
+                const delimiter = ";";
+                var talkNodeNextNames = talkNodeNextNamesJoined.split(delimiter);
+                var talkNodeCount = talkNodeNextNames.length;
+                for (var i = 0; i < talkNodeCount; i++) {
+                    var talkNodeToDisableName = talkNodeNextNames[i];
+                    conversationRun.disableTalkNodeWithName(talkNodeToDisableName);
+                }
+                var variableName = (_a = talkNode.content) !== null && _a !== void 0 ? _a : talkNodeNextNamesJoined;
+                var indexOfCurrentNodeOfCycle = conversationRun.variableGetWithDefault(variableName, 0);
+                var talkNodeNextName = talkNodeNextNames[indexOfCurrentNodeOfCycle];
+                conversationRun.enableTalkNodeWithName(talkNodeNextName);
+                indexOfCurrentNodeOfCycle++;
+                if (indexOfCurrentNodeOfCycle >= talkNodeCount) {
+                    indexOfCurrentNodeOfCycle = talkNodeCount - 1;
+                }
+                conversationRun.variableSet(variableName, indexOfCurrentNodeOfCycle);
+                conversationRun.talkNodeAdvance(universe);
+                conversationRun.talkNodeCurrentExecute(universe);
+            }
             doNothing(universe, conversationRun) {
+                conversationRun.talkNodeAdvance(universe);
+                conversationRun.talkNodeCurrentExecute(universe);
+            }
+            doRandomSelection(universe, conversationRun) {
+                // Like .doNextInCycle() and .doNextInSequence(), but random.
+                var talkNode = conversationRun.talkNodeCurrent();
+                var talkNodeNextNamesJoined = talkNode.next;
+                const delimiter = ";";
+                var talkNodeNextNames = talkNodeNextNamesJoined.split(delimiter);
+                var talkNodeCount = talkNodeNextNames.length;
+                for (var i = 0; i < talkNodeCount; i++) {
+                    var talkNodeToDisableName = talkNodeNextNames[i];
+                    conversationRun.disableTalkNodeWithName(talkNodeToDisableName);
+                }
+                var randomizer = universe.randomizer;
+                var indexRandom = randomizer.integerLessThan(talkNodeCount);
+                var talkNodeNextName = talkNodeNextNames[indexRandom];
+                conversationRun.enableTalkNodeWithName(talkNodeNextName);
                 conversationRun.talkNodeAdvance(universe);
                 conversationRun.talkNodeCurrentExecute(universe);
             }
@@ -130,8 +203,8 @@ var ThisCouldBeBetter;
             }
             goto(universe, conversationRun) {
                 var talkNode = conversationRun.talkNodeCurrent();
-                var talkNodeNameNext = talkNode.next;
-                conversationRun.goto(talkNodeNameNext, universe);
+                var talkNodeNextName = talkNode.next;
+                conversationRun.goto(talkNodeNextName, universe);
             }
             jumpIfFalse(universe, conversationRun) {
                 var talkNode = conversationRun.talkNodeCurrent();
@@ -250,6 +323,11 @@ var ThisCouldBeBetter;
                 conversationRun.talkNodeGoToNext(universe);
                 conversationRun.talkNodeCurrentExecute(universe); // hack
             }
+            speakerSet(universe, conversationRun) {
+                // todo - Set the character portrait and possibly the font.
+                conversationRun.talkNodeAdvance(universe);
+                conversationRun.talkNodeCurrentExecute(universe);
+            }
             _switch(universe, conversationRun) {
                 var talkNode = conversationRun.talkNodeCurrent();
                 var variableName = talkNode.content;
@@ -263,6 +341,9 @@ var ThisCouldBeBetter;
                 var variableName = talkNode.content;
                 var variableIncrementAsString = talkNode.next;
                 var variableIncrement = parseFloat(variableIncrementAsString);
+                if (isNaN(variableIncrement)) {
+                    variableIncrement = 1;
+                }
                 var variableValueBeforeIncrementAsUnknown = conversationRun.variableGetWithDefault(variableName, 0);
                 var variableValueBeforeIncrement = variableValueBeforeIncrementAsUnknown;
                 var variableValueAfterIncrement = variableValueBeforeIncrement + variableIncrement;
