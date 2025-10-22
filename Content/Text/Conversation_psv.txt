@@ -1,8 +1,9 @@
 name=AnEveningWithProfessorSurly
-imagePortraitName=Friendly
 
 // name|defnName|content|next|isDisabled
-Greet|Display|Hi, I'm Professor Surly.
+
+Greet|SpeakerSet|Friendly
+|Display|Hi, I'm Professor Surly.
 Subject|Display|What do you want to talk about?
 |Option|Let's talk about math.|Math
 |Option|Let's talk about science.|Science

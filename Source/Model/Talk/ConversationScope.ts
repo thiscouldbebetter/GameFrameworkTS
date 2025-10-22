@@ -29,7 +29,7 @@ export class ConversationScope
 		this.parent = parent;
 		this.talkNodeCurrentSet(talkNodeInitial);
 		this.isPromptingForResponse = false;
-		this.talkNodesForOptions = talkNodesForOptions;
+		this.talkNodesForOptions = talkNodesForOptions || [];
 		this.talkNodesForOptionsByName =
 			ArrayHelper.addLookupsByName(this.talkNodesForOptions);
 
@@ -39,6 +39,11 @@ export class ConversationScope
 		this._talkNodesForOptionsActive = [];
 		this._emptyArray = [];
 		this.haveOptionsBeenUpdated = true;
+	}
+
+	static fromTalkNodeInitial(talkNodeInitial: TalkNode): ConversationScope
+	{
+		return new ConversationScope(null, talkNodeInitial, null);
 	}
 
 	displayTextCurrent(): string

@@ -4,10 +4,9 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class ConversationDefn {
-            constructor(name, contentTextStringName, visualPortrait, soundMusicName, talkNodeDefns, talkNodes) {
+            constructor(name, contentTextStringName, soundMusicName, talkNodeDefns, talkNodes) {
                 this.name = name;
                 this.contentTextStringName = contentTextStringName;
-                this.visualPortrait = visualPortrait;
                 this.soundMusicName = soundMusicName;
                 this.talkNodeDefns = talkNodeDefns;
                 this.talkNodeDefnsByName = GameFramework.ArrayHelper.addLookupsByName(this.talkNodeDefns);
@@ -163,7 +162,7 @@ var ThisCouldBeBetter;
             clone() {
                 var talkNodeDefnsCloned = this.talkNodeDefns.map(x => x.clone());
                 var talkNodesCloned = this.talkNodes.map(x => x.clone());
-                return new ConversationDefn(this.name, this.contentTextStringName, this.visualPortrait, this.soundMusicName, talkNodeDefnsCloned, talkNodesCloned);
+                return new ConversationDefn(this.name, this.contentTextStringName, this.soundMusicName, talkNodeDefnsCloned, talkNodesCloned);
             }
             // Serialization.
             static deserialize(conversationDefnAsText) {
@@ -202,7 +201,6 @@ var ThisCouldBeBetter;
                 var body = conversationDefnAsPsv.substr(indexOfFirstBlankLine);
                 var conversationDefnName;
                 var contentTextStringName;
-                var imagePortraitName;
                 var soundMusicName;
                 var headerLines = header.split(newline);
                 headerLines = headerLines.map(x => x.indexOf("//") > 0 ? x.split("//")[0].trim() : x);
@@ -217,9 +215,6 @@ var ThisCouldBeBetter;
                     else if (fieldName == "contentTextStringName") {
                         contentTextStringName = fieldValue;
                     }
-                    else if (fieldName == "imagePortraitName") {
-                        imagePortraitName = fieldValue;
-                    }
                     else if (fieldName == "soundMusicName") {
                         soundMusicName = fieldValue;
                     }
@@ -227,14 +222,12 @@ var ThisCouldBeBetter;
                         // Ignore it.
                     }
                 }
-                var visualPortrait = new GameFramework.VisualImageFromLibrary(imagePortraitName);
                 var bodyLines = body.split(newline);
                 var bodyLinesMinusComments = bodyLines.map(x => x.split("//")[0]);
                 var bodyLinesNonBlank = bodyLinesMinusComments.filter(x => x.trim().length > 0);
                 var bodyLinesAsTalkNodes = bodyLinesNonBlank.map(x => GameFramework.TalkNode.fromLinePipeSeparatedValues(x));
                 var talkNodeDefns = GameFramework.TalkNodeDefn.Instances()._All;
-                var returnValue = new ConversationDefn(conversationDefnName, contentTextStringName, visualPortrait, // todo
-                soundMusicName, talkNodeDefns, bodyLinesAsTalkNodes);
+                var returnValue = new ConversationDefn(conversationDefnName, contentTextStringName, soundMusicName, talkNodeDefns, bodyLinesAsTalkNodes);
                 return returnValue;
             }
             static fromPipeSeparatedValues_DemoData() {
@@ -242,10 +235,11 @@ var ThisCouldBeBetter;
                 // This data is also present as /Content/Text/Conversation_psv.txt.
                 var conversationDefnAsLines = [
                     "name=AnEveningWithProfessorSurly",
-                    "imagePortraitName=Friendly",
                     "",
                     "// name|defnName|content|next|isDisabled",
-                    "Greet|Display|Hi, I'm Professor Surly.",
+                    "",
+                    "Greet|SpeakerSet|Friendly",
+                    "|Display|Hi, I'm Professor Surly.",
                     "Subject|Display|What do you want to talk about?",
                     "|Option|Let's talk about math.|Math",
                     "|Option|Let's talk about science.|Science",
@@ -434,10 +428,6 @@ var ThisCouldBeBetter;
                 }
                 if (this.contentTextStringName != null) {
                     lines.push("contentTextStringName=" + this.contentTextStringName);
-                }
-                if (this.visualPortrait != null) {
-                    // hack
-                    lines.push("imagePortraitName=" + this.visualPortrait.imageName);
                 }
                 if (this.soundMusicName != null) {
                     lines.push("soundMusicName=" + this.soundMusicName);

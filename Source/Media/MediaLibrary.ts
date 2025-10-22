@@ -396,10 +396,18 @@ export class MediaLibrary
 
 	imageGetByName(name: string): Image2
 	{
-		var returnImage = this.imagesByName.get(name);
-		if (returnImage == null)
+		var returnImage: Image2;
+		if (name == null)
 		{
-			throw new Error("No image found with name: " + name);
+			returnImage = null;
+		}
+		else
+		{
+			returnImage = this.imagesByName.get(name);
+			if (returnImage == null)
+			{
+				throw new Error("No image found with name: " + name);
+			}
 		}
 		return returnImage;
 	}

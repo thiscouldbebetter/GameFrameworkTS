@@ -6,7 +6,6 @@ export class ConversationDefn
 {
 	name: string;
 	contentTextStringName: string;
-	visualPortrait: Visual;
 	soundMusicName: string;
 	talkNodeDefns: TalkNodeDefn[];
 	talkNodes: TalkNode[];
@@ -18,7 +17,6 @@ export class ConversationDefn
 	(
 		name: string,
 		contentTextStringName: string,
-		visualPortrait: Visual,
 		soundMusicName: string,
 		talkNodeDefns: TalkNodeDefn[],
 		talkNodes: TalkNode[]
@@ -26,7 +24,6 @@ export class ConversationDefn
 	{
 		this.name = name;
 		this.contentTextStringName = contentTextStringName;
-		this.visualPortrait = visualPortrait;
 		this.soundMusicName = soundMusicName;
 		this.talkNodeDefns = talkNodeDefns;
 		this.talkNodeDefnsByName = ArrayHelper.addLookupsByName(this.talkNodeDefns);
@@ -284,7 +281,6 @@ export class ConversationDefn
 		(
 			this.name,
 			this.contentTextStringName,
-			this.visualPortrait,
 			this.soundMusicName,
 			talkNodeDefnsCloned,
 			talkNodesCloned
@@ -345,7 +341,6 @@ export class ConversationDefn
 
 		var conversationDefnName: string;
 		var contentTextStringName: string;
-		var imagePortraitName: string;
 		var soundMusicName: string;
 		var headerLines = header.split(newline);
 		headerLines = headerLines.map(x => x.indexOf("//") > 0 ? x.split("//")[0].trim() : x); 
@@ -364,10 +359,6 @@ export class ConversationDefn
 			{
 				contentTextStringName = fieldValue;
 			}
-			else if (fieldName == "imagePortraitName")
-			{
-				imagePortraitName = fieldValue;
-			}
 			else if (fieldName == "soundMusicName")
 			{
 				soundMusicName = fieldValue;
@@ -377,8 +368,6 @@ export class ConversationDefn
 				// Ignore it.
 			}
 		}
-
-		var visualPortrait = new VisualImageFromLibrary(imagePortraitName);
 
 		var bodyLines = body.split(newline);
 		var bodyLinesMinusComments =
@@ -394,7 +383,6 @@ export class ConversationDefn
 		(
 			conversationDefnName,
 			contentTextStringName,
-			visualPortrait, // todo
 			soundMusicName,
 			talkNodeDefns,
 			bodyLinesAsTalkNodes
@@ -411,10 +399,11 @@ export class ConversationDefn
 		var conversationDefnAsLines =
 		[
 			"name=AnEveningWithProfessorSurly",
-			"imagePortraitName=Friendly",
 			"",
 			"// name|defnName|content|next|isDisabled",
-			"Greet|Display|Hi, I'm Professor Surly.",
+			"",
+			"Greet|SpeakerSet|Friendly",
+			"|Display|Hi, I'm Professor Surly.",
 			"Subject|Display|What do you want to talk about?",
 			"|Option|Let's talk about math.|Math",
 			"|Option|Let's talk about science.|Science",
@@ -640,12 +629,6 @@ export class ConversationDefn
 		if (this.contentTextStringName != null)
 		{
 			lines.push("contentTextStringName=" + this.contentTextStringName);
-		}
-
-		if (this.visualPortrait != null)
-		{
-			// hack
-			lines.push("imagePortraitName=" + (this.visualPortrait as VisualImageFromLibrary).imageName);
 		}
 
 		if (this.soundMusicName != null)

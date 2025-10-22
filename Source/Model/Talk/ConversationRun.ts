@@ -11,6 +11,7 @@ export class ConversationRun
 	contentsById: Map<string, string>;
 
 	scopeCurrent: ConversationScope;
+	speakerName: string;
 	talkNodesForTranscript: TalkNode[];
 	variablesByName: Map<string, unknown>;
 
@@ -35,13 +36,10 @@ export class ConversationRun
 
 		var talkNodeStart = this.defn.talkNodes[0];
 
-		this.scopeCurrent = new ConversationScope
-		(
-			null, // parent
-			talkNodeStart,
-			// talkNodesForOptions
-			[]
-		);
+		this.scopeCurrent =
+			ConversationScope.fromTalkNodeInitial(talkNodeStart);
+
+		this.speakerName = null;
 
 		this.talkNodesForTranscript = [];
 
@@ -275,6 +273,34 @@ export class ConversationRun
 				scriptAsString
 			);
 		return returnValue;
+	}
+
+	speakerNameSet(value: string): ConversationRun
+	{
+		this.speakerName = value;
+		this._speakerPortraitVisual = null;
+		return this;
+	}
+
+	_speakerPortraitVisual: Visual;
+	speakerPortraitVisualOfSize(size: Coords): Visual
+	{
+		if (this._speakerPortraitVisual == null)
+		{
+			var visualPortrait = VisualImageFromLibrary.fromImageName(this.speakerName);
+
+			this._speakerPortraitVisual = VisualImageScaled.fromSizeAndChild
+			(
+				size, visualPortrait
+			);
+		}
+
+		return this._speakerPortraitVisual;
+	}
+
+	speakerPortraitVisualReset(): void
+	{
+		this._speakerPortraitVisual = null;
 	}
 
 	talkNodeAdvance(universe: Universe): void
@@ -615,7 +641,6 @@ export class ConversationRun
 			FontNameAndHeight.fromHeightInPixels(fontHeightShort);
 
 		var conversationRun = this;
-		var conversationDefn = conversationRun.defn;
 
 		var next = () =>
 		{
@@ -649,15 +674,6 @@ export class ConversationRun
 			)
 		];
 
-		var visualPortrait: Visual = conversationDefn.visualPortrait;
-		if (visualPortrait.constructor.name.startsWith("VisualImage"))
-		{
-			visualPortrait = new VisualImageScaled
-			(
-				portraitSize, (visualPortrait as VisualImage)
-			);
-		}
-
 		var childControls: ControlBase[] =
 		[
 			ControlButton.fromPosSizeTextFontClick
@@ -674,7 +690,12 @@ export class ConversationRun
 				"visualPortrait",
 				portraitPos,
 				portraitSize,
-				DataBinding.fromContext(visualPortrait),
+				DataBinding.fromContextAndGet
+				(
+					conversationRun,
+					(cr: ConversationRun) =>
+						cr.speakerPortraitVisualOfSize(portraitSize)
+				),
 				Color.Instances().Black
 			),
 

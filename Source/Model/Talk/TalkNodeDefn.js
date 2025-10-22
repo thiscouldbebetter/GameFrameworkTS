@@ -325,6 +325,13 @@ var ThisCouldBeBetter;
             }
             speakerSet(universe, conversationRun) {
                 // todo - Set the character portrait and possibly the font.
+                var talkNode = conversationRun.talkNodeCurrent();
+                var speakerName = talkNode.content;
+                speakerName =
+                    speakerName == ""
+                        ? null
+                        : speakerName;
+                conversationRun.speakerNameSet(speakerName);
                 conversationRun.talkNodeAdvance(universe);
                 conversationRun.talkNodeCurrentExecute(universe);
             }

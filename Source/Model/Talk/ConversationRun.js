@@ -11,10 +11,9 @@ var ThisCouldBeBetter;
                 this.entityTalker = entityTalker;
                 this.contentsById = contentsById || new Map();
                 var talkNodeStart = this.defn.talkNodes[0];
-                this.scopeCurrent = new GameFramework.ConversationScope(null, // parent
-                talkNodeStart, 
-                // talkNodesForOptions
-                []);
+                this.scopeCurrent =
+                    GameFramework.ConversationScope.fromTalkNodeInitial(talkNodeStart);
+                this.speakerName = null;
                 this.talkNodesForTranscript = [];
                 this.variablesByName = new Map();
                 // Abbreviate for scripts.
@@ -160,6 +159,21 @@ var ThisCouldBeBetter;
                 // return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
                 var returnValue = GameFramework.ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString(["u", "cr"], scriptAsString);
                 return returnValue;
+            }
+            speakerNameSet(value) {
+                this.speakerName = value;
+                this._speakerPortraitVisual = null;
+                return this;
+            }
+            speakerPortraitVisualOfSize(size) {
+                if (this._speakerPortraitVisual == null) {
+                    var visualPortrait = GameFramework.VisualImageFromLibrary.fromImageName(this.speakerName);
+                    this._speakerPortraitVisual = GameFramework.VisualImageScaled.fromSizeAndChild(size, visualPortrait);
+                }
+                return this._speakerPortraitVisual;
+            }
+            speakerPortraitVisualReset() {
+                this._speakerPortraitVisual = null;
             }
             talkNodeAdvance(universe) {
                 this.scopeCurrent.talkNodeAdvance(universe, this);
@@ -315,7 +329,6 @@ var ThisCouldBeBetter;
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
                 var fontNameAndHeightShort = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightShort);
                 var conversationRun = this;
-                var conversationDefn = conversationRun.defn;
                 var next = () => {
                     conversationRun.next(universe);
                 };
@@ -333,14 +346,10 @@ var ThisCouldBeBetter;
                 var actionToInputsMappings = [
                     GameFramework.ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce(actionNameViewLog, GameFramework.Input.Instances().Space.name, true)
                 ];
-                var visualPortrait = conversationDefn.visualPortrait;
-                if (visualPortrait.constructor.name.startsWith("VisualImage")) {
-                    visualPortrait = new GameFramework.VisualImageScaled(portraitSize, visualPortrait);
-                }
                 var childControls = [
                     GameFramework.ControlButton.fromPosSizeTextFontClick(portraitPos, portraitSize, "Next", fontNameAndHeight, next // click
                     ),
-                    GameFramework.ControlVisual.fromNamePosSizeVisualAndColorBackground("visualPortrait", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualPortrait), GameFramework.Color.Instances().Black),
+                    GameFramework.ControlVisual.fromNamePosSizeVisualAndColorBackground("visualPortrait", portraitPos, portraitSize, GameFramework.DataBinding.fromContextAndGet(conversationRun, (cr) => cr.speakerPortraitVisualOfSize(portraitSize)), GameFramework.Color.Instances().Black),
                     GameFramework.ControlLabel.fromPosSizeTextFontCenteredVertically(labelSpeakerPos, labelSpeakerSize, GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent()), fontNameAndHeight),
                     GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2), size, // size
                     GameFramework.DataBinding.fromContext("Response:"), fontNameAndHeight),

@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.parent = parent;
                 this.talkNodeCurrentSet(talkNodeInitial);
                 this.isPromptingForResponse = false;
-                this.talkNodesForOptions = talkNodesForOptions;
+                this.talkNodesForOptions = talkNodesForOptions || [];
                 this.talkNodesForOptionsByName =
                     GameFramework.ArrayHelper.addLookupsByName(this.talkNodesForOptions);
                 this.displayLinesCurrent = null;
@@ -17,6 +17,9 @@ var ThisCouldBeBetter;
                 this._talkNodesForOptionsActive = [];
                 this._emptyArray = [];
                 this.haveOptionsBeenUpdated = true;
+            }
+            static fromTalkNodeInitial(talkNodeInitial) {
+                return new ConversationScope(null, talkNodeInitial, null);
             }
             displayTextCurrent() {
                 var returnValue = (this.displayLineIndexCurrent == null

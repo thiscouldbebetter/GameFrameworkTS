@@ -220,9 +220,15 @@ var ThisCouldBeBetter;
                 return returnFont;
             }
             imageGetByName(name) {
-                var returnImage = this.imagesByName.get(name);
-                if (returnImage == null) {
-                    throw new Error("No image found with name: " + name);
+                var returnImage;
+                if (name == null) {
+                    returnImage = null;
+                }
+                else {
+                    returnImage = this.imagesByName.get(name);
+                    if (returnImage == null) {
+                        throw new Error("No image found with name: " + name);
+                    }
                 }
                 return returnImage;
             }

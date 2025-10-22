@@ -56,11 +56,14 @@ export class VisualImageScaled implements VisualImage
 		var universe = uwpe.universe;
 		var entity = uwpe.entity;
 		var image = this.visualImage.image(universe);
-		var entityPos = Locatable.of(entity).loc.pos;
-		this._posSaved.overwriteWith(entityPos);
-		entityPos.subtract(this.sizeToDrawHalf);
-		display.drawImageScaled(image, entityPos, this.sizeToDraw);
-		entityPos.overwriteWith(this._posSaved);
+		if (image != null)
+		{
+			var entityPos = Locatable.of(entity).loc.pos;
+			this._posSaved.overwriteWith(entityPos);
+			entityPos.subtract(this.sizeToDrawHalf);
+			display.drawImageScaled(image, entityPos, this.sizeToDraw);
+			entityPos.overwriteWith(this._posSaved);
+		}
 	}
 
 	image(universe: Universe): Image2

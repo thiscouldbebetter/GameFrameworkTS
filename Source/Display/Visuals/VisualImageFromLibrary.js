@@ -32,11 +32,15 @@ var ThisCouldBeBetter;
             // Visual.
             initialize(uwpe) {
                 var image = this.image(uwpe.universe);
-                image.load(uwpe, null);
+                if (image != null) {
+                    image.load(uwpe, null);
+                }
             }
             initializeIsComplete(uwpe) {
                 var image = this.image(uwpe.universe);
-                var imageIsLoaded = image.isLoaded;
+                var imageIsLoaded = image == null
+                    ? true
+                    : image.isLoaded;
                 return imageIsLoaded;
             }
             draw(uwpe, display) {
