@@ -141,6 +141,28 @@ export class ControlLabel<TContext> extends ControlBase
 		);
 	}
 
+	static fromPosSizeTextFontCenteredVertically<TContext> 
+	(
+		pos: Coords,
+		size: Coords,
+		text: DataBinding<TContext, string>,
+		fontNameAndHeight: FontNameAndHeight
+	): ControlLabel<TContext>
+	{
+		var textFromBindingInitial = text.get() || "";
+
+		return new ControlLabel
+		(
+			"label" + textFromBindingInitial.split(" ").join(""),
+			pos,
+			size,
+			false, // isTextCenteredHorizontally
+			true, // isTextCenteredVertically
+			text,
+			fontNameAndHeight
+		);
+	}
+
 	static fromPosTextFontCenteredHorizontally<TContext>
 	(
 		pos: Coords,

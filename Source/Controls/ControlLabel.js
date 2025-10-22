@@ -50,6 +50,12 @@ var ThisCouldBeBetter;
                 false, // isTextCenteredVertically
                 text, fontNameAndHeight);
             }
+            static fromPosSizeTextFontCenteredVertically(pos, size, text, fontNameAndHeight) {
+                var textFromBindingInitial = text.get() || "";
+                return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, size, false, // isTextCenteredHorizontally
+                true, // isTextCenteredVertically
+                text, fontNameAndHeight);
+            }
             static fromPosTextFontCenteredHorizontally(pos, text, fontNameAndHeight) {
                 var textFromBindingInitial = text.get() || "";
                 return new ControlLabel("label" + textFromBindingInitial.split(" ").join(""), pos, null, // size

@@ -471,6 +471,12 @@ export class TalkNode //
 	{
 		return this.content;
 	}
+
+	toStringPipeSeparatedValues(): string
+	{
+		return this.name + "|" + this.defnName + "|" + this.content + "|" + (this.next || "");
+	}
+
 }
 
 }

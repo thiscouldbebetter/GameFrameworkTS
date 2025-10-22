@@ -635,6 +635,20 @@ export class ConversationRun
 			universe.venueTransitionTo(venueNext);
 		};
 
+		var actionNameViewLog = "ViewLog";
+		var actions = 
+		[
+			Action.fromNameAndPerform(actionNameViewLog, viewLog)
+		];
+
+		var actionToInputsMappings =
+		[
+			ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce
+			(
+				actionNameViewLog, Input.Instances().Space.name, true
+			)
+		];
+
 		var visualPortrait: Visual = conversationDefn.visualPortrait;
 		if (visualPortrait.constructor.name.startsWith("VisualImage"))
 		{
@@ -655,23 +669,19 @@ export class ConversationRun
 				next // click
 			),
 
-			new ControlVisual
+			ControlVisual.fromNamePosSizeVisualAndColorBackground
 			(
 				"visualPortrait",
 				portraitPos,
 				portraitSize,
 				DataBinding.fromContext(visualPortrait),
-				Color.Instances().Black, // colorBackground
-				null // colorBorder
+				Color.Instances().Black
 			),
 
-			new ControlLabel
+			ControlLabel.fromPosSizeTextFontCenteredVertically
 			(
-				"labelSpeaker",
 				labelSpeakerPos,
 				labelSpeakerSize,
-				labelSpeakerIsCenteredHorizontally,
-				labelSpeakerIsCenteredVertically,
 				DataBinding.fromContextAndGet
 				(
 					conversationRun,
@@ -786,22 +796,12 @@ export class ConversationRun
 				buttonTranscript
 			];
 
-			var actions = 
-			[
-				new Action("ViewLog", viewLog)
-			];
-
-			var actionToInputsMappings =
-			[
-				new ActionToInputsMapping( "ViewLog", [ Input.Instances().Space.name ], true )
-			];
-
 			if (this._quit != null)
 			{
-				actions.push(new Action("Back", back));
+				actions.push(Action.fromNameAndPerform("Back", back));
 				actionToInputsMappings.push
 				(
-					new ActionToInputsMapping( "Back", [ Input.Instances().Escape.name ], true )
+					ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce( "Back", Input.Instances().Escape.name, true )
 				);
 
 				var buttonLeave = ControlButton.fromPosSizeTextFontClick
@@ -851,9 +851,7 @@ export class ConversationRun
 			"containerConversation",
 			Coords.create(), // pos
 			size,
-
 			childControls,
-
 			actions,
 			actionToInputsMappings
 		);

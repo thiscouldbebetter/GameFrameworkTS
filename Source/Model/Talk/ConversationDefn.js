@@ -94,11 +94,16 @@ var ThisCouldBeBetter;
                             + nextFieldsThatDoNotMatch.join(", ");
                         errorsSoFar.push(error);
                     }
-                    var optionNodesWithNoNextField = nodes.filter(x => x.defnName == "Option" && x.next == null);
-                    if (optionNodesWithNoNextField.length > 0) {
-                        var optionNodeContents = optionNodesWithNoNextField.map(x => "'" + x.content + "'");
-                        var error = "one or more Option nodes have no next fields specified: "
-                            + optionNodeContents.join(", ");
+                    var nodesThatNeedButLackNextField = nodes.filter(x => (x.defnName.startsWith("DoNext")
+                        || x.defnName == "DoRandom"
+                        || x.defnName == "Option"
+                        || x.defnName == "Goto"
+                        || x.defnName == "OptionClear")
+                        && x.next == null);
+                    if (nodesThatNeedButLackNextField.length > 0) {
+                        var nodesAsString = nodesThatNeedButLackNextField.map(x => x.toStringPipeSeparatedValues());
+                        var error = "one or more nodes need but lack next fields: "
+                            + nodesAsString.join(", ");
                         errorsSoFar.push(error);
                     }
                 }

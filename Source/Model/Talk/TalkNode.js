@@ -197,6 +197,9 @@ var ThisCouldBeBetter;
             toString() {
                 return this.content;
             }
+            toStringPipeSeparatedValues() {
+                return this.name + "|" + this.defnName + "|" + this.content + "|" + (this.next || "");
+            }
         }
         // static methods
         TalkNode._idNext = 0;

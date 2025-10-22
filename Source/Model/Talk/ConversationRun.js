@@ -326,6 +326,13 @@ var ThisCouldBeBetter;
                     var venueNext = transcriptAsControl.toVenue();
                     universe.venueTransitionTo(venueNext);
                 };
+                var actionNameViewLog = "ViewLog";
+                var actions = [
+                    GameFramework.Action.fromNameAndPerform(actionNameViewLog, viewLog)
+                ];
+                var actionToInputsMappings = [
+                    GameFramework.ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce(actionNameViewLog, GameFramework.Input.Instances().Space.name, true)
+                ];
                 var visualPortrait = conversationDefn.visualPortrait;
                 if (visualPortrait.constructor.name.startsWith("VisualImage")) {
                     visualPortrait = new GameFramework.VisualImageScaled(portraitSize, visualPortrait);
@@ -333,10 +340,8 @@ var ThisCouldBeBetter;
                 var childControls = [
                     GameFramework.ControlButton.fromPosSizeTextFontClick(portraitPos, portraitSize, "Next", fontNameAndHeight, next // click
                     ),
-                    new GameFramework.ControlVisual("visualPortrait", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualPortrait), GameFramework.Color.Instances().Black, // colorBackground
-                    null // colorBorder
-                    ),
-                    new GameFramework.ControlLabel("labelSpeaker", labelSpeakerPos, labelSpeakerSize, labelSpeakerIsCenteredHorizontally, labelSpeakerIsCenteredVertically, GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent()), fontNameAndHeight),
+                    GameFramework.ControlVisual.fromNamePosSizeVisualAndColorBackground("visualPortrait", portraitPos, portraitSize, GameFramework.DataBinding.fromContext(visualPortrait), GameFramework.Color.Instances().Black),
+                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredVertically(labelSpeakerPos, labelSpeakerSize, GameFramework.DataBinding.fromContextAndGet(conversationRun, (c) => c.scopeCurrent.displayTextCurrent()), fontNameAndHeight),
                     GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginSize.x, marginSize.y * 2 + portraitSize.y - fontHeight / 2), size, // size
                     GameFramework.DataBinding.fromContext("Response:"), fontNameAndHeight),
                     GameFramework.ControlList.from10("listResponses", listPos, listSize, 
@@ -366,15 +371,9 @@ var ThisCouldBeBetter;
                         buttonNext,
                         buttonTranscript
                     ];
-                    var actions = [
-                        new GameFramework.Action("ViewLog", viewLog)
-                    ];
-                    var actionToInputsMappings = [
-                        new GameFramework.ActionToInputsMapping("ViewLog", [GameFramework.Input.Instances().Space.name], true)
-                    ];
                     if (this._quit != null) {
-                        actions.push(new GameFramework.Action("Back", back));
-                        actionToInputsMappings.push(new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true));
+                        actions.push(GameFramework.Action.fromNameAndPerform("Back", back));
+                        actionToInputsMappings.push(GameFramework.ActionToInputsMapping.fromActionNameInputNameAndOnlyOnce("Back", GameFramework.Input.Instances().Escape.name, true));
                         var buttonLeave = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(containerButtonsMarginSize.x, containerButtonsMarginSize.y * 3 + buttonSize.y * 2), buttonSize.clone(), "Leave", fontNameAndHeight, back // click
                         );
                         buttons.push(buttonLeave);
