@@ -274,14 +274,10 @@ var ThisCouldBeBetter;
                 conversationRun.talkNodeCurrentExecute(universe);
             }
             pop(universe, conversationRun) {
-                var scope = conversationRun.scopeCurrent;
-                var talkNode = conversationRun.talkNodeCurrent();
-                scope = scope.parent;
-                conversationRun.scopeCurrent = scope;
-                if (talkNode.next != null) {
-                    var nodeNext = conversationRun.defn.talkNodeByName(talkNode.next);
-                    conversationRun.talkNodeCurrentSet(nodeNext);
-                }
+                var scope = conversationRun.scope();
+                var talkNodeNext = conversationRun.talkNodeNext();
+                conversationRun.scopeCurrentSet(scope.parent);
+                conversationRun.talkNodeCurrentSet(talkNodeNext);
                 conversationRun.talkNodeCurrentExecute(universe);
             }
             prompt(universe, conversationRun) {
@@ -289,12 +285,9 @@ var ThisCouldBeBetter;
                 scope.isPromptingForResponse = true;
             }
             push(universe, conversationRun) {
-                var talkNodeToPushTo = conversationRun.talkNodeNext();
-                var talkNodeToReturnTo = conversationRun.talkNodePrev();
-                conversationRun.talkNodeCurrentSet(talkNodeToReturnTo);
-                conversationRun.scopeCurrent = new GameFramework.ConversationScope(conversationRun.scopeCurrent, // parent
-                talkNodeToPushTo, [] // options
-                );
+                var talkNodeNext = conversationRun.talkNodeNext();
+                var conversationScopeChild = GameFramework.ConversationScope.fromParentAndTalkNodeInitial(conversationRun.scopeCurrent, talkNodeNext);
+                conversationRun.scopeCurrentSet(conversationScopeChild);
                 conversationRun.talkNodeCurrentExecute(universe);
             }
             quit(universe, conversationRun) {

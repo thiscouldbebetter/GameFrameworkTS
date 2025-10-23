@@ -152,6 +152,10 @@ var ThisCouldBeBetter;
                 // This convenience method is tersely named for use in scripts.
                 return this.scopeCurrent;
             }
+            scopeCurrentSet(value) {
+                this.scopeCurrent = value;
+                return this;
+            }
             scriptParse(scriptAsString) {
                 scriptAsString =
                     //"( (u, cr) => " + scriptAsString + ")";

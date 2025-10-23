@@ -41,6 +41,15 @@ export class ConversationScope
 		this.haveOptionsBeenUpdated = true;
 	}
 
+	static fromParentAndTalkNodeInitial
+	(
+		parent: ConversationScope,
+		talkNodeInitial: TalkNode
+	): ConversationScope
+	{
+		return new ConversationScope(parent, talkNodeInitial, null);
+	}
+
 	static fromTalkNodeInitial(talkNodeInitial: TalkNode): ConversationScope
 	{
 		return new ConversationScope(null, talkNodeInitial, null);

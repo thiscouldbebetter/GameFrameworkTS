@@ -18,6 +18,9 @@ var ThisCouldBeBetter;
                 this._emptyArray = [];
                 this.haveOptionsBeenUpdated = true;
             }
+            static fromParentAndTalkNodeInitial(parent, talkNodeInitial) {
+                return new ConversationScope(parent, talkNodeInitial, null);
+            }
             static fromTalkNodeInitial(talkNodeInitial) {
                 return new ConversationScope(null, talkNodeInitial, null);
             }

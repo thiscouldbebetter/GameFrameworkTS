@@ -258,6 +258,12 @@ export class ConversationRun
 		return this.scopeCurrent;
 	}
 
+	scopeCurrentSet(value: ConversationScope): ConversationRun
+	{
+		this.scopeCurrent = value;
+		return this;
+	}
+
 	scriptParse(scriptAsString: string): Script
 	{
 		scriptAsString =

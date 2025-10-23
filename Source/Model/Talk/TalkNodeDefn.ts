@@ -451,19 +451,11 @@ class TalkNodeDefn_Instances
 
 	pop(universe: Universe, conversationRun: ConversationRun): void
 	{
-		var scope = conversationRun.scopeCurrent;
-		var talkNode = conversationRun.talkNodeCurrent();
+		var scope = conversationRun.scope();
+		var talkNodeNext = conversationRun.talkNodeNext();
 
-		scope = scope.parent;
-		conversationRun.scopeCurrent = scope;
-		if (talkNode.next != null)
-		{
-			var nodeNext = conversationRun.defn.talkNodeByName
-			(
-				talkNode.next
-			);
-			conversationRun.talkNodeCurrentSet(nodeNext);
-		}
+		conversationRun.scopeCurrentSet(scope.parent);
+		conversationRun.talkNodeCurrentSet(talkNodeNext);
 		conversationRun.talkNodeCurrentExecute(universe);
 	}
 
@@ -475,17 +467,14 @@ class TalkNodeDefn_Instances
 
 	push(universe: Universe, conversationRun: ConversationRun): void
 	{
-		var talkNodeToPushTo = conversationRun.talkNodeNext();
-
-		var talkNodeToReturnTo = conversationRun.talkNodePrev();
-		conversationRun.talkNodeCurrentSet(talkNodeToReturnTo);
-
-		conversationRun.scopeCurrent = new ConversationScope
-		(
-			conversationRun.scopeCurrent, // parent
-			talkNodeToPushTo,
-			[] // options
-		);
+		var talkNodeNext = conversationRun.talkNodeNext();
+		var conversationScopeChild =
+			ConversationScope.fromParentAndTalkNodeInitial
+			(
+				conversationRun.scopeCurrent,
+				talkNodeNext
+			);
+		conversationRun.scopeCurrentSet(conversationScopeChild);
 		conversationRun.talkNodeCurrentExecute(universe);
 	}
 
