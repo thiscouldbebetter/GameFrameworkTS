@@ -158,7 +158,7 @@ export class ConversationDefn
 		if (nodesWithUnrecognizedTypes.length > 0)
 		{
 			var defnNamesUnrecognized = nodesWithUnrecognizedTypes.map(x => x.defnName);
-			var error = "one or more nodes have unrecognized types: " + defnNamesUnrecognized.join(", ");
+			var error = "one or more nodes have unrecognized types, the nonexistent type names being: " + defnNamesUnrecognized.join(", ");
 			errorsSoFar.push(error);
 		}
 
