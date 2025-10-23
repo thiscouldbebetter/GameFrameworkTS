@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class TalkNodeDefn {
             constructor(name, execute) {
                 this.name = name;
-                this.execute = execute;
+                this._execute = execute;
             }
             static Instances() {
                 if (TalkNodeDefn._instances == null) {
@@ -21,6 +21,9 @@ var ThisCouldBeBetter;
                 // return ScriptUsingEval.fromCodeAsString(scriptAsString); // Not possible to catch eval() errors here!
                 var returnValue = GameFramework.ScriptUsingFunctionConstructor.fromParameterNamesAndCodeAsString(["u", "cr"], scriptAsString);
                 return returnValue;
+            }
+            execute(u, cr) {
+                this._execute(u, cr);
             }
             // Clonable.
             clone() {

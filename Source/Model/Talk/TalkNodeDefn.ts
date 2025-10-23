@@ -5,19 +5,17 @@ namespace ThisCouldBeBetter.GameFramework
 export class TalkNodeDefn
 {
 	name: string;
-	execute: (u: Universe, r: ConversationRun) => void;
+	_execute: (u: Universe, r: ConversationRun) => void;
 
 	constructor
 	(
 		name: string,
-		execute: (u: Universe, r: ConversationRun) => void,
+		execute: (u: Universe, r: ConversationRun) => void
 	)
 	{
 		this.name = name;
-		this.execute = execute;
+		this._execute = execute;
 	}
-
-	// instances
 
 	static _instances: TalkNodeDefn_Instances;
 	static Instances()
@@ -44,6 +42,11 @@ export class TalkNodeDefn
 				scriptAsString
 			);
 		return returnValue;
+	}
+
+	execute(u: Universe, cr: ConversationRun): void
+	{
+		this._execute(u, cr);
 	}
 
 	// Clonable.

@@ -433,12 +433,17 @@ export class TalkNode //
 			}
 		}
 
+		var name = fields[0];
+		var defnName = fields[1];
+		var content = fields[2];
+		var next = fields[3];
+
 		var returnValue = TalkNode.fromNameDefnNameContentNextAndEnabled
 		(
-			fields[0],
-			fields[1],
-			fields[2],
-			fields[3],
+			name,
+			defnName,
+			content,
+			next,
 			isEnabled
 		);
 		return returnValue;
