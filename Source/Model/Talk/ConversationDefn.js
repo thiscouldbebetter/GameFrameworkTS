@@ -81,15 +81,15 @@ var ThisCouldBeBetter;
                         }
                     }
                     if (nodesWithNoTypeOrNameSpecified.length > 0) {
-                        var error = "one or more nodes have neither name nor type specified: "
-                            + nodesWithNoTypeOrNameSpecified.map(x => x.name).join(", ");
+                        var error = "one or more nodes have neither name nor type specified: \n"
+                            + nodesWithNoTypeOrNameSpecified.map(x => x.name).join("\n");
                         errorsSoFar.push(error);
                     }
                 }
                 var nodesWithUnrecognizedTypes = nodes.filter(x => this.talkNodeDefnsByName.has(x.defnName) == false);
                 if (nodesWithUnrecognizedTypes.length > 0) {
                     var defnNamesUnrecognized = nodesWithUnrecognizedTypes.map(x => x.defnName);
-                    var error = "one or more nodes have unrecognized types, the nonexistent type names being: " + defnNamesUnrecognized.join(", ");
+                    var error = "one or more nodes have unrecognized types, the nonexistent type names being: \n" + defnNamesUnrecognized.join("\n");
                     errorsSoFar.push(error);
                 }
                 var nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes = nodes.filter(x => 
@@ -101,8 +101,8 @@ var ThisCouldBeBetter;
                 if (nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.length > 0) {
                     var nextFieldsThatDoNotMatch = nodesWithNextFieldsThatDoNotCorrespondToNamesOfOtherNodes.map(x => x.next);
                     var error = "one or more nodes have 'next' fields that do not correspond to the "
-                        + " name of some other node, the unmatched 'next' values being: "
-                        + nextFieldsThatDoNotMatch.join(", ");
+                        + " name of some other node, the unmatched 'next' values being: \n"
+                        + nextFieldsThatDoNotMatch.join("\n");
                     errorsSoFar.push(error);
                 }
                 var nodesThatNeedButLackNextField = nodes.filter(x => (x.defnName.startsWith("DoNext")
@@ -113,8 +113,8 @@ var ThisCouldBeBetter;
                     && x.next == null);
                 if (nodesThatNeedButLackNextField.length > 0) {
                     var nodesAsString = nodesThatNeedButLackNextField.map(x => x.toStringPipeSeparatedValues());
-                    var error = "one or more nodes need but lack next fields: "
-                        + nodesAsString.join(", ");
+                    var error = "one or more nodes need but lack 'next' fields: \n"
+                        + nodesAsString.join("\n");
                     errorsSoFar.push(error);
                 }
                 return errorsSoFar;
