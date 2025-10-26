@@ -68,6 +68,7 @@ class TalkNodeDefn_Instances
 	DoNextInCycle: TalkNodeDefn;
 	DoNextInSequence: TalkNodeDefn;
 	DoNothing: TalkNodeDefn;
+	DoOnceOnly: TalkNodeDefn;
 	DoRandomSelection: TalkNodeDefn;
 	Enable: TalkNodeDefn;
 	Goto: TalkNodeDefn;
@@ -103,6 +104,7 @@ class TalkNodeDefn_Instances
 		this.Display 			= tnd("Display", this.display);
 		this.DoNextInCycle 		= tnd("DoNextInCycle", this.doNextInCycle);
 		this.DoNextInSequence 	= tnd("DoNextInSequence", this.doNextInSequence);
+		this.DoOnceOnly 		= tnd("DoOnceOnly", this.doOnceOnly);
 		this.DoNothing 			= tnd("DoNothing", this.doNothing);
 		this.DoRandomSelection 	= tnd("DoRandomSelection", this.doRandomSelection);
 		this.Enable 			= tnd("Enable", this.enable);
@@ -136,6 +138,7 @@ class TalkNodeDefn_Instances
 			this.DoNextInCycle,
 			this.DoNextInSequence,
 			this.DoNothing,
+			this.DoOnceOnly,
 			this.DoRandomSelection,
 			this.Enable,
 			this.Goto,
@@ -290,6 +293,25 @@ class TalkNodeDefn_Instances
 
 	doNothing(universe: Universe, conversationRun: ConversationRun): void
 	{
+		conversationRun.talkNodeAdvance(universe);
+		conversationRun.talkNodeCurrentExecute(universe);
+	}
+
+	doOnceOnly(universe: Universe, conversationRun: ConversationRun): void
+	{
+		var talkNode = conversationRun.talkNodeCurrent();
+
+		var variableName = talkNode.content;
+		var timesSoFar =
+			conversationRun.variableGetWithDefault(variableName, 0) as number;
+		if (timesSoFar > 0)
+		{
+			var talkNodeToDisableAfterFirstTimeName = talkNode.next;
+			conversationRun.disableTalkNodeWithName(talkNodeToDisableAfterFirstTimeName);
+		}
+		timesSoFar++;
+		conversationRun.variableSet(variableName, timesSoFar);
+
 		conversationRun.talkNodeAdvance(universe);
 		conversationRun.talkNodeCurrentExecute(universe);
 	}
