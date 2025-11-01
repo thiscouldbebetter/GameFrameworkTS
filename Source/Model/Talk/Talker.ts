@@ -42,6 +42,18 @@ export class Talker extends EntityPropertyBase<Talker>
 
 	talk(uwpe: UniverseWorldPlaceEntities): void
 	{
+		var conversationRun = this.toConversationRun(uwpe);
+
+		this.conversationRunSet(conversationRun);
+
+		var universe = uwpe.universe;
+		var venueNext = new VenueConversationRun(conversationRun, universe);
+
+		universe.venueTransitionTo(venueNext);
+	}
+
+	toConversationRun(uwpe: UniverseWorldPlaceEntities): ConversationRun
+	{
 		var universe = uwpe.universe;
 		var entityTalker = uwpe.entity;
 		var entityTalkee = uwpe.entity2;
@@ -55,36 +67,9 @@ export class Talker extends EntityPropertyBase<Talker>
 		var contentTextString =
 			contentTextStringName == null
 			? null
-			: mediaLibrary.textStringGetByName(contentTextStringName);
-		if (contentTextString != null)
-		{
-			// hack - For a specific content tag format in a downstream project.
-			var contentText = contentTextString.value.split("\n#").join("\n\n#");
-			contentText = contentText.split("\n\n\n").join("\n\n");
+			: mediaLibrary.textStringGetByName(contentTextStringName).value;
 
-			var contentBlocks = contentText.split("\n\n");
-
-			var contentsById = new Map
-			(
-				contentBlocks.map
-				(
-					nodeAsBlock =>
-					{
-						var indexOfNewlineFirst = nodeAsBlock.indexOf("\n");
-						var contentIdLine = nodeAsBlock.substr
-						(
-							0, indexOfNewlineFirst
-						);
-						var regexWhitespace = /\s+/;
-						var contentId = contentIdLine.split(regexWhitespace)[0];
-						var restOfBlock = nodeAsBlock.substr(indexOfNewlineFirst + 1);
-						return [ contentId, restOfBlock ];
-					}
-				)
-			);
-			conversationDefn.contentSubstitute(contentsById);
-			//conversationDefn.displayNodesExpandByLines();
-		}
+		conversationDefn.contentSubstituteFromString(contentTextString);
 
 		var conversationQuit = this.quit;
 		if (conversationQuit == null)
@@ -98,20 +83,19 @@ export class Talker extends EntityPropertyBase<Talker>
 				}
 			};
 		}
-		var conversationRun = new ConversationRun
+
+		var conversationRun = ConversationRun.fromDefnQuitTalkeeAndTalker
 		(
 			conversationDefn,
 			conversationQuit,
 			entityTalkee,
-			entityTalker, // entityTalker
-			null // contentsById
+			entityTalker
 		);
-		this.conversationRunSet(conversationRun);
 
-		var venueNext = new VenueConversationRun(conversationRun, universe);
-
-		universe.venueTransitionTo(venueNext);
+		return conversationRun;
 	}
+
+	// Controllable.
 
 	toControl(conversationRun: ConversationRun, size: Coords, universe: Universe): ControlBase
 	{

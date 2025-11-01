@@ -21,6 +21,13 @@ var ThisCouldBeBetter;
                 return this;
             }
             talk(uwpe) {
+                var conversationRun = this.toConversationRun(uwpe);
+                this.conversationRunSet(conversationRun);
+                var universe = uwpe.universe;
+                var venueNext = new GameFramework.VenueConversationRun(conversationRun, universe);
+                universe.venueTransitionTo(venueNext);
+            }
+            toConversationRun(uwpe) {
                 var universe = uwpe.universe;
                 var entityTalker = uwpe.entity;
                 var entityTalkee = uwpe.entity2;
@@ -30,23 +37,8 @@ var ThisCouldBeBetter;
                 var contentTextStringName = conversationDefn.contentTextStringName;
                 var contentTextString = contentTextStringName == null
                     ? null
-                    : mediaLibrary.textStringGetByName(contentTextStringName);
-                if (contentTextString != null) {
-                    // hack - For a specific content tag format in a downstream project.
-                    var contentText = contentTextString.value.split("\n#").join("\n\n#");
-                    contentText = contentText.split("\n\n\n").join("\n\n");
-                    var contentBlocks = contentText.split("\n\n");
-                    var contentsById = new Map(contentBlocks.map(nodeAsBlock => {
-                        var indexOfNewlineFirst = nodeAsBlock.indexOf("\n");
-                        var contentIdLine = nodeAsBlock.substr(0, indexOfNewlineFirst);
-                        var regexWhitespace = /\s+/;
-                        var contentId = contentIdLine.split(regexWhitespace)[0];
-                        var restOfBlock = nodeAsBlock.substr(indexOfNewlineFirst + 1);
-                        return [contentId, restOfBlock];
-                    }));
-                    conversationDefn.contentSubstitute(contentsById);
-                    //conversationDefn.displayNodesExpandByLines();
-                }
+                    : mediaLibrary.textStringGetByName(contentTextStringName).value;
+                conversationDefn.contentSubstituteFromString(contentTextString);
                 var conversationQuit = this.quit;
                 if (conversationQuit == null) {
                     var venueToReturnTo = universe.venueCurrent();
@@ -58,13 +50,10 @@ var ThisCouldBeBetter;
                         }
                     };
                 }
-                var conversationRun = new GameFramework.ConversationRun(conversationDefn, conversationQuit, entityTalkee, entityTalker, // entityTalker
-                null // contentsById
-                );
-                this.conversationRunSet(conversationRun);
-                var venueNext = new GameFramework.VenueConversationRun(conversationRun, universe);
-                universe.venueTransitionTo(venueNext);
+                var conversationRun = GameFramework.ConversationRun.fromDefnQuitTalkeeAndTalker(conversationDefn, conversationQuit, entityTalkee, entityTalker);
+                return conversationRun;
             }
+            // Controllable.
             toControl(conversationRun, size, universe) {
                 var returnValue = null;
                 if (this._toControl == null) {

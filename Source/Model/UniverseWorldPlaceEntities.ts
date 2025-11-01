@@ -35,7 +35,7 @@ export class UniverseWorldPlaceEntities
 
 	static fromUniverse(universe: Universe): UniverseWorldPlaceEntities
 	{
-		return new UniverseWorldPlaceEntities(universe, null, null, null, null);
+		return UniverseWorldPlaceEntities.fromUniverseAndWorld(universe, universe.world);
 	}
 
 	static fromUniverseAndWorld
@@ -43,7 +43,11 @@ export class UniverseWorldPlaceEntities
 		universe: Universe, world: World
 	): UniverseWorldPlaceEntities
 	{
-		return new UniverseWorldPlaceEntities(universe, world, null, null, null);
+		var place =
+			world == null
+			? null
+			: world.placeCurrent;
+		return UniverseWorldPlaceEntities.fromUniverseWorldAndPlace(universe, world, place);
 	}
 
 	static fromUniverseWorldAndPlace

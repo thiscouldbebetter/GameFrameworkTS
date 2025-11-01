@@ -39,7 +39,46 @@ export class ConversationDefn
 		}
 	}
 
-	contentSubstitute(contentByNodeName: Map<string, string>): ConversationDefn
+	contentSubstituteFromString(contentString: string): ConversationDefn 
+	{
+		if (contentString != null)
+		{
+			// hack
+			// This is for a specific content tag format in a particular downstream project.
+			// Maybe a format identifier should be added to the first line,
+			// to support different formats.
+
+			var contentText = contentString.split("\n#").join("\n\n#");
+			contentText = contentText.split("\n\n\n").join("\n\n");
+
+			var contentBlocks = contentText.split("\n\n");
+
+			var contentsById = new Map
+			(
+				contentBlocks.map
+				(
+					nodeAsBlock =>
+					{
+						var indexOfNewlineFirst = nodeAsBlock.indexOf("\n");
+						var contentIdLine = nodeAsBlock.substr
+						(
+							0, indexOfNewlineFirst
+						);
+						var regexWhitespace = /\s+/;
+						var contentId = contentIdLine.split(regexWhitespace)[0];
+						var restOfBlock = nodeAsBlock.substr(indexOfNewlineFirst + 1);
+						return [ contentId, restOfBlock ];
+					}
+				)
+			);
+
+			this.contentSubstituteFromContentByNodeName(contentsById);
+		}
+
+		return this;
+	}
+
+	contentSubstituteFromContentByNodeName(contentByNodeName: Map<string, string>): ConversationDefn
 	{
 		this.talkNodes.forEach(talkNode =>
 		{

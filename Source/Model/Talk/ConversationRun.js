@@ -24,6 +24,9 @@ var ThisCouldBeBetter;
             static fromConversationDefn(conversationDefn) {
                 return new ConversationRun(conversationDefn, null, null, null, null);
             }
+            static fromDefnQuitTalkeeAndTalker(defn, quit, entityTalkee, entityTalker) {
+                return new ConversationRun(defn, quit, entityTalkee, entityTalker, null);
+            }
             // Instance methods.
             disable(talkNodeToDisableName) {
                 this.disableTalkNodeWithName(talkNodeToDisableName);

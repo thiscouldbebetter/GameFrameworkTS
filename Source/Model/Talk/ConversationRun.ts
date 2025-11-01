@@ -56,6 +56,17 @@ export class ConversationRun
 		return new ConversationRun(conversationDefn, null, null, null, null);
 	}
 
+	static fromDefnQuitTalkeeAndTalker
+	(
+		defn: ConversationDefn,
+		quit: () => void,
+		entityTalkee: Entity,
+		entityTalker: Entity
+	): ConversationRun
+	{
+		return new ConversationRun(defn, quit, entityTalkee, entityTalker, null);
+	}
+
 	// Instance methods.
 
 	disable(talkNodeToDisableName: string): void
