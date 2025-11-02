@@ -4,6 +4,7 @@ class WorldGame extends World
 	constructor(name: string)
 	{
 		var name = name;
+
 		var timeCreated = DateTime.now();
 		var defn = WorldGame.defnBuild();
 		var place = new PlaceDefault();
@@ -17,6 +18,11 @@ class WorldGame extends World
 		(
 			name, timeCreated, defn, placeGetByName, placeInitialName
 		);
+	}
+
+	static fromName(name: string): WorldGame
+	{
+		return new WorldGame(name);
 	}
 
 	static defnBuild(): WorldDefn
