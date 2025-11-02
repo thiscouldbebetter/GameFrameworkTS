@@ -14,14 +14,22 @@ var ThisCouldBeBetter;
             static fromTestFixtures(testFixtures) {
                 return new TestSuite(TestSuite.name, testFixtures);
             }
-            run() {
+            runThen(testSuiteComplete) {
                 this.write("Running test suite '" + this.name + "', containing "
                     + this.testFixtures.length + " test fixtures.");
+                var testFixturesCount = this.testFixtures.length;
+                var testFixturesCompletedCount = 0;
+                var testSuite = this;
                 this.testFixtures.forEach(testFixture => {
-                    testFixture.run();
+                    testFixture.runThen((testFixtureCompleted) => {
+                        testFixturesCompletedCount++;
+                        if (testFixturesCompletedCount >= testFixturesCount) {
+                            this.write("All " + this.testFixtures.length
+                                + " test fixtures in suite '" + this.name + "' have been run.");
+                            testSuiteComplete(testSuite);
+                        }
+                    });
                 });
-                this.write("All " + this.testFixtures.length
-                    + " test fixtures in suite '" + this.name + "' have been run.");
             }
             toDomElement() {
                 var d = document;

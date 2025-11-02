@@ -10,34 +10,41 @@ var ThisCouldBeBetter;
             tests() {
                 return null;
             }
-            run() {
+            runThen(testFixtureComplete) {
                 var tests = this.tests();
-                var testCount = tests.length;
+                var testsCount = tests.length;
                 this.writeInfo("Test fixture '" + this.name
-                    + "', containing " + testCount + " tests, running.");
+                    + "', containing " + testsCount + " tests, running.");
+                var testsCompletedCount = 0;
                 var testsPassedCount = 0;
+                var testsFailedCount = 0;
+                var testFixture = this;
                 tests.forEach(test => {
                     try {
-                        test.call(this, () => {
-                            // Do nothing.
+                        test.runThen((testCompleted) => {
+                            testsCompletedCount++;
+                            testsPassedCount++;
+                            if (testsCompletedCount >= testsCount) {
+                                var results = "All tests in fixture '" + this.name + "' complete.  "
+                                    + testsPassedCount + "/" + tests.length
+                                    + " passed. ";
+                                this.writeInfo(results);
+                                if (testsFailedCount > 0) {
+                                    var results = testsFailedCount
+                                        + " tests failed!";
+                                    this.writeError(results);
+                                }
+                                testFixtureComplete(testFixture);
+                            }
                         });
-                        testsPassedCount++;
                     }
                     catch (ex) {
-                        this.writeError("Test failed: " + test.name + ".");
-                        this.writeError(ex.stack);
+                        testsCompletedCount++;
+                        testsFailedCount++;
+                        testFixture.writeError("Test failed: " + test.name + ".");
+                        testFixture.writeError(ex.stack);
                     }
                 });
-                var testsFailedCount = tests.length - testsPassedCount;
-                var results = "All tests in fixture '" + this.name + "' complete.  "
-                    + testsPassedCount + "/" + tests.length
-                    + " passed. ";
-                this.writeInfo(results);
-                if (testsFailedCount > 0) {
-                    var results = testsFailedCount
-                        + " tests failed!";
-                    this.writeError(results);
-                }
             }
             toDomElement() {
                 var d = document;
@@ -49,7 +56,6 @@ var ThisCouldBeBetter;
                 headingTestsInFixture.innerHTML = "Tests in Fixture:";
                 testFixtureAsDomElement.appendChild(headingTestsInFixture);
                 var divTests = d.createElement("div");
-                var testFixture = this;
                 var tests = this.tests();
                 tests.forEach(test => {
                     var testName = test.name;
@@ -64,8 +70,8 @@ var ThisCouldBeBetter;
                     buttonRun.onclick = () => {
                         try {
                             labelStatus.innerHTML = "Running.";
-                            test.call(testFixture, () => {
-                                var labelStatusId = "labelStatus" + test.name;
+                            test.runThen((testCompleted) => {
+                                var labelStatusId = "labelStatus" + testCompleted.name;
                                 ;
                                 var labelStatus = document.getElementById(labelStatusId);
                                 labelStatus.innerHTML = "Completed.";

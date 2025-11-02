@@ -47,6 +47,14 @@ export class TimerHelper
 		}
 	}
 
+	finalize(): void
+	{
+		if (this.systemTimerHandle != null)
+		{
+			clearInterval(this.systemTimerHandle);
+		}
+	}
+
 	tick(): void
 	{
 		this.handleEventTimerTick();

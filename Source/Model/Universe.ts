@@ -292,6 +292,12 @@ export class Universe
 		this.timerHelper.initialize(this.updateForTimerTick.bind(this));
 	}
 
+	stop(): void
+	{
+		this.timerHelper.finalize();
+		this.inputHelper.finalize(this);
+	}
+
 	toUniverseWorldPlaceEntities(): UniverseWorldPlaceEntities
 	{
 		return UniverseWorldPlaceEntities.fromUniverse(this);

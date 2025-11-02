@@ -22,7 +22,7 @@ export class TestSuite
 		return new TestSuite(TestSuite.name, testFixtures);
 	}
 
-	run(): void
+	runThen(testSuiteComplete: (testSuiteCompleted: TestSuite) => void): void
 	{
 		this.write
 		(
@@ -30,15 +30,33 @@ export class TestSuite
 			+ this.testFixtures.length + " test fixtures."
 		);
 
-		this.testFixtures.forEach(testFixture =>
-		{
-			testFixture.run();
-		});
+		var testFixturesCount = this.testFixtures.length;
+		var testFixturesCompletedCount = 0;
 
-		this.write
+		var testSuite = this;
+
+		this.testFixtures.forEach
 		(
-			"All " + this.testFixtures.length
-			+ " test fixtures in suite '" + this.name + "' have been run."
+			testFixture =>
+			{
+				testFixture.runThen
+				(
+					(testFixtureCompleted: TestFixture) =>
+					{
+						testFixturesCompletedCount++;
+						if (testFixturesCompletedCount >= testFixturesCount)
+						{
+							this.write
+							(
+								"All " + this.testFixtures.length
+								+ " test fixtures in suite '" + this.name + "' have been run."
+							);
+
+							testSuiteComplete(testSuite);
+						}
+					}
+				);
+			}
 		);
 	}
 

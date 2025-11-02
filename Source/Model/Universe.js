@@ -129,6 +129,10 @@ var ThisCouldBeBetter;
             start() {
                 this.timerHelper.initialize(this.updateForTimerTick.bind(this));
             }
+            stop() {
+                this.timerHelper.finalize();
+                this.inputHelper.finalize(this);
+            }
             toUniverseWorldPlaceEntities() {
                 return GameFramework.UniverseWorldPlaceEntities.fromUniverse(this);
             }

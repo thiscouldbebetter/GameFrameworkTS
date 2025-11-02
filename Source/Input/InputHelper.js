@@ -50,6 +50,22 @@ var ThisCouldBeBetter;
                 }
                 return actionsSoFar;
             }
+            finalize(universe) {
+                var d = document;
+                d.body.onkeydown = null;
+                d.body.onkeyup = null;
+                var platformHelper = universe.platformHelper;
+                var divMain = (platformHelper == null
+                    ? d.getElementById("divMain")
+                    : platformHelper.divMain);
+                divMain.onmousedown = null;
+                divMain.onmouseup = null;
+                divMain.onmousemove = null;
+                divMain.onwheel = null;
+                divMain.ontouchstart = null;
+                divMain.ontouchend = null;
+                return null;
+            }
             initialize(universe) {
                 this.inputsPressed = [];
                 this.gamepadsConnected = [];
@@ -258,10 +274,11 @@ var ThisCouldBeBetter;
                 divMain.onmousedown = this.handleEventMouseDown.bind(this);
                 divMain.onmouseup = this.handleEventMouseUp.bind(this);
                 divMain.onmousemove =
-                    (this.isMouseMovementTracked
+                    this.isMouseMovementTracked
                         ? this.handleEventMouseMove.bind(this)
-                        : null);
-                divMain.addEventListener("wheel", this.handleEventMouseWheel.bind(this), { passive: true });
+                        : null;
+                divMain.onwheel =
+                    this.handleEventMouseWheel.bind(this);
                 divMain.ontouchstart = this.handleEventTouchStart.bind(this);
                 divMain.ontouchend = this.handleEventTouchEnd.bind(this);
                 return null;

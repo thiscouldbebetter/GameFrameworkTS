@@ -22,6 +22,11 @@ var ThisCouldBeBetter;
                     this.systemTimerHandle = setInterval(this.tick.bind(this), this.millisecondsPerTick);
                 }
             }
+            finalize() {
+                if (this.systemTimerHandle != null) {
+                    clearInterval(this.systemTimerHandle);
+                }
+            }
             tick() {
                 this.handleEventTimerTick();
                 this.ticksSoFar++;
