@@ -1,0 +1,35 @@
+Folder PATH listing
+Volume serial number is 3048-D05F
+C:.
+|   Manifest.txt
+|   
++---Audio
+|   +---Effects
+|   |       Sound.wav
+|   |       
+|   \---Music
+|       |   Music.mp3
+|       |   Producer.mp3
+|       |   Title.mp3
+|       |   
+|       \---_Working
+|               Music.json
+|               
++---Fonts
+|   |   Font.ttf
+|   |   
+|   \---_Working
+|           Block3x6.sfd
+|           
++---Images
+|   \---Titles
+|           Opening.png
+|           Producer.png
+|           Title.png
+|           
++---Text
+|       Instructions.txt
+|       
+\---Video
+        Movie.webm
+        

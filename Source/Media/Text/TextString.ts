@@ -17,7 +17,12 @@ export class TextString implements MediaItemBase
 		//this.load(null, null);
 	}
 
-	// static methods
+	// Static methods.
+
+	static fromNameAndSourcePath(name: string, sourcePath: string)
+	{
+		return new TextString(name, sourcePath);
+	}
 
 	static fromString(name: string, value: string)
 	{
@@ -70,6 +75,12 @@ export class TextString implements MediaItemBase
 
 		return this;
 	}
+
+	loadThen(callback: (result: Loadable) => void): void
+	{
+		this.load(null, callback);
+	}
+
 
 	unload(uwpe: UniverseWorldPlaceEntities): TextString { throw new Error("todo"); }
 }

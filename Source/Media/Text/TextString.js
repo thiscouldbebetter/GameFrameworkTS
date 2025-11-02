@@ -9,7 +9,10 @@ var ThisCouldBeBetter;
                 this.sourcePath = sourcePath;
                 //this.load(null, null);
             }
-            // static methods
+            // Static methods.
+            static fromNameAndSourcePath(name, sourcePath) {
+                return new TextString(name, sourcePath);
+            }
             static fromString(name, value) {
                 var returnValue = new TextString(name, null // sourcePath
                 );
@@ -38,6 +41,9 @@ var ThisCouldBeBetter;
                     xmlHttpRequest.send();
                 }
                 return this;
+            }
+            loadThen(callback) {
+                this.load(null, callback);
             }
             unload(uwpe) { throw new Error("todo"); }
         }

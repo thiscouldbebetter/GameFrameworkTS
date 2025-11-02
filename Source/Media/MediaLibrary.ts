@@ -127,20 +127,27 @@ export class MediaLibrary
 			var fileExtension = filePath.substr(filePath.lastIndexOf(".") + 1);
 			var typeDirectoryNameAndArray =
 				typesDirectoryNamesAndArraysByFileExtension.get(fileExtension);
-			var mediaType = typeDirectoryNameAndArray[0];
-			var mediaDirectoryName = typeDirectoryNameAndArray[1];
-			var mediaArray = typeDirectoryNameAndArray[2];
+			if (typeDirectoryNameAndArray == null)
+			{
+				// File extension not supported.
+			}
+			else
+			{
+				var mediaType = typeDirectoryNameAndArray[0];
+				var mediaDirectoryName = typeDirectoryNameAndArray[1];
+				var mediaArray = typeDirectoryNameAndArray[2];
 
-			var filePathParts = filePath.split("/");
-			var filePathPartIndexForMediaType =
-				filePathParts.indexOf(mediaDirectoryName);
-			filePathParts.splice(0, filePathPartIndexForMediaType + 1);
-			var fileName = filePathParts.join("_");
-			var fileStemAndExtension = fileName.split(".");
-			var fileStem = fileStemAndExtension[0];
+				var filePathParts = filePath.split("/");
+				var filePathPartIndexForMediaType =
+					filePathParts.indexOf(mediaDirectoryName);
+				filePathParts.splice(0, filePathPartIndexForMediaType + 1);
+				var fileName = filePathParts.join("_");
+				var fileStemAndExtension = fileName.split(".");
+				var fileStem = fileStemAndExtension[0];
 
-			var mediaObject = new mediaType(fileStem, filePath);
-			mediaArray.push(mediaObject);
+				var mediaObject = new mediaType(fileStem, filePath);
+				mediaArray.push(mediaObject);
+			}
 		}
 
 		var returnValue = new MediaLibrary
@@ -215,6 +222,140 @@ export class MediaLibrary
 	static loadOrUnloadCallbackIgnore(loadable: Loadable): void
 	{
 		// Do nothing.
+	}
+
+	static mediaFilePathsReadFromContentDirectoryPathAndManifestFileNameThen
+	(
+		contentDirectoryPath: string,
+		manifestFileName: string,
+		callback: (mfps: string[]) => void
+	): void
+	{
+		var manifestFilePath = contentDirectoryPath + manifestFileName;
+
+		var manifestFileAsTextString =
+			TextString.fromNameAndSourcePath("Manifest", manifestFilePath);
+
+		manifestFileAsTextString.loadThen
+		(
+			(textStringLoadedAsLoadable: Loadable) =>
+			{
+				var textStringLoaded = textStringLoadedAsLoadable as TextString;
+				var mediaFilePathsRelative: string[] = [];
+				var mediaFilePathsAsString = textStringLoaded.value;
+
+				// Ignore anything in the root content directory.
+
+				mediaFilePathsAsString =
+					mediaFilePathsAsString.substr
+					(
+						mediaFilePathsAsString.indexOf("+")
+					);
+
+				var newline = "\n";
+				var lines = mediaFilePathsAsString.split(newline);
+
+				// Replace any tree structure characters with spaces
+				// except for hyphens, which must be handled more carefully
+				// as they often occur in actual file names.
+
+				lines = lines.map
+				(
+					line =>
+						line
+							.split("\r").join("")
+							.split("|").join(" ")
+							.split("+").join(" ")
+							.split("\\").join(" ")
+				);
+
+				// Only replace hyphens that occur before a non-space character.
+
+				lines = lines.map
+				(
+					line =>
+					{
+						for (var k = 0; k < line.length; k++)
+						{
+							var lineChar = line[k];
+							if (lineChar == " " || lineChar == "-")
+							{
+								// Do nothing.
+							}
+							else
+							{
+								line = "".padStart(k, " ") + line.substr(k);
+								break;
+							}
+						}
+						return line;
+					}
+				);
+
+				// Convert sets of four spaces to tabs.
+
+				lines = lines.map(x => x.split("    ").join("\t") );
+
+				// Remove leading tabs, comments, and blank lines.
+
+				lines =
+					lines
+						.filter(x => x.startsWith("\t") )
+						.filter(x => x.trim().startsWith("//") == false)
+						.filter(x => x.trim().length > 0)
+						.map(x => x.substr(1) );
+
+
+				var ancestorDirectoryNames = [];
+				var linePrev = null;
+				var lineIndentsCountPrev = -1;
+
+				for (var i = 0; i < lines.length; i++)
+				{
+					var line = lines[i];
+
+					var lineIndentsCount = 0;
+					while (line.startsWith("\t") )
+					{
+						line = line.substr(1);
+						lineIndentsCount++;
+					}
+
+					if (lineIndentsCount > lineIndentsCountPrev)
+					{
+						// This line is a child of the previous line.
+						if (linePrev != null)
+						{
+							ancestorDirectoryNames.push(linePrev);
+						}
+					}
+					else if (lineIndentsCount < lineIndentsCountPrev)
+					{
+						// This line is an uncle/aunt (or great uncle/aunt, etc.) of the previous line.
+						var indentsLost = lineIndentsCountPrev - lineIndentsCount;
+						for (var j = 0; j < indentsLost; j++)
+						{
+							ancestorDirectoryNames.pop();
+						}
+					}
+
+					var lineContainsDot = (line.indexOf(".") > 0);
+					if (lineContainsDot)
+					{
+						var filePath =
+							ancestorDirectoryNames.join("/") + "/" + line;
+						mediaFilePathsRelative.push(filePath);
+					}
+
+					linePrev = line;
+					lineIndentsCountPrev = lineIndentsCount;
+				}
+
+				var mediaFilePaths = mediaFilePathsRelative.map(x => contentDirectoryPath + x);
+
+				callback(mediaFilePaths);
+			}
+		);
 	}
 
 	// Instance methods.
