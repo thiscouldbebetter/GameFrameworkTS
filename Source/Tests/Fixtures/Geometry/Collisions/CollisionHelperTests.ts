@@ -39,13 +39,13 @@ class CollisionHelperTests extends TestFixture
 
 		this._boxOfSide1AtX1 = BoxAxisAligned.fromCenterAndSize
 		(
-			new Coords(1, 0, 0), // center
+			Coords.fromXYZ(1, 0, 0), // center
 			Coords.ones() // size
 		);
 
 		this._boxOfSide1AtX2 = BoxAxisAligned.fromCenterAndSize
 		(
-			new Coords(2, 0, 0), // origin
+			Coords.fromXYZ(2, 0, 0), // origin
 			Coords.ones() // size
 		);
 		
@@ -55,9 +55,9 @@ class CollisionHelperTests extends TestFixture
 		);
 	}
 
-	tests(): ( ()=>void )[]
+	tests(): Test[]
 	{
-		var tests =
+		var testRuns =
 		[
 			this.collisionActiveClosest,
 			this.collisionOfEntities,
@@ -191,6 +191,8 @@ class CollisionHelperTests extends TestFixture
 			*/
 
 		];
+
+		var tests = testRuns.map(x => Test.fromRun(x) );
 
 		return tests;
 	}

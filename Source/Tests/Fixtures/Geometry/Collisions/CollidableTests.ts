@@ -6,9 +6,9 @@ class CollidableTests extends TestFixture
 		super(CollidableTests.name);
 	}
 
-	tests(): ( () => void )[]
+	tests(): Test[]
 	{
-		var tests =
+		var testRuns =
 		[
 			this.create,
 			this.default,
@@ -20,6 +20,8 @@ class CollidableTests extends TestFixture
 
 			this.entitiesThatMustSeparateBeforeCollidingAgainCollideOnlyOncePerTouch
 		];
+
+		var tests = testRuns.map(x => Test.fromRun(x) );
 
 		return tests;
 	}

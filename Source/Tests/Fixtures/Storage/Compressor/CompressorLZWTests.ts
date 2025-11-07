@@ -9,13 +9,15 @@ class CompressorLZWTests extends TestFixture
 		this._compressor = new CompressorLZW();
 	}
 
-	tests()
+	tests(): Test[]
 	{
-		var tests =
+		var testRuns =
 		[
 			this.compressAndDecompressBytes,
 			this.compressAndDecompressString
 		];
+
+		var tests = testRuns.map(x => Test.fromRun(x) );
 
 		return tests;
 	}

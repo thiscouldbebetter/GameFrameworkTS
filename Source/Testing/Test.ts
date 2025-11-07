@@ -17,6 +17,28 @@ export class Test
 		this.runThen = runThen;
 	}
 
+	static fromName(name: string): Test
+	{
+		return new Test(name, null);
+	}
+
+	static fromRun
+	(
+		run: () => void
+	)
+	{
+		var name = run.name; // todo
+		var test = Test.fromName(name);
+		test.runThenSet
+		(
+			( testComplete: (testCompleted: Test) => void ) =>
+			{
+				testComplete(test);
+			}
+		);
+		return test;
+	}
+
 	static fromNameAndRunThen
 	(
 		name: string,
@@ -24,6 +46,12 @@ export class Test
 	): Test
 	{
 		return new Test(name, runThen);
+	}
+
+	runThenSet(value: ( testComplete: (testCompleted: Test) => void ) => void): Test
+	{
+		this.runThen = value;
+		return this;
 	}
 
 	writeMessageInColor(messageToWrite: string, color: string): void

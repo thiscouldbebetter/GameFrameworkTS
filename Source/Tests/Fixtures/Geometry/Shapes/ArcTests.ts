@@ -10,9 +10,9 @@ class ArcTests extends TestFixture
 		this._arcDefault = Arc.default();
 	}
 
-	tests(): ( ()=>void )[]
+	tests(): Test[]
 	{
-		var tests =
+		var testRuns =
 		[
 			this.collider,
 
@@ -27,6 +27,8 @@ class ArcTests extends TestFixture
 
 			this.transform
 		];
+
+		var tests = testRuns.map(x => Test.fromRun(x) );
 
 		return tests;
 	}

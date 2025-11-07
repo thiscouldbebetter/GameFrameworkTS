@@ -5,7 +5,7 @@ class CameraTests extends TestFixture {
         this._camera = Camera.default();
     }
     tests() {
-        var tests = [
+        var testRuns = [
             this.coordsTransformViewToWorld,
             this.coordsTransformWorldToView,
             this.drawEntitiesInView,
@@ -15,6 +15,7 @@ class CameraTests extends TestFixture {
             this.initialize,
             this.updateForTimerTick,
         ];
+        var tests = testRuns.map(x => Test.fromRun(x));
         return tests;
     }
     coordsTransformViewToWorld() {

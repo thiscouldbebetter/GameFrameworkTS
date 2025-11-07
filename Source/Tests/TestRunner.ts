@@ -30,6 +30,13 @@ class TestRunner
 			]
 		);
 
-		testSuite.run();
+		testSuite.runThen
+		(
+			(testSuiteCompleted: TestSuite) =>
+			{
+				console.log("Done.");
+			}
+		)
+
 	}
 }

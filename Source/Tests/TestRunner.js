@@ -17,6 +17,8 @@ class TestRunner {
             // Storage - CompressorLZW.
             new CompressorLZWTests()
         ]);
-        testSuite.run();
+        testSuite.runThen((testSuiteCompleted) => {
+            console.log("Done.");
+        });
     }
 }

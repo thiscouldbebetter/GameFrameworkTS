@@ -5,7 +5,7 @@ class ArcTests extends TestFixture {
         this._arcDefault = Arc.default();
     }
     tests() {
-        var tests = [
+        var testRuns = [
             this.collider,
             this.clone,
             this.overwriteWith,
@@ -15,6 +15,7 @@ class ArcTests extends TestFixture {
             this.toBoxAxisAligned,
             this.transform
         ];
+        var tests = testRuns.map(x => Test.fromRun(x));
         return tests;
     }
     // Tests.

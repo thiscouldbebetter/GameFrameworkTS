@@ -31,9 +31,9 @@ class ConstraintTests extends TestFixture
 		);
 	}
 
-	tests(): ( ()=>void )[]
+	tests(): Test[]
 	{
-		var tests =
+		var testRuns =
 		[
 			this.attachToEntityWithId,
 			this.attachToEntityWithName,
@@ -52,6 +52,8 @@ class ConstraintTests extends TestFixture
 			this.wrapToPlaceSizeX,
 			this.wrapToPlaceSizeXTrimY
 		];
+
+		var tests = testRuns.map(x => Test.fromRun(x) );
 
 		return tests;
 	}

@@ -15,17 +15,17 @@ class CollisionHelperTests extends TestFixture {
         this._boxOfSide3AtOrigin = BoxAxisAligned.fromCenterAndSize(Coords.zeroes(), // center
         Coords.ones().multiplyScalar(3) // size
         );
-        this._boxOfSide1AtX1 = BoxAxisAligned.fromCenterAndSize(new Coords(1, 0, 0), // center
+        this._boxOfSide1AtX1 = BoxAxisAligned.fromCenterAndSize(Coords.fromXYZ(1, 0, 0), // center
         Coords.ones() // size
         );
-        this._boxOfSide1AtX2 = BoxAxisAligned.fromCenterAndSize(new Coords(2, 0, 0), // origin
+        this._boxOfSide1AtX2 = BoxAxisAligned.fromCenterAndSize(Coords.fromXYZ(2, 0, 0), // origin
         Coords.ones() // size
         );
         this._sphereOfRadius1AtOrigin = Sphere.fromRadiusAndCenter(1, Coords.zeroes() // center
         );
     }
     tests() {
-        var tests = [
+        var testRuns = [
             this.collisionActiveClosest,
             this.collisionOfEntities,
             this.collisionOfColliders,
@@ -148,6 +148,7 @@ class CollisionHelperTests extends TestFixture {
 
             */
         ];
+        var tests = testRuns.map(x => Test.fromRun(x));
         return tests;
     }
     collisionActiveClosest() {

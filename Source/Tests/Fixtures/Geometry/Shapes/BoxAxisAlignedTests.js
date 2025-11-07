@@ -4,7 +4,7 @@ class BoxAxisAlignedTests extends TestFixture {
         super(BoxAxisAlignedTests.name);
     }
     tests() {
-        var tests = [
+        var testRuns = [
             // Constructoroids.
             this.create,
             this.default,
@@ -50,6 +50,7 @@ class BoxAxisAlignedTests extends TestFixture {
             // this.coordsGroupToTranslate,
             // this.transform
         ];
+        var tests = testRuns.map(x => Test.fromRun(x));
         return tests;
     }
     // Tests.

@@ -6,7 +6,7 @@ class ControlBuilderTests extends TestFixture {
         this._controlBuilder = this._universe.controlBuilder;
     }
     tests() {
-        var tests = [
+        var testRuns = [
             //this.styleByName,
             //this.styleDefault,
             this.choice,
@@ -23,6 +23,7 @@ class ControlBuilderTests extends TestFixture {
             this.worldDetail,
             this.worldLoad
         ];
+        var tests = testRuns.map(x => Test.fromRun(x));
         return tests;
     }
     // Tests.

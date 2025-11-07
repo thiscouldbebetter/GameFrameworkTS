@@ -8,7 +8,7 @@ class BoxAxisAlignedTests extends TestFixture
 
 	tests()
 	{
-		var tests =
+		var testRuns =
 		[
 			// Constructoroids.
 
@@ -68,6 +68,8 @@ class BoxAxisAlignedTests extends TestFixture
 			// this.coordsGroupToTranslate,
 			// this.transform
 		];
+
+		var tests = testRuns.map(x => Test.fromRun(x) );
 
 		return tests;
 	}

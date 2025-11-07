@@ -11,9 +11,9 @@ class ControlBuilderTests extends TestFixture
 		this._controlBuilder = this._universe.controlBuilder;
 	}
 
-	tests(): ( ()=>void )[]
+	tests(): Test[]
 	{
-		var tests =
+		var testRuns =
 		[
 			//this.styleByName,
 			//this.styleDefault,
@@ -32,6 +32,8 @@ class ControlBuilderTests extends TestFixture
 			this.worldDetail,
 			this.worldLoad
 		];
+
+		var tests = testRuns.map(x => Test.fromRun(x) );
 
 		return tests;
 	}

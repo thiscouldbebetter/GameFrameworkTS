@@ -4,7 +4,7 @@ class CollidableTests extends TestFixture {
         super(CollidableTests.name);
     }
     tests() {
-        var tests = [
+        var testRuns = [
             this.create,
             this.default,
             this.fromCollider,
@@ -13,6 +13,7 @@ class CollidableTests extends TestFixture {
             this.canCollideWithTypeOfEntity,
             this.entitiesThatMustSeparateBeforeCollidingAgainCollideOnlyOncePerTouch
         ];
+        var tests = testRuns.map(x => Test.fromRun(x));
         return tests;
     }
     // Tests.
