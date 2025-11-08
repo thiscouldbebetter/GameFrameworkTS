@@ -1,5 +1,8 @@
 
-class PlaceMock extends PlaceBase
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class PlaceMock extends PlaceBase
 {
 	constructor()
 	{
@@ -17,4 +20,6 @@ class PlaceMock extends PlaceBase
 	{
 		return new PlaceMock();
 	}
+}
+
 }

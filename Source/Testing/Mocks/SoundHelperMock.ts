@@ -1,5 +1,8 @@
 
-class SoundHelperMock implements SoundHelper
+namespace ThisCouldBeBetter.GameFramework
+{
+
+export class SoundHelperMock implements SoundHelper
 {
 	audioContext(): AudioContext { return null; }
 	controlSelectOptionsVolume(): ControlSelectOption<number>[] { return null; }
@@ -9,4 +12,6 @@ class SoundHelperMock implements SoundHelper
 	soundPlaybackCreateFromSound(sound: Sound): SoundPlayback { return null; }
 	soundPlaybackRegister(soundPlayback: SoundPlayback): void {}
 	soundPlaybacksAllStop(universe: Universe): void {}
+}
+
 }
