@@ -246,6 +246,9 @@ var ThisCouldBeBetter;
             drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius) {
                 this._display2DOverlay.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius);
             }
+            drawTextWithFontAtPos(text, fontNameAndHeight, pos) {
+                this.drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, null, null, null, null, null);
+            }
             drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
                 this._display2DOverlay.drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels);
             }

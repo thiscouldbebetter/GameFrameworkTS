@@ -10,6 +10,13 @@ var ThisCouldBeBetter;
                 this.colorFill = colorFill;
                 this.texture = texture;
             }
+            static fromNameColorsStrokeAndFillAndTexture(name, colorStroke, colorFill, texture) {
+                return new Material(name, colorStroke, colorFill, texture);
+            }
+            static fromTexture(texture) {
+                var colors = GameFramework.Color.Instances();
+                return new Material(texture.name, colors.Black, colors.Gray, texture);
+            }
             static Instances() {
                 if (Material._instances == null) {
                     Material._instances = new Material_Instances();

@@ -419,6 +419,19 @@ export class DisplayFarToNear implements Display
 		);
 	}
 
+	drawTextWithFontAtPos
+	(
+		text: string,
+		fontNameAndHeight: FontNameAndHeight,
+		pos: Coords
+	): void
+	{
+		this.drawTextWithFontAtPosWithColorsFillAndOutline
+		(
+			text, fontNameAndHeight, pos, null, null, null, null, null
+		);
+	}
+
 	drawTextWithFontAtPosWithColorsFillAndOutline
 	(
 		text: string,

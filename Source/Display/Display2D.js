@@ -366,6 +366,9 @@ var ThisCouldBeBetter;
                     this.graphics.stroke();
                 }
             }
+            drawTextWithFontAtPos(text, fontNameAndHeight, pos) {
+                this.drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, null, null, null, null, null);
+            }
             drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
                 var fontToRestore = this.graphics.font;
                 if (fontNameAndHeight != null) {

@@ -129,6 +129,9 @@ var ThisCouldBeBetter;
                 pos = pos.clone();
                 this.drawMethodAddAtDistance(pos.z, () => this.displayInner.drawRectangleWithRoundedCorners(pos, size, colorFill, colorBorder, cornerRadius));
             }
+            drawTextWithFontAtPos(text, fontNameAndHeight, pos) {
+                this.drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, null, null, null, null, null);
+            }
             drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) {
                 pos = pos.clone();
                 this.drawMethodAddAtDistance(pos.z, () => this.displayInner.drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels));
