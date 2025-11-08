@@ -80,7 +80,7 @@ var ThisCouldBeBetter;
                 this.display = value;
                 return this;
             }
-            initialize(callback) {
+            initialize(universeInitialized) {
                 this.platformHelper.initialize(this);
                 this.storageHelper = GameFramework.StorageHelper.fromPrefixSerializerAndCompressor(GameFramework.StringHelper.replaceAll(this.name, " ", "_") + "_", this.serializer, new GameFramework.CompressorLZW());
                 if (this.debugSettings.localStorageClear()) {
@@ -107,7 +107,7 @@ var ThisCouldBeBetter;
                 this.inputHelper.initialize(this);
                 var universe = this;
                 //this.mediaLibrary.shouldLoadAllItemsBeforehandSet(false); // todo
-                this.mediaLibrary.loadItemsBeforehandIfNecessary(() => callback(universe));
+                this.mediaLibrary.loadItemsBeforehandIfNecessary(() => universeInitialized(universe));
             }
             initializeAndStart() {
                 this.initialize(() => this.start());

@@ -13,21 +13,29 @@ class ConstraintTests extends TestFixture
 	constructor()
 	{
 		super(ConstraintTests.name);
-		var environment = new MockEnvironment();
-		this._universe = environment.universe;
-		this._world = this._universe.world;
-		this._place = this._world.placeCurrent;
 
-		this._constrainable = Constrainable.create();
-		this._entityToConstrainLoc = Disposition.create();
-		this._locatable = new Locatable(this._entityToConstrainLoc);
-		this._entityToConstrain = Entity.fromNameAndProperties
+		var fixture = this;
+
+		new EnvironmentMock().universeCreate
 		(
-			"EntityToConstrain",
-			[
-				this._constrainable,
-				this._locatable
-			]
+			(universe: Universe) =>
+			{
+				fixture._universe = universe;
+				fixture._world = universe.world;
+				fixture._place = fixture._world.placeCurrent;
+
+				fixture._constrainable = Constrainable.create();
+				fixture._entityToConstrainLoc = Disposition.create();
+				fixture._locatable = new Locatable(this._entityToConstrainLoc);
+				fixture._entityToConstrain = Entity.fromNameAndProperties
+				(
+					"EntityToConstrain",
+					[
+						fixture._constrainable,
+						fixture._locatable
+					]
+				)
+			}
 		);
 	}
 

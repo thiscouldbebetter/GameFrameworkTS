@@ -906,7 +906,7 @@ class PlaceBuilderDemo_Movers
 				Talker.fromConversationDefnName
 				(
 					//"Conversation"
-					"Conversation_psv"
+					"Talk_Conversation_psv"
 				),
 			]
 		);

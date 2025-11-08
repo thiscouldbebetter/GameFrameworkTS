@@ -1,6 +1,6 @@
 "use strict";
 class TestRunner {
-    run() {
+    runThen(testRunnerComplete) {
         var testSuite = new TestSuite("TestsAll", [
             // Controls.
             new ControlBuilderTests(),
@@ -14,11 +14,14 @@ class TestRunner {
             // Geometry - Shapes.
             new ArcTests(),
             new BoxAxisAlignedTests(),
+            // Model - Talk.
+            new TalkTests(),
             // Storage - CompressorLZW.
             new CompressorLZWTests()
         ]);
         testSuite.runThen((testSuiteCompleted) => {
-            console.log("Done.");
+            console.log("All tests in test suite '" + testSuiteCompleted.name + "' completed.");
+            testRunnerComplete();
         });
     }
 }

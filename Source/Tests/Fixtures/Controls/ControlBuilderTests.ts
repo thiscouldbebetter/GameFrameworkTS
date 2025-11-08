@@ -7,8 +7,15 @@ class ControlBuilderTests extends TestFixture
 	constructor()
 	{
 		super(ControlBuilderTests.name);
-		this._universe = new MockEnvironment().universe;
-		this._controlBuilder = this._universe.controlBuilder;
+		var fixture = this;
+		new EnvironmentMock().universeCreate
+		(
+			universe =>
+			{
+				fixture._universe = universe;
+				fixture._controlBuilder = universe.controlBuilder;
+			}
+		)
 	}
 
 	tests(): Test[]

@@ -13,45 +13,50 @@ class CollisionHelperTests extends TestFixture
 	constructor()
 	{
 		super(CollisionHelperTests.name);
-		var mockEnvironment = new MockEnvironment();
-		var universe = mockEnvironment.universe;
-		this._collisionHelper = universe.collisionHelper;
-
-		// Test colliders.
-
-		this._boxOfSide1AtOrigin = BoxAxisAligned.fromCenterAndSize
+		var fixture = this;
+		new EnvironmentMock().universeCreate
 		(
-			Coords.zeroes(), // center
-			Coords.ones() // size
-		);
+			universe =>
+			{
+				fixture._collisionHelper = universe.collisionHelper;
 
-		this._boxOfSide2AtOrigin = BoxAxisAligned.fromCenterAndSize
-		(
-			Coords.zeroes(), // center
-			Coords.ones().double() // size
-		);
+				// Test colliders.
 
-		this._boxOfSide3AtOrigin = BoxAxisAligned.fromCenterAndSize
-		(
-			Coords.zeroes(), // center
-			Coords.ones().multiplyScalar(3) // size
-		);
+				fixture._boxOfSide1AtOrigin = BoxAxisAligned.fromCenterAndSize
+				(
+					Coords.zeroes(), // center
+					Coords.ones() // size
+				);
 
-		this._boxOfSide1AtX1 = BoxAxisAligned.fromCenterAndSize
-		(
-			Coords.fromXYZ(1, 0, 0), // center
-			Coords.ones() // size
-		);
+				fixture._boxOfSide2AtOrigin = BoxAxisAligned.fromCenterAndSize
+				(
+					Coords.zeroes(), // center
+					Coords.ones().double() // size
+				);
 
-		this._boxOfSide1AtX2 = BoxAxisAligned.fromCenterAndSize
-		(
-			Coords.fromXYZ(2, 0, 0), // origin
-			Coords.ones() // size
-		);
-		
-		this._sphereOfRadius1AtOrigin = Sphere.fromRadiusAndCenter
-		(
-			1, Coords.zeroes() // center
+				fixture._boxOfSide3AtOrigin = BoxAxisAligned.fromCenterAndSize
+				(
+					Coords.zeroes(), // center
+					Coords.ones().multiplyScalar(3) // size
+				);
+
+				fixture._boxOfSide1AtX1 = BoxAxisAligned.fromCenterAndSize
+				(
+					Coords.fromXYZ(1, 0, 0), // center
+					Coords.ones() // size
+				);
+
+				fixture._boxOfSide1AtX2 = BoxAxisAligned.fromCenterAndSize
+				(
+					Coords.fromXYZ(2, 0, 0), // origin
+					Coords.ones() // size
+				);
+
+				fixture._sphereOfRadius1AtOrigin = Sphere.fromRadiusAndCenter
+				(
+					1, Coords.zeroes() // center
+				);
+			}
 		);
 	}
 

@@ -8,6 +8,11 @@ class GameDemo
 		this.configuration = configuration;
 	}
 
+	static fromConfiguration(configuration: Configuration): GameDemo
+	{
+		return new GameDemo(configuration);
+	}
+
 	start(): void
 	{
 		var contentDirectoryPath = this.configuration.contentDirectoryPath;

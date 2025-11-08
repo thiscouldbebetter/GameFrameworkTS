@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(worldCreate, toControl, settings) {
                 this.worldCreate = worldCreate;
                 this.toControl = toControl;
-                this.settings = settings;
+                this.settings = settings || {};
             }
             static fromWorldCreate(worldCreate) {
                 return new WorldCreator(worldCreate, null, null);

@@ -2,9 +2,10 @@
 class Program {
     start() {
         var testRunner = new TestRunner();
-        testRunner.run();
-        var configuration = Configuration.Instance();
-        new GameDemo(configuration).start();
+        testRunner.runThen(() => {
+            var configuration = Configuration.Instance();
+            GameDemo.fromConfiguration(configuration).start();
+        });
     }
 }
 new Program().start();

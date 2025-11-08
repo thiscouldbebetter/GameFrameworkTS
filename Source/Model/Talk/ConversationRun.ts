@@ -212,6 +212,11 @@ export class ConversationRun
 		return nodesStartingWithPrefix;
 	}
 
+	optionSelectByContentPartial(contentPartialToMatch: string): TalkNode
+	{
+		return this.scopeCurrent.optionSelectByContentPartial(contentPartialToMatch);
+	}
+
 	optionSelectByName(nameToMatch: string): TalkNode
 	{
 		return this.scopeCurrent.optionSelectByName(nameToMatch);

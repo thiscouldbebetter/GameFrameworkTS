@@ -22,6 +22,7 @@ var ThisCouldBeBetter;
                 var testSuite = this;
                 this.testFixtures.forEach(testFixture => {
                     testFixture.runThen((testFixtureCompleted) => {
+                        this.write("Test fixture '" + testFixture.name + "' completed.");
                         testFixturesCompletedCount++;
                         if (testFixturesCompletedCount >= testFixturesCount) {
                             this.write("All " + this.testFixtures.length

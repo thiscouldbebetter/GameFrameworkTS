@@ -43,6 +43,7 @@ export class TestSuite
 				(
 					(testFixtureCompleted: TestFixture) =>
 					{
+						this.write("Test fixture '" + testFixture.name + "' completed.");
 						testFixturesCompletedCount++;
 						if (testFixturesCompletedCount >= testFixturesCount)
 						{

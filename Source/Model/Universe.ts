@@ -200,7 +200,7 @@ export class Universe
 		return this;
 	}
 
-	initialize(callback: (u: Universe) => void): void
+	initialize(universeInitialized: (u: Universe) => void): void
 	{
 		this.platformHelper.initialize(this);
 
@@ -254,7 +254,7 @@ export class Universe
 		//this.mediaLibrary.shouldLoadAllItemsBeforehandSet(false); // todo
 		this.mediaLibrary.loadItemsBeforehandIfNecessary
 		(
-			() => callback(universe)
+			() => universeInitialized(universe)
 		);
 	}
 

@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class DisplayTest implements Display
+export class DisplayMock implements Display
 {
 	sizesAvailable: Coords[];
 	fontNameAndHeight: FontNameAndHeight;
@@ -32,19 +32,19 @@ export class DisplayTest implements Display
 		this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
 	}
 
-	static default(): DisplayTest
+	static default(): DisplayMock
 	{
-		return DisplayTest.fromSize(Coords.fromXY(100, 100));
+		return DisplayMock.fromSize(Coords.fromXY(100, 100));
 	}
 
-	static fromSize(size: Coords): DisplayTest
+	static fromSize(size: Coords): DisplayMock
 	{
-		return new DisplayTest([size], null, null, null, false);
+		return new DisplayMock([size], null, null, null, false);
 	}
 
-	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean): DisplayTest
+	static fromSizeAndIsInvisible(size: Coords, isInvisible: boolean): DisplayMock
 	{
-		return new DisplayTest([size], null, null, null, isInvisible);
+		return new DisplayMock([size], null, null, null, isInvisible);
 	}
 
 	clear(): void {}

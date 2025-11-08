@@ -45,6 +45,11 @@ var ThisCouldBeBetter;
                 // Tersely named convenience method for scripts.
                 return this.talkNodeForOptionSelected;
             }
+            optionSelectByContentPartial(contentPartialToMatch) {
+                this.talkNodeForOptionSelected =
+                    this.talkNodesForOptions.find(x => x.content.indexOf(contentPartialToMatch) >= 0);
+                return this.talkNodeForOptionSelected;
+            }
             optionSelectByName(nameToMatch) {
                 if (this.talkNodesForOptions.length > 0) {
                     var optionToSelect = this.talkNodesForOptions.find(x => x.name == nameToMatch);

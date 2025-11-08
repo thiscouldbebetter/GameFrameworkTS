@@ -3,6 +3,9 @@ class GameDemo {
     constructor(configuration) {
         this.configuration = configuration;
     }
+    static fromConfiguration(configuration) {
+        return new GameDemo(configuration);
+    }
     start() {
         var contentDirectoryPath = this.configuration.contentDirectoryPath;
         var manifestFileName = "Manifest.txt";

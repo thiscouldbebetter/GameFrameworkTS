@@ -443,7 +443,7 @@ class PlaceBuilderDemo_Movers {
             routable,
             Talker.fromConversationDefnName(
             //"Conversation"
-            "Conversation_psv"),
+            "Talk_Conversation_psv"),
         ]);
         return friendlyEntityDefn;
     }

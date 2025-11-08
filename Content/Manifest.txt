@@ -1,7 +1,6 @@
 Folder PATH listing
 Volume serial number is 3048-D05F
 C:.
-|   Manifest-Custom.txt
 |   Manifest.txt
 |   
 +---Audio
@@ -67,10 +66,11 @@ C:.
 |           Title.png
 |           
 +---Text
-|       Conversation.json
-|       Conversation_psv.txt
-|       Instructions.txt
-|       
+|   |   Instructions.txt
+|   |   
+|   \---Talk
+|           Conversation_psv.txt
+|           
 \---Video
         Movie.webm
         

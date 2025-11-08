@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class DisplayTest {
+        class DisplayMock {
             constructor(sizesAvailable, fontNameAndHeight, colorFore, colorBack, isInvisible) {
                 this.sizesAvailable = sizesAvailable;
                 this.fontNameAndHeight =
@@ -15,13 +15,13 @@ var ThisCouldBeBetter;
                 this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
             }
             static default() {
-                return DisplayTest.fromSize(GameFramework.Coords.fromXY(100, 100));
+                return DisplayMock.fromSize(GameFramework.Coords.fromXY(100, 100));
             }
             static fromSize(size) {
-                return new DisplayTest([size], null, null, null, false);
+                return new DisplayMock([size], null, null, null, false);
             }
             static fromSizeAndIsInvisible(size, isInvisible) {
-                return new DisplayTest([size], null, null, null, isInvisible);
+                return new DisplayMock([size], null, null, null, isInvisible);
             }
             clear() { }
             colorAtPos(pos, colorOut) {
@@ -91,6 +91,6 @@ var ThisCouldBeBetter;
                 return this._domElement;
             }
         }
-        GameFramework.DisplayTest = DisplayTest;
+        GameFramework.DisplayMock = DisplayMock;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

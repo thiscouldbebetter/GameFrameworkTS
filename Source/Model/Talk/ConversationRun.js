@@ -119,6 +119,9 @@ var ThisCouldBeBetter;
                 var nodesStartingWithPrefix = this.defn.talkNodes.filter(x => x.name.startsWith(nodeNamePrefix));
                 return nodesStartingWithPrefix;
             }
+            optionSelectByContentPartial(contentPartialToMatch) {
+                return this.scopeCurrent.optionSelectByContentPartial(contentPartialToMatch);
+            }
             optionSelectByName(nameToMatch) {
                 return this.scopeCurrent.optionSelectByName(nameToMatch);
             }

@@ -90,6 +90,17 @@ export class ConversationScope
 		return this.talkNodeForOptionSelected;
 	}
 
+	optionSelectByContentPartial(contentPartialToMatch: string): TalkNode
+	{
+		this.talkNodeForOptionSelected =
+			this.talkNodesForOptions.find
+			(
+				x => x.content.indexOf(contentPartialToMatch) >= 0
+			);
+
+		return this.talkNodeForOptionSelected;
+	}
+
 	optionSelectByName(nameToMatch: string): TalkNode
 	{
 		if (this.talkNodesForOptions.length > 0)

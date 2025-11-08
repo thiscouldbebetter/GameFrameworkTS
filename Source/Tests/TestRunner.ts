@@ -1,7 +1,7 @@
 
 class TestRunner
 {
-	run(): void
+	runThen(testRunnerComplete: () => void): void
 	{
 		var testSuite = new TestSuite
 		(
@@ -25,6 +25,9 @@ class TestRunner
 				new ArcTests(),
 				new BoxAxisAlignedTests(),
 
+				// Model - Talk.
+				new TalkTests(),
+
 				// Storage - CompressorLZW.
 				new CompressorLZWTests()
 			]
@@ -34,7 +37,8 @@ class TestRunner
 		(
 			(testSuiteCompleted: TestSuite) =>
 			{
-				console.log("Done.");
+				console.log("All tests in test suite '" + testSuiteCompleted.name + "' completed.");
+				testRunnerComplete();
 			}
 		)
 
