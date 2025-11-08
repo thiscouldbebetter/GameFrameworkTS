@@ -15,6 +15,11 @@ export class Texture
 		this.image = image;
 	}
 
+	static fromNameAndImage(name: string, image: Image2): Texture
+	{
+		return new Texture(name, image);
+	}
+
 	// methods
 
 	initializeForWebGLContext(webGLContext: WebGLContext): void

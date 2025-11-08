@@ -13,6 +13,9 @@ var ThisCouldBeBetter;
                 this.axes = [this.forward, this.right, this.down];
                 this.axesRDF = [this.right, this.down, this.forward];
             }
+            static create() {
+                return new Orientation(GameFramework.Coords.create(), GameFramework.Coords.create());
+            }
             static default() {
                 return new Orientation(new GameFramework.Coords(1, 0, 0), new GameFramework.Coords(0, 0, 1));
             }

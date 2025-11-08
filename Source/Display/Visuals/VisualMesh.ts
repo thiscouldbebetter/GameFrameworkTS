@@ -13,6 +13,11 @@ export class VisualMesh extends VisualBase<VisualMesh>
 		this.mesh = mesh;
 	}
 
+	static fromMesh(mesh: MeshTextured): VisualMesh
+	{
+		return new VisualMesh(mesh);
+	}
+
 	// Cloneable.
 
 	clone(): VisualMesh

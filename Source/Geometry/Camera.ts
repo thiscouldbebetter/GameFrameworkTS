@@ -85,6 +85,23 @@ export class Camera extends EntityPropertyBase<Camera>
 		);
 	}
 
+	static fromViewSizeFocalLengthAndDisposition
+	(
+		viewSize: Coords,
+		focalLength: number,
+		disp: Disposition
+	): Camera
+	{
+		return new Camera
+		(
+			viewSize,
+			focalLength,
+			disp,
+			null // entitiesInViewSort
+		);
+	}
+
+
 	static fromViewSizeDispositionAndEntitiesInViewSort
 	(
 		viewSize: Coords,

@@ -32,6 +32,10 @@ var ThisCouldBeBetter;
                 disp, null // entitiesInViewSort
                 );
             }
+            static fromViewSizeFocalLengthAndDisposition(viewSize, focalLength, disp) {
+                return new Camera(viewSize, focalLength, disp, null // entitiesInViewSort
+                );
+            }
             static fromViewSizeDispositionAndEntitiesInViewSort(viewSize, disp, entitiesInViewSort) {
                 return new Camera(viewSize, null, // focalLength
                 disp, entitiesInViewSort);

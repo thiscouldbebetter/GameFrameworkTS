@@ -4,6 +4,12 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class MeshBuilder {
+            static Instance() {
+                if (this._instance == null) {
+                    this._instance = new MeshBuilder();
+                }
+                return this._instance;
+            }
             biped(material, heightInPixels) {
                 var heightOver2 = heightInPixels / 2;
                 var heightOver3 = heightInPixels / 3;

@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 super();
                 this.mesh = mesh;
             }
+            static fromMesh(mesh) {
+                return new VisualMesh(mesh);
+            }
             // Cloneable.
             clone() {
                 return new VisualMesh(this.mesh.clone());

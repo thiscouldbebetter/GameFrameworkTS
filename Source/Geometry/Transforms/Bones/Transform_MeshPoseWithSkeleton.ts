@@ -32,9 +32,23 @@ export class Transform_MeshPoseWithSkeleton
 		);
 
 		// Helper variables.
-		this._orientation = new Orientation(Coords.create(), Coords.create());
+		this._orientation = Orientation.create();
 		this._vertex = Coords.create();
 	}
+
+	static fromMeshSkeletonAndBoneInfluences
+	(
+		meshAtRest: MeshTextured,
+		skeletonAtRest: Skeleton,
+		boneInfluences: BoneInfluence[]
+	): Transform_MeshPoseWithSkeleton
+	{
+		return new Transform_MeshPoseWithSkeleton
+		(
+			meshAtRest, skeletonAtRest, boneInfluences, null
+		);
+	}
+
 
 	clone(): Transform_MeshPoseWithSkeleton
 	{

@@ -4,6 +4,16 @@ namespace ThisCouldBeBetter.GameFramework
 
 export class MeshBuilder
 {
+	static _instance: MeshBuilder;
+	static Instance(): MeshBuilder
+	{
+		if (this._instance == null)
+		{
+			this._instance = new MeshBuilder();
+		}
+		return this._instance;
+	}
+
 	biped(material: Material, heightInPixels: number): MeshTextured
 	{
 		var heightOver2 = heightInPixels / 2;

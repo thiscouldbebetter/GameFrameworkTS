@@ -8,6 +8,9 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.image = image;
             }
+            static fromNameAndImage(name, image) {
+                return new Texture(name, image);
+            }
             // methods
             initializeForWebGLContext(webGLContext) {
                 var gl = webGLContext.gl;
