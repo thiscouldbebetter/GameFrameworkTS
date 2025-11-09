@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 this.colorBack = colorBack;
                 this._sizeDefault = sizeInPixels;
                 this._scaleFactor = GameFramework.Coords.ones();
-                this._display2DOverlay = new GameFramework.Display2D(this.sizesAvailable, fontNameAndHeight, colorFore, colorBack, null);
+                this._display2DOverlay = GameFramework.Display2D.fromSizesFontAndColorsForeAndBack(this.sizesAvailable, fontNameAndHeight, colorFore, colorBack);
             }
             // methods
             cameraSet(camera) {
@@ -165,18 +165,19 @@ var ThisCouldBeBetter;
                 this._display2DOverlay.drawPixel(pos, color);
             }
             initialize(universe) {
-                this._display2DOverlay.initialize(universe);
                 this.canvas = document.createElement("canvas");
+                this.canvas.id = "canvas3D";
                 this.canvas.style.position = "absolute";
                 this.canvas.width = this.sizeInPixels.x;
                 this.canvas.height = this.sizeInPixels.y;
-                this.webGLContext = new GameFramework.WebGLContext(this.canvas);
+                this.webGLContext = new GameFramework.WebGLContext(this.canvas); // The canvas from the overlay cannot be used here.
                 this.texturesRegisteredByName = new Map();
                 // hack
-                this.lighting = new GameFramework.Lighting(.5, // ambientIntensity
-                new GameFramework.Coords(-1, -1, -1), // direction
+                this.lighting = GameFramework.Lighting.fromAmbientIntensityDirectionAndDirectionalIntensity(.5, // ambientIntensity
+                GameFramework.Coords.ones().multiplyScalar(-1), // direction
                 .3 // directionalIntensity
                 );
+                this._display2DOverlay.initialize(universe);
                 // temps
                 this.matrixEntity = GameFramework.Matrix.buildZeroes();
                 this.matrixCamera = GameFramework.Matrix.buildZeroes();
@@ -261,7 +262,10 @@ var ThisCouldBeBetter;
             fontSet(fontNameAndHeight) {
                 this._display2DOverlay.fontSet(fontNameAndHeight);
             }
-            flush() { }
+            flush() {
+                var display2d = this._display2DOverlay;
+                display2d.graphics.drawImage(this.canvas, 0, 0);
+            }
             hide() { }
             rotateTurnsAroundCenter(turnsToRotate, centerOfRotation) {
                 this._display2DOverlay.rotateTurnsAroundCenter(turnsToRotate, centerOfRotation);
@@ -285,13 +289,9 @@ var ThisCouldBeBetter;
             toImage(name) {
                 return null;
             }
-            // platformable
+            // Platformable.
             toDomElement() {
-                var returnValue = document.createElement("div");
-                returnValue.appendChild(this.canvas);
-                var overlayAsDomElement = this._display2DOverlay.toDomElement();
-                returnValue.appendChild(overlayAsDomElement);
-                return returnValue;
+                return this._display2DOverlay.toDomElement();
             }
         }
         // constants

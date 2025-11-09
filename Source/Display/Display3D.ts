@@ -45,11 +45,12 @@ export class Display3D implements Display
 
 		this._sizeDefault = sizeInPixels;
 		this._scaleFactor = Coords.ones();
-		this._display2DOverlay = new Display2D
+		this._display2DOverlay = Display2D.fromSizesFontAndColorsForeAndBack
 		(
 			this.sizesAvailable,
 			fontNameAndHeight,
-			colorFore, colorBack, null
+			colorFore,
+			colorBack
 		);
 	}
 
@@ -407,25 +408,26 @@ export class Display3D implements Display
 
 	initialize(universe: Universe): Display
 	{
-		this._display2DOverlay.initialize(universe);
-
-		this.canvas = document.createElement("canvas");
+		this.canvas = document.createElement("canvas"); 
+		this.canvas.id = "canvas3D";
 		this.canvas.style.position = "absolute";
 		this.canvas.width = this.sizeInPixels.x;
 		this.canvas.height = this.sizeInPixels.y;
 
-		this.webGLContext = new WebGLContext(this.canvas);
+		this.webGLContext = new WebGLContext(this.canvas); // The canvas from the overlay cannot be used here.
 
 		this.texturesRegisteredByName = new Map<string, Texture>();
 
 		// hack
 
-		this.lighting = new Lighting
+		this.lighting = Lighting.fromAmbientIntensityDirectionAndDirectionalIntensity
 		(
 			.5, // ambientIntensity
-			new Coords(-1, -1, -1), // direction
+			Coords.ones().multiplyScalar(-1), // direction
 			.3 // directionalIntensity
 		);
+
+		this._display2DOverlay.initialize(universe);
 
 		// temps
 
@@ -671,7 +673,11 @@ export class Display3D implements Display
 		this._display2DOverlay.fontSet(fontNameAndHeight);
 	}
 
-	flush(): void {}
+	flush(): void
+	{
+		var display2d = this._display2DOverlay as Display2D;
+		display2d.graphics.drawImage(this.canvas, 0, 0);
+	}
 
 	hide(): void {}
 
@@ -718,15 +724,11 @@ export class Display3D implements Display
 		return null;
 	}
 
-	// platformable
+	// Platformable.
 
 	toDomElement(): HTMLElement
 	{
-		var returnValue = document.createElement("div");
-		returnValue.appendChild(this.canvas);
-		var overlayAsDomElement = this._display2DOverlay.toDomElement();
-		returnValue.appendChild(overlayAsDomElement);
-		return returnValue;
+		return this._display2DOverlay.toDomElement();
 	}
 }
 

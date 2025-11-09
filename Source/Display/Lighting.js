@@ -9,6 +9,9 @@ var ThisCouldBeBetter;
                 this.direction = direction.clone().normalize();
                 this.directionalIntensity = directionalIntensity;
             }
+            static fromAmbientIntensityDirectionAndDirectionalIntensity(ambientIntensity, direction, directionalIntensity) {
+                return new Lighting(ambientIntensity, direction, directionalIntensity);
+            }
         }
         GameFramework.Lighting = Lighting;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));

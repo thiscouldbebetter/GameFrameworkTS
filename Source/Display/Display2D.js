@@ -285,13 +285,14 @@ var ThisCouldBeBetter;
                 }
             }
             drawRectangle(pos, size, colorFill, colorBorder) {
+                var g = this.graphics;
                 if (colorFill != null) {
-                    this.graphics.fillStyle = GameFramework.Color.systemColorGet(colorFill);
-                    this.graphics.fillRect(pos.x, pos.y, size.x, size.y);
+                    g.fillStyle = GameFramework.Color.systemColorGet(colorFill);
+                    g.fillRect(pos.x, pos.y, size.x, size.y);
                 }
                 if (colorBorder != null) {
-                    this.graphics.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
-                    this.graphics.strokeRect(pos.x, pos.y, size.x, size.y);
+                    g.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
+                    g.strokeRect(pos.x, pos.y, size.x, size.y);
                 }
             }
             drawRectangleCentered(pos, size, colorFill, colorBorder) {
@@ -545,9 +546,6 @@ var ThisCouldBeBetter;
                     this.canvas.oncontextmenu = () => false;
                     this.graphics = this.canvas.getContext("2d");
                     this.fontSet(this.fontNameAndHeight);
-                    // todo
-                    // var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    // var widthWithFontFallthrough = this.graphics.measureText(testString).width;
                     this._scaleFactor = null;
                     var scaleFactor = this.scaleFactor();
                     this.graphics.scale(scaleFactor.x, scaleFactor.y);

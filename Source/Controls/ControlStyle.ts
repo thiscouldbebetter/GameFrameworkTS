@@ -52,10 +52,27 @@ export class ControlStyle
 		);
 	}
 
+	drawBoxOfSizeAtPosToDisplay
+	(
+		size: Coords,
+		pos: Coords,
+		display: Display
+	): void
+	{
+		var colorFill = this.colorBackground();
+		var colorBorder = this.colorBorder();
+		this.drawBoxOfSizeAtPosWithColorsToDisplay
+		(
+			size, pos, colorFill, colorBorder, false, display
+		);
+	}
+
 	drawBoxOfSizeAtPosWithColorsToDisplay
 	(
-		size: Coords, pos: Coords,
-		colorFill: Color, colorBorder: Color,
+		size: Coords,
+		pos: Coords,
+		colorFill: Color,
+		colorBorder: Color,
 		isHighlighted: boolean,
 		display: Display
 	): void

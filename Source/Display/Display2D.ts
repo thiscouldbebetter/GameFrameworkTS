@@ -589,10 +589,12 @@ export class Display2D implements Display
 		pos: Coords, size: Coords, colorFill: Color, colorBorder: Color
 	): void
 	{
+		var g = this.graphics;
+
 		if (colorFill != null)
 		{
-			this.graphics.fillStyle = Color.systemColorGet(colorFill);
-			this.graphics.fillRect
+			g.fillStyle = Color.systemColorGet(colorFill);
+			g.fillRect
 			(
 				pos.x, pos.y,
 				size.x, size.y
@@ -601,8 +603,8 @@ export class Display2D implements Display
 
 		if (colorBorder != null)
 		{
-			this.graphics.strokeStyle = Color.systemColorGet(colorBorder);
-			this.graphics.strokeRect
+			g.strokeStyle = Color.systemColorGet(colorBorder);
+			g.strokeRect
 			(
 				pos.x, pos.y,
 				size.x, size.y
@@ -1086,10 +1088,6 @@ export class Display2D implements Display
 			this.graphics = this.canvas.getContext("2d");
 
 			this.fontSet(this.fontNameAndHeight);
-
-			// todo
-			// var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-			// var widthWithFontFallthrough = this.graphics.measureText(testString).width;
 
 			this._scaleFactor = null;
 			var scaleFactor = this.scaleFactor();

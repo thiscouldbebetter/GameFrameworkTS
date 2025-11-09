@@ -23,6 +23,11 @@ var ThisCouldBeBetter;
             clone() {
                 return new ControlStyle(this.name, this.colorScheme.clone(), this.soundScheme.clone(), this._drawBoxOfSizeAtPosWithColorsToDisplay);
             }
+            drawBoxOfSizeAtPosToDisplay(size, pos, display) {
+                var colorFill = this.colorBackground();
+                var colorBorder = this.colorBorder();
+                this.drawBoxOfSizeAtPosWithColorsToDisplay(size, pos, colorFill, colorBorder, false, display);
+            }
             drawBoxOfSizeAtPosWithColorsToDisplay(size, pos, colorFill, colorBorder, isHighlighted, display) {
                 if (this._drawBoxOfSizeAtPosWithColorsToDisplay == null) {
                     if (isHighlighted) {

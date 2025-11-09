@@ -176,6 +176,11 @@ export class ScriptUsingFunctionConstructor extends Script
 		this.codeAsString = codeAsString;
 	}
 
+	static fromCodeAsString(codeAsString: string): ScriptUsingFunctionConstructor
+	{
+		return new ScriptUsingFunctionConstructor(null, null, codeAsString);
+	}
+
 	static fromParameterNamesAndCodeAsString
 	(
 		parameterNames: string[],

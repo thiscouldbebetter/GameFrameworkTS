@@ -171,7 +171,7 @@ var ThisCouldBeBetter;
                 else {
                     var scriptToRunAsString = "( (u, cr) => " + isEnabledAsText + " )";
                     try {
-                        isEnabled = GameFramework.ScriptUsingEval.fromCodeAsString(scriptToRunAsString);
+                        isEnabled = GameFramework.ScriptUsingFunctionConstructor.fromCodeAsString(scriptToRunAsString);
                     }
                     catch (err) {
                         throw err;

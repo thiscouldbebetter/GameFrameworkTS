@@ -425,7 +425,7 @@ export class TalkNode //
 				"( (u, cr) => " + isEnabledAsText + " )";
 			try
 			{
-				isEnabled = ScriptUsingEval.fromCodeAsString(scriptToRunAsString);
+				isEnabled = ScriptUsingFunctionConstructor.fromCodeAsString(scriptToRunAsString);
 			}
 			catch (err)
 			{

@@ -103,6 +103,9 @@ var ThisCouldBeBetter;
                     parameterNames || [];
                 this.codeAsString = codeAsString;
             }
+            static fromCodeAsString(codeAsString) {
+                return new ScriptUsingFunctionConstructor(null, null, codeAsString);
+            }
             static fromParameterNamesAndCodeAsString(parameterNames, codeAsString) {
                 return new ScriptUsingFunctionConstructor(null, parameterNames, codeAsString);
             }

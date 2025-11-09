@@ -326,11 +326,14 @@ var ThisCouldBeBetter;
                 return childrenAreAllInitialized;
             }
             draw(universe, display, drawLoc, style) {
-                drawLoc = this._drawLoc.overwriteWith(drawLoc);
-                var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+                drawLoc =
+                    this._drawLoc
+                        .overwriteWith(drawLoc);
+                var drawPos = this._drawPos
+                    .overwriteWith(drawLoc.pos)
+                    .add(this.pos);
                 style = style || this.style(universe);
-                style.drawBoxOfSizeAtPosWithColorsToDisplay(this.size, drawPos, style.colorBackground(), style.colorBorder(), false, // isHighlighted,
-                display);
+                style.drawBoxOfSizeAtPosToDisplay(this.size, drawPos, display);
                 var children = this.children;
                 for (var i = 0; i < children.length; i++) {
                     var child = children[i];

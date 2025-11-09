@@ -603,15 +603,21 @@ export class ControlContainer extends ControlBase
 		style: ControlStyle
 	): void
 	{
-		drawLoc = this._drawLoc.overwriteWith(drawLoc);
-		var drawPos = this._drawPos.overwriteWith(drawLoc.pos).add(this.pos);
+		drawLoc =
+			this._drawLoc
+				.overwriteWith(drawLoc);
+
+		var drawPos =
+			this._drawPos
+				.overwriteWith(drawLoc.pos)
+				.add(this.pos);
+
 		style = style || this.style(universe);
 
-		style.drawBoxOfSizeAtPosWithColorsToDisplay
+		style.drawBoxOfSizeAtPosToDisplay
 		(
-			this.size, drawPos,
-			style.colorBackground(), style.colorBorder(),
-			false, // isHighlighted,
+			this.size,
+			drawPos,
 			display
 		);
 
