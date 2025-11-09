@@ -43,8 +43,8 @@ export class Vehicle extends EntityPropertyBase<Vehicle>
 
 			var placeDefn = place.defn(world);
 			var actionsByName = placeDefn.actionsByName;
-			var inputHelper = universe.inputHelper;
-			var actionsToPerform = inputHelper.actionsFromInput
+			var inputTracker = universe.inputTracker;
+			var actionsToPerform = inputTracker.actionsFromInput
 			(
 				actionsByName, placeDefn.actionToInputsMappingsByInputName
 			);

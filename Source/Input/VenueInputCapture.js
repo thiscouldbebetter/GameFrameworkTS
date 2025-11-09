@@ -20,13 +20,13 @@ var ThisCouldBeBetter;
             initialize(universe) { }
             initializeIsComplete() { return true; }
             updateForTimerTick(universe) {
-                var inputHelper = universe.inputHelper;
+                var inputTracker = universe.inputTracker;
                 if (this.isFirstTime) {
                     this.isFirstTime = false;
-                    inputHelper.inputsRemoveAll();
+                    inputTracker.inputsRemoveAll();
                 }
                 else {
-                    var inputsPressed = inputHelper.inputsPressed;
+                    var inputsPressed = inputTracker.inputsPressed;
                     for (var i = 0; i < inputsPressed.length; i++) {
                         var inputPressed = inputsPressed[i];
                         if (inputPressed.name.startsWith("Mouse") == false) {

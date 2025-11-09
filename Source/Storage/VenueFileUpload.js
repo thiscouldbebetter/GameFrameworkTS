@@ -73,8 +73,8 @@ var ThisCouldBeBetter;
             }
             initializeIsComplete() { return true; }
             updateForTimerTick(universe) {
-                var inputHelper = universe.inputHelper;
-                var inputsPressed = inputHelper.inputsPressed;
+                var inputTracker = universe.inputTracker;
+                var inputsPressed = inputTracker.inputsPressed;
                 for (var i = 0; i < inputsPressed.length; i++) {
                     var inputPressed = inputsPressed[i];
                     if (inputPressed.isActive == true) {

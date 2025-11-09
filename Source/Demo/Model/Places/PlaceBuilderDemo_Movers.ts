@@ -1497,9 +1497,10 @@ class PlaceBuilderDemo_Movers
 				var size = universe.display.sizeInPixels;
 				var entity = uwpe.entity;
 				var venuePrev = universe.venueCurrent();
-				var isMenu = universe.inputHelper.inputsPressed.some
+				var inputs = Input.Instances();
+				var isMenu = universe.inputTracker.inputsPressed.some
 				(
-					x => x.name == "Escape" || x.name == "Tab" // hack
+					x => x.name == inputs.Escape.name || x.name == inputs.Tab.name // hack
 				);
 
 				var returnValue;
@@ -1629,10 +1630,10 @@ class PlaceBuilderDemo_Movers
 		var world = uwpe.world;
 		var entityPlayer = uwpe.entity;
 
-		var inputHelper = universe.inputHelper;
-		if (inputHelper.isMouseClicked())
+		var inputTracker = universe.inputTracker;
+		if (inputTracker.mouseIsClicked() )
 		{
-			inputHelper.mouseClickedSet(false);
+			inputTracker.mouseIsClickedSet(false);
 
 			var selector = Selector.of(entityPlayer);
 			selector.entityAtMouseClickPosSelect(uwpe);
@@ -1642,7 +1643,7 @@ class PlaceBuilderDemo_Movers
 		var actionsByName = placeDefn.actionsByName;
 		var actionToInputsMappingsByInputName =
 			placeDefn.actionToInputsMappingsByInputName;
-		var actionsToPerform = inputHelper.actionsFromInput
+		var actionsToPerform = inputTracker.actionsFromInput
 		(
 			actionsByName, actionToInputsMappingsByInputName
 		);

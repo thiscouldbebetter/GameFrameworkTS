@@ -118,8 +118,8 @@ export class VenueFileUpload implements Venue
 
 	updateForTimerTick(universe: Universe): void
 	{
-		var inputHelper = universe.inputHelper;
-		var inputsPressed = inputHelper.inputsPressed;
+		var inputTracker = universe.inputTracker;
+		var inputsPressed = inputTracker.inputsPressed;
 		for (var i = 0; i < inputsPressed.length; i++)
 		{
 			var inputPressed = inputsPressed[i];

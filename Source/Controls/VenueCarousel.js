@@ -73,8 +73,8 @@ var ThisCouldBeBetter;
                     this.advanceToSlideNext(universe);
                 }
                 else {
-                    var inputHelper = universe.inputHelper;
-                    var inputsActive = inputHelper.inputsActive();
+                    var inputTracker = universe.inputTracker;
+                    var inputsActive = inputTracker.inputsActive();
                     for (var i = 0; i < inputsActive.length; i++) {
                         var inputActive = inputsActive[i];
                         if (inputActive == this.inputToAdvanceToNextSlide) {

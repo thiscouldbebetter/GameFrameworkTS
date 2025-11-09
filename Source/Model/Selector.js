@@ -88,10 +88,10 @@ var ThisCouldBeBetter;
                 return entityToSelect;
             }
             mouseClickPosAbsoluteGet(uwpe) {
-                return this.mousePosConvertToAbsolute(uwpe, uwpe.universe.inputHelper.mouseClickPos);
+                return this.mousePosConvertToAbsolute(uwpe, uwpe.universe.inputTracker.mouseClickPos);
             }
             mouseMovePosAbsoluteGet(uwpe) {
-                return this.mousePosConvertToAbsolute(uwpe, uwpe.universe.inputHelper.mouseMovePos);
+                return this.mousePosConvertToAbsolute(uwpe, uwpe.universe.inputTracker.mouseMovePos);
             }
             mousePosConvertToAbsolute(uwpe, mousePosRelativeToCameraView) {
                 var mousePosAbsolute = mousePosRelativeToCameraView.clone();

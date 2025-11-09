@@ -2,5 +2,5 @@
 // Input.
 var ActionToInputsMapping = gf.ActionToInputsMapping;
 var Input = gf.Input;
-var InputHelper = gf.InputHelper;
+var InputTracker = gf.InputTracker;
 var UserInputListener = gf.UserInputListener;

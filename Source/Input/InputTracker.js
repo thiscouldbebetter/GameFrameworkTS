@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class InputHelper {
+        class InputTracker {
             constructor() {
                 // Helper variables.
                 this.mouseClickPos = GameFramework.Coords.create();
@@ -23,8 +23,8 @@ var ThisCouldBeBetter;
                 this.inputsPressed = [];
                 this.inputsPressedByName = new Map();
                 this.isEnabled = true;
-                this.isMouseMovementTracked = true;
-                this.isMouseWheelTracked = false;
+                this.mouseMovementIsTracked = true;
+                this.mouseWheelIsTracked = false;
             }
             actionsFromInput(actionsByName, actionToInputsMappingsByInputName) {
                 var actionsSoFar = new Array();
@@ -55,15 +55,15 @@ var ThisCouldBeBetter;
                 d.body.onkeydown = null;
                 d.body.onkeyup = null;
                 var platformHelper = universe.platformHelper;
-                var divMain = (platformHelper == null
-                    ? d.getElementById("divMain")
-                    : platformHelper.divMain);
-                divMain.onmousedown = null;
-                divMain.onmouseup = null;
-                divMain.onmousemove = null;
-                divMain.onwheel = null;
-                divMain.ontouchstart = null;
-                divMain.ontouchend = null;
+                var divDisplay = (platformHelper == null
+                    ? d.getElementById("divDisplay")
+                    : platformHelper.divDisplay);
+                divDisplay.onmousedown = null;
+                divDisplay.onmouseup = null;
+                divDisplay.onmousemove = null;
+                divDisplay.onwheel = null;
+                divDisplay.ontouchstart = null;
+                divDisplay.ontouchend = null;
                 return null;
             }
             initialize(universe) {
@@ -78,6 +78,7 @@ var ThisCouldBeBetter;
                     universe.platformHelper.platformableAdd(this);
                 }
                 this.gamepadsCheck();
+                return this;
             }
             inputAdd(inputPressed) {
                 var inputPressedName = inputPressed.name;
@@ -104,7 +105,7 @@ var ThisCouldBeBetter;
                     this.inputRemove(input);
                 }
             }
-            isMouseClicked() {
+            mouseIsClicked() {
                 var returnValue = false;
                 var inputNameMouseClick = GameFramework.Input.Instances().MouseClick.name;
                 var inputPressed = this.inputsPressedByName.get(inputNameMouseClick);
@@ -112,7 +113,7 @@ var ThisCouldBeBetter;
                     (inputPressed != null && inputPressed.isActive);
                 return returnValue;
             }
-            mouseClickedSet(value) {
+            mouseIsClickedSet(value) {
                 var inputMouseClick = GameFramework.Input.Instances().MouseClick;
                 if (value == true) {
                     this.inputAdd(inputMouseClick);
@@ -226,7 +227,7 @@ var ThisCouldBeBetter;
                 this.inputRemove(GameFramework.Input.Instances().MouseClick);
             }
             handleEventMouseWheel(event) {
-                if (this.isMouseWheelTracked) {
+                if (this.mouseWheelIsTracked) {
                     var wheelMovementAmountInPixels = event.deltaY; // Seems a strange unit.
                     var inputs = GameFramework.Input.Instances();
                     var inputToAdd = wheelMovementAmountInPixels > 0
@@ -266,25 +267,25 @@ var ThisCouldBeBetter;
             }
             // Platformable.
             toDomElement(platformHelper) {
-                document.body.onkeydown = this.handleEventKeyDown.bind(this);
-                document.body.onkeyup = this.handleEventKeyUp.bind(this);
-                var divMain = (platformHelper == null
-                    ? document.getElementById("divMain")
-                    : platformHelper.divMain);
-                divMain.onmousedown = this.handleEventMouseDown.bind(this);
-                divMain.onmouseup = this.handleEventMouseUp.bind(this);
-                divMain.onmousemove =
-                    this.isMouseMovementTracked
+                var d = document;
+                d.body.onkeydown = this.handleEventKeyDown.bind(this);
+                d.body.onkeyup = this.handleEventKeyUp.bind(this);
+                var divDisplay = (platformHelper == null
+                    ? d.getElementById("divDisplay")
+                    : platformHelper.divDisplay);
+                divDisplay.onmousedown = this.handleEventMouseDown.bind(this);
+                divDisplay.onmouseup = this.handleEventMouseUp.bind(this);
+                divDisplay.onmousemove =
+                    this.mouseMovementIsTracked
                         ? this.handleEventMouseMove.bind(this)
                         : null;
-                divMain.onwheel =
-                    this.handleEventMouseWheel.bind(this);
-                divMain.ontouchstart = this.handleEventTouchStart.bind(this);
-                divMain.ontouchend = this.handleEventTouchEnd.bind(this);
+                divDisplay.onwheel = this.handleEventMouseWheel.bind(this);
+                divDisplay.ontouchstart = this.handleEventTouchStart.bind(this);
+                divDisplay.ontouchend = this.handleEventTouchEnd.bind(this);
                 return null;
             }
         }
-        GameFramework.InputHelper = InputHelper;
+        GameFramework.InputTracker = InputTracker;
         class InputGamepad {
             constructor(index, systemGamepad) {
                 this.index = index;

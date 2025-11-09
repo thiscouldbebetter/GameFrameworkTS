@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
             platformableAdd(platformable) {
                 var platformableAsDomElement = platformable.toDomElement(this);
                 if (platformableAsDomElement != null) {
-                    this.divMain.appendChild(platformableAsDomElement);
+                    this.divDisplay.appendChild(platformableAsDomElement);
                 }
             }
             platformableHide(platformable) {
@@ -20,8 +20,8 @@ var ThisCouldBeBetter;
             platformableRemove(platformable) {
                 var platformableAsDomElement = platformable.toDomElement(this);
                 if (platformableAsDomElement != null) {
-                    if (platformableAsDomElement.parentElement == this.divMain) {
-                        this.divMain.removeChild(platformableAsDomElement);
+                    if (platformableAsDomElement.parentElement == this.divDisplay) {
+                        this.divDisplay.removeChild(platformableAsDomElement);
                     }
                 }
             }
@@ -29,20 +29,26 @@ var ThisCouldBeBetter;
                 platformable.toDomElement(this).style.display = null;
             }
             initialize(universe) {
-                var divMain = this.divMain;
-                if (divMain == null) {
+                var divDisplay = this.divDisplay;
+                if (divDisplay == null) {
                     var d = document;
-                    divMain = d.createElement("div");
-                    divMain.id = "divMain";
-                    divMain.style.position = "absolute";
-                    divMain.style.left = "50%";
-                    divMain.style.top = "50%";
-                    d.body.appendChild(divMain);
-                    this.divMain = divMain;
+                    var divDisplay = d.getElementById("divDisplay");
+                    if (divDisplay == null) {
+                        divDisplay = d.createElement("div");
+                        divDisplay.id = "divDisplay";
+                    }
+                    else {
+                        divDisplay.innerHTML = "";
+                    }
+                    divDisplay.style.position = "absolute";
+                    divDisplay.style.left = "50%";
+                    divDisplay.style.top = "50%";
+                    d.body.appendChild(divDisplay);
+                    this.divDisplay = divDisplay;
                 }
                 var display = universe.display;
-                divMain.style.marginLeft = "" + (0 - display.sizeInPixels.x / 2);
-                divMain.style.marginTop = "" + (0 - display.sizeInPixels.y / 2);
+                divDisplay.style.marginLeft = "" + (0 - display.sizeInPixels.x / 2);
+                divDisplay.style.marginTop = "" + (0 - display.sizeInPixels.y / 2);
             }
         }
         GameFramework.PlatformHelper = PlatformHelper;

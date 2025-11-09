@@ -181,8 +181,8 @@ export class VenueControls implements Venue
 	{
 		this.draw(universe);
 
-		var inputHelper = universe.inputHelper;
-		var inputsPressed = inputHelper.inputsPressed;
+		var inputTracker = universe.inputTracker;
+		var inputsPressed = inputTracker.inputsPressed;
 
 		for (var i = 0; i < inputsPressed.length; i++)
 		{
@@ -199,7 +199,7 @@ export class VenueControls implements Venue
 
 	updateForTimerTick_InputPressedIsActive(universe: Universe, inputPressed: Input): void
 	{
-		var inputHelper = universe.inputHelper;
+		var inputTracker = universe.inputTracker;
 		var inputs = Input.Instances();
 
 		var inputPressedName = inputPressed.name;
@@ -236,7 +236,7 @@ export class VenueControls implements Venue
 			var mouseClickPos = this._mouseClickPos;
 
 			mouseClickPos
-				.overwriteWith(inputHelper.mouseClickPos)
+				.overwriteWith(inputTracker.mouseClickPos)
 				.divide(scaleFactor);
 
 			var wasClickHandled =
@@ -252,11 +252,11 @@ export class VenueControls implements Venue
 			var mouseMovePos = this._mouseMovePos;
 
 			mouseMovePos
-				.overwriteWith(inputHelper.mouseMovePos)
+				.overwriteWith(inputTracker.mouseMovePos)
 				.divide(scaleFactor);
 
 			this._mouseMovePosPrev
-				.overwriteWith(inputHelper.mouseMovePosPrev)
+				.overwriteWith(inputTracker.mouseMovePosPrev)
 				.divide(scaleFactor);
 
 			this.controlRoot

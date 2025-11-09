@@ -188,7 +188,7 @@ export class Selector extends EntityPropertyBase<Selector>
 		return this.mousePosConvertToAbsolute
 		(
 			uwpe,
-			uwpe.universe.inputHelper.mouseClickPos
+			uwpe.universe.inputTracker.mouseClickPos
 		);
 	}
 
@@ -197,7 +197,7 @@ export class Selector extends EntityPropertyBase<Selector>
 		return this.mousePosConvertToAbsolute
 		(
 			uwpe,
-			uwpe.universe.inputHelper.mouseMovePos
+			uwpe.universe.inputTracker.mouseMovePos
 		);
 	}
 

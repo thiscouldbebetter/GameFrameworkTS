@@ -74,8 +74,8 @@ var ThisCouldBeBetter;
             }
             updateForTimerTick(universe) {
                 this.draw(universe);
-                var inputHelper = universe.inputHelper;
-                var inputsPressed = inputHelper.inputsPressed;
+                var inputTracker = universe.inputTracker;
+                var inputsPressed = inputTracker.inputsPressed;
                 for (var i = 0; i < inputsPressed.length; i++) {
                     var inputPressed = inputsPressed[i];
                     if (inputPressed.isActive) {
@@ -84,7 +84,7 @@ var ThisCouldBeBetter;
                 }
             }
             updateForTimerTick_InputPressedIsActive(universe, inputPressed) {
-                var inputHelper = universe.inputHelper;
+                var inputTracker = universe.inputTracker;
                 var inputs = GameFramework.Input.Instances();
                 var inputPressedName = inputPressed.name;
                 var mapping = this.actionToInputsMappingByInputName(inputPressedName);
@@ -108,7 +108,7 @@ var ThisCouldBeBetter;
                 else if (inputPressedName == inputs.MouseClick.name) {
                     var mouseClickPos = this._mouseClickPos;
                     mouseClickPos
-                        .overwriteWith(inputHelper.mouseClickPos)
+                        .overwriteWith(inputTracker.mouseClickPos)
                         .divide(scaleFactor);
                     var wasClickHandled = this.controlRoot.mouseClick(mouseClickPos);
                     if (wasClickHandled) {
@@ -118,10 +118,10 @@ var ThisCouldBeBetter;
                 else if (inputPressedName == inputs.MouseMove.name) {
                     var mouseMovePos = this._mouseMovePos;
                     mouseMovePos
-                        .overwriteWith(inputHelper.mouseMovePos)
+                        .overwriteWith(inputTracker.mouseMovePos)
                         .divide(scaleFactor);
                     this._mouseMovePosPrev
-                        .overwriteWith(inputHelper.mouseMovePosPrev)
+                        .overwriteWith(inputTracker.mouseMovePosPrev)
                         .divide(scaleFactor);
                     this.controlRoot
                         .mouseMove(mouseMovePos);

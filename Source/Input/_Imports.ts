@@ -3,5 +3,5 @@
 // Input.
 import ActionToInputsMapping = gf.ActionToInputsMapping;
 import Input = gf.Input;
-import InputHelper = gf.InputHelper;
+import InputTracker = gf.InputTracker;
 import UserInputListener = gf.UserInputListener;

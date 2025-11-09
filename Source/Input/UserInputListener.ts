@@ -43,14 +43,14 @@ export class UserInputListener extends Entity
 		var world = uwpe.world;
 		var place = uwpe.place;
 
-		var inputHelper = universe.inputHelper;
+		var inputTracker = universe.inputTracker;
 
 		var placeDefn = place.defn(world);
 		var actionsByName = placeDefn.actionsByName;
 		var actionToInputsMappingsByInputName =
 			placeDefn.actionToInputsMappingsByInputName;
 
-		var actionsToPerform = inputHelper.actionsFromInput
+		var actionsToPerform = inputTracker.actionsFromInput
 		(
 			actionsByName, actionToInputsMappingsByInputName
 		);

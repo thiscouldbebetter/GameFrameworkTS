@@ -11,14 +11,14 @@ export class PlatformHelper
 		return new PlatformHelper();
 	}
 
-	divMain: HTMLDivElement;
+	divDisplay: HTMLDivElement;
 
 	platformableAdd(platformable: Platformable): void
 	{
 		var platformableAsDomElement = platformable.toDomElement(this);
 		if (platformableAsDomElement != null)
 		{
-			this.divMain.appendChild(platformableAsDomElement);
+			this.divDisplay.appendChild(platformableAsDomElement);
 		}
 	}
 
@@ -32,9 +32,9 @@ export class PlatformHelper
 		var platformableAsDomElement = platformable.toDomElement(this);
 		if (platformableAsDomElement != null)
 		{
-			if (platformableAsDomElement.parentElement == this.divMain)
+			if (platformableAsDomElement.parentElement == this.divDisplay)
 			{
-				this.divMain.removeChild(platformableAsDomElement);
+				this.divDisplay.removeChild(platformableAsDomElement);
 			}
 		}
 	}
@@ -46,21 +46,29 @@ export class PlatformHelper
 
 	initialize(universe: Universe): void
 	{
-		var divMain = this.divMain;
-		if (divMain == null)
+		var divDisplay = this.divDisplay;
+		if (divDisplay == null)
 		{
 			var d = document;
-			divMain = d.createElement("div");
-			divMain.id = "divMain";
-			divMain.style.position = "absolute";
-			divMain.style.left = "50%";
-			divMain.style.top = "50%";
-			d.body.appendChild(divMain);
-			this.divMain = divMain;
+			var divDisplay = d.getElementById("divDisplay") as HTMLDivElement;
+			if (divDisplay == null)
+			{
+				divDisplay = d.createElement("div");
+				divDisplay.id = "divDisplay";
+			}
+			else
+			{
+				divDisplay.innerHTML = "";
+			}
+			divDisplay.style.position = "absolute";
+			divDisplay.style.left = "50%";
+			divDisplay.style.top = "50%";
+			d.body.appendChild(divDisplay);
+			this.divDisplay = divDisplay;
 		}
 		var display = universe.display;
-		divMain.style.marginLeft = "" + (0 - display.sizeInPixels.x / 2);
-		divMain.style.marginTop = "" + (0 - display.sizeInPixels.y / 2);
+		divDisplay.style.marginLeft = "" + (0 - display.sizeInPixels.x / 2);
+		divDisplay.style.marginTop = "" + (0 - display.sizeInPixels.y / 2);
 	}
 }
 

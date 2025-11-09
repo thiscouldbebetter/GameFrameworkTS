@@ -18,11 +18,11 @@ var ThisCouldBeBetter;
                 var universe = uwpe.universe;
                 var world = uwpe.world;
                 var place = uwpe.place;
-                var inputHelper = universe.inputHelper;
+                var inputTracker = universe.inputTracker;
                 var placeDefn = place.defn(world);
                 var actionsByName = placeDefn.actionsByName;
                 var actionToInputsMappingsByInputName = placeDefn.actionToInputsMappingsByInputName;
-                var actionsToPerform = inputHelper.actionsFromInput(actionsByName, actionToInputsMappingsByInputName);
+                var actionsToPerform = inputTracker.actionsFromInput(actionsByName, actionToInputsMappingsByInputName);
                 for (var i = 0; i < actionsToPerform.length; i++) {
                     var action = actionsToPerform[i];
                     action.perform(uwpe);

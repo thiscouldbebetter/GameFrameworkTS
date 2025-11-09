@@ -103,8 +103,7 @@ var ThisCouldBeBetter;
                 }
                 venueInitial = this.controlBuilder.venueTransitionalFromTo(venueInitial, venueInitial);
                 this.venueNextSet(venueInitial);
-                this.inputHelper = new GameFramework.InputHelper();
-                this.inputHelper.initialize(this);
+                this.inputTracker = new GameFramework.InputTracker().initialize(this);
                 var universe = this;
                 //this.mediaLibrary.shouldLoadAllItemsBeforehandSet(false); // todo
                 this.mediaLibrary.loadItemsBeforehandIfNecessary(() => universeInitialized(universe));
@@ -131,7 +130,7 @@ var ThisCouldBeBetter;
             }
             stop() {
                 this.timerHelper.finalize();
-                this.inputHelper.finalize(this);
+                this.inputTracker.finalize(this);
             }
             toUniverseWorldPlaceEntities() {
                 return GameFramework.UniverseWorldPlaceEntities.fromUniverse(this);
@@ -140,7 +139,7 @@ var ThisCouldBeBetter;
                 return this.toUniverseWorldPlaceEntities();
             }
             updateForTimerTick() {
-                this.inputHelper.updateForTimerTick(this);
+                this.inputTracker.updateForTimerTick(this);
                 var venueNext = this.venueNext();
                 if (venueNext != null) {
                     var venueCurrent = this.venueCurrent();

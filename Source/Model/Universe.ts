@@ -19,7 +19,7 @@ export class Universe
 	displayRecorder: DisplayRecorder;
 	entityBuilder: EntityBuilder;
 	idHelper: IDHelper;
-	inputHelper: InputHelper;
+	inputTracker: InputTracker;
 	platformHelper: PlatformHelper;
 	profileHelper: ProfileHelper;
 	randomizer: RandomizerSystem;
@@ -247,8 +247,7 @@ export class Universe
 
 		this.venueNextSet(venueInitial);
 
-		this.inputHelper = new InputHelper();
-		this.inputHelper.initialize(this);
+		this.inputTracker = new InputTracker().initialize(this);
 
 		var universe = this;
 		//this.mediaLibrary.shouldLoadAllItemsBeforehandSet(false); // todo
@@ -295,7 +294,7 @@ export class Universe
 	stop(): void
 	{
 		this.timerHelper.finalize();
-		this.inputHelper.finalize(this);
+		this.inputTracker.finalize(this);
 	}
 
 	toUniverseWorldPlaceEntities(): UniverseWorldPlaceEntities
@@ -310,7 +309,7 @@ export class Universe
 
 	updateForTimerTick(): void
 	{
-		this.inputHelper.updateForTimerTick(this);
+		this.inputTracker.updateForTimerTick(this);
 
 		var venueNext = this.venueNext();
 		if (venueNext != null)

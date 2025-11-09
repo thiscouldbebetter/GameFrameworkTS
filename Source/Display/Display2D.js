@@ -491,13 +491,15 @@ var ThisCouldBeBetter;
                     // hack - Allows use of this class
                     // without including PlatformHelper or Universe.
                     var domElement = this.toDomElement();
-                    var divMain = document.getElementById("divMain");
-                    if (divMain == null) {
-                        divMain = document.createElement("div");
-                        divMain.id = "divMain";
-                        document.body.appendChild(divMain);
+                    var d = document;
+                    var divDisplay = d.getElementById("divDisplay");
+                    if (divDisplay == null) {
+                        divDisplay = d.createElement("div");
+                        divDisplay.id = "divDisplay";
+                        d.body.appendChild(divDisplay);
                     }
-                    divMain.appendChild(domElement);
+                    divDisplay.innerHTML = "";
+                    divDisplay.appendChild(domElement);
                 }
                 else {
                     universe.platformHelper.platformableAdd(this);

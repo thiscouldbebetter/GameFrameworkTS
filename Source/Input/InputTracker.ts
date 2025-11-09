@@ -2,7 +2,7 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class InputHelper implements Platformable
+export class InputTracker implements Platformable
 {
 	mouseClickPos: Coords;
 	mouseMovePos: Coords;
@@ -16,8 +16,8 @@ export class InputHelper implements Platformable
 	keysToPreventDefaultsFor: string[];
 
 	isEnabled: boolean;
-	isMouseMovementTracked: boolean;
-	isMouseWheelTracked: boolean;
+	mouseMovementIsTracked: boolean;
+	mouseWheelIsTracked: boolean;
 
 	constructor()
 	{
@@ -43,8 +43,8 @@ export class InputHelper implements Platformable
 		this.inputsPressedByName = new Map<string, Input>();
 
 		this.isEnabled = true;
-		this.isMouseMovementTracked = true;
-		this.isMouseWheelTracked = false;
+		this.mouseMovementIsTracked = true;
+		this.mouseWheelIsTracked = false;
 	}
 
 	actionsFromInput
@@ -93,25 +93,25 @@ export class InputHelper implements Platformable
 		d.body.onkeydown = null;
 		d.body.onkeyup = null;
 		var platformHelper = universe.platformHelper;
-		var divMain =
+		var divDisplay =
 		(
 			platformHelper == null
-			? d.getElementById("divMain")
-			: platformHelper.divMain
+			? d.getElementById("divDisplay")
+			: platformHelper.divDisplay
 		);
 
-		divMain.onmousedown = null;
-		divMain.onmouseup = null;
-		divMain.onmousemove = null;
-		divMain.onwheel = null;
+		divDisplay.onmousedown = null;
+		divDisplay.onmouseup = null;
+		divDisplay.onmousemove = null;
+		divDisplay.onwheel = null;
 
-		divMain.ontouchstart = null;
-		divMain.ontouchend = null;
+		divDisplay.ontouchstart = null;
+		divDisplay.ontouchend = null;
 
 		return null;
 	}
 
-	initialize(universe: Universe): void
+	initialize(universe: Universe): InputTracker
 	{
 		this.inputsPressed = [];
 		this.gamepadsConnected = [];
@@ -128,6 +128,8 @@ export class InputHelper implements Platformable
 		}
 
 		this.gamepadsCheck();
+
+		return this;
 	}
 
 	inputAdd(inputPressed: Input): void
@@ -166,7 +168,7 @@ export class InputHelper implements Platformable
 		}
 	}
 
-	isMouseClicked(): boolean
+	mouseIsClicked(): boolean
 	{
 		var returnValue = false;
 
@@ -181,7 +183,7 @@ export class InputHelper implements Platformable
 		return returnValue;
 	}
 
-	mouseClickedSet(value: boolean): void
+	mouseIsClickedSet(value: boolean): void
 	{
 		var inputMouseClick =
 			Input.Instances().MouseClick;
@@ -360,7 +362,7 @@ export class InputHelper implements Platformable
 
 	handleEventMouseWheel(event: WheelEvent): void
 	{
-		if (this.isMouseWheelTracked)
+		if (this.mouseWheelIsTracked)
 		{
 			var wheelMovementAmountInPixels = event.deltaY; // Seems a strange unit.
 			var inputs = Input.Instances();
@@ -426,27 +428,28 @@ export class InputHelper implements Platformable
 
 	toDomElement(platformHelper: PlatformHelper): HTMLElement
 	{
-		document.body.onkeydown = this.handleEventKeyDown.bind(this);
-		document.body.onkeyup = this.handleEventKeyUp.bind(this);
-		var divMain =
+		var d = document;
+
+		d.body.onkeydown = this.handleEventKeyDown.bind(this);
+		d.body.onkeyup = this.handleEventKeyUp.bind(this);
+		var divDisplay =
 		(
 			platformHelper == null
-			? document.getElementById("divMain")
-			: platformHelper.divMain
+			? d.getElementById("divDisplay")
+			: platformHelper.divDisplay
 		);
 
-		divMain.onmousedown = this.handleEventMouseDown.bind(this);
-		divMain.onmouseup = this.handleEventMouseUp.bind(this);
-		divMain.onmousemove =
-			this.isMouseMovementTracked
+		divDisplay.onmousedown = this.handleEventMouseDown.bind(this);
+		divDisplay.onmouseup = this.handleEventMouseUp.bind(this);
+		divDisplay.onmousemove =
+			this.mouseMovementIsTracked
 			? this.handleEventMouseMove.bind(this)
 			: null;
 
-		divMain.onwheel =
-			this.handleEventMouseWheel.bind(this);
+		divDisplay.onwheel = this.handleEventMouseWheel.bind(this);
 
-		divMain.ontouchstart = this.handleEventTouchStart.bind(this);
-		divMain.ontouchend = this.handleEventTouchEnd.bind(this);
+		divDisplay.ontouchstart = this.handleEventTouchStart.bind(this);
+		divDisplay.ontouchend = this.handleEventTouchEnd.bind(this);
 
 		return null;
 	}

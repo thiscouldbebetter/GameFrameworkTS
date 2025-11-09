@@ -295,7 +295,7 @@ export class PlaceBase implements Place, Loadable
 		uwpe.placeSet(this);
 		var universe = uwpe.universe;
 		this.entitiesRemove(uwpe);
-		universe.inputHelper.inputsRemoveAll();
+		universe.inputTracker.inputsRemoveAll();
 		var entities = this._entities;
 		for (var i = 0; i < entities.length; i++)
 		{

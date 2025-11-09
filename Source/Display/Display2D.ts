@@ -999,14 +999,16 @@ export class Display2D implements Display
 			// hack - Allows use of this class
 			// without including PlatformHelper or Universe.
 			var domElement = this.toDomElement();
-			var divMain = document.getElementById("divMain");
-			if (divMain == null)
+			var d = document;
+			var divDisplay = d.getElementById("divDisplay");
+			if (divDisplay == null)
 			{
-				divMain = document.createElement("div");
-				divMain.id = "divMain";
-				document.body.appendChild(divMain);
+				divDisplay = d.createElement("div");
+				divDisplay.id = "divDisplay";
+				d.body.appendChild(divDisplay);
 			}
-			divMain.appendChild(domElement);
+			divDisplay.innerHTML = "";
+			divDisplay.appendChild(domElement);
 		}
 		else
 		{

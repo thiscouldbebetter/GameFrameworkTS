@@ -72,16 +72,16 @@ export class VenueVideo implements Venue
 		{
 			var shouldVideoBeStopped = false;
 
-			var inputHelper = universe.inputHelper;
-			if (inputHelper.isMouseClicked())
+			var inputTracker = universe.inputTracker;
+			if (inputTracker.mouseIsClicked())
 			{
-				inputHelper.mouseClickedSet(false);
+				inputTracker.mouseIsClickedSet(false);
 				shouldVideoBeStopped = true;
 			}
 			else
 			{
 				var controlActionNames = ControlActionNames.Instances();
-				var inputsPressed = inputHelper.inputsPressed;
+				var inputsPressed = inputTracker.inputsPressed;
 				for (var i = 0; i < inputsPressed.length; i++)
 				{
 					var inputPressed = inputsPressed[i];

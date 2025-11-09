@@ -38,14 +38,14 @@ var ThisCouldBeBetter;
                 }
                 if (this.video.isFinished == false) {
                     var shouldVideoBeStopped = false;
-                    var inputHelper = universe.inputHelper;
-                    if (inputHelper.isMouseClicked()) {
-                        inputHelper.mouseClickedSet(false);
+                    var inputTracker = universe.inputTracker;
+                    if (inputTracker.mouseIsClicked()) {
+                        inputTracker.mouseIsClickedSet(false);
                         shouldVideoBeStopped = true;
                     }
                     else {
                         var controlActionNames = GameFramework.ControlActionNames.Instances();
-                        var inputsPressed = inputHelper.inputsPressed;
+                        var inputsPressed = inputTracker.inputsPressed;
                         for (var i = 0; i < inputsPressed.length; i++) {
                             var inputPressed = inputsPressed[i];
                             if (inputPressed.isActive) {
