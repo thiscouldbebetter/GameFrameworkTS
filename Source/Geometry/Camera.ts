@@ -101,7 +101,6 @@ export class Camera extends EntityPropertyBase<Camera>
 		);
 	}
 
-
 	static fromViewSizeDispositionAndEntitiesInViewSort
 	(
 		viewSize: Coords,

@@ -6,7 +6,7 @@ var ThisCouldBeBetter;
         class Universe {
             constructor(name, version, timerHelper, display, soundHelper, mediaLibrary, controlBuilder, profileHelper, worldCreator) {
                 this.name = name || "Untitled";
-                this.version = version || "no_version_specified";
+                this.version = version || "Started: " + GameFramework.DateTime.now().toStringYYYYMMDD_HHMM();
                 this.timerHelper = timerHelper || GameFramework.TimerHelper.default();
                 this.display = display || GameFramework.Display2D.default();
                 this.soundHelper = soundHelper || new GameFramework.SoundHelperLive();
@@ -48,6 +48,15 @@ var ThisCouldBeBetter;
                 null, // profileHelper
                 null // worldCreator
                 );
+                return universe;
+            }
+            static fromNameDisplayMediaLibraryAndWorldCreator(name, display, mediaLibrary, worldCreator) {
+                var universe = Universe.create(name, null, // version
+                null, // timerHelper
+                display, null, // soundHelper,
+                mediaLibrary, null, // controlBuilder
+                null, // profileHelper
+                worldCreator);
                 return universe;
             }
             static fromNameMediaLibraryAndWorldCreator(name, mediaLibrary, worldCreator) {

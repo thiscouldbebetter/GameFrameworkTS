@@ -30,6 +30,15 @@ var ThisCouldBeBetter;
                     && this.seconds == other.seconds);
                 return returnValue;
             }
+            toStringMMDD_HHMM() {
+                var returnValue = ""
+                    + GameFramework.StringHelper.padStart("" + this.month, 2, "0")
+                    + GameFramework.StringHelper.padStart("" + this.day, 2, "0")
+                    + "-"
+                    + GameFramework.StringHelper.padStart("" + this.hours, 2, "0")
+                    + GameFramework.StringHelper.padStart("" + this.minutes, 2, "0");
+                return returnValue;
+            }
             toStringMMDD_HHMM_SS() {
                 var returnValue = ""
                     + GameFramework.StringHelper.padStart("" + this.month, 2, "0")
@@ -86,8 +95,11 @@ var ThisCouldBeBetter;
                     + "/" + GameFramework.StringHelper.padStart("" + this.day, 2, "0");
                 return returnValue;
             }
+            toStringYYYYMMDD_HHMM() {
+                return this.year + this.toStringMMDD_HHMM();
+            }
             toStringYYYYMMDD_HHMM_SS() {
-                return this.year + "-" + this.toStringMMDD_HHMM_SS();
+                return this.year + this.toStringMMDD_HHMM_SS();
             }
             toStringYYYY_MM_DD_HH_MM_SS() {
                 var returnValue = "" + this.year

@@ -47,7 +47,7 @@ export class Universe
 	)
 	{
 		this.name = name || "Untitled";
-		this.version = version || "no_version_specified";
+		this.version = version || "Started: " + DateTime.now().toStringYYYYMMDD_HHMM();
 		this.timerHelper = timerHelper || TimerHelper.default();
 		this.display = display || Display2D.default();
 		this.soundHelper = soundHelper || new SoundHelperLive();
@@ -127,6 +127,30 @@ export class Universe
 			null, // controlBuilder
 			null, // profileHelper
 			null // worldCreator
+		);
+
+		return universe;
+	}
+
+	static fromNameDisplayMediaLibraryAndWorldCreator
+	(
+		name: string,
+		display: Display,
+		mediaLibrary: MediaLibrary,
+		worldCreator: WorldCreator
+	): Universe
+	{
+		var universe = Universe.create
+		(
+			name,
+			null, // version
+			null, // timerHelper
+			display,
+			null, // soundHelper,
+			mediaLibrary,
+			null, // controlBuilder
+			null, // profileHelper
+			worldCreator
 		);
 
 		return universe;

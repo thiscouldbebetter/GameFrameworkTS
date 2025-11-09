@@ -107,26 +107,16 @@ export class Matrix
 
 	overwriteWithOrientationEntity(orientation: Orientation)
 	{
-		var forward = orientation.forward.clone().multiplyScalar(1);
-		var right = orientation.right.clone().multiplyScalar(1);
-		var down = orientation.down.clone().multiplyScalar(1);
-
-		/*
-		this.overwriteWithValues
-		([
-			right.x, 	down.x, 	forward.x, 	0,
-			right.y, 	down.y,		forward.y, 	0,
-			right.z, 	down.z, 	forward.z, 	0,
-			0, 		0, 		0, 		1,
-		]);
-		*/
+		var forward = orientation.forward;
+		var right = orientation.right;
+		var down = orientation.down;
 
 		this.overwriteWithValues
 		([
 			forward.x, 	right.x, 	down.x, 	0,
 			forward.y, 	right.y,	down.y, 	0,
 			forward.z, 	right.z, 	down.z, 	0,
-			0, 		0, 		0, 		1,
+			0, 			0, 			0, 			1,
 		]);
 
 
@@ -135,16 +125,16 @@ export class Matrix
 
 	overwriteWithOrientationCamera(orientation: Orientation)
 	{
-		var forward = orientation.forward.clone().multiplyScalar(1);
-		var right = orientation.right.clone().multiplyScalar(1);
-		var down = orientation.down.clone().multiplyScalar(1);
+		var forward = orientation.forward;
+		var right = orientation.right;
+		var down = orientation.down;
 
 		this.overwriteWithValues
 		([
-			right.x, 	right.y, 	right.z, 	0,
-			0-down.x, 	0-down.y,	0-down.z, 	0,
-			0-forward.x, 	0-forward.y, 	0-forward.z, 	0,
-			0, 		0, 		0, 		1,
+			right.x, 		right.y, 		right.z, 		0,
+			0 - down.x, 	0 - down.y,		0 - down.z, 	0,
+			0 - forward.x, 	0-forward.y, 	0 - forward.z, 	0,
+			0, 				0, 				0, 				1
 		]);
 
 		return this;
@@ -160,16 +150,16 @@ export class Matrix
 		// It looks like I needed to transpose the array
 		// for some mathematical reason...
 
-		var forward = orientation.forward.clone();
-		var right = orientation.right.clone();
-		var down = orientation.down.clone();
+		var forward = orientation.forward;
+		var right = orientation.right;
+		var down = orientation.down;
 
 		this.overwriteWithValues
 		([
 			forward.x, 	forward.y, 	forward.z,	0,
 			right.x, 	right.y, 	right.z,	0,
 			down.x, 	down.y,		down.z,		0,
-			0, 		0, 		0, 		1,
+			0, 			0, 			0, 			1
 		]);
 
 		return this;
@@ -189,7 +179,9 @@ export class Matrix
 		// because I don't actually understand this math.
 		// Must be adjusted if viewSize changes.
 
-		var scaleFactorMultiplier = .7;
+		var scaleFactorMultiplier =
+			// .7; // For 320x240x1920.
+			-1.2; // For 400x300x2400 and maybe 640x480x3840.
 		scaleFactorX *= scaleFactorMultiplier;
 		scaleFactorY *= scaleFactorMultiplier;
 
@@ -205,10 +197,10 @@ export class Matrix
 
 		this.overwriteWithValues
 		([
-			scaleFactorX, 0,0, 0,
-			0, scaleFactorY,0, 0,
-			0, 0, clipDistanceSumOverDifference, 2 * clipDistanceProductOverDifference,
-			0, 0, -1, 0,
+			scaleFactorX, 	0, 				0, 								0,
+			0, 				scaleFactorY, 	0, 								0,
+			0, 				0, 				clipDistanceSumOverDifference, 	2 * clipDistanceProductOverDifference,
+			0, 				0, 				-1, 							0
 		]);
 
 		return this;

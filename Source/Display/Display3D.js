@@ -9,16 +9,28 @@ var ThisCouldBeBetter;
                 this.sizesAvailable = [this.sizeInPixels];
                 this.fontNameAndHeight =
                     fontNameAndHeight || GameFramework.FontNameAndHeight.default();
-                this.colorFore = colorFore;
-                this.colorBack = colorBack;
+                this.colorFore = colorFore || GameFramework.Color.Instances().White;
+                this.colorBack = colorBack || GameFramework.Color.Instances().Black;
+                this._cameraPosInverted = GameFramework.Coords.create();
                 this._sizeDefault = sizeInPixels;
                 this._scaleFactor = GameFramework.Coords.ones();
                 this._display2DOverlay = GameFramework.Display2D.fromSizesFontAndColorsForeAndBack(this.sizesAvailable, fontNameAndHeight, colorFore, colorBack);
             }
+            static fromViewSizeInPixels(viewSizeInPixels) {
+                return new Display3D(viewSizeInPixels, null, null, null);
+            }
             // methods
             cameraSet(camera) {
                 var cameraLoc = camera.loc;
-                var matrixCamera = this.matrixCamera.overwriteWithTranslate(cameraLoc.pos.clone().multiplyScalar(-1)).multiply(this.matrixOrient.overwriteWithOrientationCamera(cameraLoc.orientation)).multiply(this.matrixPerspective.overwriteWithPerspectiveForCamera(camera));
+                var cameraPosInverted = this._cameraPosInverted
+                    .overwriteWith(cameraLoc.pos)
+                    .multiplyScalar(-1);
+                var matrixCamera = this.matrixCamera.overwriteWithTranslate(cameraPosInverted);
+                var matrixOrient = this.matrixOrient.overwriteWithOrientationCamera(cameraLoc.orientation);
+                var matrixPerspective = this.matrixPerspective.overwriteWithPerspectiveForCamera(camera);
+                matrixCamera
+                    .multiply(matrixOrient)
+                    .multiply(matrixPerspective);
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
                 var shaderProgram = webGLContext.shaderProgram;
@@ -28,7 +40,6 @@ var ThisCouldBeBetter;
             clear() {
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
-                // var shaderProgram = webGLContext.shaderProgram;
                 var viewportDimensionsAsIntegers = gl.getParameter(gl.VIEWPORT);
                 gl.viewport(0, 0, viewportDimensionsAsIntegers[2], viewportDimensionsAsIntegers[3]);
                 gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

@@ -24,6 +24,7 @@ export class Display3D implements Display
 	texturesRegisteredByName: Map<string, Texture>;
 	webGLContext: WebGLContext;
 
+	_cameraPosInverted: Coords;
 	_sizeDefault: Coords;
 	_scaleFactor: Coords;
 	_display2DOverlay: Display;
@@ -40,9 +41,10 @@ export class Display3D implements Display
 		this.sizesAvailable = [ this.sizeInPixels ];
 		this.fontNameAndHeight =
 			fontNameAndHeight || FontNameAndHeight.default();
-		this.colorFore = colorFore;
-		this.colorBack = colorBack;
+		this.colorFore = colorFore || Color.Instances().White;
+		this.colorBack = colorBack || Color.Instances().Black;
 
+		this._cameraPosInverted = Coords.create();
 		this._sizeDefault = sizeInPixels;
 		this._scaleFactor = Coords.ones();
 		this._display2DOverlay = Display2D.fromSizesFontAndColorsForeAndBack
@@ -51,6 +53,14 @@ export class Display3D implements Display
 			fontNameAndHeight,
 			colorFore,
 			colorBack
+		);
+	}
+
+	static fromViewSizeInPixels(viewSizeInPixels: Coords): Display3D
+	{
+		return new Display3D
+		(
+			viewSizeInPixels, null, null, null
 		);
 	}
 
@@ -64,22 +74,23 @@ export class Display3D implements Display
 	{
 		var cameraLoc = camera.loc;
 
-		var matrixCamera = this.matrixCamera.overwriteWithTranslate
-		(
-			cameraLoc.pos.clone().multiplyScalar(-1)
-		).multiply
-		(
-			this.matrixOrient.overwriteWithOrientationCamera
-			(
-				cameraLoc.orientation
-			)
-		).multiply
-		(
-			this.matrixPerspective.overwriteWithPerspectiveForCamera
-			(
-				camera
-			)
-		);
+		var cameraPosInverted =
+			this._cameraPosInverted
+				.overwriteWith(cameraLoc.pos)
+				.multiplyScalar(-1);
+
+		var matrixCamera =
+			this.matrixCamera.overwriteWithTranslate(cameraPosInverted);
+
+		var matrixOrient =
+			this.matrixOrient.overwriteWithOrientationCamera(cameraLoc.orientation);
+
+		var matrixPerspective =
+			this.matrixPerspective.overwriteWithPerspectiveForCamera(camera);
+
+		matrixCamera
+			.multiply(matrixOrient)
+			.multiply(matrixPerspective);
 
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
@@ -97,7 +108,6 @@ export class Display3D implements Display
 	{
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
-		// var shaderProgram = webGLContext.shaderProgram;
 
 		var viewportDimensionsAsIntegers = gl.getParameter(gl.VIEWPORT);
 		gl.viewport(0, 0, viewportDimensionsAsIntegers[2], viewportDimensionsAsIntegers[3]);

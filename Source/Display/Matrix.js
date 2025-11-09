@@ -65,18 +65,9 @@ var ThisCouldBeBetter;
                 return this;
             }
             overwriteWithOrientationEntity(orientation) {
-                var forward = orientation.forward.clone().multiplyScalar(1);
-                var right = orientation.right.clone().multiplyScalar(1);
-                var down = orientation.down.clone().multiplyScalar(1);
-                /*
-                this.overwriteWithValues
-                ([
-                    right.x, 	down.x, 	forward.x, 	0,
-                    right.y, 	down.y,		forward.y, 	0,
-                    right.z, 	down.z, 	forward.z, 	0,
-                    0, 		0, 		0, 		1,
-                ]);
-                */
+                var forward = orientation.forward;
+                var right = orientation.right;
+                var down = orientation.down;
                 this.overwriteWithValues([
                     forward.x, right.x, down.x, 0,
                     forward.y, right.y, down.y, 0,
@@ -86,14 +77,14 @@ var ThisCouldBeBetter;
                 return this;
             }
             overwriteWithOrientationCamera(orientation) {
-                var forward = orientation.forward.clone().multiplyScalar(1);
-                var right = orientation.right.clone().multiplyScalar(1);
-                var down = orientation.down.clone().multiplyScalar(1);
+                var forward = orientation.forward;
+                var right = orientation.right;
+                var down = orientation.down;
                 this.overwriteWithValues([
                     right.x, right.y, right.z, 0,
                     0 - down.x, 0 - down.y, 0 - down.z, 0,
                     0 - forward.x, 0 - forward.y, 0 - forward.z, 0,
-                    0, 0, 0, 1,
+                    0, 0, 0, 1
                 ]);
                 return this;
             }
@@ -104,14 +95,14 @@ var ThisCouldBeBetter;
                 // but for some reason movers end up in the wrong place.
                 // It looks like I needed to transpose the array
                 // for some mathematical reason...
-                var forward = orientation.forward.clone();
-                var right = orientation.right.clone();
-                var down = orientation.down.clone();
+                var forward = orientation.forward;
+                var right = orientation.right;
+                var down = orientation.down;
                 this.overwriteWithValues([
                     forward.x, forward.y, forward.z, 0,
                     right.x, right.y, right.z, 0,
                     down.x, down.y, down.z, 0,
-                    0, 0, 0, 1,
+                    0, 0, 0, 1
                 ]);
                 return this;
             }
@@ -125,7 +116,9 @@ var ThisCouldBeBetter;
                 // Trying to make the 3D perspective match the 2D one,
                 // because I don't actually understand this math.
                 // Must be adjusted if viewSize changes.
-                var scaleFactorMultiplier = .7;
+                var scaleFactorMultiplier = 
+                // .7; // For 320x240x1920.
+                -1.2; // For 400x300x2400 and maybe 640x480x3840.
                 scaleFactorX *= scaleFactorMultiplier;
                 scaleFactorY *= scaleFactorMultiplier;
                 var clipRange = clipDistanceNear - clipDistanceFar;
@@ -138,7 +131,7 @@ var ThisCouldBeBetter;
                     scaleFactorX, 0, 0, 0,
                     0, scaleFactorY, 0, 0,
                     0, 0, clipDistanceSumOverDifference, 2 * clipDistanceProductOverDifference,
-                    0, 0, -1, 0,
+                    0, 0, -1, 0
                 ]);
                 return this;
             }
