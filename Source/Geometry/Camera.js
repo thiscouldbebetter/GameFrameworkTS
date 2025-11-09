@@ -40,6 +40,9 @@ var ThisCouldBeBetter;
                 return new Camera(viewSize, null, // focalLength
                 disp, entitiesInViewSort);
             }
+            static fromViewSizeFocalLengthDispositionAndEntitiesInViewSort(viewSize, focalLength, disp, entitiesInViewSort) {
+                return new Camera(viewSize, focalLength, disp, entitiesInViewSort);
+            }
             static entityFromPlace(place) {
                 return place.entitiesByPropertyName(Camera.name)[0];
             }

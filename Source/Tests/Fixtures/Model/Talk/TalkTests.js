@@ -32,7 +32,28 @@ class TalkTests extends TestFixture {
         universe.venueNextSet(venueWorld);
         var talker = Talker.fromConversationDefnName("Talk_Conversation_psv");
         this.talkToTalker(universe, talker, [
-        // todo
+            "Subject.Math",
+            // "Too complicated."
+            "Subject.Science",
+            // "Too vague."
+            "Subject.History",
+            // "Okay, what kind?"
+            "History.Ancient",
+            // "Too long ago."
+            "History.Recent",
+            // "Not long enough ago."
+            "History.Carol",
+            // "Don't wanna talk history anymore."
+            "Subject.Random",
+            // [Flips a coin.] "Now you."
+            "CoinFlip.Done", // "I can't."
+            // "That's what I figured."
+            "Game", // "How do I play?"
+            // [Explains rules in general.]
+            "Game.NeverMind", // "I never read the instructions!"
+            // "Good for you.  Anything else?"
+            "Subject.Carol", // "We NEED to talk about Carol."
+            // "This conversation is over."
         ]);
         universe.stop();
     }
@@ -48,7 +69,7 @@ class TalkTests extends TestFixture {
                 conversationRun.optionSelectNext();
             }
             else {
-                var optionFound = conversationRun.optionSelectByContentPartial(optionToSelect);
+                var optionFound = conversationRun.optionSelectByNameContentPartialOrNext(optionToSelect);
                 if (optionFound == null) {
                     throw new Error("No option found with content: " + optionToSelect);
                 }

@@ -40,13 +40,16 @@ SubjectPrompt|Prompt
 	History.NeverMind|Option|Never mind.|History.NeverMind
 	|Prompt
 
-		History.Ancient|Display|That all happened a long time ago.
+		History.Ancient
+		|Display|That all happened a long time ago.
 		|Prompt
 
-		History.Recent|Display|If it's recent, is it really history?
+		History.Recent
+		|Display|If it's recent, is it really history?
 		|Prompt
 
-		History.Carol|Display|We are NEVER talking about Carol.
+		History.Carol
+		|Display|We are NEVER talking about Carol.
 		|Display|I don't want to talk about history anymore.
 		|Disable||Subject.History
 		|Enable||Subject.Carol
@@ -74,6 +77,7 @@ SubjectPrompt|Prompt
 
 		CoinFlip.Done|Display|Yeah, that's what I figured.
 		|Pop
+		|Prompt
 
 	SQLInjection|Display|What are you--what's happening to me?
 	|Script|alert('ER-ROR!  ER-ROR!  DOES! NOT! COMPUTE!')

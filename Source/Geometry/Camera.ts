@@ -117,6 +117,23 @@ export class Camera extends EntityPropertyBase<Camera>
 		);
 	}
 
+	static fromViewSizeFocalLengthDispositionAndEntitiesInViewSort
+	(
+		viewSize: Coords,
+		focalLength: number,
+		disp: Disposition,
+		entitiesInViewSort: (e: Entity[]) => Entity[]
+	): Camera
+	{
+		return new Camera
+		(
+			viewSize,
+			focalLength,
+			disp,
+			entitiesInViewSort
+		);
+	}
+
 	static entityFromPlace(place: Place): Entity
 	{
 		return place.entitiesByPropertyName(Camera.name)[0];

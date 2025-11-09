@@ -86,12 +86,14 @@ class TalkTests extends TestFixture
 				// "Not long enough ago."
 				"History.Carol",
 				// "Don't wanna talk history anymore."
-				"Say something random."
+				"Subject.Random",
 				// [Flips a coin.] "Now you."
 				"CoinFlip.Done", // "I can't."
 				// "That's what I figured."
-				"Game" // "How do I play?"
-				// [explains rules]
+				"Game", // "How do I play?"
+				// [Explains rules in general.]
+				"Game.NeverMind", // "I never read the instructions!"
+				// "Good for you.  Anything else?"
 				"Subject.Carol", // "We NEED to talk about Carol."
 				// "This conversation is over."
 			]

@@ -1247,7 +1247,7 @@ class PlaceBuilderDemo // Main.
 			cameraPos,
 			Orientation.Instances().ForwardZDownY.clone()
 		);
-		var camera = Camera.fromViewSizeDispositionAndEntitiesInViewSort
+		var camera = Camera.fromViewSizeFocalLengthDispositionAndEntitiesInViewSort
 		(
 			cameraViewSize,
 			cameraHeightAbovePlayfield, // focalLength
