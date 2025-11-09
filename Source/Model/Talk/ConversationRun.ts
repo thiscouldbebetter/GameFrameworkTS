@@ -222,6 +222,16 @@ export class ConversationRun
 		return this.scopeCurrent.optionSelectByName(nameToMatch);
 	}
 
+	optionSelectByNameContentPartialOrNext(textToMatch: string): TalkNode
+	{
+		var optionToSelect =
+			this.optionSelectByName(textToMatch)
+			?? this.optionSelectByContentPartial(textToMatch)
+			?? this.optionSelectByNext(textToMatch);
+
+		return optionToSelect;
+	}
+
 	optionSelectByNext(nextToMatch: string): TalkNode
 	{
 		return this.scopeCurrent.optionSelectByNext(nextToMatch);

@@ -74,7 +74,26 @@ class TalkTests extends TestFixture
 			universe,
 			talker,
 			[
-				// todo
+				"Subject.Math",
+				// "Too complicated."
+				"Subject.Science",
+				// "Too vague."
+				"Subject.History",
+				// "Okay, what kind?"
+				"History.Ancient",
+				// "Too long ago."
+				"History.Recent",
+				// "Not long enough ago."
+				"History.Carol",
+				// "Don't wanna talk history anymore."
+				"Say something random."
+				// [Flips a coin.] "Now you."
+				"CoinFlip.Done", // "I can't."
+				// "That's what I figured."
+				"Game" // "How do I play?"
+				// [explains rules]
+				"Subject.Carol", // "We NEED to talk about Carol."
+				// "This conversation is over."
 			]
 		);
 
@@ -100,7 +119,7 @@ class TalkTests extends TestFixture
 			}
 			else
 			{
-				var optionFound = conversationRun.optionSelectByContentPartial(optionToSelect);
+				var optionFound = conversationRun.optionSelectByNameContentPartialOrNext(optionToSelect);
 				if (optionFound == null)
 				{
 					throw new Error("No option found with content: " + optionToSelect);

@@ -7,8 +7,8 @@ name=AnEveningWithProfessorSurly
 Greet|SpeakerSet|Friendly
 |Display|Hi, I'm Professor Surly.
 Subject|Display|What do you want to talk about?
-|Option|Let's talk about math.|Math
-|Option|Let's talk about science.|Science
+Subject.Math|Option|Let's talk about math.|Math
+Subject.Science|Option|Let's talk about science.|Science
 Subject.History|Option|Let's talk about history.|History
 Subject.Random|Option|Say something random.|CoinFlip
 Subject.Carol|Option|We NEED to talk about Carol.|TalkOver|false
@@ -18,21 +18,26 @@ Subject.Carol|Option|We NEED to talk about Carol.|TalkOver|false
 |Option|Never mind. I hate you.|Quit
 SubjectPrompt|Prompt
 
-	Math|Display|Math is too complicated...
+	Math
+	|Display|Math is too complicated...
 	|Display|...what with all those numbers.
-	|Goto||SubjectPrompt
+	|OptionRemove||Subject.Math
+	|Prompt
 
-	Science|Display|Science is way too broad a subject.
+	Science
+	|Display|Science is way too broad a subject.
 	|Display|I mean, what ISN'T science, really?
-	|Goto||SubjectPrompt
+	|OptionRemove||Subject.Science
+	|Prompt
 
-	History|Push
+	History
+	|Push
 	|Display|Okay, but the past is pretty pointless.
 	|Display|What kind of history interests you?
 	|Option|Tell me about ancient times.|History.Ancient
 	|Option|Tell me about recent events.|History.Recent
 	|Option|I think we should talk about Carol.|History.Carol
-	|Option|Never mind.|History.NeverMind
+	History.NeverMind|Option|Never mind.|History.NeverMind
 	|Prompt
 
 		History.Ancient|Display|That all happened a long time ago.

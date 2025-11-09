@@ -125,6 +125,11 @@ var ThisCouldBeBetter;
             optionSelectByName(nameToMatch) {
                 return this.scopeCurrent.optionSelectByName(nameToMatch);
             }
+            optionSelectByNameContentPartialOrNext(textToMatch) {
+                var _a, _b;
+                var optionToSelect = (_b = (_a = this.optionSelectByName(textToMatch)) !== null && _a !== void 0 ? _a : this.optionSelectByContentPartial(textToMatch)) !== null && _b !== void 0 ? _b : this.optionSelectByNext(textToMatch);
+                return optionToSelect;
+            }
             optionSelectByNext(nextToMatch) {
                 return this.scopeCurrent.optionSelectByNext(nextToMatch);
             }
