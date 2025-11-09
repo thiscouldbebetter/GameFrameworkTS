@@ -3,6 +3,10 @@ class GameDemo {
     constructor(configuration) {
         this.configuration = configuration;
     }
+    static create() {
+        var configuration = Configuration.Instance();
+        return new GameDemo(configuration);
+    }
     static fromConfiguration(configuration) {
         return new GameDemo(configuration);
     }

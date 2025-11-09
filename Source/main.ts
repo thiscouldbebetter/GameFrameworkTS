@@ -8,8 +8,7 @@ class Program
 		(
 			() =>
 			{
-				var configuration = Configuration.Instance();
-				GameDemo.fromConfiguration(configuration).start();
+				GameDemo.create().start();
 			}
 		);
 

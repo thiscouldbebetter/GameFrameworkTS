@@ -8,6 +8,12 @@ class GameDemo
 		this.configuration = configuration;
 	}
 
+	static create(): GameDemo
+	{
+		var configuration = Configuration.Instance();
+		return new GameDemo(configuration);
+	}
+
 	static fromConfiguration(configuration: Configuration): GameDemo
 	{
 		return new GameDemo(configuration);
