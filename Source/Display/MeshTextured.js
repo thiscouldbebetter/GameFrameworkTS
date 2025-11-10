@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
                 this.faceTextures = faceTextures;
                 this.vertexGroups = vertexGroups;
             }
+            static fromGeometryMaterialsAndFaceTextures(geometry, materials, faceTextures) {
+                return new MeshTextured(geometry, materials, faceTextures, null);
+            }
             static fromMeshAndMaterials(geometry, materials) {
                 return new MeshTextured(geometry, materials, null, null);
             }
@@ -87,9 +90,12 @@ var ThisCouldBeBetter;
         }
         GameFramework.MeshTextured = MeshTextured;
         class MeshTexturedFaceTexture {
-            constructor(materialName, textureUVs) {
+            constructor(materialName, textureUvs) {
                 this.materialName = materialName;
-                this.textureUVs = textureUVs;
+                this.textureUVs = textureUvs;
+            }
+            static fromMaterialNameAndTextureUvs(materialName, textureUvs) {
+                return new MeshTexturedFaceTexture(materialName, textureUvs);
             }
             // Clonable.
             clone() {

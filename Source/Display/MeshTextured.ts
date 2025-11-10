@@ -30,6 +30,16 @@ export class MeshTextured extends ShapeBase
 		this.vertexGroups = vertexGroups;
 	}
 
+	static fromGeometryMaterialsAndFaceTextures
+	(
+		geometry: Mesh,
+		materials: Material[],
+		faceTextures: MeshTexturedFaceTexture[]
+	): MeshTextured
+	{
+		return new MeshTextured(geometry, materials, faceTextures, null);
+	}
+
 	static fromMeshAndMaterials(geometry: Mesh, materials: Material[]): MeshTextured
 	{
 		return new MeshTextured(geometry, materials, null, null);
@@ -159,10 +169,19 @@ export class MeshTexturedFaceTexture
 	materialName: string;
 	textureUVs: Coords[];
 
-	constructor(materialName: string, textureUVs: Coords[])
+	constructor(materialName: string, textureUvs: Coords[] )
 	{
 		this.materialName = materialName;
-		this.textureUVs = textureUVs;
+		this.textureUVs = textureUvs;
+	}
+
+	static fromMaterialNameAndTextureUvs
+	(
+		materialName: string,
+		textureUvs: Coords[]
+	): MeshTexturedFaceTexture
+	{
+		return new MeshTexturedFaceTexture(materialName, textureUvs);
 	}
 
 	// Clonable.

@@ -26,111 +26,139 @@ export class MeshBuilder
 		var heightOver24 = heightInPixels / 24;
 		var heightOver36 = heightInPixels / 36;
 
+		var meshPelvis = this.box
+		(
+			//"Pelvis",
+			material,
+			Coords.fromXYZ(heightOver12, heightOver24, heightOver24),
+			Coords.fromXYZ(0, 0, -heightOver2)
+		);
+
+		var meshSpine = this.box
+		(
+			//"Spine.1",
+			material,
+			Coords.fromXYZ(heightOver12, heightOver24, heightOver6),
+			Coords.fromXYZ(0, 0, 0 - heightOver2 - heightOver4)
+		);
+
+		var meshHead = this.box
+		(
+			//"Head",
+			material,
+			Coords.fromXYZ(heightOver18, heightOver18, heightOver18),
+			Coords.fromXYZ(0, heightOver36, 0 - heightInPixels)
+		);
+
+		var xInvert = Coords.fromXYZ(-1, 1, 1);
+
+		var meshThighSize = Coords.fromXYZ(heightOver36, heightOver36, heightOver8);
+		var meshThighOffsetL = Coords.fromXYZ(heightOver18, 0, 0 - heightOver2 + heightOver12);
+		var meshThighOffsetR = meshThighOffsetL.clone().multiply(xInvert);
+		var meshThighL = this.box
+		(
+			//"Thigh.L",
+			material,
+			meshThighSize,
+			meshThighOffsetL
+		);
+		var meshThighR = this.box
+		(
+			//"Thigh.R",
+			material,
+			meshThighSize,
+			meshThighOffsetR
+		);
+
+		var meshShinSize = Coords.fromXYZ(heightOver36, heightOver36, heightOver8);
+		var meshShinOffsetL = Coords.fromXYZ(heightOver18, 0, 0 - heightOver6);
+		var meshShinOffsetR = meshShinOffsetL.clone().multiply(xInvert);
+		var meshShinL = this.box
+		(
+			//"Shin.L",
+			material,
+			meshShinSize,
+			meshShinOffsetL
+		);
+		var meshShinR = this.box
+		(
+			//"Shin.R",
+			material,
+			meshShinSize,
+			meshShinOffsetR
+		);
+
+		var meshFootSize = Coords.fromXYZ(heightOver36, heightOver12, heightOver36);
+		var meshFootOffsetL = Coords.fromXYZ(heightOver18, heightOver12, 0 - heightOver36);
+		var meshFootOffsetR = meshFootOffsetL.clone().multiply(xInvert);
+		var meshFootL = this.box
+		(
+			//"Foot.L",
+			material,
+			meshFootSize,
+			meshFootOffsetL
+		);
+		var meshFootR = this.box
+		(
+			//"Foot.R",
+			material,
+			meshFootSize,
+			meshFootOffsetR
+		);
+
+		var meshBicepSize = Coords.fromXYZ(heightOver36, heightOver36, heightOver12);
+		var meshBicepOffsetL = Coords.fromXYZ(heightOver6, 0, 0 - heightOver2 - heightOver3);
+		var meshBicepOffsetR = meshBicepOffsetL.clone().multiply(xInvert);
+		var meshBicepL = this.box
+		(
+			//"Bicep.L",
+			material,
+			meshBicepSize,
+			meshBicepOffsetL
+		);
+		var meshBicepR = this.box
+		(
+			//"Bicep.R",
+			material,
+			meshBicepSize,
+			meshBicepOffsetR
+		);
+
+		var meshForearmSize = Coords.fromXYZ(heightOver36, heightOver36, heightOver12);
+		var meshForearmOffsetL = Coords.fromXYZ(heightOver6, 0, 0 - heightOver2 - heightOver4 + heightOver8);
+		var meshForearmOffsetR = meshForearmOffsetL.clone().multiply(xInvert);
+		var meshForearmL = this.box
+		(
+			//"Forearm.L",
+			material,
+			meshForearmSize,
+			meshForearmOffsetL
+		);
+		var meshForearmR = this.box
+		(
+			//"Forearm.R",
+			material,
+			meshForearmSize,
+			meshForearmOffsetR
+		);
+
 		var meshesForEntityParts =
 		[
-			this.box
-			(
-				//"Pelvis",
-				material,
-				new Coords(heightOver12, heightOver24, heightOver24),
-				new Coords(0, 0, -heightOver2)
-			),
+			meshPelvis,
+			meshSpine,
+			meshHead,
 
-			this.box
-			(
-				//"Spine.1",
-				material,
-				new Coords(heightOver12, heightOver24, heightOver6),
-				new Coords(0, 0, 0 - heightOver2 - heightOver4)
-			),
+			meshThighL,
+			meshShinL,
+			meshFootL,
+			meshBicepL,
+			meshForearmL,
 
-			this.box
-			(
-				//"Head",
-				material,
-				new Coords(heightOver18, heightOver18, heightOver18),
-				new Coords(0, heightOver36, 0 - heightInPixels)
-			),
-
-			this.box
-			(
-				//"Thigh.L",
-				material,
-				new Coords(heightOver36, heightOver36, heightOver8),
-				new Coords(heightOver18, 0, 0 - heightOver2 + heightOver12)
-			),
-
-			this.box
-			(
-				//"Shin.L",
-				material,
-				new Coords(heightOver36, heightOver36, heightOver8),
-				new Coords(heightOver18, 0, 0 - heightOver6)
-			),
-
-			this.box
-			(
-				//"Foot.L",
-				material,
-				new Coords(heightOver36, heightOver12, heightOver36),
-				new Coords(heightOver18, heightOver12, 0 - heightOver36)
-			),
-
-			this.box
-			(
-				//"Bicep.L",
-				material,
-				new Coords(heightOver36, heightOver36, heightOver12),
-				new Coords(heightOver6, 0, 0 - heightOver2 - heightOver3)
-			),
-
-			this.box
-			(
-				//"Forearm.L",
-				material,
-				new Coords(heightOver36, heightOver36, heightOver12),
-				new Coords(heightOver6, 0, 0 - heightOver2 - heightOver4 + heightOver8)
-			),
-
-			this.box
-			(
-				//"Thigh.R",
-				material,
-				new Coords(heightOver36, heightOver36, heightOver8),
-				new Coords(0 - heightOver18, 0, 0 - heightOver2 + heightOver12)
-			),
-
-			this.box
-			(
-				//"Shin.R",
-				material,
-				new Coords(heightOver36, heightOver36, heightOver8),
-				new Coords(0 - heightOver18, 0, 0 - heightOver6)
-			),
-
-			this.box
-			(
-				//"Foot.R",
-				material,
-				new Coords(heightOver36, heightOver12, heightOver36),
-				new Coords(0 - heightOver18, heightOver12, 0 - heightOver36)
-			),
-
-			this.box
-			(
-				//"Bicep.R",
-				material,
-				new Coords(heightOver36, heightOver36, heightOver12),
-				new Coords(0 - heightOver6, 0, 0 - heightOver2 - heightOver3)
-			),
-
-			this.box
-			(
-				//"Forearm.R",
-				material,
-				new Coords(heightOver36, heightOver36, heightOver12),
-				new Coords(0 - heightOver6, 0, 0 - heightOver2 - heightOver4 + heightOver8)
-			),
+			meshThighR,
+			meshShinR,
+			meshFootR,
+			meshBicepR,
+			meshForearmR
 		];
 
 		var vertexGroupNames =
@@ -158,12 +186,12 @@ export class MeshBuilder
 
 		returnValue.transform
 		(
-			new Transform_Orient
+			Transform_Orient.fromOrientation
 			(
-				new Orientation
+				Orientation.fromForwardAndDown
 				(
-					new Coords(0, 1, 0),
-					new Coords(0, 0, 1)
+					Coords.fromXYZ(0, 1, 0),
+					Coords.fromXYZ(0, 0, 1)
 				)
 			)
 		);
@@ -178,15 +206,11 @@ export class MeshBuilder
 	{
 		var returnMesh = this.unitCube(material);
 
-		returnMesh.transform
-		(
-			new Transform_Scale(size)
-		);
+		returnMesh
+			.transform(Transform_Scale.fromScaleFactors(size) );
 
-		returnMesh.transform
-		(
-			new Transform_Translate(pos)
-		);
+		returnMesh
+			.transform(Transform_Translate.fromDisplacement(pos) );
 
 		return returnMesh;
 	}
@@ -273,12 +297,11 @@ export class MeshBuilder
 				}
 			}
 
-			var returnMeshTextured = new MeshTextured
+			var returnMeshTextured = MeshTextured.fromGeometryMaterialsAndFaceTextures
 			(
-				returnMesh, // geometry
+				returnMesh,
 				[ material ],
 				faceTextures,
-				null
 			);
 		}
 
@@ -287,9 +310,12 @@ export class MeshBuilder
 
 	room
 	(
-		roomSize: Coords, neighborOffsets: Coords[],
-		connectedToNeighbors: boolean[], materialWall: Material,
-		materialFloor: Material, doorwayWidthScaleFactor: number,
+		roomSize: Coords,
+		neighborOffsets: Coords[],
+		connectedToNeighbors: boolean[],
+		materialWall: Material,
+		materialFloor: Material,
+		doorwayWidthScaleFactor: number,
 		wallThickness: number
 	): MeshTextured
 	{
@@ -361,9 +387,9 @@ export class MeshBuilder
 
 			var faceOrientationDown =
 			(
-				faceNormal.z == 0 ? down : new Coords(1, 0, 0)
+				faceNormal.z == 0 ? down : Coords.fromXYZ(1, 0, 0)
 			);
-			var faceOrientation = new Orientation
+			var faceOrientation = Orientation.fromForwardAndDown
 			(
 				faceNormal, faceOrientationDown
 			);
@@ -373,17 +399,14 @@ export class MeshBuilder
 
 			mesh.transformFaceTextures
 			(
-				new Transform_Scale
+				Transform_Scale.fromScaleFactors
 				(
-					new Coords
+					Coords.fromXYZ
 					(
 						faceTangent.dotProduct(roomSize),
 						faceDown.dotProduct(roomSize),
 						0
-					).absolute().multiplyScalar
-					(
-						.2
-					)
+					).absolute().multiplyScalar(.2)
 				)
 			)
 		}
@@ -392,10 +415,10 @@ export class MeshBuilder
 
 		returnMesh.transform
 		(
-			new Transform_Scale(roomSize)
+			Transform_Scale.fromScaleFactors(roomSize)
 		).transform
 		(
-			new Transform_Translate(new Coords(0, 0, -roomSize.z))
+			Transform_Translate.fromDisplacement(Coords.fromXYZ(0, 0, -roomSize.z) )
 		);
 
 		return returnMesh;
@@ -408,19 +431,19 @@ export class MeshBuilder
 			material
 		).transform
 		(
-			new Transform_Scale
+			Transform_Scale.fromScaleFactors
 			(
-				new Coords(1, 1, -1)
+				Coords.fromXYZ(1, 1, -1)
 			)
 		).transform
 		(
-			new Transform_Translate
+			Transform_Translate.fromDisplacement
 			(
-				new Coords(0, 0, -1)
+				Coords.fromXYZ(0, 0, -1)
 			)
 		).transformFaceTextures
 		(
-			new Transform_Scale(Coords.ones().multiplyScalar(.2))
+			Transform_Scale.fromScaleFactors(Coords.ones().multiplyScalar(.2) )
 		);
 
 		return returnMesh;
@@ -433,13 +456,13 @@ export class MeshBuilder
 			material
 		).transform
 		(
-			new Transform_Translate
+			Transform_Translate.fromDisplacement
 			(
-				new Coords(0, 0, 1)
+				Coords.fromXYZ(0, 0, 1)
 			)
 		).transformFaceTextures
 		(
-			new Transform_Scale(Coords.ones().multiplyScalar(9))
+			Transform_Scale.fromScaleFactors(Coords.ones().multiplyScalar(9))
 		);
 
 		return returnMesh;
@@ -447,7 +470,7 @@ export class MeshBuilder
 
 	room_Wall(material: Material): MeshTextured
 	{
-		var returnMesh = new Mesh
+		var returnMesh = Mesh.fromCenterVertexOffsetsAndFaceBuilders
 		(
 			Coords.create(), // center
 			// vertices
@@ -461,11 +484,11 @@ export class MeshBuilder
 			],
 			// faces
 			[
-				new Mesh_FaceBuilder([0, 1, 2, 3]),
+				Mesh_FaceBuilder.fromVertexIndices([0, 1, 2, 3]),
 			]
 		);
 
-		var returnMeshTextured = new MeshTextured
+		var returnMeshTextured = MeshTextured.fromGeometryMaterialsAndFaceTextures
 		(
 			returnMesh,
 			[ material ],
@@ -474,14 +497,13 @@ export class MeshBuilder
 				(
 					material.name,
 					[
-						new Coords(1, 0, 0),
+						Coords.fromXYZ(1, 0, 0),
 						Coords.create(),
-						new Coords(0, 1, 0),
-						new Coords(1, 1, 0),
+						Coords.fromXYZ(0, 1, 0),
+						Coords.fromXYZ(1, 1, 0),
 					]
 				),
-			],
-			null
+			]
 		);
 
 		return returnMeshTextured;
@@ -489,7 +511,9 @@ export class MeshBuilder
 
 	room_WallWithDoorway
 	(
-		material: Material, doorwayWidthScaleFactor: number, wallThickness: number
+		material: Material,
+		doorwayWidthScaleFactor: number,
+		wallThickness: number
 	): MeshTextured
 	{
 		var doorwayHeight = 0.5;
@@ -506,35 +530,35 @@ export class MeshBuilder
 
 				// b = bottom, t = top, l = left, r = right.
 				// top
-				new Coords(-doorwayWidthHalf, -doorwayHeight, 0), // bl - 0
-				new Coords(doorwayWidthHalf, -doorwayHeight, 0), // br - 1
-				new Coords(doorwayWidthHalf, -1, 0), // tr - 2
-				new Coords(-doorwayWidthHalf, -1, 0), // tl - 3
+				Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, 0), // bl - 0
+				Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, 0), // br - 1
+				Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tr - 2
+				Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tl - 3
 
 				// left
-				new Coords(-1, 1, 0), // bl - 4
-				new Coords(-doorwayWidthHalf, 1, 0), // br - 5
-				new Coords(-doorwayWidthHalf, -1, 0), // tr - 6
-				new Coords(-1, -1, 0), // tl - 7
+				Coords.fromXYZ(-1, 1, 0), // bl - 4
+				Coords.fromXYZ(-doorwayWidthHalf, 1, 0), // br - 5
+				Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tr - 6
+				Coords.fromXYZ(-1, -1, 0), // tl - 7
 
 				// right
-				new Coords(doorwayWidthHalf, 1, 0), // bl - 8
-				new Coords(1, 1, 0), // br - 9
-				new Coords(1, -1, 0), // tr - 10
-				new Coords(doorwayWidthHalf, -1, 0), // tl - 11
+				Coords.fromXYZ(doorwayWidthHalf, 1, 0), // bl - 8
+				Coords.fromXYZ(1, 1, 0), // br - 9
+				Coords.fromXYZ(1, -1, 0), // tr - 10
+				Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tl - 11
 
 				// doorframe
-				new Coords(-doorwayWidthHalf, 1, wt), // bl - 12
-				new Coords(doorwayWidthHalf, 1, wt), // br - 13
-				new Coords(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
-				new Coords(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
+				Coords.fromXYZ(-doorwayWidthHalf, 1, wt), // bl - 12
+				Coords.fromXYZ(doorwayWidthHalf, 1, wt), // br - 13
+				Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
+				Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
 			],
 			// vertexIndicesForFaces
 			[
 				// wall
-				new Mesh_FaceBuilder([ 0, 1, 2, 3]), // top
-				new Mesh_FaceBuilder([ 4, 5, 6, 7 ]), // left
-				new Mesh_FaceBuilder([ 8, 9, 10, 11 ]), // right
+				Mesh_FaceBuilder.fromVertexIndices([ 0, 1, 2, 3]), // top
+				Mesh_FaceBuilder.fromVertexIndices([ 4, 5, 6, 7 ]), // left
+				Mesh_FaceBuilder.fromVertexIndices([ 8, 9, 10, 11 ]), // right
 
 				// doorframe
 				new Mesh_FaceBuilder([ 5, 12, 15, 0  ]), // left
@@ -549,19 +573,19 @@ export class MeshBuilder
 		var doorwayWidthReversedHalf = doorwayWidthReversed / 2;
 		var doorwayHeightReversed = 1 - doorwayHeight;
 
-		var transformScaleSides = new Transform_Scale
+		var transformScaleSides = Transform_Scale.fromScaleFactors
 		(
-			new Coords(doorwayWidthReversedHalf, .5, 0)
+			Coords.fromXYZ(doorwayWidthReversedHalf, .5, 0)
 		);
 
-		var transformScaleTop = new Transform_Scale
+		var transformScaleTop = Transform_Scale.fromScaleFactors
 		(
-			new Coords(doorwayWidthHalf, doorwayHeightReversed, 0)
+			Coords.fromXYZ(doorwayWidthHalf, doorwayHeightReversed, 0)
 		);
 
-		var transformScaleSidesDoorframe = new Transform_Scale
+		var transformScaleSidesDoorframe = Transform_Scale.fromScaleFactors
 		(
-			new Coords(wallThickness, doorwayHeight, 0)
+			Coords.fromXYZ(wallThickness, doorwayHeight, 0)
 		);
 
 		var materialName = material.name;
@@ -570,7 +594,7 @@ export class MeshBuilder
 		[
 			// wall
 			// top
-			new MeshTexturedFaceTexture
+			MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs
 			(
 				materialName,
 				[
@@ -581,7 +605,7 @@ export class MeshBuilder
 				]
 			).transform(transformScaleTop),
 			// left
-			new MeshTexturedFaceTexture
+			MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs
 			(
 				materialName,
 				[
@@ -592,7 +616,7 @@ export class MeshBuilder
 				]
 			).transform(transformScaleSides),
 			// right
-			new MeshTexturedFaceTexture
+			MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs
 			(
 				materialName,
 				[
@@ -604,7 +628,7 @@ export class MeshBuilder
 			).transform(transformScaleSides),
 			// doorframe
 			// left
-			new MeshTexturedFaceTexture
+			MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs
 			(
 				materialName,
 				[
@@ -615,7 +639,7 @@ export class MeshBuilder
 				]
 			).transform(transformScaleSidesDoorframe),
 			// right
-			new MeshTexturedFaceTexture
+			MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs
 			(
 				materialName,
 				[
@@ -658,27 +682,27 @@ export class MeshBuilder
 			// vertices
 			[
 				// top
-				new Coords(-1, -1, -1),
-				new Coords(1, -1, -1),
-				new Coords(1, 1, -1),
-				new Coords(-1, 1, -1),
+				Coords.fromXYZ(-1, -1, -1),
+				Coords.fromXYZ(1, -1, -1),
+				Coords.fromXYZ(1, 1, -1),
+				Coords.fromXYZ(-1, 1, -1),
 
 				// bottom
-				new Coords(-1, -1, 1),
-				new Coords(1, -1, 1),
-				new Coords(1, 1, 1),
-				new Coords(-1, 1, 1),
+				Coords.fromXYZ(-1, -1, 1),
+				Coords.fromXYZ(1, -1, 1),
+				Coords.fromXYZ(1, 1, 1),
+				Coords.fromXYZ(-1, 1, 1),
 			],
 			// vertexIndicesForFaces
 			[
-				new Mesh_FaceBuilder([7, 3, 0, 4]), // west
-				new Mesh_FaceBuilder([5, 1, 2, 6]), // east
+				Mesh_FaceBuilder.fromVertexIndices([7, 3, 0, 4]), // west
+				Mesh_FaceBuilder.fromVertexIndices([5, 1, 2, 6]), // east
 
-				new Mesh_FaceBuilder([4, 0, 1, 5]), // north
-				new Mesh_FaceBuilder([6, 2, 3, 7]), // south
+				Mesh_FaceBuilder.fromVertexIndices([4, 0, 1, 5]), // north
+				Mesh_FaceBuilder.fromVertexIndices([6, 2, 3, 7]), // south
 
-				new Mesh_FaceBuilder([0, 3, 2, 1]), // top
-				new Mesh_FaceBuilder([5, 6, 7, 4]), // bottom
+				Mesh_FaceBuilder.fromVertexIndices([0, 3, 2, 1]), // top
+				Mesh_FaceBuilder.fromVertexIndices([5, 6, 7, 4]), // bottom
 			]
 		);
 
@@ -730,7 +754,7 @@ export class MeshBuilder
 			],
 			// vertexIndicesForFaces
 			[
-				new Mesh_FaceBuilder([3, 2, 1, 0])
+				Mesh_FaceBuilder.fromVertexIndices([3, 2, 1, 0])
 				//[0, 1, 2, 3]
 			]
 		);
