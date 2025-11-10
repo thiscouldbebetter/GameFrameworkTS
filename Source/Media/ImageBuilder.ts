@@ -19,90 +19,7 @@ export class ImageBuilder
 		return new ImageBuilder(Color.Instances()._All);
 	}
 
-	// static methods
-
-	buildImageFromStrings(name: string, stringsForPixels: string[]): Image2
-	{
-		return this.buildImageFromStringsScaled
-		(
-			name, Coords.Instances().Ones, stringsForPixels
-		);
-	}
-
-	buildImagesFromStringArrays
-	(
-		name: string, stringArraysForImagePixels: string[][]
-	): Image2[]
-	{
-		var returnValue = new Array<Image2>();
-
-		for (var i = 0; i < stringArraysForImagePixels.length; i++)
-		{
-			var stringsForImagePixels = stringArraysForImagePixels[i];
-			var image = this.buildImageFromStrings(name + i, stringsForImagePixels);
-			returnValue.push(image);
-		}
-
-		return returnValue;
-	}
-
-	buildImageFromStringsScaled
-	(
-		name: string, scaleFactor: Coords, stringsForPixels: string[]
-	): Image2
-	{
-		var sizeInPixels = new Coords
-		(
-			stringsForPixels[0].length, stringsForPixels.length, 0
-		);
-
-		var canvas = document.createElement("canvas");
-		canvas.width = sizeInPixels.x * scaleFactor.x;
-		canvas.height = sizeInPixels.y * scaleFactor.y;
-
-		var graphics = canvas.getContext("2d");
-
-		var pixelPos = Coords.create();
-		var colorForPixel;
-		var colors = this.colorsByCode;
-
-		for (var y = 0; y < sizeInPixels.y; y++)
-		{
-			var stringForPixelRow = stringsForPixels[y];
-			pixelPos.y = y * scaleFactor.y;
-
-			for (var x = 0; x < sizeInPixels.x; x++)
-			{
-				var charForPixel = stringForPixelRow[x];
-				pixelPos.x = x * scaleFactor.x;
-
-				colorForPixel = colors.get(charForPixel);
-
-				graphics.fillStyle = colorForPixel.systemColor();
-				graphics.fillRect
-				(
-					pixelPos.x,
-					pixelPos.y,
-					scaleFactor.x,
-					scaleFactor.y
-				);
-			}
-		}
-
-		var imageFromCanvasURL = canvas.toDataURL("image/png");
-		var htmlImageFromCanvas = document.createElement("img");
-		htmlImageFromCanvas.width = canvas.width;
-		htmlImageFromCanvas.height = canvas.height;
-		htmlImageFromCanvas.src = imageFromCanvasURL;
-
-		var returnValue = Image2.fromSystemImage
-		(
-			name,
-			htmlImageFromCanvas
-		);
-
-		return returnValue;
-	}
+	// Utility methods.
 
 	copyRegionFromImage
 	(
@@ -143,7 +60,113 @@ export class ImageBuilder
 		return returnValue;
 	}
 
-	sliceImageIntoTiles(imageToSlice: Image2, sizeInTiles: Coords): Image2[][]
+	imageBuildFromNameColorsAndPixelsAsStrings
+	(
+		name: string,
+		colors: Color[],
+		pixelsForStrings: string[]
+	): Image2
+	{
+		return this.imageBuildFromStrings(name, colors, pixelsForStrings);
+	}
+
+	imagesBuildFromStringArrays
+	(
+		name: string,
+		colors: Color[],
+		stringArraysForImagePixels: string[][]
+	): Image2[]
+	{
+		var returnValue = new Array<Image2>();
+
+		for (var i = 0; i < stringArraysForImagePixels.length; i++)
+		{
+			var stringsForImagePixels = stringArraysForImagePixels[i];
+			var image =
+				this.imageBuildFromStrings(name + i, colors, stringsForImagePixels);
+			returnValue.push(image);
+		}
+
+		return returnValue;
+	}
+
+	imageBuildFromStrings
+	(
+		name: string,
+		colors: Color[],
+		stringsForPixels: string[]
+	): Image2
+	{
+		return this.imageBuildFromStringsScaled
+		(
+			name, colors, stringsForPixels, Coords.Instances().Ones
+		);
+	}
+
+	imageBuildFromStringsScaled
+	(
+		name: string,
+		colors: Color[],
+		stringsForPixels: string[],
+		scaleFactor: Coords
+	): Image2
+	{
+		var colorsByCode = new Map<string, Color>(colors.map(x => [ x.code, x ] ) );
+
+		var sizeInPixels = Coords.fromXY
+		(
+			stringsForPixels[0].length,
+			stringsForPixels.length
+		);
+
+		var canvas = document.createElement("canvas");
+		canvas.width = sizeInPixels.x * scaleFactor.x;
+		canvas.height = sizeInPixels.y * scaleFactor.y;
+
+		var graphics = canvas.getContext("2d");
+
+		var pixelPos = Coords.create();
+		var colorForPixel;
+
+		for (var y = 0; y < sizeInPixels.y; y++)
+		{
+			var stringForPixelRow = stringsForPixels[y];
+			pixelPos.y = y * scaleFactor.y;
+
+			for (var x = 0; x < sizeInPixels.x; x++)
+			{
+				var codeForPixel = stringForPixelRow[x];
+				pixelPos.x = x * scaleFactor.x;
+
+				colorForPixel = colorsByCode.get(codeForPixel);
+
+				graphics.fillStyle = colorForPixel.systemColor();
+				graphics.fillRect
+				(
+					pixelPos.x,
+					pixelPos.y,
+					scaleFactor.x,
+					scaleFactor.y
+				);
+			}
+		}
+
+		var imageFromCanvasURL = canvas.toDataURL("image/png");
+		var htmlImageFromCanvas = document.createElement("img");
+		htmlImageFromCanvas.width = canvas.width;
+		htmlImageFromCanvas.height = canvas.height;
+		htmlImageFromCanvas.src = imageFromCanvasURL;
+
+		var returnValue = Image2.fromSystemImage
+		(
+			name,
+			htmlImageFromCanvas
+		);
+
+		return returnValue;
+	}
+
+	imageSliceIntoTiles(imageToSlice: Image2, sizeInTiles: Coords): Image2[][]
 	{
 		var returnImages = new Array<Image2[]>();
 
@@ -207,6 +230,109 @@ export class ImageBuilder
 
 		return returnImages;
 	}
+
+	// Library methods.
+
+	squareOfColor(color: Color): Image2
+	{
+		var colors =
+		[
+			color.clone().codeSet(".")
+		];
+
+		var pixelsForSquareWithInsetBorder =
+		[
+			"."
+		];
+
+		var image = this.imageBuildFromNameColorsAndPixelsAsStrings
+		(
+			"Square",
+			colors,
+			pixelsForSquareWithInsetBorder
+		);
+
+		return image;
+	}
+
+	squareOfColorWithInsetBorderOfColor(colorSquare: Color, colorBorder: Color): Image2
+	{
+		var colors =
+		[
+			colorSquare.clone().codeSet("."),
+			colorBorder.clone().codeSet("#")
+		];
+
+		var pixelsForSquareWithInsetBorder =
+		[
+			"................",
+			".##############.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".#............#.",
+			".##############.",
+			"................",
+		];
+
+		var image = this.imageBuildFromNameColorsAndPixelsAsStrings
+		(
+			"SquareWithInsetBorder",
+			colors,
+			pixelsForSquareWithInsetBorder
+		);
+
+		return image;
+	}
+
+
+	wallMasonryWithColorsForBlocksAndMortar
+	(
+		colorBlock: Color,
+		colorMortar: Color
+	): Image2
+	{
+		var colors =
+		[
+			colorBlock.clone().codeSet("."),
+			colorMortar.clone().codeSet("#")
+		];
+
+		var image = this.imageBuildFromNameColorsAndPixelsAsStrings
+		(
+			"Wall",
+			colors,
+			[
+				"################",
+				"#...#...#...#...",
+				"#...#...#...#...",
+				"#...#...#...#...",
+				"################",
+				"..#...#...#...#.",
+				"..#...#...#...#.",
+				"..#...#...#...#.",
+				"################",
+				"#...#...#...#...",
+				"#...#...#...#...",
+				"#...#...#...#...",
+				"################",
+				"..#...#...#...#.",
+				"..#...#...#...#.",
+				"..#...#...#...#.",
+			]
+		);
+
+		return image;
+	}
+
 }
 
 }

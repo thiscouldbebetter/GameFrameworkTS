@@ -781,6 +781,8 @@ export class MeshBuilder
 		return returnMeshTextured;
 	}
 
+	// Helpers.
+
 	clipFaceAgainstPlanes
 	(
 		faceToClip: FaceTextured, planesToClipAgainst: Plane[]

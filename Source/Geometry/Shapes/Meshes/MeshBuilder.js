@@ -405,6 +405,7 @@ var ThisCouldBeBetter;
                 ], null);
                 return returnMeshTextured;
             }
+            // Helpers.
             clipFaceAgainstPlanes(faceToClip, planesToClipAgainst) {
                 for (var p = 0; p < planesToClipAgainst.length; p++) {
                     faceToClip = this.splitFaceByPlaneFrontAndBack(faceToClip, planesToClipAgainst[p])[0];

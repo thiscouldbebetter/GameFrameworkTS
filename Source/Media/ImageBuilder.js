@@ -12,47 +12,7 @@ var ThisCouldBeBetter;
             static default() {
                 return new ImageBuilder(GameFramework.Color.Instances()._All);
             }
-            // static methods
-            buildImageFromStrings(name, stringsForPixels) {
-                return this.buildImageFromStringsScaled(name, GameFramework.Coords.Instances().Ones, stringsForPixels);
-            }
-            buildImagesFromStringArrays(name, stringArraysForImagePixels) {
-                var returnValue = new Array();
-                for (var i = 0; i < stringArraysForImagePixels.length; i++) {
-                    var stringsForImagePixels = stringArraysForImagePixels[i];
-                    var image = this.buildImageFromStrings(name + i, stringsForImagePixels);
-                    returnValue.push(image);
-                }
-                return returnValue;
-            }
-            buildImageFromStringsScaled(name, scaleFactor, stringsForPixels) {
-                var sizeInPixels = new GameFramework.Coords(stringsForPixels[0].length, stringsForPixels.length, 0);
-                var canvas = document.createElement("canvas");
-                canvas.width = sizeInPixels.x * scaleFactor.x;
-                canvas.height = sizeInPixels.y * scaleFactor.y;
-                var graphics = canvas.getContext("2d");
-                var pixelPos = GameFramework.Coords.create();
-                var colorForPixel;
-                var colors = this.colorsByCode;
-                for (var y = 0; y < sizeInPixels.y; y++) {
-                    var stringForPixelRow = stringsForPixels[y];
-                    pixelPos.y = y * scaleFactor.y;
-                    for (var x = 0; x < sizeInPixels.x; x++) {
-                        var charForPixel = stringForPixelRow[x];
-                        pixelPos.x = x * scaleFactor.x;
-                        colorForPixel = colors.get(charForPixel);
-                        graphics.fillStyle = colorForPixel.systemColor();
-                        graphics.fillRect(pixelPos.x, pixelPos.y, scaleFactor.x, scaleFactor.y);
-                    }
-                }
-                var imageFromCanvasURL = canvas.toDataURL("image/png");
-                var htmlImageFromCanvas = document.createElement("img");
-                htmlImageFromCanvas.width = canvas.width;
-                htmlImageFromCanvas.height = canvas.height;
-                htmlImageFromCanvas.src = imageFromCanvasURL;
-                var returnValue = GameFramework.Image2.fromSystemImage(name, htmlImageFromCanvas);
-                return returnValue;
-            }
+            // Utility methods.
             copyRegionFromImage(imageToCopyFrom, regionPos, regionSize) {
                 var canvas = document.createElement("canvas");
                 canvas.id = "region_" + regionPos.x + "_" + regionPos.y;
@@ -74,7 +34,50 @@ var ThisCouldBeBetter;
                 var returnValue = GameFramework.Image2.fromSystemImage(imageToCopyFrom.name, htmlImageFromCanvas);
                 return returnValue;
             }
-            sliceImageIntoTiles(imageToSlice, sizeInTiles) {
+            imageBuildFromNameColorsAndPixelsAsStrings(name, colors, pixelsForStrings) {
+                return this.imageBuildFromStrings(name, colors, pixelsForStrings);
+            }
+            imagesBuildFromStringArrays(name, colors, stringArraysForImagePixels) {
+                var returnValue = new Array();
+                for (var i = 0; i < stringArraysForImagePixels.length; i++) {
+                    var stringsForImagePixels = stringArraysForImagePixels[i];
+                    var image = this.imageBuildFromStrings(name + i, colors, stringsForImagePixels);
+                    returnValue.push(image);
+                }
+                return returnValue;
+            }
+            imageBuildFromStrings(name, colors, stringsForPixels) {
+                return this.imageBuildFromStringsScaled(name, colors, stringsForPixels, GameFramework.Coords.Instances().Ones);
+            }
+            imageBuildFromStringsScaled(name, colors, stringsForPixels, scaleFactor) {
+                var colorsByCode = new Map(colors.map(x => [x.code, x]));
+                var sizeInPixels = GameFramework.Coords.fromXY(stringsForPixels[0].length, stringsForPixels.length);
+                var canvas = document.createElement("canvas");
+                canvas.width = sizeInPixels.x * scaleFactor.x;
+                canvas.height = sizeInPixels.y * scaleFactor.y;
+                var graphics = canvas.getContext("2d");
+                var pixelPos = GameFramework.Coords.create();
+                var colorForPixel;
+                for (var y = 0; y < sizeInPixels.y; y++) {
+                    var stringForPixelRow = stringsForPixels[y];
+                    pixelPos.y = y * scaleFactor.y;
+                    for (var x = 0; x < sizeInPixels.x; x++) {
+                        var codeForPixel = stringForPixelRow[x];
+                        pixelPos.x = x * scaleFactor.x;
+                        colorForPixel = colorsByCode.get(codeForPixel);
+                        graphics.fillStyle = colorForPixel.systemColor();
+                        graphics.fillRect(pixelPos.x, pixelPos.y, scaleFactor.x, scaleFactor.y);
+                    }
+                }
+                var imageFromCanvasURL = canvas.toDataURL("image/png");
+                var htmlImageFromCanvas = document.createElement("img");
+                htmlImageFromCanvas.width = canvas.width;
+                htmlImageFromCanvas.height = canvas.height;
+                htmlImageFromCanvas.src = imageFromCanvasURL;
+                var returnValue = GameFramework.Image2.fromSystemImage(name, htmlImageFromCanvas);
+                return returnValue;
+            }
+            imageSliceIntoTiles(imageToSlice, sizeInTiles) {
                 var returnImages = new Array();
                 var systemImageToSlice = imageToSlice.systemImage;
                 var imageToSliceSize = imageToSlice.sizeInPixels;
@@ -111,6 +114,68 @@ var ThisCouldBeBetter;
                     returnImages.push(returnImageRow);
                 }
                 return returnImages;
+            }
+            // Library methods.
+            squareOfColor(color) {
+                var colors = [
+                    color.clone().codeSet(".")
+                ];
+                var pixelsForSquareWithInsetBorder = [
+                    "."
+                ];
+                var image = this.imageBuildFromNameColorsAndPixelsAsStrings("Square", colors, pixelsForSquareWithInsetBorder);
+                return image;
+            }
+            squareOfColorWithInsetBorderOfColor(colorSquare, colorBorder) {
+                var colors = [
+                    colorSquare.clone().codeSet("."),
+                    colorBorder.clone().codeSet("#")
+                ];
+                var pixelsForSquareWithInsetBorder = [
+                    "................",
+                    ".##############.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".#............#.",
+                    ".##############.",
+                    "................",
+                ];
+                var image = this.imageBuildFromNameColorsAndPixelsAsStrings("SquareWithInsetBorder", colors, pixelsForSquareWithInsetBorder);
+                return image;
+            }
+            wallMasonryWithColorsForBlocksAndMortar(colorBlock, colorMortar) {
+                var colors = [
+                    colorBlock.clone().codeSet("."),
+                    colorMortar.clone().codeSet("#")
+                ];
+                var image = this.imageBuildFromNameColorsAndPixelsAsStrings("Wall", colors, [
+                    "################",
+                    "#...#...#...#...",
+                    "#...#...#...#...",
+                    "#...#...#...#...",
+                    "################",
+                    "..#...#...#...#.",
+                    "..#...#...#...#.",
+                    "..#...#...#...#.",
+                    "################",
+                    "#...#...#...#...",
+                    "#...#...#...#...",
+                    "#...#...#...#...",
+                    "################",
+                    "..#...#...#...#.",
+                    "..#...#...#...#.",
+                    "..#...#...#...#.",
+                ]);
+                return image;
             }
         }
         GameFramework.ImageBuilder = ImageBuilder;

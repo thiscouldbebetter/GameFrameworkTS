@@ -107,6 +107,12 @@ export class Color implements Interpolatable<Color>
 		return this;
 	}
 
+	codeSet(value: string): Color
+	{
+		this.code = value;
+		return this;
+	}
+
 	fractionsRgb(): number[]
 	{
 		return this.fractionsRgba.slice(0, 3);

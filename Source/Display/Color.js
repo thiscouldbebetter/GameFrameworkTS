@@ -54,6 +54,10 @@ var ThisCouldBeBetter;
                 this._systemColor = null;
                 return this;
             }
+            codeSet(value) {
+                this.code = value;
+                return this;
+            }
             fractionsRgb() {
                 return this.fractionsRgba.slice(0, 3);
             }
