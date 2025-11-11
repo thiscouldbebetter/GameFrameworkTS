@@ -53,7 +53,7 @@ class PlaceBuilderDemo // Main.
         epebfdac("Weight", 1, null);
         var ring = this.entitiesBuildFromDefnAndCount(entityDefns.get("Ring"), 1, null, entityPosRange, randomizer)[0];
         var ringLoc = Locatable.of(ring).loc;
-        ringLoc.spin.angleInTurnsRef.value = .001;
+        ringLoc.spin.angleInTurnsSet(.001);
         this.entities.push(ring);
         var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
         var itemEntityOre = this.entityBuildFromDefn(entityDefns.get("Iron Ore"), entityPosRange, randomizer);
@@ -644,7 +644,7 @@ class PlaceBuilderDemo // Main.
         var entityRing = this.entityBuildFromDefn(entityDefns.get("Ring"), entityPosRange, this.randomizer);
         var ringLoc = Locatable.of(entityRing).loc;
         ringLoc.pos.overwriteWith(Locatable.of(goalEntity).loc.pos);
-        ringLoc.spin.angleInTurnsRef.value = .001;
+        ringLoc.spin.angleInTurnsSet(.001);
         entities.push(entityRing);
     }
     build_Interior(name, size, placeNameToReturnTo) {

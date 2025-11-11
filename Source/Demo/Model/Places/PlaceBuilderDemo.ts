@@ -105,7 +105,7 @@ class PlaceBuilderDemo // Main.
 			entityDefns.get("Ring"), 1, null, entityPosRange, randomizer
 		)[0];
 		var ringLoc = Locatable.of(ring).loc;
-		ringLoc.spin.angleInTurnsRef.value = .001;
+		ringLoc.spin.angleInTurnsSet(.001);
 		this.entities.push(ring);
 
 		var container = this.entityBuildFromDefn(entityDefns.get("Container"), entityPosRange, randomizer);
@@ -1166,7 +1166,7 @@ class PlaceBuilderDemo // Main.
 		);
 		var ringLoc = Locatable.of(entityRing).loc;
 		ringLoc.pos.overwriteWith(Locatable.of(goalEntity).loc.pos);
-		ringLoc.spin.angleInTurnsRef.value = .001;
+		ringLoc.spin.angleInTurnsSet(.001);
 
 		entities.push(entityRing);
 	}

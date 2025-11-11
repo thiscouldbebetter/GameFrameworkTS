@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
                 this.vel = GameFramework.Coords.create();
                 this.accel = GameFramework.Coords.create();
                 this.force = GameFramework.Coords.create();
-                this.spin = new GameFramework.Rotation(this.orientation.down, new GameFramework.Reference(0));
+                this.spin = GameFramework.Rotation.fromAxisAndAngleInTurns(this.orientation.down, 0);
                 this.timeOffsetInTicks = 0;
                 this._accelDirection = GameFramework.Coords.create();
                 this._velDirection = GameFramework.Coords.create();

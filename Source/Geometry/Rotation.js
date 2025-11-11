@@ -4,16 +4,23 @@ var ThisCouldBeBetter;
     var GameFramework;
     (function (GameFramework) {
         class Rotation {
-            constructor(axis, angleInTurnsRef) {
+            constructor(axis, angleInTurnsAsReference) {
                 this.axis = axis;
-                this.angleInTurnsRef = angleInTurnsRef;
+                this.angleInTurnsAsReference = angleInTurnsAsReference;
+            }
+            static fromAxisAndAngleInTurns(axis, angleInTurns) {
+                return new Rotation(axis, new GameFramework.Reference(angleInTurns));
             }
             angleInTurns() {
-                return this.angleInTurnsRef.value;
+                return this.angleInTurnsAsReference.value;
+            }
+            angleInTurnsSet(value) {
+                this.angleInTurnsAsReference.set(value);
+                return this;
             }
             transformCoords(coordsToTransform) {
                 // hack - Assume axis is (0, 0, 1).
-                var polar = new GameFramework.Polar(0, 0, 0).fromCoords(coordsToTransform);
+                var polar = GameFramework.Polar.create().fromCoords(coordsToTransform);
                 polar.azimuthInTurns = GameFramework.NumberHelper.wrapToRangeMinMax(polar.azimuthInTurns + this.angleInTurns(), 0, 1);
                 return polar.overwriteCoords(coordsToTransform);
             }
@@ -22,11 +29,11 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new Rotation(this.axis.clone(), this.angleInTurnsRef.clone());
+                return new Rotation(this.axis.clone(), this.angleInTurnsAsReference.clone());
             }
             overwriteWith(other) {
                 this.axis.overwriteWith(other.axis);
-                this.angleInTurnsRef.overwriteWith(other.angleInTurnsRef);
+                this.angleInTurnsAsReference.overwriteWith(other.angleInTurnsAsReference);
                 return this;
             }
         }
