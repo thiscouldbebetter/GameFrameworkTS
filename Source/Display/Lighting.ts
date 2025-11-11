@@ -39,15 +39,30 @@ export class Lighting
 	{
 		return new Lighting(lightAmbient, lightDirectional, lightPoint);
 	}
+
+	static fromLightPoint(lightPoint: LightPoint): Lighting
+	{
+		return new Lighting
+		(
+			LightAmbient.dark(),
+			LightDirectional.dark(),
+			lightPoint
+		);
+	}
 }
 
-class LightAmbient
+export class LightAmbient
 {
 	intensity: number;
 
 	constructor(intensity: number)
 	{
 		this.intensity = intensity;
+	}
+
+	static dark(): LightAmbient
+	{
+		return new LightAmbient(0);
 	}
 
 	static fromIntensity(intensity: number): LightAmbient
@@ -68,7 +83,7 @@ class LightAmbient
 	}
 }
 
-class LightDirectional
+export class LightDirectional
 {
 	intensity: number;
 	direction: Coords;
@@ -77,6 +92,11 @@ class LightDirectional
 	{
 		this.intensity = intensity;
 		this.direction = direction;
+	}
+
+	static dark(): LightDirectional
+	{
+		return new LightDirectional(0, Coords.fromXYZ(1, 0, 0) );
 	}
 
 	static fromIntensityAndDirection(intensity: number, direction: Coords): LightDirectional
@@ -89,21 +109,21 @@ class LightDirectional
 		var gl = webGlContext.gl;
 		var shaderProgram = webGlContext.shaderProgram;
 
-		gl.uniform3fv
-		(
-			shaderProgram.lightDirection,
-			WebGLContext.coordsToWebGLArray(this.direction)
-		);
-
 		gl.uniform1f
 		(
 			shaderProgram.lightDirectionalIntensity,
 			this.intensity
 		);
+
+		gl.uniform3fv
+		(
+			shaderProgram.lightDirectionalDirection,
+			WebGLContext.coordsToWebGLArray(this.direction)
+		);
 	}
 }
 
-class LightPoint
+export class LightPoint
 {
 	intensity: number;
 	pos: Coords;
@@ -112,6 +132,11 @@ class LightPoint
 	{
 		this.intensity = intensity;
 		this.pos = pos;
+	}
+
+	static default(): LightPoint
+	{
+		return new LightPoint(1, Coords.zeroes() );
 	}
 
 	static fromIntensityAndPos(intensity: number, pos: Coords): LightPoint

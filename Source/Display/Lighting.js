@@ -16,11 +16,17 @@ var ThisCouldBeBetter;
             static fromLightsAmbientDirectionalAndPoint(lightAmbient, lightDirectional, lightPoint) {
                 return new Lighting(lightAmbient, lightDirectional, lightPoint);
             }
+            static fromLightPoint(lightPoint) {
+                return new Lighting(LightAmbient.dark(), LightDirectional.dark(), lightPoint);
+            }
         }
         GameFramework.Lighting = Lighting;
         class LightAmbient {
             constructor(intensity) {
                 this.intensity = intensity;
+            }
+            static dark() {
+                return new LightAmbient(0);
             }
             static fromIntensity(intensity) {
                 return new LightAmbient(intensity);
@@ -31,10 +37,14 @@ var ThisCouldBeBetter;
                 gl.uniform1f(shaderProgram.lightAmbientIntensity, this.intensity);
             }
         }
+        GameFramework.LightAmbient = LightAmbient;
         class LightDirectional {
             constructor(intensity, direction) {
                 this.intensity = intensity;
                 this.direction = direction;
+            }
+            static dark() {
+                return new LightDirectional(0, GameFramework.Coords.fromXYZ(1, 0, 0));
             }
             static fromIntensityAndDirection(intensity, direction) {
                 return new LightDirectional(intensity, direction);
@@ -42,14 +52,18 @@ var ThisCouldBeBetter;
             writeToWebGlContext(webGlContext) {
                 var gl = webGlContext.gl;
                 var shaderProgram = webGlContext.shaderProgram;
-                gl.uniform3fv(shaderProgram.lightDirection, GameFramework.WebGLContext.coordsToWebGLArray(this.direction));
                 gl.uniform1f(shaderProgram.lightDirectionalIntensity, this.intensity);
+                gl.uniform3fv(shaderProgram.lightDirectionalDirection, GameFramework.WebGLContext.coordsToWebGLArray(this.direction));
             }
         }
+        GameFramework.LightDirectional = LightDirectional;
         class LightPoint {
             constructor(intensity, pos) {
                 this.intensity = intensity;
                 this.pos = pos;
+            }
+            static default() {
+                return new LightPoint(1, GameFramework.Coords.zeroes());
             }
             static fromIntensityAndPos(intensity, pos) {
                 return new LightPoint(intensity, pos);
@@ -58,5 +72,6 @@ var ThisCouldBeBetter;
                 // todo
             }
         }
+        GameFramework.LightPoint = LightPoint;
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));

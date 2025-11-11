@@ -180,7 +180,16 @@ var ThisCouldBeBetter;
                 this.webGLContext = new GameFramework.WebGLContext(this.canvas); // The canvas from the overlay cannot be used here.
                 this.texturesRegisteredByName = new Map();
                 // hack
-                this.lighting = GameFramework.Lighting.default();
+                this.lighting =
+                    GameFramework.Lighting.default();
+                /*
+                Lighting.fromLightsAmbientDirectionalAndPoint
+                    (
+                        LightAmbient.fromIntensity(.25),
+                        LightDirectional.dark(),
+                        LightPoint.fromIntensityAndPos(1000000, Coords.fromXYZ(0, 0, -100) )
+                    );
+                */
                 this._display2DOverlay.initialize(universe);
                 // temps
                 this.matrixEntity = GameFramework.Matrix.buildZeroes();

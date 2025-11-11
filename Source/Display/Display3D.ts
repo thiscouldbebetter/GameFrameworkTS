@@ -467,7 +467,16 @@ export class Display3D implements Display
 
 		// hack
 
-		this.lighting = Lighting.default();
+		this.lighting =
+			Lighting.default();
+			/*
+			Lighting.fromLightsAmbientDirectionalAndPoint
+				(
+					LightAmbient.fromIntensity(.25),
+					LightDirectional.dark(),
+					LightPoint.fromIntensityAndPos(1000000, Coords.fromXYZ(0, 0, -100) )
+				);
+			*/
 
 		this._display2DOverlay.initialize(universe);
 

@@ -68,8 +68,10 @@ var ThisCouldBeBetter;
                     "uniform mat4 uEntityMatrix;",
                     "uniform mat4 uCameraMatrix;",
                     "uniform float uLightAmbientIntensity;",
-                    "uniform vec3 uLightDirection;",
                     "uniform float uLightDirectionalIntensity;",
+                    "uniform vec3 uLightDirectionalDirection;",
+                    "uniform vec3 uLightPointIntensity;",
+                    "uniform vec3 uLightPointPosition;",
                     "uniform mat4 uNormalMatrix;",
                     "",
                     "varying vec4 vColor;",
@@ -84,8 +86,9 @@ var ThisCouldBeBetter;
                     "    float lightMagnitude = uLightAmbientIntensity;",
                     "    lightMagnitude += ",
                     "        uLightDirectionalIntensity ",
-                    "        * max(dot(transformedNormal, uLightDirection), 0.0);",
-                    "    vLight = vec3(1.0, 1.0, 1.0) * lightMagnitude;",
+                    "        * max(dot(transformedNormal, uLightDirectionalDirection), 0.0);",
+                    "    vec3 lightColor = vec3(1.0, 1.0, 1.0);",
+                    "    vLight = lightColor * lightMagnitude;",
                     "    vTextureUV = aVertexTextureUV;",
                     "    vec4 vertexPos = vec4(aVertexPosition, 1.0);",
                     "    gl_Position = uCameraMatrix * uEntityMatrix * vertexPos;",
@@ -105,6 +108,11 @@ var ThisCouldBeBetter;
             }
             buildShaderProgram_SetUpInputVariables(gl, shaderProgram) {
                 var vars = ShaderProgramVariableNames.Instance();
+                // This code sets arbitrary fields on the object,
+                // so it must be cast to type "any".
+                // This seems like a bad practice.
+                // Maybe a positive first step would be
+                // to put all these fields on a single object.
                 var sp = shaderProgram;
                 sp.vertexColorAttribute =
                     gl.getAttribLocation(sp, vars.aVertexColor);
@@ -124,10 +132,14 @@ var ThisCouldBeBetter;
                     gl.getUniformLocation(sp, vars.uCameraMatrix);
                 sp.lightAmbientIntensity =
                     gl.getUniformLocation(sp, vars.uLightAmbientIntensity);
-                sp.lightDirection =
-                    gl.getUniformLocation(sp, vars.uLightDirection);
                 sp.lightDirectionalIntensity =
                     gl.getUniformLocation(sp, vars.uLightDirectionalIntensity);
+                sp.lightDirectionalDirection =
+                    gl.getUniformLocation(sp, vars.uLightDirectionalDirection);
+                sp.lightPointIntensity =
+                    gl.getUniformLocation(sp, vars.uLightPointIntensity);
+                sp.lightPointPosition =
+                    gl.getUniformLocation(sp, vars.uLightPointPosition);
                 sp.normalMatrix =
                     gl.getUniformLocation(sp, vars.uNormalMatrix);
             }
@@ -142,8 +154,8 @@ var ThisCouldBeBetter;
                 this.uEntityMatrix = "uEntityMatrix";
                 this.uCameraMatrix = "uCameraMatrix";
                 this.uLightAmbientIntensity = "uLightAmbientIntensity";
-                this.uLightDirection = "uLightDirection";
                 this.uLightDirectionalIntensity = "uLightDirectionalIntensity";
+                this.uLightDirectionalDirection = "uLightDirectionalDirection";
                 this.uNormalMatrix = "uNormalMatrix";
             }
             static Instance() {
