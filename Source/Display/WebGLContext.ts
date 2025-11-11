@@ -29,10 +29,6 @@ export class WebGLContext
 	initGL(canvas: HTMLCanvasElement): WebGLRenderingContext
 	{
 		var gl = canvas.getContext("experimental-webgl") as WebGLRenderingContext;
-		/*
-		gl.viewportWidth = canvas.width;
-		gl.viewportHeight = canvas.height;
-		*/
 		gl.viewport(0, 0, canvas.width, canvas.height);
 
 		var colorBackground = Color.Instances().Black;
@@ -69,21 +65,24 @@ export class WebGLContext
 	buildShaderProgram_FragmentShader(gl: WebGLRenderingContext)
 	{
 		var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+		var newline = "\n";
 		var fragmentShaderCode =
-			"precision mediump float;"
-			+ "uniform sampler2D uSampler;"
-			+ "varying vec4 vColor;"
-			+ "varying vec3 vLight;"
-			+ "varying vec2 vTextureUV;"
-			+ "void main(void) {"
-			+ "    if (vTextureUV.x < 0.0) {"
-			+ "        gl_FragColor = vColor;"
-			+ "    } else {"
-			+ "        vec4 textureColor = "
-			+ "            texture2D(uSampler, vec2(vTextureUV.s, vTextureUV.t));"
-			+ "        gl_FragColor = vec4(vLight * textureColor.rgb, textureColor.a);"
-			+ "    }"
-			+ "}";
+		[
+			"precision mediump float;",
+			"uniform sampler2D uSampler;",
+			"varying vec4 vColor;",
+			"varying vec3 vLight;",
+			"varying vec2 vTextureUV;",
+			"void main(void) {",
+			"    if (vTextureUV.x < 0.0) {",
+			"        gl_FragColor = vColor;",
+			"    } else {",
+			"        vec4 textureColor = ",
+			"            texture2D(uSampler, vec2(vTextureUV.s, vTextureUV.t));",
+			"        gl_FragColor = vec4(vLight * textureColor.rgb, textureColor.a);",
+			"    }",
+			"}"
+		].join(newline);
 		gl.shaderSource(fragmentShader, fragmentShaderCode);
 		gl.compileShader(fragmentShader);
 
@@ -93,34 +92,37 @@ export class WebGLContext
 	buildShaderProgram_VertexShader(gl: WebGLRenderingContext)
 	{
 		var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+		var newline = "\n";
 		var vertexShaderCode =
-			"attribute vec4 aVertexColor;"
-			+ "attribute vec3 aVertexNormal;"
-			+ "attribute vec3 aVertexPosition;"
-			+ "attribute vec2 aVertexTextureUV;"
-			+ "uniform mat4 uEntityMatrix;"
-			+ "uniform mat4 uCameraMatrix;"
-			+ "uniform float uLightAmbientIntensity;"
-			+ "uniform vec3 uLightDirection;"
-			+ "uniform float uLightDirectionalIntensity;"
-			+ "uniform mat4 uNormalMatrix;"
-			+ "varying vec4 vColor;"
-			+ "varying vec3 vLight;"
-			+ "varying vec2 vTextureUV;"
-			+ "void main(void) {"
-			+ "    vColor = aVertexColor;"
-			+ "    vec4 vertexNormal4 = vec4(aVertexNormal, 0.0);"
-			+ "    vec4 transformedNormal4 = uNormalMatrix * vertexNormal4;"
-			+ "    vec3 transformedNormal = vec3(transformedNormal4.xyz) * -1.0;"
-			+ "    float lightMagnitude = uLightAmbientIntensity;"
-			+ "    lightMagnitude += "
-			+ "        uLightDirectionalIntensity "
-                        + "        * max(dot(transformedNormal, uLightDirection), 0.0);"
-			+ "    vLight = vec3(1.0, 1.0, 1.0) * lightMagnitude;"
-			+ "    vTextureUV = aVertexTextureUV;"
-			+ "    vec4 vertexPos = vec4(aVertexPosition, 1.0);"
-			+ "    gl_Position = uCameraMatrix * uEntityMatrix * vertexPos;"
-    			+ "}";
+		[
+			"attribute vec4 aVertexColor;",
+			"attribute vec3 aVertexNormal;",
+			"attribute vec3 aVertexPosition;",
+			"attribute vec2 aVertexTextureUV;",
+			"uniform mat4 uEntityMatrix;",
+			"uniform mat4 uCameraMatrix;",
+			"uniform float uLightAmbientIntensity;",
+			"uniform vec3 uLightDirection;",
+			"uniform float uLightDirectionalIntensity;",
+			"uniform mat4 uNormalMatrix;",
+			"varying vec4 vColor;",
+			"varying vec3 vLight;",
+			"varying vec2 vTextureUV;",
+			"void main(void) {",
+			"    vColor = aVertexColor;",
+			"    vec4 vertexNormal4 = vec4(aVertexNormal, 0.0);",
+			"    vec4 transformedNormal4 = uNormalMatrix * vertexNormal4;",
+			"    vec3 transformedNormal = vec3(transformedNormal4.xyz) * -1.0;",
+			"    float lightMagnitude = uLightAmbientIntensity;",
+			"    lightMagnitude += ",
+			"        uLightDirectionalIntensity ",
+			"        * max(dot(transformedNormal, uLightDirection), 0.0);",
+			"    vLight = vec3(1.0, 1.0, 1.0) * lightMagnitude;",
+			"    vTextureUV = aVertexTextureUV;",
+			"    vec4 vertexPos = vec4(aVertexPosition, 1.0);",
+			"    gl_Position = uCameraMatrix * uEntityMatrix * vertexPos;",
+			"}"
+		].join(newline);
 		gl.shaderSource(vertexShader, vertexShaderCode);
 		gl.compileShader(vertexShader);
 
@@ -143,72 +145,85 @@ export class WebGLContext
 
 	buildShaderProgram_SetUpInputVariables
 	(
-		gl: WebGLRenderingContext, shaderProgram: any
+		gl: WebGLRenderingContext,
+		shaderProgram: any
 	)
 	{
-		shaderProgram.vertexColorAttribute = gl.getAttribLocation
-		(
-			shaderProgram,
-			"aVertexColor"
-		);
-		gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+		var vars = ShaderProgramVariableNames.Instance();
 
-		shaderProgram.vertexNormalAttribute = gl.getAttribLocation
-		(
-			shaderProgram,
-			"aVertexNormal"
-		);
-		gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+		var sp = shaderProgram;
 
-		shaderProgram.vertexPositionAttribute = gl.getAttribLocation
-		(
-			shaderProgram,
-			"aVertexPosition"
-		);
-		gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+		sp.vertexColorAttribute =
+			gl.getAttribLocation(sp, vars.aVertexColor);
+		gl.enableVertexAttribArray(sp.vertexColorAttribute);
 
-		shaderProgram.vertexTextureUVAttribute = gl.getAttribLocation
-		(
-			shaderProgram,
-			"aVertexTextureUV"
-		);
-		gl.enableVertexAttribArray(shaderProgram.vertexTextureUVAttribute);
+		sp.vertexNormalAttribute =
+			gl.getAttribLocation(sp, vars.aVertexNormal);
+		gl.enableVertexAttribArray(sp.vertexNormalAttribute);
 
-		shaderProgram.entityMatrix = gl.getUniformLocation
-		(
-			shaderProgram,
-			"uEntityMatrix"
-		);
+		sp.vertexPositionAttribute =
+			gl.getAttribLocation(sp, vars.aVertexPosition);
+		gl.enableVertexAttribArray(sp.vertexPositionAttribute);
 
-		shaderProgram.cameraMatrix = gl.getUniformLocation
-		(
-			shaderProgram,
-			"uCameraMatrix"
-		);
+		sp.vertexTextureUVAttribute =
+			gl.getAttribLocation(sp, vars.aVertexTextureUV);
+		gl.enableVertexAttribArray(sp.vertexTextureUVAttribute);
 
-		shaderProgram.lightAmbientIntensity = gl.getUniformLocation
-		(
-			shaderProgram,
-			"uLightAmbientIntensity"
-		);
+		sp.entityMatrix =
+			gl.getUniformLocation(sp, vars.uEntityMatrix);
 
-		shaderProgram.lightDirection = gl.getUniformLocation
-		(
-			shaderProgram,
-			"uLightDirection"
-		);
+		sp.cameraMatrix =
+			gl.getUniformLocation(sp, vars.uCameraMatrix);
 
-		shaderProgram.lightDirectionalIntensity = gl.getUniformLocation
-		(
-			shaderProgram,
-			"uLightDirectionalIntensity"
-		);
+		sp.lightAmbientIntensity =
+			gl.getUniformLocation(sp, vars.uLightAmbientIntensity);
 
-		shaderProgram.normalMatrix = gl.getUniformLocation
-		(
-			shaderProgram,
-			"uNormalMatrix"
-		);
+		sp.lightDirection =
+			gl.getUniformLocation(sp, vars.uLightDirection);
+
+		sp.lightDirectionalIntensity =
+			gl.getUniformLocation(sp, vars.uLightDirectionalIntensity);
+
+		sp.normalMatrix =
+			gl.getUniformLocation(sp, vars.uNormalMatrix);
+	}
+}
+
+class ShaderProgramVariableNames
+{
+	aVertexColor: string;
+	aVertexNormal: string;
+	aVertexPosition: string;
+	aVertexTextureUV: string;
+	uEntityMatrix: string;
+	uCameraMatrix: string;
+	uLightAmbientIntensity: string;
+	uLightDirection: string;
+	uLightDirectionalIntensity: string;
+	uNormalMatrix: string;
+
+	constructor()
+	{
+		this.aVertexColor = "aVertexColor";
+		this.aVertexNormal = "aVertexNormal";
+		this.aVertexPosition = "aVertexPosition";
+		this.aVertexTextureUV = "aVertexTextureUV";
+		this.uEntityMatrix = "uEntityMatrix";
+		this.uCameraMatrix = "uCameraMatrix";
+		this.uLightAmbientIntensity = "uLightAmbientIntensity";
+		this.uLightDirection = "uLightDirection";
+		this.uLightDirectionalIntensity = "uLightDirectionalIntensity";
+		this.uNormalMatrix = "uNormalMatrix";
+	}
+
+	static _instance: ShaderProgramVariableNames;
+	static Instance(): ShaderProgramVariableNames
+	{
+		if (this._instance == null)
+		{
+			this._instance = new ShaderProgramVariableNames();
+		}
+		return this._instance;
 	}
 }
 

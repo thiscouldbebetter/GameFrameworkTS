@@ -17,10 +17,6 @@ var ThisCouldBeBetter;
             // instance methods
             initGL(canvas) {
                 var gl = canvas.getContext("experimental-webgl");
-                /*
-                gl.viewportWidth = canvas.width;
-                gl.viewportHeight = canvas.height;
-                */
                 gl.viewport(0, 0, canvas.width, canvas.height);
                 var colorBackground = GameFramework.Color.Instances().Black;
                 var colorBackgroundComponentsRGBA = colorBackground.fractionsRgba; // todo
@@ -36,53 +32,59 @@ var ThisCouldBeBetter;
             }
             buildShaderProgram_FragmentShader(gl) {
                 var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-                var fragmentShaderCode = "precision mediump float;"
-                    + "uniform sampler2D uSampler;"
-                    + "varying vec4 vColor;"
-                    + "varying vec3 vLight;"
-                    + "varying vec2 vTextureUV;"
-                    + "void main(void) {"
-                    + "    if (vTextureUV.x < 0.0) {"
-                    + "        gl_FragColor = vColor;"
-                    + "    } else {"
-                    + "        vec4 textureColor = "
-                    + "            texture2D(uSampler, vec2(vTextureUV.s, vTextureUV.t));"
-                    + "        gl_FragColor = vec4(vLight * textureColor.rgb, textureColor.a);"
-                    + "    }"
-                    + "}";
+                var newline = "\n";
+                var fragmentShaderCode = [
+                    "precision mediump float;",
+                    "uniform sampler2D uSampler;",
+                    "varying vec4 vColor;",
+                    "varying vec3 vLight;",
+                    "varying vec2 vTextureUV;",
+                    "void main(void) {",
+                    "    if (vTextureUV.x < 0.0) {",
+                    "        gl_FragColor = vColor;",
+                    "    } else {",
+                    "        vec4 textureColor = ",
+                    "            texture2D(uSampler, vec2(vTextureUV.s, vTextureUV.t));",
+                    "        gl_FragColor = vec4(vLight * textureColor.rgb, textureColor.a);",
+                    "    }",
+                    "}"
+                ].join(newline);
                 gl.shaderSource(fragmentShader, fragmentShaderCode);
                 gl.compileShader(fragmentShader);
                 return fragmentShader;
             }
             buildShaderProgram_VertexShader(gl) {
                 var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-                var vertexShaderCode = "attribute vec4 aVertexColor;"
-                    + "attribute vec3 aVertexNormal;"
-                    + "attribute vec3 aVertexPosition;"
-                    + "attribute vec2 aVertexTextureUV;"
-                    + "uniform mat4 uEntityMatrix;"
-                    + "uniform mat4 uCameraMatrix;"
-                    + "uniform float uLightAmbientIntensity;"
-                    + "uniform vec3 uLightDirection;"
-                    + "uniform float uLightDirectionalIntensity;"
-                    + "uniform mat4 uNormalMatrix;"
-                    + "varying vec4 vColor;"
-                    + "varying vec3 vLight;"
-                    + "varying vec2 vTextureUV;"
-                    + "void main(void) {"
-                    + "    vColor = aVertexColor;"
-                    + "    vec4 vertexNormal4 = vec4(aVertexNormal, 0.0);"
-                    + "    vec4 transformedNormal4 = uNormalMatrix * vertexNormal4;"
-                    + "    vec3 transformedNormal = vec3(transformedNormal4.xyz) * -1.0;"
-                    + "    float lightMagnitude = uLightAmbientIntensity;"
-                    + "    lightMagnitude += "
-                    + "        uLightDirectionalIntensity "
-                    + "        * max(dot(transformedNormal, uLightDirection), 0.0);"
-                    + "    vLight = vec3(1.0, 1.0, 1.0) * lightMagnitude;"
-                    + "    vTextureUV = aVertexTextureUV;"
-                    + "    vec4 vertexPos = vec4(aVertexPosition, 1.0);"
-                    + "    gl_Position = uCameraMatrix * uEntityMatrix * vertexPos;"
-                    + "}";
+                var newline = "\n";
+                var vertexShaderCode = [
+                    "attribute vec4 aVertexColor;",
+                    "attribute vec3 aVertexNormal;",
+                    "attribute vec3 aVertexPosition;",
+                    "attribute vec2 aVertexTextureUV;",
+                    "uniform mat4 uEntityMatrix;",
+                    "uniform mat4 uCameraMatrix;",
+                    "uniform float uLightAmbientIntensity;",
+                    "uniform vec3 uLightDirection;",
+                    "uniform float uLightDirectionalIntensity;",
+                    "uniform mat4 uNormalMatrix;",
+                    "varying vec4 vColor;",
+                    "varying vec3 vLight;",
+                    "varying vec2 vTextureUV;",
+                    "void main(void) {",
+                    "    vColor = aVertexColor;",
+                    "    vec4 vertexNormal4 = vec4(aVertexNormal, 0.0);",
+                    "    vec4 transformedNormal4 = uNormalMatrix * vertexNormal4;",
+                    "    vec3 transformedNormal = vec3(transformedNormal4.xyz) * -1.0;",
+                    "    float lightMagnitude = uLightAmbientIntensity;",
+                    "    lightMagnitude += ",
+                    "        uLightDirectionalIntensity ",
+                    "        * max(dot(transformedNormal, uLightDirection), 0.0);",
+                    "    vLight = vec3(1.0, 1.0, 1.0) * lightMagnitude;",
+                    "    vTextureUV = aVertexTextureUV;",
+                    "    vec4 vertexPos = vec4(aVertexPosition, 1.0);",
+                    "    gl_Position = uCameraMatrix * uEntityMatrix * vertexPos;",
+                    "}"
+                ].join(newline);
                 gl.shaderSource(vertexShader, vertexShaderCode);
                 gl.compileShader(vertexShader);
                 return vertexShader;
@@ -96,22 +98,54 @@ var ThisCouldBeBetter;
                 return shaderProgram;
             }
             buildShaderProgram_SetUpInputVariables(gl, shaderProgram) {
-                shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
-                gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-                shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
-                gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
-                shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
-                gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-                shaderProgram.vertexTextureUVAttribute = gl.getAttribLocation(shaderProgram, "aVertexTextureUV");
-                gl.enableVertexAttribArray(shaderProgram.vertexTextureUVAttribute);
-                shaderProgram.entityMatrix = gl.getUniformLocation(shaderProgram, "uEntityMatrix");
-                shaderProgram.cameraMatrix = gl.getUniformLocation(shaderProgram, "uCameraMatrix");
-                shaderProgram.lightAmbientIntensity = gl.getUniformLocation(shaderProgram, "uLightAmbientIntensity");
-                shaderProgram.lightDirection = gl.getUniformLocation(shaderProgram, "uLightDirection");
-                shaderProgram.lightDirectionalIntensity = gl.getUniformLocation(shaderProgram, "uLightDirectionalIntensity");
-                shaderProgram.normalMatrix = gl.getUniformLocation(shaderProgram, "uNormalMatrix");
+                var vars = ShaderProgramVariableNames.Instance();
+                var sp = shaderProgram;
+                sp.vertexColorAttribute =
+                    gl.getAttribLocation(sp, vars.aVertexColor);
+                gl.enableVertexAttribArray(sp.vertexColorAttribute);
+                sp.vertexNormalAttribute =
+                    gl.getAttribLocation(sp, vars.aVertexNormal);
+                gl.enableVertexAttribArray(sp.vertexNormalAttribute);
+                sp.vertexPositionAttribute =
+                    gl.getAttribLocation(sp, vars.aVertexPosition);
+                gl.enableVertexAttribArray(sp.vertexPositionAttribute);
+                sp.vertexTextureUVAttribute =
+                    gl.getAttribLocation(sp, vars.aVertexTextureUV);
+                gl.enableVertexAttribArray(sp.vertexTextureUVAttribute);
+                sp.entityMatrix =
+                    gl.getUniformLocation(sp, vars.uEntityMatrix);
+                sp.cameraMatrix =
+                    gl.getUniformLocation(sp, vars.uCameraMatrix);
+                sp.lightAmbientIntensity =
+                    gl.getUniformLocation(sp, vars.uLightAmbientIntensity);
+                sp.lightDirection =
+                    gl.getUniformLocation(sp, vars.uLightDirection);
+                sp.lightDirectionalIntensity =
+                    gl.getUniformLocation(sp, vars.uLightDirectionalIntensity);
+                sp.normalMatrix =
+                    gl.getUniformLocation(sp, vars.uNormalMatrix);
             }
         }
         GameFramework.WebGLContext = WebGLContext;
+        class ShaderProgramVariableNames {
+            constructor() {
+                this.aVertexColor = "aVertexColor";
+                this.aVertexNormal = "aVertexNormal";
+                this.aVertexPosition = "aVertexPosition";
+                this.aVertexTextureUV = "aVertexTextureUV";
+                this.uEntityMatrix = "uEntityMatrix";
+                this.uCameraMatrix = "uCameraMatrix";
+                this.uLightAmbientIntensity = "uLightAmbientIntensity";
+                this.uLightDirection = "uLightDirection";
+                this.uLightDirectionalIntensity = "uLightDirectionalIntensity";
+                this.uNormalMatrix = "uNormalMatrix";
+            }
+            static Instance() {
+                if (this._instance == null) {
+                    this._instance = new ShaderProgramVariableNames();
+                }
+                return this._instance;
+            }
+        }
     })(GameFramework = ThisCouldBeBetter.GameFramework || (ThisCouldBeBetter.GameFramework = {}));
 })(ThisCouldBeBetter || (ThisCouldBeBetter = {}));
