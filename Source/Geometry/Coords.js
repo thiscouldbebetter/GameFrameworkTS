@@ -125,6 +125,9 @@ var ThisCouldBeBetter;
             dimensions() {
                 return [this.x, this.y, this.z];
             }
+            dimensionsXY() {
+                return [this.x, this.y];
+            }
             directions() {
                 if (this.x < 0) {
                     this.x = -1;

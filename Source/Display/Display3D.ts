@@ -174,104 +174,29 @@ export class Display3D implements Display
 		var vertexNormalsAsFloatArray: number[] = [];
 		var vertexTextureUvsAsFloatArray: number[] = [];
 
-		var numberOfTrianglesSoFar = 0;
-		var materials = mesh.materials;
-		var faces = mesh.faces();
-		var faceTextures = mesh.faceTextures;
-		var faceIndicesByMaterialName = mesh.faceIndicesByMaterialName();
+		var numberOfTrianglesSoFar = new Reference<number>(0);
 
-		for (var m = 0; m < materials.length; m++)
+		var meshMaterials = mesh.materials;
+
+		for (var m = 0; m < meshMaterials.length; m++)
 		{
-			var material = materials[m];
-			var materialName = material.name;
-			var faceIndices = faceIndicesByMaterialName.get(materialName);
+			var material = meshMaterials[m];
 
-			for (var fi = 0; fi < faceIndices.length; fi++)
-			{
-				var f = faceIndices[fi];
-				var face = faces[f];
-				var faceMaterial = face.material;
-				var faceGeometry = face.geometry;
-				var faceNormal = faceGeometry.plane().normal;
-
-				// todo
-				// var vertexNormalsForFaceVertices = mesh.vertexNormalsForFaceVertices;
-
-				var vertexIndicesForTriangles: number[][] =
-				[
-					[0, 1, 2]
-				];
-
-				var faceVertices = faceGeometry.vertices;
-				var numberOfVerticesInFace = faceVertices.length;
-
-				if (numberOfVerticesInFace == 4)
-				{
-					vertexIndicesForTriangles.push([0, 2, 3]);
-				}
-
-				for (var t = 0; t < vertexIndicesForTriangles.length; t++)
-				{
-					var vertexIndicesForTriangle = vertexIndicesForTriangles[t];
-
-					for (var vi = 0; vi < vertexIndicesForTriangle.length; vi++)
-					{
-						var vertexIndex = vertexIndicesForTriangle[vi];
-						var vertex = faceVertices[vertexIndex];
-
-						vertexPositionsAsFloatArray = vertexPositionsAsFloatArray.concat
-						(
-							vertex.dimensions()
-						);
-
-						var vertexColor = faceMaterial.colorFill;
-
-						vertexColorsAsFloatArray = vertexColorsAsFloatArray.concat
-						(
-							vertexColor.fractionsRgba
-						);
-
-						var vertexNormal = faceNormal;
-						/*
-						// todo
-						(
-							vertexNormalsForFaceVertices == null
-							? faceNormal
-							: vertexNormalsForFaceVertices[f][vertexIndex]
-						);
-						*/
-
-						vertexNormalsAsFloatArray = vertexNormalsAsFloatArray.concat
-						(
-							vertexNormal.dimensions()
-						);
-
-						var vertexTextureUV =
-						(
-							faceTextures == null
-							? Coords.fromXY(-1, -1)
-							: faceTextures[f] == null
-							? Coords.fromXY(-1, -1)
-							: faceTextures[f].textureUVs[vertexIndex]
-						);
-
-						vertexTextureUvsAsFloatArray = vertexTextureUvsAsFloatArray.concat
-						(
-							[
-								vertexTextureUV.x,
-								vertexTextureUV.y
-							]
-						);
-					}
-				}
-
-				numberOfTrianglesSoFar += vertexIndicesForTriangles.length;
-			}
-
-			this.drawMesh_2
+			this.drawMesh_1
 			(
+				mesh,
 				material,
 				numberOfTrianglesSoFar,
+				vertexColorsAsFloatArray,
+				vertexNormalsAsFloatArray,
+				vertexPositionsAsFloatArray,
+				vertexTextureUvsAsFloatArray
+			);
+
+			this.drawMesh_2_Gl
+			(
+				material,
+				numberOfTrianglesSoFar.value,
 				vertexColorsAsFloatArray,
 				vertexNormalsAsFloatArray,
 				vertexPositionsAsFloatArray,
@@ -281,14 +206,99 @@ export class Display3D implements Display
 		} // end for each material
 	}
 
-	drawMesh_2
+	drawMesh_1
+	(
+		mesh: MeshTextured,
+		material: Material,
+		numberOfTrianglesSoFar: Reference<number>,
+		vertexColorsAsFloatArray: any[],
+		vertexNormalsAsFloatArray: any[],
+		vertexPositionsAsFloatArray: any[],
+		vertexTextureUvsAsFloatArray: any[]
+	): void
+	{
+		var meshFaces = mesh.faces();
+		var meshFaceTextures = mesh.faceTextures;
+		var meshFaceIndicesByMaterialName = mesh.faceIndicesByMaterialName();
+
+		var materialName = material.name;
+		var faceIndices = meshFaceIndicesByMaterialName.get(materialName);
+
+		for (var fi = 0; fi < faceIndices.length; fi++)
+		{
+			var f = faceIndices[fi];
+			var face = meshFaces[f];
+			var faceMaterial = face.material;
+			var faceGeometry = face.geometry;
+			var faceNormal = faceGeometry.plane().normal;
+
+			var vertexIndicesForTriangles: number[][] =
+			[
+				[0, 1, 2]
+			];
+
+			var faceVertices = faceGeometry.vertices;
+			var numberOfVerticesInFace = faceVertices.length;
+
+			if (numberOfVerticesInFace == 4)
+			{
+				vertexIndicesForTriangles.push([0, 2, 3]);
+			}
+
+			for (var t = 0; t < vertexIndicesForTriangles.length; t++)
+			{
+				var vertexIndicesForTriangle = vertexIndicesForTriangles[t];
+
+				for (var vi = 0; vi < vertexIndicesForTriangle.length; vi++)
+				{
+					var vertexIndex = vertexIndicesForTriangle[vi];
+
+					var vertexPos = faceVertices[vertexIndex];
+					vertexPositionsAsFloatArray.push
+					(
+						...vertexPos.dimensions()
+					);
+
+					var vertexColor = faceMaterial.colorFill;
+					vertexColorsAsFloatArray.push
+					(
+						...vertexColor.fractionsRgba
+					);
+
+					var vertexNormal = faceNormal;
+					vertexNormalsAsFloatArray.push
+					(
+						...vertexNormal.dimensions()
+					);
+
+					var vertexTextureUv =
+					(
+						meshFaceTextures == null
+						? Coords.fromXY(-1, -1)
+						: meshFaceTextures[f] == null
+						? Coords.fromXY(-1, -1)
+						: meshFaceTextures[f].textureUVs[vertexIndex]
+					);
+					vertexTextureUvsAsFloatArray.push
+					(
+						...vertexTextureUv.dimensionsXY()
+					);
+				}
+			}
+
+			numberOfTrianglesSoFar.value += vertexIndicesForTriangles.length;
+		}
+
+	}
+
+	drawMesh_2_Gl
 	(
 		material: Material,
 		numberOfTrianglesSoFar: number,
 		vertexColorsAsFloatArray: any[],
 		vertexNormalsAsFloatArray: any[],
 		vertexPositionsAsFloatArray: any[],
-		vertexTextureUvsAsFloatArray: any[],
+		vertexTextureUvsAsFloatArray: any[]
 	): void
 	{
 		var webGLContext = this.webGLContext;

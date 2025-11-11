@@ -203,6 +203,11 @@ export class Coords
 		return [ this.x, this.y, this.z ];
 	}
 
+	dimensionsXY(): number[]
+	{
+		return [ this.x, this.y ];
+	}
+
 	directions(): Coords
 	{
 		if (this.x < 0)

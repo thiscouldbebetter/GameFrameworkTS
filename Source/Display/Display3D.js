@@ -70,66 +70,56 @@ var ThisCouldBeBetter;
                 var vertexColorsAsFloatArray = [];
                 var vertexNormalsAsFloatArray = [];
                 var vertexTextureUvsAsFloatArray = [];
-                var numberOfTrianglesSoFar = 0;
-                var materials = mesh.materials;
-                var faces = mesh.faces();
-                var faceTextures = mesh.faceTextures;
-                var faceIndicesByMaterialName = mesh.faceIndicesByMaterialName();
-                for (var m = 0; m < materials.length; m++) {
-                    var material = materials[m];
-                    var materialName = material.name;
-                    var faceIndices = faceIndicesByMaterialName.get(materialName);
-                    for (var fi = 0; fi < faceIndices.length; fi++) {
-                        var f = faceIndices[fi];
-                        var face = faces[f];
-                        var faceMaterial = face.material;
-                        var faceGeometry = face.geometry;
-                        var faceNormal = faceGeometry.plane().normal;
-                        // todo
-                        // var vertexNormalsForFaceVertices = mesh.vertexNormalsForFaceVertices;
-                        var vertexIndicesForTriangles = [
-                            [0, 1, 2]
-                        ];
-                        var faceVertices = faceGeometry.vertices;
-                        var numberOfVerticesInFace = faceVertices.length;
-                        if (numberOfVerticesInFace == 4) {
-                            vertexIndicesForTriangles.push([0, 2, 3]);
-                        }
-                        for (var t = 0; t < vertexIndicesForTriangles.length; t++) {
-                            var vertexIndicesForTriangle = vertexIndicesForTriangles[t];
-                            for (var vi = 0; vi < vertexIndicesForTriangle.length; vi++) {
-                                var vertexIndex = vertexIndicesForTriangle[vi];
-                                var vertex = faceVertices[vertexIndex];
-                                vertexPositionsAsFloatArray = vertexPositionsAsFloatArray.concat(vertex.dimensions());
-                                var vertexColor = faceMaterial.colorFill;
-                                vertexColorsAsFloatArray = vertexColorsAsFloatArray.concat(vertexColor.fractionsRgba);
-                                var vertexNormal = faceNormal;
-                                /*
-                                // todo
-                                (
-                                    vertexNormalsForFaceVertices == null
-                                    ? faceNormal
-                                    : vertexNormalsForFaceVertices[f][vertexIndex]
-                                );
-                                */
-                                vertexNormalsAsFloatArray = vertexNormalsAsFloatArray.concat(vertexNormal.dimensions());
-                                var vertexTextureUV = (faceTextures == null
-                                    ? GameFramework.Coords.fromXY(-1, -1)
-                                    : faceTextures[f] == null
-                                        ? GameFramework.Coords.fromXY(-1, -1)
-                                        : faceTextures[f].textureUVs[vertexIndex]);
-                                vertexTextureUvsAsFloatArray = vertexTextureUvsAsFloatArray.concat([
-                                    vertexTextureUV.x,
-                                    vertexTextureUV.y
-                                ]);
-                            }
-                        }
-                        numberOfTrianglesSoFar += vertexIndicesForTriangles.length;
-                    }
-                    this.drawMesh_2(material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray);
+                var numberOfTrianglesSoFar = new GameFramework.Reference(0);
+                var meshMaterials = mesh.materials;
+                for (var m = 0; m < meshMaterials.length; m++) {
+                    var material = meshMaterials[m];
+                    this.drawMesh_1(mesh, material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray);
+                    this.drawMesh_2_Gl(material, numberOfTrianglesSoFar.value, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray);
                 } // end for each material
             }
-            drawMesh_2(material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
+            drawMesh_1(mesh, material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
+                var meshFaces = mesh.faces();
+                var meshFaceTextures = mesh.faceTextures;
+                var meshFaceIndicesByMaterialName = mesh.faceIndicesByMaterialName();
+                var materialName = material.name;
+                var faceIndices = meshFaceIndicesByMaterialName.get(materialName);
+                for (var fi = 0; fi < faceIndices.length; fi++) {
+                    var f = faceIndices[fi];
+                    var face = meshFaces[f];
+                    var faceMaterial = face.material;
+                    var faceGeometry = face.geometry;
+                    var faceNormal = faceGeometry.plane().normal;
+                    var vertexIndicesForTriangles = [
+                        [0, 1, 2]
+                    ];
+                    var faceVertices = faceGeometry.vertices;
+                    var numberOfVerticesInFace = faceVertices.length;
+                    if (numberOfVerticesInFace == 4) {
+                        vertexIndicesForTriangles.push([0, 2, 3]);
+                    }
+                    for (var t = 0; t < vertexIndicesForTriangles.length; t++) {
+                        var vertexIndicesForTriangle = vertexIndicesForTriangles[t];
+                        for (var vi = 0; vi < vertexIndicesForTriangle.length; vi++) {
+                            var vertexIndex = vertexIndicesForTriangle[vi];
+                            var vertexPos = faceVertices[vertexIndex];
+                            vertexPositionsAsFloatArray.push(...vertexPos.dimensions());
+                            var vertexColor = faceMaterial.colorFill;
+                            vertexColorsAsFloatArray.push(...vertexColor.fractionsRgba);
+                            var vertexNormal = faceNormal;
+                            vertexNormalsAsFloatArray.push(...vertexNormal.dimensions());
+                            var vertexTextureUv = (meshFaceTextures == null
+                                ? GameFramework.Coords.fromXY(-1, -1)
+                                : meshFaceTextures[f] == null
+                                    ? GameFramework.Coords.fromXY(-1, -1)
+                                    : meshFaceTextures[f].textureUVs[vertexIndex]);
+                            vertexTextureUvsAsFloatArray.push(...vertexTextureUv.dimensionsXY());
+                        }
+                    }
+                    numberOfTrianglesSoFar.value += vertexIndicesForTriangles.length;
+                }
+            }
+            drawMesh_2_Gl(material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
                 var shaderProgram = webGLContext.shaderProgram;
