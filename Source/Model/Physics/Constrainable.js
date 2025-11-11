@@ -27,10 +27,8 @@ var ThisCouldBeBetter;
             constrain(uwpe) {
                 var entity = uwpe.entity;
                 var constrainable = Constrainable.of(entity);
-                var constraints = constrainable.constraints;
-                for (var i = 0; i < constraints.length; i++) {
-                    var constraint = constraints[i];
-                    constraint.constrain(uwpe);
+                if (constrainable != null) {
+                    constrainable.constraints.forEach(x => x.constrain(uwpe));
                 }
             }
             constraintAdd(constraintToAdd) {

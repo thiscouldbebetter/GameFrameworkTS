@@ -43,11 +43,9 @@ export class Constrainable extends EntityPropertyBase<Constrainable>
 	{
 		var entity = uwpe.entity;
 		var constrainable = Constrainable.of(entity);
-		var constraints = constrainable.constraints;
-		for (var i = 0; i < constraints.length; i++)
+		if (constrainable != null)
 		{
-			var constraint = constraints[i];
-			constraint.constrain(uwpe);
+			constrainable.constraints.forEach(x => x.constrain(uwpe) );
 		}
 	}
 

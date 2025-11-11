@@ -27,7 +27,7 @@ export class UserInputListener extends Entity
 
 	static activityDefn(): ActivityDefn
 	{
-		return new ActivityDefn
+		return ActivityDefn.fromNameAndPerform
 		(
 			"HandleUserInput",
 			UserInputListener.activityDefnPerform

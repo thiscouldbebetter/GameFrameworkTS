@@ -28,6 +28,8 @@ var ThisCouldBeBetter;
             }
             updateForTimerTick(uwpe) {
                 this.activity.perform(uwpe);
+                this.actions.forEach(x => x.perform(uwpe));
+                this.actions.length = 0; // What about long-running actions?
             }
             // Clonable.
             clone() {

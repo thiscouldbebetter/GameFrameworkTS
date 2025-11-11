@@ -12,7 +12,7 @@ var ThisCouldBeBetter;
                 ]);
             }
             static activityDefn() {
-                return new GameFramework.ActivityDefn("HandleUserInput", UserInputListener.activityDefnPerform);
+                return GameFramework.ActivityDefn.fromNameAndPerform("HandleUserInput", UserInputListener.activityDefnPerform);
             }
             static activityDefnPerform(uwpe) {
                 var universe = uwpe.universe;
