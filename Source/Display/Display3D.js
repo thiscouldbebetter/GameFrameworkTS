@@ -35,8 +35,8 @@ var ThisCouldBeBetter;
                     .multiply(matrixPerspective);
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
-                var shaderProgram = webGLContext.shaderProgram;
-                gl.uniformMatrix4fv(shaderProgram.cameraMatrix, false, // transpose
+                var shaderProgramVariables = webGLContext.shaderProgramVariables;
+                gl.uniformMatrix4fv(shaderProgramVariables.cameraMatrix, false, // transpose
                 matrixCamera.toWebGLArray());
             }
             clear() {
@@ -126,19 +126,19 @@ var ThisCouldBeBetter;
             drawMesh_2_WriteVertexDataArraysToWebGlContext(texture, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
-                var shaderProgram = webGLContext.shaderProgram;
+                var shaderProgramVariables = webGLContext.shaderProgramVariables;
                 var colorBuffer = gl.createBuffer();
                 gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexColorsAsFloatArray), gl.STATIC_DRAW);
-                gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, GameFramework.Color.NumberOfComponentsRgba, gl.FLOAT, false, 0, 0);
+                gl.vertexAttribPointer(shaderProgramVariables.vertexColorAttribute, GameFramework.Color.NumberOfComponentsRgba, gl.FLOAT, false, 0, 0);
                 var normalBuffer = gl.createBuffer();
                 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormalsAsFloatArray), gl.STATIC_DRAW);
-                gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
+                gl.vertexAttribPointer(shaderProgramVariables.vertexNormalAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
                 var positionBuffer = gl.createBuffer();
                 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositionsAsFloatArray), gl.STATIC_DRAW);
-                gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
+                gl.vertexAttribPointer(shaderProgramVariables.vertexPositionAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
                 if (texture != null) {
                     var textureName = texture.name;
                     var textureRegistered = this.texturesRegisteredByName.get(textureName);
@@ -149,11 +149,10 @@ var ThisCouldBeBetter;
                     gl.activeTexture(gl.TEXTURE0);
                     gl.bindTexture(gl.TEXTURE_2D, texture.systemTexture);
                 }
-                gl.uniform1i(shaderProgram.samplerUniform, 0);
                 var textureBuffer = gl.createBuffer();
                 gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexTextureUvsAsFloatArray), gl.STATIC_DRAW);
-                gl.vertexAttribPointer(shaderProgram.vertexTextureUVAttribute, 2, gl.FLOAT, false, 0, 0);
+                gl.vertexAttribPointer(shaderProgramVariables.vertexTextureUVAttribute, 2, gl.FLOAT, false, 0, 0);
                 gl.drawArrays(gl.TRIANGLES, 0, numberOfTrianglesSoFar * Display3D.VerticesPerTriangle);
             }
             drawMeshWithOrientation(mesh, meshOrientation) {
@@ -161,10 +160,10 @@ var ThisCouldBeBetter;
                 var matrixEntity = this.matrixEntity.overwriteWithOrientationMover(meshOrientation).multiply(matrixOrient.overwriteWithOrientationEntity(meshOrientation));
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
-                var shaderProgram = webGLContext.shaderProgram;
-                gl.uniformMatrix4fv(shaderProgram.normalMatrix, false, // transpose
+                var shaderProgramVariables = webGLContext.shaderProgramVariables;
+                gl.uniformMatrix4fv(shaderProgramVariables.normalMatrix, false, // transpose
                 matrixOrient.toWebGLArray());
-                gl.uniformMatrix4fv(shaderProgram.entityMatrix, false, // transpose
+                gl.uniformMatrix4fv(shaderProgramVariables.entityMatrix, false, // transpose
                 matrixEntity.toWebGLArray());
                 this.drawMesh(mesh);
             }

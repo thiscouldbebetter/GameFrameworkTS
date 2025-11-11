@@ -33,8 +33,8 @@ var ThisCouldBeBetter;
             }
             writeToWebGlContext(webGlContext) {
                 var gl = webGlContext.gl;
-                var shaderProgram = webGlContext.shaderProgram;
-                gl.uniform1f(shaderProgram.lightAmbientIntensity, this.intensity);
+                var shaderProgramVariables = webGlContext.shaderProgramVariables;
+                gl.uniform1f(shaderProgramVariables.lightAmbientIntensity, this.intensity);
             }
         }
         GameFramework.LightAmbient = LightAmbient;
@@ -51,9 +51,9 @@ var ThisCouldBeBetter;
             }
             writeToWebGlContext(webGlContext) {
                 var gl = webGlContext.gl;
-                var shaderProgram = webGlContext.shaderProgram;
-                gl.uniform1f(shaderProgram.lightDirectionalIntensity, this.intensity);
-                gl.uniform3fv(shaderProgram.lightDirectionalDirection, GameFramework.WebGLContext.coordsToWebGLArray(this.direction));
+                var shaderProgramVariables = webGlContext.shaderProgramVariables;
+                gl.uniform1f(shaderProgramVariables.lightDirectionalIntensity, this.intensity);
+                gl.uniform3fv(shaderProgramVariables.lightDirectionalDirection, GameFramework.WebGLContext.coordsToWebGLArray(this.direction));
             }
         }
         GameFramework.LightDirectional = LightDirectional;

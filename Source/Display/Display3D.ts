@@ -98,11 +98,11 @@ export class Display3D implements Display
 
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
-		var shaderProgram = webGLContext.shaderProgram;
+		var shaderProgramVariables = webGLContext.shaderProgramVariables;
 
 		gl.uniformMatrix4fv
 		(
-			shaderProgram.cameraMatrix,
+			shaderProgramVariables.cameraMatrix,
 			false, // transpose
 			matrixCamera.toWebGLArray()
 		);
@@ -310,7 +310,7 @@ export class Display3D implements Display
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
 
-		var shaderProgram = webGLContext.shaderProgram;
+		var shaderProgramVariables = webGLContext.shaderProgramVariables;
 
 		var colorBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
@@ -322,7 +322,7 @@ export class Display3D implements Display
 		);
 		gl.vertexAttribPointer
 		(
-			shaderProgram.vertexColorAttribute,
+			shaderProgramVariables.vertexColorAttribute,
 			Color.NumberOfComponentsRgba,
 			gl.FLOAT,
 			false,
@@ -340,7 +340,7 @@ export class Display3D implements Display
 		);
 		gl.vertexAttribPointer
 		(
-			shaderProgram.vertexNormalAttribute,
+			shaderProgramVariables.vertexNormalAttribute,
 			Coords.NumberOfDimensions,
 			gl.FLOAT,
 			false,
@@ -358,7 +358,7 @@ export class Display3D implements Display
 		);
 		gl.vertexAttribPointer
 		(
-			shaderProgram.vertexPositionAttribute,
+			shaderProgramVariables.vertexPositionAttribute,
 			Coords.NumberOfDimensions,
 			gl.FLOAT,
 			false,
@@ -381,8 +381,6 @@ export class Display3D implements Display
 			gl.bindTexture(gl.TEXTURE_2D, texture.systemTexture);
 		}
 
-		gl.uniform1i(shaderProgram.samplerUniform, 0);
-
 		var textureBuffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
 		gl.bufferData
@@ -393,7 +391,7 @@ export class Display3D implements Display
 		);
 		gl.vertexAttribPointer
 		(
-			shaderProgram.vertexTextureUVAttribute,
+			shaderProgramVariables.vertexTextureUVAttribute,
 			2,
 			gl.FLOAT,
 			false,
@@ -429,18 +427,18 @@ export class Display3D implements Display
 
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;
-		var shaderProgram = webGLContext.shaderProgram;
+		var shaderProgramVariables = webGLContext.shaderProgramVariables;
 
 		gl.uniformMatrix4fv
 		(
-			shaderProgram.normalMatrix,
+			shaderProgramVariables.normalMatrix,
 			false, // transpose
 			matrixOrient.toWebGLArray()
 		);
 
 		gl.uniformMatrix4fv
 		(
-			shaderProgram.entityMatrix,
+			shaderProgramVariables.entityMatrix,
 			false, // transpose
 			matrixEntity.toWebGLArray()
 		);

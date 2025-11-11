@@ -73,11 +73,11 @@ export class LightAmbient
 	writeToWebGlContext(webGlContext: WebGLContext): void
 	{
 		var gl = webGlContext.gl;
-		var shaderProgram = webGlContext.shaderProgram;
+		var shaderProgramVariables = webGlContext.shaderProgramVariables;
 
 		gl.uniform1f
 		(
-			shaderProgram.lightAmbientIntensity,
+			shaderProgramVariables.lightAmbientIntensity,
 			this.intensity
 		);
 	}
@@ -107,17 +107,17 @@ export class LightDirectional
 	writeToWebGlContext(webGlContext: WebGLContext): void
 	{
 		var gl = webGlContext.gl;
-		var shaderProgram = webGlContext.shaderProgram;
+		var shaderProgramVariables = webGlContext.shaderProgramVariables;
 
 		gl.uniform1f
 		(
-			shaderProgram.lightDirectionalIntensity,
+			shaderProgramVariables.lightDirectionalIntensity,
 			this.intensity
 		);
 
 		gl.uniform3fv
 		(
-			shaderProgram.lightDirectionalDirection,
+			shaderProgramVariables.lightDirectionalDirection,
 			WebGLContext.coordsToWebGLArray(this.direction)
 		);
 	}
