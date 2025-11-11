@@ -180,10 +180,7 @@ var ThisCouldBeBetter;
                 this.webGLContext = new GameFramework.WebGLContext(this.canvas); // The canvas from the overlay cannot be used here.
                 this.texturesRegisteredByName = new Map();
                 // hack
-                this.lighting = GameFramework.Lighting.fromAmbientIntensityDirectionAndDirectionalIntensity(.5, // ambientIntensity
-                GameFramework.Coords.ones().multiplyScalar(-1), // direction
-                .3 // directionalIntensity
-                );
+                this.lighting = GameFramework.Lighting.default();
                 this._display2DOverlay.initialize(universe);
                 // temps
                 this.matrixEntity = GameFramework.Matrix.buildZeroes();
@@ -197,13 +194,10 @@ var ThisCouldBeBetter;
                 return this;
             }
             lightingSet(lightingToSet) {
-                var webGLContext = this.webGLContext;
-                var gl = webGLContext.gl;
-                var shaderProgram = webGLContext.shaderProgram;
+                var webGlContext = this.webGLContext;
                 var lighting = this.lighting;
-                gl.uniform1f(shaderProgram.lightAmbientIntensity, lighting.ambientIntensity);
-                gl.uniform3fv(shaderProgram.lightDirection, GameFramework.WebGLContext.coordsToWebGLArray(lighting.direction));
-                gl.uniform1f(shaderProgram.lightDirectionalIntensity, lighting.directionalIntensity);
+                lighting.lightAmbient.writeToWebGlContext(webGlContext);
+                lighting.lightDirectional.writeToWebGlContext(webGlContext);
             }
             // Display2D overlay.
             drawArc(center, radiusInner, radiusOuter, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) {

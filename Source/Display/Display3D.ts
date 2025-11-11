@@ -467,12 +467,7 @@ export class Display3D implements Display
 
 		// hack
 
-		this.lighting = Lighting.fromAmbientIntensityDirectionAndDirectionalIntensity
-		(
-			.5, // ambientIntensity
-			Coords.ones().multiplyScalar(-1), // direction
-			.3 // directionalIntensity
-		);
+		this.lighting = Lighting.default();
 
 		this._display2DOverlay.initialize(universe);
 
@@ -492,29 +487,13 @@ export class Display3D implements Display
 
 	lightingSet(lightingToSet: Lighting): void
 	{
-		var webGLContext = this.webGLContext;
-		var gl = webGLContext.gl;
-		var shaderProgram = webGLContext.shaderProgram;
+		var webGlContext = this.webGLContext;
 
 		var lighting = this.lighting;
 
-		gl.uniform1f
-		(
-			shaderProgram.lightAmbientIntensity,
-			lighting.ambientIntensity
-		);
+		lighting.lightAmbient.writeToWebGlContext(webGlContext);
 
-		gl.uniform3fv
-		(
-			shaderProgram.lightDirection,
-			WebGLContext.coordsToWebGLArray(lighting.direction)
-		);
-
-		gl.uniform1f
-		(
-			shaderProgram.lightDirectionalIntensity,
-			lighting.directionalIntensity
-		);
+		lighting.lightDirectional.writeToWebGlContext(webGlContext);
 	}
 
 	// Display2D overlay.
