@@ -66,13 +66,10 @@ var ThisCouldBeBetter;
                 this._display2DOverlay.drawEllipse(center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder);
             }
             drawMesh(mesh) {
-                var webGLContext = this.webGLContext;
-                var gl = webGLContext.gl;
-                var shaderProgram = webGLContext.shaderProgram;
                 var vertexPositionsAsFloatArray = [];
                 var vertexColorsAsFloatArray = [];
                 var vertexNormalsAsFloatArray = [];
-                var vertexTextureUVsAsFloatArray = [];
+                var vertexTextureUvsAsFloatArray = [];
                 var numberOfTrianglesSoFar = 0;
                 var materials = mesh.materials;
                 var faces = mesh.faces();
@@ -121,7 +118,7 @@ var ThisCouldBeBetter;
                                     : faceTextures[f] == null
                                         ? GameFramework.Coords.fromXY(-1, -1)
                                         : faceTextures[f].textureUVs[vertexIndex]);
-                                vertexTextureUVsAsFloatArray = vertexTextureUVsAsFloatArray.concat([
+                                vertexTextureUvsAsFloatArray = vertexTextureUvsAsFloatArray.concat([
                                     vertexTextureUV.x,
                                     vertexTextureUV.y
                                 ]);
@@ -129,36 +126,42 @@ var ThisCouldBeBetter;
                         }
                         numberOfTrianglesSoFar += vertexIndicesForTriangles.length;
                     }
-                    var colorBuffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexColorsAsFloatArray), gl.STATIC_DRAW);
-                    gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, GameFramework.Color.NumberOfComponentsRgba, gl.FLOAT, false, 0, 0);
-                    var normalBuffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormalsAsFloatArray), gl.STATIC_DRAW);
-                    gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
-                    var positionBuffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositionsAsFloatArray), gl.STATIC_DRAW);
-                    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
-                    var texture = material.texture;
-                    if (texture != null) {
-                        var textureName = texture.name;
-                        var textureRegistered = this.texturesRegisteredByName.get(textureName);
-                        if (textureRegistered == null) {
-                            texture.initializeForWebGLContext(this.webGLContext);
-                            this.texturesRegisteredByName.set(textureName, texture);
-                        }
-                        gl.activeTexture(gl.TEXTURE0);
-                        gl.bindTexture(gl.TEXTURE_2D, texture.systemTexture);
-                    }
-                    gl.uniform1i(shaderProgram.samplerUniform, 0);
-                    var textureBuffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexTextureUVsAsFloatArray), gl.STATIC_DRAW);
-                    gl.vertexAttribPointer(shaderProgram.vertexTextureUVAttribute, 2, gl.FLOAT, false, 0, 0);
-                    gl.drawArrays(gl.TRIANGLES, 0, numberOfTrianglesSoFar * Display3D.VerticesPerTriangle);
+                    this.drawMesh_2(material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray);
                 } // end for each material
+            }
+            drawMesh_2(material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
+                var webGLContext = this.webGLContext;
+                var gl = webGLContext.gl;
+                var shaderProgram = webGLContext.shaderProgram;
+                var colorBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexColorsAsFloatArray), gl.STATIC_DRAW);
+                gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, GameFramework.Color.NumberOfComponentsRgba, gl.FLOAT, false, 0, 0);
+                var normalBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormalsAsFloatArray), gl.STATIC_DRAW);
+                gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
+                var positionBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositionsAsFloatArray), gl.STATIC_DRAW);
+                gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
+                var texture = material.texture;
+                if (texture != null) {
+                    var textureName = texture.name;
+                    var textureRegistered = this.texturesRegisteredByName.get(textureName);
+                    if (textureRegistered == null) {
+                        texture.initializeForWebGLContext(this.webGLContext);
+                        this.texturesRegisteredByName.set(textureName, texture);
+                    }
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, texture.systemTexture);
+                }
+                gl.uniform1i(shaderProgram.samplerUniform, 0);
+                var textureBuffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, textureBuffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexTextureUvsAsFloatArray), gl.STATIC_DRAW);
+                gl.vertexAttribPointer(shaderProgram.vertexTextureUVAttribute, 2, gl.FLOAT, false, 0, 0);
+                gl.drawArrays(gl.TRIANGLES, 0, numberOfTrianglesSoFar * Display3D.VerticesPerTriangle);
             }
             drawMeshWithOrientation(mesh, meshOrientation) {
                 var matrixOrient = this.matrixOrient;
