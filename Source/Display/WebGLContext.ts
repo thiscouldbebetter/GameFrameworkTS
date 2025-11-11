@@ -99,25 +99,27 @@ export class WebGLContext
 		var newline = "\n";
 		var vertexShaderCode =
 		[
+			"// These come from the vertex data stream.",
 			"attribute vec4 aVertexColor;",
 			"attribute vec3 aVertexNormal;",
 			"attribute vec3 aVertexPosition;",
 			"attribute vec2 aVertexTextureUV;",
 			"",
-			"// These are specified by the calling application.",
+			"// These are specified individually by the calling application.",
 			"uniform mat4 uEntityMatrix;",
 			"uniform mat4 uCameraMatrix;",
+			"uniform mat4 uNormalMatrix;",
 			"uniform float uLightAmbientIntensity;",
 			"uniform float uLightDirectionalIntensity;",
 			"uniform vec3 uLightDirectionalDirection;",
 			"uniform vec3 uLightPointIntensity;",
 			"uniform vec3 uLightPointPosition;",
-			"uniform mat4 uNormalMatrix;",
 			"",
 			"// These are set below, then passed to the fragment shader.",
 			"varying vec4 vColor;",
 			"varying vec3 vLight;",
 			"varying vec2 vTextureUv;",
+			"varying vec3 vDisplacementFromVertexToLightPoint;", // Not being used in fragment shader yet.
 			"",
 			"void main(void) {",
 			"    vColor = aVertexColor;",
@@ -130,9 +132,11 @@ export class WebGLContext
 			"        * max(dot(transformedNormal, uLightDirectionalDirection), 0.0);",
 			"    vec3 lightColor = vec3(1.0, 1.0, 1.0);",
 			"    vLight = lightColor * lightMagnitude;",
+			"    vec4 vertexPositionAsVec4 = vec4(aVertexPosition, 1.0);", // Because a vec3 can't be multiplied with a mat4?
+			"    vec3 vertexPositionInWorldCoords = (uEntityMatrix * vertexPositionAsVec4).xyz;", // Need a "world matrix" instead of uEntityMatrix?
+			"    vDisplacementFromVertexToLightPoint = uLightPointPosition - vertexPositionInWorldCoords;",
 			"    vTextureUv = aVertexTextureUV;",
-			"    vec4 vertexPos = vec4(aVertexPosition, 1.0);",
-			"    gl_Position = uCameraMatrix * uEntityMatrix * vertexPos;",
+			"    gl_Position = uCameraMatrix * uEntityMatrix * vertexPositionAsVec4;",
 			"}"
 		].join(newline);
 		gl.shaderSource(vertexShader, vertexShaderCode);

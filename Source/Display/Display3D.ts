@@ -215,10 +215,10 @@ export class Display3D implements Display
 		mesh: MeshTextured,
 		material: Material,
 		numberOfTrianglesSoFar: Reference<number>,
-		vertexColorsAsFloatArray: any[],
-		vertexNormalsAsFloatArray: any[],
-		vertexPositionsAsFloatArray: any[],
-		vertexTextureUvsAsFloatArray: any[]
+		vertexColorsAsFloatArray: number[],
+		vertexNormalsAsFloatArray: number[],
+		vertexPositionsAsFloatArray: number[],
+		vertexTextureUvsAsFloatArray: number[]
 	): void
 	{
 		var meshFaces = mesh.faces();
@@ -301,10 +301,10 @@ export class Display3D implements Display
 	(
 		texture: Texture,
 		numberOfTrianglesSoFar: number,
-		vertexColorsAsFloatArray: any[],
-		vertexNormalsAsFloatArray: any[],
-		vertexPositionsAsFloatArray: any[],
-		vertexTextureUvsAsFloatArray: any[]
+		vertexColorsAsFloatArray: number[],
+		vertexNormalsAsFloatArray: number[],
+		vertexPositionsAsFloatArray: number[],
+		vertexTextureUvsAsFloatArray: number[]
 	): void
 	{
 		var webGLContext = this.webGLContext;
@@ -414,16 +414,14 @@ export class Display3D implements Display
 	{
 		var matrixOrient = this.matrixOrient;
 
-		var matrixEntity = this.matrixEntity.overwriteWithOrientationMover
-		(
-			meshOrientation
-		).multiply
-		(
-			matrixOrient.overwriteWithOrientationEntity
-			(
-				meshOrientation
-			)
-		);
+		var matrixEntity =
+			this.matrixEntity
+				.overwriteWithOrientationMover(meshOrientation)
+				.multiply
+				(
+					matrixOrient
+						.overwriteWithOrientationEntity(meshOrientation)
+				);
 
 		var webGLContext = this.webGLContext;
 		var gl = webGLContext.gl;

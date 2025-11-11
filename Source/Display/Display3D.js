@@ -157,7 +157,10 @@ var ThisCouldBeBetter;
             }
             drawMeshWithOrientation(mesh, meshOrientation) {
                 var matrixOrient = this.matrixOrient;
-                var matrixEntity = this.matrixEntity.overwriteWithOrientationMover(meshOrientation).multiply(matrixOrient.overwriteWithOrientationEntity(meshOrientation));
+                var matrixEntity = this.matrixEntity
+                    .overwriteWithOrientationMover(meshOrientation)
+                    .multiply(matrixOrient
+                    .overwriteWithOrientationEntity(meshOrientation));
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
                 var shaderProgramVariables = webGLContext.shaderProgramVariables;
