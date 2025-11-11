@@ -293,41 +293,98 @@ export class ImageBuilder
 		return image;
 	}
 
-
 	wallMasonryWithColorsForBlocksAndMortar
 	(
 		colorBlock: Color,
-		colorMortar: Color
+		colorMortar: Color,
 	): Image2
 	{
+		var colorBlockCode = ".";
+		var colorMortarCode = "#";
+
 		var colors =
 		[
-			colorBlock.clone().codeSet("."),
-			colorMortar.clone().codeSet("#")
+			colorBlock.clone().codeSet(colorBlockCode),
+			colorMortar.clone().codeSet(colorMortarCode)
 		];
+
+		var pixelsPerBlock = 16;
+		var wallSizeInBlocks = Coords.ones().multiplyScalar(4);
+		var blockSizeInPixels = Coords.ones().multiplyScalar(pixelsPerBlock);
+		var wallSizeInPixels = wallSizeInBlocks.clone().multiply(blockSizeInPixels);
+
+		var pixelRowAsStringForMortar = "".padEnd(wallSizeInPixels.x, colorMortarCode);
+
+		// Even course.
+
+		var pixelStringForBlockThenMortarEven =
+			"".padEnd(blockSizeInPixels.x - 1, colorBlockCode) + colorMortarCode;
+		var pixelRowAsStringForBlocksAndMortarEven = "";
+		for (var x = 0; x < wallSizeInBlocks.x; x++)
+		{
+			pixelRowAsStringForBlocksAndMortarEven += pixelStringForBlockThenMortarEven;
+		}
+
+		var courseAsStringsEven = [ pixelRowAsStringForMortar ];
+		for (var y = 1; y < blockSizeInPixels.y; y++)
+		{
+			courseAsStringsEven.push(pixelRowAsStringForBlocksAndMortarEven);
+		}
+
+		// Odd course.
+
+		var pixelRowAsStringForBlocksAndMortarOdd =
+			pixelRowAsStringForBlocksAndMortarEven
+				.substring(Math.round(blockSizeInPixels.x / 2) )
+				.padEnd(wallSizeInPixels.x, colorBlockCode)
+
+		var courseAsStringsOdd = [ pixelRowAsStringForMortar ];
+		for (var y = 1; y < blockSizeInPixels.y; y++)
+		{
+			courseAsStringsOdd.push(pixelRowAsStringForBlocksAndMortarOdd);
+		}
+
+		var pixelsAsStrings = [];
+
+		for (var courseY = 0; courseY < wallSizeInBlocks.y; courseY++)
+		{
+			var courseIsEven = (courseY % 2) == 0;
+
+			var courseAsStrings =
+				courseIsEven
+				? courseAsStringsEven
+				: courseAsStringsOdd;
+
+			pixelsAsStrings.push(...courseAsStrings);
+		}
+
+		/*
+		pixelsAsStrings =
+		[
+			"################",
+			"#...#...#...#...",
+			"#...#...#...#...",
+			"#...#...#...#...",
+			"################",
+			"..#...#...#...#.",
+			"..#...#...#...#.",
+			"..#...#...#...#.",
+			"################",
+			"#...#...#...#...",
+			"#...#...#...#...",
+			"#...#...#...#...",
+			"################",
+			"..#...#...#...#.",
+			"..#...#...#...#.",
+			"..#...#...#...#.",
+		];
+		*/
 
 		var image = this.imageBuildFromNameColorsAndPixelsAsStrings
 		(
 			"Wall",
 			colors,
-			[
-				"################",
-				"#...#...#...#...",
-				"#...#...#...#...",
-				"#...#...#...#...",
-				"################",
-				"..#...#...#...#.",
-				"..#...#...#...#.",
-				"..#...#...#...#.",
-				"################",
-				"#...#...#...#...",
-				"#...#...#...#...",
-				"#...#...#...#...",
-				"################",
-				"..#...#...#...#.",
-				"..#...#...#...#.",
-				"..#...#...#...#.",
-			]
+			pixelsAsStrings
 		);
 
 		return image;
