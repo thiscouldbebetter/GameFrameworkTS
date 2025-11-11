@@ -59,7 +59,7 @@ class Enemy extends EntityPropertyBase {
                 activity.targetEntityClear();
             }
         };
-        var enemyActivityDefn = new ActivityDefn("Enemy", enemyActivityPerform);
+        var enemyActivityDefn = ActivityDefn.fromNameAndPerform("Enemy", enemyActivityPerform);
         return enemyActivityDefn;
     }
 }

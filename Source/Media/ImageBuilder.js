@@ -126,29 +126,32 @@ var ThisCouldBeBetter;
                 var image = this.imageBuildFromNameColorsAndPixelsAsStrings("Square", colors, pixelsForSquareWithInsetBorder);
                 return image;
             }
-            squareOfColorWithInsetBorderOfColor(colorSquare, colorBorder) {
+            squareOfColorWithInsetBorderOfColor(colorCenterAndMargin, colorInsetBorder) {
+                var colorCenterAndMarginCode = ".";
+                var colorInsetBorderCode = "#";
                 var colors = [
-                    colorSquare.clone().codeSet("."),
-                    colorBorder.clone().codeSet("#")
+                    colorCenterAndMargin.clone().codeSet(colorCenterAndMarginCode),
+                    colorInsetBorder.clone().codeSet(colorInsetBorderCode)
                 ];
-                var pixelsForSquareWithInsetBorder = [
-                    "................",
-                    ".##############.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".#............#.",
-                    ".##############.",
-                    "................",
-                ];
+                var tileDimensionInPixels = 16;
+                var tileSizeInPixels = GameFramework.Coords.ones().multiplyScalar(tileDimensionInPixels);
+                var pixelRowTopAndBottomOfTile = "".padEnd(tileSizeInPixels.x, colorCenterAndMarginCode);
+                var pixelRowTopAndBottomOfInsetBorder = colorCenterAndMarginCode
+                    + "".padEnd(tileSizeInPixels.x - 2, colorInsetBorderCode)
+                    + colorCenterAndMarginCode;
+                var pixelRowCenter = colorCenterAndMarginCode
+                    + colorInsetBorderCode
+                    + "".padEnd(tileSizeInPixels.x - 4, colorCenterAndMarginCode)
+                    + colorInsetBorderCode
+                    + colorCenterAndMarginCode;
+                var pixelsForSquareWithInsetBorder = [];
+                pixelsForSquareWithInsetBorder.push(pixelRowTopAndBottomOfTile);
+                pixelsForSquareWithInsetBorder.push(pixelRowTopAndBottomOfInsetBorder);
+                for (var y = 0; y < tileSizeInPixels.y - 4; y++) {
+                    pixelsForSquareWithInsetBorder.push(pixelRowCenter);
+                }
+                pixelsForSquareWithInsetBorder.push(pixelRowTopAndBottomOfInsetBorder);
+                pixelsForSquareWithInsetBorder.push(pixelRowTopAndBottomOfTile);
                 var image = this.imageBuildFromNameColorsAndPixelsAsStrings("SquareWithInsetBorder", colors, pixelsForSquareWithInsetBorder);
                 return image;
             }
@@ -190,27 +193,6 @@ var ThisCouldBeBetter;
                         : courseAsStringsOdd;
                     pixelsAsStrings.push(...courseAsStrings);
                 }
-                /*
-                pixelsAsStrings =
-                [
-                    "################",
-                    "#...#...#...#...",
-                    "#...#...#...#...",
-                    "#...#...#...#...",
-                    "################",
-                    "..#...#...#...#.",
-                    "..#...#...#...#.",
-                    "..#...#...#...#.",
-                    "################",
-                    "#...#...#...#...",
-                    "#...#...#...#...",
-                    "#...#...#...#...",
-                    "################",
-                    "..#...#...#...#.",
-                    "..#...#...#...#.",
-                    "..#...#...#...#.",
-                ];
-                */
                 var image = this.imageBuildFromNameColorsAndPixelsAsStrings("Wall", colors, pixelsAsStrings);
                 return image;
             }

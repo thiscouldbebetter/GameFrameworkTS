@@ -255,33 +255,44 @@ export class ImageBuilder
 		return image;
 	}
 
-	squareOfColorWithInsetBorderOfColor(colorSquare: Color, colorBorder: Color): Image2
+	squareOfColorWithInsetBorderOfColor(colorCenterAndMargin: Color, colorInsetBorder: Color): Image2
 	{
+		var colorCenterAndMarginCode = ".";
+		var colorInsetBorderCode = "#";
+
 		var colors =
 		[
-			colorSquare.clone().codeSet("."),
-			colorBorder.clone().codeSet("#")
+			colorCenterAndMargin.clone().codeSet(colorCenterAndMarginCode),
+			colorInsetBorder.clone().codeSet(colorInsetBorderCode)
 		];
 
-		var pixelsForSquareWithInsetBorder =
-		[
-			"................",
-			".##############.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".#............#.",
-			".##############.",
-			"................",
-		];
+		var tileDimensionInPixels = 16;
+		var tileSizeInPixels = Coords.ones().multiplyScalar(tileDimensionInPixels);
+
+		var pixelRowTopAndBottomOfTile =
+			"".padEnd(tileSizeInPixels.x, colorCenterAndMarginCode);
+
+		var pixelRowTopAndBottomOfInsetBorder =
+			colorCenterAndMarginCode
+			+ "".padEnd(tileSizeInPixels.x - 2, colorInsetBorderCode)
+			+ colorCenterAndMarginCode;
+
+		var pixelRowCenter =
+			colorCenterAndMarginCode
+			+ colorInsetBorderCode
+			+ "".padEnd(tileSizeInPixels.x - 4, colorCenterAndMarginCode)
+			+ colorInsetBorderCode
+			+ colorCenterAndMarginCode;
+
+		var pixelsForSquareWithInsetBorder = [];
+		pixelsForSquareWithInsetBorder.push(pixelRowTopAndBottomOfTile);
+		pixelsForSquareWithInsetBorder.push(pixelRowTopAndBottomOfInsetBorder);
+		for (var y = 0; y < tileSizeInPixels.y - 4; y++)
+		{
+			pixelsForSquareWithInsetBorder.push(pixelRowCenter);
+		}
+		pixelsForSquareWithInsetBorder.push(pixelRowTopAndBottomOfInsetBorder);
+		pixelsForSquareWithInsetBorder.push(pixelRowTopAndBottomOfTile);
 
 		var image = this.imageBuildFromNameColorsAndPixelsAsStrings
 		(
@@ -357,28 +368,6 @@ export class ImageBuilder
 
 			pixelsAsStrings.push(...courseAsStrings);
 		}
-
-		/*
-		pixelsAsStrings =
-		[
-			"################",
-			"#...#...#...#...",
-			"#...#...#...#...",
-			"#...#...#...#...",
-			"################",
-			"..#...#...#...#.",
-			"..#...#...#...#.",
-			"..#...#...#...#.",
-			"################",
-			"#...#...#...#...",
-			"#...#...#...#...",
-			"#...#...#...#...",
-			"################",
-			"..#...#...#...#.",
-			"..#...#...#...#.",
-			"..#...#...#...#.",
-		];
-		*/
 
 		var image = this.imageBuildFromNameColorsAndPixelsAsStrings
 		(
