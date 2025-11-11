@@ -15,6 +15,8 @@ var ThisCouldBeBetter;
                 this._sizeDefault = sizeInPixels;
                 this._scaleFactor = GameFramework.Coords.ones();
                 this._display2DOverlay = GameFramework.Display2D.fromSizesFontAndColorsForeAndBack(this.sizesAvailable, fontNameAndHeight, colorFore, colorBack);
+                this._vertexIndicesForTrianglesSingle = [[0, 1, 2]];
+                this._vertexIndicesForTrianglesDouble = [[0, 1, 2], [0, 2, 3]];
             }
             static fromViewSizeInPixels(viewSizeInPixels) {
                 return new Display3D(viewSizeInPixels, null, null, null);
@@ -74,11 +76,11 @@ var ThisCouldBeBetter;
                 var meshMaterials = mesh.materials;
                 for (var m = 0; m < meshMaterials.length; m++) {
                     var material = meshMaterials[m];
-                    this.drawMesh_1(mesh, material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray);
-                    this.drawMesh_2_Gl(material, numberOfTrianglesSoFar.value, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray);
+                    this.drawMesh_1_PopulateVertexDataArrays(mesh, material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray);
+                    this.drawMesh_2_WriteVertexDataArraysToWebGlContext(material.texture, numberOfTrianglesSoFar.value, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray);
                 } // end for each material
             }
-            drawMesh_1(mesh, material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
+            drawMesh_1_PopulateVertexDataArrays(mesh, material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
                 var meshFaces = mesh.faces();
                 var meshFaceTextures = mesh.faceTextures;
                 var meshFaceIndicesByMaterialName = mesh.faceIndicesByMaterialName();
@@ -90,13 +92,15 @@ var ThisCouldBeBetter;
                     var faceMaterial = face.material;
                     var faceGeometry = face.geometry;
                     var faceNormal = faceGeometry.plane().normal;
-                    var vertexIndicesForTriangles = [
-                        [0, 1, 2]
-                    ];
                     var faceVertices = faceGeometry.vertices;
                     var numberOfVerticesInFace = faceVertices.length;
-                    if (numberOfVerticesInFace == 4) {
-                        vertexIndicesForTriangles.push([0, 2, 3]);
+                    var vertexIndicesForTriangles = numberOfVerticesInFace == 3
+                        ? this._vertexIndicesForTrianglesSingle
+                        : numberOfVerticesInFace == 4
+                            ? this._vertexIndicesForTrianglesDouble
+                            : null;
+                    if (vertexIndicesForTriangles == null) {
+                        throw new Error("Only faces with 3 or 4 vertices are supported.");
                     }
                     for (var t = 0; t < vertexIndicesForTriangles.length; t++) {
                         var vertexIndicesForTriangle = vertexIndicesForTriangles[t];
@@ -119,7 +123,7 @@ var ThisCouldBeBetter;
                     numberOfTrianglesSoFar.value += vertexIndicesForTriangles.length;
                 }
             }
-            drawMesh_2_Gl(material, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
+            drawMesh_2_WriteVertexDataArraysToWebGlContext(texture, numberOfTrianglesSoFar, vertexColorsAsFloatArray, vertexNormalsAsFloatArray, vertexPositionsAsFloatArray, vertexTextureUvsAsFloatArray) {
                 var webGLContext = this.webGLContext;
                 var gl = webGLContext.gl;
                 var shaderProgram = webGLContext.shaderProgram;
@@ -135,7 +139,6 @@ var ThisCouldBeBetter;
                 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositionsAsFloatArray), gl.STATIC_DRAW);
                 gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
-                var texture = material.texture;
                 if (texture != null) {
                     var textureName = texture.name;
                     var textureRegistered = this.texturesRegisteredByName.get(textureName);

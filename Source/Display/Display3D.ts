@@ -28,6 +28,8 @@ export class Display3D implements Display
 	_sizeDefault: Coords;
 	_scaleFactor: Coords;
 	_display2DOverlay: Display;
+	_vertexIndicesForTrianglesSingle: number[][];
+	_vertexIndicesForTrianglesDouble: number[][];
 
 	constructor
 	(
@@ -54,6 +56,8 @@ export class Display3D implements Display
 			colorFore,
 			colorBack
 		);
+		this._vertexIndicesForTrianglesSingle = [ [0, 1, 2] ];
+		this._vertexIndicesForTrianglesDouble = [ [0, 1, 2], [0, 2, 3] ];
 	}
 
 	static fromViewSizeInPixels(viewSizeInPixels: Coords): Display3D
@@ -182,7 +186,7 @@ export class Display3D implements Display
 		{
 			var material = meshMaterials[m];
 
-			this.drawMesh_1
+			this.drawMesh_1_PopulateVertexDataArrays
 			(
 				mesh,
 				material,
@@ -193,9 +197,9 @@ export class Display3D implements Display
 				vertexTextureUvsAsFloatArray
 			);
 
-			this.drawMesh_2_Gl
+			this.drawMesh_2_WriteVertexDataArraysToWebGlContext
 			(
-				material,
+				material.texture,
 				numberOfTrianglesSoFar.value,
 				vertexColorsAsFloatArray,
 				vertexNormalsAsFloatArray,
@@ -206,7 +210,7 @@ export class Display3D implements Display
 		} // end for each material
 	}
 
-	drawMesh_1
+	drawMesh_1_PopulateVertexDataArrays
 	(
 		mesh: MeshTextured,
 		material: Material,
@@ -232,17 +236,19 @@ export class Display3D implements Display
 			var faceGeometry = face.geometry;
 			var faceNormal = faceGeometry.plane().normal;
 
-			var vertexIndicesForTriangles: number[][] =
-			[
-				[0, 1, 2]
-			];
-
 			var faceVertices = faceGeometry.vertices;
 			var numberOfVerticesInFace = faceVertices.length;
 
-			if (numberOfVerticesInFace == 4)
+			var vertexIndicesForTriangles: number[][] =
+				numberOfVerticesInFace == 3
+				? this._vertexIndicesForTrianglesSingle
+				: numberOfVerticesInFace == 4
+				? this._vertexIndicesForTrianglesDouble
+				: null;
+
+			if (vertexIndicesForTriangles == null)
 			{
-				vertexIndicesForTriangles.push([0, 2, 3]);
+				throw new Error("Only faces with 3 or 4 vertices are supported.");
 			}
 
 			for (var t = 0; t < vertexIndicesForTriangles.length; t++)
@@ -291,9 +297,9 @@ export class Display3D implements Display
 
 	}
 
-	drawMesh_2_Gl
+	drawMesh_2_WriteVertexDataArraysToWebGlContext
 	(
-		material: Material,
+		texture: Texture,
 		numberOfTrianglesSoFar: number,
 		vertexColorsAsFloatArray: any[],
 		vertexNormalsAsFloatArray: any[],
@@ -360,7 +366,6 @@ export class Display3D implements Display
 			0
 		);
 
-		var texture = material.texture;
 		if (texture != null)
 		{
 			var textureName = texture.name;
@@ -402,7 +407,6 @@ export class Display3D implements Display
 			0,
 			numberOfTrianglesSoFar * Display3D.VerticesPerTriangle
 		);
-
 	}
 
 	drawMeshWithOrientation
