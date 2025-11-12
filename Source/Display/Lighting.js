@@ -10,8 +10,7 @@ var ThisCouldBeBetter;
                 this.lightPoint = lightPoint;
             }
             static default() {
-                return new Lighting(LightAmbient.fromIntensity(.5), LightDirectional.fromIntensityAndDirection(.4, GameFramework.Coords.ones().multiplyScalar(-1).normalize()), null // lightPoint
-                );
+                return new Lighting(LightAmbient.fromIntensity(.5), LightDirectional.fromIntensityAndDirection(.4, GameFramework.Coords.ones().invert().normalize()), LightPoint.default());
             }
             static fromLightsAmbientDirectionalAndPoint(lightAmbient, lightDirectional, lightPoint) {
                 return new Lighting(lightAmbient, lightDirectional, lightPoint);
@@ -44,7 +43,7 @@ var ThisCouldBeBetter;
                 this.direction = direction;
             }
             static dark() {
-                return new LightDirectional(0, GameFramework.Coords.fromXYZ(1, 0, 0));
+                return new LightDirectional(0, GameFramework.Coords.ones().invert().normalize());
             }
             static fromIntensityAndDirection(intensity, direction) {
                 return new LightDirectional(intensity, direction);
@@ -62,6 +61,9 @@ var ThisCouldBeBetter;
                 this.intensity = intensity;
                 this.pos = pos;
             }
+            static dark() {
+                return new LightPoint(0, GameFramework.Coords.zeroes());
+            }
             static default() {
                 return new LightPoint(1, GameFramework.Coords.zeroes());
             }
@@ -69,7 +71,11 @@ var ThisCouldBeBetter;
                 return new LightPoint(intensity, pos);
             }
             writeToWebGlContext(webGlContext) {
-                // todo
+                var gl = webGlContext.gl;
+                var shaderProgramVariables = webGlContext.shaderProgramVariables;
+                gl.uniform1f(shaderProgramVariables.lightPointIntensity, // Not used by shader program yet!
+                this.intensity);
+                gl.uniform3fv(shaderProgramVariables.lightPointPosition, GameFramework.WebGLContext.coordsToWebGLArray(this.pos));
             }
         }
         GameFramework.LightPoint = LightPoint;

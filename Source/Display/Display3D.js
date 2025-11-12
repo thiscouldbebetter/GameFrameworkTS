@@ -187,8 +187,8 @@ var ThisCouldBeBetter;
                 Lighting.fromLightsAmbientDirectionalAndPoint
                     (
                         LightAmbient.fromIntensity(.25),
-                        LightDirectional.dark(),
-                        LightPoint.fromIntensityAndPos(1000000, Coords.fromXYZ(0, 0, -100) )
+                        LightDirectional.fromIntensityAndDirection(0, Coords.ones().invert().normalize() ),
+                        LightPoint.fromIntensityAndPos(0, Coords.fromXYZ(0, 0, -100) )
                     );
                 */
                 this._display2DOverlay.initialize(universe);

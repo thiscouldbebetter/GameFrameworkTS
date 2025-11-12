@@ -74,18 +74,30 @@ export class WebGLContext
 			"uniform sampler2D uSampler;",
 			"",
 			"varying vec4 vColor;",
-			"varying vec3 vLightFromAmbientAndDirectional;",
+			"varying vec3 vNormal;",
+			"varying vec3 vLightComponentsFromAmbientAndDirectional;",
 			"varying vec2 vTextureUv;",
+			"varying float vLightPointIntensity;",
 			"varying vec3 vDisplacementFromSurfaceToLightPoint;",
 			"",
 			"void main(void) {",
-			"    if (vTextureUv.x < 0.0) {",
+			"    if (vTextureUv.x < 0.0)",
+			"    {",
 			"        gl_FragColor = vColor;",
-			"    } else {",
+			"    }",
+			"    else",
+			"    {",
 			"        vec2 textureUvAsVec2 = vec2(vTextureUv.s, vTextureUv.t);",
 			"        vec4 textureColor = texture2D(uSampler, textureUvAsVec2);",
 			"        vec3 directionFromSurfaceToLightPoint = normalize(vDisplacementFromSurfaceToLightPoint);",
-			"        vec3 surfaceColorRgb = vLightFromAmbientAndDirectional * textureColor.rgb;",
+			"        float distanceFromSurfaceToLightPoint = length(vDisplacementFromSurfaceToLightPoint);",
+			"        float distanceFromSurfaceToLightPointSquared = distanceFromSurfaceToLightPoint * distanceFromSurfaceToLightPoint;",
+			//"        float lightMagnitudeFromPointAtSurface = dot(vNormal, directionFromSurfaceToLightPoint);",
+			"        float lightMagnitudeFromPointAtSurface = vLightPointIntensity / distanceFromSurfaceToLightPointSquared;",
+			"        vec3 lightComponentsFromPointAtSurface = vec3(1.0, 1.0, 1.0) * lightMagnitudeFromPointAtSurface;",
+			"        vec3 lightComponentsFromAllSources = ",
+			"            vLightComponentsFromAmbientAndDirectional + lightComponentsFromPointAtSurface;",
+			"        vec3 surfaceColorRgb = lightComponentsFromAllSources * textureColor.rgb;",
 			"        gl_FragColor = vec4(surfaceColorRgb, textureColor.a);",
 			"    }",
 			"}"
@@ -115,17 +127,20 @@ export class WebGLContext
 			"uniform float uLightAmbientIntensity;",
 			"uniform float uLightDirectionalIntensity;",
 			"uniform vec3 uLightDirectionalDirection;",
-			"uniform vec3 uLightPointIntensity;",
+			"uniform float uLightPointIntensity;",
 			"uniform vec3 uLightPointPosition;",
 			"",
 			"// These are set below, then passed to the fragment shader.",
 			"varying vec4 vColor;",
-			"varying vec3 vLightFromAmbientAndDirectional;",
+			"varying vec3 vLightComponentsFromAmbientAndDirectional;",
 			"varying vec2 vTextureUv;",
 			"varying vec3 vDisplacementFromSurfaceToLightPoint;",
+			"varying float vLightPointIntensity;",
+			"varying vec3 vNormal;",
 			"",
 			"void main(void) {",
 			"    vColor = aVertexColor;",
+			"    vNormal = aVertexNormal;",
 			"    vec4 vertexNormalAsVec4 = vec4(aVertexNormal, 0.0);",
 			"    vec4 vertexNormalTimesNormalMatrix = uNormalMatrix * vertexNormalAsVec4;",
 			"    vec3 vertexNormalTimesNormalMatrixInverted = vec3(vertexNormalTimesNormalMatrix.xyz) * -1.0;",
@@ -135,9 +150,10 @@ export class WebGLContext
 			"        uLightDirectionalIntensity * max(normalTransformedDotLightDirection, 0.0);",
 			"    float lightMagnitude = uLightAmbientIntensity + lightDirectionalMagnitude;",
 			"    vec3 lightColor = vec3(1.0, 1.0, 1.0);",
-			"    vLightFromAmbientAndDirectional = lightColor * lightMagnitude;",
+			"    vLightComponentsFromAmbientAndDirectional = lightColor * lightMagnitude;",
 			"    vec4 vertexPositionAsVec4 = vec4(aVertexPosition, 1.0);", // Because a vec3 can't be multiplied with a mat4?
 			"    vec3 vertexPositionInWorldCoords = (uEntityMatrix * vertexPositionAsVec4).xyz;", // Need a "world matrix" instead of uEntityMatrix?
+			"    vLightPointIntensity = uLightPointIntensity;",
 			"    vDisplacementFromSurfaceToLightPoint = uLightPointPosition - vertexPositionInWorldCoords;",
 			"    vTextureUv = aVertexTextureUV;",
 			"    gl_Position = uCameraMatrix * uEntityMatrix * vertexPositionAsVec4;",
@@ -259,6 +275,8 @@ class ShaderProgramVariableNames
 		this.uLightAmbientIntensity = "uLightAmbientIntensity";
 		this.uLightDirectionalIntensity = "uLightDirectionalIntensity";
 		this.uLightDirectionalDirection = "uLightDirectionalDirection";
+		this.uLightPointIntensity = "uLightPointIntensity";
+		this.uLightPointPosition = "uLightPointPosition";
 		this.uNormalMatrix = "uNormalMatrix";
 	}
 

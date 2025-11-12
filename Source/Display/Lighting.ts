@@ -25,8 +25,8 @@ export class Lighting
 		return new Lighting
 		(
 			LightAmbient.fromIntensity(.5),
-			LightDirectional.fromIntensityAndDirection(.4, Coords.ones().multiplyScalar(-1).normalize() ),
-			null // lightPoint
+			LightDirectional.fromIntensityAndDirection(.4, Coords.ones().invert().normalize() ),
+			LightPoint.default()
 		);
 	}
 
@@ -96,7 +96,7 @@ export class LightDirectional
 
 	static dark(): LightDirectional
 	{
-		return new LightDirectional(0, Coords.fromXYZ(1, 0, 0) );
+		return new LightDirectional(0, Coords.ones().invert().normalize() );
 	}
 
 	static fromIntensityAndDirection(intensity: number, direction: Coords): LightDirectional
@@ -134,6 +134,11 @@ export class LightPoint
 		this.pos = pos;
 	}
 
+	static dark(): LightPoint
+	{
+		return new LightPoint(0, Coords.zeroes() );
+	}
+
 	static default(): LightPoint
 	{
 		return new LightPoint(1, Coords.zeroes() );
@@ -146,7 +151,20 @@ export class LightPoint
 
 	writeToWebGlContext(webGlContext: WebGLContext): void
 	{
-		// todo
+		var gl = webGlContext.gl;
+		var shaderProgramVariables = webGlContext.shaderProgramVariables;
+
+		gl.uniform1f
+		(
+			shaderProgramVariables.lightPointIntensity, // Not used by shader program yet!
+			this.intensity
+		);
+
+		gl.uniform3fv
+		(
+			shaderProgramVariables.lightPointPosition,
+			WebGLContext.coordsToWebGLArray(this.pos)
+		);
 	}
 }
 
