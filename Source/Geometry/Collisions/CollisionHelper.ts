@@ -111,6 +111,7 @@ export class CollisionHelper
 			lookup = new Map<string, any>
 			([
 				[ boxName, this.collisionOfMeshAndBox ],
+				[ meshName, this.collisionOfMeshes ],
 				[ shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll ],
 				[ shapeInverseName, this.collisionOfShapeAndShapeInverse ],
 				[ sphereName, this.collisionOfMeshAndSphere ]
@@ -1400,6 +1401,14 @@ export class CollisionHelper
 	collisionOfMeshAndBox(mesh: Mesh, box: BoxAxisAligned, collision: Collision): Collision
 	{
 		return this.collisionOfBoxAndMesh(box, mesh, collision);
+	}
+
+	collisionOfMeshes
+	(
+		mesh0: Mesh, mesh1: Mesh, collision: Collision
+	): Collision
+	{
+		throw new Error("todo");
 	}
 
 	collisionOfMeshAndSphere(mesh: Mesh, sphere: Sphere, collision: Collision): Collision

@@ -12,6 +12,9 @@ var ThisCouldBeBetter;
             static create() {
                 return new Transform_Locate(GameFramework.Disposition.create());
             }
+            static fromDisposition(loc) {
+                return new Transform_Locate(loc);
+            }
             clone() {
                 return new Transform_Locate(this.loc.clone());
             }

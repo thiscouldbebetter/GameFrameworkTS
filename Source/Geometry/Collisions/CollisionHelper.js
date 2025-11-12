@@ -73,6 +73,7 @@ var ThisCouldBeBetter;
                 if (meshName != null) {
                     lookup = new Map([
                         [boxName, this.collisionOfMeshAndBox],
+                        [meshName, this.collisionOfMeshes],
                         [shapeGroupAllName, this.collisionOfShapeAndShapeGroupAll],
                         [shapeInverseName, this.collisionOfShapeAndShapeInverse],
                         [sphereName, this.collisionOfMeshAndSphere]
@@ -871,6 +872,9 @@ var ThisCouldBeBetter;
             }
             collisionOfMeshAndBox(mesh, box, collision) {
                 return this.collisionOfBoxAndMesh(box, mesh, collision);
+            }
+            collisionOfMeshes(mesh0, mesh1, collision) {
+                throw new Error("todo");
             }
             collisionOfMeshAndSphere(mesh, sphere, collision) {
                 // hack

@@ -153,6 +153,58 @@ var ThisCouldBeBetter;
                 this.vertices(); // hack - Recalculate.
                 return this;
             }
+            // Serialization.
+            static fromStringHumanReadable(meshAsString) {
+                var newline = "\n";
+                var lines = meshAsString.split(newline);
+                var centerAsString = lines[1].split(": ")[1];
+                var center = GameFramework.Coords.fromStringXYZ(centerAsString);
+                lines = lines.slice(4);
+                var textFaces = "Faces:";
+                var lineIndexForTextFaces = lines.indexOf(textFaces);
+                var vertexOffsetsAsStrings = lines.slice(0, lineIndexForTextFaces);
+                var facesAsLines = lines.slice(lineIndexForTextFaces + 1);
+                var vertexOffsets = vertexOffsetsAsStrings
+                    .map(x => GameFramework.Coords.fromStringXYZ(x.split(": ")[1]));
+                var vertexIndicesForFaces = facesAsLines.map(x => x
+                    .split(": ")[1]
+                    .split(", ")
+                    .map(y => parseInt(y)));
+                var faceBuilders = vertexIndicesForFaces
+                    .map(x => Mesh_FaceBuilder.fromVertexIndices(x));
+                var mesh = Mesh.fromCenterVertexOffsetsAndFaceBuilders(center, vertexOffsets, faceBuilders);
+                return mesh;
+            }
+            toStringHumanReadable() {
+                var verticesAsStrings = this.vertexOffsets.map((v, i) => i + ": " + v.toStringXYZ());
+                var newline = "\n";
+                var verticesAsString = verticesAsStrings.join(newline);
+                var tab = "\t";
+                var tabTab = tab + tab;
+                var newlineTabTab = newline + tabTab;
+                verticesAsString =
+                    tabTab
+                        + verticesAsString
+                            .split(newline)
+                            .join(newlineTabTab);
+                var facesAsVertexIndexStrings = this.faceBuilders.map((f, i) => i + ": " + f.toStringHumanReadable());
+                var facesAsString = facesAsVertexIndexStrings.join(newline);
+                facesAsString =
+                    tabTab
+                        + facesAsString
+                            .split(newline)
+                            .join(newlineTabTab);
+                var lines = [
+                    Mesh.name + ":",
+                    tab + "Center: " + this.center.toStringXYZ(),
+                    tab + "Vertices:",
+                    verticesAsString,
+                    tab + "Faces:",
+                    facesAsString
+                ];
+                var returnValue = lines.join(newline);
+                return returnValue;
+            }
             // ShapeBase.
             normalAtPos(posToCheck, normalOut) {
                 return this.box().normalAtPos(posToCheck, normalOut);
@@ -189,13 +241,17 @@ var ThisCouldBeBetter;
                     this.vertexIndices[i] = vertexIndex;
                 }
             }
-            // clonable
+            // Clonable.
             clone() {
                 return new Mesh_FaceBuilder(this.vertexIndices.slice());
             }
             overwriteWith(other) {
                 GameFramework.ArrayHelper.overwriteWithNonClonables(this.vertexIndices, other.vertexIndices);
                 return this;
+            }
+            // Serialization.
+            toStringHumanReadable() {
+                return this.vertexIndices.join(", ");
             }
             // Transformable.
             transform(transformToApply) { throw new Error("Not implemented!"); }

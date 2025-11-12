@@ -455,11 +455,21 @@ var ThisCouldBeBetter;
                 return this;
             }
             // string
+            static fromStringXYZ(coordsAsString) {
+                var xyz = coordsAsString
+                    .split("x")
+                    .map(x => parseFloat(x));
+                var returnValue = Coords.fromXYZ(xyz[0], xyz[1], xyz[2]);
+                return returnValue;
+            }
             toString() {
-                return this.x + "x" + this.y + "x" + this.z;
+                return this.toStringXYZ();
             }
             toStringXY() {
                 return this.x + "x" + this.y;
+            }
+            toStringXYZ() {
+                return this.x + "x" + this.y + "x" + this.z;
             }
         }
         // constants

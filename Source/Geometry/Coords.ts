@@ -703,15 +703,34 @@ export class Coords
 
 	// string
 
-	toString()
+	static fromStringXYZ(coordsAsString: string): Coords
+	{
+		var xyz =
+			coordsAsString
+				.split("x")
+				.map(x => parseFloat(x) );
+
+		var returnValue =
+			Coords.fromXYZ(xyz[0], xyz[1], xyz[2]);
+
+		return returnValue;
+	}
+
+	toString(): string
+	{
+		return this.toStringXYZ();
+	}
+
+	toStringXY(): string
+	{
+		return this.x + "x" + this.y;
+	}
+
+	toStringXYZ(): string
 	{
 		return this.x + "x" + this.y + "x" + this.z;
 	}
 
-	toStringXY()
-	{
-		return this.x + "x" + this.y;
-	}
 }
 
 class Coords_Instances

@@ -22,6 +22,11 @@ export class Transform_Locate implements Transform<Transform_Locate>
 		return new Transform_Locate(Disposition.create() );
 	}
 
+	static fromDisposition(loc: Disposition): Transform_Locate
+	{
+		return new Transform_Locate(loc);
+	}
+
 	clone(): Transform_Locate
 	{
 		return new Transform_Locate(this.loc.clone());
