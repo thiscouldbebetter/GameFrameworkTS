@@ -393,7 +393,7 @@ export class SkeletonHelper
 		skeletonPosed: Skeleton
 	)
 	{
-		var vertices = meshAtRest.geometry.vertices();
+		var vertices = meshAtRest.vertices();
 		var bones = skeletonAtRest.bonesAll;
 
 		var boneInfluences = new Array<BoneInfluence>();

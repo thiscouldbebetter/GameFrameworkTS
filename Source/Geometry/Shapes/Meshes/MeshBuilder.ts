@@ -382,7 +382,8 @@ export class MeshBuilder
 		{
 			var mesh = meshesForRoom[i];
 
-			var face = mesh.geometry.faces()[0];
+			var faces = mesh.faces();
+			var face = faces[0];
 			var faceNormal = face.plane().normal;
 
 			var faceOrientationDown =
@@ -521,52 +522,49 @@ export class MeshBuilder
 
 		var wt = wallThickness;
 
-		var returnMesh = new Mesh
-		(
-			Coords.create(), // center
-			// vertices
-			[
-				// wall
+		var vertices = 
+		[
+			// wall
 
-				// b = bottom, t = top, l = left, r = right.
-				// top
-				Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, 0), // bl - 0
-				Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, 0), // br - 1
-				Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tr - 2
-				Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tl - 3
+			// b = bottom, t = top, l = left, r = right.
+			// top
+			Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, 0), // bl - 0
+			Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, 0), // br - 1
+			Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tr - 2
+			Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tl - 3
 
-				// left
-				Coords.fromXYZ(-1, 1, 0), // bl - 4
-				Coords.fromXYZ(-doorwayWidthHalf, 1, 0), // br - 5
-				Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tr - 6
-				Coords.fromXYZ(-1, -1, 0), // tl - 7
+			// left
+			Coords.fromXYZ(-1, 1, 0), // bl - 4
+			Coords.fromXYZ(-doorwayWidthHalf, 1, 0), // br - 5
+			Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tr - 6
+			Coords.fromXYZ(-1, -1, 0), // tl - 7
 
-				// right
-				Coords.fromXYZ(doorwayWidthHalf, 1, 0), // bl - 8
-				Coords.fromXYZ(1, 1, 0), // br - 9
-				Coords.fromXYZ(1, -1, 0), // tr - 10
-				Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tl - 11
+			// right
+			Coords.fromXYZ(doorwayWidthHalf, 1, 0), // bl - 8
+			Coords.fromXYZ(1, 1, 0), // br - 9
+			Coords.fromXYZ(1, -1, 0), // tr - 10
+			Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tl - 11
 
-				// doorframe
-				Coords.fromXYZ(-doorwayWidthHalf, 1, wt), // bl - 12
-				Coords.fromXYZ(doorwayWidthHalf, 1, wt), // br - 13
-				Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
-				Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
-			],
-			// vertexIndicesForFaces
-			[
-				// wall
-				Mesh_FaceBuilder.fromVertexIndices([ 0, 1, 2, 3]), // top
-				Mesh_FaceBuilder.fromVertexIndices([ 4, 5, 6, 7 ]), // left
-				Mesh_FaceBuilder.fromVertexIndices([ 8, 9, 10, 11 ]), // right
+			// doorframe
+			Coords.fromXYZ(-doorwayWidthHalf, 1, wt), // bl - 12
+			Coords.fromXYZ(doorwayWidthHalf, 1, wt), // br - 13
+			Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
+			Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
+		];
 
-				// doorframe
-				new Mesh_FaceBuilder([ 5, 12, 15, 0  ]), // left
-				new Mesh_FaceBuilder([ 1, 14, 13, 8 ]), // right
+		var faceBuilders = 
+		[
+			// wall
+			Mesh_FaceBuilder.fromVertexIndices([ 0, 1, 2, 3]), // top
+			Mesh_FaceBuilder.fromVertexIndices([ 4, 5, 6, 7 ]), // left
+			Mesh_FaceBuilder.fromVertexIndices([ 8, 9, 10, 11 ]), // right
 
-				// todo - top - Hard to see currently.
-			]
-		);
+			// doorframe
+			new Mesh_FaceBuilder([ 5, 12, 15, 0  ]), // left
+			new Mesh_FaceBuilder([ 1, 14, 13, 8 ]), // right
+
+			// todo - top - Hard to see currently.
+		];
 
 		var doorwayWidth = doorwayWidthHalf * 2;
 		var doorwayWidthReversed = 1 - doorwayWidth;
@@ -654,7 +652,9 @@ export class MeshBuilder
 
 		var returnMeshTextured = new MeshTextured
 		(
-			returnMesh,
+			Coords.create(), // center
+			vertices,
+			faceBuilders,
 			[ material ],
 			faceTextures,
 			null
@@ -741,7 +741,8 @@ export class MeshBuilder
 
 	unitSquare(material: Material): MeshTextured
 	{
-		var returnMesh = new Mesh
+
+		var returnMeshTextured = new MeshTextured
 		(
 			Coords.create(), // center
 			// vertices
@@ -756,12 +757,7 @@ export class MeshBuilder
 			[
 				Mesh_FaceBuilder.fromVertexIndices([3, 2, 1, 0])
 				//[0, 1, 2, 3]
-			]
-		);
-
-		var returnMeshTextured = new MeshTextured
-		(
-			returnMesh,
+			],
 			[ material ],
 			[
 				new MeshTexturedFaceTexture
@@ -820,7 +816,7 @@ export class MeshBuilder
 		for (var m = 0; m < meshesToMerge.length; m++)
 		{
 			var meshToMerge = meshesToMerge[m];
-			var meshToMergeGeometry = meshToMerge.geometry;
+			var meshToMergeGeometry = meshToMerge;
 			var verticesToMerge = meshToMergeGeometry.vertices();
 
 			verticesMerged = verticesMerged.concat
@@ -867,13 +863,6 @@ export class MeshBuilder
 			numberOfVerticesSoFar += verticesToMerge.length;
 		}
 
-		var returnMesh = new Mesh
-		(
-			Coords.create(), // center
-			verticesMerged,
-			faceBuildersMerged
-		);
-
 		var materialsMerged = [];
 		var materialsMergedByName = new Map<string, Material>();
 
@@ -894,7 +883,9 @@ export class MeshBuilder
 
 		var returnMeshTextured = new MeshTextured
 		(
-			returnMesh,
+			Coords.create(), // center
+			verticesMerged,
+			faceBuildersMerged,
 			materialsMerged,
 			faceTexturesMerged,
 			vertexGroups
@@ -918,7 +909,7 @@ export class MeshBuilder
 
 		var distanceOfVertexAbovePlane = 0;
 
-		var faceToDivideVertices = faceToDivide.geometry.vertices;
+		var faceToDivideVertices = faceToDivide.vertices;
 		for (var v = 0; v < faceToDivideVertices.length; v++)
 		{
 			var vertex = faceToDivideVertices[v];
@@ -942,7 +933,7 @@ export class MeshBuilder
 		var collisionHelper = new CollisionHelper();
 		var collision = Collision.create();
 
-		var edges = faceToDivide.geometry.edges();
+		var edges = faceToDivide.edges();
 		for (var e = 0; e < edges.length; e++)
 		{
 			var edge = edges[e];
@@ -997,7 +988,7 @@ export class MeshBuilder
 				{
 					var faceDivided = new FaceTextured
 					(
-						new Face(verticesInFace), faceToDivide.material
+						verticesInFace, faceToDivide.material
 					);
 
 					returnValues.push(faceDivided);

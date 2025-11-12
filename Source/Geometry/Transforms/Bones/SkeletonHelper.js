@@ -93,7 +93,7 @@ var ThisCouldBeBetter;
                 return animationDefnBipedWalk;
             }
             static transformBuildForMeshAndSkeleton_Proximity(meshAtRest, skeletonAtRest, skeletonPosed) {
-                var vertices = meshAtRest.geometry.vertices();
+                var vertices = meshAtRest.vertices();
                 var bones = skeletonAtRest.bonesAll;
                 var boneInfluences = new Array();
                 var boneNameToInfluenceLookup = new Map();

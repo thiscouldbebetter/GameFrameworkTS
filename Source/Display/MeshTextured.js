@@ -3,31 +3,31 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class MeshTextured extends GameFramework.ShapeBase {
-            constructor(geometry, materials, faceTextures, vertexGroups) {
-                super();
-                this.geometry = geometry;
+        class MeshTextured extends GameFramework.Mesh {
+            constructor(center, vertexOffsets, faceBuilders, materials, faceTextures, vertexGroups) {
+                super(center, vertexOffsets, faceBuilders);
                 this.materials = materials;
                 this.materialsByName = GameFramework.ArrayHelper.addLookupsByName(this.materials);
                 this.faceTextures = faceTextures;
                 this.vertexGroups = vertexGroups;
             }
             static fromGeometryMaterialsAndFaceTextures(geometry, materials, faceTextures) {
-                return new MeshTextured(geometry, materials, faceTextures, null);
+                return new MeshTextured(geometry.center, geometry.vertexOffsets, geometry.faceBuilders, materials, faceTextures, null);
             }
             static fromMeshAndMaterials(geometry, materials) {
-                return new MeshTextured(geometry, materials, null, null);
+                return new MeshTextured(geometry.center, geometry.vertexOffsets, geometry.faceBuilders, materials, null, null);
             }
             faces() {
                 if (this._faces == null) {
+                    var geometryFaces = super.faces();
                     this._faces = [];
-                    var geometryFaces = this.geometry.faces();
                     for (var i = 0; i < geometryFaces.length; i++) {
                         var geometryFace = geometryFaces[i];
+                        var vertices = geometryFace.vertices;
                         var faceTexture = this.faceTextures[i];
                         var faceMaterialName = faceTexture.materialName;
                         var faceMaterial = this.materialsByName.get(faceMaterialName);
-                        var face = new GameFramework.FaceTextured(geometryFace, faceMaterial);
+                        var face = new GameFramework.FaceTextured(vertices, faceMaterial);
                         this._faces.push(face);
                     }
                 }
@@ -36,7 +36,7 @@ var ThisCouldBeBetter;
             faceTexturesBuild() {
                 var materialName = this.materials[0].name;
                 var faceTextures = [];
-                var numberOfFaces = this.geometry.faceBuilders.length;
+                var numberOfFaces = this.faceBuilders.length;
                 for (var f = 0; f < numberOfFaces; f++) {
                     var faceTexture = new MeshTexturedFaceTexture(materialName, [
                         GameFramework.Coords.create(),
@@ -66,7 +66,7 @@ var ThisCouldBeBetter;
                 return this._faceIndicesByMaterialName;
             }
             transform(transformToApply) {
-                this.geometry.transform(transformToApply);
+                super.transform(transformToApply);
                 return this;
             }
             transformFaceTextures(transformToApply) {
@@ -78,10 +78,15 @@ var ThisCouldBeBetter;
             }
             // Clonable.
             clone() {
-                return new MeshTextured(this.geometry.clone(), this.materials, GameFramework.ArrayHelper.clone(this.faceTextures), GameFramework.ArrayHelper.clone(this.vertexGroups));
+                var center = this.center.clone();
+                var vertexOffsets = this.vertexOffsets.map(x => x.clone());
+                var faceBuilders = this.faceBuilders.map(x => x.clone());
+                var faceTextures = this.faceTextures.map(x => x.clone());
+                var vertexGroups = this.vertexGroups == null ? null : this.vertexGroups.map(x => x.clone());
+                return new MeshTextured(center, vertexOffsets, faceBuilders, this.materials, faceTextures, vertexGroups);
             }
             overwriteWith(other) {
-                this.geometry.overwriteWith(other.geometry);
+                super.overwriteWith(other);
                 // todo
                 return this;
             }

@@ -3,9 +3,9 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class FaceTextured {
-            constructor(geometry, material) {
-                this.geometry = geometry;
+        class FaceTextured extends GameFramework.Face {
+            constructor(vertices, material) {
+                super(vertices);
                 this.material = material;
             }
         }

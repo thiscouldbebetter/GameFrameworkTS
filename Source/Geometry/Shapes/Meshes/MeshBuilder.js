@@ -198,7 +198,8 @@ var ThisCouldBeBetter;
                 //meshesForRoom.push(meshForCeiling);
                 for (var i = 0; i < meshesForRoom.length; i++) {
                     var mesh = meshesForRoom[i];
-                    var face = mesh.geometry.faces()[0];
+                    var faces = mesh.faces();
+                    var face = faces[0];
                     var faceNormal = face.plane().normal;
                     var faceOrientationDown = (faceNormal.z == 0 ? down : GameFramework.Coords.fromXYZ(1, 0, 0));
                     var faceOrientation = GameFramework.Orientation.fromForwardAndDown(faceNormal, faceOrientationDown);
@@ -246,9 +247,7 @@ var ThisCouldBeBetter;
                 var doorwayHeight = 0.5;
                 var doorwayWidthHalf = doorwayHeight * doorwayWidthScaleFactor / 2;
                 var wt = wallThickness;
-                var returnMesh = new GameFramework.Mesh(GameFramework.Coords.create(), // center
-                // vertices
-                [
+                var vertices = [
                     // wall
                     // b = bottom, t = top, l = left, r = right.
                     // top
@@ -271,9 +270,8 @@ var ThisCouldBeBetter;
                     GameFramework.Coords.fromXYZ(doorwayWidthHalf, 1, wt), // br - 13
                     GameFramework.Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
                     GameFramework.Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
-                ], 
-                // vertexIndicesForFaces
-                [
+                ];
+                var faceBuilders = [
                     // wall
                     GameFramework.Mesh_FaceBuilder.fromVertexIndices([0, 1, 2, 3]), // top
                     GameFramework.Mesh_FaceBuilder.fromVertexIndices([4, 5, 6, 7]), // left
@@ -282,7 +280,7 @@ var ThisCouldBeBetter;
                     new GameFramework.Mesh_FaceBuilder([5, 12, 15, 0]), // left
                     new GameFramework.Mesh_FaceBuilder([1, 14, 13, 8]), // right
                     // todo - top - Hard to see currently.
-                ]);
+                ];
                 var doorwayWidth = doorwayWidthHalf * 2;
                 var doorwayWidthReversed = 1 - doorwayWidth;
                 var doorwayWidthReversedHalf = doorwayWidthReversed / 2;
@@ -331,7 +329,8 @@ var ThisCouldBeBetter;
                     ]).transform(transformScaleSidesDoorframe),
                     // todo - top
                 ];
-                var returnMeshTextured = new GameFramework.MeshTextured(returnMesh, [material], faceTextures, null).transformFaceTextures(new GameFramework.Transform_Scale(GameFramework.Coords.ones().multiplyScalar(2)));
+                var returnMeshTextured = new GameFramework.MeshTextured(GameFramework.Coords.create(), // center
+                vertices, faceBuilders, [material], faceTextures, null).transformFaceTextures(new GameFramework.Transform_Scale(GameFramework.Coords.ones().multiplyScalar(2)));
                 return returnMeshTextured;
             }
             unitCube(material) {
@@ -381,7 +380,7 @@ var ThisCouldBeBetter;
                 return returnMeshTextured;
             }
             unitSquare(material) {
-                var returnMesh = new GameFramework.Mesh(GameFramework.Coords.create(), // center
+                var returnMeshTextured = new GameFramework.MeshTextured(GameFramework.Coords.create(), // center
                 // vertices
                 [
                     // back
@@ -394,8 +393,7 @@ var ThisCouldBeBetter;
                 [
                     GameFramework.Mesh_FaceBuilder.fromVertexIndices([3, 2, 1, 0])
                     //[0, 1, 2, 3]
-                ]);
-                var returnMeshTextured = new GameFramework.MeshTextured(returnMesh, [material], [
+                ], [material], [
                     new GameFramework.MeshTexturedFaceTexture(material.name, [
                         GameFramework.Coords.create(),
                         GameFramework.Coords.fromXY(1, 0),
@@ -423,7 +421,7 @@ var ThisCouldBeBetter;
                 var numberOfVerticesSoFar = 0;
                 for (var m = 0; m < meshesToMerge.length; m++) {
                     var meshToMerge = meshesToMerge[m];
-                    var meshToMergeGeometry = meshToMerge.geometry;
+                    var meshToMergeGeometry = meshToMerge;
                     var verticesToMerge = meshToMergeGeometry.vertices();
                     verticesMerged = verticesMerged.concat(verticesToMerge);
                     var faceBuildersToMerge = meshToMergeGeometry.faceBuilders;
@@ -450,8 +448,6 @@ var ThisCouldBeBetter;
                     }
                     numberOfVerticesSoFar += verticesToMerge.length;
                 }
-                var returnMesh = new GameFramework.Mesh(GameFramework.Coords.create(), // center
-                verticesMerged, faceBuildersMerged);
                 var materialsMerged = [];
                 var materialsMergedByName = new Map();
                 for (var i = 0; i < meshesToMerge.length; i++) {
@@ -465,7 +461,8 @@ var ThisCouldBeBetter;
                         }
                     }
                 }
-                var returnMeshTextured = new GameFramework.MeshTextured(returnMesh, materialsMerged, faceTexturesMerged, vertexGroups);
+                var returnMeshTextured = new GameFramework.MeshTextured(GameFramework.Coords.create(), // center
+                verticesMerged, faceBuildersMerged, materialsMerged, faceTexturesMerged, vertexGroups);
                 return returnMeshTextured;
             }
             splitFaceByPlaneFrontAndBack(faceToDivide, planeToDivideOn) {
@@ -475,7 +472,7 @@ var ThisCouldBeBetter;
                     new Array() // back
                 ];
                 var distanceOfVertexAbovePlane = 0;
-                var faceToDivideVertices = faceToDivide.geometry.vertices;
+                var faceToDivideVertices = faceToDivide.vertices;
                 for (var v = 0; v < faceToDivideVertices.length; v++) {
                     var vertex = faceToDivideVertices[v];
                     distanceOfVertexAbovePlane =
@@ -489,7 +486,7 @@ var ThisCouldBeBetter;
                 var doAnyEdgesCollideWithPlaneSoFar = false;
                 var collisionHelper = new GameFramework.CollisionHelper();
                 var collision = GameFramework.Collision.create();
-                var edges = faceToDivide.geometry.edges();
+                var edges = faceToDivide.edges();
                 for (var e = 0; e < edges.length; e++) {
                     var edge = edges[e];
                     var vertex0 = edge.vertices[0];
@@ -512,7 +509,7 @@ var ThisCouldBeBetter;
                     for (var i = 0; i < verticesInFacesDivided.length; i++) {
                         var verticesInFace = verticesInFacesDivided[i];
                         if (verticesInFace.length > 2) {
-                            var faceDivided = new GameFramework.FaceTextured(new GameFramework.Face(verticesInFace), faceToDivide.material);
+                            var faceDivided = new GameFramework.FaceTextured(verticesInFace, faceToDivide.material);
                             returnValues.push(faceDivided);
                         }
                     }

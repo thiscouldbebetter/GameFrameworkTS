@@ -90,9 +90,8 @@ var ThisCouldBeBetter;
                     var f = faceIndices[fi];
                     var face = meshFaces[f];
                     var faceMaterial = face.material;
-                    var faceGeometry = face.geometry;
-                    var faceNormal = faceGeometry.plane().normal;
-                    var faceVertices = faceGeometry.vertices;
+                    var faceNormal = face.plane().normal;
+                    var faceVertices = face.vertices;
                     var numberOfVerticesInFace = faceVertices.length;
                     var vertexIndicesForTriangles = numberOfVerticesInFace == 3
                         ? this._vertexIndicesForTrianglesSingle

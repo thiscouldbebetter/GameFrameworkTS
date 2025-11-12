@@ -233,10 +233,9 @@ export class Display3D implements Display
 			var f = faceIndices[fi];
 			var face = meshFaces[f];
 			var faceMaterial = face.material;
-			var faceGeometry = face.geometry;
-			var faceNormal = faceGeometry.plane().normal;
+			var faceNormal = face.plane().normal;
 
-			var faceVertices = faceGeometry.vertices;
+			var faceVertices = face.vertices;
 			var numberOfVerticesInFace = faceVertices.length;
 
 			var vertexIndicesForTriangles: number[][] =

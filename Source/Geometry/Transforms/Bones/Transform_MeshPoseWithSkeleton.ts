@@ -76,8 +76,8 @@ export class Transform_MeshPoseWithSkeleton
 
 	transformMesh(meshToPose: MeshTextured)
 	{
-		var meshAtRestVertices = this.meshAtRest.geometry.vertexOffsets;
-		var meshToPoseVertices = meshToPose.geometry.vertexOffsets;
+		var meshAtRestVertices = this.meshAtRest.vertexOffsets;
+		var meshToPoseVertices = meshToPose.vertexOffsets;
 
 		var bonesAtRest = this.skeletonAtRest.bonesAllByName;
 		var bonesPosed = this.skeletonPosed.bonesAllByName;

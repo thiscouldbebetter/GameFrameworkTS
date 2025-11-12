@@ -97,7 +97,8 @@ var ThisCouldBeBetter;
                 this.drawMethodAddAtDistance(fromPos.z, () => this.displayInner.drawLine(fromPos, toPos, color, lineThickness));
             }
             drawMeshWithOrientation(mesh, meshOrientation) {
-                var pos = mesh.geometry.vertices()[0];
+                var meshVertices = mesh.vertices();
+                var pos = meshVertices[0];
                 this.drawMethodAddAtDistance(pos.z, // hack
                 () => this.displayInner.drawMeshWithOrientation(mesh, meshOrientation));
             }

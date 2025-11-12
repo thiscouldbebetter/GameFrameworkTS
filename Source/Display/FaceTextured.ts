@@ -2,14 +2,13 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class FaceTextured
+export class FaceTextured extends Face
 {
-	geometry: Face;
 	material: Material;
 
-	constructor(geometry: Face, material: Material)
+	constructor(vertices: Coords[], material: Material)
 	{
-		this.geometry = geometry;
+		super(vertices);
 		this.material = material;
 	}
 }

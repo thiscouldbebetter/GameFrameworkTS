@@ -288,7 +288,8 @@ export class DisplayFarToNear implements Display
 		mesh: MeshTextured, meshOrientation: Orientation
 	): void
 	{
-		var pos = mesh.geometry.vertices()[0];
+		var meshVertices = mesh.vertices();
+		var pos = meshVertices[0];
 		this.drawMethodAddAtDistance
 		(
 			pos.z, // hack

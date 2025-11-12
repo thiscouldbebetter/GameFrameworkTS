@@ -2,9 +2,8 @@
 namespace ThisCouldBeBetter.GameFramework
 {
 
-export class MeshTextured extends ShapeBase
+export class MeshTextured extends Mesh
 {
-	geometry: Mesh;
 	materials: Material[];
 	materialsByName: Map<string, Material>;
 	faceTextures: MeshTexturedFaceTexture[];
@@ -15,15 +14,19 @@ export class MeshTextured extends ShapeBase
 
 	constructor
 	(
-		geometry: Mesh,
+		center: Coords,
+		vertexOffsets: Coords[],
+		faceBuilders: Mesh_FaceBuilder[],
 		materials: Material[],
 		faceTextures: MeshTexturedFaceTexture[],
 		vertexGroups: VertexGroup[]
 	)
 	{
-		super();
+		super
+		(
+			center, vertexOffsets, faceBuilders
+		);
 
-		this.geometry = geometry;
 		this.materials = materials;
 		this.materialsByName = ArrayHelper.addLookupsByName(this.materials);
 		this.faceTextures = faceTextures;
@@ -37,27 +40,34 @@ export class MeshTextured extends ShapeBase
 		faceTextures: MeshTexturedFaceTexture[]
 	): MeshTextured
 	{
-		return new MeshTextured(geometry, materials, faceTextures, null);
+		return new MeshTextured
+		(
+			geometry.center, geometry.vertexOffsets, geometry.faceBuilders, materials, faceTextures, null
+		);
 	}
 
 	static fromMeshAndMaterials(geometry: Mesh, materials: Material[]): MeshTextured
 	{
-		return new MeshTextured(geometry, materials, null, null);
+		return new MeshTextured
+		(
+			geometry.center, geometry.vertexOffsets, geometry.faceBuilders, materials, null, null
+		);
 	}
 
 	faces(): FaceTextured[]
 	{
 		if (this._faces == null)
 		{
+			var geometryFaces = super.faces();
 			this._faces = [];
-			var geometryFaces = this.geometry.faces();
 			for (var i = 0; i < geometryFaces.length; i++)
 			{
 				var geometryFace = geometryFaces[i];
+				var vertices = geometryFace.vertices;
 				var faceTexture = this.faceTextures[i];
 				var faceMaterialName = faceTexture.materialName;
 				var faceMaterial = this.materialsByName.get(faceMaterialName);
-				var face = new FaceTextured(geometryFace, faceMaterial);
+				var face = new FaceTextured(vertices, faceMaterial);
 				this._faces.push(face);
 			}
 		}
@@ -71,7 +81,7 @@ export class MeshTextured extends ShapeBase
 
 		var faceTextures = [];
 
-		var numberOfFaces = this.geometry.faceBuilders.length;
+		var numberOfFaces = this.faceBuilders.length;
 		for (var f = 0; f < numberOfFaces; f++)
 		{
 			var faceTexture = new MeshTexturedFaceTexture
@@ -123,7 +133,7 @@ export class MeshTextured extends ShapeBase
 
 	transform(transformToApply: TransformBase): MeshTextured
 	{
-		this.geometry.transform(transformToApply);
+		super.transform(transformToApply);
 
 		return this;
 	}
@@ -143,18 +153,26 @@ export class MeshTextured extends ShapeBase
 
 	clone(): MeshTextured
 	{
+		var center = this.center.clone();
+		var vertexOffsets = this.vertexOffsets.map(x => x.clone() );
+		var faceBuilders = this.faceBuilders.map(x => x.clone() );
+		var faceTextures = this.faceTextures.map(x => x.clone() );
+		var vertexGroups = this.vertexGroups == null ? null : this.vertexGroups.map(x => x.clone() );
+
 		return new MeshTextured
 		(
-			this.geometry.clone(),
+			center,
+			vertexOffsets,
+			faceBuilders,
 			this.materials,
-			ArrayHelper.clone(this.faceTextures),
-			ArrayHelper.clone(this.vertexGroups)
+			faceTextures,
+			vertexGroups
 		);
 	}
 
 	overwriteWith(other: MeshTextured): MeshTextured
 	{
-		this.geometry.overwriteWith(other.geometry);
+		super.overwriteWith(other);
 		// todo
 		return this;
 	}
