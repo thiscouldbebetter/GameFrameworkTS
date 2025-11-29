@@ -158,14 +158,14 @@ var ThisCouldBeBetter;
                 var newline = "\n";
                 var lines = meshAsString.split(newline);
                 var centerAsString = lines[1].split(": ")[1];
-                var center = GameFramework.Coords.fromStringXYZ(centerAsString);
+                var center = GameFramework.Coords.fromStringXxYxZ(centerAsString);
                 lines = lines.slice(4);
                 var textFaces = "Faces:";
                 var lineIndexForTextFaces = lines.indexOf(textFaces);
                 var vertexOffsetsAsStrings = lines.slice(0, lineIndexForTextFaces);
                 var facesAsLines = lines.slice(lineIndexForTextFaces + 1);
                 var vertexOffsets = vertexOffsetsAsStrings
-                    .map(x => GameFramework.Coords.fromStringXYZ(x.split(": ")[1]));
+                    .map(x => GameFramework.Coords.fromStringXxYxZ(x.split(": ")[1]));
                 var vertexIndicesForFaces = facesAsLines.map(x => x
                     .split(": ")[1]
                     .split(", ")
@@ -176,7 +176,7 @@ var ThisCouldBeBetter;
                 return mesh;
             }
             toStringHumanReadable() {
-                var verticesAsStrings = this.vertexOffsets.map((v, i) => i + ": " + v.toStringXYZ());
+                var verticesAsStrings = this.vertexOffsets.map((v, i) => i + ": " + v.toStringXxYxZ());
                 var newline = "\n";
                 var verticesAsString = verticesAsStrings.join(newline);
                 var tab = "\t";
@@ -196,7 +196,7 @@ var ThisCouldBeBetter;
                             .join(newlineTabTab);
                 var lines = [
                     Mesh.name + ":",
-                    tab + "Center: " + this.center.toStringXYZ(),
+                    tab + "Center: " + this.center.toStringXxYxZ(),
                     tab + "Vertices:",
                     verticesAsString,
                     tab + "Faces:",

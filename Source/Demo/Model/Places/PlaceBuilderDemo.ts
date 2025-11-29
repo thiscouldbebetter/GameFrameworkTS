@@ -128,7 +128,7 @@ class PlaceBuilderDemo // Main.
 	)
 	{
 		var namePrefix = "Battlefield";
-		this.name = namePrefix + placePos.toStringXY();
+		this.name = namePrefix + placePos.toStringXxY();
 		this.size = size;
 		this.entities = [];
 
@@ -279,26 +279,14 @@ class PlaceBuilderDemo // Main.
 
 				var zonePos = zonePosInZones.clone().multiply(zoneSize);
 
-				/*
-				var neighborNames = neighborOffsets.filter
-				(
-					x => neighborPos.overwriteWith(x).add(zonePosInZones).isInRangeMaxExclusive(placeSizeInZones)
-				).map
-				(
-					x => "Zone" + neighborPos.overwriteWith(x).add(zonePosInZones).toStringXY()
-				);
-				*/
-
 				var neighborNames = neighborOffsets.map
 				(
 					x =>
-						"Zone" + neighborPos.overwriteWith(x).add
-						(
-							zonePosInZones
-						).wrapToRangeMax
-						(
-							placeSizeInZones
-						).toStringXY()
+						"Zone" + neighborPos
+							.overwriteWith(x)
+							.add(zonePosInZones)
+							.wrapToRangeMax(placeSizeInZones)
+							.toStringXxY()
 				);
 
 				var entityBoulderCorner = this.entityBuildFromDefn
@@ -310,7 +298,7 @@ class PlaceBuilderDemo // Main.
 
 				var zone = new Zone
 				(
-					"Zone" + zonePosInZones.toStringXY(),
+					"Zone" + zonePosInZones.toStringXxY(),
 					BoxAxisAligned.fromMinAndSize(zonePos, zoneSize),
 					neighborNames,
 					[
@@ -340,13 +328,11 @@ class PlaceBuilderDemo // Main.
 			(posToCheck: Coords) => // zoneAtPos
 				zonesByName.get
 				(
-					"Zone" + posInZones.overwriteWith
-					(
-						posToCheck
-					).divide
-					(
-						zoneSize
-					).floor().toStringXY()
+					"Zone" + posInZones
+						.overwriteWith(posToCheck)
+						.divide(zoneSize)
+						.floor()
+						.toStringXxY()
 				)
 		);
 
@@ -359,8 +345,6 @@ class PlaceBuilderDemo // Main.
 	buildTerrarium(size: Coords, placeNameToReturnTo: string)
 	{
 		size = size.clone().multiplyScalar(2);
-
-		//this.build_Interior("Terrarium", size, placeNameToReturnTo);
 
 		this.name = "Terrarium";
 		this.size = size;
@@ -1708,7 +1692,9 @@ class PlaceBuilderDemo // Main.
 					neighborOffset.clone().multiply(portalSize)
 				);
 				var neighborPos = placePos.clone().add(neighborOffset);
-				var neighborName = placeNamePrefix + neighborPos.toStringXY();
+				var neighborName =
+					placeNamePrefix
+					+ neighborPos.toStringXxY();
 
 				var portal = new Portal
 				(

@@ -1403,7 +1403,7 @@ export class ControlBuilder
 				(c: Display) => c.sizesAvailable
 			),
 			DataBinding.fromGet( (c: Coords) => c ), // bindingForOptionValues,
-			DataBinding.fromGet( (c: Coords) => c.toStringXY() ), // bindingForOptionText
+			DataBinding.fromGet( (c: Coords) => c.toStringXxY() ), // bindingForOptionText
 			font
 		);
 

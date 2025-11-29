@@ -294,7 +294,7 @@ export class Mesh extends ShapeBase
 		var newline = "\n";
 		var lines = meshAsString.split(newline);
 		var centerAsString = lines[1].split(": ")[1];
-		var center = Coords.fromStringXYZ(centerAsString);
+		var center = Coords.fromStringXxYxZ(centerAsString);
 
 		lines = lines.slice(4);
 		var textFaces = "Faces:";
@@ -304,7 +304,7 @@ export class Mesh extends ShapeBase
 
 		var vertexOffsets =
 			vertexOffsetsAsStrings
-				.map(x => Coords.fromStringXYZ(x.split(": ")[1] ) );
+				.map(x => Coords.fromStringXxYxZ(x.split(": ")[1] ) );
 
 		var vertexIndicesForFaces =
 			facesAsLines.map
@@ -331,7 +331,7 @@ export class Mesh extends ShapeBase
 	toStringHumanReadable()
 	{
 		var verticesAsStrings =
-			this.vertexOffsets.map( (v, i) => i + ": " + v.toStringXYZ() )
+			this.vertexOffsets.map( (v, i) => i + ": " + v.toStringXxYxZ() )
 
 		var newline = "\n";
 
@@ -360,7 +360,7 @@ export class Mesh extends ShapeBase
 		var lines =
 		[
 			Mesh.name + ":",
-			tab + "Center: " + this.center.toStringXYZ(),
+			tab + "Center: " + this.center.toStringXxYxZ(),
 			tab + "Vertices:",
 			verticesAsString,
 			tab + "Faces:",

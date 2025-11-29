@@ -578,7 +578,7 @@ var ThisCouldBeBetter;
                 GameFramework.DataBinding.fromContextAndGet(universe.display, (c) => c.sizeInPixels), // valueSelected
                 // options
                 GameFramework.DataBinding.fromContextAndGet(universe.display, (c) => c.sizesAvailable), GameFramework.DataBinding.fromGet((c) => c), // bindingForOptionValues,
-                GameFramework.DataBinding.fromGet((c) => c.toStringXY()), // bindingForOptionText
+                GameFramework.DataBinding.fromGet((c) => c.toStringXxY()), // bindingForOptionText
                 font);
                 var buttonChange = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(140, row2PosY), // pos
                 GameFramework.Coords.fromXY(30, buttonHeight), // size

@@ -67,7 +67,7 @@ class PlaceBuilderDemo // Main.
     }
     buildBattlefield(size, placePos, areNeighborsConnectedESWN, isGoal, placeNamesToIncludePortalsTo) {
         var namePrefix = "Battlefield";
-        this.name = namePrefix + placePos.toStringXY();
+        this.name = namePrefix + placePos.toStringXxY();
         this.size = size;
         this.entities = [];
         this.build_SizeWallsAndMargins(namePrefix, placePos, areNeighborsConnectedESWN);
@@ -162,18 +162,13 @@ class PlaceBuilderDemo // Main.
             for (var x = 0; x < placeSizeInZones.x; x++) {
                 zonePosInZones.x = x;
                 var zonePos = zonePosInZones.clone().multiply(zoneSize);
-                /*
-                var neighborNames = neighborOffsets.filter
-                (
-                    x => neighborPos.overwriteWith(x).add(zonePosInZones).isInRangeMaxExclusive(placeSizeInZones)
-                ).map
-                (
-                    x => "Zone" + neighborPos.overwriteWith(x).add(zonePosInZones).toStringXY()
-                );
-                */
-                var neighborNames = neighborOffsets.map(x => "Zone" + neighborPos.overwriteWith(x).add(zonePosInZones).wrapToRangeMax(placeSizeInZones).toStringXY());
+                var neighborNames = neighborOffsets.map(x => "Zone" + neighborPos
+                    .overwriteWith(x)
+                    .add(zonePosInZones)
+                    .wrapToRangeMax(placeSizeInZones)
+                    .toStringXxY());
                 var entityBoulderCorner = this.entityBuildFromDefn(this.entityDefnsByName.get("Boulder"), boxZeroes, this.randomizer);
-                var zone = new Zone("Zone" + zonePosInZones.toStringXY(), BoxAxisAligned.fromMinAndSize(zonePos, zoneSize), neighborNames, [
+                var zone = new Zone("Zone" + zonePosInZones.toStringXxY(), BoxAxisAligned.fromMinAndSize(zonePos, zoneSize), neighborNames, [
                     entityBoulderCorner
                 ]);
                 zones.push(zone);
@@ -189,14 +184,17 @@ class PlaceBuilderDemo // Main.
         placeSize, "Player", // entityToFollowName
         // zoneStart.name, // zoneStartName
         (zoneName) => zonesByName.get(zoneName), (posToCheck) => // zoneAtPos
-         zonesByName.get("Zone" + posInZones.overwriteWith(posToCheck).divide(zoneSize).floor().toStringXY()));
+         zonesByName.get("Zone" + posInZones
+            .overwriteWith(posToCheck)
+            .divide(zoneSize)
+            .floor()
+            .toStringXxY()));
         var entityCamera = this.build_Camera(this.cameraViewSize, place.size());
         zoneStart.entities.push(entityCamera);
         return place;
     }
     buildTerrarium(size, placeNameToReturnTo) {
         size = size.clone().multiplyScalar(2);
-        //this.build_Interior("Terrarium", size, placeNameToReturnTo);
         this.name = "Terrarium";
         this.size = size;
         this.entities = [];
@@ -910,7 +908,8 @@ class PlaceBuilderDemo // Main.
                 var portalSize = (i % 2 == 0) ? portalSizeWE : portalSizeNS;
                 portalPos.add(neighborOffset.clone().multiply(portalSize));
                 var neighborPos = placePos.clone().add(neighborOffset);
-                var neighborName = placeNamePrefix + neighborPos.toStringXY();
+                var neighborName = placeNamePrefix
+                    + neighborPos.toStringXxY();
                 var portal = new Portal(neighborName, "PortalToNeighbor" + ((i + 2) % 4), neighborOffset.clone().double());
                 var portalBox = BoxAxisAligned.fromSize(portalSize);
                 var collidable = Collidable.fromColliderPropertyNameAndCollide(portalBox, Playable.name, portalCollide);

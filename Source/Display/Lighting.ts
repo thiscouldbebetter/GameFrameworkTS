@@ -156,7 +156,7 @@ export class LightPoint
 
 		gl.uniform1f
 		(
-			shaderProgramVariables.lightPointIntensity, // Not used by shader program yet!
+			shaderProgramVariables.lightPointIntensity,
 			this.intensity
 		);
 

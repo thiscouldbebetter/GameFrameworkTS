@@ -73,8 +73,7 @@ var ThisCouldBeBetter;
             writeToWebGlContext(webGlContext) {
                 var gl = webGlContext.gl;
                 var shaderProgramVariables = webGlContext.shaderProgramVariables;
-                gl.uniform1f(shaderProgramVariables.lightPointIntensity, // Not used by shader program yet!
-                this.intensity);
+                gl.uniform1f(shaderProgramVariables.lightPointIntensity, this.intensity);
                 gl.uniform3fv(shaderProgramVariables.lightPointPosition, GameFramework.WebGLContext.coordsToWebGLArray(this.pos));
             }
         }

@@ -455,7 +455,7 @@ var ThisCouldBeBetter;
                 return this;
             }
             // string
-            static fromStringXYZ(coordsAsString) {
+            static fromStringXxYxZ(coordsAsString) {
                 var xyz = coordsAsString
                     .split("x")
                     .map(x => parseFloat(x));
@@ -463,12 +463,12 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             toString() {
-                return this.toStringXYZ();
+                return this.toStringXxYxZ();
             }
-            toStringXY() {
+            toStringXxY() {
                 return this.x + "x" + this.y;
             }
-            toStringXYZ() {
+            toStringXxYxZ() {
                 return this.x + "x" + this.y + "x" + this.z;
             }
         }

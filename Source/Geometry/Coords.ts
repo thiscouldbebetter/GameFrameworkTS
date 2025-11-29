@@ -703,7 +703,7 @@ export class Coords
 
 	// string
 
-	static fromStringXYZ(coordsAsString: string): Coords
+	static fromStringXxYxZ(coordsAsString: string): Coords
 	{
 		var xyz =
 			coordsAsString
@@ -718,15 +718,15 @@ export class Coords
 
 	toString(): string
 	{
-		return this.toStringXYZ();
+		return this.toStringXxYxZ();
 	}
 
-	toStringXY(): string
+	toStringXxY(): string
 	{
 		return this.x + "x" + this.y;
 	}
 
-	toStringXYZ(): string
+	toStringXxYxZ(): string
 	{
 		return this.x + "x" + this.y + "x" + this.z;
 	}
