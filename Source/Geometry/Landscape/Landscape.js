@@ -9,8 +9,8 @@ var ThisCouldBeBetter;
                 this.depthMax = depthMax;
                 this.terrainSet = terrainSet;
                 var dimensionInCells = Math.pow(2, this.depthMax) + 1;
-                this.sizeInCells = new GameFramework.Coords(dimensionInCells, dimensionInCells, 0);
-                this.sizeInCellsMinusOnes = this.sizeInCells.clone().add(GameFramework.Coords.fromXY(-1, -1));
+                this.sizeInCells = new Coords(dimensionInCells, dimensionInCells, 0);
+                this.sizeInCellsMinusOnes = this.sizeInCells.clone().add(Coords.fromXY(-1, -1));
                 this.cellAltitudes = new Array();
             }
             indexOfCellAtPos(cellPos) {
@@ -18,23 +18,23 @@ var ThisCouldBeBetter;
             }
             generateRandom() {
                 var cornerCellPositions = [
-                    GameFramework.Coords.create(), // nw
-                    GameFramework.Coords.fromXY(this.sizeInCellsMinusOnes.x, 0), // ne
-                    GameFramework.Coords.fromXY(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y), // se
-                    GameFramework.Coords.fromXY(0, this.sizeInCellsMinusOnes.y), // sw
+                    Coords.create(), // nw
+                    Coords.fromXY(this.sizeInCellsMinusOnes.x, 0), // ne
+                    Coords.fromXY(this.sizeInCellsMinusOnes.x, this.sizeInCellsMinusOnes.y), // se
+                    Coords.fromXY(0, this.sizeInCellsMinusOnes.y), // sw
                 ];
                 for (var i = 0; i < cornerCellPositions.length; i++) {
                     var cornerPos = cornerCellPositions[i];
                     var cellIndex = this.indexOfCellAtPos(cornerPos);
                     this.cellAltitudes[cellIndex] = 0;
                 }
-                var parentPos = GameFramework.Coords.create();
-                var childPos = GameFramework.Coords.create();
+                var parentPos = Coords.create();
+                var childPos = Coords.create();
                 var neighborDatas = [
                     // directionToNeighbor, neighborIndicesContributing, altitudeVariationMultiplier
-                    new NeighborData(GameFramework.Coords.fromXY(1, 0), [0], 1),
-                    new NeighborData(GameFramework.Coords.fromXY(0, 1), [1], 1),
-                    new NeighborData(GameFramework.Coords.fromXY(1, 1), [0, 1, 2], Math.sqrt(2)),
+                    new NeighborData(Coords.fromXY(1, 0), [0], 1),
+                    new NeighborData(Coords.fromXY(0, 1), [1], 1),
+                    new NeighborData(Coords.fromXY(1, 1), [0, 1, 2], Math.sqrt(2)),
                 ];
                 for (var d = 0; d < this.depthMax; d++) {
                     this.generateRandom_1(parentPos, childPos, neighborDatas, d);
@@ -93,7 +93,7 @@ var ThisCouldBeBetter;
                 canvas.width = this.sizeInCells.x;
                 canvas.height = this.sizeInCells.y;
                 var graphics = canvas.getContext("2d");
-                var cellPos = GameFramework.Coords.create();
+                var cellPos = Coords.create();
                 for (var y = 0; y < this.sizeInCells.y; y++) {
                     cellPos.y = y;
                     for (var x = 0; x < this.sizeInCells.x; x++) {
@@ -123,7 +123,7 @@ var ThisCouldBeBetter;
                 this.directionToNeighbor = directionToNeighbor;
                 this.neighborIndicesContributing = neighborIndicesContributing;
                 this.altitudeVariationMultiplier = altitudeVariationMultiplier;
-                this.pos = GameFramework.Coords.create();
+                this.pos = Coords.create();
             }
         }
         class LandscapeTerrain {

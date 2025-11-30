@@ -13,19 +13,19 @@ var ThisCouldBeBetter;
                 this.collisionFindByColliderTypeNameByColliderTypeName =
                     this.collisionFindLookupBuild();
                 // Helper variables.
-                this._box = GameFramework.BoxAxisAligned.create();
-                this._box2 = GameFramework.BoxAxisAligned.create();
+                this._box = BoxAxisAligned.create();
+                this._box2 = BoxAxisAligned.create();
                 this._collision = GameFramework.Collision.create();
-                this._displacement = GameFramework.Coords.create();
-                this._edge = GameFramework.Edge.create();
+                this._displacement = Coords.create();
+                this._edge = Edge.create();
                 this._mapCells = [];
-                this._polar = GameFramework.Polar.create();
-                this._pos = GameFramework.Coords.create();
-                this._range = GameFramework.RangeExtent.create();
-                this._range2 = GameFramework.RangeExtent.create();
-                this._size = GameFramework.Coords.create();
-                this._vel = GameFramework.Coords.create();
-                this._vel2 = GameFramework.Coords.create();
+                this._polar = Polar.create();
+                this._pos = Coords.create();
+                this._range = RangeExtent.create();
+                this._range2 = RangeExtent.create();
+                this._size = Coords.create();
+                this._vel = Coords.create();
+                this._vel2 = Coords.create();
             }
             static create() {
                 return new CollisionHelper();
@@ -35,17 +35,17 @@ var ThisCouldBeBetter;
                 var lookupOfLookups = new Map();
                 var lookup;
                 var notDefined = "undefined"; // todo
-                var boxName = (typeof GameFramework.BoxAxisAligned == notDefined ? null : GameFramework.BoxAxisAligned.name);
+                var boxName = (typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name);
                 var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
                 var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
-                var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
-                var pointName = (typeof GameFramework.Point == notDefined ? null : GameFramework.Point.name);
-                var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
-                var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
-                var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
-                var shapeTransformedName = (typeof GameFramework.ShapeTransformed == notDefined ? null : GameFramework.ShapeTransformed.name);
-                var shapeWrappedName = (typeof GameFramework.ShapeWrapped == notDefined ? null : GameFramework.ShapeWrapped.name);
-                var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
+                var meshName = (typeof Mesh == notDefined ? null : Mesh.name);
+                var pointName = (typeof Point == notDefined ? null : Point.name);
+                var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
+                var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
+                var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
+                var shapeTransformedName = (typeof ShapeTransformed == notDefined ? null : ShapeTransformed.name);
+                var shapeWrappedName = (typeof ShapeWrapped == notDefined ? null : ShapeWrapped.name);
+                var sphereName = (typeof Sphere == notDefined ? null : Sphere.name);
                 if (boxName != null) {
                     lookup = new Map([
                         [boxName, this.collisionOfBoxAndBox],
@@ -155,19 +155,19 @@ var ThisCouldBeBetter;
                 var lookupOfLookups = new Map();
                 var lookup;
                 var notDefined = "undefined"; // todo
-                var boxName = (typeof GameFramework.BoxAxisAligned == notDefined ? null : GameFramework.BoxAxisAligned.name);
-                var hemispaceName = (typeof GameFramework.Hemispace == notDefined ? null : GameFramework.Hemispace.name);
+                var boxName = (typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name);
+                var hemispaceName = (typeof Hemispace == notDefined ? null : Hemispace.name);
                 var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
                 var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
-                var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
-                var pointName = (typeof GameFramework.Point == notDefined ? null : GameFramework.Point.name);
-                var shapeContainerName = (typeof GameFramework.ShapeContainer == notDefined ? null : GameFramework.ShapeContainer.name);
-                var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
-                var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
-                var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
-                var shapeTransformedName = (typeof GameFramework.ShapeTransformed == notDefined ? null : GameFramework.ShapeTransformed.name);
-                var shapeWrappedName = (typeof GameFramework.ShapeWrapped == notDefined ? null : GameFramework.ShapeWrapped.name);
-                var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
+                var meshName = (typeof Mesh == notDefined ? null : Mesh.name);
+                var pointName = (typeof Point == notDefined ? null : Point.name);
+                var shapeContainerName = (typeof ShapeContainer == notDefined ? null : ShapeContainer.name);
+                var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
+                var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
+                var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
+                var shapeTransformedName = (typeof ShapeTransformed == notDefined ? null : ShapeTransformed.name);
+                var shapeWrappedName = (typeof ShapeWrapped == notDefined ? null : ShapeWrapped.name);
+                var sphereName = (typeof Sphere == notDefined ? null : Sphere.name);
                 if (boxName != null) {
                     lookup = new Map([
                         [boxName, this.doBoxAndBoxCollide],
@@ -291,16 +291,16 @@ var ThisCouldBeBetter;
                 var lookupOfLookups = new Map();
                 var lookup;
                 var notDefined = "undefined"; // todo
-                var boxName = (typeof GameFramework.BoxAxisAligned == notDefined ? null : GameFramework.BoxAxisAligned.name);
+                var boxName = (typeof BoxAxisAligned == notDefined ? null : BoxAxisAligned.name);
                 var mapLocatedName = (typeof GameFramework.MapLocated == notDefined ? null : GameFramework.MapLocated.name);
                 var mapLocated2Name = (typeof GameFramework.MapLocated2 == notDefined ? null : GameFramework.MapLocated2.name);
-                var meshName = (typeof GameFramework.Mesh == notDefined ? null : GameFramework.Mesh.name);
-                var pointName = (typeof GameFramework.Point == notDefined ? null : GameFramework.Point.name);
-                var shapeGroupAllName = (typeof GameFramework.ShapeGroupAll == notDefined ? null : GameFramework.ShapeGroupAll.name);
-                var shapeGroupAnyName = (typeof GameFramework.ShapeGroupAny == notDefined ? null : GameFramework.ShapeGroupAny.name);
-                var shapeInverseName = (typeof GameFramework.ShapeInverse == notDefined ? null : GameFramework.ShapeInverse.name);
-                var shapeTransformedName = (typeof GameFramework.ShapeTransformed == notDefined ? null : GameFramework.ShapeTransformed.name);
-                var sphereName = (typeof GameFramework.Sphere == notDefined ? null : GameFramework.Sphere.name);
+                var meshName = (typeof Mesh == notDefined ? null : Mesh.name);
+                var pointName = (typeof Point == notDefined ? null : Point.name);
+                var shapeGroupAllName = (typeof ShapeGroupAll == notDefined ? null : ShapeGroupAll.name);
+                var shapeGroupAnyName = (typeof ShapeGroupAny == notDefined ? null : ShapeGroupAny.name);
+                var shapeInverseName = (typeof ShapeInverse == notDefined ? null : ShapeInverse.name);
+                var shapeTransformedName = (typeof ShapeTransformed == notDefined ? null : ShapeTransformed.name);
+                var sphereName = (typeof Sphere == notDefined ? null : Sphere.name);
                 if (boxName != null) {
                     lookup = new Map([
                         [boxName, this.doesBoxContainBox],
@@ -562,9 +562,9 @@ var ThisCouldBeBetter;
                 var collidable1 = GameFramework.Collidable.of(entity1);
                 var collider0 = collidable0.collider;
                 var collider1 = collidable1.collider;
-                var normal0 = collider0.normalAtPos(collisionPos, GameFramework.Coords.create() // normalOut
+                var normal0 = collider0.normalAtPos(collisionPos, Coords.create() // normalOut
                 );
-                var normal1 = collider1.normalAtPos(collisionPos, GameFramework.Coords.create() // normalOut
+                var normal1 = collider1.normalAtPos(collisionPos, Coords.create() // normalOut
                 );
                 var entity0Loc = GameFramework.Locatable.of(entity0).loc;
                 var entity1Loc = GameFramework.Locatable.of(entity1).loc;
@@ -589,7 +589,7 @@ var ThisCouldBeBetter;
                 var entity0Pos = entity0Loc.pos;
                 var collidable1 = GameFramework.Collidable.of(entity1);
                 var collider1 = collidable1.collider;
-                var collider1Normal = collider1.normalAtPos(entity0Pos, GameFramework.Coords.create() // normalOut
+                var collider1Normal = collider1.normalAtPos(entity0Pos, Coords.create() // normalOut
                 );
                 var distanceMovedSoFar = 0;
                 var distanceToMoveMax = 10;
@@ -619,13 +619,13 @@ var ThisCouldBeBetter;
                 }
                 var map = mapLocated.map;
                 var cell = map.cellCreate();
-                var cellPosAbsolute = GameFramework.Coords.create();
-                var cellPosInCells = GameFramework.Coords.create();
+                var cellPosAbsolute = Coords.create();
+                var cellPosInCells = Coords.create();
                 var mapSizeInCells = map.sizeInCells;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = GameFramework.BoxAxisAligned.fromSize(map.cellSize);
+                var cellAsBox = BoxAxisAligned.fromSize(map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -690,7 +690,7 @@ var ThisCouldBeBetter;
                 collision.isActive = doCollide;
                 if (doCollide && shouldCalculatePos) {
                     // todo - Fix this.
-                    var boxCircumscribedAroundSphere = GameFramework.BoxAxisAligned.fromCenterAndSize(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphereRadius * 2));
+                    var boxCircumscribedAroundSphere = BoxAxisAligned.fromCenterAndSize(sphere.center, Coords.ones().multiplyScalar(sphereRadius * 2));
                     collision = this.collisionOfBoxAndBox(box, boxCircumscribedAroundSphere, collision);
                 }
                 return collision;
@@ -724,7 +724,7 @@ var ThisCouldBeBetter;
                             collision.distanceToCollision = distanceAlongEdge0ToLineOfEdge1;
                             collision.pos.overwriteWith(edge0.direction()).multiplyScalar(distanceAlongEdge0ToLineOfEdge1).add(edge0.vertices[0]);
                             collision.colliders.push(edge1);
-                            collision.collidersByName.set(GameFramework.Edge.name, edge1);
+                            collision.collidersByName.set(Edge.name, edge1);
                         }
                     } // end if (doesEdgeCrossLineOfOther)
                 } // end if (doBoundsOverlap)
@@ -738,7 +738,7 @@ var ThisCouldBeBetter;
                     collision.isActive = isWithinFace;
                     if (isWithinFace) {
                         collision.colliders.push(face);
-                        collision.collidersByName.set(GameFramework.Face.name, face);
+                        collision.collidersByName.set(Face.name, face);
                     }
                 }
                 return collision;
@@ -753,7 +753,7 @@ var ThisCouldBeBetter;
                     var collision = this.collisionOfEdgeAndFace(edge, meshFace, GameFramework.Collision.create());
                     if (collision.isActive) {
                         collision.colliders.push(mesh);
-                        collision.collidersByName.set(GameFramework.Mesh.name, mesh);
+                        collision.collidersByName.set(Mesh.name, mesh);
                         collisions.push(collision);
                         if (stopAfterFirst) {
                             break;
@@ -786,9 +786,9 @@ var ThisCouldBeBetter;
                         colliders.length = 0;
                         collidersByName.clear();
                         colliders.push(edge);
-                        collidersByName.set(GameFramework.Edge.name, edge);
+                        collidersByName.set(Edge.name, edge);
                         colliders.push(plane);
-                        collidersByName.set(GameFramework.Plane.name, plane);
+                        collidersByName.set(Plane.name, plane);
                     }
                 }
                 return returnValue;
@@ -843,13 +843,13 @@ var ThisCouldBeBetter;
                 }
                 var map = mapLocated.map;
                 var cell = map.cellCreate();
-                var cellPosAbsolute = GameFramework.Coords.create();
-                var cellPosInCells = GameFramework.Coords.create();
+                var cellPosAbsolute = Coords.create();
+                var cellPosInCells = Coords.create();
                 var mapSizeInCells = map.sizeInCells;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = GameFramework.BoxAxisAligned.fromSize(map.cellSize);
+                var cellAsBox = BoxAxisAligned.fromSize(map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -981,7 +981,7 @@ var ThisCouldBeBetter;
             }
             doBoxAndHemispaceCollide(box, hemispace) {
                 var returnValue = false;
-                var vertices = GameFramework.Mesh.fromBox(box).vertices();
+                var vertices = Mesh.fromBox(box).vertices();
                 for (var i = 0; i < vertices.length; i++) {
                     var vertex = vertices[i];
                     if (hemispace.containsPoint(vertex)) {
@@ -1173,11 +1173,11 @@ var ThisCouldBeBetter;
                 var map1 = mapLocated1.map;
                 var cell0 = map0.cellCreate();
                 var cell1 = map1.cellCreate();
-                var cell0PosAbsolute = GameFramework.Coords.create();
-                var cell0PosInCells = GameFramework.Coords.create();
-                var cell1PosInCells = GameFramework.Coords.create();
-                var cell1PosInCellsMin = GameFramework.Coords.create();
-                var cell1PosInCellsMax = GameFramework.Coords.create();
+                var cell0PosAbsolute = Coords.create();
+                var cell0PosInCells = Coords.create();
+                var cell1PosInCells = Coords.create();
+                var cell1PosInCellsMin = Coords.create();
+                var cell1PosInCellsMax = Coords.create();
                 var map0SizeInCells = map0.sizeInCells;
                 var map1SizeInCellsMinusOnes = map1.sizeInCellsMinusOnes;
                 var map0CellSize = map0.cellSize;
@@ -1198,7 +1198,7 @@ var ThisCouldBeBetter;
                                 cell1PosInCells.y = y1;
                                 for (var x1 = cell1PosInCellsMin.x; x1 < cell1PosInCellsMax.x; x1++) {
                                     cell1PosInCells.x = x1;
-                                    var isCell1PosInBox = cell1PosInCells.isInRangeMinMax(GameFramework.Coords.Instances().Zeroes, map1SizeInCellsMinusOnes);
+                                    var isCell1PosInBox = cell1PosInCells.isInRangeMinMax(Coords.Instances().Zeroes, map1SizeInCellsMinusOnes);
                                     if (isCell1PosInBox) {
                                         cell1 = map1.cellAtPosInCells(cell1PosInCells);
                                         if (cell1.isBlocking) {
@@ -1224,13 +1224,13 @@ var ThisCouldBeBetter;
                 }
                 var map = mapLocated.map;
                 var cell = map.cellCreate();
-                var cellPosAbsolute = GameFramework.Coords.create();
-                var cellPosInCells = GameFramework.Coords.create();
+                var cellPosAbsolute = Coords.create();
+                var cellPosInCells = Coords.create();
                 var mapSizeInCells = map.sizeInCells;
                 var mapCellSize = map.cellSize;
                 var mapSizeHalf = map.sizeHalf;
                 var mapPos = mapLocated.loc.pos;
-                var cellAsBox = GameFramework.BoxAxisAligned.fromSize(map.cellSize);
+                var cellAsBox = BoxAxisAligned.fromSize(map.cellSize);
                 for (var y = 0; y < mapSizeInCells.y; y++) {
                     cellPosInCells.y = y;
                     cellPosAbsolute.y = (y * mapCellSize.y) + mapPos.y - mapSizeHalf.y;
@@ -1254,7 +1254,7 @@ var ThisCouldBeBetter;
                 var returnValue = true;
                 // hack - Mesh is assumed to be convex.
                 var meshFaces = mesh.faces();
-                var hemispace = new GameFramework.Hemispace(null);
+                var hemispace = new Hemispace(null);
                 for (var f = 0; f < meshFaces.length; f++) {
                     var face = meshFaces[f];
                     hemispace.plane = face.plane();
@@ -1408,13 +1408,13 @@ var ThisCouldBeBetter;
                 return meshVerticesAreAllInsideBox;
             }
             doesBoxContainSphere(box, sphere) {
-                var boxForSphere = GameFramework.BoxAxisAligned.fromCenterAndSize(sphere.center, GameFramework.Coords.ones().multiplyScalar(sphere.radius() * 2));
+                var boxForSphere = BoxAxisAligned.fromCenterAndSize(sphere.center, Coords.ones().multiplyScalar(sphere.radius() * 2));
                 var returnValue = box.containsOther(boxForSphere);
                 return returnValue;
             }
             doesHemispaceContainBox(hemispace, box) {
                 var returnValue = true;
-                var vertices = GameFramework.Mesh.fromBox(box).vertices();
+                var vertices = Mesh.fromBox(box).vertices();
                 for (var i = 0; i < vertices.length; i++) {
                     var vertex = vertices[i];
                     if (hemispace.containsPoint(vertex) == false) {
@@ -1475,7 +1475,7 @@ var ThisCouldBeBetter;
                 throw new Error("Not implemented!");
             }
             doesSphereContainBox(sphere, box) {
-                var sphereCircumscribingBox = GameFramework.Sphere.fromCenterAndRadius(box.center, box.size.magnitude() / 2);
+                var sphereCircumscribingBox = Sphere.fromCenterAndRadius(box.center, box.size.magnitude() / 2);
                 var returnValue = sphere.containsOther(sphereCircumscribingBox);
                 return returnValue;
             }

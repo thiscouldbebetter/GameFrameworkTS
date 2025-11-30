@@ -16,14 +16,14 @@ var ThisCouldBeBetter;
                     var cell = new GameFramework.MazeCell(numberOfNeighbors);
                     this.cells.push(cell);
                 }
-                this.sizeInCellsMinusOnes = sizeInCells.clone().subtract(GameFramework.Coords.ones());
+                this.sizeInCellsMinusOnes = sizeInCells.clone().subtract(Coords.ones());
             }
             // static methods
             generateRandom(randomizer) {
                 var sizeInCells = this.sizeInCells;
                 var numberOfCellsInMaze = this.sizeInCells.productOfDimensions();
-                var cellPos = GameFramework.Coords.create();
-                var cellPosNeighbor = GameFramework.Coords.create();
+                var cellPos = Coords.create();
+                var cellPosNeighbor = Coords.create();
                 var numberOfCellsInLargestNetworkSoFar = 0;
                 while (numberOfCellsInLargestNetworkSoFar < numberOfCellsInMaze) {
                     for (var y = 0; y < sizeInCells.y; y++) {

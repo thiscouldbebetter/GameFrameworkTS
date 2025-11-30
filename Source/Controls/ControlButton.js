@@ -12,8 +12,8 @@ var ThisCouldBeBetter;
                 this._click = click;
                 this.canBeHeldDown = canBeHeldDown || false;
                 // Helper variables.
-                this._drawLoc = GameFramework.Disposition.create();
-                this._sizeHalf = GameFramework.Coords.create();
+                this._drawLoc = Disposition.create();
+                this._sizeHalf = Coords.create();
             }
             static from5(pos, size, text, fontNameAndHeight, click) {
                 return ControlButton.fromPosSizeTextFontClick(pos, size, text, fontNameAndHeight, click);

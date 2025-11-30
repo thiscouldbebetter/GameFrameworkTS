@@ -11,8 +11,8 @@ var ThisCouldBeBetter;
                 this.boneInfluences = boneInfluences;
                 this.boneInfluencesByName = GameFramework.ArrayHelper.addLookups(this.boneInfluences, (x) => x.boneName);
                 // Helper variables.
-                this._orientation = GameFramework.Orientation.create();
-                this._vertex = GameFramework.Coords.create();
+                this._orientation = Orientation.create();
+                this._vertex = Coords.create();
             }
             static fromMeshSkeletonAndBoneInfluences(meshAtRest, skeletonAtRest, boneInfluences) {
                 return new Transform_MeshPoseWithSkeleton(meshAtRest, skeletonAtRest, boneInfluences, null);

@@ -13,7 +13,7 @@ var ThisCouldBeBetter;
                 this.verticesAsPathTransformed =
                     this.verticesAsPath.clone();
                 this.transformTranslate =
-                    GameFramework.Transform_Translate.fromDisplacement(GameFramework.Coords.create());
+                    Transform_Translate.fromDisplacement(Coords.create());
             }
             static fromPathColorAndThicknessOpen(verticesAsPath, color, lineThickness) {
                 return new VisualPath(verticesAsPath, color, lineThickness, false);
@@ -30,7 +30,7 @@ var ThisCouldBeBetter;
                 var entityPos = GameFramework.Locatable.of(entity).loc.pos;
                 this.transformTranslate.displacement.overwriteWith(entityPos);
                 this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
-                GameFramework.Transforms.applyTransformToCoordsMany(this.transformTranslate, this.verticesAsPathTransformed.points);
+                Transforms.applyTransformToCoordsMany(this.transformTranslate, this.verticesAsPathTransformed.points);
                 display.drawPath(this.verticesAsPathTransformed.points, this.color, this.lineThickness, this.isClosed);
             }
             // Clonable.

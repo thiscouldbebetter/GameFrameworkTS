@@ -114,8 +114,8 @@ var ThisCouldBeBetter;
                 var pos = shooterPos
                     .clone()
                     .add(offset);
-                var ori = GameFramework.Orientation.fromForward(shooterForward);
-                var loc = GameFramework.Disposition.fromPosAndOri(pos, ori);
+                var ori = Orientation.fromForward(shooterForward);
+                var loc = Disposition.fromPosAndOri(pos, ori);
                 loc.vel
                     .overwriteWith(shooterForward)
                     .multiplyScalar(this.speed);
@@ -123,7 +123,7 @@ var ThisCouldBeBetter;
                 // Shots may move so fast that they "pass through" targets
                 // without ever colliding with them, so duplicate the collider along the path
                 // to make sure anything between the starting and ending points is hit.
-                var colliderPartBeforeTransform = GameFramework.Sphere.fromRadius(this.radius);
+                var colliderPartBeforeTransform = Sphere.fromRadius(this.radius);
                 var diameter = this.radius * 2;
                 var colliderPartsCount = (this.speed / diameter) || 1;
                 var colliderParts = [];
@@ -131,11 +131,11 @@ var ThisCouldBeBetter;
                     var displacement = shooterForward
                         .clone()
                         .multiplyScalar(i * diameter);
-                    var transform = GameFramework.Transform_Translate.fromDisplacement(displacement);
-                    var colliderPart = GameFramework.ShapeTransformed.fromTransformAndChild(transform, colliderPartBeforeTransform);
+                    var transform = Transform_Translate.fromDisplacement(displacement);
+                    var colliderPart = ShapeTransformed.fromTransformAndChild(transform, colliderPartBeforeTransform);
                     colliderParts.push(colliderPart);
                 }
-                var collider = GameFramework.ShapeGroupAny.fromChildren(colliderParts);
+                var collider = ShapeGroupAny.fromChildren(colliderParts);
                 var collidable = GameFramework.Collidable.fromColliderPropertyNamesAndCollide(collider, this.collideOnlyWithEntitiesHavingPropertiesNamed, (uwpe) => this.collide(uwpe));
                 var damager = GameFramework.Damager.fromDamagePerHit(this.damage);
                 var drawable = GameFramework.Drawable.fromVisual(this.visual); // hack

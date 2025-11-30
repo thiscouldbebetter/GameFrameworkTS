@@ -7,12 +7,12 @@ var ThisCouldBeBetter;
             constructor(sizeInWrappedInstances, child) {
                 super();
                 this.sizeInWrappedInstances =
-                    sizeInWrappedInstances || GameFramework.Coords.ones();
+                    sizeInWrappedInstances || Coords.ones();
                 this.child = child;
-                this._entityPosToRestore = GameFramework.Coords.create();
-                this._sizeInWrappedInstancesHalfRoundedDown = GameFramework.Coords.create();
-                this._wrapOffsetInPixels = GameFramework.Coords.create();
-                this._wrapOffsetInWraps = GameFramework.Coords.create();
+                this._entityPosToRestore = Coords.create();
+                this._sizeInWrappedInstancesHalfRoundedDown = Coords.create();
+                this._wrapOffsetInPixels = Coords.create();
+                this._wrapOffsetInWraps = Coords.create();
             }
             static fromSizeInWrappedInstancesAndChild(sizeInWrappedInstances, child) {
                 return new VisualWrapped(sizeInWrappedInstances, child);

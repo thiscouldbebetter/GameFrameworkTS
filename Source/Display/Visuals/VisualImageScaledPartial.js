@@ -10,18 +10,18 @@ var ThisCouldBeBetter;
                 this.regionToDrawAsBox = regionToDrawAsBox;
                 this.sizeToDraw = sizeToDraw;
                 this.sizeToDrawHalf = this.sizeToDraw.clone().half();
-                this._posSaved = GameFramework.Coords.create();
+                this._posSaved = Coords.create();
             }
             static manyFromVisualImageAndSizes(visualImage, imageSizeInPixels, imageSizeInTiles, sizeToScaleTo) {
                 var returnVisuals = new Array();
                 var tileSizeInPixels = imageSizeInPixels.clone().divide(imageSizeInTiles);
-                var sourcePosInTiles = GameFramework.Coords.create();
+                var sourcePosInTiles = Coords.create();
                 for (var y = 0; y < imageSizeInTiles.y; y++) {
                     sourcePosInTiles.y = y;
                     for (var x = 0; x < imageSizeInTiles.x; x++) {
                         sourcePosInTiles.x = x;
                         var sourcePosInPixels = sourcePosInTiles.clone().multiply(tileSizeInPixels);
-                        var sourceBox = GameFramework.BoxAxisAligned.fromMinAndSize(sourcePosInPixels, tileSizeInPixels);
+                        var sourceBox = BoxAxisAligned.fromMinAndSize(sourcePosInPixels, tileSizeInPixels);
                         var visual = new VisualImageScaledPartial(sourceBox, sizeToScaleTo, visualImage);
                         returnVisuals.push(visual);
                     }

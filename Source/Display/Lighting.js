@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.lightPoint = lightPoint;
             }
             static default() {
-                return new Lighting(LightAmbient.fromIntensity(.5), LightDirectional.fromIntensityAndDirection(.4, GameFramework.Coords.ones().invert().normalize()), LightPoint.default());
+                return new Lighting(LightAmbient.fromIntensity(.5), LightDirectional.fromIntensityAndDirection(.4, Coords.ones().invert().normalize()), LightPoint.default());
             }
             static fromLightsAmbientDirectionalAndPoint(lightAmbient, lightDirectional, lightPoint) {
                 return new Lighting(lightAmbient, lightDirectional, lightPoint);
@@ -43,7 +43,7 @@ var ThisCouldBeBetter;
                 this.direction = direction;
             }
             static dark() {
-                return new LightDirectional(0, GameFramework.Coords.ones().invert().normalize());
+                return new LightDirectional(0, Coords.ones().invert().normalize());
             }
             static fromIntensityAndDirection(intensity, direction) {
                 return new LightDirectional(intensity, direction);
@@ -62,10 +62,10 @@ var ThisCouldBeBetter;
                 this.pos = pos;
             }
             static dark() {
-                return new LightPoint(0, GameFramework.Coords.zeroes());
+                return new LightPoint(0, Coords.zeroes());
             }
             static default() {
-                return new LightPoint(1, GameFramework.Coords.zeroes());
+                return new LightPoint(1, Coords.zeroes());
             }
             static fromIntensityAndPos(intensity, pos) {
                 return new LightPoint(intensity, pos);

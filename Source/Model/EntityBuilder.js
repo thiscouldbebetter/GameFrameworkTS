@@ -34,7 +34,7 @@ var ThisCouldBeBetter;
                 [
                     GameFramework.Drawable.fromVisual(visual),
                     GameFramework.Ephemeral.fromTicksToLive(ticksToLive),
-                    GameFramework.Locatable.fromDisposition(GameFramework.Disposition.fromPos(pos).velSet(new GameFramework.Coords(0, riseSpeed, 0))),
+                    GameFramework.Locatable.fromDisposition(Disposition.fromPos(pos).velSet(new Coords(0, riseSpeed, 0))),
                 ]);
                 return messageEntity;
             }

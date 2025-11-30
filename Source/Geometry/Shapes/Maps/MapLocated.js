@@ -3,17 +3,17 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class MapLocated extends GameFramework.ShapeBase {
+        class MapLocated extends ShapeBase {
             constructor(map, loc) {
                 super();
                 this.map = map;
                 this.loc = loc;
-                this.box = new GameFramework.BoxAxisAligned(this.loc.pos, this.map.size);
+                this.box = new BoxAxisAligned(this.loc.pos, this.map.size);
                 // Helper variables.
-                this._boxTransformed = GameFramework.BoxAxisAligned.create();
+                this._boxTransformed = BoxAxisAligned.create();
             }
             static fromMap(map) {
-                return new MapLocated(map, GameFramework.Disposition.default());
+                return new MapLocated(map, Disposition.default());
             }
             cellsInBox(box, cellsInBox) {
                 var boxTransformed = this._boxTransformed.overwriteWith(box);
@@ -55,7 +55,7 @@ var ThisCouldBeBetter;
                 super(map, loc);
             }
             static fromMap(map) {
-                return new MapLocated2(map, GameFramework.Disposition.default());
+                return new MapLocated2(map, Disposition.default());
             }
             // Cloneable.
             clone() {

@@ -23,7 +23,7 @@ var ThisCouldBeBetter;
                     var child = this.childrenForTabs[i];
                     child.pos.y += tabPaneHeight;
                     var childName = child.name;
-                    var buttonPos = GameFramework.Coords.fromXY(marginSize + this.tabButtonSize.x * i, marginSize);
+                    var buttonPos = Coords.fromXY(marginSize + this.tabButtonSize.x * i, marginSize);
                     var button = GameFramework.ControlButton.fromPosSizeTextFontClick(buttonPos, this.tabButtonSize.clone(), childName, // text
                     this.fontNameAndHeight, null // click - Assigned below.
                     ).isEnabledSet(GameFramework.DataBinding.fromTrueWithContext(this.context) // Is this necessary?
@@ -81,7 +81,7 @@ var ThisCouldBeBetter;
                 }
                 if (this.cancel != null) {
                     this.childrenForTabs.push(null);
-                    var button = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(this.size.x - marginSize - this.tabButtonSize.x, marginSize), // pos
+                    var button = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(this.size.x - marginSize - this.tabButtonSize.x, marginSize), // pos
                     this.tabButtonSize.clone(), "Done", // text
                     this.fontNameAndHeight, this.cancel // click
                     ).isEnabledSet(GameFramework.DataBinding.fromTrueWithContext(this.context) // Is this necessary?
@@ -91,12 +91,12 @@ var ThisCouldBeBetter;
                 this.buttonsForChildren = buttonsForChildren;
                 this.buttonsForChildren[0].isHighlighted = true;
                 // Temporary variables.
-                this._childMax = GameFramework.Coords.create();
-                this._drawPos = GameFramework.Coords.create();
-                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
-                this._mouseClickPos = GameFramework.Coords.create();
-                this._mouseMovePos = GameFramework.Coords.create();
-                this._posToCheck = GameFramework.Coords.create();
+                this._childMax = Coords.create();
+                this._drawPos = Coords.create();
+                this._drawLoc = Disposition.fromPos(this._drawPos);
+                this._mouseClickPos = Coords.create();
+                this._mouseMovePos = Coords.create();
+                this._posToCheck = Coords.create();
             }
             // instance methods
             // actions
@@ -183,7 +183,7 @@ var ThisCouldBeBetter;
                     var child = childrenActive[i];
                     if (child != null) {
                         var childPos = child.pos;
-                        var childSize = child.size || GameFramework.Coords.zeroes();
+                        var childSize = child.size || Coords.zeroes();
                         var childMax = this._childMax.overwriteWith(childPos).add(childSize);
                         var doesChildContainPos = posToCheck.isInRangeMinMax(childPos, childMax);
                         if (doesChildContainPos) {

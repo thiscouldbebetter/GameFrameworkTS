@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
             }
             static default() {
-                return DisplayMock.fromSize(GameFramework.Coords.fromXY(100, 100));
+                return DisplayMock.fromSize(Coords.fromXY(100, 100));
             }
             static fromSize(size) {
                 return new DisplayMock([size], null, null, null, false);
@@ -73,7 +73,7 @@ var ThisCouldBeBetter;
                 return this.sizesAvailable[0];
             }
             scaleFactor() {
-                return GameFramework.Coords.ones();
+                return Coords.ones();
             }
             stateRestore() { }
             stateSave() { }

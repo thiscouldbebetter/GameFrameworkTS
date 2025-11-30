@@ -17,7 +17,7 @@ var ThisCouldBeBetter;
             static fromImageAndBox(imageSource, box) {
                 var display = GameFramework.Display2D.fromSizeAndIsInvisible(box.size, true // isInvisible
                 ).initialize(null);
-                display.drawImagePartial(imageSource, GameFramework.Coords.Instances().Zeroes, box);
+                display.drawImagePartial(imageSource, Coords.Instances().Zeroes, box);
                 var name = imageSource.name + box.toStringXxY();
                 var returnImage = display.toImage(name);
                 return returnImage;
@@ -25,13 +25,13 @@ var ThisCouldBeBetter;
             static fromSystemImage(name, systemImage) {
                 var returnValue = new Image2(name, systemImage.src);
                 returnValue.systemImage = systemImage;
-                returnValue.sizeInPixels = GameFramework.Coords.fromXY(systemImage.width, systemImage.height);
+                returnValue.sizeInPixels = Coords.fromXY(systemImage.width, systemImage.height);
                 returnValue.isLoaded = true;
                 return returnValue;
             }
             toTiles(sizeInTiles) {
-                var tilePosInTiles = GameFramework.Coords.create();
-                var tilePosInPixels = GameFramework.Coords.create();
+                var tilePosInTiles = Coords.create();
+                var tilePosInPixels = Coords.create();
                 var tileSizeInPixels = this.sizeInPixels.clone().divide(sizeInTiles);
                 var imageRows = [];
                 for (var y = 0; y < sizeInTiles.y; y++) {
@@ -40,7 +40,7 @@ var ThisCouldBeBetter;
                     for (var x = 0; x < sizeInTiles.x; x++) {
                         tilePosInTiles.x = x;
                         tilePosInPixels.overwriteWith(tilePosInTiles).multiply(tileSizeInPixels);
-                        var box = GameFramework.BoxAxisAligned.fromMinAndSize(tilePosInPixels, tileSizeInPixels);
+                        var box = BoxAxisAligned.fromMinAndSize(tilePosInPixels, tileSizeInPixels);
                         var imageForTile = Image2.fromImageAndBox(this, box);
                         imagesInRow.push(imageForTile);
                     }
@@ -71,7 +71,7 @@ var ThisCouldBeBetter;
                             var imgLoaded = event.target;
                             image.isLoaded = true;
                             image.systemImage = imgLoaded;
-                            image.sizeInPixels = new GameFramework.Coords(imgLoaded.width, imgLoaded.height, 0);
+                            image.sizeInPixels = new Coords(imgLoaded.width, imgLoaded.height, 0);
                             if (callback != null) {
                                 callback(this);
                             }

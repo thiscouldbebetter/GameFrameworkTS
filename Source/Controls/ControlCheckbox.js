@@ -10,8 +10,8 @@ var ThisCouldBeBetter;
                 this._isEnabled = isEnabled;
                 this.valueBinding = valueBinding;
                 // Helper variables.
-                this._drawLoc = GameFramework.Disposition.create();
-                this._sizeHalf = GameFramework.Coords.create();
+                this._drawLoc = Disposition.create();
+                this._sizeHalf = Coords.create();
             }
             actionHandle(actionNameToHandle, universe) {
                 if (actionNameToHandle == GameFramework.ControlActionNames.Instances().ControlConfirm) {

@@ -10,14 +10,14 @@ var ThisCouldBeBetter;
                 this.colorBackground = colorBackground;
                 this.colorBorder = colorBorder;
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
                 this._entity = GameFramework.Entity.fromNameAndProperties(this.name, [
                     new GameFramework.Audible(),
                     GameFramework.Locatable.fromPos(this._drawPos),
                     GameFramework.Drawable.fromVisual(new GameFramework.VisualNone())
                 ]);
-                this._entityPosToRestore = GameFramework.Coords.create();
-                this._sizeHalf = GameFramework.Coords.create();
+                this._entityPosToRestore = Coords.create();
+                this._sizeHalf = Coords.create();
             }
             static manyFromVisuals(universe, visualsForSlides) {
                 // This was originally taken from what became VenueCarousel,
@@ -25,7 +25,7 @@ var ThisCouldBeBetter;
                 // to which text is expected to be added as well.
                 var controlsForSlideImagesAndTexts = [];
                 var sizeBase = universe.controlBuilder.sizeBase;
-                var zeroes = GameFramework.Coords.Instances().Zeroes;
+                var zeroes = Coords.Instances().Zeroes;
                 for (var i = 0; i < visualsForSlides.length; i++) {
                     var visualForSlide = visualsForSlides[i];
                     var controlVisualForSlideImage = ControlVisual.fromNamePosSizeAndVisual("imageSlide", zeroes, sizeBase.clone(), GameFramework.DataBinding.fromContext(visualForSlide));

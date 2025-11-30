@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 super();
                 this.visualJumper = visualJumper;
                 this.visualShadow = visualShadow;
-                this._posSaved = GameFramework.Coords.create();
+                this._posSaved = Coords.create();
             }
             static fromVisualsForBodyAndShadow(visualJumper, visualShadow) {
                 return new VisualJump2D(visualJumper, visualShadow);

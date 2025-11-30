@@ -14,7 +14,7 @@ var ThisCouldBeBetter;
             // EntityProperty.
             initialize(uwpe) {
                 this.route.bounds =
-                    GameFramework.BoxAxisAligned.fromMinAndMax(GameFramework.Coords.create(), uwpe.place.size().clone());
+                    BoxAxisAligned.fromMinAndMax(Coords.create(), uwpe.place.size().clone());
             }
             propertyName() { return Routable.name; }
             updateForTimerTick(uwpe) { }
@@ -32,7 +32,7 @@ var ThisCouldBeBetter;
                 this.goalPos = goalPos;
                 this.lengthMax = lengthMax || Number.POSITIVE_INFINITY;
                 // Helper variables.
-                this._tempPos = GameFramework.Coords.create();
+                this._tempPos = Coords.create();
             }
             static fromNeighborOffsets(neighborOffsets) {
                 return new Route(neighborOffsets, null, null, null, null);
@@ -94,7 +94,7 @@ var ThisCouldBeBetter;
             neighborsForNode(nodeCentral, goalPos) {
                 var returnValues = new Array();
                 var nodeCentralPos = nodeCentral.pos;
-                var neighborPos = GameFramework.Coords.create();
+                var neighborPos = Coords.create();
                 var neighborPositions = new Array();
                 var directions = this.neighborOffsets;
                 for (var i = 0; i < directions.length; i++) {

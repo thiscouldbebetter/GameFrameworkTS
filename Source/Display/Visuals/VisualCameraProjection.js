@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 super();
                 this.cameraGet = cameraGet;
                 this.child = child;
-                this._posBeforeProjection = GameFramework.Coords.create();
+                this._posBeforeProjection = Coords.create();
             }
             reset() {
                 this._transformCamera = null;

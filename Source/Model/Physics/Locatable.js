@@ -6,14 +6,14 @@ var ThisCouldBeBetter;
         class Locatable extends GameFramework.EntityPropertyBase {
             constructor(loc) {
                 super();
-                this.loc = loc || GameFramework.Disposition.create();
+                this.loc = loc || Disposition.create();
                 this.locPrev = this.loc.clone();
             }
             static create() {
                 return new Locatable(null);
             }
             static default() {
-                return new Locatable(GameFramework.Disposition.default());
+                return new Locatable(Disposition.default());
             }
             static fromDisp(disp) {
                 // "Disposition" used to be named "Location".
@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                 return new Locatable(loc);
             }
             static fromPos(pos) {
-                return new Locatable(GameFramework.Disposition.fromPos(pos));
+                return new Locatable(Disposition.fromPos(pos));
             }
             static of(entity) {
                 return entity.propertyByName(Locatable.name);

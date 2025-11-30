@@ -64,20 +64,20 @@ var ThisCouldBeBetter;
                 });
                 this.Healing = new Effect("Healing", 40, // ticksPerCycle
                 10, // cyclesToLive
-                GameFramework.VisualPolygon.fromPathAndColorFill(new GameFramework.Path([
-                    GameFramework.Coords.fromXY(-0.5, -0.2),
-                    GameFramework.Coords.fromXY(-0.2, -0.2),
-                    GameFramework.Coords.fromXY(-0.2, -0.5),
-                    GameFramework.Coords.fromXY(0.2, -0.5),
-                    GameFramework.Coords.fromXY(0.2, -0.2),
-                    GameFramework.Coords.fromXY(0.5, -0.2),
-                    GameFramework.Coords.fromXY(0.5, 0.2),
-                    GameFramework.Coords.fromXY(0.2, 0.2),
-                    GameFramework.Coords.fromXY(0.2, 0.5),
-                    GameFramework.Coords.fromXY(-0.2, 0.5),
-                    GameFramework.Coords.fromXY(-0.2, 0.2),
-                    GameFramework.Coords.fromXY(-0.5, 0.2)
-                ]).transform(GameFramework.Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.Instances().Red), (uwpe, effect) => {
+                GameFramework.VisualPolygon.fromPathAndColorFill(new Path([
+                    Coords.fromXY(-0.5, -0.2),
+                    Coords.fromXY(-0.2, -0.2),
+                    Coords.fromXY(-0.2, -0.5),
+                    Coords.fromXY(0.2, -0.5),
+                    Coords.fromXY(0.2, -0.2),
+                    Coords.fromXY(0.5, -0.2),
+                    Coords.fromXY(0.5, 0.2),
+                    Coords.fromXY(0.2, 0.2),
+                    Coords.fromXY(0.2, 0.5),
+                    Coords.fromXY(-0.2, 0.5),
+                    Coords.fromXY(-0.2, 0.2),
+                    Coords.fromXY(-0.5, 0.2)
+                ]).transform(Transform_Scale.fromScalar(visualDimension * 1.5)), GameFramework.Color.Instances().Red), (uwpe, effect) => {
                     var damage = GameFramework.Damage.fromAmountAndTypeName(-1, "Healing");
                     var e = uwpe.entity;
                     uwpe.entity2Set(e);

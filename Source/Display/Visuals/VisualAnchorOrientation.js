@@ -9,13 +9,13 @@ var ThisCouldBeBetter;
                 this.child = child;
                 this.orientationToAnchorAt = orientationToAnchorAt;
                 // Helper variables.
-                this._orientationSaved = new GameFramework.Orientation(null, null);
+                this._orientationSaved = new Orientation(null, null);
             }
             static fromOrientationAndChild(orientationToAnchorAt, child) {
                 return new VisualAnchorOrientation(orientationToAnchorAt, child);
             }
             static fromChild(child) {
-                return new VisualAnchorOrientation(GameFramework.Orientation.default(), child);
+                return new VisualAnchorOrientation(Orientation.default(), child);
             }
             // Visual.
             initialize(uwpe) {

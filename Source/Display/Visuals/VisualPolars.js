@@ -10,9 +10,9 @@ var ThisCouldBeBetter;
                 this.color = color;
                 this.lineThickness = (lineThickness == null ? 1 : lineThickness);
                 // temps
-                this._polar = new GameFramework.Polar(0, 0, 0);
-                this._fromPos = GameFramework.Coords.create();
-                this._toPos = GameFramework.Coords.create();
+                this._polar = new Polar(0, 0, 0);
+                this._fromPos = Coords.create();
+                this._toPos = Coords.create();
             }
             static fromPolarsColorAndLineThickness(polars, color, lineThickness) {
                 return new VisualPolars(polars, color, lineThickness);

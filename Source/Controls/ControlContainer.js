@@ -23,12 +23,12 @@ var ThisCouldBeBetter;
                 this.childrenContainingPos = [];
                 this.childrenContainingPosPrev = [];
                 // Helper variables.
-                this._childMax = GameFramework.Coords.create();
-                this._drawPos = GameFramework.Coords.create();
-                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
-                this._mouseClickPos = GameFramework.Coords.create();
-                this._mouseMovePos = GameFramework.Coords.create();
-                this._posToCheck = GameFramework.Coords.create();
+                this._childMax = Coords.create();
+                this._drawPos = Coords.create();
+                this._drawLoc = Disposition.fromPos(this._drawPos);
+                this._mouseClickPos = Coords.create();
+                this._mouseMovePos = Coords.create();
+                this._posToCheck = Coords.create();
             }
             static fromNamePosSizeAndChildren(name, pos, size, children) {
                 return new ControlContainer(name, pos, size, null, children, null, null);
@@ -189,7 +189,7 @@ var ThisCouldBeBetter;
                 for (var i = this.children.length - 1; i >= 0; i--) {
                     var child = this.children[i];
                     var childPos = child.pos;
-                    var childSize = child.size || GameFramework.Coords.zeroes();
+                    var childSize = child.size || Coords.zeroes();
                     var childMax = this._childMax.overwriteWith(childPos).add(childSize);
                     var doesChildContainPos = posToCheck.isInRangeMinMax(childPos, childMax);
                     if (doesChildContainPos) {
@@ -202,7 +202,7 @@ var ThisCouldBeBetter;
                 return listToAddTo;
             }
             childrenLayOutWithSpacingAlongDimension(spacing, dimensionIndex) {
-                var axis = GameFramework.Coords.zeroes().dimensionSet(dimensionIndex, 1);
+                var axis = Coords.zeroes().dimensionSet(dimensionIndex, 1);
                 var spacingAlongAxis = spacing.clone().multiply(axis);
                 var childPos = spacing.clone();
                 for (var i = 0; i < this.children.length; i++) {

@@ -12,11 +12,11 @@ var ThisCouldBeBetter;
                 this.shouldUseEntityOrientation =
                     (shouldUseEntityOrientation == null ? true : shouldUseEntityOrientation);
                 this.verticesAsPathTransformed = this.verticesAsPath.clone();
-                this.transformLocate = new GameFramework.Transform_Locate(null);
+                this.transformLocate = new Transform_Locate(null);
             }
             static arrow(width, length, headingInTurns, colorFill, colorBorder) {
-                var pathArrow = GameFramework.Path.arrowOfWidthAndLength(width, length);
-                var transform = new GameFramework.Transform_Rotate2D(headingInTurns);
+                var pathArrow = Path.arrowOfWidthAndLength(width, length);
+                var transform = new Transform_Rotate2D(headingInTurns);
                 pathArrow.transform(transform);
                 var returnValue = new VisualPolygon(pathArrow, colorFill, colorBorder, null);
                 return returnValue;
@@ -28,7 +28,7 @@ var ThisCouldBeBetter;
                 return VisualPolygon.fromDimensionAndColorBorder(10, colorBorder);
             }
             static fromDimensionAndColorBorder(dimension, colorBorder) {
-                return VisualPolygon.fromPathAndColorsFillAndBorder(GameFramework.Path.fromDimension(dimension), null, // colorFill
+                return VisualPolygon.fromPathAndColorsFillAndBorder(Path.fromDimension(dimension), null, // colorFill
                 colorBorder);
             }
             static fromPathAndColorFill(path, colorFill) {
@@ -40,7 +40,7 @@ var ThisCouldBeBetter;
                 return new VisualPolygon(verticesAsPath, colorFill, colorBorder, null);
             }
             static fromVerticesAndColorFill(vertices, colorFill) {
-                var verticesAsPath = new GameFramework.Path(vertices);
+                var verticesAsPath = new Path(vertices);
                 return VisualPolygon.fromPathAndColorFill(verticesAsPath, colorFill);
             }
             // Visual.
@@ -58,7 +58,7 @@ var ThisCouldBeBetter;
                     this.transformLocate.loc.orientation.default();
                 }
                 this.verticesAsPathTransformed.overwriteWith(this.verticesAsPath);
-                GameFramework.Transforms.applyTransformToCoordsMany(this.transformLocate, this.verticesAsPathTransformed.points);
+                Transforms.applyTransformToCoordsMany(this.transformLocate, this.verticesAsPathTransformed.points);
                 display.drawPolygon(this.verticesAsPathTransformed.points, this.colorFill, this.colorBorder);
             }
             shouldUseEntityOrientationSet(value) {

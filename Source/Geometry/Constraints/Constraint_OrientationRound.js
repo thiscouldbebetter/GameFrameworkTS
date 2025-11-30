@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                 var headingInTurns = constrainableForward.headingInTurns();
                 var headingIndex = Math.round(headingInTurns * this.headingsCount) % this.headingsCount;
                 headingInTurns = headingIndex / this.headingsCount;
-                var headingAsCoords = GameFramework.Coords.create().fromHeadingInTurns(headingInTurns);
+                var headingAsCoords = Coords.create().fromHeadingInTurns(headingInTurns);
                 constrainableOri
                     .forwardSet(headingAsCoords)
                     .normalize();

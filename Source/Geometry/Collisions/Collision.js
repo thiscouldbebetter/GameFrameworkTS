@@ -6,12 +6,12 @@ var ThisCouldBeBetter;
         class Collision //
          {
             constructor(pos, distanceToCollision, colliders, entitiesColliding) {
-                this.pos = pos || GameFramework.Coords.create();
+                this.pos = pos || Coords.create();
                 this.distanceToCollision = distanceToCollision;
                 this.colliders = colliders || new Array();
                 this.entitiesColliding = entitiesColliding || new Array();
                 this.collidersByName = new Map();
-                this.normals = [GameFramework.Coords.create(), GameFramework.Coords.create()];
+                this.normals = [Coords.create(), Coords.create()];
                 this.isActive = false;
             }
             static create() {

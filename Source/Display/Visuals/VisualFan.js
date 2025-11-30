@@ -12,8 +12,8 @@ var ThisCouldBeBetter;
                 this.colorFill = colorFill;
                 this.colorBorder = colorBorder;
                 // helper variables
-                this._drawPos = GameFramework.Coords.create();
-                this._polar = GameFramework.Polar.create();
+                this._drawPos = Coords.create();
+                this._polar = Polar.create();
             }
             static fromRadiusAndAnglesStartAndSpanned(radius, angleStartInTurns, angleSpannedInTurns) {
                 return VisualFan.fromRadiusAnglesStartAndSpannedAndColorsFillAndBorder(radius, angleStartInTurns, angleSpannedInTurns, null, // colorFill

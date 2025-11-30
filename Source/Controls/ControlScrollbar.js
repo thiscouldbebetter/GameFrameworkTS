@@ -10,19 +10,19 @@ var ThisCouldBeBetter;
                 this._items = items;
                 this._sliderPosInItems = sliderPosInItems;
                 this.windowSizeInItems = Math.floor(this.size.y / itemHeight);
-                this.handleSize = GameFramework.Coords.fromXY(this.size.x, this.size.x);
-                this.buttonScrollUp = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.create(), // pos
+                this.handleSize = Coords.fromXY(this.size.x, this.size.x);
+                this.buttonScrollUp = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.create(), // pos
                 this.handleSize.clone(), // size
                 "-", // text
                 this.fontNameAndHeight, this.scrollUp // click
                 );
-                this.buttonScrollDown = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
+                this.buttonScrollDown = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(0, this.size.y - this.handleSize.y), // pos
                 this.handleSize.clone(), // size
                 "+", // text
                 this.fontNameAndHeight, this.scrollDown // click
                 );
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
             }
             actionHandle(actionNameToHandle, universe) {
                 return true;
@@ -52,7 +52,7 @@ var ThisCouldBeBetter;
                 this._sliderPosInItems = sliderPosInItems;
             }
             slideSizeInPixels() {
-                var slideSizeInPixels = new GameFramework.Coords(this.handleSize.x, this.size.y - 2 * this.handleSize.y, 0);
+                var slideSizeInPixels = new Coords(this.handleSize.x, this.size.y - 2 * this.handleSize.y, 0);
                 return slideSizeInPixels;
             }
             sliderPosInItems() {
@@ -62,14 +62,14 @@ var ThisCouldBeBetter;
                 return this.items().length - Math.floor(this.windowSizeInItems);
             }
             sliderPosInPixels() {
-                var sliderPosInPixels = new GameFramework.Coords(this.size.x - this.handleSize.x, this.handleSize.y
+                var sliderPosInPixels = new Coords(this.size.x - this.handleSize.x, this.handleSize.y
                     + this.sliderPosInItems()
                         * this.slideSizeInPixels().y
                         / this.items().length, 0);
                 return sliderPosInPixels;
             }
             sliderSizeInPixels() {
-                var sliderSizeInPixels = this.slideSizeInPixels().multiply(GameFramework.Coords.fromXY(1, this.windowSizeInItems / this.items().length));
+                var sliderSizeInPixels = this.slideSizeInPixels().multiply(Coords.fromXY(1, this.windowSizeInItems / this.items().length));
                 return sliderSizeInPixels;
             }
             // drawable

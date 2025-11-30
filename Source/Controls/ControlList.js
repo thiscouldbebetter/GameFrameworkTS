@@ -16,18 +16,18 @@ var ThisCouldBeBetter;
                 this._confirm = confirm;
                 this.widthInItems = widthInItems || 1;
                 var itemSizeY = 1.2 * this.fontNameAndHeight.heightInPixels; // hack
-                this._itemSize = GameFramework.Coords.fromXY(size.x, itemSizeY);
+                this._itemSize = Coords.fromXY(size.x, itemSizeY);
                 var scrollbarWidth = itemSizeY;
                 this.isHighlighted = false;
-                this.scrollbar = new GameFramework.ControlScrollbar(GameFramework.Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
-                GameFramework.Coords.fromXY(scrollbarWidth, this.size.y), // size
+                this.scrollbar = new GameFramework.ControlScrollbar(Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
+                Coords.fromXY(scrollbarWidth, this.size.y), // size
                 this.fontNameAndHeight, itemSizeY, // itemHeight
                 this._items, 0 // value
                 );
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
-                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
-                this._mouseClickPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
+                this._drawLoc = Disposition.fromPos(this._drawPos);
+                this._mouseClickPos = Coords.create();
             }
             static fromPosSizeItemsAndBindingForItemText(pos, size, items, bindingForItemText) {
                 var returnValue = new ControlList("", // name,
@@ -256,11 +256,11 @@ var ThisCouldBeBetter;
                     indexEnd = items.length - 1;
                 }
                 var itemSelected = this.itemSelected();
-                var drawPos2 = GameFramework.Coords.create();
+                var drawPos2 = Coords.create();
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var item = items[i];
                     var iOffset = i - indexStart;
-                    var offsetInItems = new GameFramework.Coords(iOffset % this.widthInItems, Math.floor(iOffset / this.widthInItems), 0);
+                    var offsetInItems = new Coords(iOffset % this.widthInItems, Math.floor(iOffset / this.widthInItems), 0);
                     drawPos2.overwriteWith(this.itemSize()).multiply(offsetInItems).add(drawPos);
                     if (item == itemSelected) {
                         style.drawBoxOfSizeAtPosWithColorsToDisplay(this.itemSize(), drawPos2, colorFore, colorBack, this.isHighlighted, display);
@@ -272,7 +272,7 @@ var ThisCouldBeBetter;
                     var areColorsReversed = ((this.isHighlighted && !isItemSelected)
                         ||
                             (isItemSelected && !this.isHighlighted));
-                    var textSizeMax = GameFramework.Coords.fromXY(this.itemSize().x, this.fontNameAndHeight.heightInPixels);
+                    var textSizeMax = Coords.fromXY(this.itemSize().x, this.fontNameAndHeight.heightInPixels);
                     display.drawTextWithFontAtPosWithColorsFillAndOutline(text, this.fontNameAndHeight, drawPos2, (areColorsReversed ? colorBack : colorFore), (areColorsReversed ? colorFore : colorBack), false, // isCenteredHorizontally
                     false, // isTextCenteredVertically
                     textSizeMax);

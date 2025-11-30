@@ -9,9 +9,9 @@ var ThisCouldBeBetter;
                 this.name = name;
                 this.entityToGenerate = entityToGenerate;
                 this.ticksPerGenerationAsRange =
-                    ticksPerGenerationAsRange || GameFramework.RangeExtent.fromNumber(100);
+                    ticksPerGenerationAsRange || RangeExtent.fromNumber(100);
                 this.entitiesPerGenerationAsRange =
-                    entitiesPerGenerationAsRange || GameFramework.RangeExtent.fromNumber(1);
+                    entitiesPerGenerationAsRange || RangeExtent.fromNumber(1);
                 this.entitiesToGenerateMaxConcurrent =
                     entitiesToGenerateMaxConcurrent || 1;
                 this.entitiesToGenerateMaxAllTime =
@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
                 this.entityPositionRangeAsBox =
                     entityPositionRangeAsBox;
                 this.entitySpeedAsRange =
-                    entitySpeedAsRange || GameFramework.RangeExtent.fromNumber(0);
+                    entitySpeedAsRange || RangeExtent.fromNumber(0);
                 this._windDown = windDown;
                 this.entitiesGeneratedAllTimeCount = 0;
                 this.entitiesGeneratedActive = new Array();
@@ -27,7 +27,7 @@ var ThisCouldBeBetter;
                 this.windDownHasBeenRun = false;
             }
             static fromNameEntityTicksBatchMaxesAndPosBox(name, entityToGenerate, ticksPerGeneration, entitiesPerGeneration, entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox) {
-                return new EntityGenerator(name, entityToGenerate, GameFramework.RangeExtent.fromNumber(ticksPerGeneration), GameFramework.RangeExtent.fromNumber(entitiesPerGeneration), entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox, null, // entitySpeedAsRange
+                return new EntityGenerator(name, entityToGenerate, RangeExtent.fromNumber(ticksPerGeneration), RangeExtent.fromNumber(entitiesPerGeneration), entitiesToGenerateMaxConcurrent, entitiesToGenerateMaxAllTime, entityPositionRangeAsBox, null, // entitySpeedAsRange
                 null // windDown
                 );
             }
@@ -106,7 +106,7 @@ var ThisCouldBeBetter;
                             var entityGeneratedSpeed = this.entitySpeedAsRange.random(randomizer);
                             if (entityGeneratedSpeed > 0) {
                                 var entityGeneratedVel = entityGeneratedLoc.vel;
-                                GameFramework.Polar
+                                Polar
                                     .create()
                                     .random(randomizer)
                                     .overwriteCoords(entityGeneratedVel)

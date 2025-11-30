@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(hemispaceToContainWithin) {
                 super();
                 this.hemispaceToContainWithin = hemispaceToContainWithin;
-                this._coordsTemp = GameFramework.Coords.create();
+                this._coordsTemp = Coords.create();
             }
             static fromHemispace(hemispaceToContainWithin) {
                 return new Constraint_ContainInHemispace(hemispaceToContainWithin);

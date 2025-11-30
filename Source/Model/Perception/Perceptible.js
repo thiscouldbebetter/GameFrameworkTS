@@ -9,7 +9,7 @@ var ThisCouldBeBetter;
                 this.isHiding = isHiding;
                 this._visibilityGet = visibilityGet;
                 this._audibilityGet = audibilityGet;
-                this._displacement = GameFramework.Coords.create();
+                this._displacement = Coords.create();
                 this._isHidingPrev = null;
             }
             static fromHidingVisibilityGetAndAudibilityGet(isHiding, visibilityGet, audibilityGet) {

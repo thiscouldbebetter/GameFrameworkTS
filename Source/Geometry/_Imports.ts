@@ -2,13 +2,6 @@
 
 // Geometry.
 import Camera = gf.Camera;
-import Coords = gf.Coords;
-import Direction = gf.Direction;
-import Disposition = gf.Disposition;
-import Orientation = gf.Orientation;
-import Polar = gf.Polar;
-import RangeExtent = gf.RangeExtent;
-import Rotation = gf.Rotation;
 
 // Geometry - Collisions.
 import Collision = gf.Collision;
@@ -47,32 +40,6 @@ import Constraint_WrapToPlaceSizeXTrimY = gf.Constraint_WrapToPlaceSizeXTrimY;
 // Geometry - Network.
 import Network = gf.Network;
 
-// Geometry - Shapes.
-import Arc = gf.Arc;
-import BoxAxisAligned = gf.BoxAxisAligned;
-import BoxOriented = gf.BoxOriented;
-import Cylinder = gf.Cylinder;
-import Edge = gf.Edge;
-import Face = gf.Face;
-import Hemispace = gf.Hemispace;
-import Path = gf.Path;
-import PathBuilder = gf.PathBuilder;
-import Plane = gf.Plane;
-import Point = gf.Point;
-import Ray = gf.Ray;
-import Shape = gf.Shape;
-import ShapeBase = gf.ShapeBase;
-import ShapeContainer = gf.ShapeContainer;
-import ShapeGroupAll = gf.ShapeGroupAll;
-import ShapeGroupAny = gf.ShapeGroupAny;
-import ShapeInverse = gf.ShapeInverse;
-import ShapeNone = gf.ShapeNone;
-import ShapeTransformed = gf.ShapeTransformed;
-import ShapeWrapped = gf.ShapeWrapped;
-import Shell = gf.Shell;
-import Sphere = gf.Sphere;
-import Wedge = gf.Wedge;
-
 // Geometry - Shapes - Map.
 import MapCell = gf.MapCell;
 import MapCellCollidable = gf.MapCellCollidable;
@@ -87,28 +54,11 @@ import MazeCell = gf.MazeCell;
 import MazeCellNetwork = gf.MazeCellNetwork;
 
 // Geometry - Shapes - Meshes.
-import Mesh = gf.Mesh;
 import MeshBuilder = gf.MeshBuilder;
 import MeshTextured = gf.MeshTextured;
 
 // Geometry - Transforms.
-import Transform = gf.Transform;
-import TransformBase = gf.TransformBase;
 import Transform_Camera = gf.Transform_Camera;
-import Transform_Dynamic = gf.Transform_Dynamic;
-import Transform_Locate = gf.Transform_Locate;
-import Transform_Multiple = gf.Transform_Multiple;
-import Transform_None = gf.Transform_None;
-import Transform_Orient = gf.Transform_Orient;
-import Transform_Overwrite = gf.Transform_Overwrite;
-import Transform_Rotate2D = gf.Transform_Rotate2D;
-import Transform_RotateLeft = gf.Transform_RotateLeft;
-import Transform_RotateRight = gf.Transform_RotateRight;
-import Transform_Scale = gf.Transform_Scale;
-import Transform_Translate = gf.Transform_Translate;
-import Transformable = gf.Transformable;
-import TransformableBase = gf.TransformableBase;
-import Transforms = gf.Transforms;
 
 // Geometry - Transforms - Bones.
 import BoneInfluence = gf.BoneInfluence;

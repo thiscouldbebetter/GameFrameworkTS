@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 super();
                 this.destinationPlaceName = destinationPlaceName;
                 this.destinationEntityName = destinationEntityName;
-                this.velocityToApply = velocityToApply || GameFramework.Coords.zeroes();
+                this.velocityToApply = velocityToApply || Coords.zeroes();
             }
             static create() {
                 return new Portal(null, null, null);

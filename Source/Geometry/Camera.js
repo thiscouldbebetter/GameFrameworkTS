@@ -14,18 +14,18 @@ var ThisCouldBeBetter;
                 var viewColliderSize = this.viewSize.clone();
                 viewColliderSize.z = Number.POSITIVE_INFINITY;
                 this.viewCollider =
-                    GameFramework.BoxAxisAligned.fromSize(viewColliderSize);
+                    BoxAxisAligned.fromSize(viewColliderSize);
                 this.entitiesInView = new Array();
                 this._displayToRestore = null;
-                this._posSaved = GameFramework.Coords.create();
+                this._posSaved = Coords.create();
             }
             static default() {
                 return Camera.fromEntitiesInViewSort(null);
             }
             static fromEntitiesInViewSort(entitiesInViewSort) {
-                return new Camera(GameFramework.Coords.fromXYZ(400, 300, 1000), // viewSize
+                return new Camera(Coords.fromXYZ(400, 300, 1000), // viewSize
                 150, // focalLength
-                GameFramework.Disposition.fromPosAndOri(GameFramework.Coords.fromXYZ(0, 0, -150), GameFramework.Orientation.Instances().ForwardZDownY.clone()), entitiesInViewSort);
+                Disposition.fromPosAndOri(Coords.fromXYZ(0, 0, -150), Orientation.Instances().ForwardZDownY.clone()), entitiesInViewSort);
             }
             static fromViewSizeAndDisposition(viewSize, disp) {
                 return new Camera(viewSize, null, // focalLength
@@ -53,10 +53,10 @@ var ThisCouldBeBetter;
                 if (this._clipPlanes == null) {
                     this._clipPlanes =
                         [
-                            GameFramework.Plane.create(),
-                            GameFramework.Plane.create(),
-                            GameFramework.Plane.create(),
-                            GameFramework.Plane.create(),
+                            Plane.create(),
+                            Plane.create(),
+                            Plane.create(),
+                            Plane.create(),
                         ];
                 }
                 var cameraLoc = this.loc;
@@ -107,12 +107,12 @@ var ThisCouldBeBetter;
             constraintContainInBoxForPlaceSizeAndWrapped(placeSize, placeIsWrappedHorizontally) {
                 var viewSizeHalf = this.viewSizeHalf;
                 var min = placeIsWrappedHorizontally
-                    ? GameFramework.Coords.fromXY(0, viewSizeHalf.y) // todo
+                    ? Coords.fromXY(0, viewSizeHalf.y) // todo
                     : viewSizeHalf.clone();
                 var max = placeIsWrappedHorizontally
-                    ? GameFramework.Coords.fromXY(placeSize.x, viewSizeHalf.y)
+                    ? Coords.fromXY(placeSize.x, viewSizeHalf.y)
                     : placeSize.clone().subtract(viewSizeHalf);
-                var box = GameFramework.BoxAxisAligned.fromMinAndMax(min, max);
+                var box = BoxAxisAligned.fromMinAndMax(min, max);
                 var constraintContainInBox = GameFramework.Constraint_ContainInBox.fromBox(box);
                 return constraintContainInBox;
             }
@@ -182,7 +182,6 @@ var ThisCouldBeBetter;
             drawEntitiesInView_2_Draw(uwpe, entitiesInView) {
                 var universe = uwpe.universe;
                 var drawColliders = universe.debugSettings.drawColliders();
-                var display = universe.display;
                 this.entitiesInViewSort(entitiesInView);
                 for (var i = 0; i < entitiesInView.length; i++) {
                     var entity = entitiesInView[i];
@@ -193,11 +192,15 @@ var ThisCouldBeBetter;
                     this.coordsTransformWorldToView(entityPos);
                     drawable.draw(uwpe);
                     if (drawColliders) {
-                        var collidable = GameFramework.Collidable.of(entity);
-                        if (collidable != null) {
+                        console.log("todo - Camera.drawColliders.");
+                        /*
+                        var collidable = Collidable.of(entity);
+                        if (collidable != null)
+                        {
                             var collider = collidable.collider;
                             collider.drawToDisplayAtPos(display, entityPos);
                         }
+                        */
                     }
                     entityPos.overwriteWith(this._posSaved);
                 }
@@ -259,7 +262,7 @@ var ThisCouldBeBetter;
                 var constraintMultiple = GameFramework.Constraint_Multiple.fromChildren([
                     GameFramework.Constraint_AttachToEntityWithName.
                         fromTargetEntityName(targetEntityName),
-                    GameFramework.Constraint_Transform.fromTransform(GameFramework.Transform_Translate.fromDisplacement(displacementToTargetEntity)),
+                    GameFramework.Constraint_Transform.fromTransform(Transform_Translate.fromDisplacement(displacementToTargetEntity)),
                     GameFramework.Constraint_OrientTowardEntityWithName
                         .fromTargetEntityName(targetEntityName),
                 ]);

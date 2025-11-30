@@ -14,10 +14,10 @@ var ThisCouldBeBetter;
                 this.fontHeightInPixelsBase = this.fontBase.heightInPixels;
                 this.buttonHeightBase = this.fontHeightInPixelsBase * 2;
                 this.buttonHeightSmallBase = this.fontHeightInPixelsBase * 1.5;
-                this.sizeBase = GameFramework.Coords.fromXYZ(200, 150, 1);
+                this.sizeBase = Coords.fromXYZ(200, 150, 1);
                 // Helper variables.
-                this._zeroes = GameFramework.Coords.create();
-                this._scaleMultiplier = GameFramework.Coords.create();
+                this._zeroes = Coords.create();
+                this._scaleMultiplier = Coords.create();
             }
             static default() {
                 return new ControlBuilder(null, null, null);
@@ -65,8 +65,8 @@ var ThisCouldBeBetter;
                 }
                 var labelMessageSizeY = Math.round(this.sizeBase.y * (numberOfOptions == 0 ? 1 : (2 / 3)));
                 buttonPosY = buttonPosY || Math.round(this.sizeBase.y * (numberOfOptions > 0 ? (2 / 3) : 1));
-                var labelMessagePos = GameFramework.Coords.fromXY(0, 0);
-                var labelMessageSize = GameFramework.Coords.fromXY(this.sizeBase.x, labelMessageSizeY);
+                var labelMessagePos = Coords.fromXY(0, 0);
+                var labelMessageSize = Coords.fromXY(this.sizeBase.x, labelMessageSizeY);
                 var labelMessage = GameFramework.ControlLabel.fromPosSizeTextFontCentered(labelMessagePos, labelMessageSize, message, fontNameAndHeight);
                 var childControls = [labelMessage];
                 if (secondsToShow != null) {
@@ -75,14 +75,14 @@ var ThisCouldBeBetter;
                 }
                 if (optionButtonsAreSuppressed == false) {
                     var buttonWidth = 55;
-                    var buttonSize = GameFramework.Coords.fromXY(buttonWidth, fontHeight * 2);
+                    var buttonSize = Coords.fromXY(buttonWidth, fontHeight * 2);
                     var spaceBetweenButtons = 5;
                     var buttonMarginLeftRight = (this.sizeBase.x
                         - (buttonWidth * numberOfOptions)
                         - (spaceBetweenButtons * (numberOfOptions - 1))) / 2;
                     for (var i = 0; i < numberOfOptions; i++) {
                         var optionName = optionNames[i];
-                        var button = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), buttonPosY), // pos
+                        var button = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(buttonMarginLeftRight + i * (buttonWidth + spaceBetweenButtons), buttonPosY), // pos
                         buttonSize.clone(), optionName, fontNameAndHeight, optionFunctions[i]);
                         childControls.push(button);
                     }
@@ -118,16 +118,16 @@ var ThisCouldBeBetter;
                 // todo - Variable sizes.
                 size = size || universe.display.sizeDefault();
                 var marginWidth = 10;
-                var marginSize = GameFramework.Coords.fromXY(1, 1).multiplyScalar(marginWidth);
+                var marginSize = Coords.fromXY(1, 1).multiplyScalar(marginWidth);
                 var fontHeight = 20;
                 var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
-                var labelSize = GameFramework.Coords.fromXY(size.x - marginSize.x * 2, fontHeight);
-                var buttonSize = GameFramework.Coords.fromXY(labelSize.x, fontHeight * 2);
-                var listSize = GameFramework.Coords.fromXY(labelSize.x, size.y - labelSize.y - buttonSize.y - marginSize.y * 4);
-                var labelMessage = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2), labelSize, GameFramework.DataBinding.fromContext(message), font);
-                var listOptions = GameFramework.ControlList.fromPosSizeItemsAndBindingForItemText(GameFramework.Coords.fromXY(marginSize.x, labelSize.y + marginSize.y * 2), listSize, options, bindingForOptionText);
-                var buttonChoose = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(marginSize.x, size.y - marginSize.y - buttonSize.y), buttonSize, buttonSelectText, font, () => this.choiceList_Choose(universe, listOptions, select));
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerChoice", GameFramework.Coords.create(), size, [
+                var labelSize = Coords.fromXY(size.x - marginSize.x * 2, fontHeight);
+                var buttonSize = Coords.fromXY(labelSize.x, fontHeight * 2);
+                var listSize = Coords.fromXY(labelSize.x, size.y - labelSize.y - buttonSize.y - marginSize.y * 4);
+                var labelMessage = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(size.x / 2, marginSize.y + fontHeight / 2), labelSize, GameFramework.DataBinding.fromContext(message), font);
+                var listOptions = GameFramework.ControlList.fromPosSizeItemsAndBindingForItemText(Coords.fromXY(marginSize.x, labelSize.y + marginSize.y * 2), listSize, options, bindingForOptionText);
+                var buttonChoose = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(marginSize.x, size.y - marginSize.y - buttonSize.y), buttonSize, buttonSelectText, font, () => this.choiceList_Choose(universe, listOptions, select));
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerChoice", Coords.create(), size, [
                     labelMessage,
                     listOptions,
                     buttonChoose
@@ -175,25 +175,25 @@ var ThisCouldBeBetter;
                 var buttonCount = universe.profileHelper.gameCanBeSaved ? 5 : 3;
                 var buttonsAllHeight = buttonCount * buttonHeight + (buttonCount - 1) * padding;
                 var margin = (this.sizeBase.y - buttonsAllHeight) / 2;
-                var buttonSize = GameFramework.Coords.fromXY(40, buttonHeight);
+                var buttonSize = Coords.fromXY(40, buttonHeight);
                 var posX = (this.sizeBase.x - buttonSize.x) / 2;
                 var buttons = [];
                 if (universe.profileHelper.gameCanBeSaved) {
                     var save = () => this.game_Save(universe, size);
                     var load = () => this.game_Load(universe);
-                    var buttonSave = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Save", font, save);
+                    var buttonSave = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Save", font, save);
                     buttons.push(buttonSave);
-                    var buttonLoad = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Load", font, load);
+                    var buttonLoad = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Load", font, load);
                     buttons.push(buttonLoad);
                 }
                 var about = () => this.game_About(universe, size);
-                var buttonAbout = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "About", font, about);
+                var buttonAbout = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "About", font, about);
                 buttons.push(buttonAbout);
                 var quit = () => this.game_Quit(universe, size, venuePrev);
-                var buttonQuit = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Quit", font, quit);
+                var buttonQuit = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Quit", font, quit);
                 buttons.push(buttonQuit);
                 var back = () => this.game_Back(universe, venuePrev);
-                var buttonBack = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Back", font, back);
+                var buttonBack = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(posX, margin + buttons.length * rowHeight), buttonSize.clone(), "Back", font, back);
                 buttons.push(buttonBack);
                 var actions = [GameFramework.Action.fromNameAndPerform("Back", back)];
                 var mappings = [
@@ -266,14 +266,14 @@ var ThisCouldBeBetter;
                 var rowCount = (includeResumeButton ? 3 : 2);
                 var rowHeight = buttonHeight + padding;
                 var buttonsAllHeight = rowCount * buttonHeight + (rowCount - 1) * padding;
-                var margin = GameFramework.Coords.fromXY((this.sizeBase.x - buttonWidth) / 2, (this.sizeBase.y - buttonsAllHeight) / 2);
+                var margin = Coords.fromXY((this.sizeBase.x - buttonWidth) / 2, (this.sizeBase.y - buttonsAllHeight) / 2);
                 var row0PosY = margin.y;
                 var row1PosY = row0PosY + rowHeight;
                 var row2PosY = row1PosY + rowHeight;
-                var buttonSize = GameFramework.Coords.fromXY(buttonWidth, buttonHeight);
-                var buttonGame = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(margin.x, row0PosY), // pos
+                var buttonSize = Coords.fromXY(buttonWidth, buttonHeight);
+                var buttonGame = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(margin.x, row0PosY), // pos
                 buttonSize.clone(), "Game", font, () => this.gameAndSettings_TransitionToGameMenu(universe));
-                var buttonSettings = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(margin.x, row1PosY), // pos
+                var buttonSettings = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(margin.x, row1PosY), // pos
                 buttonSize.clone(), "Settings", font, () => this.gameAndSettings_Settings(universe));
                 var children = [
                     buttonGame,
@@ -282,8 +282,8 @@ var ThisCouldBeBetter;
                 var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("Game", this._zeroes.clone(), // pos
                 this.sizeBase.clone(), children);
                 if (includeResumeButton) {
-                    var buttonResume = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(margin.x, row2PosY), // pos
-                    GameFramework.Coords.fromXY(buttonWidth, buttonHeight), // size
+                    var buttonResume = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(margin.x, row2PosY), // pos
+                    Coords.fromXY(buttonWidth, buttonHeight), // size
                     "Resume", this.fontBase, () => this.gameAndSettings_Back(universe, venuePrev));
                     returnValue.children.push(buttonResume);
                     returnValue.actionAdd(GameFramework.Action.fromNameAndPerform("Back", () => this.gameAndSettings_Back(universe, venuePrev)));
@@ -313,43 +313,43 @@ var ThisCouldBeBetter;
                 // hack - Should do ALL placeDefns, not just the current one.
                 var placeCurrent = world.placeCurrent;
                 var placeDefn = placeCurrent.defn(world);
-                var labelActions = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(25, 10), // pos
-                GameFramework.Coords.fromXY(150, 20), // size
+                var labelActions = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(25, 10), // pos
+                Coords.fromXY(150, 20), // size
                 GameFramework.DataBinding.fromContext("Actions:"), font);
-                var listActions = GameFramework.ControlList.fromNamePosSizeItemsTextFontSelectedValue("listActions", GameFramework.Coords.fromXY(25, 25), // pos
-                GameFramework.Coords.fromXY(150, 40), // size
+                var listActions = GameFramework.ControlList.fromNamePosSizeItemsTextFontSelectedValue("listActions", Coords.fromXY(25, 25), // pos
+                Coords.fromXY(150, 40), // size
                 GameFramework.DataBinding.fromGet((c) => placeDefn.actionToInputsMappingsEdited), // items
                 GameFramework.DataBinding.fromGet((c) => c.actionName), // bindingForItemText
                 font, GameFramework.DataBinding.fromContextGetAndSet(placeDefn, (c) => c.actionToInputsMappingSelected, (c, v) => { c.actionToInputsMappingSelected = v; }), // bindingForItemSelected
                 GameFramework.DataBinding.fromGet((c) => c) // bindingForItemValue
                 );
-                var labelInputs = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(25, 65), // pos
-                GameFramework.Coords.fromXY(150, 20), // size
+                var labelInputs = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(25, 65), // pos
+                Coords.fromXY(150, 20), // size
                 GameFramework.DataBinding.fromContext("Inputs for Selected Action:"), font);
-                var labelInputNames = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(25, 75), // pos
-                GameFramework.Coords.fromXY(150, 25), // size
+                var labelInputNames = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(25, 75), // pos
+                Coords.fromXY(150, 25), // size
                 GameFramework.DataBinding.fromContextAndGet(placeDefn, (c) => {
                     var i = c.actionToInputsMappingSelected;
                     return (i == null ? "-" : i.inputNames.join(", "));
                 }), // text
                 font);
-                var buttonClear = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(25, 90), // pos
-                GameFramework.Coords.fromXY(45, 15), // size
+                var buttonClear = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(25, 90), // pos
+                Coords.fromXY(45, 15), // size
                 "Clear", font, () => this.inputs_Clear(placeDefn)).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(placeDefn, (c) => (c.actionToInputsMappingSelected != null)));
-                var buttonAdd = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(80, 90), // pos
-                GameFramework.Coords.fromXY(45, 15), // size
+                var buttonAdd = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(80, 90), // pos
+                Coords.fromXY(45, 15), // size
                 "Add", font, () => this.inputs_Add(universe, placeDefn)).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(placeDefn, (c) => (c.actionToInputsMappingSelected != null)));
-                var buttonDefault = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(135, 90), // pos
-                GameFramework.Coords.fromXY(45, 15), // size
+                var buttonDefault = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(135, 90), // pos
+                Coords.fromXY(45, 15), // size
                 "Default", font, () => this.inputs_ResetSelectedToDefault(placeDefn)).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(placeDefn, (c) => (c.actionToInputsMappingSelected != null)));
-                var buttonDefaultAll = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(50, 110), // pos
-                GameFramework.Coords.fromXY(100, 15), // size
+                var buttonDefaultAll = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(50, 110), // pos
+                Coords.fromXY(100, 15), // size
                 "Default All", font, () => this.inputs_ResetAllToDefault(universe, size, placeDefn));
-                var buttonCancel = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(50, 130), // pos
-                GameFramework.Coords.fromXY(45, 15), // size
+                var buttonCancel = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(50, 130), // pos
+                Coords.fromXY(45, 15), // size
                 "Cancel", font, () => this.inputs_Cancel(universe, venuePrev));
-                var buttonSave = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(105, 130), // pos
-                GameFramework.Coords.fromXY(45, 15), // size
+                var buttonSave = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(105, 130), // pos
+                Coords.fromXY(45, 15), // size
                 "Save", font, () => this.inputs_Save(universe, placeDefn, venuePrev)).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(placeDefn, (c) => {
                     var mappings = c.actionToInputsMappingsEdited;
                     var doAnyActionsLackInputs = mappings.some((x) => (x.inputNames.length == 0));
@@ -468,8 +468,8 @@ var ThisCouldBeBetter;
                 var goToVenueNext = () => this.opening_GoToVenueNext(universe, size);
                 var children = [imageOpening];
                 if (buttonNextOmit == false) {
-                    var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
-                    GameFramework.Coords.fromXY(50, fontHeight * 2), // size
+                    var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(75, 120), // pos
+                    Coords.fromXY(50, fontHeight * 2), // size
                     "Next", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), goToVenueNext).hasBorderSet(false);
                     children.push(buttonNext);
                 }
@@ -514,8 +514,8 @@ var ThisCouldBeBetter;
                     imageProducer
                 ];
                 if (buttonNextOmit == false) {
-                    var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
-                    GameFramework.Coords.fromXY(50, fontHeight * 2), // size
+                    var buttonNext = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(75, 120), // pos
+                    Coords.fromXY(50, fontHeight * 2), // size
                     "Next", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), goToVenueNext // click
                     ).hasBorderSet(false);
                     children.push(buttonNext);
@@ -550,41 +550,41 @@ var ThisCouldBeBetter;
                 var back = () => {
                     universe.venueTransitionTo(venuePrev);
                 };
-                var labelMusic = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(30, row1PosY + labelPadding), // pos
-                GameFramework.Coords.fromXY(75, buttonHeight), // size
+                var labelMusic = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(30, row1PosY + labelPadding), // pos
+                Coords.fromXY(75, buttonHeight), // size
                 GameFramework.DataBinding.fromContext("Music:"), font);
-                var selectMusicVolume = new GameFramework.ControlSelect("selectMusicVolume", GameFramework.Coords.fromXY(70, row1PosY), // pos
-                GameFramework.Coords.fromXY(30, buttonHeight), // size
+                var selectMusicVolume = new GameFramework.ControlSelect("selectMusicVolume", Coords.fromXY(70, row1PosY), // pos
+                Coords.fromXY(30, buttonHeight), // size
                 GameFramework.DataBinding.fromContextGetAndSet(universe.soundHelper, (c) => c.musicVolume, (c, v) => c.musicVolume = v), // valueSelected
                 GameFramework.DataBinding.fromContextAndGet(universe.soundHelper, (c) => c.controlSelectOptionsVolume()), // options
                 GameFramework.DataBinding.fromGet((c) => c.value), // bindingForOptionValues,
                 GameFramework.DataBinding.fromGet((c) => c.text), // bindingForOptionText
                 font);
-                var labelSound = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(105, row1PosY + labelPadding), // pos
-                GameFramework.Coords.fromXY(75, buttonHeight), // size
+                var labelSound = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(105, row1PosY + labelPadding), // pos
+                Coords.fromXY(75, buttonHeight), // size
                 GameFramework.DataBinding.fromContext("Effects:"), font);
-                var selectSoundVolume = new GameFramework.ControlSelect("selectSoundVolume", GameFramework.Coords.fromXY(140, row1PosY), // pos
-                GameFramework.Coords.fromXY(30, buttonHeight), // size
+                var selectSoundVolume = new GameFramework.ControlSelect("selectSoundVolume", Coords.fromXY(140, row1PosY), // pos
+                Coords.fromXY(30, buttonHeight), // size
                 GameFramework.DataBinding.fromContextGetAndSet(universe.soundHelper, (c) => c.effectVolume, (c, v) => { c.effectVolume = v; }), // valueSelected
                 GameFramework.DataBinding.fromContextAndGet(universe.soundHelper, (c) => c.controlSelectOptionsVolume()), // options
                 GameFramework.DataBinding.fromGet((c) => c.value), // bindingForOptionValues,
                 GameFramework.DataBinding.fromGet((c) => c.text), // bindingForOptionText
                 font);
-                var labelDisplay = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(30, row2PosY + labelPadding), // pos
-                GameFramework.Coords.fromXY(75, buttonHeight), // size
+                var labelDisplay = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(30, row2PosY + labelPadding), // pos
+                Coords.fromXY(75, buttonHeight), // size
                 GameFramework.DataBinding.fromContext("Display:"), font);
-                var selectDisplaySize = new GameFramework.ControlSelect("selectDisplaySize", GameFramework.Coords.fromXY(70, row2PosY), // pos
-                GameFramework.Coords.fromXY(65, buttonHeight), // size
+                var selectDisplaySize = new GameFramework.ControlSelect("selectDisplaySize", Coords.fromXY(70, row2PosY), // pos
+                Coords.fromXY(65, buttonHeight), // size
                 GameFramework.DataBinding.fromContextAndGet(universe.display, (c) => c.sizeInPixels), // valueSelected
                 // options
                 GameFramework.DataBinding.fromContextAndGet(universe.display, (c) => c.sizesAvailable), GameFramework.DataBinding.fromGet((c) => c), // bindingForOptionValues,
                 GameFramework.DataBinding.fromGet((c) => c.toStringXxY()), // bindingForOptionText
                 font);
-                var buttonChange = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(140, row2PosY), // pos
-                GameFramework.Coords.fromXY(30, buttonHeight), // size
+                var buttonChange = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(140, row2PosY), // pos
+                Coords.fromXY(30, buttonHeight), // size
                 "Change", font, () => this.settings_Change(universe));
-                var buttonInputs = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(70, row3PosY), // pos
-                GameFramework.Coords.fromXY(65, buttonHeight), // size
+                var buttonInputs = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(70, row3PosY), // pos
+                Coords.fromXY(65, buttonHeight), // size
                 "Inputs", font, () => // click
                  {
                     var venueCurrent = universe.venueCurrent();
@@ -592,8 +592,8 @@ var ThisCouldBeBetter;
                     var venueNext = controlGameControls.toVenue();
                     universe.venueTransitionTo(venueNext);
                 });
-                var buttonDone = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(70, row4PosY), // pos
-                GameFramework.Coords.fromXY(65, buttonHeight), // size
+                var buttonDone = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(70, row4PosY), // pos
+                Coords.fromXY(65, buttonHeight), // size
                 "Done", font, back // click
                 );
                 var children = [
@@ -679,8 +679,8 @@ var ThisCouldBeBetter;
                     imageTitle
                 ];
                 if (buttonStartOmit == false) {
-                    var buttonStart = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(75, 120), // pos
-                    GameFramework.Coords.fromXY(50, fontHeight * 2), // size
+                    var buttonStart = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(75, 120), // pos
+                    Coords.fromXY(50, fontHeight * 2), // size
                     "Start", GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight * 2), () => this.title_Start(universe)).hasBorderSet(false);
                     controls.push(buttonStart);
                 }
@@ -720,30 +720,30 @@ var ThisCouldBeBetter;
                 var world = universe.world;
                 var dateCreated = world.dateCreated;
                 var dateSaved = world.dateSaved;
-                var labelProfileName = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(0, 40), // pos
-                GameFramework.Coords.fromXY(sizeBase.x, 20), // size
+                var labelProfileName = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(0, 40), // pos
+                Coords.fromXY(sizeBase.x, 20), // size
                 GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), font);
-                var labelWorldName = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(0, 55), // pos
-                GameFramework.Coords.fromXY(sizeBase.x, 25), // size
+                var labelWorldName = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(0, 55), // pos
+                Coords.fromXY(sizeBase.x, 25), // size
                 GameFramework.DataBinding.fromContext("World: " + world.name), font);
-                var labelStartDate = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(0, 70), // pos
-                GameFramework.Coords.fromXY(sizeBase.x, 25), // size
+                var labelStartDate = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(0, 70), // pos
+                Coords.fromXY(sizeBase.x, 25), // size
                 GameFramework.DataBinding.fromContext("Started: " + dateCreated.toStringTimestamp()), font);
-                var labelSavedDate = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(0, 85), // pos
-                GameFramework.Coords.fromXY(sizeBase.x, 25), // size
+                var labelSavedDate = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(0, 85), // pos
+                Coords.fromXY(sizeBase.x, 25), // size
                 GameFramework.DataBinding.fromContext("Saved: "
                     + (dateSaved == null ? "[never]" : dateSaved.toStringTimestamp())), font);
-                var buttonStart = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(50, 100), // pos
-                GameFramework.Coords.fromXY(100, this.buttonHeightBase), // size
+                var buttonStart = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(50, 100), // pos
+                Coords.fromXY(100, this.buttonHeightBase), // size
                 "Start", font, () => this.worldDetail_Start(universe, size));
-                var buttonBack = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(10, 10), // pos
-                GameFramework.Coords.fromXY(15, 15), // size
+                var buttonBack = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(10, 10), // pos
+                Coords.fromXY(15, 15), // size
                 "<", font, () => // click
                  {
                     universe.venueTransitionTo(venuePrev);
                 });
-                var buttonDelete = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(180, 10), // pos
-                GameFramework.Coords.fromXY(15, 15), // size
+                var buttonDelete = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(180, 10), // pos
+                Coords.fromXY(15, 15), // size
                 "x", font, () => this.worldDetail_DeleteSaveStateSelected(universe, size));
                 var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerWorldDetail", this._zeroes, // pos
                 sizeBase.clone(), // size
@@ -802,27 +802,27 @@ var ThisCouldBeBetter;
                 }
                 var scaleMultiplier = this._scaleMultiplier.overwriteWith(size).divide(this.sizeBase);
                 var font = this.fontBase;
-                var labelProfileName = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(100, 25), // pos
-                GameFramework.Coords.fromXY(120, 25), // size
+                var labelProfileName = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(100, 25), // pos
+                Coords.fromXY(120, 25), // size
                 GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), font);
-                var labelSelectASave = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(100, 40), // pos
-                GameFramework.Coords.fromXY(100, 25), // size
+                var labelSelectASave = GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(100, 40), // pos
+                Coords.fromXY(100, 25), // size
                 GameFramework.DataBinding.fromContext("Select a Save:"), font);
-                var listSaveStates = GameFramework.ControlList.fromNamePosSizeItemsTextFontSelectedValue("listSaveStates", GameFramework.Coords.fromXY(30, 50), // pos
-                GameFramework.Coords.fromXY(140, 50), // size
+                var listSaveStates = GameFramework.ControlList.fromNamePosSizeItemsTextFontSelectedValue("listSaveStates", Coords.fromXY(30, 50), // pos
+                Coords.fromXY(140, 50), // size
                 GameFramework.DataBinding.fromContextAndGet(universe.profile, (c) => c.saveStates), // items
                 GameFramework.DataBinding.fromGet((c) => c.name), // bindingForOptionText
                 font, GameFramework.DataBinding.fromContextGetAndSet(universe.profile, (c) => c.saveStateSelected(), (c, v) => c.saveStateNameSelected = v.name), // bindingForOptionSelected
                 GameFramework.DataBinding.fromGet((v) => v.name));
-                var buttonLoadFromServer = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(30, 105), // pos
-                GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
+                var buttonLoadFromServer = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(30, 105), // pos
+                Coords.fromXY(40, this.buttonHeightBase), // size
                 "Load", font, () => this.worldLoad_LoadFromServer(universe, size));
                 var venueFileUpload = GameFramework.VenueFileUpload.create();
-                var buttonLoadFromFile = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(80, 105), // pos
-                GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
+                var buttonLoadFromFile = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(80, 105), // pos
+                Coords.fromXY(40, this.buttonHeightBase), // size
                 "Load File", font, () => this.worldLoad_LoadFile(universe, size, venueFileUpload));
-                var buttonReturn = GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(130, 105), // pos
-                GameFramework.Coords.fromXY(40, this.buttonHeightBase), // size
+                var buttonReturn = GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(130, 105), // pos
+                Coords.fromXY(40, this.buttonHeightBase), // size
                 "Return", font, () => this.worldLoad_Return(universe, size));
                 var returnValue = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerWorldLoad", this._zeroes, // pos
                 this.sizeBase.clone(), // size

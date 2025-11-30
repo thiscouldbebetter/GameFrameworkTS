@@ -20,24 +20,24 @@ var ThisCouldBeBetter;
                 var controlsForTabs = new Array();
                 var fontHeight = 12;
                 var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
-                var labelSize = GameFramework.Coords.fromXY(300, fontHeight * 1.25);
+                var labelSize = Coords.fromXY(300, fontHeight * 1.25);
                 var marginX = fontHeight;
                 var timePlayingAsString = universe.world.timePlayingAsStringLong(universe);
                 var controlsForStatusFields = [
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginX, labelSize.y), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(marginX, labelSize.y), // pos
                     labelSize.clone(), GameFramework.DataBinding.fromContext("Profile: " + universe.profile.name), font),
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginX, labelSize.y * 2), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(marginX, labelSize.y * 2), // pos
                     labelSize.clone(), GameFramework.DataBinding.fromContext("Time Playing: " + timePlayingAsString), font)
                 ];
                 var killable = GameFramework.Killable.of(entity);
                 if (killable != null) {
-                    var labelHealth = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginX, labelSize.y * 3), // pos
+                    var labelHealth = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(marginX, labelSize.y * 3), // pos
                     labelSize.clone(), GameFramework.DataBinding.fromContext("Health: " + GameFramework.Killable.of(entity).integrity
                         + "/" + GameFramework.Killable.of(entity).integrityMax), font);
                     controlsForStatusFields.push(labelHealth);
                 }
-                var tabButtonSize = GameFramework.Coords.fromXY(36, 20);
-                var tabPageSize = size.clone().subtract(GameFramework.Coords.fromXY(0, tabButtonSize.y + fontHeight));
+                var tabButtonSize = Coords.fromXY(36, 20);
+                var tabPageSize = size.clone().subtract(Coords.fromXY(0, tabButtonSize.y + fontHeight));
                 var includeTitleAndDoneButtonFalse = false;
                 var itemHolder = GameFramework.ItemHolder.of(entity);
                 if (itemHolder != null) {
@@ -58,7 +58,7 @@ var ThisCouldBeBetter;
                 if (skillLearner != null) {
                     var skillLearnerAsControl = skillLearner.toControl(universe, tabPageSize, entity, venuePrev, includeTitleAndDoneButtonFalse);
                     controlsForTabs.push(skillLearnerAsControl);
-                    var labelExperience = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(marginX, labelSize.y * 4), // pos
+                    var labelExperience = GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(marginX, labelSize.y * 4), // pos
                     labelSize.clone(), GameFramework.DataBinding.fromContext("Experience: "
                         + GameFramework.SkillLearner.of(entity).learningAccumulated), font);
                     controlsForStatusFields.push(labelExperience);
@@ -71,13 +71,13 @@ var ThisCouldBeBetter;
                 var gameAndSettingsMenuAsControl = universe.controlBuilder.gameAndSettings(universe, tabPageSize, universe.venueCurrent(), false // includeResumeButton
                 );
                 controlsForTabs.push(gameAndSettingsMenuAsControl);
-                var statusAsControl = GameFramework.ControlContainer.fromNamePosSizeAndChildren("Status", GameFramework.Coords.create(), // pos
+                var statusAsControl = GameFramework.ControlContainer.fromNamePosSizeAndChildren("Status", Coords.create(), // pos
                 size.clone().addDimensions(0, -32, 0), // size
                 // children
                 controlsForStatusFields);
                 controlsForTabs.splice(0, 0, statusAsControl);
                 var back = () => universe.venueTransitionTo(venuePrev);
-                var returnValue = new GameFramework.ControlTabbed("tabbedItems", GameFramework.Coords.create(), // pos
+                var returnValue = new GameFramework.ControlTabbed("tabbedItems", Coords.create(), // pos
                 size, tabButtonSize, controlsForTabs, font, back, entity // context
                 );
                 return returnValue;
@@ -92,20 +92,20 @@ var ThisCouldBeBetter;
                 var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightInPixels);
                 var margin = 10;
                 var worldDefn = world.defn;
-                var playerVisualBarSize = GameFramework.Coords.fromXY(entityDimension * 4, entityDimension);
+                var playerVisualBarSize = Coords.fromXY(entityDimension * 4, entityDimension);
                 var killable = GameFramework.Killable.of(entity);
                 var playerVisualHealthBar = GameFramework.VisualBar.fromSizeColorAndBindingsForValueAndMax(playerVisualBarSize, GameFramework.Color.Instances().Red, GameFramework.DataBinding.fromGet((c) => killable.integrity), GameFramework.DataBinding.fromGet((c) => killable.integrityMax));
                 var playerVisualHealthIcon = worldDefn.itemDefnByName("Heart").visual;
                 var playerVisualHealthBarPlusIcon = GameFramework.VisualGroup.fromChildren([
                     playerVisualHealthBar,
-                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualHealthIcon)
+                    GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualHealthIcon)
                 ]);
                 var starvable = GameFramework.Starvable.of(entity);
                 var playerVisualSatietyBar = GameFramework.VisualBar.fromSizeColorAndBindingsForValueAndMax(playerVisualBarSize, GameFramework.Color.Instances().Brown, GameFramework.DataBinding.fromGet((c) => starvable.satiety), GameFramework.DataBinding.fromGet((c) => starvable.satietyMax));
                 var playerVisualSatietyIcon = worldDefn.itemDefnByName("Bread").visual;
                 var playerVisualSatietyBarPlusIcon = GameFramework.VisualGroup.fromChildren([
                     playerVisualSatietyBar,
-                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualSatietyIcon)
+                    GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualSatietyIcon)
                 ]);
                 var tirable = GameFramework.Tirable.of(entity);
                 var playerVisualStaminaBar = new GameFramework.VisualBar(null, // "S", // abbreviation
@@ -113,10 +113,10 @@ var ThisCouldBeBetter;
                 null, // colorForBorderAsValueBreakGroup
                 null // text
                 );
-                var playerVisualStaminaIcon = GameFramework.VisualImageScaled.fromSizeAndChild(GameFramework.Coords.fromXY(1, 1).multiplyScalar(playerVisualBarSize.y * 1.5), GameFramework.VisualImageFromLibrary.fromImageName("Zap"));
+                var playerVisualStaminaIcon = GameFramework.VisualImageScaled.fromSizeAndChild(Coords.fromXY(1, 1).multiplyScalar(playerVisualBarSize.y * 1.5), GameFramework.VisualImageFromLibrary.fromImageName("Zap"));
                 var playerVisualStaminaBarPlusIcon = GameFramework.VisualGroup.fromChildren([
                     playerVisualStaminaBar,
-                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualStaminaIcon)
+                    GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualStaminaIcon)
                 ]);
                 var hoursPerDay = 24;
                 var minutesPerHour = 60;
@@ -143,31 +143,31 @@ var ThisCouldBeBetter;
                 var playerVisualTimeIcon = GameFramework.VisualBuilder.Instance().sun(playerVisualBarSize.y * .5);
                 var playerVisualTimeBarPlusIcon = GameFramework.VisualGroup.fromChildren([
                     playerVisualTimeBar,
-                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualTimeIcon)
+                    GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(-playerVisualBarSize.x / 2 - playerVisualBarSize.y, 0), playerVisualTimeIcon)
                 ]);
-                var childSpacing = GameFramework.Coords.fromXY(0, playerVisualBarSize.y * 2);
+                var childSpacing = Coords.fromXY(0, playerVisualBarSize.y * 2);
                 var playerVisualStatusInfo = GameFramework.VisualGroup.fromChildren([
                     playerVisualHealthBarPlusIcon,
                     GameFramework.VisualOffset.fromOffsetAndChild(childSpacing, playerVisualSatietyBarPlusIcon),
                     GameFramework.VisualOffset.fromOffsetAndChild(childSpacing.clone().double(), playerVisualStaminaBarPlusIcon),
                     GameFramework.VisualOffset.fromOffsetAndChild(childSpacing.clone().multiplyScalar(3), playerVisualTimeBarPlusIcon)
                 ]);
-                var controlPlayerStatusInfo = GameFramework.ControlVisual.fromNamePosSizeAndVisual("visualPlayerStatusInfo", GameFramework.Coords.fromXY(5, 2).multiplyScalar(playerVisualBarSize.y), // pos
-                GameFramework.Coords.create(), // size
+                var controlPlayerStatusInfo = GameFramework.ControlVisual.fromNamePosSizeAndVisual("visualPlayerStatusInfo", Coords.fromXY(5, 2).multiplyScalar(playerVisualBarSize.y), // pos
+                Coords.create(), // size
                 GameFramework.DataBinding.fromContext(playerVisualStatusInfo));
                 childControls.push(controlPlayerStatusInfo);
                 // Selection.
                 var selector = GameFramework.Selector.of(entity);
-                var controlSelectionSize = GameFramework.Coords.fromXY(playerVisualBarSize.x * 1.5, margin * 3);
-                var controlSelectionPos = GameFramework.Coords.fromXY(size.x - controlSelectionSize.x - margin, margin);
+                var controlSelectionSize = Coords.fromXY(playerVisualBarSize.x * 1.5, margin * 3);
+                var controlSelectionPos = Coords.fromXY(size.x - controlSelectionSize.x - margin, margin);
                 var controlSelection = selector.toControl(controlSelectionSize, controlSelectionPos);
                 childControls.push(controlSelection);
                 // Quick slots.
                 var itemQuickSlotCount = 10;
-                var buttonSize = GameFramework.Coords.fromXY(25, 25);
+                var buttonSize = Coords.fromXY(25, 25);
                 var buttonWidthAll = itemQuickSlotCount * buttonSize.x;
                 var buttonMargin = (size.x - buttonWidthAll) / (itemQuickSlotCount + 1);
-                var buttonPos = GameFramework.Coords.fromXY(buttonMargin, size.y - margin - buttonSize.y);
+                var buttonPos = Coords.fromXY(buttonMargin, size.y - margin - buttonSize.y);
                 var useItemInQuickSlot = (slotNumber) => {
                     var uwpe = new GameFramework.UniverseWorldPlaceEntities(universe, universe.world, place, entity, null);
                     equipmentUser.useItemInSocketNumbered(uwpe, slotNumber);
@@ -203,7 +203,7 @@ var ThisCouldBeBetter;
                     childControls.push(button);
                     buttonPos.x += buttonSize.x + buttonMargin;
                 }
-                var controlOverlayContainer = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerPlayer", GameFramework.Coords.create(), // pos,
+                var controlOverlayContainer = GameFramework.ControlContainer.fromNamePosSizeAndChildren("containerPlayer", Coords.create(), // pos,
                 universe.display.sizeInPixels.clone(), childControls);
                 var controlOverlayTransparent = GameFramework.ControlContainerTransparent.fromContainer(controlOverlayContainer);
                 controlOverlayTransparent.styleName = GameFramework.ControlStyle.Instances().Dark.name;

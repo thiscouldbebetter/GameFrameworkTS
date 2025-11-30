@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 super();
                 this.transformToApply = transformToApply;
                 this.child = child;
-                this._entityPosSaved = GameFramework.Coords.create();
+                this._entityPosSaved = Coords.create();
             }
             // Cloneable.
             clone() {

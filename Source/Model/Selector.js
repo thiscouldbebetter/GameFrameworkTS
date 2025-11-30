@@ -123,11 +123,11 @@ var ThisCouldBeBetter;
                 var fontHeightInPixels = 12;
                 var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightInPixels);
                 var margin = fontHeightInPixels / 2;
-                var labelSize = GameFramework.Coords.fromXY(size.x, fontHeightInPixels);
+                var labelSize = Coords.fromXY(size.x, fontHeightInPixels);
                 var selectionAsContainer = GameFramework.ControlContainer.fromNamePosSizeAndChildren("visualPlayerSelection", pos, size, [
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(1, 0).multiplyScalar(margin), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(1, 0).multiplyScalar(margin), // pos
                     labelSize, GameFramework.DataBinding.fromContext("Selected:"), font),
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(1, 1.5).multiplyScalar(margin), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(1, 1.5).multiplyScalar(margin), // pos
                     labelSize, GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.entitiesSelected.length == 0
                         ? "-"
                         : c.entitiesSelected[0].name)), font)

@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 super();
                 this.controlRoot = controlRoot;
                 // Helper variables.
-                this._drawLoc = new GameFramework.Disposition(GameFramework.Coords.create(), null, null);
+                this._drawLoc = new Disposition(Coords.create(), null, null);
             }
             // Visual.
             initialize(uwpe) {

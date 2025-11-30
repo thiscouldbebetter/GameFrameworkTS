@@ -53,7 +53,7 @@ var ThisCouldBeBetter;
                 }
                 for (var i = 0; i < particleCountThisTick; i++) {
                     var particleName = "Particle" + this.name + "-" + this.ticksSoFar + "-" + i;
-                    var particleDispRelativeToEmitter = GameFramework.Disposition.create();
+                    var particleDispRelativeToEmitter = Disposition.create();
                     var particleVel = this.particleVelocityGet();
                     particleDispRelativeToEmitter.vel.overwriteWith(particleVel);
                     var particleTicksToLive = this.particleTicksToLiveGet();

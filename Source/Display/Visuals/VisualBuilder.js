@@ -25,18 +25,18 @@ var ThisCouldBeBetter;
             boneLong(shaftLength, shaftThickness) {
                 var colors = GameFramework.Color.Instances();
                 var color = colors.White;
-                var shaftSize = GameFramework.Coords.fromXY(shaftLength, shaftThickness);
+                var shaftSize = Coords.fromXY(shaftLength, shaftThickness);
                 var visualShaft = GameFramework.VisualRectangle.fromSizeAndColorFill(shaftSize, color);
                 var knobRadius = shaftThickness / 2;
                 var knobOffsetFromCenterOfEpiphysis = knobRadius;
                 var visualEpiphysisKnob = GameFramework.VisualCircle.fromRadiusAndColorFill(knobRadius, color);
                 var visualEpiphysis = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(0, 0 - knobOffsetFromCenterOfEpiphysis), visualEpiphysisKnob),
-                    GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(0, knobOffsetFromCenterOfEpiphysis), visualEpiphysisKnob)
+                    GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0 - knobOffsetFromCenterOfEpiphysis), visualEpiphysisKnob),
+                    GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(0, knobOffsetFromCenterOfEpiphysis), visualEpiphysisKnob)
                 ]);
                 var shaftLengthHalf = shaftLength / 2;
-                var visualEpiphysisLeft = GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(0 - shaftLengthHalf, 0), visualEpiphysis);
-                var visualEpiphysisRight = GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(shaftLengthHalf, 0), visualEpiphysis);
+                var visualEpiphysisLeft = GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(0 - shaftLengthHalf, 0), visualEpiphysis);
+                var visualEpiphysisRight = GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(shaftLengthHalf, 0), visualEpiphysis);
                 var visual = GameFramework.VisualGroup.fromChildren([
                     visualShaft,
                     visualEpiphysisLeft,
@@ -54,8 +54,8 @@ var ThisCouldBeBetter;
                     GameFramework.VisualCircle.fromRadiusAndColorFill(eyeSocketRadius, socketColor)
                 ]);
                 var eyeSockets = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualOffset.fromChildAndOffset(eyeSocket, GameFramework.Coords.fromXY(-eyeSocketRadius, 0)),
-                    GameFramework.VisualOffset.fromChildAndOffset(eyeSocket, GameFramework.Coords.fromXY(eyeSocketRadius, 0))
+                    GameFramework.VisualOffset.fromChildAndOffset(eyeSocket, Coords.fromXY(-eyeSocketRadius, 0)),
+                    GameFramework.VisualOffset.fromChildAndOffset(eyeSocket, Coords.fromXY(eyeSocketRadius, 0))
                 ]);
                 var skull = GameFramework.VisualGroup.fromChildren([
                     skullWithoutFeatures,
@@ -66,13 +66,13 @@ var ThisCouldBeBetter;
             boneSkullAndCrossbones(headRadius, shaftLength, shaftThickness) {
                 var skull = this.boneSkull(headRadius);
                 var bone = this.boneLong(shaftLength, shaftThickness);
-                var boneBack = GameFramework.VisualTransform.fromTransformAndChild(GameFramework.Transform_None.create(), bone);
-                var boneFront = GameFramework.VisualTransform.fromTransformAndChild(GameFramework.Transform_None.create(), bone);
+                var boneBack = GameFramework.VisualTransform.fromTransformAndChild(Transform_None.create(), bone);
+                var boneFront = GameFramework.VisualTransform.fromTransformAndChild(Transform_None.create(), bone);
                 var bonesCrossed = GameFramework.VisualGroup.fromChildren([
                     boneBack,
                     boneFront
                 ]);
-                var bonesCrossedOffset = GameFramework.VisualOffset.fromOffsetAndChild(GameFramework.Coords.fromXY(0, 0), // todo
+                var bonesCrossedOffset = GameFramework.VisualOffset.fromOffsetAndChild(Coords.fromXY(0, 0), // todo
                 bonesCrossed);
                 var skullAndBonesCrossed = GameFramework.VisualGroup.fromChildren([
                     bonesCrossedOffset,
@@ -81,18 +81,18 @@ var ThisCouldBeBetter;
                 return skullAndBonesCrossed;
             }
             crystal(dimension, colorCrystal, colorHighlight) {
-                var crystalOutline = GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(GameFramework.Path.fromPoints([
-                    GameFramework.Coords.fromXY(1, 0),
-                    GameFramework.Coords.fromXY(0, 1),
-                    GameFramework.Coords.fromXY(-1, 0),
-                    GameFramework.Coords.fromXY(0, -1)
-                ]).transform(GameFramework.Transform_Scale.fromScaleFactor(dimension / 2)), colorCrystal, colorHighlight);
-                var crystalCenter = GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
-                    GameFramework.Coords.fromXY(1, 0),
-                    GameFramework.Coords.fromXY(0, 1),
-                    GameFramework.Coords.fromXY(-1, 0),
-                    GameFramework.Coords.fromXY(0, -1)
-                ]).transform(GameFramework.Transform_Scale.fromScaleFactor(dimension / 4)), colorHighlight);
+                var crystalOutline = GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(Path.fromPoints([
+                    Coords.fromXY(1, 0),
+                    Coords.fromXY(0, 1),
+                    Coords.fromXY(-1, 0),
+                    Coords.fromXY(0, -1)
+                ]).transform(Transform_Scale.fromScaleFactor(dimension / 2)), colorCrystal, colorHighlight);
+                var crystalCenter = GameFramework.VisualPolygon.fromPathAndColorFill(Path.fromPoints([
+                    Coords.fromXY(1, 0),
+                    Coords.fromXY(0, 1),
+                    Coords.fromXY(-1, 0),
+                    Coords.fromXY(0, -1)
+                ]).transform(Transform_Scale.fromScaleFactor(dimension / 4)), colorHighlight);
                 var crystal = GameFramework.VisualGroup.fromChildren([
                     crystalOutline,
                     crystalCenter
@@ -102,8 +102,8 @@ var ThisCouldBeBetter;
             directionalAnimationsFromTiledImage(visualImageSource, imageSource, imageSourceSizeInTiles, tileSizeToDraw) {
                 var imageSourceSizeInPixels = imageSource.sizeInPixels;
                 var tileSizeInPixels = imageSourceSizeInPixels.clone().divide(imageSourceSizeInTiles);
-                var tilePosInTiles = GameFramework.Coords.create();
-                var tilePosInPixels = GameFramework.Coords.create();
+                var tilePosInTiles = Coords.create();
+                var tilePosInPixels = Coords.create();
                 var directions = [];
                 for (var y = 0; y < imageSourceSizeInTiles.y; y++) {
                     // Directions.
@@ -113,7 +113,7 @@ var ThisCouldBeBetter;
                         // Frames.
                         tilePosInTiles.x = x;
                         tilePosInPixels.overwriteWith(tilePosInTiles).multiply(tileSizeInPixels);
-                        var sourceRegionBounds = GameFramework.BoxAxisAligned.fromMinAndSize(tilePosInPixels.clone(), tileSizeInPixels);
+                        var sourceRegionBounds = BoxAxisAligned.fromMinAndSize(tilePosInPixels.clone(), tileSizeInPixels);
                         var frame = new GameFramework.VisualImageScaledPartial(sourceRegionBounds, tileSizeToDraw, visualImageSource);
                         frames.push(frame);
                     }
@@ -134,11 +134,11 @@ var ThisCouldBeBetter;
                 var particleVisual = GameFramework.VisualCircle.fromRadiusAndColorFill(sparkRadius, colors.Yellow);
                 var particleSpeed = 5;
                 var randomizer = new GameFramework.RandomizerSystem();
-                var particleVelocityGet = () => GameFramework.Polar
+                var particleVelocityGet = () => Polar
                     .random2D(randomizer)
                     .toCoords()
                     .multiplyScalar(particleSpeed);
-                var transform = GameFramework.Transform_Dynamic.fromTransformTransformable((transformable) => {
+                var transform = Transform_Dynamic.fromTransformTransformable((transformable) => {
                     var transformableAsVisualCircle = transformable;
                     transformableAsVisualCircle.radius *= 1.02;
                     var color = transformableAsVisualCircle.colorFill.clone();
@@ -178,8 +178,8 @@ var ThisCouldBeBetter;
                     GameFramework.VisualCircle.fromRadiusAndColorFill(visualPupilRadius, colors.Black)
                 ]);
                 var visualEyes = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualOffset.fromChildAndOffset(visualEye, GameFramework.Coords.fromXY(-visualEyeRadius, 0)),
-                    GameFramework.VisualOffset.fromChildAndOffset(visualEye, GameFramework.Coords.fromXY(visualEyeRadius, 0))
+                    GameFramework.VisualOffset.fromChildAndOffset(visualEye, Coords.fromXY(-visualEyeRadius, 0)),
+                    GameFramework.VisualOffset.fromChildAndOffset(visualEye, Coords.fromXY(visualEyeRadius, 0))
                 ]);
                 var visualEyesBlinking = new GameFramework.VisualAnimation("EyesBlinking", [50, 5], // ticksToHoldFrames
                 [visualEyes, new GameFramework.VisualNone()], null);
@@ -195,8 +195,8 @@ var ThisCouldBeBetter;
                 var shouldersHeight = legLength + torsoLength;
                 var arms = this.figure_Arms(bodyColor, shouldersWidth, shouldersHeight, limbThickness, armLength);
                 // Compose the body parts.
-                var torsoRaisedAboveLegs = GameFramework.VisualOffset.fromNameOffsetAndChild("TorsoRaisedAboveLegs", GameFramework.Coords.fromXY(0, 0 - legLength), torso);
-                var shoulderHeightAsOffset = GameFramework.Coords.fromXY(0, 0 - shouldersHeight);
+                var torsoRaisedAboveLegs = GameFramework.VisualOffset.fromNameOffsetAndChild("TorsoRaisedAboveLegs", Coords.fromXY(0, 0 - legLength), torso);
+                var shoulderHeightAsOffset = Coords.fromXY(0, 0 - shouldersHeight);
                 var headRaisedAboveShoulders = GameFramework.VisualOffset.fromNameOffsetAndChild("HeadRaisedAboveShoulders", shoulderHeightAsOffset, head);
                 var armsRaisedToShoulderHeight = GameFramework.VisualOffset.fromNameOffsetAndChild("armsRaisedToShoulderHeight", shoulderHeightAsOffset, arms);
                 var body = GameFramework.VisualGroup.fromChildren([
@@ -211,16 +211,16 @@ var ThisCouldBeBetter;
                 var wieldable = this.figure_Wieldable();
                 // "RDLU" = "Right, Down, Left, Up".
                 var directionsFromNeckToShoulderRDLU = [
-                    GameFramework.Coords.fromXY(1, 0),
-                    GameFramework.Coords.fromXY(-1, 0),
-                    GameFramework.Coords.fromXY(-1, 0),
-                    GameFramework.Coords.fromXY(1, 0)
+                    Coords.fromXY(1, 0),
+                    Coords.fromXY(-1, 0),
+                    Coords.fromXY(-1, 0),
+                    Coords.fromXY(1, 0)
                 ].map(x => x.normalize());
                 var directionsFromShoulderToHandRDLU = [
-                    GameFramework.Coords.fromXY(1, 1),
-                    GameFramework.Coords.fromXY(-1, 1),
-                    GameFramework.Coords.fromXY(-1, 1),
-                    GameFramework.Coords.fromXY(1, 1)
+                    Coords.fromXY(1, 1),
+                    Coords.fromXY(-1, 1),
+                    Coords.fromXY(-1, 1),
+                    Coords.fromXY(1, 1)
                 ].map(x => x.normalize());
                 var visualsForArmRDLU = [];
                 var shoulderWidthHalf = shoulderWidth / 2;
@@ -229,8 +229,8 @@ var ThisCouldBeBetter;
                     var directionFromShoulderToHand = directionsFromShoulderToHandRDLU[i];
                     var displacementFromShoulderToHand = directionFromShoulderToHand
                         .multiplyScalar(armLength);
-                    var pathArm = GameFramework.Path.fromPoints([
-                        GameFramework.Coords.zeroes(),
+                    var pathArm = Path.fromPoints([
+                        Coords.zeroes(),
                         displacementFromShoulderToHand
                     ]);
                     var arm = GameFramework.VisualPath.fromPathColorAndThicknessOpen(pathArm, skinColor, armThickness);
@@ -256,15 +256,15 @@ var ThisCouldBeBetter;
             }
             figure_Legs(legColor, hipsWidth, legThickness, legLength) {
                 var legs = this.figure_LegsDirectional(legColor, hipsWidth, legThickness, legLength);
-                var legsRaisedAboveGround = GameFramework.VisualOffset.fromNameOffsetAndChild("LegsRaisedAboveGround", GameFramework.Coords.fromXY(0, 0 - legLength), legs);
+                var legsRaisedAboveGround = GameFramework.VisualOffset.fromNameOffsetAndChild("LegsRaisedAboveGround", Coords.fromXY(0, 0 - legLength), legs);
                 return legsRaisedAboveGround;
             }
             figure_LegsDirectional(legColor, hipsWidth, legThickness, legLength) {
                 var footLength = legLength * 2 / 3;
                 var hipsWidthHalf = hipsWidth / 2;
                 var footLengthHalf = footLength / 2;
-                var offsetHipLeft = GameFramework.Coords.fromXY(-hipsWidthHalf, 0);
-                var offsetHipRight = GameFramework.Coords.fromXY(hipsWidthHalf, 0);
+                var offsetHipLeft = Coords.fromXY(-hipsWidthHalf, 0);
+                var offsetHipRight = Coords.fromXY(hipsWidthHalf, 0);
                 var offsetsForHipsLeftAndRight = [offsetHipLeft, offsetHipRight];
                 var ticksPerStep = 2;
                 var ticksPerStep = ticksPerStep;
@@ -337,11 +337,11 @@ var ThisCouldBeBetter;
             ;
             figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForHipsLeftAndRight, ticksPerStep, toeOffsetsFromAnklesLeftRight) {
                 var legLengthHalf = legLength / 2;
-                var legTop = GameFramework.Coords.fromXY(0, 0).multiplyScalar(legLength);
-                var legBottom = GameFramework.Coords.fromXY(0, 1).multiplyScalar(legLength);
+                var legTop = Coords.fromXY(0, 0).multiplyScalar(legLength);
+                var legBottom = Coords.fromXY(0, 1).multiplyScalar(legLength);
                 toeOffsetsFromAnklesLeftRight.forEach(x => x.multiplyScalar(footLengthHalf)
                     .add(legBottom));
-                var visualsForLegsLeftAndRight = toeOffsetsFromAnklesLeftRight.map((x, i) => GameFramework.VisualPath.fromPathColorAndThicknessOpen(GameFramework.Path.fromPoints([
+                var visualsForLegsLeftAndRight = toeOffsetsFromAnklesLeftRight.map((x, i) => GameFramework.VisualPath.fromPathColorAndThicknessOpen(Path.fromPoints([
                     legTop,
                     legBottom,
                     toeOffsetsFromAnklesLeftRight[i]
@@ -354,7 +354,7 @@ var ThisCouldBeBetter;
                     visualsForLegsStanding.push(visualForLegStanding);
                 }
                 var visualLegsStanding = GameFramework.VisualGroup.fromChildren(visualsForLegsStanding);
-                var legRaiseForStepDisplacement = GameFramework.Coords.fromXY(0, -1).multiplyScalar(legLengthHalf);
+                var legRaiseForStepDisplacement = Coords.fromXY(0, -1).multiplyScalar(legLengthHalf);
                 var visualsForLegsWalking = visualsForLegsLeftAndRight.map((visualForLegAtRest, i) => {
                     var visualForLegRaised = GameFramework.VisualOffset.fromChildAndOffset(visualForLegAtRest, legRaiseForStepDisplacement);
                     var frames = [visualForLegAtRest];
@@ -373,29 +373,29 @@ var ThisCouldBeBetter;
             }
             figure_LegsDirectional_StandingAndWalking_Down(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep) {
                 var toeOffsetsFromAnklesLeftRight = [
-                    GameFramework.Coords.fromXY(-1, 1),
-                    GameFramework.Coords.fromXY(1, 1)
+                    Coords.fromXY(-1, 1),
+                    Coords.fromXY(1, 1)
                 ];
                 return this.figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep, toeOffsetsFromAnklesLeftRight);
             }
             figure_LegsDirectional_StandingAndWalking_Left(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep) {
                 var toeOffsetsFromAnklesLeftRight = [
-                    GameFramework.Coords.fromXY(-2, 0),
-                    GameFramework.Coords.fromXY(-2, 0)
+                    Coords.fromXY(-2, 0),
+                    Coords.fromXY(-2, 0)
                 ];
                 return this.figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep, toeOffsetsFromAnklesLeftRight);
             }
             figure_LegsDirectional_StandingAndWalking_Right(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep) {
                 var toeOffsetsFromAnklesLeftRight = [
-                    GameFramework.Coords.fromXY(2, 0),
-                    GameFramework.Coords.fromXY(2, 0)
+                    Coords.fromXY(2, 0),
+                    Coords.fromXY(2, 0)
                 ];
                 return this.figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep, toeOffsetsFromAnklesLeftRight);
             }
             figure_LegsDirectional_StandingAndWalking_Up(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep) {
                 var toeOffsetsFromAnklesLeftRight = [
-                    GameFramework.Coords.fromXY(-1, -1),
-                    GameFramework.Coords.fromXY(1, -1)
+                    Coords.fromXY(-1, -1),
+                    Coords.fromXY(1, -1)
                 ];
                 return this.figure_LegsDirectional_StandingAndWalking(legColor, lineThickness, legLength, footLengthHalf, offsetsForLegsLeftAndRight, ticksPerStep, toeOffsetsFromAnklesLeftRight);
             }
@@ -403,17 +403,17 @@ var ThisCouldBeBetter;
                 eyes = eyes || this.eyesBlinking(eyeRadius);
                 var eyesDirectional = new GameFramework.VisualDirectional(eyes, // visualForNoDirection
                 [
-                    GameFramework.VisualOffset.fromChildAndOffset(eyes, GameFramework.Coords.fromXY(1, 0).multiplyScalar(eyeRadius)),
-                    GameFramework.VisualOffset.fromChildAndOffset(eyes, GameFramework.Coords.fromXY(0, 1).multiplyScalar(eyeRadius)),
-                    GameFramework.VisualOffset.fromChildAndOffset(eyes, GameFramework.Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)),
-                    GameFramework.VisualOffset.fromChildAndOffset(eyes, GameFramework.Coords.fromXY(0, -1).multiplyScalar(eyeRadius))
+                    GameFramework.VisualOffset.fromChildAndOffset(eyes, Coords.fromXY(1, 0).multiplyScalar(eyeRadius)),
+                    GameFramework.VisualOffset.fromChildAndOffset(eyes, Coords.fromXY(0, 1).multiplyScalar(eyeRadius)),
+                    GameFramework.VisualOffset.fromChildAndOffset(eyes, Coords.fromXY(-1, 0).multiplyScalar(eyeRadius)),
+                    GameFramework.VisualOffset.fromChildAndOffset(eyes, Coords.fromXY(0, -1).multiplyScalar(eyeRadius))
                 ], null);
                 var headWithoutFeatures = GameFramework.VisualCircle.fromRadiusAndColorFill(headRadius, skinColor);
                 var head = GameFramework.VisualGroup.fromChildren([
                     headWithoutFeatures,
                     eyesDirectional
                 ]);
-                head = GameFramework.VisualOffset.fromNameOffsetAndChild("HeadRaisedToChin", GameFramework.Coords.fromXY(0, -headRadius), head);
+                head = GameFramework.VisualOffset.fromNameOffsetAndChild("HeadRaisedToChin", Coords.fromXY(0, -headRadius), head);
                 return head;
             }
             figure_Torso(torsoColor, torsoLength, shouldersWidth, waistWidthAndHeightAboveHipsIfAny, hipsWidth) {
@@ -425,21 +425,21 @@ var ThisCouldBeBetter;
                     var shouldersWidthHalf = shouldersWidth / 2;
                     var hipsWidthHalf = hipsWidth / 2;
                     var torsoPathPoints = [
-                        GameFramework.Coords.fromXY(-shouldersWidthHalf, -torsoLength),
-                        GameFramework.Coords.fromXY(shouldersWidthHalf, -torsoLength),
-                        GameFramework.Coords.fromXY(hipsWidthHalf, 0),
-                        GameFramework.Coords.fromXY(-hipsWidthHalf, 0)
+                        Coords.fromXY(-shouldersWidthHalf, -torsoLength),
+                        Coords.fromXY(shouldersWidthHalf, -torsoLength),
+                        Coords.fromXY(hipsWidthHalf, 0),
+                        Coords.fromXY(-hipsWidthHalf, 0)
                     ];
                     if (waistWidthAndHeightAboveHipsIfAny != null) {
                         var waistWidth = waistWidthAndHeightAboveHipsIfAny.x;
                         var waistHeightAboveHips = waistWidthAndHeightAboveHipsIfAny.y;
                         var waistWidthHalf = waistWidth / 2;
-                        var waistPointRight = GameFramework.Coords.fromXY(waistWidthHalf, -waistHeightAboveHips);
+                        var waistPointRight = Coords.fromXY(waistWidthHalf, -waistHeightAboveHips);
                         torsoPathPoints.splice(2, 0, waistPointRight);
-                        var waistPointLeft = GameFramework.Coords.fromXY(-waistWidthHalf, -waistHeightAboveHips);
+                        var waistPointLeft = Coords.fromXY(-waistWidthHalf, -waistHeightAboveHips);
                         torsoPathPoints.push(waistPointLeft);
                     }
-                    var torsoPath = GameFramework.Path.fromPoints(torsoPathPoints);
+                    var torsoPath = Path.fromPoints(torsoPathPoints);
                     torso = GameFramework.VisualPolygonPreoriented.fromPathAndColorsFillAndBorder(torsoPath, torsoColor, null // border
                     );
                 }
@@ -481,21 +481,21 @@ var ThisCouldBeBetter;
                 var dimensionHalf = dimension / 2;
                 var colors = GameFramework.Color.Instances();
                 var flameVisualStatic = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
-                        GameFramework.Coords.fromXY(0, -dimension * 2),
-                        GameFramework.Coords.fromXY(dimension, 0),
-                        GameFramework.Coords.fromXY(-dimension, 0),
+                    GameFramework.VisualPolygon.fromPathAndColorFill(Path.fromPoints([
+                        Coords.fromXY(0, -dimension * 2),
+                        Coords.fromXY(dimension, 0),
+                        Coords.fromXY(-dimension, 0),
                     ]), colors.Orange),
-                    GameFramework.VisualPolygon.fromPathAndColorFill(GameFramework.Path.fromPoints([
-                        GameFramework.Coords.fromXY(0, -dimension),
-                        GameFramework.Coords.fromXY(dimensionHalf, 0),
-                        GameFramework.Coords.fromXY(-dimensionHalf, 0),
+                    GameFramework.VisualPolygon.fromPathAndColorFill(Path.fromPoints([
+                        Coords.fromXY(0, -dimension),
+                        Coords.fromXY(dimensionHalf, 0),
+                        Coords.fromXY(-dimensionHalf, 0),
                     ]), colors.Yellow)
                 ]);
                 var flameVisualStaticSmall = flameVisualStatic
                     .clone()
-                    .transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, .8, 1)));
-                var flameVisualStaticLarge = flameVisualStatic.clone().transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, 1.2, 1)));
+                    .transform(Transform_Scale.fromScaleFactors(Coords.fromXYZ(1, .8, 1)));
+                var flameVisualStaticLarge = flameVisualStatic.clone().transform(Transform_Scale.fromScaleFactors(Coords.fromXYZ(1, 1.2, 1)));
                 var flameVisualStaticCloned = flameVisualStatic.clone();
                 var ticksPerFrame = 3;
                 var flameVisual = GameFramework.VisualAnimation.fromNameTicksToHoldFramesAndFramesRepeating("Flame", // name
@@ -511,12 +511,12 @@ var ThisCouldBeBetter;
                 var dimensionHalf = dimension / 2;
                 var color = GameFramework.Color.Instances().Cyan;
                 var visual = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(GameFramework.Path.fromPoints([
-                        GameFramework.Coords.fromXY(-1, -1),
-                        GameFramework.Coords.fromXY(1, -1),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(-1, 1),
-                    ]).transform(GameFramework.Transform_Scale.fromScaleFactor(dimensionHalf)), null, // colorFill
+                    GameFramework.VisualPolygon.fromPathAndColorsFillAndBorder(Path.fromPoints([
+                        Coords.fromXY(-1, -1),
+                        Coords.fromXY(1, -1),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(-1, 1),
+                    ]).transform(Transform_Scale.fromScaleFactor(dimensionHalf)), null, // colorFill
                     color // border
                     ),
                 ]);
@@ -537,7 +537,7 @@ var ThisCouldBeBetter;
                     var visualImageScaled = GameFramework.VisualImageScaled.fromSizeAndChild(sizeToDrawScaled, visualImage);
                     var colors = GameFramework.Color.Instances();
                     var visualText = GameFramework.VisualText.fromTextImmediateFontAndColorsFillAndBorder(message, controlBuilder.fontBase, colors.Black, colors.White);
-                    var textPos = GameFramework.Coords.fromXY(0, controlBuilder.fontHeightInPixelsBase);
+                    var textPos = Coords.fromXY(0, controlBuilder.fontHeightInPixelsBase);
                     var visualTextOffset = GameFramework.VisualOffset.fromOffsetAndChild(textPos, visualText);
                     var visualImagePlusText = GameFramework.VisualGroup.fromChildren([
                         visualImageScaled,
@@ -549,15 +549,15 @@ var ThisCouldBeBetter;
             }
             rhombusOfColor(color) {
                 var rhombus = this.starburstWithPointsRatioRadiusAndColor(2, .5, 1, color);
-                var transform = GameFramework.Transform_RotateRight.fromQuarterTurnsToRotate(1);
+                var transform = Transform_RotateRight.fromQuarterTurnsToRotate(1);
                 rhombus.transform(transform);
                 return rhombus;
             }
             smoke(puffRadius) {
                 var colors = GameFramework.Color.Instances();
                 var smokePuffVisual = GameFramework.VisualCircle.fromRadiusAndColorFill(puffRadius, colors.GrayLight);
-                var particleVelocityGet = () => GameFramework.Coords.fromXY(.33, -1.5).add(GameFramework.Coords.fromXY(Math.random() - 0.5, 0));
-                var transform = GameFramework.Transform_Dynamic.fromTransformTransformable((transformable) => {
+                var particleVelocityGet = () => Coords.fromXY(.33, -1.5).add(Coords.fromXY(Math.random() - 0.5, 0));
+                var transform = Transform_Dynamic.fromTransformTransformable((transformable) => {
                     var transformableAsVisualCircle = transformable;
                     transformableAsVisualCircle.radius *= 1.02;
                     var color = transformableAsVisualCircle.colorFill.clone();
@@ -572,10 +572,10 @@ var ThisCouldBeBetter;
                 return smokeVisual;
             }
             starburstWithPointsRatioRadiusAndColor(numberOfPoints, radiusInnerAsFractionOfOuter, radiusOuter, color) {
-                var path = GameFramework.PathBuilder.Instance().star(numberOfPoints, radiusInnerAsFractionOfOuter);
-                var transform = GameFramework.Transform_Multiple.fromChildren([
-                    GameFramework.Transform_RotateLeft.fromQuarterTurnsToRotate(1),
-                    GameFramework.Transform_Scale.fromScaleFactor(radiusOuter),
+                var path = PathBuilder.Instance().star(numberOfPoints, radiusInnerAsFractionOfOuter);
+                var transform = Transform_Multiple.fromChildren([
+                    Transform_RotateLeft.fromQuarterTurnsToRotate(1),
+                    Transform_Scale.fromScaleFactor(radiusOuter),
                 ]);
                 path.transform(transform);
                 var visual = GameFramework.VisualGroup.fromChildren([
@@ -590,10 +590,10 @@ var ThisCouldBeBetter;
                 var rayThickness = 1;
                 var dimensionOblique = dimension * Math.sin(Math.PI / 4);
                 var sunVisual = GameFramework.VisualGroup.fromChildren([
-                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-dimension, 0), GameFramework.Coords.fromXY(dimension, 0), color, rayThickness),
-                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(0, -dimension), GameFramework.Coords.fromXY(0, dimension), color, rayThickness),
-                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-1, -1).multiplyScalar(dimensionOblique), GameFramework.Coords.fromXY(1, 1).multiplyScalar(dimensionOblique), color, rayThickness),
-                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(GameFramework.Coords.fromXY(-1, 1).multiplyScalar(dimensionOblique), GameFramework.Coords.fromXY(1, -1).multiplyScalar(dimensionOblique), color, rayThickness),
+                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(Coords.fromXY(-dimension, 0), Coords.fromXY(dimension, 0), color, rayThickness),
+                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(Coords.fromXY(0, -dimension), Coords.fromXY(0, dimension), color, rayThickness),
+                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(Coords.fromXY(-1, -1).multiplyScalar(dimensionOblique), Coords.fromXY(1, 1).multiplyScalar(dimensionOblique), color, rayThickness),
+                    GameFramework.VisualLine.fromFromAndToPosColorAndThickness(Coords.fromXY(-1, 1).multiplyScalar(dimensionOblique), Coords.fromXY(1, -1).multiplyScalar(dimensionOblique), color, rayThickness),
                     GameFramework.VisualCircle.fromRadiusAndColorFill(dimension / 2, color),
                 ]);
                 return sunVisual;
@@ -607,9 +607,9 @@ var ThisCouldBeBetter;
                 var sextantAngleSpannedInTurns = 1 / 6;
                 var colorOfDotAndSextants = colors.Black;
                 var visualDotCentral = GameFramework.VisualCircle.fromRadiusAndColorFill(centralDotRadius, colorOfDotAndSextants);
-                var visualSextantTop = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, GameFramework.Polar.fromAzimuthInTurns(2 / 3).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
-                var visualSextantLowerLeft = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, GameFramework.Polar.fromAzimuthInTurns(1 / 3).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
-                var visualSextantLowerRight = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, GameFramework.Polar.fromAzimuthInTurns(0).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
+                var visualSextantTop = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, Polar.fromAzimuthInTurns(2 / 3).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
+                var visualSextantLowerLeft = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, Polar.fromAzimuthInTurns(1 / 3).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
+                var visualSextantLowerRight = GameFramework.VisualArc.fromRadiiDirectionAngleSpannedAndColor(sextantRadiusOuter, sextantRadiusInner, Polar.fromAzimuthInTurns(0).toCoords(), sextantAngleSpannedInTurns, colorOfDotAndSextants);
                 var visualTrefoil = GameFramework.VisualGroup.fromChildren([
                     visualBackground,
                     visualDotCentral,
@@ -621,9 +621,9 @@ var ThisCouldBeBetter;
             }
             triangleIsocelesOfColorPointingRight(color) {
                 var vertices = [
-                    GameFramework.Coords.fromXY(0, -0.5),
-                    GameFramework.Coords.fromXY(1, 0),
-                    GameFramework.Coords.fromXY(0, 0.5)
+                    Coords.fromXY(0, -0.5),
+                    Coords.fromXY(1, 0),
+                    Coords.fromXY(0, 0.5)
                 ];
                 var visual = GameFramework.VisualPolygon.fromVerticesAndColorFill(vertices, color);
                 return visual;

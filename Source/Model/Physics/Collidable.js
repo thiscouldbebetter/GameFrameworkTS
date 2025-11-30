@@ -17,21 +17,21 @@ var ThisCouldBeBetter;
                     collidesOnlyWithEntitiesHavingPropertiesNamed || [Collidable.name];
                 this._collideEntitiesForUniverseWorldPlaceEntitiesAndCollision =
                     collideEntitiesForUniverseWorldPlaceEntitiesAndCollision;
-                this.locPrev = GameFramework.Disposition.create();
+                this.locPrev = Disposition.create();
                 this.ticksUntilCanCollide = 0;
                 this._entitiesAlreadyCollidedWith = new Array();
                 this.isDisabled = false;
                 // Helper variables.
                 this._collision = GameFramework.Collision.create();
                 this._collisions = new Array();
-                this._transformLocate = GameFramework.Transform_Locate.create();
+                this._transformLocate = Transform_Locate.create();
                 this._uwpe = GameFramework.UniverseWorldPlaceEntities.create();
             }
             static create() {
-                return Collidable.fromCollider(GameFramework.ShapeNone.Instance());
+                return Collidable.fromCollider(ShapeNone.Instance());
             }
             static default() {
-                var collider = GameFramework.BoxAxisAligned.fromSize(GameFramework.Coords.ones().multiplyScalar(10));
+                var collider = BoxAxisAligned.fromSize(Coords.ones().multiplyScalar(10));
                 return Collidable.fromColliderAndCollideEntities(collider, Collidable.collideEntitiesForUniverseWorldPlaceEntitiesAndCollisionLog);
             }
             static entitiesFromPlace(place) {

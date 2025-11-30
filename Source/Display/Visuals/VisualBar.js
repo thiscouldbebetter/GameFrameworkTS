@@ -15,7 +15,7 @@ var ThisCouldBeBetter;
                 this.fractionBelowWhichToShow = fractionBelowWhichToShow;
                 this.colorForBorderAsValueBreakGroup = colorForBorderAsValueBreakGroup;
                 this.text = text;
-                this._drawPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
                 this._sizeCurrent = this.size.clone();
                 this._sizeHalf = this.size.clone().half();
             }
@@ -69,7 +69,7 @@ var ThisCouldBeBetter;
                         var thresholdFraction = this.amountThreshold.contextSet(entity).get();
                         this._sizeCurrent.x = thresholdFraction * this.size.x;
                         display.drawRectangle(this._sizeCurrent, // pos
-                        new GameFramework.Coords(1, this.size.y, 0), // size
+                        new Coords(1, this.size.y, 0), // size
                         this.color, null // colorBorder
                         );
                     }

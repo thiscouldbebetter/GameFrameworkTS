@@ -43,7 +43,7 @@ var ThisCouldBeBetter;
                     var axisToRotateAround = axesToRotateAround[i];
                     var cyclesToRotateAroundAxis = this.cyclesToRotateAroundAxesDownRightForward[i];
                     if (cyclesToRotateAroundAxis != 0) {
-                        var quaternionForRotation = GameFramework.Quaternion.fromAxisAndCyclesToRotate(axisToRotateAround, cyclesToRotateAroundAxis);
+                        var quaternionForRotation = Quaternion.fromAxisAndCyclesToRotate(axisToRotateAround, cyclesToRotateAroundAxis);
                         quaternionsForRotation.push(quaternionForRotation);
                     }
                 }

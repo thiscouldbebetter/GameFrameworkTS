@@ -96,7 +96,7 @@ var ThisCouldBeBetter;
                 if (size == null) {
                     size = universe.display.sizeDefault().clone();
                 }
-                var sizeBase = new GameFramework.Coords(200, 135, 1);
+                var sizeBase = new Coords(200, 135, 1);
                 var fontHeight = 10;
                 var fontHeightSmall = fontHeight * 0.6;
                 var fontSmall = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeightSmall);
@@ -116,15 +116,15 @@ var ThisCouldBeBetter;
                         crafter.recipesQueued.push(crafter.recipeAvailableSelected);
                     }
                 };
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("Craft", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("Craft", Coords.create(), // pos
                 sizeBase.clone(), // size
                 // children
                 [
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(10, 5), // pos
-                    GameFramework.Coords.fromXY(70, 25), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(10, 5), // pos
+                    Coords.fromXY(70, 25), // size
                     GameFramework.DataBinding.fromContext("Recipes:"), fontSmall),
-                    new GameFramework.ControlList("listRecipes", GameFramework.Coords.fromXY(10, 15), // pos
-                    GameFramework.Coords.fromXY(85, 100), // size
+                    new GameFramework.ControlList("listRecipes", Coords.fromXY(10, 15), // pos
+                    Coords.fromXY(85, 100), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.recipesAvailable), // items
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemText
                     fontSmall, new GameFramework.DataBinding(this, (c) => c.recipeAvailableSelected, (c, v) => c.recipeAvailableSelected = v), // bindingForItemSelected
@@ -132,20 +132,20 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     addToQueue, // confirm
                     null),
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(105, 5), // pos
-                    GameFramework.Coords.fromXY(70, 25), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(105, 5), // pos
+                    Coords.fromXY(70, 25), // size
                     GameFramework.DataBinding.fromContext("Recipe Selected:"), fontSmall),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(170, 5), // pos
-                    GameFramework.Coords.fromXY(20, 10), // size
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(170, 5), // pos
+                    Coords.fromXY(20, 10), // size
                     "Craft", fontSmall, addToQueue).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => c.isRecipeAvailableSelectedFulfilled(GameFramework.ItemHolder.of(entityCrafter))) // isEnabled
                     ),
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(105, 10), // pos
-                    GameFramework.Coords.fromXY(75, 25), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(105, 10), // pos
+                    Coords.fromXY(75, 25), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => ((c.recipeAvailableSelected == null)
                         ? "-"
                         : c.recipeAvailableSelected.nameAndSecondsToCompleteAsString(universe))), fontSmall),
-                    GameFramework.ControlList.fromNamePosSizeItemsTextFontSelectedValue("listItemsInRecipe", GameFramework.Coords.fromXY(105, 20), // pos
-                    GameFramework.Coords.fromXY(85, 25), // size
+                    GameFramework.ControlList.fromNamePosSizeItemsTextFontSelectedValue("listItemsInRecipe", Coords.fromXY(105, 20), // pos
+                    Coords.fromXY(85, 25), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.recipeAvailableSelected == null
                         ? []
                         : c.recipeAvailableSelected.itemsIn)), // items
@@ -159,25 +159,25 @@ var ThisCouldBeBetter;
                     fontSmall, null, // bindingForItemSelected
                     null // bindingForItemValue
                     ),
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(105, 50), // pos
-                    GameFramework.Coords.fromXY(75, 25), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(105, 50), // pos
+                    Coords.fromXY(75, 25), // size
                     GameFramework.DataBinding.fromContext("Crafting:"), fontSmall),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(170, 50), // pos
-                    GameFramework.Coords.fromXY(20, 10), // size
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(170, 50), // pos
+                    Coords.fromXY(20, 10), // size
                     "Cancel", fontSmall, crafter.recipeInProgressCancel // click
                     ).isEnabledSet(GameFramework.DataBinding.fromContextAndGet(this, (c) => (c.recipesQueued.length > 0)) // isEnabled
                     ),
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(105, 55), // pos
-                    GameFramework.Coords.fromXY(75, 25), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(105, 55), // pos
+                    Coords.fromXY(75, 25), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.recipeProgressAsString(universe)), fontSmall),
-                    GameFramework.ControlList.fromNamePosSizeItemsTextFontSelectedValue("listCraftingsQueued", GameFramework.Coords.fromXY(105, 65), // pos
-                    GameFramework.Coords.fromXY(85, 35), // size
+                    GameFramework.ControlList.fromNamePosSizeItemsTextFontSelectedValue("listCraftingsQueued", Coords.fromXY(105, 65), // pos
+                    Coords.fromXY(85, 35), // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.recipesQueued), // items
                     GameFramework.DataBinding.fromGet((c) => c.name), // bindingForItemText
                     fontSmall, new GameFramework.DataBinding(this, (c) => c.recipeQueuedSelected, (c, v) => c.recipeQueuedSelected = v), // bindingForItemSelected
                     GameFramework.DataBinding.fromGet((c) => c) // bindingForItemValue
                     ),
-                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(150, 115), // pos
+                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(150, 115), // pos
                     null, // size
                     GameFramework.DataBinding.fromContextAndGet(this, (c) => c.statusMessage), // text
                     fontSmall)
@@ -188,14 +188,14 @@ var ThisCouldBeBetter;
                     new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true),
                 ]);
                 if (includeTitleAndDoneButton) {
-                    returnValue.children.splice(0, 0, GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(100, -5), // pos
-                    GameFramework.Coords.fromXY(100, 25), // size
+                    returnValue.children.splice(0, 0, GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(100, -5), // pos
+                    Coords.fromXY(100, 25), // size
                     GameFramework.DataBinding.fromContext("Craft"), fontLarge));
-                    returnValue.children.push(GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(170, 115), // pos
-                    GameFramework.Coords.fromXY(20, 10), // size
+                    returnValue.children.push(GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(170, 115), // pos
+                    Coords.fromXY(20, 10), // size
                     "Done", fontSmall, back // click
                     ));
-                    var titleHeight = GameFramework.Coords.fromXY(0, 15);
+                    var titleHeight = Coords.fromXY(0, 15);
                     sizeBase.add(titleHeight);
                     returnValue.size.add(titleHeight);
                     returnValue.shiftChildPositions(titleHeight);

@@ -12,11 +12,11 @@ var ThisCouldBeBetter;
                 this._isEnabled = isEnabled;
                 this.cursorPos = null;
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
-                this._drawPosText = GameFramework.Coords.create();
-                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
-                this._textMargin = GameFramework.Coords.create();
-                this._textSize = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
+                this._drawPosText = Coords.create();
+                this._drawLoc = Disposition.fromPos(this._drawPos);
+                this._textMargin = Coords.create();
+                this._textSize = Coords.create();
             }
             numberOfDigitsMax() {
                 return Math.ceil(Math.log(this.valueMax()) / Math.log(10));
@@ -122,7 +122,7 @@ var ThisCouldBeBetter;
                     var cursorX = display.textWidthForFontHeight(textBeforeCursor, this.fontNameAndHeight.heightInPixels);
                     var cursorWidth = display.textWidthForFontHeight(textAtCursor, this.fontNameAndHeight.heightInPixels);
                     drawPosText.x += cursorX;
-                    style.drawBoxOfSizeAtPosWithColorsToDisplay(GameFramework.Coords.fromXY(cursorWidth, this.fontNameAndHeight.heightInPixels), // size
+                    style.drawBoxOfSizeAtPosWithColorsToDisplay(Coords.fromXY(cursorWidth, this.fontNameAndHeight.heightInPixels), // size
                     drawPosText, style.colorFill(), style.colorFill(), // ?
                     this.isHighlighted, display);
                     display.drawTextWithFontAtPosWithColorsFillAndOutline(textAtCursor, this.fontNameAndHeight, drawPosText, style.colorBorder(), null, // colorBack

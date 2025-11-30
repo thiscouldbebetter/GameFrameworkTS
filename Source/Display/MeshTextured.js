@@ -3,7 +3,7 @@ var ThisCouldBeBetter;
 (function (ThisCouldBeBetter) {
     var GameFramework;
     (function (GameFramework) {
-        class MeshTextured extends GameFramework.Mesh {
+        class MeshTextured extends Mesh {
             constructor(center, vertexOffsets, faceBuilders, materials, faceTextures, vertexGroups) {
                 super(center, vertexOffsets, faceBuilders);
                 this.materials = materials;
@@ -39,10 +39,10 @@ var ThisCouldBeBetter;
                 var numberOfFaces = this.faceBuilders.length;
                 for (var f = 0; f < numberOfFaces; f++) {
                     var faceTexture = new MeshTexturedFaceTexture(materialName, [
-                        GameFramework.Coords.create(),
-                        GameFramework.Coords.fromXY(1, 0),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(1, 0)
+                        Coords.create(),
+                        Coords.fromXY(1, 0),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(1, 0)
                     ]);
                     faceTextures.push(faceTexture);
                 }

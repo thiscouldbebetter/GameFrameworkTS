@@ -47,16 +47,16 @@ var ThisCouldBeBetter;
                 return returnValue;
             }
             imageBuildFromStrings(name, colors, stringsForPixels) {
-                return this.imageBuildFromStringsScaled(name, colors, stringsForPixels, GameFramework.Coords.Instances().Ones);
+                return this.imageBuildFromStringsScaled(name, colors, stringsForPixels, Coords.Instances().Ones);
             }
             imageBuildFromStringsScaled(name, colors, stringsForPixels, scaleFactor) {
                 var colorsByCode = new Map(colors.map(x => [x.code, x]));
-                var sizeInPixels = GameFramework.Coords.fromXY(stringsForPixels[0].length, stringsForPixels.length);
+                var sizeInPixels = Coords.fromXY(stringsForPixels[0].length, stringsForPixels.length);
                 var canvas = document.createElement("canvas");
                 canvas.width = sizeInPixels.x * scaleFactor.x;
                 canvas.height = sizeInPixels.y * scaleFactor.y;
                 var graphics = canvas.getContext("2d");
-                var pixelPos = GameFramework.Coords.create();
+                var pixelPos = Coords.create();
                 var colorForPixel;
                 for (var y = 0; y < sizeInPixels.y; y++) {
                     var stringForPixelRow = stringsForPixels[y];
@@ -82,8 +82,8 @@ var ThisCouldBeBetter;
                 var systemImageToSlice = imageToSlice.systemImage;
                 var imageToSliceSize = imageToSlice.sizeInPixels;
                 var tileSize = imageToSliceSize.clone().divide(sizeInTiles);
-                var tilePos = GameFramework.Coords.create();
-                var sourcePos = GameFramework.Coords.create();
+                var tilePos = Coords.create();
+                var sourcePos = Coords.create();
                 for (var y = 0; y < sizeInTiles.y; y++) {
                     tilePos.y = y;
                     var returnImageRow = new Array();
@@ -134,7 +134,7 @@ var ThisCouldBeBetter;
                     colorInsetBorder.clone().codeSet(colorInsetBorderCode)
                 ];
                 var tileDimensionInPixels = 16;
-                var tileSizeInPixels = GameFramework.Coords.ones().multiplyScalar(tileDimensionInPixels);
+                var tileSizeInPixels = Coords.ones().multiplyScalar(tileDimensionInPixels);
                 var pixelRowTopAndBottomOfTile = "".padEnd(tileSizeInPixels.x, colorCenterAndMarginCode);
                 var pixelRowTopAndBottomOfInsetBorder = colorCenterAndMarginCode
                     + "".padEnd(tileSizeInPixels.x - 2, colorInsetBorderCode)
@@ -163,8 +163,8 @@ var ThisCouldBeBetter;
                     colorMortar.clone().codeSet(colorMortarCode)
                 ];
                 var pixelsPerBlock = 16;
-                var wallSizeInBlocks = GameFramework.Coords.ones().multiplyScalar(4);
-                var blockSizeInPixels = GameFramework.Coords.ones().multiplyScalar(pixelsPerBlock);
+                var wallSizeInBlocks = Coords.ones().multiplyScalar(4);
+                var blockSizeInPixels = Coords.ones().multiplyScalar(pixelsPerBlock);
                 var wallSizeInPixels = wallSizeInBlocks.clone().multiply(blockSizeInPixels);
                 var pixelRowAsStringForMortar = "".padEnd(wallSizeInPixels.x, colorMortarCode);
                 // Even course.

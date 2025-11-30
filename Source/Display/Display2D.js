@@ -19,10 +19,10 @@ var ThisCouldBeBetter;
                 this.colorBack = colorBack || colors.White;
                 this.isInvisible = isInvisible || false;
                 // Helper variables.
-                this._curveControlPos = GameFramework.Coords.create();
-                this._drawPos = GameFramework.Coords.create();
-                this._sizeHalf = GameFramework.Coords.create();
-                this._zeroes = GameFramework.Coords.Instances().Zeroes;
+                this._curveControlPos = Coords.create();
+                this._drawPos = Coords.create();
+                this._sizeHalf = Coords.create();
+                this._zeroes = Coords.Instances().Zeroes;
             }
             static default() {
                 return new Display2D(null, // sizesAvailable
@@ -36,7 +36,7 @@ var ThisCouldBeBetter;
                 var returnDisplay = Display2D.fromSizeAndIsInvisible(image.sizeInPixels, true // isInvisible
                 );
                 returnDisplay.initialize(null);
-                returnDisplay.drawImage(image, GameFramework.Coords.Instances().Zeroes);
+                returnDisplay.drawImage(image, Coords.Instances().Zeroes);
                 return returnDisplay;
             }
             static fromSize(size) {
@@ -50,12 +50,12 @@ var ThisCouldBeBetter;
             }
             static sizesDefault() {
                 var sizesAvailableDefault = [
-                    GameFramework.Coords.fromXYZ(400, 300, 1),
-                    GameFramework.Coords.fromXYZ(640, 480, 1),
-                    GameFramework.Coords.fromXYZ(800, 600, 1),
-                    GameFramework.Coords.fromXYZ(1200, 900, 1),
+                    Coords.fromXYZ(400, 300, 1),
+                    Coords.fromXYZ(640, 480, 1),
+                    Coords.fromXYZ(800, 600, 1),
+                    Coords.fromXYZ(1200, 900, 1),
                     // Wrap.
-                    GameFramework.Coords.fromXYZ(200, 150, 1)
+                    Coords.fromXYZ(200, 150, 1)
                 ];
                 return sizesAvailableDefault;
             }
@@ -96,7 +96,7 @@ var ThisCouldBeBetter;
                     g.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     g.beginPath();
                     g.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords());
+                    drawPos.overwriteWith(center).add(new Polar(angleStopInTurns, radiusOuter, 0).toCoords());
                     g.lineTo(drawPos.x, drawPos.y);
                     g.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -107,7 +107,7 @@ var ThisCouldBeBetter;
                     g.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     g.beginPath();
                     g.arc(center.x, center.y, radiusInner, angleStartInRadians, angleStopInRadians);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radiusOuter, 0).toCoords());
+                    drawPos.overwriteWith(center).add(new Polar(angleStopInTurns, radiusOuter, 0).toCoords());
                     g.lineTo(drawPos.x, drawPos.y);
                     g.arc(center.x, center.y, radiusOuter, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -161,8 +161,8 @@ var ThisCouldBeBetter;
                 g.beginPath();
                 g.strokeStyle = GameFramework.Color.systemColorGet(color);
                 g.lineWidth = lineThickness;
-                var polarForLine = GameFramework.Polar.default();
-                var offset = GameFramework.Coords.create();
+                var polarForLine = Polar.default();
+                var offset = Coords.create();
                 for (var i = 0; i < numberOfLines; i++) {
                     polarForLine.azimuthInTurns = GameFramework.NumberHelper.wrapToRangeMax(.75 + i / numberOfLines, 1);
                     polarForLine.radius = radiusInner;
@@ -181,7 +181,7 @@ var ThisCouldBeBetter;
             drawEllipse(center, semimajorAxis, semiminorAxis, rotationInTurns, colorFill, colorBorder) {
                 this.graphics.save();
                 this.graphics.translate(center.x, center.y);
-                var rotationInRadians = rotationInTurns * GameFramework.Polar.RadiansPerTurn;
+                var rotationInRadians = rotationInTurns * Polar.RadiansPerTurn;
                 this.graphics.rotate(rotationInRadians);
                 var ratioOfHeightToWidth = semiminorAxis / semimajorAxis;
                 this.graphics.scale(1, ratioOfHeightToWidth);
@@ -448,7 +448,7 @@ var ThisCouldBeBetter;
                     g.fillStyle = GameFramework.Color.systemColorGet(colorFill);
                     g.beginPath();
                     g.moveTo(center.x, center.y);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords());
+                    drawPos.overwriteWith(center).add(new Polar(angleStopInTurns, radius, 0).toCoords());
                     g.lineTo(drawPos.x, drawPos.y);
                     g.arc(center.x, center.y, radius, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -459,7 +459,7 @@ var ThisCouldBeBetter;
                     g.strokeStyle = GameFramework.Color.systemColorGet(colorBorder);
                     g.beginPath();
                     g.moveTo(center.x, center.y);
-                    drawPos.overwriteWith(center).add(new GameFramework.Polar(angleStopInTurns, radius, 0).toCoords());
+                    drawPos.overwriteWith(center).add(new Polar(angleStopInTurns, radius, 0).toCoords());
                     g.lineTo(drawPos.x, drawPos.y);
                     g.arc(center.x, center.y, radius, angleStopInRadians, angleStartInRadians, true // counterclockwise
                     );
@@ -509,7 +509,7 @@ var ThisCouldBeBetter;
             rotateTurnsAroundCenter(turnsToRotate, centerOfRotation) {
                 var graphics = this.graphics;
                 graphics.translate(centerOfRotation.x, centerOfRotation.y);
-                var rotationInRadians = turnsToRotate * GameFramework.Polar.RadiansPerTurn;
+                var rotationInRadians = turnsToRotate * Polar.RadiansPerTurn;
                 graphics.rotate(rotationInRadians);
                 graphics.translate(0 - centerOfRotation.x, 0 - centerOfRotation.y);
             }

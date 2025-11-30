@@ -94,7 +94,7 @@ var ThisCouldBeBetter;
                 this._cells = [];
             }
             static fromSize(size) {
-                return new CollisionTrackerMapped(size, GameFramework.Coords.fromXY(4, 4));
+                return new CollisionTrackerMapped(size, Coords.fromXY(4, 4));
             }
             cellsWithEntityByName(entityToFindName) {
                 // For debugging.
@@ -219,7 +219,7 @@ var ThisCouldBeBetter;
         class CollisionTrackerMappedMap extends GameFramework.MapOfCells {
             constructor(size, sizeInCells) {
                 sizeInCells =
-                    sizeInCells || GameFramework.Coords.fromXY(1, 1).multiplyScalar(4);
+                    sizeInCells || Coords.fromXY(1, 1).multiplyScalar(4);
                 var cellSize = size.clone().divide(sizeInCells);
                 super(CollisionTrackerMappedMap.name, sizeInCells, cellSize, new GameFramework.MapOfCellsCellSourceArray([], // cells
                 () => new CollisionTrackerMappedMapCell()) // cellSource

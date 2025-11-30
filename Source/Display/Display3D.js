@@ -11,9 +11,9 @@ var ThisCouldBeBetter;
                     fontNameAndHeight || GameFramework.FontNameAndHeight.default();
                 this.colorFore = colorFore || GameFramework.Color.Instances().White;
                 this.colorBack = colorBack || GameFramework.Color.Instances().Black;
-                this._cameraPosInverted = GameFramework.Coords.create();
+                this._cameraPosInverted = Coords.create();
                 this._sizeDefault = sizeInPixels;
-                this._scaleFactor = GameFramework.Coords.ones();
+                this._scaleFactor = Coords.ones();
                 this._display2DOverlay = GameFramework.Display2D.fromSizesFontAndColorsForeAndBack(this.sizesAvailable, fontNameAndHeight, colorFore, colorBack);
                 this._vertexIndicesForTrianglesSingle = [[0, 1, 2]];
                 this._vertexIndicesForTrianglesDouble = [[0, 1, 2], [0, 2, 3]];
@@ -112,9 +112,9 @@ var ThisCouldBeBetter;
                             var vertexNormal = faceNormal;
                             vertexNormalsAsFloatArray.push(...vertexNormal.dimensions());
                             var vertexTextureUv = (meshFaceTextures == null
-                                ? GameFramework.Coords.fromXY(-1, -1)
+                                ? Coords.fromXY(-1, -1)
                                 : meshFaceTextures[f] == null
-                                    ? GameFramework.Coords.fromXY(-1, -1)
+                                    ? Coords.fromXY(-1, -1)
                                     : meshFaceTextures[f].textureUVs[vertexIndex]);
                             vertexTextureUvsAsFloatArray.push(...vertexTextureUv.dimensionsXY());
                         }
@@ -133,11 +133,11 @@ var ThisCouldBeBetter;
                 var normalBuffer = gl.createBuffer();
                 gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormalsAsFloatArray), gl.STATIC_DRAW);
-                gl.vertexAttribPointer(shaderProgramVariables.vertexNormalAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
+                gl.vertexAttribPointer(shaderProgramVariables.vertexNormalAttribute, Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
                 var positionBuffer = gl.createBuffer();
                 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositionsAsFloatArray), gl.STATIC_DRAW);
-                gl.vertexAttribPointer(shaderProgramVariables.vertexPositionAttribute, GameFramework.Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
+                gl.vertexAttribPointer(shaderProgramVariables.vertexPositionAttribute, Coords.NumberOfDimensions, gl.FLOAT, false, 0, 0);
                 if (texture != null) {
                     var textureName = texture.name;
                     var textureRegistered = this.texturesRegisteredByName.get(textureName);
@@ -198,7 +198,7 @@ var ThisCouldBeBetter;
                 this.matrixOrient = GameFramework.Matrix.buildZeroes();
                 this.matrixPerspective = GameFramework.Matrix.buildZeroes();
                 this.matrixTranslate = GameFramework.Matrix.buildZeroes();
-                this.tempCoords = GameFramework.Coords.create();
+                this.tempCoords = Coords.create();
                 this.tempMatrix0 = GameFramework.Matrix.buildZeroes();
                 this.tempMatrix1 = GameFramework.Matrix.buildZeroes();
                 return this;

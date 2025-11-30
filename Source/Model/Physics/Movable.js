@@ -115,35 +115,35 @@ var ThisCouldBeBetter;
                 movable.accelerateInDirectionIfAble(uwpe, direction, orientationMatchesAcceleration);
             }
             static actionAccelerateAndFaceDown() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Down", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroOneZero, true // orientationMatchesAcceleration
+                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Down", uwpe => this.actionAccelerate_Perform(uwpe, Coords.Instances().ZeroOneZero, true // orientationMatchesAcceleration
                 ));
             }
             static actionAccelerateAndFaceLeft() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Left", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().MinusOneZeroZero, true // orientationMatchesAcceleration
+                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Left", uwpe => this.actionAccelerate_Perform(uwpe, Coords.Instances().MinusOneZeroZero, true // orientationMatchesAcceleration
                 ));
             }
             static actionAccelerateAndFaceRight() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Right", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().OneZeroZero, true // orientationMatchesAcceleration
+                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Right", uwpe => this.actionAccelerate_Perform(uwpe, Coords.Instances().OneZeroZero, true // orientationMatchesAcceleration
                 ));
             }
             static actionAccelerateAndFaceUp() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Up", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero, true // orientationMatchesAcceleration
+                return GameFramework.Action.fromNameAndPerform("Accelerate and Face Up", uwpe => this.actionAccelerate_Perform(uwpe, Coords.Instances().ZeroMinusOneZero, true // orientationMatchesAcceleration
                 ));
             }
             static actionAccelerateWithoutFacingDown() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate Down", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroOneZero, false // orientationMatchesAcceleration
+                return GameFramework.Action.fromNameAndPerform("Accelerate Down", uwpe => this.actionAccelerate_Perform(uwpe, Coords.Instances().ZeroOneZero, false // orientationMatchesAcceleration
                 ));
             }
             static actionAccelerateWithoutFacingLeft() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate Left", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().MinusOneZeroZero, false // orientationMatchesAcceleration
+                return GameFramework.Action.fromNameAndPerform("Accelerate Left", uwpe => this.actionAccelerate_Perform(uwpe, Coords.Instances().MinusOneZeroZero, false // orientationMatchesAcceleration
                 ));
             }
             static actionAccelerateWithoutFacingRight() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate Right", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().OneZeroZero, false // orientationMatchesAcceleration
+                return GameFramework.Action.fromNameAndPerform("Accelerate Right", uwpe => this.actionAccelerate_Perform(uwpe, Coords.Instances().OneZeroZero, false // orientationMatchesAcceleration
                 ));
             }
             static actionAccelerateWithoutFacingUp() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate Up", uwpe => this.actionAccelerate_Perform(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero, false // orientationMatchesAcceleration
+                return GameFramework.Action.fromNameAndPerform("Accelerate Up", uwpe => this.actionAccelerate_Perform(uwpe, Coords.Instances().ZeroMinusOneZero, false // orientationMatchesAcceleration
                 ));
             }
             static actionMove_Perform(uwpe, direction, orientationMatchesMoveDirection) {
@@ -152,11 +152,11 @@ var ThisCouldBeBetter;
                 movable.moveInDirectionIfAble(uwpe, direction, orientationMatchesMoveDirection);
             }
             static actionMoveWithoutFacingDown() {
-                return GameFramework.Action.fromNameAndPerform("Move Down", uwpe => this.actionMove_Perform(uwpe, GameFramework.Coords.Instances().ZeroOneZero, false // orientationMatchesMove
+                return GameFramework.Action.fromNameAndPerform("Move Down", uwpe => this.actionMove_Perform(uwpe, Coords.Instances().ZeroOneZero, false // orientationMatchesMove
                 ));
             }
             static actionMoveWithoutFacingUp() {
-                return GameFramework.Action.fromNameAndPerform("Accelerate Up", uwpe => this.actionMove_Perform(uwpe, GameFramework.Coords.Instances().ZeroMinusOneZero, false // orientationMatchesMove
+                return GameFramework.Action.fromNameAndPerform("Accelerate Up", uwpe => this.actionMove_Perform(uwpe, Coords.Instances().ZeroMinusOneZero, false // orientationMatchesMove
                 ));
             }
             // Activities.
@@ -172,7 +172,7 @@ var ThisCouldBeBetter;
                 if (targetEntity == null) {
                     var place = uwpe.place;
                     var randomizer = uwpe.universe.randomizer;
-                    var targetPos = GameFramework.Coords.create().randomize(randomizer).multiply(place.size());
+                    var targetPos = Coords.create().randomize(randomizer).multiply(place.size());
                     targetEntity = GameFramework.Locatable.fromPos(targetPos).toEntity();
                     activity.targetEntitySet(targetEntity);
                 }

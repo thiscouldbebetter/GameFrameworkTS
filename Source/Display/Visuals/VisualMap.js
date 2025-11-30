@@ -12,13 +12,13 @@ var ThisCouldBeBetter;
                 this.shouldConvertToImage =
                     (shouldConvertToImage == null ? true : shouldConvertToImage);
                 // Helper variables.
-                this._cameraPos = GameFramework.Coords.create();
+                this._cameraPos = Coords.create();
                 //this._cell = this.map.cellCreate();
-                this._cellPosEnd = GameFramework.Coords.create();
-                this._cellPosInCells = GameFramework.Coords.create();
-                this._cellPosStart = GameFramework.Coords.create();
-                this._drawPos = GameFramework.Coords.create();
-                this._posSaved = GameFramework.Coords.create();
+                this._cellPosEnd = Coords.create();
+                this._cellPosInCells = Coords.create();
+                this._cellPosStart = Coords.create();
+                this._drawPos = Coords.create();
+                this._posSaved = Coords.create();
             }
             // Visual.
             initialize(uwpe) {

@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor() {
                 super(PlaceMock.name, null, // defnName
                 null, // parentName
-                GameFramework.Coords.create(), // size
+                Coords.create(), // size
                 [] // entities
                 );
             }

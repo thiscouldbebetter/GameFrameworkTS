@@ -10,12 +10,12 @@ var ThisCouldBeBetter;
                 this.isTextCenteredVertically = isTextCenteredVertically;
                 this._text = text;
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
             }
             static fromPosAndText(pos, text) {
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
                 var fontHeightInPixels = fontNameAndHeight.heightInPixels;
-                var size = GameFramework.Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
+                var size = Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
                 return new ControlLabel(ControlLabel.name + "_" + text.get(), //name
                 pos, size, false, // isTextCenteredHorizontally
                 false, // isTextCenteredVertically
@@ -24,7 +24,7 @@ var ThisCouldBeBetter;
             static fromPosAndTextString(pos, textAsString) {
                 var fontNameAndHeight = GameFramework.FontNameAndHeight.default();
                 var fontHeightInPixels = fontNameAndHeight.heightInPixels;
-                var size = GameFramework.Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
+                var size = Coords.fromXY(100, 1).multiplyScalar(fontHeightInPixels);
                 var text = GameFramework.DataBinding.fromGet((c) => textAsString);
                 return new ControlLabel(ControlLabel.name + "_" + textAsString, //name
                 pos, size, false, // isTextCenteredHorizontally

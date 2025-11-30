@@ -6,10 +6,10 @@ var ThisCouldBeBetter;
         class InputTracker {
             constructor() {
                 // Helper variables.
-                this.mouseClickPos = GameFramework.Coords.create();
-                this.mouseMovePos = GameFramework.Coords.create();
-                this.mouseMovePosPrev = GameFramework.Coords.create();
-                this.mouseMovePosNext = GameFramework.Coords.create();
+                this.mouseClickPos = Coords.create();
+                this.mouseMovePos = Coords.create();
+                this.mouseMovePosPrev = Coords.create();
+                this.mouseMovePosNext = Coords.create();
                 var inputs = GameFramework.Input.Instances();
                 this.keysToPreventDefaultsFor =
                     [

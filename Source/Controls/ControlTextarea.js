@@ -13,15 +13,15 @@ var ThisCouldBeBetter;
                 this.lineSpacing = 1.2 * this.fontNameAndHeight.heightInPixels; // hack
                 var scrollbarWidth = this.lineSpacing;
                 var thisAsControlTextarea = this;
-                this.scrollbar = new GameFramework.ControlScrollbar(GameFramework.Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
-                GameFramework.Coords.fromXY(scrollbarWidth, this.size.y), // size
+                this.scrollbar = new GameFramework.ControlScrollbar(Coords.fromXY(this.size.x - scrollbarWidth, 0), // pos
+                Coords.fromXY(scrollbarWidth, this.size.y), // size
                 this.fontNameAndHeight, this.lineSpacing, // itemHeight
                 GameFramework.DataBinding.fromContextAndGet(thisAsControlTextarea, (c) => c.textAsLines()), 0 // sliderPosInItems
                 );
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
-                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
-                this._mouseClickPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
+                this._drawLoc = Disposition.fromPos(this._drawPos);
+                this._mouseClickPos = Coords.create();
             }
             actionHandle(actionNameToHandle, universe) {
                 var text = this.text(null);
@@ -163,7 +163,7 @@ var ThisCouldBeBetter;
                 if (indexEnd >= lines.length) {
                     indexEnd = lines.length - 1;
                 }
-                var drawPos2 = GameFramework.Coords.fromXY(drawPos.x + textMarginLeft, itemPosY);
+                var drawPos2 = Coords.fromXY(drawPos.x + textMarginLeft, itemPosY);
                 for (var i = indexStart; i <= indexEnd; i++) {
                     var line = lines[i];
                     display.drawTextWithFontAtPosWithColorsFillAndOutline(line, this.fontNameAndHeight, drawPos2, colorFore, colorBack, false, // isCenteredHorizontally

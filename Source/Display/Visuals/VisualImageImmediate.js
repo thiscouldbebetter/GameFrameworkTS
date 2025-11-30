@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this._image = image;
                 this.isScaled = isScaled || false;
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
             }
             static fromImage(image) {
                 return new VisualImageImmediate(image, null);

@@ -10,3 +10,6 @@
 [submodule "Source/_Libraries/WavFileViewer"]
 	path = Source/_Libraries/WavFileViewer
 	url = https://github.com/thiscouldbebetter/WavFileViewer
+[submodule "Source/_Libraries/Geometry"]
+	path = Source/_Libraries/Geometry
+	url = https://github.com/thiscouldbebetter/Geometry

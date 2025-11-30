@@ -11,9 +11,9 @@ var ThisCouldBeBetter;
                 this.color = color;
                 this.lineThickness = lineThickness || 1;
                 // Helper variables.
-                this._drawPosFrom = GameFramework.Coords.create();
-                this._drawPosTo = GameFramework.Coords.create();
-                this._transformLocate = new GameFramework.Transform_Locate(null);
+                this._drawPosFrom = Coords.create();
+                this._drawPosTo = Coords.create();
+                this._transformLocate = new Transform_Locate(null);
             }
             static fromFromAndToPosColorAndThickness(fromPos, toPos, color, lineThickness) {
                 return new VisualLine(fromPos, toPos, color, lineThickness);

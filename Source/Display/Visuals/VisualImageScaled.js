@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 this.sizeToDraw = sizeToDraw;
                 this.visualImage = visualImage;
                 this.sizeToDrawHalf = this.sizeToDraw.clone().half();
-                this._posSaved = GameFramework.Coords.create();
+                this._posSaved = Coords.create();
             }
             static fromSizeAndChild(size, child) {
                 return new VisualImageScaled(size, child);

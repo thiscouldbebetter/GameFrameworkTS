@@ -5,7 +5,7 @@ var ThisCouldBeBetter;
     (function (GameFramework) {
         class ControlTimer extends GameFramework.ControlBase {
             constructor(name, secondsToWait, elapsed) {
-                super(name, GameFramework.Coords.create(), GameFramework.Coords.create(), null);
+                super(name, Coords.create(), Coords.create(), null);
                 this.name = name;
                 this.secondsToWait = secondsToWait;
                 this._elapsed = elapsed;

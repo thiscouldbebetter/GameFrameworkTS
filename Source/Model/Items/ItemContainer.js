@@ -45,8 +45,8 @@ var ThisCouldBeBetter;
                 var fontHeight = 10;
                 var font = GameFramework.FontNameAndHeight.fromHeightInPixels(fontHeight);
                 var margin = fontHeight * 1.5;
-                var buttonSize = GameFramework.Coords.fromXY(2, 2).multiplyScalar(fontHeight);
-                var listSize = GameFramework.Coords.fromXY((size.x - margin * 4 - buttonSize.x) / 2, size.y - margin * 4 - fontHeight * 2);
+                var buttonSize = Coords.fromXY(2, 2).multiplyScalar(fontHeight);
+                var listSize = Coords.fromXY((size.x - margin * 4 - buttonSize.x) / 2, size.y - margin * 4 - fontHeight * 2);
                 var itemContainer = this;
                 var itemHolderGetterPutter = GameFramework.ItemHolder.of(entityGetterPutter);
                 var itemHolderContainer = GameFramework.ItemHolder.of(entityContainer);
@@ -58,14 +58,14 @@ var ThisCouldBeBetter;
                 var put = () => {
                     itemContainer.transfer(world, entityGetterPutter, entityContainer, "Put");
                 };
-                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("containerTransfer", GameFramework.Coords.create(), // pos
+                var returnValue = GameFramework.ControlContainer.fromNamePosSizeChildrenActionsAndMappings("containerTransfer", Coords.create(), // pos
                 size.clone(), 
                 // children
                 [
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(margin, margin), // pos
-                    GameFramework.Coords.fromXY(listSize.x, 25), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(margin, margin), // pos
+                    Coords.fromXY(listSize.x, 25), // size
                     GameFramework.DataBinding.fromContext(entityContainer.name + ":"), font),
-                    new GameFramework.ControlList("listContainerItems", GameFramework.Coords.fromXY(margin, margin * 2), // pos
+                    new GameFramework.ControlList("listContainerItems", Coords.fromXY(margin, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderContainer, (c) => c.items), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
                     font, new GameFramework.DataBinding(itemHolderContainer, (c) => c.itemSelected, (c, v) => c.itemSelected = v), // bindingForItemSelected
@@ -73,16 +73,16 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     get, // confirm
                     null),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y - buttonSize.y - margin) / 2), // pos
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY((size.x - buttonSize.x) / 2, (size.y - buttonSize.y - margin) / 2), // pos
                     buttonSize.clone(), ">", font, get // click
                     ),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY((size.x - buttonSize.x) / 2, (size.y + buttonSize.y + margin) / 2), // pos
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY((size.x - buttonSize.x) / 2, (size.y + buttonSize.y + margin) / 2), // pos
                     buttonSize.clone(), "<", font, put // click
                     ),
-                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin), // pos
-                    GameFramework.Coords.fromXY(85, 25), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontUncentered(Coords.fromXY(size.x - margin - listSize.x, margin), // pos
+                    Coords.fromXY(85, 25), // size
                     GameFramework.DataBinding.fromContext(entityGetterPutter.name + ":"), font),
-                    new GameFramework.ControlList("listOtherItems", GameFramework.Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
+                    new GameFramework.ControlList("listOtherItems", Coords.fromXY(size.x - margin - listSize.x, margin * 2), // pos
                     listSize.clone(), GameFramework.DataBinding.fromContextAndGet(itemHolderGetterPutter, (c) => c.items //.filter(x => x.item().defnName != itemDefnNameCurrency);
                     ), // items
                     GameFramework.DataBinding.fromGet((c) => c.toString(world)), // bindingForItemText
@@ -91,10 +91,10 @@ var ThisCouldBeBetter;
                     GameFramework.DataBinding.fromTrue(), // isEnabled
                     put, // confirm
                     null),
-                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(GameFramework.Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
-                    GameFramework.Coords.fromXY(size.x, fontHeight), // size
+                    GameFramework.ControlLabel.fromPosSizeTextFontCenteredHorizontally(Coords.fromXY(size.x / 2, size.y - margin - fontHeight), // pos
+                    Coords.fromXY(size.x, fontHeight), // size
                     GameFramework.DataBinding.fromContextAndGet(this, c => c.statusMessage), font),
-                    GameFramework.ControlButton.fromPosSizeTextFontClick(GameFramework.Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
+                    GameFramework.ControlButton.fromPosSizeTextFontClick(Coords.fromXY(size.x - margin - buttonSize.x, size.y - margin - buttonSize.y), // pos
                     buttonSize.clone(), "Done", font, back // click
                     )
                 ], [GameFramework.Action.fromNameAndPerform("Back", back)], [new GameFramework.ActionToInputsMapping("Back", [GameFramework.Input.Instances().Escape.name], true)]);

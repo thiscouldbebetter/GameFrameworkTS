@@ -10,7 +10,7 @@ var ThisCouldBeBetter;
                 this.offset = offset;
                 this.child = child;
                 // Helper variables.
-                this._posSaved = GameFramework.Coords.create();
+                this._posSaved = Coords.create();
             }
             static fromChildAndOffset(child, offset) {
                 return new VisualOffset(null, offset, child);

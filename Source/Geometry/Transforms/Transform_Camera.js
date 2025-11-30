@@ -6,10 +6,10 @@ var ThisCouldBeBetter;
         class Transform_Camera {
             constructor(camera) {
                 this._camera = camera;
-                this.transformTranslateInvert = new GameFramework.Transform_TranslateInvert(camera.loc.pos);
-                this.transformOrientForCamera = new GameFramework.Transform_OrientForCamera(camera.loc.orientation);
-                this.transformPerspective = new GameFramework.Transform_Perspective(camera.focalLength);
-                this.transformViewCenter = new GameFramework.Transform_Translate(camera.viewSizeHalf);
+                this.transformTranslateInvert = new Transform_TranslateInvert(camera.loc.pos);
+                this.transformOrientForCamera = new Transform_OrientForCamera(camera.loc.orientation);
+                this.transformPerspective = new Transform_Perspective(camera.focalLength);
+                this.transformViewCenter = new Transform_Translate(camera.viewSizeHalf);
             }
             clone() { return this; } // todo
             overwriteWith(other) {

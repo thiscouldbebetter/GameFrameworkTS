@@ -11,7 +11,7 @@ var ThisCouldBeBetter;
                 this.colorBorder = colorBorder;
                 this.isCentered = isCentered || true;
                 this.sizeHalf = this.size.clone().half();
-                this._drawPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
             }
             static default() {
                 // For rapid prototyping.
@@ -19,7 +19,7 @@ var ThisCouldBeBetter;
             }
             static fromColorFill(colorFill) {
                 // For rapid prototyping.
-                return new VisualRectangle(GameFramework.Coords.fromXY(1, 1).multiplyScalar(10), null, colorFill, true);
+                return new VisualRectangle(Coords.fromXY(1, 1).multiplyScalar(10), null, colorFill, true);
             }
             static fromColorFillAndSize(colorFill, size) {
                 return VisualRectangle.fromSizeAndColorFill(size, colorFill);

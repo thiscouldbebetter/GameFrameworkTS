@@ -21,7 +21,7 @@ var ThisCouldBeBetter;
                     if (collidable != null) {
                         var colliderAtRest = collidable.colliderAtRest;
                         var placeSizeToWrapTo = place.size();
-                        colliderAtRest = GameFramework.ShapeWrapped.fromSizeInWrappedInstancesSizeToWrapToAndChild(this.sizeInWrappedInstances, placeSizeToWrapTo, colliderAtRest);
+                        colliderAtRest = ShapeWrapped.fromSizeInWrappedInstancesSizeToWrapToAndChild(this.sizeInWrappedInstances, placeSizeToWrapTo, colliderAtRest);
                         collidable.colliderAtRestSet(colliderAtRest);
                     }
                     var constrainable = GameFramework.Constrainable.of(entity);

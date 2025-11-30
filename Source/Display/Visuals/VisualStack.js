@@ -8,7 +8,7 @@ var ThisCouldBeBetter;
                 super();
                 this.childSpacing = childSpacing;
                 this.children = children;
-                this._posSaved = GameFramework.Coords.create();
+                this._posSaved = Coords.create();
             }
             static fromSpacingAndChildren(childSpacing, children) {
                 return new VisualStack(childSpacing, children);

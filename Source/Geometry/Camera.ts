@@ -405,7 +405,6 @@ export class Camera extends EntityPropertyBase<Camera>
 	{
 		var universe = uwpe.universe;
 		var drawColliders = universe.debugSettings.drawColliders();
-		var display = universe.display;
 
 		this.entitiesInViewSort(entitiesInView);
 
@@ -426,12 +425,15 @@ export class Camera extends EntityPropertyBase<Camera>
 
 			if (drawColliders)
 			{
+				console.log("todo - Camera.drawColliders.");
+				/*
 				var collidable = Collidable.of(entity);
 				if (collidable != null)
 				{
 					var collider = collidable.collider;
 					collider.drawToDisplayAtPos(display, entityPos);
 				}
+				*/
 			}
 
 			entityPos.overwriteWith(this._posSaved);

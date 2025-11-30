@@ -14,38 +14,38 @@ var ThisCouldBeBetter;
                 var heightOver12 = heightInPixels / 12;
                 var heightOver18 = heightInPixels / 18;
                 var isVisibleTrue = true;
-                var legRight = new GameFramework.Bone("Hip.R", heightOver12, new GameFramework.Orientation(new GameFramework.Coords(-1, 0, 0), new GameFramework.Coords(0, 0, 1)), [
-                    new GameFramework.Bone("Thigh.R", heightOver4, new GameFramework.Orientation(new GameFramework.Coords(0, 0, 1), new GameFramework.Coords(-1, 0, 0)), [
-                        new GameFramework.Bone("Shin.R", heightOver4, new GameFramework.Orientation(new GameFramework.Coords(0, 0, 1), new GameFramework.Coords(1, 0, 0)), [
-                            new GameFramework.Bone("Foot.R", heightOver8, new GameFramework.Orientation(new GameFramework.Coords(0, 1, 0), new GameFramework.Coords(1, 0, 0)), [], isVisibleTrue)
+                var legRight = new GameFramework.Bone("Hip.R", heightOver12, new Orientation(new Coords(-1, 0, 0), new Coords(0, 0, 1)), [
+                    new GameFramework.Bone("Thigh.R", heightOver4, new Orientation(new Coords(0, 0, 1), new Coords(-1, 0, 0)), [
+                        new GameFramework.Bone("Shin.R", heightOver4, new Orientation(new Coords(0, 0, 1), new Coords(1, 0, 0)), [
+                            new GameFramework.Bone("Foot.R", heightOver8, new Orientation(new Coords(0, 1, 0), new Coords(1, 0, 0)), [], isVisibleTrue)
                         ], isVisibleTrue),
                     ], isVisibleTrue)
                 ], isVisibleTrue);
-                var legLeft = new GameFramework.Bone("Hip.L", heightOver12, new GameFramework.Orientation(new GameFramework.Coords(1, 0, 0), new GameFramework.Coords(0, 0, 1)), [
-                    new GameFramework.Bone("Thigh.L", heightOver4, new GameFramework.Orientation(new GameFramework.Coords(0, 0, 1), new GameFramework.Coords(-1, 0, 0)), [
-                        new GameFramework.Bone("Shin.L", heightOver4, new GameFramework.Orientation(new GameFramework.Coords(0, 0, 1), new GameFramework.Coords(1, 0, 0)), [
-                            new GameFramework.Bone("Foot.L", heightOver8, new GameFramework.Orientation(new GameFramework.Coords(0, 1, 0), new GameFramework.Coords(1, 0, 0)), [], isVisibleTrue)
+                var legLeft = new GameFramework.Bone("Hip.L", heightOver12, new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1)), [
+                    new GameFramework.Bone("Thigh.L", heightOver4, new Orientation(new Coords(0, 0, 1), new Coords(-1, 0, 0)), [
+                        new GameFramework.Bone("Shin.L", heightOver4, new Orientation(new Coords(0, 0, 1), new Coords(1, 0, 0)), [
+                            new GameFramework.Bone("Foot.L", heightOver8, new Orientation(new Coords(0, 1, 0), new Coords(1, 0, 0)), [], isVisibleTrue)
                         ], isVisibleTrue),
                     ], isVisibleTrue)
                 ], isVisibleTrue);
-                var upperEntity = new GameFramework.Bone("Spine.1", heightOfSpine, new GameFramework.Orientation(new GameFramework.Coords(0, 0, -1), new GameFramework.Coords(0, -1, 0)), [
-                    new GameFramework.Bone("Neck", heightOver12, new GameFramework.Orientation(new GameFramework.Coords(0, 0, -1), new GameFramework.Coords(0, 1, 0)), [
-                        new GameFramework.Bone("Head.Back", heightOver18, new GameFramework.Orientation(new GameFramework.Coords(0, 0, -1), new GameFramework.Coords(0, 1, 0)), [
-                            new GameFramework.Bone("Head.Front", heightOver9, new GameFramework.Orientation(new GameFramework.Coords(0, 1, 0), new GameFramework.Coords(0, 0, 1)), [], isVisibleTrue),
+                var upperEntity = new GameFramework.Bone("Spine.1", heightOfSpine, new Orientation(new Coords(0, 0, -1), new Coords(0, -1, 0)), [
+                    new GameFramework.Bone("Neck", heightOver12, new Orientation(new Coords(0, 0, -1), new Coords(0, 1, 0)), [
+                        new GameFramework.Bone("Head.Back", heightOver18, new Orientation(new Coords(0, 0, -1), new Coords(0, 1, 0)), [
+                            new GameFramework.Bone("Head.Front", heightOver9, new Orientation(new Coords(0, 1, 0), new Coords(0, 0, 1)), [], isVisibleTrue),
                         ], isVisibleTrue)
                     ], isVisibleTrue),
-                    new GameFramework.Bone("Shoulder.L", heightOver6, new GameFramework.Orientation(new GameFramework.Coords(1, 0, 0), new GameFramework.Coords(0, 0, 1)), [
-                        new GameFramework.Bone("Bicep.L", heightOver6, new GameFramework.Orientation(new GameFramework.Coords(0, -.1, 1), new GameFramework.Coords(-1, 0, 0)), [
-                            new GameFramework.Bone("Forearm.L", heightOver6, new GameFramework.Orientation(new GameFramework.Coords(0, .1, 1), new GameFramework.Coords(-1, 0, 0)), [], isVisibleTrue)
+                    new GameFramework.Bone("Shoulder.L", heightOver6, new Orientation(new Coords(1, 0, 0), new Coords(0, 0, 1)), [
+                        new GameFramework.Bone("Bicep.L", heightOver6, new Orientation(new Coords(0, -.1, 1), new Coords(-1, 0, 0)), [
+                            new GameFramework.Bone("Forearm.L", heightOver6, new Orientation(new Coords(0, .1, 1), new Coords(-1, 0, 0)), [], isVisibleTrue)
                         ], isVisibleTrue)
                     ], isVisibleTrue),
-                    new GameFramework.Bone("Shoulder.R", heightOver6, new GameFramework.Orientation(new GameFramework.Coords(-1, 0, 0), new GameFramework.Coords(0, 0, 1)), [
-                        new GameFramework.Bone("Bicep.R", heightOver6, new GameFramework.Orientation(new GameFramework.Coords(0, -.1, 1), new GameFramework.Coords(-1, 0, 0)), [
-                            new GameFramework.Bone("Forearm.R", heightOver6, new GameFramework.Orientation(new GameFramework.Coords(0, .1, 1), new GameFramework.Coords(-1, 0, 0)), [], isVisibleTrue)
+                    new GameFramework.Bone("Shoulder.R", heightOver6, new Orientation(new Coords(-1, 0, 0), new Coords(0, 0, 1)), [
+                        new GameFramework.Bone("Bicep.R", heightOver6, new Orientation(new Coords(0, -.1, 1), new Coords(-1, 0, 0)), [
+                            new GameFramework.Bone("Forearm.R", heightOver6, new Orientation(new Coords(0, .1, 1), new Coords(-1, 0, 0)), [], isVisibleTrue)
                         ], isVisibleTrue)
                     ], isVisibleTrue)
                 ], isVisibleTrue); // end spine
-                var skeletonBiped = new GameFramework.Skeleton("Skeleton0", new GameFramework.Bone("Root", heightOver2, new GameFramework.Orientation(new GameFramework.Coords(0, 0, -1), new GameFramework.Coords(0, 1, 0)), [
+                var skeletonBiped = new GameFramework.Skeleton("Skeleton0", new GameFramework.Bone("Root", heightOver2, new Orientation(new Coords(0, 0, -1), new Coords(0, 1, 0)), [
                     legRight,
                     legLeft,
                     upperEntity,
@@ -55,7 +55,7 @@ var ThisCouldBeBetter;
                 skeletonBiped.transform(new Transform_DimensionsSwap([0, 1]));
                 skeletonBiped.transform(new Transform_Scale(new Coords(-1, -1, 1)));
                 */
-                skeletonBiped.transform(new GameFramework.Transform_Orient(new GameFramework.Orientation(new GameFramework.Coords(0, 1, 0), new GameFramework.Coords(0, 0, 1))));
+                skeletonBiped.transform(new Transform_Orient(new Orientation(new Coords(0, 1, 0), new Coords(0, 0, 1))));
                 return skeletonBiped;
             }
             static bipedAnimationDefnGroup() {

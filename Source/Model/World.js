@@ -137,7 +137,7 @@ var ThisCouldBeBetter;
                 var imageSizeThumbnail = GameFramework.Profile.toControlSaveStateLoadOrSave_ThumbnailSize();
                 var displayThumbnail = GameFramework.Display2D.fromSizeAndIsInvisible(imageSizeThumbnail, true);
                 displayThumbnail.initialize(universe);
-                displayThumbnail.drawImageScaled(imageSnapshotFull, GameFramework.Coords.Instances().Zeroes, imageSizeThumbnail);
+                displayThumbnail.drawImageScaled(imageSnapshotFull, Coords.Instances().Zeroes, imageSizeThumbnail);
                 var imageThumbnailFromDisplay = displayThumbnail.toImage(GameFramework.SaveStateBase.name);
                 var imageThumbnailAsDataUrl = imageThumbnailFromDisplay.systemImage.toDataURL();
                 var imageThumbnail = new GameFramework.Image2("Snapshot", imageThumbnailAsDataUrl);

@@ -9,22 +9,22 @@ var ThisCouldBeBetter;
                 this.sizeInCells = sizeInCells;
                 this.cellSize = cellSize;
                 this.cellSource = cellSource;
-                this.sizeInCellsMinusOnes = this.sizeInCells.clone().subtract(GameFramework.Coords.Instances().Ones);
+                this.sizeInCellsMinusOnes = this.sizeInCells.clone().subtract(Coords.Instances().Ones);
                 this.size = this.sizeInCells.clone().multiply(this.cellSize);
                 this.sizeHalf = this.size.clone().half();
                 this.cellSizeHalf = this.cellSize.clone().half();
                 // Helper variables.
                 this._cell = this.cellCreate();
-                this._posInCells = GameFramework.Coords.create();
-                this._posInCellsMax = GameFramework.Coords.create();
-                this._posInCellsMin = GameFramework.Coords.create();
+                this._posInCells = Coords.create();
+                this._posInCellsMax = Coords.create();
+                this._posInCellsMin = Coords.create();
             }
             static default() {
                 var cells = new Array();
                 var cellCreate = () => new MapCellGeneric("todo - MapCellGeneric");
                 var cellSource = new MapOfCellsCellSourceArray(cells, cellCreate);
-                return new MapOfCells(MapOfCells.name, GameFramework.Coords.fromXY(3, 3), // sizeInCells
-                GameFramework.Coords.fromXY(10, 10), // cellSize
+                return new MapOfCells(MapOfCells.name, Coords.fromXY(3, 3), // sizeInCells
+                Coords.fromXY(10, 10), // cellSize
                 cellSource);
             }
             static fromNameSizeInCellsAndCellSize(name, sizeInCells, cellSize) {
@@ -81,8 +81,8 @@ var ThisCouldBeBetter;
             }
             cellsAll() {
                 var returnCells = new Array();
-                var cellPosInCells = GameFramework.Coords.create();
-                var cellPosStart = GameFramework.Coords.zeroes();
+                var cellPosInCells = Coords.create();
+                var cellPosStart = Coords.zeroes();
                 var cellPosEnd = this.sizeInCells;
                 for (var y = cellPosStart.y; y < cellPosEnd.y; y++) {
                     cellPosInCells.y = y;
@@ -96,8 +96,8 @@ var ThisCouldBeBetter;
             }
             cellsAsEntities(mapAndCellPosToEntity) {
                 var returnValues = new Array();
-                var cellPosInCells = GameFramework.Coords.create();
-                var cellPosStart = GameFramework.Coords.zeroes();
+                var cellPosInCells = Coords.create();
+                var cellPosStart = Coords.zeroes();
                 var cellPosEnd = this.sizeInCells;
                 for (var y = cellPosStart.y; y < cellPosEnd.y; y++) {
                     cellPosInCells.y = y;

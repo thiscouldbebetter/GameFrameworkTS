@@ -22,16 +22,16 @@ var ThisCouldBeBetter;
                 var heightOver36 = heightInPixels / 36;
                 var meshPelvis = this.box(
                 //"Pelvis",
-                material, GameFramework.Coords.fromXYZ(heightOver12, heightOver24, heightOver24), GameFramework.Coords.fromXYZ(0, 0, -heightOver2));
+                material, Coords.fromXYZ(heightOver12, heightOver24, heightOver24), Coords.fromXYZ(0, 0, -heightOver2));
                 var meshSpine = this.box(
                 //"Spine.1",
-                material, GameFramework.Coords.fromXYZ(heightOver12, heightOver24, heightOver6), GameFramework.Coords.fromXYZ(0, 0, 0 - heightOver2 - heightOver4));
+                material, Coords.fromXYZ(heightOver12, heightOver24, heightOver6), Coords.fromXYZ(0, 0, 0 - heightOver2 - heightOver4));
                 var meshHead = this.box(
                 //"Head",
-                material, GameFramework.Coords.fromXYZ(heightOver18, heightOver18, heightOver18), GameFramework.Coords.fromXYZ(0, heightOver36, 0 - heightInPixels));
-                var xInvert = GameFramework.Coords.fromXYZ(-1, 1, 1);
-                var meshThighSize = GameFramework.Coords.fromXYZ(heightOver36, heightOver36, heightOver8);
-                var meshThighOffsetL = GameFramework.Coords.fromXYZ(heightOver18, 0, 0 - heightOver2 + heightOver12);
+                material, Coords.fromXYZ(heightOver18, heightOver18, heightOver18), Coords.fromXYZ(0, heightOver36, 0 - heightInPixels));
+                var xInvert = Coords.fromXYZ(-1, 1, 1);
+                var meshThighSize = Coords.fromXYZ(heightOver36, heightOver36, heightOver8);
+                var meshThighOffsetL = Coords.fromXYZ(heightOver18, 0, 0 - heightOver2 + heightOver12);
                 var meshThighOffsetR = meshThighOffsetL.clone().multiply(xInvert);
                 var meshThighL = this.box(
                 //"Thigh.L",
@@ -39,8 +39,8 @@ var ThisCouldBeBetter;
                 var meshThighR = this.box(
                 //"Thigh.R",
                 material, meshThighSize, meshThighOffsetR);
-                var meshShinSize = GameFramework.Coords.fromXYZ(heightOver36, heightOver36, heightOver8);
-                var meshShinOffsetL = GameFramework.Coords.fromXYZ(heightOver18, 0, 0 - heightOver6);
+                var meshShinSize = Coords.fromXYZ(heightOver36, heightOver36, heightOver8);
+                var meshShinOffsetL = Coords.fromXYZ(heightOver18, 0, 0 - heightOver6);
                 var meshShinOffsetR = meshShinOffsetL.clone().multiply(xInvert);
                 var meshShinL = this.box(
                 //"Shin.L",
@@ -48,8 +48,8 @@ var ThisCouldBeBetter;
                 var meshShinR = this.box(
                 //"Shin.R",
                 material, meshShinSize, meshShinOffsetR);
-                var meshFootSize = GameFramework.Coords.fromXYZ(heightOver36, heightOver12, heightOver36);
-                var meshFootOffsetL = GameFramework.Coords.fromXYZ(heightOver18, heightOver12, 0 - heightOver36);
+                var meshFootSize = Coords.fromXYZ(heightOver36, heightOver12, heightOver36);
+                var meshFootOffsetL = Coords.fromXYZ(heightOver18, heightOver12, 0 - heightOver36);
                 var meshFootOffsetR = meshFootOffsetL.clone().multiply(xInvert);
                 var meshFootL = this.box(
                 //"Foot.L",
@@ -57,8 +57,8 @@ var ThisCouldBeBetter;
                 var meshFootR = this.box(
                 //"Foot.R",
                 material, meshFootSize, meshFootOffsetR);
-                var meshBicepSize = GameFramework.Coords.fromXYZ(heightOver36, heightOver36, heightOver12);
-                var meshBicepOffsetL = GameFramework.Coords.fromXYZ(heightOver6, 0, 0 - heightOver2 - heightOver3);
+                var meshBicepSize = Coords.fromXYZ(heightOver36, heightOver36, heightOver12);
+                var meshBicepOffsetL = Coords.fromXYZ(heightOver6, 0, 0 - heightOver2 - heightOver3);
                 var meshBicepOffsetR = meshBicepOffsetL.clone().multiply(xInvert);
                 var meshBicepL = this.box(
                 //"Bicep.L",
@@ -66,8 +66,8 @@ var ThisCouldBeBetter;
                 var meshBicepR = this.box(
                 //"Bicep.R",
                 material, meshBicepSize, meshBicepOffsetR);
-                var meshForearmSize = GameFramework.Coords.fromXYZ(heightOver36, heightOver36, heightOver12);
-                var meshForearmOffsetL = GameFramework.Coords.fromXYZ(heightOver6, 0, 0 - heightOver2 - heightOver4 + heightOver8);
+                var meshForearmSize = Coords.fromXYZ(heightOver36, heightOver36, heightOver12);
+                var meshForearmOffsetL = Coords.fromXYZ(heightOver6, 0, 0 - heightOver2 - heightOver4 + heightOver8);
                 var meshForearmOffsetR = meshForearmOffsetL.clone().multiply(xInvert);
                 var meshForearmL = this.box(
                 //"Forearm.L",
@@ -106,7 +106,7 @@ var ThisCouldBeBetter;
                     "Forearm.R",
                 ];
                 var returnValue = this.mergeMeshes(meshesForEntityParts, vertexGroupNames);
-                returnValue.transform(GameFramework.Transform_Orient.fromOrientation(GameFramework.Orientation.fromForwardAndDown(GameFramework.Coords.fromXYZ(0, 1, 0), GameFramework.Coords.fromXYZ(0, 0, 1))));
+                returnValue.transform(Transform_Orient.fromOrientation(Orientation.fromForwardAndDown(Coords.fromXYZ(0, 1, 0), Coords.fromXYZ(0, 0, 1))));
                 // fix
                 //this.meshVerticesMergeIfWithinDistance(returnValue, 3);
                 return returnValue;
@@ -114,15 +114,15 @@ var ThisCouldBeBetter;
             box(material, size, pos) {
                 var returnMesh = this.unitCube(material);
                 returnMesh
-                    .transform(GameFramework.Transform_Scale.fromScaleFactors(size));
+                    .transform(Transform_Scale.fromScaleFactors(size));
                 returnMesh
-                    .transform(GameFramework.Transform_Translate.fromDisplacement(pos));
+                    .transform(Transform_Translate.fromDisplacement(pos));
                 return returnMesh;
             }
             grid(sizeInCells, cellSize, material) {
                 var vertexPositions = [];
-                var vertexPosInCells = GameFramework.Coords.create();
-                var vertexPos = GameFramework.Coords.create();
+                var vertexPosInCells = Coords.create();
+                var vertexPos = Coords.create();
                 for (var y = 0; y <= sizeInCells.y; y++) {
                     vertexPosInCells.y = y;
                     for (var x = 0; x <= sizeInCells.x; x++) {
@@ -141,20 +141,20 @@ var ThisCouldBeBetter;
                             vertexIndex + (sizeInCells.x + 1) + 1,
                             vertexIndex + (sizeInCells.x + 1),
                         ];
-                        var face = new GameFramework.Mesh_FaceBuilder(faceVertexIndices);
+                        var face = new Mesh_FaceBuilder(faceVertexIndices);
                         faces.push(face);
                     }
                 }
-                var returnMesh = new GameFramework.Mesh(GameFramework.Coords.create(), // center
+                var returnMesh = new Mesh(Coords.create(), // center
                 vertexPositions, faces // faceBuilders
                 );
                 if (material != null) {
                     var faceTextures = [];
                     var textureUVs = [
-                        GameFramework.Coords.create(),
-                        GameFramework.Coords.fromXY(1, 0),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(0, 1),
+                        Coords.create(),
+                        Coords.fromXY(1, 0),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(0, 1),
                     ];
                     for (var y = 0; y < sizeInCells.y; y++) {
                         for (var x = 0; x < sizeInCells.x; x++) {
@@ -174,7 +174,7 @@ var ThisCouldBeBetter;
                     connectedToNeighbors = [false, false, false, false];
                 }
                 var meshesForRoom = [];
-                var down = new GameFramework.Coords(0, 0, 1);
+                var down = new Coords(0, 0, 1);
                 for (var i = 0; i < wallNormals.length; i++) {
                     var wallNormal = wallNormals[i];
                     var meshForWall;
@@ -188,8 +188,8 @@ var ThisCouldBeBetter;
                         meshForWall = this.room_Wall(materialWall);
                         wallDisplacement = wallNormal.clone();
                     }
-                    var wallOrientation = new GameFramework.Orientation(wallNormal.clone(), down.clone());
-                    meshForWall.transform(new GameFramework.Transform_OrientRDF(wallOrientation)).transform(new GameFramework.Transform_Translate(wallDisplacement));
+                    var wallOrientation = new Orientation(wallNormal.clone(), down.clone());
+                    meshForWall.transform(new Transform_OrientRDF(wallOrientation)).transform(new Transform_Translate(wallDisplacement));
                     meshesForRoom.push(meshForWall);
                 }
                 var meshForFloor = this.room_Floor(materialFloor);
@@ -201,44 +201,44 @@ var ThisCouldBeBetter;
                     var faces = mesh.faces();
                     var face = faces[0];
                     var faceNormal = face.plane().normal;
-                    var faceOrientationDown = (faceNormal.z == 0 ? down : GameFramework.Coords.fromXYZ(1, 0, 0));
-                    var faceOrientation = GameFramework.Orientation.fromForwardAndDown(faceNormal, faceOrientationDown);
+                    var faceOrientationDown = (faceNormal.z == 0 ? down : Coords.fromXYZ(1, 0, 0));
+                    var faceOrientation = Orientation.fromForwardAndDown(faceNormal, faceOrientationDown);
                     var faceTangent = faceOrientation.right;
                     var faceDown = faceOrientation.down;
-                    mesh.transformFaceTextures(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(faceTangent.dotProduct(roomSize), faceDown.dotProduct(roomSize), 0).absolute().multiplyScalar(.2)));
+                    mesh.transformFaceTextures(Transform_Scale.fromScaleFactors(Coords.fromXYZ(faceTangent.dotProduct(roomSize), faceDown.dotProduct(roomSize), 0).absolute().multiplyScalar(.2)));
                 }
                 var returnMesh = this.mergeMeshes(meshesForRoom, new Array());
-                returnMesh.transform(GameFramework.Transform_Scale.fromScaleFactors(roomSize)).transform(GameFramework.Transform_Translate.fromDisplacement(GameFramework.Coords.fromXYZ(0, 0, -roomSize.z)));
+                returnMesh.transform(Transform_Scale.fromScaleFactors(roomSize)).transform(Transform_Translate.fromDisplacement(Coords.fromXYZ(0, 0, -roomSize.z)));
                 return returnMesh;
             }
             room_Ceiling(material) {
-                var returnMesh = this.unitSquare(material).transform(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(1, 1, -1))).transform(GameFramework.Transform_Translate.fromDisplacement(GameFramework.Coords.fromXYZ(0, 0, -1))).transformFaceTextures(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.ones().multiplyScalar(.2)));
+                var returnMesh = this.unitSquare(material).transform(Transform_Scale.fromScaleFactors(Coords.fromXYZ(1, 1, -1))).transform(Transform_Translate.fromDisplacement(Coords.fromXYZ(0, 0, -1))).transformFaceTextures(Transform_Scale.fromScaleFactors(Coords.ones().multiplyScalar(.2)));
                 return returnMesh;
             }
             room_Floor(material) {
-                var returnMesh = this.unitSquare(material).transform(GameFramework.Transform_Translate.fromDisplacement(GameFramework.Coords.fromXYZ(0, 0, 1))).transformFaceTextures(GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.ones().multiplyScalar(9)));
+                var returnMesh = this.unitSquare(material).transform(Transform_Translate.fromDisplacement(Coords.fromXYZ(0, 0, 1))).transformFaceTextures(Transform_Scale.fromScaleFactors(Coords.ones().multiplyScalar(9)));
                 return returnMesh;
             }
             room_Wall(material) {
-                var returnMesh = GameFramework.Mesh.fromCenterVertexOffsetsAndFaceBuilders(GameFramework.Coords.create(), // center
+                var returnMesh = Mesh.fromCenterVertexOffsetsAndFaceBuilders(Coords.create(), // center
                 // vertices
                 [
                     // wall
-                    GameFramework.Coords.fromXY(1, -1),
-                    GameFramework.Coords.fromXY(-1, -1),
-                    GameFramework.Coords.fromXY(-1, 1),
-                    GameFramework.Coords.fromXY(1, 1),
+                    Coords.fromXY(1, -1),
+                    Coords.fromXY(-1, -1),
+                    Coords.fromXY(-1, 1),
+                    Coords.fromXY(1, 1),
                 ], 
                 // faces
                 [
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([0, 1, 2, 3]),
+                    Mesh_FaceBuilder.fromVertexIndices([0, 1, 2, 3]),
                 ]);
                 var returnMeshTextured = GameFramework.MeshTextured.fromGeometryMaterialsAndFaceTextures(returnMesh, [material], [
                     new GameFramework.MeshTexturedFaceTexture(material.name, [
-                        GameFramework.Coords.fromXYZ(1, 0, 0),
-                        GameFramework.Coords.create(),
-                        GameFramework.Coords.fromXYZ(0, 1, 0),
-                        GameFramework.Coords.fromXYZ(1, 1, 0),
+                        Coords.fromXYZ(1, 0, 0),
+                        Coords.create(),
+                        Coords.fromXYZ(0, 1, 0),
+                        Coords.fromXYZ(1, 1, 0),
                     ]),
                 ]);
                 return returnMeshTextured;
@@ -251,86 +251,86 @@ var ThisCouldBeBetter;
                     // wall
                     // b = bottom, t = top, l = left, r = right.
                     // top
-                    GameFramework.Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, 0), // bl - 0
-                    GameFramework.Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, 0), // br - 1
-                    GameFramework.Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tr - 2
-                    GameFramework.Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tl - 3
+                    Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, 0), // bl - 0
+                    Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, 0), // br - 1
+                    Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tr - 2
+                    Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tl - 3
                     // left
-                    GameFramework.Coords.fromXYZ(-1, 1, 0), // bl - 4
-                    GameFramework.Coords.fromXYZ(-doorwayWidthHalf, 1, 0), // br - 5
-                    GameFramework.Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tr - 6
-                    GameFramework.Coords.fromXYZ(-1, -1, 0), // tl - 7
+                    Coords.fromXYZ(-1, 1, 0), // bl - 4
+                    Coords.fromXYZ(-doorwayWidthHalf, 1, 0), // br - 5
+                    Coords.fromXYZ(-doorwayWidthHalf, -1, 0), // tr - 6
+                    Coords.fromXYZ(-1, -1, 0), // tl - 7
                     // right
-                    GameFramework.Coords.fromXYZ(doorwayWidthHalf, 1, 0), // bl - 8
-                    GameFramework.Coords.fromXYZ(1, 1, 0), // br - 9
-                    GameFramework.Coords.fromXYZ(1, -1, 0), // tr - 10
-                    GameFramework.Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tl - 11
+                    Coords.fromXYZ(doorwayWidthHalf, 1, 0), // bl - 8
+                    Coords.fromXYZ(1, 1, 0), // br - 9
+                    Coords.fromXYZ(1, -1, 0), // tr - 10
+                    Coords.fromXYZ(doorwayWidthHalf, -1, 0), // tl - 11
                     // doorframe
-                    GameFramework.Coords.fromXYZ(-doorwayWidthHalf, 1, wt), // bl - 12
-                    GameFramework.Coords.fromXYZ(doorwayWidthHalf, 1, wt), // br - 13
-                    GameFramework.Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
-                    GameFramework.Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
+                    Coords.fromXYZ(-doorwayWidthHalf, 1, wt), // bl - 12
+                    Coords.fromXYZ(doorwayWidthHalf, 1, wt), // br - 13
+                    Coords.fromXYZ(doorwayWidthHalf, -doorwayHeight, wt), // tr - 14
+                    Coords.fromXYZ(-doorwayWidthHalf, -doorwayHeight, wt), // tl - 15
                 ];
                 var faceBuilders = [
                     // wall
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([0, 1, 2, 3]), // top
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([4, 5, 6, 7]), // left
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([8, 9, 10, 11]), // right
+                    Mesh_FaceBuilder.fromVertexIndices([0, 1, 2, 3]), // top
+                    Mesh_FaceBuilder.fromVertexIndices([4, 5, 6, 7]), // left
+                    Mesh_FaceBuilder.fromVertexIndices([8, 9, 10, 11]), // right
                     // doorframe
-                    new GameFramework.Mesh_FaceBuilder([5, 12, 15, 0]), // left
-                    new GameFramework.Mesh_FaceBuilder([1, 14, 13, 8]), // right
+                    new Mesh_FaceBuilder([5, 12, 15, 0]), // left
+                    new Mesh_FaceBuilder([1, 14, 13, 8]), // right
                     // todo - top - Hard to see currently.
                 ];
                 var doorwayWidth = doorwayWidthHalf * 2;
                 var doorwayWidthReversed = 1 - doorwayWidth;
                 var doorwayWidthReversedHalf = doorwayWidthReversed / 2;
                 var doorwayHeightReversed = 1 - doorwayHeight;
-                var transformScaleSides = GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(doorwayWidthReversedHalf, .5, 0));
-                var transformScaleTop = GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(doorwayWidthHalf, doorwayHeightReversed, 0));
-                var transformScaleSidesDoorframe = GameFramework.Transform_Scale.fromScaleFactors(GameFramework.Coords.fromXYZ(wallThickness, doorwayHeight, 0));
+                var transformScaleSides = Transform_Scale.fromScaleFactors(Coords.fromXYZ(doorwayWidthReversedHalf, .5, 0));
+                var transformScaleTop = Transform_Scale.fromScaleFactors(Coords.fromXYZ(doorwayWidthHalf, doorwayHeightReversed, 0));
+                var transformScaleSidesDoorframe = Transform_Scale.fromScaleFactors(Coords.fromXYZ(wallThickness, doorwayHeight, 0));
                 var materialName = material.name;
                 var faceTextures = [
                     // wall
                     // top
                     GameFramework.MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs(materialName, [
-                        GameFramework.Coords.fromXY(0, 1),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(1, 0),
-                        GameFramework.Coords.create(),
+                        Coords.fromXY(0, 1),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(1, 0),
+                        Coords.create(),
                     ]).transform(transformScaleTop),
                     // left
                     GameFramework.MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs(materialName, [
-                        GameFramework.Coords.fromXY(0, 1),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(1, 0),
-                        GameFramework.Coords.create(),
+                        Coords.fromXY(0, 1),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(1, 0),
+                        Coords.create(),
                     ]).transform(transformScaleSides),
                     // right
                     GameFramework.MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs(materialName, [
-                        GameFramework.Coords.fromXY(0, 1),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(1, 0),
-                        GameFramework.Coords.create(),
+                        Coords.fromXY(0, 1),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(1, 0),
+                        Coords.create(),
                     ]).transform(transformScaleSides),
                     // doorframe
                     // left
                     GameFramework.MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs(materialName, [
-                        GameFramework.Coords.fromXY(0, 1),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(1, 0),
-                        GameFramework.Coords.create(),
+                        Coords.fromXY(0, 1),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(1, 0),
+                        Coords.create(),
                     ]).transform(transformScaleSidesDoorframe),
                     // right
                     GameFramework.MeshTexturedFaceTexture.fromMaterialNameAndTextureUvs(materialName, [
-                        GameFramework.Coords.fromXY(0, 1),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(1, 0),
-                        GameFramework.Coords.create(),
+                        Coords.fromXY(0, 1),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(1, 0),
+                        Coords.create(),
                     ]).transform(transformScaleSidesDoorframe),
                     // todo - top
                 ];
-                var returnMeshTextured = new GameFramework.MeshTextured(GameFramework.Coords.create(), // center
-                vertices, faceBuilders, [material], faceTextures, null).transformFaceTextures(new GameFramework.Transform_Scale(GameFramework.Coords.ones().multiplyScalar(2)));
+                var returnMeshTextured = new GameFramework.MeshTextured(Coords.create(), // center
+                vertices, faceBuilders, [material], faceTextures, null).transformFaceTextures(new Transform_Scale(Coords.ones().multiplyScalar(2)));
                 return returnMeshTextured;
             }
             unitCube(material) {
@@ -339,28 +339,28 @@ var ThisCouldBeBetter;
                 return returnMeshTextured;
             }
             unitCube_Geometry() {
-                var returnMesh = new GameFramework.Mesh(GameFramework.Coords.create(), // center
+                var returnMesh = new Mesh(Coords.create(), // center
                 // vertices
                 [
                     // top
-                    GameFramework.Coords.fromXYZ(-1, -1, -1),
-                    GameFramework.Coords.fromXYZ(1, -1, -1),
-                    GameFramework.Coords.fromXYZ(1, 1, -1),
-                    GameFramework.Coords.fromXYZ(-1, 1, -1),
+                    Coords.fromXYZ(-1, -1, -1),
+                    Coords.fromXYZ(1, -1, -1),
+                    Coords.fromXYZ(1, 1, -1),
+                    Coords.fromXYZ(-1, 1, -1),
                     // bottom
-                    GameFramework.Coords.fromXYZ(-1, -1, 1),
-                    GameFramework.Coords.fromXYZ(1, -1, 1),
-                    GameFramework.Coords.fromXYZ(1, 1, 1),
-                    GameFramework.Coords.fromXYZ(-1, 1, 1),
+                    Coords.fromXYZ(-1, -1, 1),
+                    Coords.fromXYZ(1, -1, 1),
+                    Coords.fromXYZ(1, 1, 1),
+                    Coords.fromXYZ(-1, 1, 1),
                 ], 
                 // vertexIndicesForFaces
                 [
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([7, 3, 0, 4]), // west
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([5, 1, 2, 6]), // east
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([4, 0, 1, 5]), // north
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([6, 2, 3, 7]), // south
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([0, 3, 2, 1]), // top
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([5, 6, 7, 4]), // bottom
+                    Mesh_FaceBuilder.fromVertexIndices([7, 3, 0, 4]), // west
+                    Mesh_FaceBuilder.fromVertexIndices([5, 1, 2, 6]), // east
+                    Mesh_FaceBuilder.fromVertexIndices([4, 0, 1, 5]), // north
+                    Mesh_FaceBuilder.fromVertexIndices([6, 2, 3, 7]), // south
+                    Mesh_FaceBuilder.fromVertexIndices([0, 3, 2, 1]), // top
+                    Mesh_FaceBuilder.fromVertexIndices([5, 6, 7, 4]), // bottom
                 ]);
                 return returnMesh;
             }
@@ -369,36 +369,36 @@ var ThisCouldBeBetter;
                 var vertexIndicesForFace = [];
                 for (var i = 0; i < numberOfVertices; i++) {
                     var vertexAngleInTurns = i / numberOfVertices;
-                    var vertexPolar = new GameFramework.Polar(vertexAngleInTurns, 1, 0);
+                    var vertexPolar = new Polar(vertexAngleInTurns, 1, 0);
                     var vertex = vertexPolar.toCoords();
                     vertices.push(vertex);
                     vertexIndicesForFace.splice(0, 0, i);
                 }
-                var returnMesh = new GameFramework.Mesh(GameFramework.Coords.create(), // center
-                vertices, [new GameFramework.Mesh_FaceBuilder(vertexIndicesForFace)]);
+                var returnMesh = new Mesh(Coords.create(), // center
+                vertices, [new Mesh_FaceBuilder(vertexIndicesForFace)]);
                 var returnMeshTextured = GameFramework.MeshTextured.fromMeshAndMaterials(returnMesh, [material]);
                 return returnMeshTextured;
             }
             unitSquare(material) {
-                var returnMeshTextured = new GameFramework.MeshTextured(GameFramework.Coords.create(), // center
+                var returnMeshTextured = new GameFramework.MeshTextured(Coords.create(), // center
                 // vertices
                 [
                     // back
-                    GameFramework.Coords.fromXY(1, -1),
-                    GameFramework.Coords.fromXY(1, 1),
-                    GameFramework.Coords.fromXY(-1, 1),
-                    GameFramework.Coords.fromXY(-1, -1),
+                    Coords.fromXY(1, -1),
+                    Coords.fromXY(1, 1),
+                    Coords.fromXY(-1, 1),
+                    Coords.fromXY(-1, -1),
                 ], 
                 // vertexIndicesForFaces
                 [
-                    GameFramework.Mesh_FaceBuilder.fromVertexIndices([3, 2, 1, 0])
+                    Mesh_FaceBuilder.fromVertexIndices([3, 2, 1, 0])
                     //[0, 1, 2, 3]
                 ], [material], [
                     new GameFramework.MeshTexturedFaceTexture(material.name, [
-                        GameFramework.Coords.create(),
-                        GameFramework.Coords.fromXY(1, 0),
-                        GameFramework.Coords.fromXY(1, 1),
-                        GameFramework.Coords.fromXY(0, 1),
+                        Coords.create(),
+                        Coords.fromXY(1, 0),
+                        Coords.fromXY(1, 1),
+                        Coords.fromXY(0, 1),
                     ])
                 ], null);
                 return returnMeshTextured;
@@ -461,7 +461,7 @@ var ThisCouldBeBetter;
                         }
                     }
                 }
-                var returnMeshTextured = new GameFramework.MeshTextured(GameFramework.Coords.create(), // center
+                var returnMeshTextured = new GameFramework.MeshTextured(Coords.create(), // center
                 verticesMerged, faceBuildersMerged, materialsMerged, faceTexturesMerged, vertexGroups);
                 return returnMeshTextured;
             }

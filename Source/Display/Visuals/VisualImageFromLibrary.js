@@ -7,7 +7,7 @@ var ThisCouldBeBetter;
             constructor(imageName) {
                 this.imageName = imageName;
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
             }
             // static methods
             static fromImageName(imageName) {

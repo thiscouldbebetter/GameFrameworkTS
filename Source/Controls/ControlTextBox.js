@@ -14,11 +14,11 @@ var ThisCouldBeBetter;
                     GameFramework.CharacterSet.Instances().LettersSpaceNumeralsPunctuation;
                 this.cursorPos = null;
                 // Helper variables.
-                this._drawPos = GameFramework.Coords.create();
-                this._drawPosText = GameFramework.Coords.create();
-                this._drawLoc = GameFramework.Disposition.fromPos(this._drawPos);
-                this._textMargin = GameFramework.Coords.create();
-                this._textSize = GameFramework.Coords.create();
+                this._drawPos = Coords.create();
+                this._drawPosText = Coords.create();
+                this._drawLoc = Disposition.fromPos(this._drawPos);
+                this._textMargin = Coords.create();
+                this._textSize = Coords.create();
             }
             static fromNamePosSizeAndTextBinding(name, pos, size, textBinding) {
                 return new ControlTextBox(name, pos, size, textBinding, null, null, null);
@@ -175,7 +175,7 @@ var ThisCouldBeBetter;
                     var cursorX = display.textWidthForFontHeight(textBeforeCursor, fontHeightInPixels);
                     var cursorWidth = display.textWidthForFontHeight(textAtCursor, fontHeightInPixels);
                     drawPosText.x += cursorX;
-                    style.drawBoxOfSizeAtPosWithColorsToDisplay(GameFramework.Coords.fromXY(cursorWidth, fontHeightInPixels), // size
+                    style.drawBoxOfSizeAtPosWithColorsToDisplay(Coords.fromXY(cursorWidth, fontHeightInPixels), // size
                     drawPosText, style.colorFill(), style.colorFill(), // ?
                     this.isHighlighted, display);
                     display.drawTextWithFontAtPosWithColorsFillAndOutline(textAtCursor, this.fontNameAndHeight, drawPosText, style.colorBorder(), null, // colorBack

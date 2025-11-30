@@ -19,10 +19,10 @@ var ThisCouldBeBetter;
                 }
                 this.actionToInputsMappingsByInputName = GameFramework.ArrayHelper.addLookupsMultiple(this.actionToInputsMappings, (x) => x.inputNames);
                 // Helper variables.
-                this._drawLoc = GameFramework.Disposition.create();
-                this._mouseClickPos = GameFramework.Coords.create();
-                this._mouseMovePos = GameFramework.Coords.create();
-                this._mouseMovePosPrev = GameFramework.Coords.create();
+                this._drawLoc = Disposition.create();
+                this._mouseClickPos = Coords.create();
+                this._mouseMovePos = Coords.create();
+                this._mouseMovePosPrev = Coords.create();
             }
             constructor_ActionToInputsMappingsBuild() {
                 var buildGamepadInputs = (inputName) => {
