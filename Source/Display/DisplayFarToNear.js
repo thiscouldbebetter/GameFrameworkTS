@@ -144,6 +144,9 @@ var ThisCouldBeBetter;
             eraseModeSet(value) {
                 throw new Error("Not supported: DisplayFarToNear.eraseModeSet().");
             }
+            finalize(universe) {
+                return this.displayInner.finalize(universe);
+            }
             fontSet(fontNameAndHeight) {
                 this.displayInner.fontSet(fontNameAndHeight);
             }

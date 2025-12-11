@@ -31,12 +31,15 @@ export class Display2D implements Display
 		isInvisible: boolean
 	)
 	{
+		var configuration = Configuration.Instance();
+
 		this.sizesAvailable =
 			sizesAvailable
-			|| Configuration.Instance().displaySizesAvailable
+			|| configuration.displaySizesAvailable
 			|| Display2D.sizesDefault();
 		this._sizeDefault = this.sizesAvailable[0];
-		this.sizeInPixels = this._sizeDefault;
+		var sizeInitialIndex = configuration.displaySizeInitialIndex ?? 0;
+		this.sizeInPixels = this.sizesAvailable[sizeInitialIndex];
 		this.sizeInPixelsHalf = this.sizeInPixels.clone().half();
 		this.fontNameAndHeight =
 			fontNameAndHeight || FontNameAndHeight.default();
@@ -975,6 +978,13 @@ export class Display2D implements Display
 		}
 	}
 
+	finalize(universe: Universe): Display
+	{
+		this.canvas = null;
+		this.graphics = null;
+		return this;
+	}
+
 	fontSet(fontNameAndHeight: FontNameAndHeight): void
 	{
 		this.fontNameAndHeight = fontNameAndHeight;
@@ -1042,7 +1052,7 @@ export class Display2D implements Display
 	{
 		if (this._scaleFactor == null)
 		{
-			var sizeBase = this.sizesAvailable[0];
+			var sizeBase = this._sizeDefault;
 			this._scaleFactor = this.sizeInPixels.clone().divide(sizeBase);
 		}
 		return this._scaleFactor;
@@ -1075,7 +1085,7 @@ export class Display2D implements Display
 		return Image2.fromSystemImage(name || "[fromDisplay]", this.canvas);
 	}
 
-	// platformable
+	// Platformable.
 
 	toDomElement(): HTMLElement
 	{

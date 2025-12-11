@@ -448,6 +448,15 @@ export class Display3D implements Display
 		this._display2DOverlay.drawPixel(pos, color);
 	}
 
+	finalize(universe: Universe): Display
+	{
+		this.canvas = null;
+		this.webGLContext = null;
+		// todo
+		this._display2DOverlay.finalize(universe);
+		return this;
+	}
+
 	initialize(universe: Universe): Display
 	{
 		this.canvas = document.createElement("canvas"); 

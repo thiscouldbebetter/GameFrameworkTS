@@ -221,6 +221,11 @@ export class DisplayMock implements Display
 	eraseModeSet(value: boolean): void
 	{}
 
+	finalize(universe: Universe): Display
+	{
+		return this;
+	}
+
 	fontSet(fontNameAndHeight: FontNameAndHeight): void
 	{}
 

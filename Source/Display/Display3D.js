@@ -172,6 +172,13 @@ var ThisCouldBeBetter;
             drawPixel(pos, color) {
                 this._display2DOverlay.drawPixel(pos, color);
             }
+            finalize(universe) {
+                this.canvas = null;
+                this.webGLContext = null;
+                // todo
+                this._display2DOverlay.finalize(universe);
+                return this;
+            }
             initialize(universe) {
                 this.canvas = document.createElement("canvas");
                 this.canvas.id = "canvas3D";

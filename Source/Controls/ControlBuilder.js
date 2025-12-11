@@ -627,7 +627,7 @@ var ThisCouldBeBetter;
                 var platformHelper = universe.platformHelper;
                 platformHelper.platformableRemove(display);
                 display.sizeInPixels = displaySizeSpecified;
-                display.canvas = null; // hack
+                display.finalize(universe);
                 display.initialize(universe);
                 platformHelper.initialize(universe);
             }

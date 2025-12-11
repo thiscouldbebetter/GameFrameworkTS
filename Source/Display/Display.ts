@@ -139,6 +139,8 @@ export interface Display
 
 	eraseModeSet(value: boolean): void;
 
+	finalize(universe: Universe): Display;
+
 	fontSet(fontNameAndHeight: FontNameAndHeight): void;
 
 	flush(): void;

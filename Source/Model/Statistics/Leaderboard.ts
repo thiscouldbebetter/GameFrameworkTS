@@ -136,9 +136,9 @@ export class Leaderboard
 			false, // backgroundIsTransparent
 			fontNameAndHeight,
 			this.secondsToShow
-		) as ControlContainerTransparent;
+		) as ControlContainer;
 
-		controlRoot.containerInner.indexOfChildWithFocusCannotBeNullSet(true);
+		controlRoot.indexOfChildWithFocusCannotBeNullSet(true);
 
 		var textBoxInitials = ControlTextBox.fromNamePosSizeAndTextBinding
 		(

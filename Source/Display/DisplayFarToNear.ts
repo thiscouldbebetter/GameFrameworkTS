@@ -486,6 +486,11 @@ export class DisplayFarToNear implements Display
 		throw new Error("Not supported: DisplayFarToNear.eraseModeSet().")
 	}
 
+	finalize(universe: Universe): Display
+	{
+		return this.displayInner.finalize(universe);
+	}
+
 	fontSet(fontNameAndHeight: FontNameAndHeight): void
 	{
 		this.displayInner.fontSet(fontNameAndHeight);

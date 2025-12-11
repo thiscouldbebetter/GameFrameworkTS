@@ -62,6 +62,9 @@ var ThisCouldBeBetter;
             drawTextWithFontAtPosWithColorsFillAndOutline(text, fontNameAndHeight, pos, colorFill, colorOutline, isCenteredHorizontally, isCenteredVertically, sizeMaxInPixels) { }
             drawWedge(center, radius, angleStartInTurns, angleStopInTurns, colorFill, colorBorder) { }
             eraseModeSet(value) { }
+            finalize(universe) {
+                return this;
+            }
             fontSet(fontNameAndHeight) { }
             flush() { }
             hide(universe) { }

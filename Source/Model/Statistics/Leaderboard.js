@@ -83,7 +83,7 @@ var ThisCouldBeBetter;
                 true, // acknowledgeButtonIsSuppressed
                 false, // backgroundIsTransparent
                 fontNameAndHeight, this.secondsToShow);
-                controlRoot.containerInner.indexOfChildWithFocusCannotBeNullSet(true);
+                controlRoot.indexOfChildWithFocusCannotBeNullSet(true);
                 var textBoxInitials = GameFramework.ControlTextBox.fromNamePosSizeAndTextBinding("textBoxInitials", Coords.fromXY(150, 200), // pos
                 Coords.fromXY(100, 40), // size
                 GameFramework.DataBinding.fromContextGetAndSet(this.scoreBeingEntered, (c) => c.playerInitials, (c, v) => c.playerInitials = v)).charsMaxSet(3).characterSetSet(GameFramework.CharacterSet.Instances().LettersUppercase);
