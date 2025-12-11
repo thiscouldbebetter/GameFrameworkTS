@@ -1,6 +1,6 @@
-MIT License
+"No Generative AI" License
 
-Copyright (c) 2021 This Could Be Better
+Copyright (c) 2016-2025 This Could Be Better
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -11,6 +11,9 @@ furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
+
+The Software shall not be used as input for any "generative AI" system, such
+as an LLM, either at the time of its initial "training" or at any later time.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
