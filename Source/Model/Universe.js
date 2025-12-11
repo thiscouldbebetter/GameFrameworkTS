@@ -108,7 +108,7 @@ var ThisCouldBeBetter;
                     venueInitial = this.worldCreator.toVenue(this);
                 }
                 else {
-                    venueInitial = this.controlBuilder.opening(this, this.display.sizeInPixels).toVenue();
+                    venueInitial = this.controlBuilder.opening(this, this.display.sizeDefault()).toVenue();
                 }
                 venueInitial = this.controlBuilder.venueTransitionalFromTo(venueInitial, venueInitial);
                 this.venueNextSet(venueInitial);

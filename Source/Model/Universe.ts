@@ -260,7 +260,7 @@ export class Universe
 		{
 			venueInitial = this.controlBuilder.opening
 			(
-				this, this.display.sizeInPixels,
+				this, this.display.sizeDefault(),
 			).toVenue();
 		}
 
